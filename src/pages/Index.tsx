@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import JobCard from '@/components/JobCard';
 import { mockJobs } from '@/lib/mock-data';
 import { useFadeIn } from '@/utils/animations';
+import ProgramsSection from '@/components/ProgramsSection';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -38,6 +39,8 @@ const Index = () => {
           </button>
         </div>
       </section>
+      
+      <ProgramsSection />
       
       <section className="py-20 bg-secondary/50">
         <div className="container-custom">
