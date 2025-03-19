@@ -29,10 +29,20 @@ const Navbar = () => {
       <div className="container-custom flex items-center justify-between">
         <Link 
           to="/" 
-          className="text-2xl font-medium tracking-tight transition-opacity duration-200 hover:opacity-80"
+          className="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80"
         >
-          <span className="text-primary font-semibold">job</span>
-          <span>seekaroo</span>
+          <img 
+            src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" 
+            alt="Westside HS Logo" 
+            className="h-10 w-auto"
+          />
+          <div className="flex flex-col items-start">
+            <span className="text-2xl font-medium tracking-tight">
+              <span className="text-primary font-semibold">job</span>
+              <span>seekaroo</span>
+            </span>
+            <span className="text-xs text-muted-foreground -mt-1">Westside High School</span>
+          </div>
         </Link>
         
         <nav className="hidden md:flex items-center space-x-8">
