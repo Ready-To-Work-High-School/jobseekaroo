@@ -36,10 +36,10 @@ const CredentialsBadges = () => {
     <div className="p-8 rounded-xl shadow-xl border-2 border-blue-200 bg-gradient-to-br from-sky-100 to-blue-100">
       <SectionHeading 
         eyebrow="" 
-        title="School High Distinction Scholars" 
+        title="High School Scholars Distinction" 
         description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" 
         eyebrowColor="px-4 py-1.5 rounded-full text-sm font-bold bg-blue-700 text-white"
-        titleClassName="text-4xl bg-gradient-to-r from-black via-zinc-800 to-blue-700 bg-clip-text text-transparent" 
+        titleClassName="text-4xl bg-gradient-to-r from-purple-600 via-blue-600 to-amber-500 bg-clip-text text-transparent font-extrabold" 
       />
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
