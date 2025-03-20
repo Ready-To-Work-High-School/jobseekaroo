@@ -1,12 +1,15 @@
+
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
 import FeatureCard from './FeatureCard';
+
 const Hero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
+
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
@@ -16,8 +19,10 @@ const Hero = () => {
           For Westside High School Students
         </span>
         
-        <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6 text-black", titleAnimation)}>
-          Find the perfect entry level job in Jacksonville, Florida.
+        <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", titleAnimation)}>
+          <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+            Find the perfect entry level job in Jacksonville, Florida.
+          </span>
         </h1>
         
         <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>
@@ -25,7 +30,7 @@ const Hero = () => {
           skills, and interests – all with just your ZIP code.
         </p>
 
-        <p className="text-base font-semibold">
+        <p className="text-base font-semibold text-black bg-amber-100 inline-block px-4 py-2 rounded-md border border-amber-200">
           This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy
         </p>
         
@@ -41,4 +46,5 @@ const Hero = () => {
       </div>
     </section>;
 };
+
 export default Hero;
