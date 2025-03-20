@@ -29,7 +29,7 @@ const CredentialsBadges = () => {
     name: "Problem Solving"
   }];
   return <div className="p-8 rounded-xl shadow-sm border border-border bg-sky-200">
-      <SectionHeading eyebrow="Florida Ready To Work Credentials" title="School High Distinction Scholars" description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, emerging technology and industry certification to potential employers" eyebrowColor="bg-primary/10 text-red-800" />
+      <SectionHeading eyebrow="Florida Ready To Work Credentials" title="School High Distinction Scholars" description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" eyebrowColor="bg-primary/10 text-red-800" />
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
         {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
