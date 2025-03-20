@@ -39,10 +39,12 @@ const CredentialsBadges = () => {
 
       <div className="flex justify-center mt-8">
         <div className="flex items-center bg-secondary/30 p-4 rounded-lg">
-          <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="h-16 w-16 object-contain mr-4" />
-          <div>
-            <Badge className="mb-1 bg-primary text-white">Entrepreneurship & Small Business</Badge>
-            <p className="text-sm font-medium">Industry Certification</p>
+          <div className="relative">
+            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="h-16 w-16 object-contain" />
+            <Badge className="absolute -top-2 -right-2 bg-primary text-white">Industry Certification</Badge>
+          </div>
+          <div className="ml-4">
+            <p className="text-sm font-medium">Entrepreneurship &amp; Small Business</p>
             <p className="text-xs text-muted-foreground">Industry-recognized business credential</p>
           </div>
         </div>
