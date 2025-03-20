@@ -262,13 +262,9 @@ const ProgramsSection = () => {
         </div>
         
         <div className="text-center mb-10">
-          <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-            Essential Skills
-          </span>
-          <h2 className="text-3xl font-bold mb-4">Duval County Career Skills Badges</h2>
-          <p className="max-w-2xl mx-auto text-base font-normal text-gray-950">
-            Earn these digital badges to showcase your career-ready skills to potential employers
-          </p>
+          <span className="inline-block mb-4 px-3 py-1 rounded-full font-medium bg-primary/10 text-red-800 text-base">Florida Ready To Work Credentials</span>
+          <h2 className="text-3xl font-bold mb-4">Duval County School High Distinction</h2>
+          <p className="max-w-2xl mx-auto text-base font-normal text-gray-950">Students earn digital badges and credentials to showcase career-ready skills to potential employers</p>
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">

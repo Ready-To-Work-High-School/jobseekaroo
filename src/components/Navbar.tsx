@@ -19,7 +19,7 @@ const Navbar = () => {
           <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside HS Logo" className="h-16 w-auto object-fill" />
           <div className="flex flex-col items-start">
             <span className="text-2xl font-medium tracking-tight">
-              <span className="text-primary font-semibold">job</span>
+              <span className="text-primary font-semibold">Job</span>
               <span>seeker
             </span>
             </span>
