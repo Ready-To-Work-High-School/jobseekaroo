@@ -93,28 +93,33 @@ const JobCard = ({
   };
 
   // Determine if we should use amber styling based on company name
-  const isJacksonvilleElectronics = job.company === "Jacksonville Electronics";
+  const jacksonvilleCompanies = [
+    "Jacksonville Electronics", 
+    "Jacksonville Waterfront Hotel", 
+    "TechSolutions Jacksonville"
+  ];
+  const useAmberStyling = jacksonvilleCompanies.includes(job.company);
 
   return (
     <Link to={`/jobs/${job.id}`} className={animation}>
-      <div className={`flex flex-col space-y-4 p-6 rounded-lg ${isJacksonvilleElectronics ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}>
+      <div className={`flex flex-col space-y-4 p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}>
         {/* Header */}
         <div className="flex items-start gap-4">
           {job.logoUrl ? (
-            <div className={`w-12 h-12 rounded-md ${isJacksonvilleElectronics ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
+            <div className={`w-12 h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
               <img src={job.logoUrl} alt={`${job.company} logo`} className="w-full h-full object-cover" loading="lazy" />
             </div>
           ) : (
-            <div className={`w-12 h-12 rounded-md border ${isJacksonvilleElectronics ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}>
-              <span className={`${isJacksonvilleElectronics ? 'text-amber-600' : 'text-primary'} font-medium text-lg`}>
+            <div className={`w-12 h-12 rounded-md border ${useAmberStyling ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}>
+              <span className={`${useAmberStyling ? 'text-amber-600' : 'text-primary'} font-medium text-lg`}>
                 {job.company.substring(0, 1)}
               </span>
             </div>
           )}
           
           <div className="flex-1 min-w-0">
-            <h3 className={`font-semibold text-lg truncate ${isJacksonvilleElectronics ? 'text-amber-800' : ''}`}>{job.title}</h3>
-            <p className={`${isJacksonvilleElectronics ? 'text-amber-700' : 'text-muted-foreground'}`}>{job.company}</p>
+            <h3 className={`font-semibold text-lg truncate ${useAmberStyling ? 'text-amber-800' : ''}`}>{job.title}</h3>
+            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-muted-foreground'}`}>{job.company}</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -125,11 +130,11 @@ const JobCard = ({
             
             <button 
               onClick={handleSaveToggle}
-              className={`${isJacksonvilleElectronics ? 'text-amber-600 hover:text-amber-800' : 'text-muted-foreground hover:text-primary'} transition-colors`}
+              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-muted-foreground hover:text-primary'} transition-colors`}
               aria-label={isSaved ? "Unsave job" : "Save job"}
             >
               <BookmarkIcon 
-                className={`h-5 w-5 ${isSaved ? (isJacksonvilleElectronics ? 'fill-amber-500 text-amber-600' : 'fill-primary text-primary') : 'fill-none'}`} 
+                className={`h-5 w-5 ${isSaved ? (useAmberStyling ? 'fill-amber-500 text-amber-600' : 'fill-primary text-primary') : 'fill-none'}`} 
               />
             </button>
           </div>
@@ -138,17 +143,17 @@ const JobCard = ({
         {/* Location and Details */}
         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
-            <MapPin className={isJacksonvilleElectronics ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <MapPin className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
             <span>{job.location.city}, {job.location.state}</span>
           </div>
           
           <div className="flex items-center gap-1">
-            <BriefcaseIcon className={isJacksonvilleElectronics ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <BriefcaseIcon className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
             <span>{formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}</span>
           </div>
           
           <div className="flex items-center gap-1">
-            <CalendarIcon className={isJacksonvilleElectronics ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <CalendarIcon className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
             <span className="capitalize">{job.type.replace('-', ' ')}</span>
           </div>
         </div>
@@ -162,12 +167,12 @@ const JobCard = ({
           )}
           
           {job.isFlexible && (
-            <span className={`px-2 py-1 rounded-md ${isJacksonvilleElectronics ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} text-xs font-medium`}>
+            <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} text-xs font-medium`}>
               Flexible
             </span>
           )}
           
-          <span className={`px-2 py-1 rounded-md ${isJacksonvilleElectronics ? 'bg-amber-200 text-amber-900' : 'bg-secondary'} text-xs font-medium capitalize`}>
+          <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-200 text-amber-900' : 'bg-secondary'} text-xs font-medium capitalize`}>
             {job.experienceLevel.replace('-', ' ')}
           </span>
         </div>
