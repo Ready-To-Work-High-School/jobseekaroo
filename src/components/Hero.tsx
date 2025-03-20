@@ -30,7 +30,7 @@ const Hero = () => {
           skills, and interests – all with just your ZIP code.
         </p>
 
-        <p className="text-base font-semibold text-black bg-amber-100 inline-block px-4 py-2 rounded-md border border-amber-200">
+        <p className="text-base font-semibold text-amber-900 bg-amber-100 inline-block px-4 py-2 rounded-md border border-amber-300">
           This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy
         </p>
         
