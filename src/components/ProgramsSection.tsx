@@ -16,7 +16,7 @@ const ProgramsSection = () => {
         <div className="container-custom">
           <SectionHeading
             eyebrow="Career Readiness"
-            title="Educational Programs"
+            title="For Employers"
             description="Discover specialized programs that prepare high school students with verified skills employers value"
           />
           
