@@ -59,6 +59,10 @@ const CredentialsBadges = () => {
             Become a Partner Employer
           </Button>
         </div>
+        
+        <div className="mt-6 text-right">
+          <span className="inline-block font-medium text-primary">Created by Ms. Coleman</span>
+        </div>
       </div>
     </div>
   );
