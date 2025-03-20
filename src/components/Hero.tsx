@@ -1,4 +1,3 @@
-
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
@@ -28,7 +27,7 @@ const Hero = () => {
           skills, and interests – all with just your ZIP code.
         </p>
 
-        <p className="text-base font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-700">
+        <p className="text-base font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-500">
           This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy
         </p>
         
