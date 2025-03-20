@@ -27,7 +27,7 @@ const Hero = () => {
         </h1>
         
         <p className={cn("text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto", subtitleAnimation)}>
-          Discover entry-level opportunities in Jacksonville, FL that fit your schedule,
+          Discover entry-level positions and apprenticeships in Jacksonville, FL that fit your schedule,
           skills, and interests – all with just your ZIP code.
         </p>
         
@@ -42,14 +42,14 @@ const Hero = () => {
             description="Find opportunities within Jacksonville that minimize commute time." 
           />
           <FeatureCard 
-            icon="🏆" 
-            title="Industry Certified" 
-            description="Exclusive positions for students with Florida Ready to Work credentials or industry certifications." 
+            icon="🧠" 
+            title="Apprenticeships" 
+            description="Discover paid training programs where you can learn valuable skills while earning income." 
           />
           <FeatureCard 
             icon="💼" 
             title="Entry Level Positions" 
-            description="Browse positions specifically designed for high school students beginning their career journey." 
+            description="Explore positions specifically designed for high school students beginning their career journey." 
           />
         </div>
       </div>
