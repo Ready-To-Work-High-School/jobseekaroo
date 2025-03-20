@@ -17,8 +17,8 @@ const ProgramCard = ({
       <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center">
         {image && <img src={image} alt={title} className="w-full h-full object-scale-down" />}
       </div>
-      <CardHeader className="bg-sky-50">
-        <CardTitle>{title}</CardTitle>
+      <CardHeader>
+        <CardTitle className="bg-blue-200">{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-muted-foreground">
@@ -26,7 +26,7 @@ const ProgramCard = ({
         </p>
         
         {employerBenefits.length > 0 && <div>
-            <h4 className="text-sm font-semibold mb-2 text-zinc-950">Employer Benefits:</h4>
+            <h4 className="text-sm font-semibold mb-2">Employer Benefits:</h4>
             <ul className="text-sm space-y-1">
               {employerBenefits.map((benefit, i) => <li key={i} className="flex items-start gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary flex-shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
