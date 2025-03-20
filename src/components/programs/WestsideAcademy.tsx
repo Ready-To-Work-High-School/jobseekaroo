@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 const WestsideAcademy = () => {
   return <div className="border border-border rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
-      <div className="p-6 md:p-8 bg-blue-400">
+      <div className="p-6 md:p-8 bg-blue-200">
         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
           <div className="flex-shrink-0">
             <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
@@ -36,7 +36,7 @@ const AcademyDescription = () => {
         </div>
         <div>
           <h4 className="text-lg font-semibold mb-1">Advanced Academy Program</h4>
-          <p className="text-zinc-950">
+          <p className="text-muted-foreground">
             The Entrepreneurship Academy is designated as an Advanced Academy, which means it offers a rigorous curriculum with accelerated coursework, industry certifications, and college credit opportunities. Advanced Academies prepare students for both higher education and direct entry into competitive career fields with high skill and wage potential.
           </p>
         </div>
@@ -47,7 +47,7 @@ const ProgramBenefits = () => {
   return <div className="md:w-1/2">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="bg-sky-950">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
           </svg>
         </div>
@@ -56,7 +56,7 @@ const ProgramBenefits = () => {
       <ul className="bg-white rounded-lg p-5 shadow-sm border border-border space-y-3">
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span className="text-zinc-950">Industry certifications in Entrepreneurship & Small Business</span>
+          <span>Industry certifications in Entrepreneurship & Small Business</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -77,7 +77,7 @@ const CourseCurriculum = () => {
   return <div className="md:w-1/2">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="bg-blue-950">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
             <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
             <path d="M12 11h4" />
