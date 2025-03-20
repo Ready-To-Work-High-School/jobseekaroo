@@ -43,7 +43,7 @@ const Index = () => {
               <h2 className="text-3xl font-bold mb-4">
                 Easy Jobs for High School Students
               </h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="mb-6 text-base text-zinc-900">
                 Finding your first job can be challenging, but we've made it simple. 
                 Browse opportunities specifically designed for students with little 
                 to no prior work experience.

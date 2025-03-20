@@ -11,7 +11,7 @@ const ProgramsSection = () => {
             Career Readiness
           </span>
           <h2 className="text-3xl font-bold mb-4">Educational Programs</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto font-semibold">
+          <p className="max-w-2xl mx-auto font-semibold text-zinc-950">
             Discover specialized programs that help prepare high school students for their future careers
           </p>
         </div>
@@ -25,7 +25,7 @@ const ProgramsSection = () => {
               </div>
               <div>
                 <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
-                <p className="text-muted-foreground">Career Technical Education Division | Duval County School District</p>
+                <p className="text-base text-gray-950">Career Technical Education Division | Duval County School District</p>
               </div>
             </div>
             
@@ -266,7 +266,7 @@ const ProgramsSection = () => {
             Essential Skills
           </span>
           <h2 className="text-3xl font-bold mb-4">Duval County Career Skills Badges</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto text-base font-normal text-gray-950">
             Earn these digital badges to showcase your career-ready skills to potential employers
           </p>
         </div>
