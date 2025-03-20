@@ -23,7 +23,7 @@ const Navbar = () => {
               <span>seeker
             </span>
             </span>
-            <span className="text-xs -mt-1 font-bold text-stone-950">Westside High School</span>
+            <span className="-mt-1 font-bold text-stone-950 text-base">Westside High School</span>
           </div>
         </Link>
         
