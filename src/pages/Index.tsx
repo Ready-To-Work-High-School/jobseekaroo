@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Hero from '@/components/Hero';
@@ -61,7 +62,9 @@ const Index = () => {
             <span className="inline-block mb-2 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-600 text-white shadow-sm">
               Trending Now
             </span>
-            <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-black to-amber-600 bg-clip-text text-transparent">
+              Featured Opportunities
+            </h2>
             <p className="max-w-2xl mx-auto text-muted-foreground">
               Current jobs available for high school students
             </p>
