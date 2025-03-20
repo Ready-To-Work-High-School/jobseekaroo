@@ -54,12 +54,12 @@ const Index = () => {
       <section className={`py-20 container-custom ${sectionAnimation}`}>
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
-          <p className="max-w-2xl mx-auto text-zinc-950">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Discover some of the top jobs available for high school students
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-amber-500">
           {featuredJobs.map((job, index) => <JobCard key={job.id} job={job} index={index} />)}
         </div>
         
