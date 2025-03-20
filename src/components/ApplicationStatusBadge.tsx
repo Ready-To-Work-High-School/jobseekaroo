@@ -1,4 +1,3 @@
-
 import { ApplicationStatus } from '@/types/application';
 import { cn } from '@/lib/utils';
 import { 
@@ -10,6 +9,7 @@ import {
   XOctagon 
 } from 'lucide-react';
 import { Badge } from './ui/badge';
+import { validateApplicationStatus } from '@/lib/supabase';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
@@ -18,6 +18,9 @@ interface ApplicationStatusBadgeProps {
 }
 
 export const ApplicationStatusBadge = ({ status, className, large = false }: ApplicationStatusBadgeProps) => {
+  // Make sure we're dealing with a valid status
+  const validStatus = validateApplicationStatus(status);
+  
   const getStatusConfig = (status: ApplicationStatus) => {
     switch (status) {
       case 'applied':
@@ -65,7 +68,7 @@ export const ApplicationStatusBadge = ({ status, className, large = false }: App
     }
   };
 
-  const { icon: Icon, label, variant } = getStatusConfig(status);
+  const { icon: Icon, label, variant } = getStatusConfig(validStatus);
 
   return (
     <Badge 
