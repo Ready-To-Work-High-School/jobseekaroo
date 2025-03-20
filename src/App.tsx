@@ -10,6 +10,7 @@ import JobListings from "./pages/JobListings";
 import JobDetails from "./pages/JobDetails";
 import SavedJobs from "./pages/SavedJobs";
 import Profile from "./pages/Profile";
+import Applications from "./pages/Applications";
 import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/jobs" element={<JobListings />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/saved-jobs" element={<SavedJobs />} />
+            <Route path="/applications" element={<Applications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/sign-in" element={<SignIn />} />
