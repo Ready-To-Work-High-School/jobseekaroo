@@ -50,7 +50,8 @@ const Navbar = () => {
             <span className="-mt-2 font-bold text-stone-950 text-base my-0">High School</span>
             <span className="text-2xl font-medium tracking-tight">
               <span className="text-primary font-semibold">Job</span>
-              <span className="-mt-2 font-bold text-stone-950 text-base my-0"> seekers 4</span>
+              <span className="text-primary font-semibold"> seekers </span>
+              <span className="-mt-2 font-bold text-stone-950 text-base my-0">4</span>
             </span>
           </div>
         </Link>
