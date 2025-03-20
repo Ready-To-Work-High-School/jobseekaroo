@@ -94,7 +94,7 @@ const ProgramsSection = () => {
                 <Accordion type="single" collapsible className="bg-white rounded-lg shadow-sm border border-border">
                   <AccordionItem value="year1">
                     <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-                      <span className="font-semibold">Year 1: Introduction to Entrepreneurship</span>
+                      <span className="font-semibold text-left">Year 1: Introduction to Entrepreneurship</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-5 pb-4 pt-0">
                       <ul className="space-y-2">
