@@ -3,7 +3,7 @@ import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, ExternalLink } from 'lucide-react';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -55,8 +55,11 @@ const CredentialsBadges = () => {
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </Button>
-          <Button variant="outline">
-            Become a Partner Employer
+          <Button variant="outline" className="gap-2" asChild>
+            <a href="mailto:Colemanp3@duvalschools.org">
+              Become a Partner Employer
+              <ExternalLink className="h-4 w-4" />
+            </a>
           </Button>
         </div>
         
