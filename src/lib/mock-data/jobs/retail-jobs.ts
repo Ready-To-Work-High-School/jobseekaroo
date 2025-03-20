@@ -1,4 +1,3 @@
-
 import { Job } from '../../../types/job';
 
 export const retailJobs: Job[] = [
@@ -26,7 +25,7 @@ export const retailJobs: Job[] = [
     ],
     experienceLevel: 'entry-level',
     postedDate: '2023-09-15',
-    logoUrl: '/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png',
+    logoUrl: 'https://images.unsplash.com/photo-1563770660941-10b3dc965c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
     isFlexible: true,
   },
