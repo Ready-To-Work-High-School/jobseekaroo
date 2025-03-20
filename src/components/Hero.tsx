@@ -46,9 +46,9 @@ const Hero = () => {
             description="Exclusive positions for students with Florida Ready to Work credentials or industry certifications." 
           />
           <FeatureCard 
-            icon="🎓" 
-            title="No Experience Needed" 
-            description="Browse positions specifically open to high school students with employability skills training." 
+            icon="💼" 
+            title="Entry Level Positions" 
+            description="Browse positions specifically designed for high school students beginning their career journey." 
           />
         </div>
       </div>
