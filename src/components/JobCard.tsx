@@ -30,7 +30,7 @@ const JobCard = ({
     return `$${min}${max > min ? `-$${max}` : ''} ${period}`;
   };
   return <Link to={`/jobs/${job.id}`} className="">
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4 bg-amber-500">
         {job.logoUrl ? <div className="w-12 h-12 rounded-md border border-border overflow-hidden bg-muted flex-shrink-0">
             <img src={job.logoUrl} alt={`${job.company} logo`} className="w-full h-full object-cover" loading="lazy" />
           </div> : <div className="w-12 h-12 rounded-md border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
