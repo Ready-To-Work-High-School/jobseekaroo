@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -6,6 +7,8 @@ import CredentialsBadges from './programs/CredentialsBadges';
 import { Separator } from './ui/separator';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { cn } from '@/lib/utils';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   return <>
@@ -18,7 +21,11 @@ const ProgramsSection = () => {
                 <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs bg-amber-500 text-stone-950 font-bold">
                   Employer Resources
                 </span>
-                <h2 className="text-3xl font-bold mb-3 text-red-700 text-center">For Employers Only</h2>
+                <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight mt-2 text-center")}>
+                  <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+                    For Employers Only
+                  </span>
+                </h2>
                 <p className="text-center font-bold text-zinc-900">
                   Learn how students in the Entrepreneurship Academy receive intensive specialized curriculum that prepares them with verified skills and credentials employers value
                 </p>
