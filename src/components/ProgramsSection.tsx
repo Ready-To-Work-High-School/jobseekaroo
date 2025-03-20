@@ -26,7 +26,7 @@ const ProgramsSection = () => {
               <img src="/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png" alt="Career & Technical Education Logo" className="h-12 md:h-22 w-auto object-scale-down" />
             </div>
             
-            <Alert className="mt-4 bg-amber-50 border-amber-300">
+            <Alert className="mt-4 border-amber-300 bg-zinc-50">
               <AlertTriangle className="h-4 w-4 text-red-700 font-extrabold" />
               <AlertTitle className="text-zinc-900 font-extrabold">Hiring Opportunity</AlertTitle>
               <AlertDescription className="text-center font-bold text-zinc-900">
