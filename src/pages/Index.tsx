@@ -14,13 +14,13 @@ const Index = () => {
       
       {/* Easy Jobs Section - Moved up two sections */}
       <section className="py-20 bg-secondary/50">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="container-custom bg-amber-400">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-amber-500">
             <div>
               <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 Get Started
               </span>
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="text-3xl font-bold mb-4 text-zinc-950">
                 Easy Jobs for High School Students
               </h2>
               <p className="mb-6 text-base text-zinc-900">
@@ -45,7 +45,7 @@ const Index = () => {
             
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-2xl transform -rotate-3" />
-              <img src="https://images.unsplash.com/photo-1564460549619-41a10580f0c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="High school student working at a coffee shop" className="rounded-2xl border border-border shadow-lg w-full relative z-10" />
+              <img alt="High school student working at a coffee shop" src="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" className="rounded-2xl border border-border shadow-lg w-full relative z-10 object-scale-down" />
             </div>
           </div>
         </div>
