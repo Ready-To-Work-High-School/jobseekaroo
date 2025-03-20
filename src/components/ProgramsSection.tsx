@@ -28,8 +28,8 @@ const ProgramsSection = () => {
             
             <Alert className="mt-4 bg-amber-50 border-amber-300">
               <AlertTriangle className="h-4 w-4 text-amber-600" />
-              <AlertTitle className="text-amber-800">Hiring Opportunity</AlertTitle>
-              <AlertDescription className="text-amber-700">
+              <AlertTitle className="text-zinc-900">Hiring Opportunity</AlertTitle>
+              <AlertDescription className="text-center font-bold text-zinc-900">
                 Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
               </AlertDescription>
             </Alert>
