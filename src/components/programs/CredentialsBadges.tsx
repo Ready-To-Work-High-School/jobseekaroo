@@ -4,6 +4,7 @@ import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+
 const CredentialsBadges = () => {
   const badges = [{
     image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
@@ -27,8 +28,16 @@ const CredentialsBadges = () => {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
     name: "Problem Solving"
   }];
-  return <div className="p-8 rounded-xl shadow-sm border border-border bg-sky-200">
-      <SectionHeading eyebrow="Florida Ready To Work Credentials" title="School High Distinction Scholars" description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" eyebrowColor="bg-primary/10 text-red-800" />
+
+  return (
+    <div className="p-8 rounded-xl shadow-sm border border-border bg-sky-200">
+      <SectionHeading 
+        eyebrow="Florida Ready To Work Credentials" 
+        title="School High Distinction Scholars" 
+        description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" 
+        eyebrowColor="bg-primary/10 text-red-800"
+        titleClassName="bg-gradient-to-r from-black via-zinc-800 to-blue-700 bg-clip-text text-transparent" 
+      />
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
         {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
@@ -82,6 +91,8 @@ const CredentialsBadges = () => {
           
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default CredentialsBadges;
