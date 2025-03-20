@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 const WestsideAcademy = () => {
   return <div className="border border-border rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
-      <div className="p-6 md:p-8 bg-blue-200">
+      <div className="p-6 md:p-8 bg-sky-200">
         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
           <div className="flex-shrink-0">
             <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
