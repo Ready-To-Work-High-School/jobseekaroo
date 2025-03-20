@@ -2,11 +2,13 @@
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
+
 const Hero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
+
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-yellow-600 rounded-none">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent -z-10" />
@@ -16,7 +18,7 @@ const Hero = () => {
       
       <div className="max-w-3xl mx-auto">
         <span className={cn("inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium", "bg-primary/10 text-primary", titleAnimation)}>
-          For High School Students
+          For Westside High School Students
         </span>
         
         <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight", "bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600", titleAnimation)}>
@@ -33,25 +35,42 @@ const Hero = () => {
         </div>
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto", infoAnimation)}>
-          <FeatureCard icon="🔎" title="Local Jobs" description="Find opportunities within your community that minimize commute time." />
-          <FeatureCard icon="🕒" title="Industry Certified" description="Gain Florida Ready to Work Employability Skills Distinction through job experience." />
-          <FeatureCard icon="🎓" title="No Experience Needed" description="Browse positions specifically open to high school students." />
+          <FeatureCard 
+            icon="🔎" 
+            title="Local Jobs" 
+            description="Find opportunities within your community that minimize commute time." 
+          />
+          <FeatureCard 
+            icon="🏆" 
+            title="Industry Certified" 
+            description="Exclusive positions for students with Florida Ready to Work credentials or industry certifications." 
+          />
+          <FeatureCard 
+            icon="🎓" 
+            title="No Experience Needed" 
+            description="Browse positions specifically open to high school students with employability skills training." 
+          />
         </div>
       </div>
     </section>;
 };
+
 interface FeatureCardProps {
   icon: string;
   title: string;
   description: string;
 }
+
 const FeatureCard = ({
   icon,
   title,
   description
-}: FeatureCardProps) => <div className="p-6 rounded-lg bg-white border border-border shadow-sm hover:shadow-md transition-shadow">
+}: FeatureCardProps) => (
+  <div className="p-6 rounded-lg bg-white border border-border shadow-sm hover:shadow-md transition-shadow">
     <div className="mb-3 text-2xl">{icon}</div>
     <h3 className="text-lg font-medium mb-2">{title}</h3>
     <p className="text-sm text-muted-foreground">{description}</p>
-  </div>;
+  </div>
+);
+
 export default Hero;
