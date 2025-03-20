@@ -11,6 +11,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   signOut: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
   saveJob: (jobId: string) => Promise<void>;
   unsaveJob: (jobId: string) => Promise<void>;
   isSavedJob: (jobId: string) => Promise<boolean>;
@@ -72,6 +73,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       navigate('/');
     } catch (error) {
       console.error('Error signing up:', error);
+      throw error;
+    }
+  };
+
+  const signInWithApple = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error signing in with Apple:', error);
       throw error;
     }
   };
@@ -267,6 +284,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     signUp,
     signOut,
+    signInWithApple,
     saveJob,
     unsaveJob,
     isSavedJob,
