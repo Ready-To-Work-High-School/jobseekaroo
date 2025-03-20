@@ -14,7 +14,7 @@ const Hero = () => {
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
-      <div className="max-w-3xl mx-auto rounded-md py-[2px]">
+      <div className="max-w-3xl mx-auto rounded-md py-0">
         <span className={cn("inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium", "bg-primary/10 text-primary", titleAnimation)}>
           For Westside High School Students
         </span>
