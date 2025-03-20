@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -15,7 +14,6 @@ const WestsideAcademy = () => {
             <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
             <p className="text-base text-gray-950">
               Career Technical Education Division | Duval County School District
-              <span className="ml-2 inline-block font-medium text-primary">Created by Ms. Coleman</span>
             </p>
           </div>
         </div>
@@ -25,6 +23,10 @@ const WestsideAcademy = () => {
         <div className="flex flex-col md:flex-row gap-6">
           <ProgramBenefits />
           <CourseCurriculum />
+        </div>
+        
+        <div className="mt-6 text-right">
+          <span className="inline-block font-medium text-primary">Created by Ms. Coleman</span>
         </div>
       </div>
     </div>
