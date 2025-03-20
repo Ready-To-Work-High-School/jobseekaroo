@@ -167,12 +167,12 @@ const JobCard = ({
           )}
           
           {job.isFlexible && (
-            <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} text-xs font-medium`}>
+            <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-xs font-medium`}>
               Flexible
             </span>
           )}
           
-          <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-200 text-amber-900' : 'bg-secondary'} text-xs font-medium capitalize`}>
+          <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-xs font-medium capitalize`}>
             {job.experienceLevel.replace('-', ' ')}
           </span>
         </div>
