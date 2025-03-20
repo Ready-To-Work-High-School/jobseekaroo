@@ -14,7 +14,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return <header className={cn('fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out', animation, scrolled ? 'py-3 backdrop-blur-lg bg-white/80 shadow-sm' : 'py-5 bg-transparent')}>
-      <div className="container-custom flex items-center justify-between">
+      <div className="container-custom flex items-center justify-between bg-red-700 rounded">
         <Link to="/" className="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80">
           <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside HS Logo" className="h-16 w-auto object-fill" />
           <div className="flex flex-col items-start">
@@ -22,7 +22,7 @@ const Navbar = () => {
               <span className="text-primary font-semibold">job</span>
               <span>seekaroo</span>
             </span>
-            <span className="text-xs text-muted-foreground -mt-1">Westside High School</span>
+            <span className="text-xs -mt-1 font-bold text-stone-950">Westside High School</span>
           </div>
         </Link>
         
