@@ -1,5 +1,5 @@
 
-export type JobType = 'part-time' | 'full-time' | 'internship' | 'temporary' | 'weekend' | 'summer';
+export type JobType = 'part-time' | 'full-time' | 'internship' | 'temporary' | 'weekend' | 'summer' | 'apprenticeship';
 
 export type ExperienceLevel = 'no-experience' | 'entry-level' | 'some-experience';
 
