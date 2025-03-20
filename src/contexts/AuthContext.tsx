@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase, validateApplicationStatus } from '@/lib/supabase';
+import { supabase, validateApplicationStatus, getRedirectUrl } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { JobApplication, ApplicationStatus } from '@/types/application';
@@ -79,10 +79,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithApple = async () => {
     try {
+      const redirectUrl = getRedirectUrl();
+      console.log(`Redirecting to: ${redirectUrl}`);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: redirectUrl,
         },
       });
       
