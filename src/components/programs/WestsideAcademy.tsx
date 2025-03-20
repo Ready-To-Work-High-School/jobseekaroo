@@ -10,9 +10,7 @@ const WestsideAcademy = () => {
           </div>
           <div>
             <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
-            <p className="text-base text-gray-950">
-              Career Technical Education Division | Duval County School District
-            </p>
+            <p className="text-base text-gray-950">Career Technical Education | Duval County School District</p>
           </div>
         </div>
         
@@ -56,19 +54,19 @@ const ProgramBenefits = () => {
       <ul className="bg-white rounded-lg p-5 shadow-sm border border-border space-y-3">
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span>Industry certifications in Entrepreneurship & Small Business</span>
+          <span className="font-bold">Industry certifications in Entrepreneurship & Small Business</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span>College credit through dual enrollment opportunities</span>
+          <span className="font-bold">College credit through dual enrollment opportunities</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span>Real-world business experience through community partnerships</span>
+          <span className="font-bold">Real-world business experience through community partnerships</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span>Preferential consideration for scholarships and internships</span>
+          <span className="font-bold">Preferential consideration for scholarships and internships</span>
         </li>
       </ul>
     </div>;

@@ -16,7 +16,7 @@ const SectionHeading = ({
         {eyebrow}
       </span>
       <h2 className="text-3xl font-bold mb-4">{title}</h2>
-      <p className="max-w-2xl mx-auto font-semibold text-zinc-950">
+      <p className="max-w-2xl mx-auto text-zinc-950 font-medium">
         {description}
       </p>
     </div>;
