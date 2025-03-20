@@ -17,7 +17,7 @@ export const retailJobs: Job[] = [
       max: 18,
       period: 'hourly',
     },
-    description: 'Join our retail team helping customers find the perfect electronics. Learn about the latest technology while developing valuable customer service and sales skills.',
+    description: 'Join our dynamic retail team helping customers find the perfect electronics. Learn about cutting-edge technology while building valuable customer service and sales skills in a fun, supportive environment.',
     requirements: [
       'No prior experience required',
       'Interest in technology and electronics',
@@ -26,7 +26,7 @@ export const retailJobs: Job[] = [
     ],
     experienceLevel: 'entry-level',
     postedDate: '2023-09-15',
-    logoUrl: 'https://images.unsplash.com/photo-1563770660941-10b3dc965c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
+    logoUrl: '/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png',
     isRemote: false,
     isFlexible: true,
   },
