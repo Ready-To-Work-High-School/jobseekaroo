@@ -27,7 +27,7 @@ const CredentialsBadges = () => {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
     name: "Problem Solving"
   }];
-  return <div className="bg-white p-8 rounded-xl shadow-sm border border-border">
+  return <div className="p-8 rounded-xl shadow-sm border border-border bg-sky-200">
       <SectionHeading eyebrow="Florida Ready To Work Credentials" title="Duval County School High Distinction" description="Students earn digital badges and credentials to showcase career-ready skills to potential employers" eyebrowColor="bg-primary/10 text-red-800" />
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
