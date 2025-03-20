@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Hero from '@/components/Hero';
@@ -6,19 +5,16 @@ import JobCard from '@/components/JobCard';
 import { mockJobs } from '@/lib/mock-data';
 import { useFadeIn } from '@/utils/animations';
 import ProgramsSection from '@/components/ProgramsSection';
-
 const Index = () => {
   const navigate = useNavigate();
   const sectionAnimation = useFadeIn(300);
   const featuredJobs = mockJobs.slice(0, 3);
-  
-  return (
-    <Layout fullWidth withPadding={false}>
+  return <Layout fullWidth withPadding={false}>
       <Hero />
       
       {/* Easy Jobs Section - Moved up two sections */}
       <section className="py-20 bg-secondary/50">
-        <div className="container-custom">
+        <div className="container-custom bg-amber-500">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
@@ -33,16 +29,14 @@ const Index = () => {
                 to no prior work experience.
               </p>
               <ul className="space-y-3 mb-8">
-                {['No experience required for most positions', 'Flexible schedules that work around your classes', 'Local opportunities to minimize commute time', 'Build valuable skills for your future career'].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2">
+                {['No experience required for most positions', 'Flexible schedules that work around your classes', 'Local opportunities to minimize commute time', 'Build valuable skills for your future career'].map((item, i) => <li key={i} className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     </div>
                     <span>{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
               <button onClick={() => navigate('/jobs')} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
                 Find Your First Job
@@ -66,9 +60,7 @@ const Index = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredJobs.map((job, index) => (
-            <JobCard key={job.id} job={job} index={index} />
-          ))}
+          {featuredJobs.map((job, index) => <JobCard key={job.id} job={job} index={index} />)}
         </div>
         
         <div className="text-center mt-12">
@@ -79,8 +71,6 @@ const Index = () => {
       </section>
       
       <ProgramsSection />
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
