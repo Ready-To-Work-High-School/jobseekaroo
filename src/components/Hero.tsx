@@ -36,6 +36,10 @@ const Hero = () => {
           Discover entry-level positions and apprenticeships in Jacksonville, FL that fit your schedule,
           skills, and interests – all with just your ZIP code.
         </p>
+
+        <p className={cn("text-sm mb-6 font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-4 py-2 rounded-md max-w-md mx-auto", subtitleAnimation)}>
+          This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy
+        </p>
         
         <div className={cn("mb-12 flex justify-center", searchAnimation)}>
           <SearchForm />
