@@ -14,11 +14,18 @@ const ProgramsSection = () => {
       <Separator className="max-w-4xl mx-auto my-8" />
       <section className={`py-16 bg-secondary/5 ${animation}`}>
         <div className="container-custom">
-          <SectionHeading
-            eyebrow="Career Readiness"
-            title="For Employers"
-            description="Discover specialized programs that prepare high school students with verified skills employers value"
-          />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+            <SectionHeading
+              eyebrow="Career Readiness"
+              title="For Employers"
+              description="Discover specialized programs that prepare high school students with verified skills employers value"
+            />
+            <img 
+              src="/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png" 
+              alt="Career & Technical Education Logo" 
+              className="h-24 md:h-32 w-auto object-contain"
+            />
+          </div>
           
           <div className="space-y-16">
             <WestsideAcademy />
