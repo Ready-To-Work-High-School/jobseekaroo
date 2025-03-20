@@ -176,7 +176,19 @@ interface NavLinkProps {
 
 const NavLink = ({ to, label, currentPath }: NavLinkProps) => {
   const isActive = currentPath === to || (to !== '/' && currentPath.startsWith(to));
-  return <Link to={to} className="">{label}</Link>;
+  return (
+    <Link 
+      to={to} 
+      className={cn(
+        "text-sm font-medium transition-colors",
+        isActive 
+          ? "text-primary" 
+          : "text-foreground/80 hover:text-foreground"
+      )}
+    >
+      {label}
+    </Link>
+  );
 };
 
 export default Navbar;
