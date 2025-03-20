@@ -25,7 +25,10 @@ const ProgramsSection = () => {
               </div>
               <div>
                 <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
-                <p className="text-base text-gray-950">Career Technical Education Division | Duval County School District</p>
+                <p className="text-base text-gray-950">
+                  Career Technical Education Division | Duval County School District
+                  <span className="ml-2 inline-block font-medium text-primary">Created by Ms. Coleman</span>
+                </p>
               </div>
             </div>
             
