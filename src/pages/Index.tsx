@@ -43,7 +43,7 @@ const Index = () => {
                   </li>)}
               </ul>
               <button onClick={() => navigate('/jobs')} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
-                Find Your First Job
+                Search for Jobs Now
               </button>
             </div>
             
