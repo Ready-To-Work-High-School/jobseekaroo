@@ -15,11 +15,11 @@ const ProgramsSection = () => {
           <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs font-medium bg-amber-200 text-amber-800">
+                <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs bg-amber-200 text-stone-950 font-bold">
                   Employer Resources
                 </span>
                 <h2 className="text-3xl font-bold mb-3 text-amber-800 text-center">For Employers Only</h2>
-                <p className="text-amber-900 font-medium text-center">
+                <p className="text-center font-bold text-zinc-900">
                   Learn how students in the Entrepreneurship Academy receive intensive specialized curriculum that prepares them with verified skills and credentials employers value
                 </p>
               </div>
