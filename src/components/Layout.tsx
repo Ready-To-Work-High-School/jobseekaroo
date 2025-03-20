@@ -28,7 +28,7 @@ const Layout = ({
             <div className="mb-4 md:mb-0">
               <span className="text-xl font-medium">
                 <span className="text-primary font-semibold">job</span>
-                <span className="text-center">seeker, created by Pamela Coleman</span>
+                <span className="text-right">seeker, created by Pamela Coleman</span>
               </span>
               <p className="text-sm mt-1 font-bold text-zinc-950">
                 Helping high school students find great jobs
