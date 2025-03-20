@@ -20,11 +20,13 @@ const SkillBadge = ({ image, name, isESB = false }: SkillBadgeProps) => {
         <Badge className="absolute -top-2 -right-2 bg-primary text-white">Certified</Badge>
         
         {isESB && (
-          <img 
-            src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
-            alt="ESB Certification" 
-            className="absolute -bottom-3 -right-3 h-8 w-8 md:h-10 md:w-10"
-          />
+          <div className="absolute bottom-0 right-0 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+              alt="ESB Certification" 
+              className="h-10 w-10 md:h-12 md:w-12 object-contain"
+            />
+          </div>
         )}
       </div>
       <p className="text-center text-sm font-medium mt-2">{name}</p>
