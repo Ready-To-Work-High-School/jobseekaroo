@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Hero from '@/components/Hero';
@@ -6,12 +5,10 @@ import JobCard from '@/components/JobCard';
 import { mockJobs } from '@/lib/mock-data';
 import { useFadeIn } from '@/utils/animations';
 import ProgramsSection from '@/components/ProgramsSection';
-
 const Index = () => {
   const navigate = useNavigate();
   const sectionAnimation = useFadeIn(300);
   const featuredJobs = mockJobs.slice(0, 3);
-  
   return <Layout fullWidth withPadding={false}>
       <Hero />
       
@@ -38,7 +35,7 @@ const Index = () => {
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     </div>
-                    <span>{item}</span>
+                    <span className="Entry level jobs that provides stability and opportunities to climb the ladder">{item}</span>
                   </li>)}
               </ul>
               <button onClick={() => navigate('/jobs')} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
@@ -76,5 +73,4 @@ const Index = () => {
       <ProgramsSection />
     </Layout>;
 };
-
 export default Index;
