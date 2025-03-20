@@ -26,7 +26,7 @@ const Hero = () => {
         </h1>
         
         <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>
-          Thathat offer competitive salaries, opportunities for growth and professional development, and long-term career potential.
+          Many jobs offer competitive salaries, opportunities for growth and professional development, and long-term career potential.
         </p>
 
         <p className="text-base font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-500">
