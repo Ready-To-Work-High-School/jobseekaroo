@@ -1,4 +1,3 @@
-
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
@@ -8,7 +7,7 @@ const Hero = () => {
   const subtitleAnimation = useSlideIn(300);
   const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
-  return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-yellow-600 rounded-none">
+  return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 rounded-none bg-amber-500">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent -z-10" />
       
