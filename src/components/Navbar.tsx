@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -6,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+
 const Navbar = () => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -14,6 +16,7 @@ const Navbar = () => {
     user,
     signOut
   } = useAuth();
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -21,6 +24,7 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const getUserInitials = () => {
     if (!user) return '';
 
@@ -37,16 +41,17 @@ const Navbar = () => {
     }
     return '';
   };
+
   return <header className={cn('fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out', animation, scrolled ? 'py-3 backdrop-blur-lg bg-white/80 shadow-sm' : 'py-5 bg-transparent')}>
       <div className="container-custom flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80">
           <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside HS Logo" className="h-16 w-auto object-fill" />
           <div className="flex flex-col items-start">
+            <span className="-mt-2 font-bold text-stone-950 text-base my-0">High School</span>
             <span className="text-2xl font-medium tracking-tight">
               <span className="text-primary font-semibold">Job</span>
-              <span className="-mt-2 font-bold text-stone-950 text-base my-0\n"> seekers 4</span>
+              <span className="-mt-2 font-bold text-stone-950 text-base my-0"> seekers 4</span>
             </span>
-            <span className="-mt-2 font-bold text-stone-950 text-base my-0">  High School</span>
           </div>
         </Link>
 
@@ -110,11 +115,13 @@ const Navbar = () => {
       </div>
     </header>;
 };
+
 interface NavLinkProps {
   to: string;
   label: string;
   currentPath: string;
 }
+
 const NavLink = ({
   to,
   label,
@@ -125,4 +132,5 @@ const NavLink = ({
       {label}
     </Link>;
 };
+
 export default Navbar;
