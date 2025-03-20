@@ -25,14 +25,13 @@ const Hero = () => {
         </span>
         
         <h1 className={cn(
-          "text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", 
-          "bg-clip-text text-transparent bg-gradient-to-br from-gray-900 via-gray-700 to-amber-500", 
+          "text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6 text-black", 
           titleAnimation
         )}>
           Find the perfect entry level job in Jacksonville, Florida.
         </h1>
         
-        <p className={cn("text-lg mb-8 text-muted-foreground max-w-2xl mx-auto", subtitleAnimation)}>
+        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>
           Discover entry-level positions and apprenticeships in Jacksonville, FL that fit your schedule,
           skills, and interests – all with just your ZIP code.
         </p>
