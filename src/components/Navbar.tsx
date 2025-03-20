@@ -20,7 +20,8 @@ const Navbar = () => {
           <div className="flex flex-col items-start">
             <span className="text-2xl font-medium tracking-tight">
               <span className="text-primary font-semibold">job</span>
-              <span>seekaroo</span>
+              <span>seeker
+            </span>
             </span>
             <span className="text-xs -mt-1 font-bold text-stone-950">Westside High School</span>
           </div>
