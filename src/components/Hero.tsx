@@ -1,3 +1,4 @@
+
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
@@ -33,7 +34,7 @@ Find the perfect entry level job in Jacksonville</h1>
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto", infoAnimation)}>
           <FeatureCard icon="🔎" title="Local Jobs" description="Find opportunities within Jacksonville that minimize commute time." />
-          <FeatureCard icon="💰" title="Apprenticeships" description="Discover paid training programs where you can learn valuable skills while earning income." />
+          <FeatureCard icon="🚀" title="Career Growth" description="Entry-level positions that provide stability and opportunities to climb the career ladder." />
           <FeatureCard icon="💼" title="Entry Level Positions" description="Explore positions specifically designed for high school students beginning their career journey." />
         </div>
       </div>
