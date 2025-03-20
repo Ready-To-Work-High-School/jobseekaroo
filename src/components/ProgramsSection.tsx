@@ -120,7 +120,7 @@ const ProgramsSection = () => {
                   
                   <AccordionItem value="year2">
                     <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-                      <span className="font-semibold"> Year 2: Business Management &amp; Law
+                      <span className="font-semibold text-left"> Year 2: Business Management &amp; Law
                     </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-5 pb-4 pt-0">
@@ -173,7 +173,7 @@ const ProgramsSection = () => {
                   
                   <AccordionItem value="year4">
                     <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-                      <span className="font-semibold text-center">Capstone &amp; Certification</span>
+                      <span className="font-semibold text-left">Capstone &amp; Certification</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-5 pb-4 pt-0">
                       <ul className="space-y-2">
