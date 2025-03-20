@@ -59,7 +59,7 @@ const Index = () => {
       <section className="py-20 bg-secondary/50">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-700">
+            <span className="inline-block mb-2 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-600 text-white shadow-sm">
               Trending Now
             </span>
             <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
@@ -77,7 +77,7 @@ const Index = () => {
           <div className="text-center mt-12">
             <button 
               onClick={() => navigate('/jobs')} 
-              className="px-6 py-3 rounded-full bg-amber-500 text-white font-medium hover:bg-amber-600 transition-colors focus-ring"
+              className="px-6 py-3 rounded-full bg-amber-600 text-white font-medium hover:bg-amber-700 transition-colors focus-ring shadow-sm"
             >
               View All Jobs
             </button>
