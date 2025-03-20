@@ -118,8 +118,8 @@ const JobCard = ({
           )}
           
           <div className="flex-1 min-w-0">
-            <h3 className={`font-semibold text-lg truncate ${useAmberStyling ? 'text-amber-800' : ''}`}>{job.title}</h3>
-            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-muted-foreground'}`}>{job.company}</p>
+            <h3 className={`font-semibold text-lg truncate text-black`}>{job.title}</h3>
+            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>{job.company}</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -141,7 +141,7 @@ const JobCard = ({
         </div>
 
         {/* Location and Details */}
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-wrap gap-4 text-sm text-black">
           <div className="flex items-center gap-1">
             <MapPin className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
             <span>{job.location.city}, {job.location.state}</span>
@@ -178,7 +178,7 @@ const JobCard = ({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-muted-foreground line-clamp-2">
+        <p className="text-sm text-black line-clamp-2">
           {job.description}
         </p>
       </div>
