@@ -1,11 +1,14 @@
+
 import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
+import { MapPin, Clock, BriefcaseIcon, CalendarIcon } from 'lucide-react';
+
 interface JobCardProps {
   job: Job;
   index: number;
 }
+
 const JobCard = ({
   job,
   index
@@ -29,53 +32,79 @@ const JobCard = ({
   const formatPayRange = (min: number, max: number, period: string) => {
     return `$${min}${max > min ? `-$${max}` : ''} ${period}`;
   };
-  return <Link to={`/jobs/${job.id}`} className="">
-      <div className="flex items-start gap-4 bg-neutral-50">
-        {job.logoUrl ? <div className="w-12 h-12 rounded-md border border-border overflow-hidden bg-muted flex-shrink-0">
-            <img src={job.logoUrl} alt={`${job.company} logo`} className="w-full h-full object-cover" loading="lazy" />
-          </div> : <div className="w-12 h-12 rounded-md border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <span className="text-primary font-medium text-lg">
-              {job.company.substring(0, 1)}
-            </span>
-          </div>}
-        
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start gap-2">
+
+  return (
+    <Link to={`/jobs/${job.id}`} className={animation}>
+      <div className="flex flex-col space-y-4">
+        {/* Header */}
+        <div className="flex items-start gap-4">
+          {job.logoUrl ? (
+            <div className="w-12 h-12 rounded-md border border-border overflow-hidden bg-muted flex-shrink-0">
+              <img src={job.logoUrl} alt={`${job.company} logo`} className="w-full h-full object-cover" loading="lazy" />
+            </div>
+          ) : (
+            <div className="w-12 h-12 rounded-md border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-primary font-medium text-lg">
+                {job.company.substring(0, 1)}
+              </span>
+            </div>
+          )}
+          
+          <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-lg truncate">{job.title}</h3>
-            <span className="text-xs text-muted-foreground whitespace-nowrap">
-              {formatRelativeDate(job.postedDate)}
-            </span>
+            <p className="text-muted-foreground">{job.company}</p>
           </div>
           
-          <p className="text-muted-foreground text-sm mt-1">{job.company}</p>
-          
-          <div className="flex flex-wrap gap-2 mt-3">
-            <span className="px-2 py-1 rounded-md bg-secondary text-xs font-medium">
-              {job.location.city}, {job.location.state}
-            </span>
-            
-            <span className="px-2 py-1 rounded-md bg-secondary text-xs font-medium">
-              {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
-            </span>
-            
-            <span className="px-2 py-1 rounded-md bg-secondary text-xs font-medium capitalize">
-              {job.type.replace('-', ' ')}
-            </span>
-            
-            {job.isRemote && <span className="px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
-                Remote
-              </span>}
-            
-            {job.isFlexible && <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-800 text-xs font-medium">
-                Flexible
-              </span>}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
+            <Clock className="h-3 w-3" />
+            {formatRelativeDate(job.postedDate)}
           </div>
-          
-          <p className="mt-3 text-sm text-foreground/80 line-clamp-2">
-            {job.description}
-          </p>
         </div>
+
+        {/* Location and Details */}
+        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <MapPin className="h-4 w-4" />
+            <span>{job.location.city}, {job.location.state}</span>
+          </div>
+          
+          <div className="flex items-center gap-1">
+            <BriefcaseIcon className="h-4 w-4" />
+            <span>{formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}</span>
+          </div>
+          
+          <div className="flex items-center gap-1">
+            <CalendarIcon className="h-4 w-4" />
+            <span className="capitalize">{job.type.replace('-', ' ')}</span>
+          </div>
+        </div>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2">
+          {job.isRemote && (
+            <span className="px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
+              Remote
+            </span>
+          )}
+          
+          {job.isFlexible && (
+            <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-800 text-xs font-medium">
+              Flexible
+            </span>
+          )}
+          
+          <span className="px-2 py-1 rounded-md bg-secondary text-xs font-medium capitalize">
+            {job.experienceLevel.replace('-', ' ')}
+          </span>
+        </div>
+
+        {/* Description */}
+        <p className="text-sm text-muted-foreground line-clamp-2">
+          {job.description}
+        </p>
       </div>
-    </Link>;
+    </Link>
+  );
 };
+
 export default JobCard;

@@ -8,6 +8,8 @@ import SearchForm from '@/components/SearchForm';
 import { searchJobsByZipCode } from '@/lib/mock-data';
 import { Job, JobType, ExperienceLevel } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { MapPin } from 'lucide-react';
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +17,15 @@ const JobListings = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const animation = useFadeIn(200);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 5;
 
   // Apply filters function
   const applyFilters = (filters: FilterState) => {
     setLoading(true);
+    setCurrentPage(1); // Reset to first page when filters change
     
     // Update search params
     const newParams = new URLSearchParams(searchParams);
@@ -95,24 +102,41 @@ const JobListings = () => {
     }, 800);
   }, [searchParams, zipCodeParam]);
 
+  // Get current jobs for pagination
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <Layout>
       <div className={`space-y-8 ${animation}`}>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Find Jobs Near You</h1>
-            <p className="text-muted-foreground">
-              {zipCodeParam 
-                ? `Showing jobs in ZIP code ${zipCodeParam}` 
-                : "Search for jobs by entering your ZIP code"}
-            </p>
+        <div className="p-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Find Jobs Near You</h1>
+              <div className="flex items-center text-muted-foreground">
+                {zipCodeParam && (
+                  <>
+                    <MapPin className="h-4 w-4 mr-1 text-primary" />
+                    <p>Jobs in ZIP code <span className="font-medium">{zipCodeParam}</span></p>
+                  </>
+                )}
+                {!zipCodeParam && (
+                  <p>Search for jobs by entering your ZIP code</p>
+                )}
+              </div>
+            </div>
+            
+            <SearchForm 
+              variant="minimal" 
+              initialZipCode={zipCodeParam} 
+              className="w-full md:w-auto"
+            />
           </div>
-          
-          <SearchForm 
-            variant="minimal" 
-            initialZipCode={zipCodeParam} 
-            className="w-full md:w-auto"
-          />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -130,17 +154,57 @@ const JobListings = () => {
               </div>
             ) : jobs.length > 0 ? (
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Showing {jobs.length} job{jobs.length !== 1 ? 's' : ''}
-                </p>
+                <div className="bg-white p-4 rounded-lg border border-border shadow-sm">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-muted-foreground">
+                      Found <span className="font-medium text-foreground">{jobs.length}</span> job{jobs.length !== 1 ? 's' : ''}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Showing {indexOfFirstJob + 1} to {Math.min(indexOfLastJob, jobs.length)} of {jobs.length}
+                    </p>
+                  </div>
+                </div>
+                
                 <div className="space-y-4">
-                  {jobs.map((job, index) => (
-                    <JobCard key={job.id} job={job} index={index} />
+                  {currentJobs.map((job, index) => (
+                    <div key={job.id} className="bg-white rounded-lg border border-border shadow-sm p-4 hover:border-primary/30 transition-all duration-200">
+                      <JobCard job={job} index={index} />
+                    </div>
                   ))}
                 </div>
+                
+                {jobs.length > jobsPerPage && (
+                  <div className="py-4">
+                    <Pagination>
+                      <PaginationContent>
+                        {currentPage > 1 && (
+                          <PaginationItem>
+                            <PaginationPrevious onClick={() => paginate(currentPage - 1)} />
+                          </PaginationItem>
+                        )}
+                        
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                          <PaginationItem key={index}>
+                            <PaginationLink 
+                              isActive={currentPage === index + 1} 
+                              onClick={() => paginate(index + 1)}>
+                              {index + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        
+                        {currentPage < totalPages && (
+                          <PaginationItem>
+                            <PaginationNext onClick={() => paginate(currentPage + 1)} />
+                          </PaginationItem>
+                        )}
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="text-center py-12 px-6 rounded-lg border border-border bg-white">
+              <div className="text-center py-12 px-6 rounded-lg border border-border bg-white shadow-sm">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
