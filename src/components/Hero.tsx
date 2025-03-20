@@ -1,12 +1,15 @@
+
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
 import FeatureCard from './FeatureCard';
+
 const Hero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
+
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
@@ -28,7 +31,7 @@ const Hero = () => {
         </p>
 
         <p className="text-base font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-500">
-          This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy
+          * <em>This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy</em>
         </p>
         
         <div className={cn("mb-12 flex justify-center", searchAnimation)}>
@@ -43,4 +46,5 @@ const Hero = () => {
       </div>
     </section>;
 };
+
 export default Hero;
