@@ -4,6 +4,7 @@ import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ExternalLink } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -13,7 +14,7 @@ const CredentialsBadges = () => {
     { image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png", name: "Florida Soft Skills" },
     { image: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.png", name: "Team Building" },
     { image: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png", name: "Capstone Experience" },
-    { image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png", name: "Problem Solving", isESB: true },
+    { image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png", name: "Problem Solving" },
   ];
 
   return (
@@ -27,8 +28,23 @@ const CredentialsBadges = () => {
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
         {badges.map((badge, index) => (
-          <SkillBadge key={index} image={badge.image} name={badge.name} isESB={badge.isESB} />
+          <SkillBadge key={index} image={badge.image} name={badge.name} />
         ))}
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <div className="flex items-center bg-secondary/30 p-4 rounded-lg">
+          <img 
+            src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+            alt="ESB Certification" 
+            className="h-16 w-16 object-contain mr-4"
+          />
+          <div>
+            <Badge className="mb-1 bg-primary text-white">Entrepreneurship & Small Business</Badge>
+            <p className="text-sm font-medium">Problem Solving Credential includes ESB Certification</p>
+            <p className="text-xs text-muted-foreground">Industry-recognized business credential</p>
+          </div>
+        </div>
       </div>
       
       <div className="mt-12 bg-secondary/20 p-6 rounded-lg">
