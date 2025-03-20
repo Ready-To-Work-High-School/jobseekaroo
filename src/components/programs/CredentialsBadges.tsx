@@ -60,7 +60,7 @@ const CredentialsBadges = () => {
           </div>
           <div className="flex gap-3">
             <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-            <p className="text-sm">Badges are verified and can be validated through the Florida Ready To Work program</p>
+            <p className="text-sm">Badges are verified and can be validated through the Florida Ready To Work program, IBM and credentialing agencies</p>
           </div>
         </div>
         
