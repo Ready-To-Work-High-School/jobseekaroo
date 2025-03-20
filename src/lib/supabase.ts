@@ -1,8 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
+import { supabase as supabaseClient } from '@/integrations/supabase/client';
 
-// Use default values for local development if environment variables are not set
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-test-supabase-url.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-test-supabase-anon-key';
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Export the already configured supabase client
+export const supabase = supabaseClient;

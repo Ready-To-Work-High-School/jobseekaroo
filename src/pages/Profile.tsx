@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Layout from '@/components/Layout';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Card,
   CardContent,
@@ -61,7 +60,6 @@ const Profile = () => {
   const { toast } = useToast();
   const animation = useFadeIn(200);
 
-  // Initialize form with user data
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -80,7 +78,19 @@ const Profile = () => {
     }
   }, [user, navigate]);
 
-  // Fetch saved jobs
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        firstName: user.user_metadata?.first_name || '',
+        lastName: user.user_metadata?.last_name || '',
+        email: user.email || '',
+        bio: user.user_metadata?.bio || '',
+        location: user.user_metadata?.location || '',
+        phone: user.user_metadata?.phone || '',
+      });
+    }
+  }, [user, form]);
+
   useEffect(() => {
     const fetchSavedJobs = async () => {
       if (!user) return;
@@ -105,7 +115,6 @@ const Profile = () => {
   const onSubmit = async (values: ProfileFormValues) => {
     setIsLoading(true);
     try {
-      // Update user metadata in Supabase
       const { error } = await supabase.auth.updateUser({
         data: {
           first_name: values.firstName,
