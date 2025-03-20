@@ -181,7 +181,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const newApplication = {
         ...application,
         user_id: user.id,
-        status: application.status || 'applied',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };

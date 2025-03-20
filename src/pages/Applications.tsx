@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -95,14 +94,12 @@ const Applications = () => {
     },
   });
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!user) {
       navigate('/sign-in');
     }
   }, [user, navigate]);
 
-  // Load applications
   const loadApplications = async () => {
     setIsLoading(true);
     try {
@@ -121,23 +118,19 @@ const Applications = () => {
     }
   };
 
-  // Load applications on mount
   useEffect(() => {
     if (user) {
       loadApplications();
     }
   }, [user]);
 
-  // Filter applications based on search term and active tab
   useEffect(() => {
     let filtered = applications;
     
-    // Filter by tab
     if (activeTab !== 'all') {
       filtered = filtered.filter(app => app.status === activeTab);
     }
     
-    // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -150,24 +143,20 @@ const Applications = () => {
     setFilteredApplications(filtered);
   }, [applications, activeTab, searchTerm]);
 
-  // Calculate status counts
   const updateStatusCounts = (apps: JobApplication[]) => {
     const counts: { [key in ApplicationStatus]?: number } = {};
     
-    // Initialize all statuses with 0
     const statuses: ApplicationStatus[] = ['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'];
     statuses.forEach(status => {
       counts[status] = 0;
     });
     
-    // Count applications by status
     apps.forEach(app => {
       if (counts[app.status] !== undefined) {
         counts[app.status]! += 1;
       }
     });
     
-    // Convert to array for component
     const countsArray: StatusCount[] = statuses.map(status => ({
       status,
       count: counts[status] || 0,
@@ -176,7 +165,6 @@ const Applications = () => {
     setStatusCounts(countsArray);
   };
 
-  // Load saved jobs when adding application
   const loadSavedJobs = async () => {
     if (!user) return;
     
@@ -189,7 +177,6 @@ const Applications = () => {
     }
   };
 
-  // Pre-fill form with saved job data
   const prefillWithSavedJob = (job: Job) => {
     form.setValue('job_title', job.title);
     form.setValue('company', job.company);
@@ -197,14 +184,21 @@ const Applications = () => {
     setShowSavedJobs(false);
   };
 
-  // Handle new application submission
   const onSubmit = async (values: FormValues) => {
     setIsAdding(true);
     
     try {
       const newApplication = {
         job_id: selectedJob?.id || 'manual-entry',
-        ...values,
+        job_title: values.job_title,
+        company: values.company,
+        applied_date: values.applied_date,
+        status: values.status,
+        notes: values.notes,
+        contact_name: values.contact_name,
+        contact_email: values.contact_email,
+        next_step: values.next_step,
+        next_step_date: values.next_step_date,
       };
       
       await createApplication(newApplication);
@@ -228,7 +222,6 @@ const Applications = () => {
       });
       setSelectedJob(null);
       
-      // Reload applications
       loadApplications();
       
     } catch (error) {
@@ -247,7 +240,6 @@ const Applications = () => {
     <Layout>
       <div className={`container max-w-5xl py-8 ${animation}`}>
         <div className="flex flex-col gap-6">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Applications</h1>
@@ -270,7 +262,6 @@ const Applications = () => {
             </div>
           </div>
 
-          {/* Stats */}
           {applications.length > 0 && (
             <ApplicationStats 
               statusCounts={statusCounts} 
@@ -278,7 +269,6 @@ const Applications = () => {
             />
           )}
 
-          {/* Filters and Search */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -304,7 +294,6 @@ const Applications = () => {
             </Tabs>
           </div>
 
-          {/* Applications List */}
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -359,7 +348,6 @@ const Applications = () => {
         </div>
       </div>
 
-      {/* Add Application Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
@@ -606,3 +594,4 @@ const Applications = () => {
 };
 
 export default Applications;
+
