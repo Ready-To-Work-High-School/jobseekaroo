@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
@@ -21,7 +20,6 @@ const JobCard = ({
   const [isSaved, setIsSaved] = useState(false);
   const { toast } = useToast();
   
-  // Check if job is saved on component mount and when user changes
   useEffect(() => {
     if (user) {
       const checkSaved = async () => {
@@ -34,7 +32,6 @@ const JobCard = ({
     }
   }, [user, job.id, isSavedJob]);
 
-  // Format date to relative time (e.g., "2 days ago")
   const formatRelativeDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -47,15 +44,13 @@ const JobCard = ({
     return `${Math.floor(diffDays / 30)} months ago`;
   };
 
-  // Format pay range
   const formatPayRange = (min: number, max: number, period: string) => {
     return `$${min}${max > min ? `-$${max}` : ''} ${period}`;
   };
-  
-  // Handle saving/unsaving job
+
   const handleSaveToggle = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation to job details
-    e.stopPropagation(); // Prevent event bubbling
+    e.preventDefault();
+    e.stopPropagation();
     
     if (!user) {
       toast({
@@ -92,7 +87,6 @@ const JobCard = ({
     }
   };
 
-  // Determine if we should use amber styling based on company name
   const jacksonvilleCompanies = [
     "Jacksonville Electronics", 
     "Jacksonville Waterfront Hotel", 
@@ -103,7 +97,6 @@ const JobCard = ({
   return (
     <Link to={`/jobs/${job.id}`} className={animation}>
       <div className={`flex flex-col space-y-4 p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}>
-        {/* Header */}
         <div className="flex items-start gap-4">
           {job.logoUrl ? (
             <div className={`w-12 h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
@@ -123,14 +116,14 @@ const JobCard = ({
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
+            <div className="flex items-center gap-2 text-xs text-black whitespace-nowrap">
               <Clock className="h-3 w-3" />
               {formatRelativeDate(job.postedDate)}
             </div>
             
             <button 
               onClick={handleSaveToggle}
-              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-muted-foreground hover:text-primary'} transition-colors`}
+              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors`}
               aria-label={isSaved ? "Unsave job" : "Save job"}
             >
               <BookmarkIcon 
@@ -140,7 +133,6 @@ const JobCard = ({
           </div>
         </div>
 
-        {/* Location and Details */}
         <div className="flex flex-wrap gap-4 text-sm text-black">
           <div className="flex items-center gap-1">
             <MapPin className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
@@ -158,7 +150,6 @@ const JobCard = ({
           </div>
         </div>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {job.isRemote && (
             <span className="px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
@@ -177,7 +168,6 @@ const JobCard = ({
           </span>
         </div>
 
-        {/* Description */}
         <p className="text-sm text-black line-clamp-2">
           {job.description}
         </p>
