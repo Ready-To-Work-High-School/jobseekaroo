@@ -15,7 +15,7 @@ const Index = () => {
       {/* Easy Jobs Section - Moved up two sections */}
       <section className="py-20 bg-secondary/50">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-amber-400">
             <div>
               <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 Get Started
