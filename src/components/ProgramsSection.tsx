@@ -243,7 +243,7 @@ const ProgramsSection = () => {
           
           <div className="border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center">
-              <img src="/lovable-uploads/521bdc87-8068-492d-8a0c-7281a4c42c5a.png" alt="Duval Ready Diploma Designation" className="w-full h-full object-contain p-4" />
+              
             </div>
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">Duval Ready Diploma</h3>
