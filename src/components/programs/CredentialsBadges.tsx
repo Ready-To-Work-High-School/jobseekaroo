@@ -3,7 +3,7 @@ import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, ExternalLink } from 'lucide-react';
+import { CheckCircle, ExternalLink, Moon } from 'lucide-react';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -49,11 +49,11 @@ const CredentialsBadges = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button className="gap-2">
-            Verify Student Credentials
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
+          <Button className="gap-2" asChild>
+            <a href="mailto:Colemanp3@duvalschools.org">
+              Verify Student Credentials
+              <Moon className="h-4 w-4" />
+            </a>
           </Button>
           <Button variant="outline" className="gap-2" asChild>
             <a href="mailto:Colemanp3@duvalschools.org">
