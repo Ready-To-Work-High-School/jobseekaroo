@@ -205,7 +205,7 @@ const ProgramsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <div className="border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div className="w-full relative h-40 overflow-hidden">
-              <img src="/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png" alt="ESB - Entrepreneurship and Small Business" className="w-full h-full object-cover" />
+              <img src="/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png" alt="ESB - Entrepreneurship and Small Business" className="w-full h-full object-scale-down" />
             </div>
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">Entrepreneurship & Small Business</h3>
@@ -224,7 +224,7 @@ const ProgramsSection = () => {
           
           <div className="border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center">
-              <img src="/lovable-uploads/ddd8b723-4e16-4c33-8a98-ffac9d6cec5c.png" alt="Improving Post-Secondary Readiness" className="w-full h-full object-cover" />
+              
             </div>
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">Post-Secondary Readiness</h3>
