@@ -1,4 +1,3 @@
-
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
