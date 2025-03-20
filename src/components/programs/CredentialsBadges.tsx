@@ -1,8 +1,9 @@
+
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, ExternalLink, Moon } from 'lucide-react';
+import { CheckCircle, ExternalLink } from 'lucide-react';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -51,7 +52,7 @@ const CredentialsBadges = () => {
           <Button className="gap-2" asChild>
             <a href="mailto:Colemanp3@duvalschools.org">
               Verify Student Credentials
-              <Moon className="h-4 w-4" />
+              <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="outline" className="gap-2" asChild>
