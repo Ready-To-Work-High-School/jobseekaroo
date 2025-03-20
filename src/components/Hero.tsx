@@ -1,4 +1,3 @@
-
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
@@ -20,8 +19,7 @@ const Hero = () => {
           For Westside High School Students
         </span>
         
-        <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight", "bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600", titleAnimation)}>
-Find the perfect entry level job in Jacksonville</h1>
+        <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight", "bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600", titleAnimation)}>Find the perfect entry level job in Jacksonville, Florida.</h1>
         
         <p className="font-semibold">
           Discover entry-level positions and apprenticeships in Jacksonville, FL that fit your schedule,

@@ -60,7 +60,7 @@ const NavLink = ({
   currentPath
 }: NavLinkProps) => {
   const isActive = currentPath === to || to !== '/' && currentPath.startsWith(to);
-  return <Link to={to} className={cn("text-sm font-medium transition-all duration-200 focus-ring", isActive ? "text-primary" : "text-foreground/80 hover:text-foreground")}>
+  return <Link to={to} className="">
       {label}
     </Link>;
 };
