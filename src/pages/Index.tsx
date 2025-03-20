@@ -5,11 +5,14 @@ import JobCard from '@/components/JobCard';
 import { mockJobs } from '@/lib/mock-data';
 import { useFadeIn } from '@/utils/animations';
 import ProgramsSection from '@/components/ProgramsSection';
+
 const Index = () => {
   const navigate = useNavigate();
   const sectionAnimation = useFadeIn(300);
   const featuredJobs = mockJobs.slice(0, 3);
-  return <Layout fullWidth withPadding={false}>
+  
+  return (
+    <Layout fullWidth withPadding={false}>
       <Hero />
       
       {/* Easy Jobs Section */}
@@ -51,10 +54,13 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Featured Jobs Section */}
+      {/* Featured Opportunities Section */}
       <section className="py-20 bg-secondary/50">
-        <div className="container-custom bg-amber-500">
+        <div className="container-custom">
           <div className="text-center mb-12">
+            <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-700">
+              Trending Now
+            </span>
             <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground">
               Current jobs available for high school students
@@ -62,11 +68,16 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredJobs.map((job, index) => <JobCard key={job.id} job={job} index={index} />)}
+            {featuredJobs.map((job, index) => (
+              <JobCard key={job.id} job={job} index={index} />
+            ))}
           </div>
           
           <div className="text-center mt-12">
-            <button onClick={() => navigate('/jobs')} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
+            <button 
+              onClick={() => navigate('/jobs')} 
+              className="px-6 py-3 rounded-full bg-amber-500 text-white font-medium hover:bg-amber-600 transition-colors focus-ring"
+            >
               View All Jobs
             </button>
           </div>
@@ -74,6 +85,8 @@ const Index = () => {
       </section>
       
       <ProgramsSection />
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default Index;
