@@ -2,7 +2,10 @@
 import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
-import { MapPin, Clock, BriefcaseIcon, CalendarIcon } from 'lucide-react';
+import { MapPin, Clock, BriefcaseIcon, CalendarIcon, BookmarkIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface JobCardProps {
   job: Job;
@@ -14,6 +17,22 @@ const JobCard = ({
   index
 }: JobCardProps) => {
   const animation = useFadeIn(100 + index * 50);
+  const { user, saveJob, unsaveJob, isSavedJob } = useAuth();
+  const [isSaved, setIsSaved] = useState(false);
+  const { toast } = useToast();
+  
+  // Check if job is saved on component mount and when user changes
+  useEffect(() => {
+    if (user) {
+      const checkSaved = async () => {
+        const saved = await isSavedJob(job.id);
+        setIsSaved(saved);
+      };
+      checkSaved();
+    } else {
+      setIsSaved(false);
+    }
+  }, [user, job.id, isSavedJob]);
 
   // Format date to relative time (e.g., "2 days ago")
   const formatRelativeDate = (dateString: string) => {
@@ -31,6 +50,46 @@ const JobCard = ({
   // Format pay range
   const formatPayRange = (min: number, max: number, period: string) => {
     return `$${min}${max > min ? `-$${max}` : ''} ${period}`;
+  };
+  
+  // Handle saving/unsaving job
+  const handleSaveToggle = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation to job details
+    e.stopPropagation(); // Prevent event bubbling
+    
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to save jobs",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    try {
+      if (isSaved) {
+        await unsaveJob(job.id);
+        setIsSaved(false);
+        toast({
+          title: "Job removed",
+          description: "Job removed from your saved jobs",
+        });
+      } else {
+        await saveJob(job.id);
+        setIsSaved(true);
+        toast({
+          title: "Job saved",
+          description: "Job added to your saved jobs",
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling job save status:", error);
+      toast({
+        title: "Error",
+        description: "There was an error updating your saved jobs",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -55,9 +114,21 @@ const JobCard = ({
             <p className="text-muted-foreground">{job.company}</p>
           </div>
           
-          <div className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
-            <Clock className="h-3 w-3" />
-            {formatRelativeDate(job.postedDate)}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
+              <Clock className="h-3 w-3" />
+              {formatRelativeDate(job.postedDate)}
+            </div>
+            
+            <button 
+              onClick={handleSaveToggle}
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label={isSaved ? "Unsave job" : "Save job"}
+            >
+              <BookmarkIcon 
+                className={`h-5 w-5 ${isSaved ? 'fill-primary text-primary' : 'fill-none'}`} 
+              />
+            </button>
           </div>
         </div>
 

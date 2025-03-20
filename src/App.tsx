@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import JobListings from "./pages/JobListings";
 import JobDetails from "./pages/JobDetails";
+import SavedJobs from "./pages/SavedJobs";
 import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/jobs" element={<JobListings />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
+            <Route path="/saved-jobs" element={<SavedJobs />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
