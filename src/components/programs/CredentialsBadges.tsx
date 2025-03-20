@@ -1,9 +1,11 @@
+
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+
 const CredentialsBadges = () => {
   const badges = [{
     image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
@@ -27,6 +29,7 @@ const CredentialsBadges = () => {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
     name: "Problem Solving"
   }];
+  
   return <div className="bg-white p-8 rounded-xl shadow-sm border border-border">
       <SectionHeading eyebrow="Florida Ready To Work Credentials" title="Duval County School High Distinction" description="Students earn digital badges and credentials to showcase career-ready skills to potential employers" eyebrowColor="bg-primary/10 text-red-800" />
       
@@ -39,7 +42,7 @@ const CredentialsBadges = () => {
           <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="h-16 w-16 object-contain mr-4" />
           <div>
             <Badge className="mb-1 bg-primary text-white">Entrepreneurship & Small Business</Badge>
-            <p className="text-sm font-medium">Entrepreneurship &amp; Small Business</p>
+            <p className="text-sm font-medium">Industry Certification</p>
             <p className="text-xs text-muted-foreground">Industry-recognized business credential</p>
           </div>
         </div>
@@ -83,4 +86,5 @@ const CredentialsBadges = () => {
       </div>
     </div>;
 };
+
 export default CredentialsBadges;
