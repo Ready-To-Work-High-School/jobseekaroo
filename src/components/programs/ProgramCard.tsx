@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,7 @@ const ProgramCard = ({
         {image && <img src={image} alt={title} className="w-full h-full object-scale-down" />}
       </div>
       <CardHeader>
-        <CardTitle className="bg-blue-200">{title}</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-muted-foreground">

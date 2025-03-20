@@ -15,7 +15,7 @@ const ProgramCards = () => {
       ]
     },
     {
-      image: "",
+      image: "/lovable-uploads/e3cddfb1-0795-425f-9b41-401d7156b350.png",
       title: "Post-Secondary Readiness",
       description: "Comprehensive programs designed to prepare high school students for college and future careers.",
       employerBenefits: [
