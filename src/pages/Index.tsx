@@ -45,7 +45,7 @@ const Index = () => {
             
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-2xl transform -rotate-3" />
-              <img src="https://images.unsplash.com/photo-1564460549619-41a10580f0c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="High school student working at a coffee shop" className="rounded-2xl border border-border shadow-lg w-full relative z-10" />
+              <img alt="High school student working at a coffee shop" src="/lovable-uploads/9902b779-4825-4eca-a738-f4c7384f3331.jpg" className="rounded-2xl border border-border shadow-lg w-full relative z-10 object-fill" />
             </div>
           </div>
         </div>
