@@ -49,7 +49,7 @@ const SearchForm = ({
         className
       )}
     >
-      <div className="absolute left-3 text-muted-foreground">
+      <div className="absolute left-3 text-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.3-4.3" />
@@ -65,9 +65,11 @@ const SearchForm = ({
           "w-full pl-10 pr-20 py-3 rounded-full border focus-ring",
           "bg-white text-foreground placeholder:text-muted-foreground/60",
           "transition-all duration-200",
+          "focus:border-primary focus:ring-2 focus:ring-primary/20",
           variant === 'default' && "text-base",
           variant === 'minimal' && "text-sm py-2",
-          !isValid && "border-destructive focus-visible:ring-destructive"
+          !isValid && "border-destructive focus-visible:ring-destructive",
+          isValid && zipCode ? "border-primary bg-blue-50/50" : ""
         )}
         aria-invalid={!isValid}
       />
