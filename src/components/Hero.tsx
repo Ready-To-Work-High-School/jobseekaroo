@@ -1,3 +1,4 @@
+
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import SearchForm from './SearchForm';
@@ -33,7 +34,7 @@ const Hero = () => {
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto", infoAnimation)}>
           <FeatureCard icon="🔎" title="Local Jobs" description="Find opportunities within your community that minimize commute time." />
-          <FeatureCard icon="🕒" title="Flexible Hours" description="Filter for jobs that work with your class schedule and activities." />
+          <FeatureCard icon="🕒" title="Industry Certified" description="Gain Florida Ready to Work Employability Skills Distinction through job experience." />
           <FeatureCard icon="🎓" title="No Experience Needed" description="Browse positions specifically open to high school students." />
         </div>
       </div>
