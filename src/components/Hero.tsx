@@ -22,11 +22,11 @@ const Hero = () => {
         </span>
         
         <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight", "bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600", titleAnimation)}>
-          Find the perfect starting job in your area
+          Find the perfect starting job in Jacksonville
         </h1>
         
         <p className={cn("text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto", subtitleAnimation)}>
-          Discover entry-level opportunities near you that fit your schedule,
+          Discover entry-level opportunities in Jacksonville, FL that fit your schedule,
           skills, and interests – all with just your ZIP code.
         </p>
         
@@ -38,7 +38,7 @@ const Hero = () => {
           <FeatureCard 
             icon="🔎" 
             title="Local Jobs" 
-            description="Find opportunities within your community that minimize commute time." 
+            description="Find opportunities within Jacksonville that minimize commute time." 
           />
           <FeatureCard 
             icon="🏆" 

@@ -1,4 +1,3 @@
-
 import { Job } from '../types/job';
 
 export const mockJobs: Job[] = [
@@ -7,9 +6,9 @@ export const mockJobs: Job[] = [
     title: 'Cashier',
     company: 'SuperMart',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97205',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32256',
     },
     type: 'part-time',
     payRate: {
@@ -24,7 +23,7 @@ export const mockJobs: Job[] = [
       'Strong communication skills',
       'Availability for evening and weekend shifts',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-15',
     logoUrl: 'https://images.unsplash.com/photo-1565372595887-80c757841e7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -33,11 +32,11 @@ export const mockJobs: Job[] = [
   {
     id: '2',
     title: 'Barista',
-    company: 'Morning Brew Coffee',
+    company: 'Bold Bean Coffee',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97209',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32204',
     },
     type: 'part-time',
     payRate: {
@@ -52,7 +51,7 @@ export const mockJobs: Job[] = [
       'Ability to work in a fast-paced environment',
       'Weekend availability is a plus',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-10',
     logoUrl: 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -61,11 +60,11 @@ export const mockJobs: Job[] = [
   {
     id: '3',
     title: 'Retail Associate',
-    company: 'Fashion Forward',
+    company: 'River City Fashion',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97204',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32246',
     },
     type: 'part-time',
     payRate: {
@@ -73,14 +72,14 @@ export const mockJobs: Job[] = [
       max: 16,
       period: 'hourly',
     },
-    description: 'Join our retail team at our downtown location! Help customers find the perfect outfits, manage inventory, and keep the store looking its best.',
+    description: 'Join our retail team at our St. Johns Town Center location! Help customers find the perfect outfits, manage inventory, and keep the store looking its best.',
     requirements: [
       'No prior retail experience needed',
       'Fashion enthusiast preferred',
       'Strong customer service orientation',
       'Able to work weekends and some evenings',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-12',
     logoUrl: 'https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -89,11 +88,11 @@ export const mockJobs: Job[] = [
   {
     id: '4',
     title: 'Library Assistant',
-    company: 'City Public Library',
+    company: 'Jacksonville Public Library',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97212',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32202',
     },
     type: 'part-time',
     payRate: {
@@ -108,7 +107,7 @@ export const mockJobs: Job[] = [
       'Friendly and patient demeanor',
       'Interest in books and research',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-08',
     logoUrl: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -117,11 +116,11 @@ export const mockJobs: Job[] = [
   {
     id: '5',
     title: 'Social Media Intern',
-    company: 'TechStart',
+    company: 'JAX Tech Startups',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97201',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32207',
     },
     type: 'internship',
     payRate: {
@@ -145,11 +144,11 @@ export const mockJobs: Job[] = [
   {
     id: '6',
     title: 'Dog Walker',
-    company: 'Happy Tails Pet Services',
+    company: 'Jax Happy Tails',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97215',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32225',
     },
     type: 'part-time',
     payRate: {
@@ -157,14 +156,14 @@ export const mockJobs: Job[] = [
       max: 20,
       period: 'hourly',
     },
-    description: 'Walk dogs in your neighborhood! Flexible schedule, perfect for animal lovers. Help pet owners keep their furry friends happy and healthy.',
+    description: 'Walk dogs in Jacksonville neighborhoods! Flexible schedule, perfect for animal lovers. Help pet owners keep their furry friends happy and healthy.',
     requirements: [
       'Love of dogs and comfort around different breeds',
       'Responsible and reliable',
       'Access to transportation',
       'Available for afternoon walks',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-03',
     logoUrl: 'https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -173,11 +172,11 @@ export const mockJobs: Job[] = [
   {
     id: '7',
     title: 'Grocery Store Clerk',
-    company: 'Natural Foods Market',
+    company: 'Jacksonville Natural Foods',
     location: {
-      city: 'Beaverton',
-      state: 'OR',
-      zipCode: '97005',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32258',
     },
     type: 'part-time',
     payRate: {
@@ -192,7 +191,7 @@ export const mockJobs: Job[] = [
       'Interest in health and nutrition a plus',
       'Flexible schedule availability',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-02',
     logoUrl: 'https://images.unsplash.com/photo-1534723452862-4c874018d8d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
@@ -201,11 +200,11 @@ export const mockJobs: Job[] = [
   {
     id: '8',
     title: 'Restaurant Host/Hostess',
-    company: 'Pacific Grill',
+    company: 'St. Johns Grill',
     location: {
-      city: 'Portland',
-      state: 'OR',
-      zipCode: '97210',
+      city: 'Jacksonville',
+      state: 'FL',
+      zipCode: '32224',
     },
     type: 'part-time',
     payRate: {
@@ -220,7 +219,7 @@ export const mockJobs: Job[] = [
       'Ability to multitask in a fast-paced environment',
       'Weekend and evening availability',
     ],
-    experienceLevel: 'no-experience',
+    experienceLevel: 'entry-level',
     postedDate: '2023-09-01',
     logoUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
