@@ -56,7 +56,7 @@ const ProgramBenefits = () => {
       <ul className="bg-white rounded-lg p-5 shadow-sm border border-border space-y-3">
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span>Industry certifications in Entrepreneurship & Small Business</span>
+          <span className="text-zinc-950">Industry certifications in Entrepreneurship & Small Business</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
