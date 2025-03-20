@@ -36,7 +36,7 @@ const AcademyDescription = () => {
         </div>
         <div>
           <h4 className="text-lg font-semibold mb-1">Advanced Academy Program</h4>
-          <p className="text-muted-foreground">
+          <p className="text-zinc-950">
             The Entrepreneurship Academy is designated as an Advanced Academy, which means it offers a rigorous curriculum with accelerated coursework, industry certifications, and college credit opportunities. Advanced Academies prepare students for both higher education and direct entry into competitive career fields with high skill and wage potential.
           </p>
         </div>
