@@ -44,7 +44,7 @@ const Navbar = () => {
           <div className="flex flex-col items-start">
             <span className="text-2xl font-medium tracking-tight">
               <span className="text-primary font-semibold">Job</span>
-              <span className="text-base 5-font-bold font-bold"> seekers 4</span>
+              <span className="-mt-2 font-bold text-stone-950 text-base my-0\n"> seekers 4</span>
             </span>
             <span className="-mt-2 font-bold text-stone-950 text-base my-0">  High School</span>
           </div>
