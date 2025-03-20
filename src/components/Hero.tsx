@@ -25,7 +25,7 @@ const Hero = () => {
         </span>
         
         <h1 className={cn(
-          "text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight", 
+          "text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", 
           "bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600", 
           titleAnimation
         )}>
