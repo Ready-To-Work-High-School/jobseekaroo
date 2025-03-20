@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Hero from '@/components/Hero';
@@ -56,14 +55,14 @@ const Index = () => {
       </section>
       
       {/* Featured Opportunities Section */}
-      <section className="py-20 bg-gradient-to-br from-zinc-900 via-amber-900 to-amber-600">
+      <section className="py-20 bg-secondary/50">
         <div className="container-custom">
           <div className="text-center mb-12">
             <span className="inline-block mb-2 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-600 text-white shadow-sm">
               Trending Now
             </span>
-            <h2 className="text-3xl font-bold mb-4 text-white">Featured Opportunities</h2>
-            <p className="max-w-2xl mx-auto text-amber-100">
+            <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
               Current jobs available for high school students
             </p>
           </div>
