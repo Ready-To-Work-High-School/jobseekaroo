@@ -220,8 +220,7 @@ export const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps)
               Cancel
             </Button>
             <Button 
-              variant="destructive" the above structure is one possible way to add a `dark` option to the `Dialog` component. Let me describe the steps:
-              
+              variant="destructive"
               onClick={handleDeleteApplication}
               disabled={isLoading}
             >
