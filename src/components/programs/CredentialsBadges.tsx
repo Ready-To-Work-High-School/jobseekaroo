@@ -2,6 +2,8 @@
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
+import { Button } from '@/components/ui/button';
+import { CheckCircle } from 'lucide-react';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -15,7 +17,7 @@ const CredentialsBadges = () => {
   ];
 
   return (
-    <>
+    <div className="bg-white p-8 rounded-xl shadow-sm border border-border">
       <SectionHeading
         eyebrow="Florida Ready To Work Credentials"
         title="Duval County School High Distinction"
@@ -29,16 +31,36 @@ const CredentialsBadges = () => {
         ))}
       </div>
       
-      <div className="text-center mt-12">
-        <a href="#" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
-          Explore All Skill Badges
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2">
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </a>
+      <div className="mt-12 bg-secondary/20 p-6 rounded-lg">
+        <h3 className="text-lg font-semibold mb-4">For Employers</h3>
+        <div className="space-y-3 mb-6">
+          <div className="flex gap-3">
+            <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+            <p className="text-sm">Students with these credentials demonstrate workforce readiness</p>
+          </div>
+          <div className="flex gap-3">
+            <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+            <p className="text-sm">Each badge represents completion of industry-standard assessments</p>
+          </div>
+          <div className="flex gap-3">
+            <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+            <p className="text-sm">Badges are verified and can be validated through the Florida Ready To Work program</p>
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button className="gap-2">
+            Verify Student Credentials
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </Button>
+          <Button variant="outline">
+            Become a Partner Employer
+          </Button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
