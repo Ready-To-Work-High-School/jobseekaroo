@@ -16,7 +16,7 @@ const Navbar = () => {
   return <header className={cn('fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out', animation, scrolled ? 'py-3 backdrop-blur-lg bg-white/80 shadow-sm' : 'py-5 bg-transparent')}>
       <div className="container-custom flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80">
-          <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside HS Logo" className="h-10 w-auto object-cover" />
+          <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside HS Logo" className="h-10 w-auto object-fill" />
           <div className="flex flex-col items-start">
             <span className="text-2xl font-medium tracking-tight">
               <span className="text-primary font-semibold">job</span>
