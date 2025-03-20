@@ -23,7 +23,7 @@ const Layout = ({
       </main>
       
       <footer className="py-8 bg-secondary">
-        <div className="container-custom bg-blue-100">
+        <div className="container-custom bg-sky-200">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <span className="text-xl font-medium">
