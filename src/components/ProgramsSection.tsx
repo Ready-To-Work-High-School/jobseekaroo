@@ -23,7 +23,7 @@ const ProgramsSection = () => {
                   Learn how students in the Entrepreneurship Academy receive intensive specialized curriculum that prepares them with verified skills and credentials employers value
                 </p>
               </div>
-              <img src="/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png" alt="Career & Technical Education Logo" className="h-20 md:h-24 w-auto object-scale-down" />
+              <img src="/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png" alt="Career & Technical Education Logo" className="h-18 md:h-22 w-auto object-scale-down" />
             </div>
             
             <Alert className="mt-4 bg-amber-50 border-amber-300">
