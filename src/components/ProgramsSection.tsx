@@ -5,13 +5,13 @@ import { ChevronRight } from 'lucide-react';
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   return <section className={`py-16 bg-white ${animation}`}>
-      <div className="container-custom">
+      <div className="container-custom bg-amber-500">
         <div className="text-center mb-12">
           <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
             Career Readiness
           </span>
           <h2 className="text-3xl font-bold mb-4">Educational Programs</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto font-semibold">
             Discover specialized programs that help prepare high school students for their future careers
           </p>
         </div>
