@@ -36,7 +36,7 @@ const CredentialsBadges = () => {
         {/* ESB Badge */}
         <div className="skill-badge hover:scale-105 transition-transform flex flex-col items-center">
           <div className="relative">
-            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="rounded-lg shadow-md h-25md:h-34 w-auto mx-auto\\\\n object-scale-down" />
+            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="rounded-lg shadow-md h-21 md:h-30 w-auto mx-auto\\\\\\\\n object-fill" />
             <Badge className="absolute -top-2 -right-2 bg-primary text-white">Industry Certification</Badge>
           </div>
           <p className="text-center text-sm font-medium mt-2">Entrepreneurship &amp; Small Business</p>
