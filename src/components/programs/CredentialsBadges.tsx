@@ -38,7 +38,7 @@ const CredentialsBadges = () => {
         eyebrow="" 
         title="High School Scholars Distinction" 
         description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" 
-        eyebrowColor="px-4 py-1.5 rounded-full text-sm font-bold bg-blue-700 text-white"
+        eyebrowColor=""
         titleClassName="text-4xl bg-gradient-to-r from-purple-600 via-blue-600 to-amber-500 bg-clip-text text-transparent font-extrabold" 
       />
       
