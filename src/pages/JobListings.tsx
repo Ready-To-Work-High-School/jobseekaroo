@@ -6,7 +6,7 @@ import JobCard from '@/components/JobCard';
 import FilterBar, { FilterState } from '@/components/FilterBar';
 import SearchForm from '@/components/SearchForm';
 import { searchJobsByZipCode } from '@/lib/mock-data';
-import { Job } from '@/types/job';
+import { Job, JobType, ExperienceLevel } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
 
 const JobListings = () => {
