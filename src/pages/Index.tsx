@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Hero from '@/components/Hero';
@@ -20,7 +21,7 @@ const Index = () => {
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+              <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-zinc-900 text-white">
                 Get Started
               </span>
               <h2 className="text-3xl font-bold mb-4 text-zinc-950">
@@ -33,7 +34,7 @@ const Index = () => {
               </p>
               <ul className="space-y-3 mb-8">
                 {['No experience required for most positions', 'Flexible schedules that work around your classes', 'Local opportunities to minimize commute time', 'Build valuable skills for your future career'].map((item, i) => <li key={i} className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 rounded-full bg-zinc-900 text-white flex items-center justify-center flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
