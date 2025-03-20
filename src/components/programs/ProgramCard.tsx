@@ -17,11 +17,11 @@ const ProgramCard = ({
   employerBenefits = []
 }: ProgramCardProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
-      <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center">
+    <Card className="overflow-hidden hover:shadow-md transition-shadow border-blue-100">
+      <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center border-b border-blue-100">
         {image && <img src={image} alt={title} className="w-full h-full object-scale-down" />}
       </div>
-      <CardHeader>
+      <CardHeader className="bg-blue-50/50">
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -45,7 +45,7 @@ const ProgramCard = ({
           </div>
         )}
         
-        <Button variant="link" className="p-0 h-auto">
+        <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-800">
           Learn more
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
             <path d="M5 12h14" />
