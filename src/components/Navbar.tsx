@@ -1,15 +1,12 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useFadeIn } from '@/utils/animations';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-
 const Navbar = () => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const animation = useFadeIn(100);
-  
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -17,7 +14,6 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
   return <header className={cn('fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out', animation, scrolled ? 'py-3 backdrop-blur-lg bg-white/80 shadow-sm' : 'py-5 bg-transparent')}>
       <div className="container-custom flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80">
@@ -66,25 +62,19 @@ const Navbar = () => {
       </div>
     </header>;
 };
-
 interface NavLinkProps {
   to: string;
   label: string;
   currentPath: string;
 }
-
 const NavLink = ({
   to,
   label,
   currentPath
 }: NavLinkProps) => {
   const isActive = currentPath === to || to !== '/' && currentPath.startsWith(to);
-  return <Link to={to} className={cn(
-    "text-sm font-medium transition-colors", 
-    isActive ? "text-primary font-semibold" : "text-foreground/80 hover:text-foreground"
-  )}>
+  return <Link to={to} className="">
       {label}
     </Link>;
 };
-
 export default Navbar;

@@ -15,10 +15,10 @@ const ProgramsSection = () => {
           <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs bg-amber-200 text-stone-950 font-bold">
+                <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs bg-amber-500 text-stone-950 font-bold">
                   Employer Resources
                 </span>
-                <h2 className="text-3xl font-bold mb-3 text-amber-800 text-center">For Employers Only</h2>
+                <h2 className="text-3xl font-bold mb-3 text-red-700 text-center">For Employers Only</h2>
                 <p className="text-center font-bold text-zinc-900">
                   Learn how students in the Entrepreneurship Academy receive intensive specialized curriculum that prepares them with verified skills and credentials employers value
                 </p>
@@ -27,8 +27,8 @@ const ProgramsSection = () => {
             </div>
             
             <Alert className="mt-4 bg-amber-50 border-amber-300">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-              <AlertTitle className="text-zinc-900">Hiring Opportunity</AlertTitle>
+              <AlertTriangle className="h-4 w-4 text-red-700 font-extrabold" />
+              <AlertTitle className="text-zinc-900 font-extrabold">Hiring Opportunity</AlertTitle>
               <AlertDescription className="text-center font-bold text-zinc-900">
                 Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
               </AlertDescription>

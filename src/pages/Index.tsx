@@ -51,12 +51,10 @@ const Index = () => {
         </div>
       </section>
       
-      <section className={`py-20 container-custom ${sectionAnimation}`}>
+      <section className="bg-amber-500">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Featured Opportunities</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover some of the top jobs available for high school students
-          </p>
+          <p className="max-w-2xl mx-auto font-bold text-zinc-950">Current jobs available for high school students</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
