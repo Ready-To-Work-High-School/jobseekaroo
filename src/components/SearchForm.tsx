@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
+import { Progress } from '@/components/ui/progress';
 
 interface SearchFormProps {
   className?: string;
@@ -131,18 +132,21 @@ const SearchForm = ({
         </button>
         
         {showRadius && (
-          <div className="flex-1 flex items-center gap-2 px-2">
-            <Slider
-              value={[radius]}
-              min={1}
-              max={50}
-              step={1}
-              onValueChange={(values) => setRadius(values[0])}
-              className="flex-1"
-            />
-            <span className="text-xs font-medium min-w-[45px]">
-              {radius} mile{radius !== 1 ? 's' : ''}
-            </span>
+          <div className="flex-1 flex flex-col gap-1 px-2">
+            <div className="flex items-center gap-2">
+              <Slider
+                value={[radius]}
+                min={1}
+                max={50}
+                step={1}
+                onValueChange={(values) => setRadius(values[0])}
+                className="flex-1"
+              />
+              <span className="text-xs font-medium min-w-[45px]">
+                {radius} mile{radius !== 1 ? 's' : ''}
+              </span>
+            </div>
+            <Progress value={(radius / 50) * 100} className="h-1" />
           </div>
         )}
       </div>
