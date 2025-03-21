@@ -9,8 +9,8 @@ const EntrepreneurshipStoreSection = () => {
             <div className="w-full md:w-1/3 flex-shrink-0">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col items-center">
-                  <img src="/lovable-uploads/7a8cdc49-c423-4d1d-ba37-61d9420a1056.png" alt="Microsoft Certified Fundamentals" className="h-24 w-auto object-contain mb-2" />
-                  <span className="text-xs text-center font-medium">Microsoft Certified Fundamentals</span>
+                  <img src="/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png" alt="ESB Badge" className="h-24 w-auto object-contain mb-2" />
+                  <span className="text-xs text-center font-medium">Entrepreneurship & Small Business</span>
                 </div>
                 <div className="flex flex-col items-center">
                   <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-24 w-auto object-contain mb-2" />
