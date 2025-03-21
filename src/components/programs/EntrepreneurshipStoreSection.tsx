@@ -21,15 +21,15 @@ const EntrepreneurshipStoreSection = () => {
               
               <div className="prose text-gray-700">
                 <p className="mb-4">
-                  The Westside High School Entrepreneurship School Store was a remarkable success, giving students real-world business experience by managing daily operations, handling finances, and providing customer service.
+                  The Westside High School Entrepreneurship School Store continues to be a remarkable success, providing students with real-world business experience through the management of daily operations, financial handling, and customer service.
                 </p>
                 
                 <p className="mb-4">
-                  Through running the store and working concessions at events, students gained valuable skills in sales, inventory management, and marketing. They also developed financial literacy by budgeting, tracking profits, and making business decisions.
+                  By running the store and working concessions at events, students are actively gaining valuable skills in sales, inventory management, and marketing. They are also enhancing their financial literacy by budgeting, tracking profits, and making informed business decisions.
                 </p>
                 
                 <p className="mb-4">
-                  The revenue generated supported the entrepreneurship program and other school initiatives, fostering growth and future expansion plans. This hands-on experience empowered students with practical skills and an entrepreneurial mindset, preparing them for future careers.
+                  The revenue generated supports the entrepreneurship program and other school initiatives, fostering ongoing growth and enabling future expansion plans. This hands-on experience empowers students with practical skills and an entrepreneurial mindset, preparing them for successful future careers.
                 </p>
                 
                 <div className="mt-6">
