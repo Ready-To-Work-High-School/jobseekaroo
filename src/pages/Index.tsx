@@ -42,7 +42,7 @@ const Index = () => {
           const featured = allJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 3);
+            .slice(0, 4);  // Change from 3 to 4
           
           setFeaturedJobs(featured);
         } else {
@@ -51,7 +51,7 @@ const Index = () => {
           const featured = allMockJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 3);
+            .slice(0, 4);  // Change from 3 to 4
           
           setFeaturedJobs(featured);
           
@@ -71,7 +71,7 @@ const Index = () => {
         const featured = allJobs
           .filter(job => job.isFeatured)
           .sort(() => 0.5 - Math.random()) // Shuffle
-          .slice(0, 3);
+          .slice(0, 4);  // Change from 3 to 4
         
         setFeaturedJobs(featured);
       } finally {
