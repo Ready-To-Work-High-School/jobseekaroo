@@ -83,7 +83,14 @@ export function SkillList({
     if (editingSkill) {
       await onUpdateSkill(editingSkill.id, values);
     } else {
-      await onAddSkill(values);
+      // Fix: Ensure we're passing a non-optional skill_name to match the required type
+      const skillData: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'> = {
+        skill_name: values.skill_name,
+        proficiency_level: values.proficiency_level,
+        is_learning: values.is_learning,
+        target_level: values.target_level,
+      };
+      await onAddSkill(skillData);
     }
     
     form.reset({
