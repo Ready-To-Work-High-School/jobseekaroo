@@ -147,8 +147,8 @@ const ApplicationsPage = () => {
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground hidden md:inline">Filter:</span>
             </div>
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} disabled={isLoading}>
-              <TabsList>
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+              <TabsList disabled={isLoading}>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="applied">Applied</TabsTrigger>
                 <TabsTrigger value="interviewing">Interviewing</TabsTrigger>
