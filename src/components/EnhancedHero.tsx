@@ -38,8 +38,8 @@ const EnhancedHero = () => {
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12", infoAnimation)}>
           <FeatureCard 
             icon="🔎" 
-            title="Enhanced Location Search" 
-            description="Find opportunities within Jacksonville and surrounding counties. Use the adjustable radius filter to search up to 50 miles from your location." 
+            title="Location Search" 
+            description="Find opportunities within Jacksonville and surrounding counties. Search up to 50 miles from your location." 
           />
           <FeatureCard 
             icon="💰" 
@@ -57,10 +57,20 @@ const EnhancedHero = () => {
           <EnhancedSearchForm />
         </div>
 
-        <div className={cn("mb-12 flex justify-center", searchAnimation)}>
-          <Link to="/jobs">
-            <Button variant="default" size="lg">
-              Browse All Jobs
+        <div className={cn("grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 mb-12", searchAnimation)}>
+          <Link to="/jobs" className="col-span-1">
+            <Button variant="outline" size="lg" className="w-full">
+              Entry Level Jobs
+            </Button>
+          </Link>
+          <Link to="/jobs" className="col-span-1">
+            <Button variant="default" size="lg" className="w-full">
+              Find Jobs
+            </Button>
+          </Link>
+          <Link to="/jobs" className="col-span-1">
+            <Button variant="outline" size="lg" className="w-full">
+              Internships
             </Button>
           </Link>
         </div>
