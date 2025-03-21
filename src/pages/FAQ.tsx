@@ -42,7 +42,7 @@ const FAQ = () => {
   const employerFAQs = [
     {
       question: "How do I post a job opportunity?",
-      answer: "Contact our program director directly at Colemanp3@duvalschools.org to post a job opportunity. We'll work with you to create an effective listing that reaches our qualified students."
+      answer: "Contact our Department Chair directly at Colemanp3@duvalschools.org to post a job opportunity. We'll work with you to create an effective listing that reaches our qualified students."
     },
     {
       question: "What skills do students from the Entrepreneurship Academy have?",
@@ -137,7 +137,7 @@ const FAQ = () => {
             <h2 className="text-2xl font-bold mb-4">Still Have Questions?</h2>
             <p className="mb-6 max-w-xl mx-auto">
               If you couldn't find the answer to your question, feel free to reach out directly
-              to our program director.
+              to our Department Chair.
             </p>
             <div className="inline-flex gap-4">
               <Button size="lg" asChild>
