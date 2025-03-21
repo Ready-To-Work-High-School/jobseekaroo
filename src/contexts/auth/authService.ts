@@ -14,6 +14,7 @@ export const signIn = async (
   
   if (error) throw error;
   
+  // Ensure navigate is called only after authentication completes successfully
   navigate('/');
 };
 
@@ -37,7 +38,11 @@ export const signUp = async (
   
   if (error) throw error;
   
-  navigate('/');
+  // Ensure navigation happens after successful signup
+  // Add a small delay to ensure state updates before navigation
+  setTimeout(() => {
+    navigate('/');
+  }, 100);
 };
 
 export const signInWithApple = async (): Promise<void> => {
@@ -52,5 +57,6 @@ export const signOut = async (navigate: NavigateFunction) => {
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
   
+  // Ensure navigation happens after successful signout
   navigate('/');
 };

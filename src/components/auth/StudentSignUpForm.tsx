@@ -3,7 +3,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { CheckCircle2, GraduationCap } from "lucide-react";
@@ -22,8 +22,10 @@ type SignUpValues = z.infer<typeof signUpSchema>;
 
 interface StudentSignUpFormProps {
   isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
   isAppleLoading: boolean;
   handleAppleSignIn: () => Promise<void>;
+  navigate: NavigateFunction;
 }
 
 const studentBenefits = [
@@ -51,12 +53,13 @@ const studentBenefits = [
 
 const StudentSignUpForm = ({
   isLoading,
+  setIsLoading,
   isAppleLoading,
   handleAppleSignIn,
+  navigate,
 }: StudentSignUpFormProps) => {
   const { signUp } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -69,6 +72,7 @@ const StudentSignUpForm = ({
   });
 
   const onSubmit = async (values: SignUpValues) => {
+    setIsLoading(true);
     try {
       await signUp(
         values.email, 
@@ -88,6 +92,8 @@ const StudentSignUpForm = ({
         description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
