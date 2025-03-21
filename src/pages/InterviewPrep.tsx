@@ -28,35 +28,35 @@ const mockInterviewQuestions: InterviewQuestion[] = [
     role: 'general',
     question: 'Tell me about a time when you faced a challenge and how you overcame it.',
     category: 'behavioral',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   {
     id: '2',
     role: 'general',
     question: 'Describe a situation where you had to work with a difficult team member.',
     category: 'behavioral',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '3',
     role: 'general',
     question: 'Tell me about a time when you had to meet a tight deadline.',
     category: 'behavioral',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   {
     id: '4',
     role: 'customer-service',
     question: 'Describe a time when you dealt with an angry customer and how you resolved the situation.',
     category: 'behavioral',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '5',
     role: 'retail',
     question: 'Tell me about a time when you went above and beyond for a customer.',
     category: 'behavioral',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   
   // Technical Questions
@@ -65,73 +65,73 @@ const mockInterviewQuestions: InterviewQuestion[] = [
     role: 'tech',
     question: 'What programming languages are you familiar with and which do you prefer?',
     category: 'technical',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   {
     id: '7',
     role: 'tech',
-    question: 'Explain how you would troubleshoot a computer that won't start.',
+    question: 'Explain how you would troubleshoot a computer that won\'t start.',
     category: 'technical',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '8',
     role: 'healthcare',
     question: 'What experience do you have with electronic health record systems?',
     category: 'technical',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '9',
     role: 'office',
     question: 'How proficient are you with Microsoft Office applications?',
     category: 'technical',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   {
     id: '10',
     role: 'office',
     question: 'Explain your experience with scheduling and calendar management.',
     category: 'technical',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   
   // Situational Questions
   {
     id: '11',
     role: 'general',
-    question: 'How would you handle a situation where you're given multiple tasks with the same deadline?',
+    question: 'How would you handle a situation where you\'re given multiple tasks with the same deadline?',
     category: 'situational',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '12',
     role: 'general',
     question: 'What would you do if you made a mistake that no one noticed?',
     category: 'situational',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '13',
     role: 'retail',
     question: 'How would you handle a situation where a customer wants to return an item without a receipt?',
     category: 'situational',
-    difficulty: 'intermediate',
+    difficulty: 'intermediate'
   },
   {
     id: '14',
     role: 'customer-service',
-    question: 'What would you do if you don't know the answer to a customer's question?',
+    question: 'What would you do if you don\'t know the answer to a customer\'s question?',
     category: 'situational',
-    difficulty: 'beginner',
+    difficulty: 'beginner'
   },
   {
     id: '15',
     role: 'management',
     question: 'How would you handle a team member who consistently misses deadlines?',
     category: 'situational',
-    difficulty: 'advanced',
-  },
+    difficulty: 'advanced'
+  }
 ];
 
 // Tips for each section
@@ -140,32 +140,32 @@ const interviewTips = [
     id: '1',
     title: 'Be Specific with STAR Method',
     description: 'When answering behavioral questions, use the STAR method: Situation, Task, Action, Result.',
-    icon: ListChecks,
+    icon: ListChecks
   },
   {
     id: '2',
     title: 'Research the Company',
-    description: 'Learn about the company's values, mission, and recent news before your interview.',
-    icon: Search,
+    description: 'Learn about the company\'s values, mission, and recent news before your interview.',
+    icon: Search
   },
   {
     id: '3',
     title: 'Prepare Questions',
     description: 'Have 3-5 thoughtful questions ready to ask the interviewer.',
-    icon: MessageSquare,
+    icon: MessageSquare
   },
   {
     id: '4',
     title: 'Practice Out Loud',
     description: 'Rehearse your answers out loud to build confidence and improve delivery.',
-    icon: Mic,
+    icon: Mic
   },
   {
     id: '5',
     title: 'Review Your Resume',
     description: 'Be prepared to discuss anything on your resume in detail.',
-    icon: BookOpen,
-  },
+    icon: BookOpen
+  }
 ];
 
 // Mock practice session feedback
@@ -175,22 +175,22 @@ const mockFeedback = [
     question: 'Tell me about yourself.',
     feedback: 'Good introduction, but try to keep it more concise and focused on relevant experience.',
     strength: 'Friendly tone and clear communication',
-    improvement: 'Be more concise and professional',
+    improvement: 'Be more concise and professional'
   },
   {
     id: '2',
     question: 'Why do you want to work here?',
-    feedback: 'Excellent job connecting your skills to the company's needs. Very persuasive answer.',
+    feedback: 'Excellent job connecting your skills to the company\'s needs. Very persuasive answer.',
     strength: 'Great research about the company',
-    improvement: 'None - this was a strong answer',
+    improvement: 'None - this was a strong answer'
   },
   {
     id: '3',
     question: 'Describe a challenge you faced at work.',
     feedback: 'Good example, but your answer lacked structure. Try using the STAR method.',
     strength: 'Authentic example with a positive outcome',
-    improvement: 'Structure your answer better (Situation, Task, Action, Result)',
-  },
+    improvement: 'Structure your answer better (Situation, Task, Action, Result)'
+  }
 ];
 
 const InterviewPrep = () => {
