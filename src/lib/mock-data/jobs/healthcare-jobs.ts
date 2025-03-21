@@ -31,6 +31,7 @@ export const healthcareJobs: Job[] = [
     logoUrl: 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
     isFlexible: false,
+    isFeatured: true,
   },
   {
     id: '6',
@@ -61,5 +62,6 @@ export const healthcareJobs: Job[] = [
     logoUrl: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
     isFlexible: true,
+    isFeatured: true,
   },
 ];

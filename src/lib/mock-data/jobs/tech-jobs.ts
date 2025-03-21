@@ -31,5 +31,6 @@ export const techJobs: Job[] = [
     logoUrl: 'https://images.unsplash.com/photo-1633419461186-7d40a38105ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
     isFlexible: false,
+    isFeatured: true,
   },
 ];

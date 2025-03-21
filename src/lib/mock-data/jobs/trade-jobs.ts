@@ -31,6 +31,7 @@ export const tradeJobs: Job[] = [
     logoUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&q=80',
     isRemote: false,
     isFlexible: false,
+    isFeatured: true,
   },
   {
     id: '8',

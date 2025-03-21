@@ -29,7 +29,9 @@ const Index = () => {
         <SectionSeparator />
         
         {/* Featured Jobs Section - moved up directly after Hero */}
-        <FeaturedJobsSection />
+        <div className="bg-white">
+          <FeaturedJobsSection />
+        </div>
         
         {/* Separator */}
         <SectionSeparator />
