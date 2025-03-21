@@ -18,6 +18,8 @@ import './App.css';
 // Import our components
 import Skills from './pages/Skills';
 import InterviewPrep from './pages/InterviewPrep';
+import EmployerDashboard from './pages/EmployerDashboard';
+import Analytics from './pages/Analytics';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/jobs/:id" element={<JobDetails />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/for-employers" element={<ForEmployers />} />
+          <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />

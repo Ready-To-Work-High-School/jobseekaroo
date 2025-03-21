@@ -1,15 +1,19 @@
+
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Building, Briefcase, Medal, FileCheck, Phone, Calendar, Mail } from 'lucide-react';
+import { Building, Briefcase, Medal, FileCheck, Phone, Calendar, Mail, ExternalLink } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ForEmployers = () => {
   const [activeTab, setActiveTab] = useState("benefits");
+  const isMobile = useIsMobile();
   const headerAnimation = useSlideIn(100);
   const contentAnimation = useFadeIn(300);
   
@@ -61,15 +65,27 @@ const ForEmployers = () => {
             Connect with Westside High School's Entrepreneurship Academy to find pre-trained students
             with industry-recognized credentials who are ready to join your workforce.
           </p>
+          
+          <div className="mt-8">
+            <Button asChild size="lg" className="gap-2">
+              <Link to="/employer-dashboard">
+                Access Employer Dashboard
+                <ExternalLink className="h-4 w-4 ml-1" />
+              </Link>
+            </Button>
+            <p className="text-sm text-muted-foreground mt-2">
+              Post jobs and manage applications in one place
+            </p>
+          </div>
         </div>
       </div>
       
       <div className={contentAnimation}>
         <Tabs defaultValue="benefits" className="max-w-4xl mx-auto mb-16" onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 mb-8">
+          <TabsList className={`grid grid-cols-${isMobile ? '2' : '3'} mb-8`}>
             <TabsTrigger value="benefits">Benefits</TabsTrigger>
             <TabsTrigger value="post-job">Post a Job</TabsTrigger>
-            <TabsTrigger value="contact">Contact Us</TabsTrigger>
+            {!isMobile && <TabsTrigger value="contact">Contact Us</TabsTrigger>}
           </TabsList>
           
           <TabsContent value="benefits" className="space-y-8">
@@ -114,14 +130,16 @@ const ForEmployers = () => {
               <CardContent>
                 <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-6 text-center">
                   <p className="text-amber-800 font-medium">
-                    To post a job on our platform, please contact us directly. We'll work with you to create
-                    a posting that attracts the right candidates for your position.
+                    Use our employer dashboard to post job opportunities for our students.
+                    The dashboard lets you manage applications and communicate with candidates.
                   </p>
                 </div>
                 <div className="text-center">
-                  <Button size="lg" className="gap-2">
-                    <Mail className="h-4 w-4" />
-                    Contact to Post a Job
+                  <Button asChild size="lg" className="gap-2">
+                    <Link to="/employer-dashboard">
+                      Access Employer Dashboard
+                      <ExternalLink className="h-4 w-4 ml-1" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
@@ -180,12 +198,20 @@ const ForEmployers = () => {
           Our students are eager to apply their skills and learning in real-world settings.
           Connect with us today to find your next great hire.
         </p>
-        <Button size="lg" asChild>
-          <a href="mailto:Colemanp3@duvalschools.org" className="gap-2">
-            <Mail className="h-4 w-4" />
-            Academy Lead Teacher
-          </a>
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button asChild size="lg">
+            <Link to="/employer-dashboard" className="gap-2">
+              <Briefcase className="h-4 w-4" />
+              Post a Job
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" asChild>
+            <a href="mailto:Colemanp3@duvalschools.org" className="gap-2">
+              <Mail className="h-4 w-4" />
+              Contact Us
+            </a>
+          </Button>
+        </div>
       </div>
     </Layout>
   );
