@@ -45,15 +45,10 @@ const Hero = () => {
           <SearchForm />
         </div>
 
-        <div className={cn("mb-12 flex justify-center gap-4", searchAnimation)}>
+        <div className={cn("mb-12 flex justify-center", searchAnimation)}>
           <Link to="/jobs">
             <Button variant="default" size="lg">
               Browse All Jobs
-            </Button>
-          </Link>
-          <Link to="/resume-assistant">
-            <Button variant="outline" size="lg">
-              AI Resume Helper
             </Button>
           </Link>
         </div>
