@@ -10,6 +10,7 @@ export interface UserProfile {
   preferences: Record<string, any> | null;
   created_at: string;
   updated_at: string;
+  user_type?: 'jobseeker' | 'employer' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
   notification_preferences?: NotificationPreferences;
