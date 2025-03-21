@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AccessibilityMenu } from "@/components/AccessibilityMenu";
 import Index from "./pages/Index";
 import JobListings from "./pages/JobListings";
 import JobDetails from "./pages/JobDetails";
@@ -22,7 +23,16 @@ import ResumeAssistant from "./pages/ResumeAssistant";
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import './App.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -47,6 +57,7 @@ const App = () => (
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AccessibilityMenu />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

@@ -1,263 +1,311 @@
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { useFadeIn } from '@/utils/animations';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { X, Menu } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { useMobile } from '@/hooks/use-mobile';
+import { NotificationCenter } from '@/components/NotificationCenter';
+import {
+  Menu,
+  Search,
+  Briefcase,
+  BookOpen,
+  BookMarked,
+  Building2,
+  User,
+  FileText,
+  CheckSquare,
+  LogOut,
+  X,
+  Menu as MenuIcon
+} from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
+
+interface NavLinkProps {
+  to: string;
+  children: React.ReactNode;
+  end?: boolean;
+}
+
+const NavLink = ({ to, children }: NavLinkProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === to || 
+    (to !== '/' && location.pathname.startsWith(to));
+  
+  return (
+    <Link
+      to={to}
+      className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+        isActive 
+          ? 'bg-primary/10 text-primary' 
+          : 'text-foreground hover:bg-muted hover:text-primary'
+      }`}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const MobileNavLink = ({ to, children }: NavLinkProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === to || 
+    (to !== '/' && location.pathname.startsWith(to));
+  
+  return (
+    <SheetClose asChild>
+      <Link
+        to={to}
+        className={`flex items-center gap-3 px-4 py-3 text-base transition-colors ${
+          isActive 
+            ? 'bg-primary/10 text-primary font-medium' 
+            : 'hover:bg-muted'
+        }`}
+      >
+        {children}
+      </Link>
+    </SheetClose>
+  );
+};
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const animation = useFadeIn(100);
-  const {
-    user,
-    signOut
-  } = useAuth();
-
+  const isMobile = useMobile();
+  const [atTop, setAtTop] = useState(true);
+  
+  // Handle scroll for sticky header with shadow
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setAtTop(window.scrollY < 10);
     };
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-
-  const getUserInitials = () => {
-    if (!user) return '';
-
-    // Try to get initials from user metadata
-    const firstName = user.user_metadata?.first_name || '';
-    const lastName = user.user_metadata?.last_name || '';
-    if (firstName && lastName) {
-      return `${firstName[0]}${lastName[0]}`.toUpperCase();
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/jobs?q=${encodeURIComponent(searchQuery.trim())}`);
     }
-
-    // Fallback to email
-    if (user.email) {
-      return user.email[0].toUpperCase();
-    }
-    return '';
   };
-
+  
+  const handleQuickSearch = (query: string) => {
+    navigate(`/jobs?q=${encodeURIComponent(query)}`);
+  };
+  
+  const showSearchBar = !location.pathname.includes('/jobs') && !location.pathname.includes('/sign');
+  
   return (
-    <header className={cn(
-      'fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out', 
-      animation, 
-      scrolled ? 'py-2 md:py-3 backdrop-blur-lg bg-white/80 shadow-sm' : 'py-3 md:py-5 bg-transparent'
-    )}>
-      <div className="container-custom flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 transition-opacity duration-200 hover:opacity-80">
-          <img 
-            src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" 
-            alt="Westside HS Logo" 
-            className="h-14 md:h-20 w-auto object-fill" 
-          />
-        </Link>
+    <header 
+      className={`sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md ${
+        atTop ? 'border-b border-border/40' : 'border-b border-border shadow-sm'
+      }`}
+      // Add important accessibility attributes
+      role="banner"
+      aria-label="Main navigation"
+    >
+      <div className="container-custom flex h-16 items-center justify-between py-2">
+        <div className="flex items-center gap-2 md:gap-6">
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Menu">
+                  <MenuIcon className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 pt-10 w-[280px]">
+                <SheetHeader className="px-4 pb-2">
+                  <SheetTitle>Menu</SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col border-t">
+                  <MobileNavLink to="/">
+                    <Briefcase className="h-5 w-5" />
+                    Home
+                  </MobileNavLink>
+                  <MobileNavLink to="/jobs">
+                    <Search className="h-5 w-5" />
+                    Find Jobs
+                  </MobileNavLink>
+                  <MobileNavLink to="/resources">
+                    <BookOpen className="h-5 w-5" />
+                    Resources
+                  </MobileNavLink>
+                  <MobileNavLink to="/for-employers">
+                    <Building2 className="h-5 w-5" />
+                    For Employers
+                  </MobileNavLink>
+                  <MobileNavLink to="/resume-assistant">
+                    <FileText className="h-5 w-5" />
+                    Resume Assistant
+                  </MobileNavLink>
+                  
+                  {user && (
+                    <>
+                      <div className="border-t border-border/60 my-2"></div>
+                      <MobileNavLink to="/saved-jobs">
+                        <BookMarked className="h-5 w-5" />
+                        Saved Jobs
+                      </MobileNavLink>
+                      <MobileNavLink to="/applications">
+                        <CheckSquare className="h-5 w-5" />
+                        Applications
+                      </MobileNavLink>
+                      <MobileNavLink to="/profile">
+                        <User className="h-5 w-5" />
+                        Profile
+                      </MobileNavLink>
+                      <div 
+                        className="flex items-center gap-3 px-4 py-3 text-base cursor-pointer hover:bg-muted"
+                        onClick={() => {
+                          signOut();
+                          navigate('/');
+                        }}
+                      >
+                        <LogOut className="h-5 w-5" />
+                        Sign Out
+                      </div>
+                    </>
+                  )}
+                  
+                  {!user && (
+                    <>
+                      <div className="border-t border-border/60 my-2"></div>
+                      <MobileNavLink to="/sign-in">
+                        Sign In
+                      </MobileNavLink>
+                      <MobileNavLink to="/sign-up">
+                        Sign Up
+                      </MobileNavLink>
+                    </>
+                  )}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          )}
+          
+          <Link to="/" className="flex items-center gap-2">
+            <Briefcase className="h-6 w-6 text-primary" aria-hidden="true" />
+            <span className="text-xl font-bold">Job<span className="text-primary">Match</span></span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-black">
-          <NavLink to="/" label="Home" currentPath={location.pathname} />
-          <NavLink to="/jobs" label="Find Jobs" currentPath={location.pathname} />
-          <NavLink to="/for-employers" label="For Employers" currentPath={location.pathname} />
-          <NavLink to="/success-stories" label="Success Stories" currentPath={location.pathname} />
-          <NavLink to="/resume-assistant" label="Resume Help" currentPath={location.pathname} />
-          <NavLink to="/resources" label="Resources" currentPath={location.pathname} />
-          <NavLink to="/faq" label="FAQ" currentPath={location.pathname} />
-        </nav>
+          {!isMobile && (
+            <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
+              <NavLink to="/">Home</NavLink>
+              <NavLink to="/jobs">Find Jobs</NavLink>
+              <NavLink to="/resources">Resources</NavLink>
+              <NavLink to="/for-employers">For Employers</NavLink>
+              <NavLink to="/resume-assistant">Resume Assistant</NavLink>
+            </nav>
+          )}
+        </div>
 
-        <div className="flex items-center space-x-2 md:space-x-4">
+        <div className="flex items-center gap-2 md:gap-4">
+          {showSearchBar && (
+            <form className="hidden md:flex" onSubmit={handleSearch}>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <Input
+                  type="search"
+                  placeholder="Search jobs..."
+                  className="pl-8 w-[180px] lg:w-[240px]"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  aria-label="Search for jobs"
+                />
+              </div>
+            </form>
+          )}
+          
           {user ? (
-            <>
-              <Link to="/jobs" className={cn(
-                "hidden md:flex px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 mr-2", 
-                "bg-primary text-white hover:bg-primary/90 focus-ring"
-              )}>
-                Find Jobs
-              </Link>
+            <div className="flex items-center gap-2">
+              <NotificationCenter />
+              
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.user_metadata?.avatar_url} alt="User" />
-                      <AvatarFallback>{getUserInitials()}</AvatarFallback>
-                    </Avatar>
+                  <Button variant="ghost" size="icon" aria-label="User menu">
+                    <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem className="font-medium">
-                    {user.user_metadata?.first_name} {user.user_metadata?.last_name}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="text-sm text-muted-foreground">
-                    {user.email}
-                  </DropdownMenuItem>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/applications">My Applications</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/saved-jobs">Saved Jobs</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/resume-assistant">Resume Assistant</Link>
-                  </DropdownMenuItem>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/saved-jobs">
+                        <BookMarked className="mr-2 h-4 w-4" />
+                        Saved Jobs
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/applications">
+                        <CheckSquare className="mr-2 h-4 w-4" />
+                        Applications
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/resume-assistant">
+                        <FileText className="mr-2 h-4 w-4" />
+                        Resume Assistant
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
-                    className="text-destructive focus:text-destructive" 
-                    onClick={() => signOut()}
+                    className="text-red-500 focus:text-red-500"
+                    onClick={() => {
+                      signOut();
+                      navigate('/');
+                    }}
                   >
+                    <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>
+            </div>
           ) : (
-            <>
-              <Link to="/sign-in" className="hidden md:block text-sm font-medium text-black hover:text-foreground transition-colors">
-                Sign In
-              </Link>
-              <Link to="/sign-up" className={cn(
-                "hidden md:flex px-4 py-2 rounded-full text-sm font-medium transition-all duration-200", 
-                "bg-primary text-white hover:bg-primary/90 focus-ring"
-              )}>
-                Sign Up
-              </Link>
-            </>
-          )}
-
-          {/* Mobile Menu Button */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="md:hidden"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-5 w-5" />
+            <div className="flex items-center gap-2">
+              <Button variant="outline" asChild className="hidden sm:flex">
+                <Link to="/sign-in">Sign In</Link>
               </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[85vw] max-w-[350px] p-0">
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-4 border-b">
-                  <span className="text-lg font-semibold">Menu</span>
-                  <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-                
-                <nav className="flex flex-col gap-1 p-4 overflow-y-auto flex-1">
-                  <MobileNavLink to="/" label="Home" />
-                  <MobileNavLink to="/jobs" label="Find Jobs" />
-                  <MobileNavLink to="/for-employers" label="For Employers" />
-                  <MobileNavLink to="/success-stories" label="Success Stories" />
-                  <MobileNavLink to="/resume-assistant" label="Resume Help" />
-                  <MobileNavLink to="/resources" label="Resources" />
-                  <MobileNavLink to="/faq" label="FAQ" />
-                </nav>
-                
-                <div className="mt-auto p-4 border-t">
-                  {user ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={user.user_metadata?.avatar_url} alt="User" />
-                          <AvatarFallback>{getUserInitials()}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">
-                            {user.user_metadata?.first_name} {user.user_metadata?.last_name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">{user.email}</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" className="w-full justify-start" asChild>
-                        <Link to="/profile">My Profile</Link>
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" asChild>
-                        <Link to="/applications">My Applications</Link>
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" asChild>
-                        <Link to="/saved-jobs">Saved Jobs</Link>
-                      </Button>
-                      <Button variant="destructive" className="w-full mt-4" onClick={() => signOut()}>
-                        Sign Out
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <Button className="w-full" asChild>
-                        <Link to="/sign-in">Sign In</Link>
-                      </Button>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link to="/sign-up">Create Account</Link>
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              <Button asChild>
+                <Link to="/sign-up">Sign Up</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </header>
-  );
-};
-
-interface NavLinkProps {
-  to: string;
-  label: string;
-  currentPath: string;
-}
-
-const NavLink = ({
-  to,
-  label,
-  currentPath
-}: NavLinkProps) => {
-  const isActive = currentPath === to || (to !== '/' && currentPath.startsWith(to));
-  return (
-    <Link 
-      to={to} 
-      className={cn(
-        "text-sm font-medium transition-colors hover:text-primary",
-        isActive ? "text-primary" : "text-black"
-      )}
-    >
-      {label}
-    </Link>
-  );
-};
-
-const MobileNavLink = ({ to, label }: { to: string; label: string }) => {
-  const location = useLocation();
-  const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
-  
-  return (
-    <Link 
-      to={to} 
-      className={cn(
-        "flex items-center px-4 py-3 rounded-md transition-colors text-base",
-        isActive 
-          ? "bg-primary/10 text-primary font-medium" 
-          : "hover:bg-secondary/50 text-foreground"
-      )}
-    >
-      <span>{label}</span>
-    </Link>
   );
 };
 

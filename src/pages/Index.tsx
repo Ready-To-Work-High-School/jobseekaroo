@@ -1,93 +1,220 @@
 
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import Hero from '@/components/Hero';
-import JobCard from '@/components/JobCard';
-import { mockJobs } from '@/lib/mock-data';
-import { useFadeIn } from '@/utils/animations';
+import EnhancedHero from '@/components/EnhancedHero';
 import ProgramsSection from '@/components/ProgramsSection';
+import { Button } from '@/components/ui/button';
+import { useFadeIn } from '@/utils/animations';
+import { 
+  getJobs,
+  getJobsByLocation,
+  getSavedSearches 
+} from '@/lib/mock-data';
+import { Job } from '@/types/job';
+import JobCard from '@/components/JobCard';
+import { useAuth } from '@/contexts/AuthContext';
+import { ExternalLink } from 'lucide-react';
 
 const Index = () => {
+  const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
+  const [localJobs, setLocalJobs] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const sectionAnimation = useFadeIn(300);
-  const featuredJobs = mockJobs.slice(0, 3);
+  
+  const fadeInFast = useFadeIn(200);
+  const fadeInMedium = useFadeIn(400);
+  const fadeInSlow = useFadeIn(600);
+  
+  useEffect(() => {
+    const fetchFeaturedJobs = () => {
+      try {
+        // Get some featured job recommendations
+        const allJobs = getJobs();
+        const featured = allJobs
+          .filter(job => job.isFeatured)
+          .sort(() => 0.5 - Math.random()) // Shuffle
+          .slice(0, 4);
+        
+        setFeaturedJobs(featured);
+        
+        // Get some jobs from Jacksonville
+        const jacksonvilleJobs = getJobsByLocation('Jacksonville', 'FL')
+          .slice(0, 4);
+        
+        setLocalJobs(jacksonvilleJobs);
+      } catch (error) {
+        console.error('Error loading featured jobs:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchFeaturedJobs();
+  }, []);
   
   return (
-    <Layout fullWidth withPadding={false}>
-      <Hero />
+    <Layout>
+      {/* Skip to content link for keyboard users */}
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       
-      {/* Easy Jobs Section */}
-      <section className="py-20 bg-amber-500">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-primary text-white">
-                Get Started
-              </span>
-              <h2 className="text-3xl font-bold mb-4 text-zinc-950">
-                Easy Jobs for High School Students
-              </h2>
-              <p className="mb-6 text-base text-zinc-900">
-                Finding your first job can be challenging, but we've made it simple. 
-                Browse opportunities specifically designed for students with little 
-                to no prior work experience.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {['No experience required for most positions', 'Flexible schedules that work around your classes', 'Local opportunities to minimize commute time', 'Build valuable skills for your future career'].map((item, i) => <li key={i} className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-zinc-900 text-white flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 6 9 17l-5-5" />
-                      </svg>
-                    </div>
-                    <span>{item}</span>
-                  </li>)}
-              </ul>
-              <button onClick={() => navigate('/jobs')} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors focus-ring">
-                Search for Jobs Now
-              </button>
+      <div id="main-content">
+        <EnhancedHero />
+        
+        {/* Featured Jobs Section */}
+        <section className={`py-12 bg-white ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+              <div>
+                <h2 id="featured-jobs-heading" className="text-2xl font-bold text-gray-900 sm:text-3xl mb-1">
+                  Featured Jobs
+                </h2>
+                <p className="text-base text-muted-foreground">
+                  Hand-picked opportunities from top employers
+                </p>
+              </div>
+              <Button 
+                onClick={() => navigate('/jobs')}
+                variant="outline"
+                className="mt-3 sm:mt-0"
+              >
+                View All Jobs
+              </Button>
             </div>
             
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-2xl transform -rotate-3" />
-              <img alt="High school student working at a coffee shop" src="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" className="rounded-2xl border border-border shadow-lg w-full relative z-10 object-cover h-[400px]" />
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="rounded-lg border border-border bg-card p-4 h-64 animate-pulse">
+                    <div className="flex gap-3 items-start mb-4">
+                      <div className="w-12 h-12 bg-muted rounded-md"></div>
+                      <div className="flex-1">
+                        <div className="h-5 bg-muted rounded w-3/4 mb-2"></div>
+                        <div className="h-4 bg-muted rounded w-1/2"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-muted rounded"></div>
+                      <div className="h-3 bg-muted rounded"></div>
+                      <div className="h-3 bg-muted rounded w-2/3"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {featuredJobs.map((job, index) => (
+                  <JobCard job={job} key={job.id} index={index} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+        
+        {/* Jacksonville Jobs Section */}
+        <section className={`py-12 bg-amber-50 ${fadeInMedium}`} aria-labelledby="local-jobs-heading">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+              <div>
+                <h2 id="local-jobs-heading" className="text-2xl font-bold text-gray-900 sm:text-3xl mb-1">
+                  Jobs in Jacksonville
+                </h2>
+                <p className="text-base text-muted-foreground">
+                  Local opportunities in the Jacksonville area
+                </p>
+              </div>
+              <Button 
+                onClick={() => navigate('/jobs?location=Jacksonville, FL')}
+                variant="outline"
+                className="mt-3 sm:mt-0"
+              >
+                Browse Local Jobs
+              </Button>
+            </div>
+            
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="rounded-lg border border-amber-300 bg-white p-4 h-64 animate-pulse">
+                    <div className="flex gap-3 items-start mb-4">
+                      <div className="w-12 h-12 bg-amber-100 rounded-md"></div>
+                      <div className="flex-1">
+                        <div className="h-5 bg-amber-100 rounded w-3/4 mb-2"></div>
+                        <div className="h-4 bg-amber-100 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-amber-100 rounded"></div>
+                      <div className="h-3 bg-amber-100 rounded"></div>
+                      <div className="h-3 bg-amber-100 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {localJobs.map((job, index) => (
+                  <JobCard job={job} key={job.id} index={index} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+        
+        {/* Training & Certification Section */}
+        <div className={fadeInSlow}>
+          <ProgramsSection />
+        </div>
+        
+        {/* Resources Section */}
+        <section className="py-12 bg-white" aria-labelledby="resources-heading">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-8">
+              <h2 id="resources-heading" className="text-2xl font-bold sm:text-3xl mb-3">
+                Resources to Help You Succeed
+              </h2>
+              <p className="text-muted-foreground">
+                Take advantage of our free tools and resources to advance your career
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Resume Assistant</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Our AI-powered resume builder will help you create a professional resume that stands out.
+                </p>
+                <Button variant="outline" onClick={() => navigate('/resume-assistant')}>
+                  Build Your Resume
+                </Button>
+              </div>
+              
+              <div className="bg-green-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Career Resources</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Explore articles, guides, and tips to help you navigate your career path.
+                </p>
+                <Button variant="outline" onClick={() => navigate('/resources')}>
+                  Browse Resources
+                </Button>
+              </div>
+              
+              <div className="bg-purple-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Success Stories</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Read about people who have found their dream jobs through our platform.
+                </p>
+                <Button variant="outline" onClick={() => navigate('/success-stories')}>
+                  Read Stories
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      
-      {/* Featured Opportunities Section */}
-      <section className="py-20 bg-secondary/50">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <span className="inline-block mb-2 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-600 text-white shadow-sm">
-              Trending Now
-            </span>
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-black to-amber-600 bg-clip-text text-transparent">
-              Featured Opportunities
-            </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
-              Current jobs available for high school students
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredJobs.map((job, index) => (
-              <JobCard key={job.id} job={job} index={index} />
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <button 
-              onClick={() => navigate('/jobs')} 
-              className="px-6 py-3 rounded-full bg-amber-600 text-white font-medium hover:bg-amber-700 transition-colors focus-ring shadow-sm"
-            >
-              View All Jobs
-            </button>
-          </div>
-        </div>
-      </section>
-      
-      <ProgramsSection />
+        </section>
+      </div>
     </Layout>
   );
 };

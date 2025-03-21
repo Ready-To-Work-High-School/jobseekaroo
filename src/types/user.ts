@@ -11,6 +11,8 @@ export interface UserProfile {
   created_at: string;
   updated_at: string;
   saved_searches?: SavedSearch[];
+  accessibility_settings?: AccessibilitySettings;
+  notification_preferences?: NotificationPreferences;
 }
 
 export interface SavedSearch {
@@ -29,4 +31,19 @@ export interface JobRecommendation {
   score: number;
   reason: string | null;
   created_at: string;
+}
+
+export interface AccessibilitySettings {
+  high_contrast: boolean;
+  increased_font_size: boolean;
+  reduce_motion: boolean;
+  screen_reader_optimized: boolean;
+}
+
+export interface NotificationPreferences {
+  email_alerts: boolean;
+  job_recommendations: boolean;
+  application_updates: boolean;
+  saved_search_alerts: boolean;
+  newsletter: boolean;
 }
