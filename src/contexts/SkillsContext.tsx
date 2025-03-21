@@ -1,10 +1,15 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { UserSkill, SkillResource } from '@/types/skills';
-import { getUserSkills, createUserSkill, updateUserSkill, deleteUserSkill, getSkillResources } from '@/lib/supabase';
+import { 
+  getUserSkills, 
+  createUserSkill, 
+  updateUserSkill, 
+  deleteUserSkill, 
+  getSkillResources 
+} from '@/lib/supabase';
 
 interface SkillsContextType {
   skills: UserSkill[];
@@ -47,7 +52,6 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
           setSkills(userSkills);
         }
         
-        // Load resources for the selected skill or all resources if no skill is selected
         const skillResources = await getSkillResources(selectedSkill || undefined);
         setResources(skillResources);
       } catch (error) {
