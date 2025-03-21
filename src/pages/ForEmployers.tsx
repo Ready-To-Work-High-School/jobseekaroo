@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from "@/components/ui/button";
@@ -184,7 +183,7 @@ const ForEmployers = () => {
         <Button size="lg" asChild>
           <a href="mailto:Colemanp3@duvalschools.org" className="gap-2">
             <Mail className="h-4 w-4" />
-            Contact Academy Lead
+            Academy Lead Teacher
           </a>
         </Button>
       </div>
