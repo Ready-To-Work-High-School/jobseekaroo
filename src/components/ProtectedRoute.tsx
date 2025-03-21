@@ -33,7 +33,7 @@ const ProtectedRoute = ({ children, requiredRoles = [] }: ProtectedRouteProps) =
       
       // Role-based authorization check (if roles system is implemented in the future)
       if (requiredRoles.length > 0 && userProfile) {
-        const hasRequiredRole = userProfile.role && requiredRoles.includes(userProfile.role);
+        const hasRequiredRole = userProfile.user_type && requiredRoles.includes(userProfile.user_type);
         
         if (!hasRequiredRole) {
           toast({
