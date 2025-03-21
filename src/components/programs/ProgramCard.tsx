@@ -19,7 +19,7 @@ const ProgramCard = ({
 }: ProgramCardProps) => {
   return (
     <div className="relative group">
-      {/* Accent border */}
+      {/* Accent border with gradient */}
       <div className="absolute -inset-1 bg-gradient-to-r from-amber-300 via-amber-400 to-blue-400 rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-300"></div>
       
       <Card className="relative overflow-hidden hover:shadow-md transition-shadow border-blue-100">
