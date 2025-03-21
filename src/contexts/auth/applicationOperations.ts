@@ -25,7 +25,7 @@ export async function createApplication(
   };
 
   const { data, error } = await supabase
-    .from('applications')
+    .from('job_applications')
     .insert(applicationData)
     .select('id')
     .single();
@@ -52,7 +52,7 @@ export async function updateApplicationStatus(
   }
 
   const { error } = await supabase
-    .from('applications')
+    .from('job_applications')
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', applicationId)
     .eq('user_id', userId);
@@ -68,7 +68,7 @@ export async function updateApplicationStatus(
  */
 export async function getApplications(userId: string): Promise<JobApplication[]> {
   const { data, error } = await supabase
-    .from('applications')
+    .from('job_applications')
     .select('*')
     .eq('user_id', userId)
     .order('applied_date', { ascending: false });
@@ -78,7 +78,11 @@ export async function getApplications(userId: string): Promise<JobApplication[]>
     throw error;
   }
 
-  return data || [];
+  // Ensure the status field is properly typed as ApplicationStatus
+  return (data || []).map(app => ({
+    ...app,
+    status: app.status as ApplicationStatus
+  })) as JobApplication[];
 }
 
 /**
@@ -86,7 +90,7 @@ export async function getApplications(userId: string): Promise<JobApplication[]>
  */
 export async function deleteApplication(userId: string, applicationId: string): Promise<void> {
   const { error } = await supabase
-    .from('applications')
+    .from('job_applications')
     .delete()
     .eq('id', applicationId)
     .eq('user_id', userId);
