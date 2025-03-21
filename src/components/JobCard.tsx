@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
@@ -96,34 +97,38 @@ const JobCard = ({
 
   return (
     <Link to={`/jobs/${job.id}`} className={animation}>
-      <div className={`flex flex-col space-y-4 p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}>
-        <div className="flex items-start gap-4">
+      <div className={`flex flex-col space-y-3 sm:space-y-4 p-4 sm:p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}>
+        <div className="flex items-start gap-3 sm:gap-4">
           {job.logoUrl ? (
-            <div className={`w-12 h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
               <img src={job.logoUrl} alt={`${job.company.name} logo`} className="w-full h-full object-cover" loading="lazy" />
             </div>
           ) : (
-            <div className={`w-12 h-12 rounded-md border ${useAmberStyling ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}>
-              <span className={`${useAmberStyling ? 'text-amber-600' : 'text-primary'} font-medium text-lg`}>
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md border ${useAmberStyling ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}>
+              <span className={`${useAmberStyling ? 'text-amber-600' : 'text-primary'} font-medium text-base sm:text-lg`}>
                 {job.company.name.substring(0, 1)}
               </span>
             </div>
           )}
           
           <div className="flex-1 min-w-0">
-            <h3 className={`font-semibold text-lg truncate text-black`}>{job.title}</h3>
-            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>{job.company.name}</p>
+            <h3 className={`font-semibold text-base sm:text-lg truncate text-black`}>
+              {job.title}
+            </h3>
+            <p className={`text-sm ${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>
+              {job.company.name}
+            </p>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-black whitespace-nowrap">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:flex items-center gap-1 text-xs text-black whitespace-nowrap">
               <Clock className="h-3 w-3" />
               {formatRelativeDate(job.postedDate)}
             </div>
             
             <button 
               onClick={handleSaveToggle}
-              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors`}
+              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors p-1 sm:p-0`}
               aria-label={isSaved ? "Unsave job" : "Save job"}
             >
               <BookmarkIcon 
@@ -133,42 +138,47 @@ const JobCard = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 text-sm text-black">
+        <div className="sm:hidden flex items-center gap-2 text-xs text-black">
+          <Clock className="h-3 w-3" />
+          {formatRelativeDate(job.postedDate)}
+        </div>
+
+        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs sm:text-sm text-black">
           <div className="flex items-center gap-1">
-            <MapPin className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <MapPin className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} />
             <span>{job.location.city}, {job.location.state}</span>
           </div>
           
           <div className="flex items-center gap-1">
-            <BriefcaseIcon className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <BriefcaseIcon className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} />
             <span>{formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}</span>
           </div>
           
           <div className="flex items-center gap-1">
-            <CalendarIcon className={useAmberStyling ? "h-4 w-4 text-amber-600" : "h-4 w-4"} />
+            <CalendarIcon className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} />
             <span className="capitalize">{job.type.replace('-', ' ')}</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {job.isRemote && (
-            <span className="px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
+            <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md bg-primary/10 text-primary text-[10px] sm:text-xs font-medium">
               Remote
             </span>
           )}
           
           {job.isFlexible && (
-            <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-xs font-medium`}>
+            <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-[10px] sm:text-xs font-medium`}>
               Flexible
             </span>
           )}
           
-          <span className={`px-2 py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-xs font-medium capitalize`}>
+          <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-[10px] sm:text-xs font-medium capitalize`}>
             {job.experienceLevel.replace('-', ' ')}
           </span>
         </div>
 
-        <p className="text-sm text-black line-clamp-2">
+        <p className="text-xs sm:text-sm text-black line-clamp-2">
           {job.description}
         </p>
       </div>

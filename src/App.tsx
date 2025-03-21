@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,7 +20,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ResumeAssistant from "./pages/ResumeAssistant";
 import EnhancedJobListings from './pages/EnhancedJobListings';
-import EnhancedHero from './components/EnhancedHero';
+import './App.css';
 
 const queryClient = new QueryClient();
 
@@ -27,7 +28,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner position="top-right" closeButton className="z-[100]" />
       <BrowserRouter>
         <AuthProvider>
           <Routes>
