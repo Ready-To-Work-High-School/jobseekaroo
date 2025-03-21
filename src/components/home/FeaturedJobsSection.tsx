@@ -1,9 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useFadeIn } from '@/utils/animations';
-import { getJobs } from '@/lib/mock-data';
 import { getFeaturedJobs } from '@/lib/mock-data/jobs';
 import { getAllJobs } from '@/lib/supabase';
 import { Job } from '@/types/job';
@@ -15,7 +12,6 @@ const FeaturedJobsSection = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
-  const navigate = useNavigate();
   
   const fadeInFast = useFadeIn(200);
   
@@ -78,13 +74,6 @@ const FeaturedJobsSection = () => {
           <p className="text-lg text-muted-foreground max-w-md mx-auto">
             Hand-picked opportunities from top employers
           </p>
-          <Button 
-            onClick={() => navigate('/jobs')}
-            variant="outline"
-            className="mt-4"
-          >
-            View All Jobs
-          </Button>
         </div>
         
         {isLoading ? (
@@ -109,7 +98,7 @@ const FeaturedJobsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {featuredJobs.map((job, index) => (
-              <div key={job.id} className={`${index === 0 ? 'border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow' : 'border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow'}`}>
+              <div key={job.id} className="border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
                 <JobCard job={job} index={index} />
               </div>
             ))}
