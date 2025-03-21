@@ -39,9 +39,19 @@ const SearchSection = () => {
         </div>
       </div>
       
-      {/* Add separator at the end of the section */}
-      <div className="container mx-auto px-4 mt-8">
-        <Separator className="max-w-4xl mx-auto" />
+      {/* Enhanced decorative separator */}
+      <div className="container mx-auto px-4 my-12">
+        <div className="flex items-center justify-center">
+          <div className="w-1/4 h-px bg-gradient-to-r from-transparent to-primary/60"></div>
+          <div className="mx-4">
+            <div className="w-3 h-3 rounded-full bg-primary/80 animate-pulse-slow"></div>
+          </div>
+          <div className="w-1/2 h-1 rounded-full bg-gradient-to-r from-primary/60 via-primary/80 to-primary/60"></div>
+          <div className="mx-4">
+            <div className="w-3 h-3 rounded-full bg-primary/80 animate-pulse-slow"></div>
+          </div>
+          <div className="w-1/4 h-px bg-gradient-to-l from-transparent to-primary/60"></div>
+        </div>
       </div>
     </section>
   );
