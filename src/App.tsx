@@ -45,20 +45,20 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
             
             {/* Protected Routes */}
-            <Route path="/jobs" element={<ProtectedRoute><JobListings /></ProtectedRoute>} />
-            <Route path="/skills" element={<ProtectedRoute><Skills /></ProtectedRoute>} />
-            <Route path="/interview-prep" element={<ProtectedRoute><InterviewPrep /></ProtectedRoute>} />
-            <Route path="/jobs/:id" element={<ProtectedRoute><JobDetails /></ProtectedRoute>} />
-            <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
-            <Route path="/for-employers" element={<ProtectedRoute><ForEmployers /></ProtectedRoute>} />
-            <Route path="/employer-dashboard" element={<ProtectedRoute><EmployerDashboard /></ProtectedRoute>} />
-            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
-            <Route path="/resume-assistant" element={<ProtectedRoute><ResumeAssistant /></ProtectedRoute>} />
-            <Route path="/saved-jobs" element={<ProtectedRoute><SavedJobs /></ProtectedRoute>} />
-            <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
-            <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
+            <Route path="/jobs" element={<JobListings />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/interview-prep" element={<InterviewPrep />} />
+            <Route path="/jobs/:id" element={<JobDetails />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/for-employers" element={<ForEmployers />} />
+            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/applications" element={<Applications />} />
+            <Route path="/resume-assistant" element={<ResumeAssistant />} />
+            <Route path="/saved-jobs" element={<SavedJobs />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/success-stories" element={<SuccessStories />} />
             
             {/* 404 Page */}
             <Route path="*" element={<NotFound />} />
