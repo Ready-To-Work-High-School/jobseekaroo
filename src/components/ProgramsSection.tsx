@@ -7,6 +7,7 @@ import CredentialsBadges from './programs/CredentialsBadges';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
+import SectionSeparator from './home/SectionSeparator';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -14,6 +15,9 @@ const ProgramsSection = () => {
   return (
     <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
+        {/* Add SectionSeparator before the Employers Section */}
+        <SectionSeparator className="mt-0 mb-8" />
+        
         {/* Employers Section */}
         <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
