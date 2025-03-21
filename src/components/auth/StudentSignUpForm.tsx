@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -78,13 +77,13 @@ const StudentSignUpForm = ({
         values.email, 
         values.password, 
         values.firstName, 
-        values.lastName
+        values.lastName,
+        navigate
       );
       toast({
         title: "Account created",
         description: "You have successfully created a student account",
       });
-      navigate('/');
     } catch (error: any) {
       console.error(error);
       toast({
@@ -92,7 +91,6 @@ const StudentSignUpForm = ({
         description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -105,13 +104,14 @@ const EmployerSignUpForm = ({
         values.email, 
         values.password, 
         values.firstName, 
-        values.lastName
+        values.lastName,
+        navigate
       );
       toast({
         title: "Employer account created",
         description: "You have successfully created an employer account",
       });
-      navigate('/');
+      // Navigation is now handled in the signUp function
     } catch (error: any) {
       console.error(error);
       toast({
@@ -119,7 +119,6 @@ const EmployerSignUpForm = ({
         description: error.message || "Failed to create employer account. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };
