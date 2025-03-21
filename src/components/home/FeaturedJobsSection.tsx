@@ -7,6 +7,7 @@ import { Job } from '@/types/job';
 import JobCard from '@/components/JobCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 const FeaturedJobsSection = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
@@ -61,6 +62,17 @@ const FeaturedJobsSection = () => {
     fetchJobs();
   }, [user]);
 
+  // Function to get a different accent color for each job card
+  const getAccentGradient = (index: number) => {
+    const gradients = [
+      'from-brand-400 via-brand-600 to-brand-800', // Blue gradient
+      'from-amber-400 via-amber-500 to-amber-600', // Amber gradient
+      'from-brand-600 via-amber-500 to-amber-600', // Mixed gradient
+    ];
+    
+    return gradients[index % gradients.length];
+  };
+
   return (
     <section className={`py-12 ${user ? 'bg-slate-50' : 'bg-white'} ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -98,8 +110,18 @@ const FeaturedJobsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {featuredJobs.map((job, index) => (
-              <div key={job.id} className="rounded-lg overflow-hidden hover:shadow-xl transition-shadow h-full">
-                <JobCard job={job} index={index} />
+              <div 
+                key={job.id} 
+                className={cn(
+                  "relative p-[2px] rounded-lg overflow-hidden hover:shadow-xl transition-shadow h-full",
+                  "before:absolute before:inset-0 before:rounded-lg",
+                  `before:bg-gradient-to-br ${getAccentGradient(index)}`,
+                  "before:content-[''] before:z-0"
+                )}
+              >
+                <div className="relative bg-white rounded-lg h-full z-10">
+                  <JobCard job={job} index={index} />
+                </div>
               </div>
             ))}
           </div>
