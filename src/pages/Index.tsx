@@ -23,11 +23,11 @@ const Index = () => {
       <div id="main-content">
         <EnhancedHero />
         
+        {/* Featured Jobs Section - moved up directly after Hero */}
+        <FeaturedJobsSection />
+        
         {/* User-specific recommendation section */}
         {user && <UserRecommendationsSection />}
-        
-        {/* Featured Jobs Section */}
-        <FeaturedJobsSection />
         
         {/* Training & Certification Section */}
         <div className={fadeInSlow}>
