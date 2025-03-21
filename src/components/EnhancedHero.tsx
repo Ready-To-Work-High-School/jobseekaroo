@@ -57,7 +57,7 @@ const EnhancedHero = () => {
           <EnhancedSearchForm />
         </div>
 
-        <div className={cn("grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 mb-12", searchAnimation)}>
+        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12", searchAnimation)}>
           <Link to="/jobs" className="col-span-1">
             <Button variant="outline" size="lg" className="w-full">
               Entry Level Jobs
