@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import LazyImage from '@/components/LazyImage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Badge } from '@/components/ui/badge';
 
 const EntrepreneurshipStoreSection = () => {
   return (
@@ -47,17 +48,41 @@ const EntrepreneurshipStoreSection = () => {
               <Card className="border-amber-200 bg-amber-50/30">
                 <CardContent className="p-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">AI Fundamentals<br />IBM SkillsBuild</span>
+                    <div className="flex flex-col items-center group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <img 
+                          src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" 
+                          alt="Getting Started with Artificial Intelligence" 
+                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                        />
+                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
+                      </div>
+                      <span className="text-sm text-center font-medium">AI Fundamentals<br />IBM SkillsBuild</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" alt="Entrepreneurship Business Essentials" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">Business Essentials<br />IBM SkillsBuild</span>
+                    <div className="flex flex-col items-center group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <img 
+                          src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" 
+                          alt="Entrepreneurship Business Essentials" 
+                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                        />
+                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
+                      </div>
+                      <span className="text-sm text-center font-medium">Business Essentials<br />IBM SkillsBuild</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" alt="Explore Emerging Tech" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">Emerging Tech<br />IBM SkillsBuild</span>
+                    <div className="flex flex-col items-center group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <img 
+                          src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" 
+                          alt="Explore Emerging Tech" 
+                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                        />
+                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
+                      </div>
+                      <span className="text-sm text-center font-medium">Emerging Tech<br />IBM SkillsBuild</span>
                     </div>
                   </div>
                 </CardContent>
