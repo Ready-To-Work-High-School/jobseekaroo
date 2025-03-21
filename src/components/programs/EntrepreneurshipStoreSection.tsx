@@ -10,7 +10,7 @@ const EntrepreneurshipStoreSection = () => {
             </div>
             
             <div className="w-full md:w-2/3">
-              <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-2xl font-bold mb-4 text-blue-800">Westside High School Entrepreneurship School Store</h3>
+              <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-2xl font-bold mb-4 text-blue-800 text-center">Westside High School Entrepreneurship School Store</h3>
               
               <div className="prose text-gray-700">
                 <p className="mb-4">
