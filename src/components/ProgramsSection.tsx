@@ -23,7 +23,7 @@ const ProgramsSection = () => {
                 </span>
                 <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight mt-2 text-center")}>
                   <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
-                    For Employers Only
+                    <em>For Employers Only</em>
                   </span>
                 </h2>
                 <p className="text-center font-bold text-zinc-900">
