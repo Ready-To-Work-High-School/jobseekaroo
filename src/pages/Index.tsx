@@ -25,6 +25,9 @@ const Index = () => {
       <div id="main-content">
         <EnhancedHero />
         
+        {/* Separator above Featured Jobs */}
+        <SectionSeparator />
+        
         {/* Featured Jobs Section - moved up directly after Hero */}
         <FeaturedJobsSection />
         
