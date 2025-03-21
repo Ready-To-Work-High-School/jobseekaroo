@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { SkillGapAnalysis } from '@/components/skills/SkillGapAnalysis';
 import { SkillList } from '@/components/skills/SkillList';
 import { SkillResourcesList } from '@/components/skills/SkillResourcesList';
+import { SkillProgressTracker } from '@/components/skills/SkillProgressTracker';
 import {
   Tabs,
   TabsContent,
@@ -21,6 +22,7 @@ import {
   BookOpen,
   TrendingUp,
   Book,
+  Target,
 } from 'lucide-react';
 
 const Skills = () => {
@@ -147,18 +149,22 @@ const Skills = () => {
           </div>
           
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="my-skills" className="flex items-center gap-2">
                 <Bookmark className="h-4 w-4" />
                 My Skills
               </TabsTrigger>
+              <TabsTrigger value="progress" className="flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Development
+              </TabsTrigger>
               <TabsTrigger value="skill-gaps" className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
-                Skill Gap Analysis
+                Skill Gaps
               </TabsTrigger>
               <TabsTrigger value="resources" className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />
-                Learning Resources
+                Resources
               </TabsTrigger>
             </TabsList>
             
@@ -171,6 +177,18 @@ const Skills = () => {
                 isLoading={isLoading}
                 onSelectSkill={(skill) => {
                   setSelectedSkill(skill);
+                  setActiveTab('resources');
+                }}
+              />
+            </TabsContent>
+            
+            <TabsContent value="progress" className="mt-6">
+              <SkillProgressTracker
+                userSkills={skills}
+                resources={resources}
+                isLoading={isLoading}
+                onViewResources={(skillName) => {
+                  setSelectedSkill(skillName);
                   setActiveTab('resources');
                 }}
               />

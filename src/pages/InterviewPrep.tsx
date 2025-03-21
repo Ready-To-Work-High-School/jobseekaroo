@@ -32,10 +32,17 @@ import {
   Video, 
   MessageCircle, 
   Filter, 
-  Search 
+  Search,
+  CheckCircle,
+  XCircle,
+  Save,
+  ArrowRight,
+  FileAudio,
+  Share2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Mock data for interview questions and practice sessions
 const mockInterviewQuestions: InterviewQuestion[] = [
   {
     id: "q1",
@@ -203,8 +210,23 @@ const InterviewPrep = () => {
   const [showQuestionDialog, setShowQuestionDialog] = useState<boolean>(false);
   const [currentQuestion, setCurrentQuestion] = useState<InterviewQuestion | null>(null);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>(mockPracticeSessions);
   const [answer, setAnswer] = useState<string>('');
+  const [transcript, setTranscript] = useState<string>('');
+  const [feedback, setFeedback] = useState<{
+    strengths: string[];
+    improvements: string[];
+    overall: string;
+    score: number;
+  }>({
+    strengths: [],
+    improvements: [],
+    overall: '',
+    score: 0
+  });
+  const [showFeedback, setShowFeedback] = useState<boolean>(false);
+  const [interviewMode, setInterviewMode] = useState<'practice' | 'simulation'>('practice');
   
   // Get unique roles for filter
   const uniqueRoles = ['all', ...Array.from(new Set(questions.map(q => q.role)))];
@@ -245,6 +267,8 @@ const InterviewPrep = () => {
       setCurrentQuestion(question);
       setShowQuestionDialog(true);
       setAnswer('');
+      setTranscript('');
+      setShowFeedback(false);
     } else {
       toast.error("No questions match your current filters. Please adjust filters and try again.");
     }
@@ -261,6 +285,8 @@ const InterviewPrep = () => {
       
       setCurrentQuestion(question);
       setAnswer('');
+      setTranscript('');
+      setShowFeedback(false);
     } else {
       toast.info("You've gone through all available questions! You can adjust filters for more questions.");
       setShowQuestionDialog(false);
@@ -271,42 +297,117 @@ const InterviewPrep = () => {
     if (isRecording) {
       // Stop recording
       setIsRecording(false);
+      
+      // In a real app, we would have actual transcription and audio data
+      // For demo purposes, generate a mock transcript
+      if (currentQuestion) {
+        const mockTranscript = `I would address this by first understanding the situation completely. For example, when I was working at my previous job, I encountered a similar challenge and I approached it by analyzing the root cause before taking action. This helped me to develop an effective solution.`;
+        setTranscript(mockTranscript);
+      }
+      
       toast.success("Recording saved successfully!");
       
-      // Create a new practice session
-      const newSession: PracticeSession = {
-        id: `session${new Date().getTime()}`,
-        user_id: user?.id || "guest",
-        date: new Date().toISOString().split('T')[0],
-        duration: 5, // mock duration
-        questions_attempted: 1,
-        feedback: "This is automated feedback. Your answer was clear and concise. Consider using more specific examples next time.",
-      };
+      // Generate AI feedback (mocked for demo)
+      generateFeedback();
       
-      setPracticeSessions([newSession, ...practiceSessions]);
     } else {
       // Start recording
       setIsRecording(true);
+      setTranscript('');
       toast.info("Recording started... Speak clearly into your microphone.");
+      
+      // Request microphone permission
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(function(stream) {
+            // Successfully got audio stream, but we won't actually use it in this demo
+            toast.success("Microphone access granted");
+          })
+          .catch(function(err) {
+            toast.error("Microphone access denied. Please enable microphone access to record your answer.");
+            setIsRecording(false);
+          });
+      } else {
+        toast.error("Your browser doesn't support audio recording");
+        setIsRecording(false);
+      }
+    }
+  };
+  
+  const handlePlayRecording = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      toast.info("Playback paused");
+    } else {
+      setIsPlaying(true);
+      toast.info("Playing recording...");
+      
+      // Simulate playback ending after 5 seconds
+      setTimeout(() => {
+        setIsPlaying(false);
+        toast.info("Playback finished");
+      }, 5000);
     }
   };
   
   const handleSubmitAnswer = () => {
+    if (!answer.trim() && !transcript) {
+      toast.error("Please provide an answer before submitting");
+      return;
+    }
+    
+    // Generate AI feedback (mocked for demo)
+    generateFeedback();
+    
+    // In a real app, we'd submit the answer to the backend for analysis
     toast.success("Answer submitted for review!");
+  };
+  
+  const generateFeedback = () => {
+    // In a real app, this would be generated by an AI based on the actual answer
+    // For demo purposes, generate mock feedback
+    
+    const mockFeedback = {
+      strengths: [
+        "You provided a clear structure to your answer",
+        "You included a relevant example from your experience",
+        "Your communication was professional and articulate"
+      ],
+      improvements: [
+        "Consider using the STAR method more explicitly",
+        "You could provide more specific details about the outcome",
+        "Try to connect your example more clearly to the question"
+      ],
+      overall: "Your answer demonstrates good communication skills and relevant experience. To improve, focus on providing more specific details and measurable outcomes from your examples.",
+      score: Math.floor(Math.random() * 30) + 70 // Random score between 70-100
+    };
+    
+    setFeedback(mockFeedback);
+    setShowFeedback(true);
     
     // Create a new practice session
     const newSession: PracticeSession = {
       id: `session${new Date().getTime()}`,
       user_id: user?.id || "guest",
       date: new Date().toISOString().split('T')[0],
-      duration: 3, // mock duration
+      duration: Math.floor(Math.random() * 10) + 3, // Random duration between 3-12 minutes
       questions_attempted: 1,
-      feedback: "Your written answer shows good understanding. Try to include a specific example that demonstrates your point.",
+      feedback: mockFeedback.overall,
+      recording_url: Math.random() > 0.5 ? "https://example.com/recording" : undefined // Randomly add recording URL
     };
     
     setPracticeSessions([newSession, ...practiceSessions]);
+  };
+  
+  const handleSaveSession = () => {
+    toast.success("Practice session saved to your profile!");
     setShowQuestionDialog(false);
-    setAnswer('');
+  };
+  
+  const startInterviewSimulation = () => {
+    setInterviewMode('simulation');
+    handleStartSession();
+    toast.info("Starting interview simulation mode. Your responses will be timed and evaluated for realistic interview practice.");
   };
   
   return (
@@ -318,6 +419,7 @@ const InterviewPrep = () => {
           <TabsList className="mb-6">
             <TabsTrigger value="questions">Practice Questions</TabsTrigger>
             <TabsTrigger value="practice">Practice Sessions</TabsTrigger>
+            <TabsTrigger value="simulation">Interview Simulation</TabsTrigger>
             <TabsTrigger value="tips">Interview Tips</TabsTrigger>
           </TabsList>
           
@@ -392,7 +494,10 @@ const InterviewPrep = () => {
                   </div>
                 </div>
                 
-                <Button className="mb-6" onClick={handleStartSession}>
+                <Button className="mb-6" onClick={() => {
+                  setInterviewMode('practice');
+                  handleStartSession();
+                }}>
                   Start Practice Session
                 </Button>
                 
@@ -421,9 +526,12 @@ const InterviewPrep = () => {
                             variant="outline" 
                             size="sm"
                             onClick={() => {
+                              setInterviewMode('practice');
                               setCurrentQuestion(question);
                               setShowQuestionDialog(true);
                               setAnswer('');
+                              setTranscript('');
+                              setShowFeedback(false);
                             }}
                           >
                             Practice This Question
@@ -503,9 +611,92 @@ const InterviewPrep = () => {
                 ) : (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground mb-4">You haven't completed any practice sessions yet.</p>
-                    <Button onClick={() => handleStartSession()}>Start Your First Practice</Button>
+                    <Button onClick={() => {
+                      setInterviewMode('practice');
+                      handleStartSession();
+                    }}>Start Your First Practice</Button>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="simulation">
+            <Card>
+              <CardHeader>
+                <CardTitle>Interview Simulation</CardTitle>
+                <CardDescription>
+                  Experience a realistic interview simulation with timed responses and professional feedback
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Entry Level Positions</CardTitle>
+                      <CardDescription>
+                        Practice for roles that require minimal experience
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        This simulation includes common questions for entry-level positions in customer service, retail, administrative work, and more.
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">15 questions simulation</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">Timed responses</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">Instant AI feedback</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button onClick={startInterviewSimulation} className="w-full">
+                        Start Simulation
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Specialized Roles</CardTitle>
+                      <CardDescription>
+                        Practice for roles requiring specific skills or certifications
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        This simulation focuses on roles that require specific skills or certifications in healthcare, technology, trades, and more.
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">20 questions simulation</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">Technical and behavioral questions</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          <span className="text-sm">Detailed performance analysis</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button onClick={startInterviewSimulation} className="w-full">
+                        Start Simulation
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -605,9 +796,11 @@ const InterviewPrep = () => {
         </Tabs>
         
         <Dialog open={showQuestionDialog} onOpenChange={setShowQuestionDialog}>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[650px]">
             <DialogHeader>
-              <DialogTitle>Practice Question</DialogTitle>
+              <DialogTitle>
+                {interviewMode === 'simulation' ? 'Interview Simulation' : 'Practice Question'}
+              </DialogTitle>
               <DialogDescription>
                 Role: {currentQuestion?.role}
               </DialogDescription>
@@ -632,78 +825,191 @@ const InterviewPrep = () => {
               
               <Separator className="my-4" />
               
-              <div className="space-y-4">
-                <div className="bg-muted p-4 rounded-md">
-                  <div className="flex items-start mb-2">
-                    <BookOpen className="h-5 w-5 text-muted-foreground mr-2 mt-0.5" />
-                    <h4 className="font-medium">Preparation Tips:</h4>
-                  </div>
-                  {currentQuestion?.category === 'behavioral' && (
-                    <p className="text-sm text-muted-foreground">
-                      Use the STAR method (Situation, Task, Action, Result) to structure your answer.
-                      Focus on specific examples from your past experiences.
-                    </p>
-                  )}
-                  {currentQuestion?.category === 'technical' && (
-                    <p className="text-sm text-muted-foreground">
-                      Be clear and concise. Explain technical concepts in simple terms.
-                      If you don't know something, it's okay to say so and explain how you would find the answer.
-                    </p>
-                  )}
-                  {currentQuestion?.category === 'situational' && (
-                    <p className="text-sm text-muted-foreground">
-                      Describe how you would handle the hypothetical situation step by step.
-                      Emphasize your problem-solving approach and decision-making process.
-                    </p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="answer">Your Answer:</Label>
-                  <Textarea 
-                    id="answer" 
-                    placeholder="Type your answer here..." 
-                    rows={5}
-                    value={answer}
-                    onChange={e => setAnswer(e.target.value)}
-                  />
-                </div>
-                
-                <div className="flex justify-between">
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    onClick={toggleRecording}
-                  >
-                    {isRecording ? (
-                      <>
-                        <Pause className="h-4 w-4 mr-2 text-red-500" />
-                        Stop Recording
-                      </>
-                    ) : (
-                      <>
-                        <Mic className="h-4 w-4 mr-2" />
-                        Record Answer
-                      </>
+              {!showFeedback ? (
+                <div className="space-y-4">
+                  <div className="bg-muted p-4 rounded-md">
+                    <div className="flex items-start mb-2">
+                      <BookOpen className="h-5 w-5 text-muted-foreground mr-2 mt-0.5" />
+                      <h4 className="font-medium">Preparation Tips:</h4>
+                    </div>
+                    {currentQuestion?.category === 'behavioral' && (
+                      <p className="text-sm text-muted-foreground">
+                        Use the STAR method (Situation, Task, Action, Result) to structure your answer.
+                        Focus on specific examples from your past experiences.
+                      </p>
                     )}
-                  </Button>
+                    {currentQuestion?.category === 'technical' && (
+                      <p className="text-sm text-muted-foreground">
+                        Be clear and concise. Explain technical concepts in simple terms.
+                        If you don't know something, it's okay to say so and explain how you would find the answer.
+                      </p>
+                    )}
+                    {currentQuestion?.category === 'situational' && (
+                      <p className="text-sm text-muted-foreground">
+                        Describe how you would handle the hypothetical situation step by step.
+                        Emphasize your problem-solving approach and decision-making process.
+                      </p>
+                    )}
+                  </div>
                   
-                  <Button 
-                    type="button"
-                    disabled={!answer.trim() && !isRecording}
-                    onClick={handleSubmitAnswer}
-                  >
-                    Submit Answer
-                  </Button>
+                  {transcript ? (
+                    <div className="space-y-2">
+                      <Label>Your Recorded Answer:</Label>
+                      <div className="bg-muted/40 p-4 rounded-md">
+                        <p className="text-sm">{transcript}</p>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={handlePlayRecording}
+                        >
+                          {isPlaying ? (
+                            <>
+                              <Pause className="h-4 w-4 mr-2" />
+                              Pause
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-4 w-4 mr-2" />
+                              Play Recording
+                            </>
+                          )}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={toggleRecording}
+                        >
+                          <Mic className="h-4 w-4 mr-2" />
+                          Record Again
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label htmlFor="answer">Your Answer:</Label>
+                      <Textarea 
+                        id="answer" 
+                        placeholder="Type your answer here..." 
+                        rows={5}
+                        value={answer}
+                        onChange={e => setAnswer(e.target.value)}
+                        disabled={isRecording}
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-between">
+                    <Button 
+                      type="button" 
+                      variant={isRecording ? "destructive" : "outline"}
+                      onClick={toggleRecording}
+                    >
+                      {isRecording ? (
+                        <>
+                          <Pause className="h-4 w-4 mr-2" />
+                          Stop Recording
+                        </>
+                      ) : (
+                        <>
+                          <Mic className="h-4 w-4 mr-2" />
+                          Record Answer
+                        </>
+                      )}
+                    </Button>
+                    
+                    <Button 
+                      type="button"
+                      disabled={(!answer.trim() && !transcript) || isRecording}
+                      onClick={handleSubmitAnswer}
+                    >
+                      Get Feedback
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="bg-green-50 p-4 rounded-md border border-green-200">
+                    <div className="flex items-start gap-2 mb-3">
+                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium text-green-800">Strengths:</h4>
+                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                          {feedback.strengths.map((strength, index) => (
+                            <li key={index} className="text-sm text-green-700">{strength}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-amber-50 p-4 rounded-md border border-amber-200">
+                    <div className="flex items-start gap-2 mb-3">
+                      <XCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium text-amber-800">Areas for Improvement:</h4>
+                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                          {feedback.improvements.map((improvement, index) => (
+                            <li key={index} className="text-sm text-amber-700">{improvement}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted p-4 rounded-md">
+                    <h4 className="font-medium mb-2">Overall Feedback:</h4>
+                    <p className="text-sm text-muted-foreground">{feedback.overall}</p>
+                    
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-sm font-medium">Performance Score:</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-32 bg-gray-200 rounded-full h-2.5">
+                          <div 
+                            className={`h-2.5 rounded-full ${
+                              feedback.score >= 90 ? 'bg-green-500' : 
+                              feedback.score >= 80 ? 'bg-blue-500' : 
+                              feedback.score >= 70 ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}
+                            style={{ width: `${feedback.score}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-medium">{feedback.score}/100</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    <Button size="sm" variant="outline" onClick={() => setShowFeedback(false)}>
+                      <ArrowRight className="h-4 w-4 mr-2" />
+                      Try Again
+                    </Button>
+                    
+                    <Button size="sm" variant="outline">
+                      <FileAudio className="h-4 w-4 mr-2" />
+                      Download Recording
+                    </Button>
+                    
+                    <Button size="sm" variant="outline">
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share Feedback
+                    </Button>
+                    
+                    <Button size="sm" onClick={handleSaveSession}>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Session
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
             
             <DialogFooter className="flex justify-between">
               <Button variant="outline" onClick={() => setShowQuestionDialog(false)}>
-                Cancel
+                Exit
               </Button>
-              <Button onClick={handleNextQuestion}>
+              <Button onClick={handleNextQuestion} disabled={isRecording}>
                 Next Question
               </Button>
             </DialogFooter>

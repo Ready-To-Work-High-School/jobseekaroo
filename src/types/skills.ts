@@ -44,3 +44,14 @@ export interface PracticeSession {
   feedback: string;
   recording_url?: string;
 }
+
+export interface SkillProgress {
+  skill_id: string;
+  skill_name: string;
+  start_level: number;
+  current_level: number;
+  target_level: number;
+  progress_percentage: number;
+  last_updated: string;
+  learning_resources: SkillResource[];
+}
