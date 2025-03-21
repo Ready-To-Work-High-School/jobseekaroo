@@ -1,10 +1,11 @@
 
-import { createContext, useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { UserProfile } from '@/types/user';
 import { AuthContextType } from './authContext.types';
+import { AuthContext } from './AuthContext';
 
 // Import services
 import { signIn as authSignIn, signUp as authSignUp, signInWithApple, signOut as authSignOut } from './authService';
@@ -20,12 +21,7 @@ import {
   getApplications,
   deleteApplication
 } from './applicationService';
-import { 
-  getUserProfile, 
-  updateUserProfile 
-} from './authUtils';
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { fetchUserProfile, handleUpdateProfile } from './profileService';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -34,26 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
-
-  const fetchUserProfile = async (userId: string) => {
-    if (!userId) {
-      console.log('fetchUserProfile: No user ID provided');
-      setProfileLoading(false);
-      return;
-    }
-    
-    console.log('fetchUserProfile: Fetching profile for user ID:', userId);
-    setProfileLoading(true);
-    try {
-      const profileData = await getUserProfile(userId);
-      console.log('fetchUserProfile: Profile data received:', profileData);
-      setUserProfile(profileData as UserProfile);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    } finally {
-      setProfileLoading(false);
-    }
-  };
 
   useEffect(() => {
     console.log('Setting up auth state listener');
@@ -68,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (newSession?.user) {
         console.log('Auth state change: user is logged in, fetching profile');
-        fetchUserProfile(newSession.user.id);
+        refreshUserProfile(newSession.user.id);
       } else {
         console.log('Auth state change: no user, clearing profile');
         setUserProfile(null);
@@ -85,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (existingSession?.user) {
         console.log('Initial session: user is logged in, fetching profile');
-        fetchUserProfile(existingSession.user.id);
+        refreshUserProfile(existingSession.user.id);
       } else {
         console.log('Initial session: no user');
         setProfileLoading(false);
@@ -100,25 +76,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const refreshUserProfile = async (userId: string) => {
+    setProfileLoading(true);
+    try {
+      const profile = await fetchUserProfile(userId);
+      setUserProfile(profile);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
   const refreshProfile = async () => {
     console.log('refreshProfile called');
     if (user) {
-      await fetchUserProfile(user.id);
+      await refreshUserProfile(user.id);
     } else {
       console.log('refreshProfile: No user to refresh profile for');
     }
   };
 
-  const handleUpdateProfile = async (profileData: Partial<UserProfile>) => {
+  const updateProfile = async (profileData: Partial<UserProfile>) => {
     if (!user) {
       console.error('User must be logged in to update profile');
       throw new Error('User must be logged in to update profile');
     }
     
     try {
-      console.log('handleUpdateProfile: Updating profile for user:', user.id);
-      const updatedProfile = await updateUserProfile(user.id, profileData);
-      console.log('handleUpdateProfile: Profile updated:', updatedProfile);
+      const updatedProfile = await handleUpdateProfile(user.id, profileData);
       setUserProfile(updatedProfile as UserProfile);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -250,7 +234,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       return deleteApplication(user.id, applicationId);
     },
-    updateProfile: handleUpdateProfile,
+    updateProfile,
     refreshProfile,
   };
 
