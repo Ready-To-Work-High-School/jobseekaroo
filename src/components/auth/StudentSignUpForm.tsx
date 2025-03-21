@@ -77,8 +77,7 @@ const StudentSignUpForm = ({
         values.email, 
         values.password, 
         values.firstName, 
-        values.lastName,
-        navigate
+        values.lastName
       );
       toast({
         title: "Account created",

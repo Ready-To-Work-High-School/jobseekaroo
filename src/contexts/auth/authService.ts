@@ -23,8 +23,7 @@ export const signUp = async (
   email: string, 
   password: string,
   firstName: string,
-  lastName: string,
-  navigate: NavigateFunction
+  lastName: string
 ) => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -38,17 +37,6 @@ export const signUp = async (
   });
   
   if (error) throw error;
-  
-  // If email confirmation is enabled, tell the user to check their email
-  // Otherwise, sign them in directly after signup
-  if (data.session) {
-    // If we have a session, user was auto-signed in
-    navigate('/');
-  } else {
-    // Otherwise, they might need to confirm their email
-    // We'll still redirect them to home, and they can sign in later
-    navigate('/');
-  }
   
   return data;
 };

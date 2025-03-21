@@ -99,19 +99,17 @@ const EmployerSignUpForm = ({
   const onSubmit = async (values: EmployerSignUpValues) => {
     setIsLoading(true);
     try {
-      // Additional employer-specific logic could go here
       await signUp(
         values.email, 
         values.password, 
         values.firstName, 
-        values.lastName,
-        navigate
+        values.lastName
       );
       toast({
         title: "Employer account created",
         description: "You have successfully created an employer account",
       });
-      // Navigation is now handled in the signUp function
+      setIsLoading(false);
     } catch (error: any) {
       console.error(error);
       toast({

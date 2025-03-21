@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
@@ -95,7 +94,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Create AuthContextValue object
   const value: AuthContextType = {
     user,
     session,
@@ -103,7 +101,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     profileLoading,
     signIn: (email, password) => signIn(email, password, navigate),
-    signUp: (email, password, firstName, lastName, navigate) => signUp(email, password, firstName, lastName, navigate),
+    signUp: (email, password, firstName, lastName) => {
+      return signUp(email, password, firstName, lastName).then(data => {
+        if (data.session) {
+          navigate('/');
+        } else {
+          navigate('/');
+        }
+        return data;
+      });
+    },
     signOut: () => signOut(navigate),
     signInWithApple,
     saveJob: (jobId) => user ? saveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to save jobs')),
