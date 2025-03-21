@@ -1,11 +1,24 @@
 
 import '@testing-library/jest-dom';
-import { expect, afterEach, vi } from 'vitest';
+import { expect, afterEach, vi, describe, it } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import * as matchers from '@testing-library/jest-dom/matchers';
 
 // Add the custom jest-dom matchers
 expect.extend(matchers);
+
+// Explicitly export Vitest globals to make them available to tests
+declare global {
+  // Extend global namespace to include Vitest functions
+  export const expect: typeof import('vitest')['expect'];
+  export const describe: typeof import('vitest')['describe'];
+  export const it: typeof import('vitest')['it'];
+  export const vi: typeof import('vitest')['vi'];
+  export const beforeEach: typeof import('vitest')['beforeEach'];
+  export const afterEach: typeof import('vitest')['afterEach'];
+  export const beforeAll: typeof import('vitest')['beforeAll'];
+  export const afterAll: typeof import('vitest')['afterAll'];
+}
 
 // Add missing properties from the window
 if (typeof window !== 'undefined') {

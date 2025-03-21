@@ -9,6 +9,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/setupTests.ts',
+    include: ['**/__tests__/**/*.{test,spec}.{ts,tsx}'],
+    typecheck: {
+      enabled: true,
+      tsconfig: './tsconfig.vitest.json',
+    },
   },
   resolve: {
     alias: {
