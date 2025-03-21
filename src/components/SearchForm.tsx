@@ -2,20 +2,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Slider } from '@/components/ui/slider';
-import { Progress } from '@/components/ui/progress';
-import { MapPin, Filter, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Badge } from '@/components/ui/badge';
 import { JobType, ExperienceLevel } from '@/types/job';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
+import FilterButton from './search/FilterButton';
+import RadiusSelector from './search/RadiusSelector';
 
 interface SearchFormProps {
   className?: string;
@@ -38,7 +29,7 @@ const SearchForm = ({
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   
-  // New state for advanced filters
+  // Advanced filters state
   const [jobType, setJobType] = useState<JobType | 'all'>('all');
   const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | 'all'>('all');
   const [isRemote, setIsRemote] = useState<boolean | null>(null);
@@ -181,166 +172,21 @@ const SearchForm = ({
           />
         </div>
         
-        {/* Advanced filters popover */}
-        <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size={variant === 'minimal' ? "sm" : "default"}
-              className={cn(
-                "rounded-full relative",
-                appliedFiltersCount > 0 && "border-primary text-primary"
-              )}
-            >
-              <Filter className="h-4 w-4" />
-              {appliedFiltersCount > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center">
-                  {appliedFiltersCount}
-                </Badge>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80 p-4" align="end">
-            <div className="space-y-4">
-              <h3 className="font-medium">Advanced Filters</h3>
-              
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium">Job Type</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button 
-                    type="button" 
-                    variant={jobType === 'all' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setJobType('all')}
-                    className="justify-start"
-                  >
-                    <Briefcase className="mr-2 h-3.5 w-3.5" />
-                    All Types
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={jobType === 'part-time' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setJobType('part-time')}
-                    className="justify-start"
-                  >
-                    <Briefcase className="mr-2 h-3.5 w-3.5" />
-                    Part Time
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={jobType === 'full-time' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setJobType('full-time')}
-                    className="justify-start"
-                  >
-                    <Briefcase className="mr-2 h-3.5 w-3.5" />
-                    Full Time
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={jobType === 'internship' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setJobType('internship')}
-                    className="justify-start"
-                  >
-                    <Briefcase className="mr-2 h-3.5 w-3.5" />
-                    Internship
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium">Experience Level</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button 
-                    type="button" 
-                    variant={experienceLevel === 'all' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setExperienceLevel('all')}
-                    className="justify-start"
-                  >
-                    All Levels
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={experienceLevel === 'no-experience' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setExperienceLevel('no-experience')}
-                    className="justify-start"
-                  >
-                    No Experience
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={experienceLevel === 'entry-level' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setExperienceLevel('entry-level')}
-                    className="justify-start"
-                  >
-                    Entry Level
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant={experienceLevel === 'some-experience' ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setExperienceLevel('some-experience')}
-                    className="justify-start"
-                  >
-                    Some Experience
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium">Job Features</h4>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="remote"
-                      checked={isRemote === true}
-                      onCheckedChange={(checked) => {
-                        if (checked === 'indeterminate') return;
-                        setIsRemote(checked ? true : null);
-                      }}
-                    />
-                    <Label htmlFor="remote">Remote Work</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="flexible"
-                      checked={isFlexible === true} 
-                      onCheckedChange={(checked) => {
-                        if (checked === 'indeterminate') return;
-                        setIsFlexible(checked ? true : null);
-                      }}
-                    />
-                    <Label htmlFor="flexible">Flexible Schedule</Label>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-between pt-2">
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={resetFilters}
-                >
-                  Reset
-                </Button>
-                <Button 
-                  type="button" 
-                  size="sm"
-                  onClick={() => setIsFilterOpen(false)}
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+        <FilterButton
+          variant={variant}
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          appliedFiltersCount={appliedFiltersCount}
+          jobType={jobType}
+          setJobType={setJobType}
+          experienceLevel={experienceLevel}
+          setExperienceLevel={setExperienceLevel}
+          isRemote={isRemote}
+          setIsRemote={setIsRemote}
+          isFlexible={isFlexible}
+          setIsFlexible={setIsFlexible}
+          resetFilters={resetFilters}
+        />
         
         <button
           type="submit"
@@ -359,43 +205,12 @@ const SearchForm = ({
         </button>
       </div>
       
-      <div className="mt-2 flex items-center">
-        <button 
-          type="button" 
-          onClick={toggleRadius}
-          className={cn(
-            "text-xs bg-blue-100 text-blue-600 px-3 py-1.5 rounded-full",
-            "hover:bg-blue-200 transition-colors font-medium border border-blue-200"
-          )}
-        >
-          {showRadius ? "Remove radius" : "Add radius filter"}
-        </button>
-        
-        {showRadius && (
-          <div className="flex-1 flex flex-col gap-1 px-2">
-            <div className="flex items-center gap-2">
-              <div className="bg-blue-100 text-blue-600 px-3 py-2 rounded-md text-xs flex items-center font-medium flex-1">
-                <MapPin size={12} className="flex-shrink-0 mr-1.5" />
-                <span className="mr-3">Search Radius:</span>
-                <div className="flex-1 flex items-center gap-2">
-                  <Slider
-                    value={[radius]}
-                    min={1}
-                    max={50}
-                    step={1}
-                    onValueChange={(values) => setRadius(values[0])}
-                    className="flex-1"
-                  />
-                  <span className="text-xs font-medium min-w-[45px] ml-2">
-                    {radius} mile{radius !== 1 ? 's' : ''}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Progress value={(radius / 50) * 100} className="h-1" />
-          </div>
-        )}
-      </div>
+      <RadiusSelector
+        showRadius={showRadius}
+        toggleRadius={toggleRadius}
+        radius={radius}
+        setRadius={setRadius}
+      />
       
       {!isValid && (
         <p className="absolute -bottom-6 left-0 text-xs text-destructive">
