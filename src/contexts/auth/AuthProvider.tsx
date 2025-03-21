@@ -7,7 +7,7 @@ import { UserProfile } from '@/types/user';
 import { AuthContextType } from './authContext.types';
 
 // Import services
-import { signIn, signUp, signInWithApple, signOut } from './authService';
+import { signIn as authSignIn, signUp as authSignUp, signInWithApple, signOut as authSignOut } from './authService';
 import { 
   saveJob, 
   unsaveJob, 
@@ -97,24 +97,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const handleSignIn = async (email: string, password: string) => {
+    const response = await authSignIn(email, password);
+    navigate('/');
+    return response;
+  };
+
+  const handleSignUp = async (email: string, password: string, firstName: string, lastName: string) => {
+    const response = await authSignUp(email, password, firstName, lastName);
+    if (response.data.session) {
+      navigate('/');
+    }
+    return response;
+  };
+
+  const handleSignOut = async () => {
+    const result = await authSignOut();
+    navigate('/');
+    return result;
+  };
+
   const value: AuthContextType = {
     user,
     session,
     userProfile,
     isLoading,
     profileLoading,
-    signIn: (email, password) => signIn(email, password, navigate),
-    signUp: (email, password, firstName, lastName) => {
-      return signUp(email, password, firstName, lastName).then(data => {
-        if (data.session) {
-          navigate('/');
-        } else {
-          navigate('/');
-        }
-        return data;
-      });
-    },
-    signOut: () => signOut(navigate),
+    signIn: handleSignIn,
+    signUp: handleSignUp,
+    signOut: handleSignOut,
     signInWithApple,
     saveJob: (jobId) => user ? saveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to save jobs')),
     unsaveJob: (jobId) => user ? unsaveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to unsave jobs')),

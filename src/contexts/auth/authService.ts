@@ -1,22 +1,19 @@
 
 import { supabase } from '@/lib/supabase';
-import { NavigateFunction } from 'react-router-dom';
+import { AuthResponse } from '@supabase/supabase-js';
 
 export const signIn = async (
   email: string, 
-  password: string,
-  navigate: NavigateFunction
-) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
+  password: string
+): Promise<AuthResponse> => {
+  const response = await supabase.auth.signInWithPassword({
     email,
     password,
   });
   
-  if (error) throw error;
+  if (response.error) throw response.error;
   
-  // Ensure navigation happens after successful authentication
-  navigate('/');
-  return data;
+  return response;
 };
 
 export const signUp = async (
@@ -24,8 +21,8 @@ export const signUp = async (
   password: string,
   firstName: string,
   lastName: string
-) => {
-  const { data, error } = await supabase.auth.signUp({
+): Promise<AuthResponse> => {
+  const response = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -36,9 +33,9 @@ export const signUp = async (
     },
   });
   
-  if (error) throw error;
+  if (response.error) throw response.error;
   
-  return data;
+  return response;
 };
 
 export const signInWithApple = async () => {
@@ -50,11 +47,9 @@ export const signInWithApple = async () => {
   return { success: true };
 };
 
-export const signOut = async (navigate: NavigateFunction) => {
+export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
   
-  // Ensure navigation happens after successful signout
-  navigate('/');
   return { success: true };
 };

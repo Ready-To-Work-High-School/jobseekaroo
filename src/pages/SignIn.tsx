@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -44,7 +43,6 @@ const SignIn = () => {
         title: "Success",
         description: "You have successfully signed in",
       });
-      navigate('/');
     } catch (error: any) {
       console.error(error);
       toast({
