@@ -10,7 +10,6 @@ import { getAllJobs } from '@/lib/supabase';
 import { syncMockJobsToSupabase } from '@/lib/mock-data/sync-jobs';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { MapPin, Filter as FilterIcon, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -23,6 +22,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import JobPagination from '@/components/job/JobPagination';
+import JobEmptyState from '@/components/job/JobEmptyState';
+import JobLoadingState from '@/components/job/JobLoadingState';
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -147,7 +149,10 @@ const JobListings = () => {
   const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  // Reset filters
+  const resetFilters = () => {
+    setSearchParams(new URLSearchParams({ zipCode: zipCodeParam }));
+  };
 
   return (
     <Layout>
@@ -248,21 +253,17 @@ const JobListings = () => {
           
           <div className="md:col-span-3">
             {loading ? (
-              <div className="flex items-center justify-center min-h-[300px]">
-                <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-              </div>
+              <JobLoadingState />
             ) : jobs.length > 0 ? (
               <div className="space-y-4">
-                <div className="bg-white p-4 rounded-lg border border-border shadow-sm">
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-muted-foreground">
-                      Found <span className="font-medium text-foreground">{jobs.length}</span> job{jobs.length !== 1 ? 's' : ''}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Showing {indexOfFirstJob + 1} to {Math.min(indexOfLastJob, jobs.length)} of {jobs.length}
-                    </p>
-                  </div>
-                </div>
+                <JobPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  jobsCount={jobs.length}
+                  currentPageStart={indexOfFirstJob + 1}
+                  currentPageEnd={Math.min(indexOfLastJob, jobs.length)}
+                />
                 
                 <div className="space-y-4">
                   {currentJobs.map((job, index) => (
@@ -274,61 +275,19 @@ const JobListings = () => {
                 
                 {jobs.length > jobsPerPage && (
                   <div className="py-4">
-                    <Pagination>
-                      <PaginationContent>
-                        {currentPage > 1 && (
-                          <PaginationItem>
-                            <PaginationPrevious onClick={() => paginate(currentPage - 1)} />
-                          </PaginationItem>
-                        )}
-                        
-                        {Array.from({ length: totalPages }).map((_, index) => (
-                          <PaginationItem key={index}>
-                            <PaginationLink 
-                              isActive={currentPage === index + 1} 
-                              onClick={() => paginate(index + 1)}>
-                              {index + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-                        
-                        {currentPage < totalPages && (
-                          <PaginationItem>
-                            <PaginationNext onClick={() => paginate(currentPage + 1)} />
-                          </PaginationItem>
-                        )}
-                      </PaginationContent>
-                    </Pagination>
+                    <JobPagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage}
+                      jobsCount={jobs.length}
+                      currentPageStart={indexOfFirstJob + 1}
+                      currentPageEnd={Math.min(indexOfLastJob, jobs.length)}
+                    />
                   </div>
                 )}
               </div>
             ) : (
-              <div className="text-center py-12 px-6 rounded-lg border border-border bg-white shadow-sm">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                      <circle cx="11" cy="11" r="8" />
-                      <path d="m21 21-4.3-4.3" />
-                    </svg>
-                  </div>
-                </div>
-                <h3 className="text-xl font-medium mb-2">No jobs found</h3>
-                <p className="text-muted-foreground mb-6">
-                  {zipCodeParam 
-                    ? "We couldn't find any jobs matching your filters in this ZIP code." 
-                    : "Please enter a ZIP code to search for jobs."}
-                </p>
-                {zipCodeParam && (
-                  <button
-                    onClick={() => {
-                      setSearchParams(new URLSearchParams({ zipCode: zipCodeParam }));
-                    }}
-                    className="text-primary hover:text-primary/80 font-medium transition-colors"
-                  >
-                    Reset filters and try again
-                  </button>
-                )}
-              </div>
+              <JobEmptyState zipCode={zipCodeParam} onResetFilters={resetFilters} />
             )}
           </div>
         </div>
