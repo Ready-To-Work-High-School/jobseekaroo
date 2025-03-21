@@ -135,9 +135,9 @@ const SearchForm = ({
         {showRadius && (
           <div className="flex-1 flex flex-col gap-1 px-2">
             <div className="flex items-center gap-2">
-              <div className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md text-xs flex items-center font-medium flex-1">
-                <MapPin size={12} className="flex-shrink-0 mr-1" />
-                <span className="mr-2">Search Radius:</span>
+              <div className="bg-blue-100 text-blue-600 px-3 py-2 rounded-md text-xs flex items-center font-medium flex-1">
+                <MapPin size={12} className="flex-shrink-0 mr-1.5" />
+                <span className="mr-3">Search Radius:</span>
                 <div className="flex-1 flex items-center gap-2">
                   <Slider
                     value={[radius]}
@@ -147,7 +147,7 @@ const SearchForm = ({
                     onValueChange={(values) => setRadius(values[0])}
                     className="flex-1"
                   />
-                  <span className="text-xs font-medium min-w-[45px] ml-1">
+                  <span className="text-xs font-medium min-w-[45px] ml-2">
                     {radius} mile{radius !== 1 ? 's' : ''}
                   </span>
                 </div>
