@@ -94,7 +94,7 @@ const Layout = ({ children }: LayoutProps) => {
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[250px] sm:w-[300px]">
                   <div className="flex flex-col gap-6 py-4">
-                    <Link to="/" className="font-bold text-lg px-2">
+                    <Link to="/" className="font-bold text-lg px-2 bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
                       Job Seekers 4 High Schools
                     </Link>
                     
@@ -137,7 +137,7 @@ const Layout = ({ children }: LayoutProps) => {
             
             <Link to="/" className="font-bold text-lg flex items-center gap-2">
               <Home className="h-5 w-5" />
-              <span>Job Seekers 4 High Schools</span>
+              <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">Job Seekers 4 High Schools</span>
             </Link>
           </div>
           

@@ -18,7 +18,7 @@ const Hero = () => {
       
       <div className="max-w-3xl mx-auto py-8 mt-10">
         <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", titleAnimation)}>
-          <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
             Find the perfect entry level job for credential holders
           </span>
         </h1>

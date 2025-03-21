@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -213,7 +214,7 @@ const Navbar = () => {
           
           <Link to="/" className="flex items-center gap-2">
             <Home className="h-6 w-6 text-primary" aria-hidden="true" />
-            <span className="text-xl font-bold">Job Seekers 4 High Schools</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">Job Seekers 4 High Schools</span>
           </Link>
 
           {!isMobile && (

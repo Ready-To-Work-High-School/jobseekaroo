@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useFadeIn } from '@/utils/animations';
 import { 
   getJobs,
-  getJobsByLocation,
   getSavedSearches 
 } from '@/lib/mock-data';
 import { getAllJobs } from '@/lib/supabase';
@@ -22,7 +21,6 @@ import { toast } from 'sonner';
 
 const Index = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
-  const [localJobs, setLocalJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -44,34 +42,18 @@ const Index = () => {
           const featured = allJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 4);
+            .slice(0, 3);
           
           setFeaturedJobs(featured);
-          
-          // Find Jacksonville jobs
-          const jacksonvilleJobs = allJobs
-            .filter(job => 
-              job.location?.city === 'Jacksonville' && 
-              job.location?.state === 'FL'
-            )
-            .slice(0, 4);
-          
-          setLocalJobs(jacksonvilleJobs.length > 0 ? jacksonvilleJobs : allJobs.slice(0, 4));
         } else {
           // Fallback to mock data if no jobs in Supabase
           const allMockJobs = getJobs();
           const featured = allMockJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 4);
+            .slice(0, 3);
           
           setFeaturedJobs(featured);
-          
-          // Get some jobs from Jacksonville
-          const jacksonvilleJobs = getJobsByLocation('Jacksonville', 'FL')
-            .slice(0, 4);
-          
-          setLocalJobs(jacksonvilleJobs);
           
           // Show a toast that we're using mock data
           if (user) {
@@ -89,15 +71,9 @@ const Index = () => {
         const featured = allJobs
           .filter(job => job.isFeatured)
           .sort(() => 0.5 - Math.random()) // Shuffle
-          .slice(0, 4);
+          .slice(0, 3);
         
         setFeaturedJobs(featured);
-        
-        // Get some jobs from Jacksonville
-        const jacksonvilleJobs = getJobsByLocation('Jacksonville', 'FL')
-          .slice(0, 4);
-        
-        setLocalJobs(jacksonvilleJobs);
       } finally {
         setIsLoading(false);
       }
@@ -154,8 +130,8 @@ const Index = () => {
             </div>
             
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[...Array(4)].map((_, i) => (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[...Array(3)].map((_, i) => (
                   <div key={i} className="rounded-lg border border-border bg-card p-4 h-64 animate-pulse">
                     <div className="flex gap-3 items-start mb-4">
                       <div className="w-12 h-12 bg-muted rounded-md"></div>
@@ -173,58 +149,8 @@ const Index = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {featuredJobs.map((job, index) => (
-                  <JobCard job={job} key={job.id} index={index} />
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-        
-        {/* Jacksonville Jobs Section */}
-        <section className={`py-12 bg-amber-50 ${fadeInMedium}`} aria-labelledby="local-jobs-heading">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-              <div>
-                <h2 id="local-jobs-heading" className="text-2xl font-bold text-gray-900 sm:text-3xl mb-1">
-                  Jobs in Jacksonville
-                </h2>
-                <p className="text-base text-muted-foreground">
-                  Local opportunities in the Jacksonville area
-                </p>
-              </div>
-              <Button 
-                onClick={() => navigate('/jobs?location=Jacksonville, FL')}
-                variant="outline"
-                className="mt-3 sm:mt-0"
-              >
-                Browse Local Jobs
-              </Button>
-            </div>
-            
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="rounded-lg border border-amber-300 bg-white p-4 h-64 animate-pulse">
-                    <div className="flex gap-3 items-start mb-4">
-                      <div className="w-12 h-12 bg-amber-100 rounded-md"></div>
-                      <div className="flex-1">
-                        <div className="h-5 bg-amber-100 rounded w-3/4 mb-2"></div>
-                        <div className="h-4 bg-amber-100 rounded w-1/2"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-amber-100 rounded"></div>
-                      <div className="h-3 bg-amber-100 rounded"></div>
-                      <div className="h-3 bg-amber-100 rounded w-2/3"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {localJobs.map((job, index) => (
                   <JobCard job={job} key={job.id} index={index} />
                 ))}
               </div>

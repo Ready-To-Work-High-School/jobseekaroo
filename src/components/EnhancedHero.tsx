@@ -20,7 +20,7 @@ const EnhancedHero = () => {
       <div className="max-w-3xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
               Job Seekers 4 High Schools
             </span>
           </h1>
