@@ -1,14 +1,12 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-
 const EntrepreneurshipStoreSection = () => {
   return <div className="mb-16">
       <Card className="overflow-hidden border-amber-300 bg-amber-50/60">
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-full md:w-1/3 flex-shrink-0">
-              <img src="/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png" alt="Westside High School Entrepreneurship School Store" className="w-full h-auto rounded-lg shadow-md" />
+              
             </div>
             
             <div className="w-full md:w-2/3">
@@ -55,5 +53,4 @@ const EntrepreneurshipStoreSection = () => {
       </Card>
     </div>;
 };
-
 export default EntrepreneurshipStoreSection;
