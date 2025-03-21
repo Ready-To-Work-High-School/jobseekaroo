@@ -15,8 +15,7 @@ const ProgramsSection = () => {
   return (
     <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
-        {/* Add SectionSeparator before the Employers Section */}
-        <SectionSeparator className="mt-0 mb-8" />
+        {/* Removing the SectionSeparator that was here */}
         
         {/* Employers Section */}
         <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
