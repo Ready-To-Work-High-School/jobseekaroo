@@ -36,11 +36,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   const fetchUserProfile = async (userId: string) => {
-    if (!userId) return;
+    if (!userId) {
+      console.log('fetchUserProfile: No user ID provided');
+      return;
+    }
     
+    console.log('fetchUserProfile: Fetching profile for user ID:', userId);
     setProfileLoading(true);
     try {
       const profileData = await getUserProfile(userId);
+      console.log('fetchUserProfile: Profile data received:', profileData);
       setUserProfile(profileData as UserProfile);
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -54,13 +59,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state change:', event, session);
+      console.log('Auth state change:', event, session?.user?.id);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('Auth state change: user is logged in, fetching profile');
         fetchUserProfile(session.user.id);
       } else {
+        console.log('Auth state change: no user, clearing profile');
         setUserProfile(null);
       }
       
@@ -69,31 +76,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session:', session);
+      console.log('Initial session check:', session?.user?.id);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('Initial session: user is logged in, fetching profile');
         fetchUserProfile(session.user.id);
+      } else {
+        console.log('Initial session: no user');
       }
       
       setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('Cleaning up auth state listener');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const refreshProfile = async () => {
+    console.log('refreshProfile called');
     if (user) {
       await fetchUserProfile(user.id);
+    } else {
+      console.log('refreshProfile: No user to refresh profile for');
     }
   };
 
   const handleUpdateProfile = async (profileData: Partial<UserProfile>) => {
-    if (!user) throw new Error('User must be logged in to update profile');
+    if (!user) {
+      console.error('User must be logged in to update profile');
+      throw new Error('User must be logged in to update profile');
+    }
     
     try {
+      console.log('handleUpdateProfile: Updating profile for user:', user.id);
       const updatedProfile = await updateUserProfile(user.id, profileData);
+      console.log('handleUpdateProfile: Profile updated:', updatedProfile);
       setUserProfile(updatedProfile as UserProfile);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -103,37 +124,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleSignIn = async (email: string, password: string) => {
     try {
+      console.log('handleSignIn: Signing in with email:', email);
       const response = await authSignIn(email, password);
-      console.log('Sign in response:', response);
-      navigate('/');
+      console.log('handleSignIn: Sign in response:', response);
+      
+      if (response.data.session) {
+        console.log('handleSignIn: Successfully signed in, navigating to home');
+        navigate('/');
+      }
+      
       return response;
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error('handleSignIn: Sign in error:', error);
       throw error;
     }
   };
 
   const handleSignUp = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
+      console.log('handleSignUp: Signing up with email:', email);
       const response = await authSignUp(email, password, firstName, lastName);
-      console.log('Sign up response:', response);
+      console.log('handleSignUp: Sign up response:', response);
+      
       if (response.data.session) {
+        console.log('handleSignUp: Session created, navigating to home');
         navigate('/');
+      } else if (!response.error) {
+        console.log('handleSignUp: Successful signup but email confirmation required');
+        // Could redirect to a confirmation page here
       }
+      
       return response;
     } catch (error) {
-      console.error('Sign up error:', error);
+      console.error('handleSignUp: Sign up error:', error);
       throw error;
     }
   };
 
   const handleSignOut = async () => {
     try {
+      console.log('handleSignOut: Signing out');
       const result = await authSignOut();
+      console.log('handleSignOut: Sign out successful');
       navigate('/');
       return result;
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error('handleSignOut: Sign out error:', error);
       throw error;
     }
   };
@@ -148,14 +184,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp: handleSignUp,
     signOut: handleSignOut,
     signInWithApple,
-    saveJob: (jobId) => user ? saveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to save jobs')),
-    unsaveJob: (jobId) => user ? unsaveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to unsave jobs')),
-    isSavedJob: (jobId) => user ? isSavedJob(user.id, jobId) : Promise.resolve(false),
-    getSavedJobs: () => user ? getSavedJobs(user.id) : Promise.resolve([]),
-    createApplication: (application) => user ? createApplication(user.id, application) : Promise.reject(new Error('User must be logged in to create an application')),
-    updateApplicationStatus: (applicationId, status) => user ? updateApplicationStatus(user.id, applicationId, status) : Promise.reject(new Error('User must be logged in to update an application')),
-    getApplications: () => user ? getApplications(user.id) : Promise.resolve([]),
-    deleteApplication: (applicationId) => user ? deleteApplication(user.id, applicationId) : Promise.reject(new Error('User must be logged in to delete an application')),
+    saveJob: (jobId) => {
+      if (!user) {
+        console.error('User must be logged in to save jobs');
+        return Promise.reject(new Error('User must be logged in to save jobs'));
+      }
+      return saveJob(user.id, jobId);
+    },
+    unsaveJob: (jobId) => {
+      if (!user) {
+        console.error('User must be logged in to unsave jobs');
+        return Promise.reject(new Error('User must be logged in to unsave jobs'));
+      }
+      return unsaveJob(user.id, jobId);
+    },
+    isSavedJob: (jobId) => {
+      if (!user) {
+        console.log('No user, job cannot be saved');
+        return Promise.resolve(false);
+      }
+      return isSavedJob(user.id, jobId);
+    },
+    getSavedJobs: () => {
+      if (!user) {
+        console.log('No user, no saved jobs');
+        return Promise.resolve([]);
+      }
+      return getSavedJobs(user.id);
+    },
+    createApplication: (application) => {
+      if (!user) {
+        console.error('User must be logged in to create an application');
+        return Promise.reject(new Error('User must be logged in to create an application'));
+      }
+      return createApplication(user.id, application);
+    },
+    updateApplicationStatus: (applicationId, status) => {
+      if (!user) {
+        console.error('User must be logged in to update an application');
+        return Promise.reject(new Error('User must be logged in to update an application'));
+      }
+      return updateApplicationStatus(user.id, applicationId, status);
+    },
+    getApplications: () => {
+      if (!user) {
+        console.log('No user, no applications');
+        return Promise.resolve([]);
+      }
+      return getApplications(user.id);
+    },
+    deleteApplication: (applicationId) => {
+      if (!user) {
+        console.error('User must be logged in to delete an application');
+        return Promise.reject(new Error('User must be logged in to delete an application'));
+      }
+      return deleteApplication(user.id, applicationId);
+    },
     updateProfile: handleUpdateProfile,
     refreshProfile,
   };

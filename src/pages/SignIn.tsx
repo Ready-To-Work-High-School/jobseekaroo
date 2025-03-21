@@ -37,14 +37,20 @@ const SignIn = () => {
   const onSubmit = async (values: SignInValues) => {
     setIsLoading(true);
     try {
-      console.log("Attempting to sign in with:", values.email);
-      await signIn(values.email, values.password);
+      console.log("SignIn: Attempting to sign in with:", values.email);
+      const result = await signIn(values.email, values.password);
+      console.log("SignIn: Sign in result:", result);
+      
+      if (result.error) {
+        throw result.error;
+      }
+      
       toast({
         title: "Success",
         description: "You have successfully signed in",
       });
     } catch (error: any) {
-      console.error("Sign in error:", error);
+      console.error("SignIn: Sign in error:", error);
       toast({
         title: "Error",
         description: error.message || "Invalid email or password",
@@ -58,10 +64,11 @@ const SignIn = () => {
   const handleAppleSignIn = async () => {
     setIsAppleLoading(true);
     try {
+      console.log("SignIn: Attempting to sign in with Apple");
       await signInWithApple();
       // Note: No need to show success toast or navigate since OAuth redirects
     } catch (error: any) {
-      console.error("Apple sign in error:", error);
+      console.error("SignIn: Apple sign in error:", error);
       toast({
         title: "Error",
         description: error.message || "Could not sign in with Apple",
