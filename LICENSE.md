@@ -39,21 +39,49 @@ The Software and any accompanying documentation are confidential and proprietary
 
 This license is effective until terminated. Licensor may terminate this Agreement at any time if Licensee is in breach of any of the terms and conditions of this Agreement. Upon termination, Licensee shall cease all use of the Software and destroy all copies, full or partial, of the Software.
 
-## 7. Disclaimer of Warranty
+## 7. Educational Institution Licensing
+
+### 7.1 Educational License Grant
+
+Educational institutions may apply for a special educational license to use the Software within their academic programs, subject to the following terms:
+
+a) **License Fee Structure**: Educational institutions shall pay an annual licensing fee based on the number of students enrolled:
+   - Small institutions (up to 500 students): $1,000 per year
+   - Medium institutions (501-2,000 students): $2,500 per year
+   - Large institutions (over 2,000 students): $5,000 per year
+
+b) **Multi-Campus Deployment**: For educational institutions with multiple campuses, each campus requires a separate license unless a multi-campus agreement is negotiated directly with the Licensor.
+
+c) **Usage Limitations**: The educational license permits use of the Software for educational and career development purposes only. Commercial use of the Software by the institution is expressly prohibited.
+
+d) **User Restrictions**: The license extends only to currently enrolled students, faculty, and staff of the licensed educational institution.
+
+### 7.2 Reporting Requirements
+
+Licensed educational institutions must provide an annual report to the Licensor detailing:
+- The number of active users
+- Courses or programs in which the Software is utilized
+- Success metrics and outcomes from using the Software
+
+### 7.3 License Renewal
+
+Educational licenses must be renewed annually. Failure to renew will result in immediate termination of access to the Software and all associated services.
+
+## 8. Disclaimer of Warranty
 
 THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. LICENSOR DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT.
 
-## 8. Limitation of Liability
+## 9. Limitation of Liability
 
 IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
-## 9. General
+## 10. General
 
 This Agreement shall be governed by the laws of the United States and the state of California. This Agreement is the complete and exclusive statement of the agreement between Licensor and Licensee and supersedes all proposals or prior agreements, oral or written, and any other communications between the parties relating to the subject matter of this Agreement.
 
-## 10. Contact Information
+## 11. Contact Information
 
-For questions regarding this license, please contact:
+For questions regarding this license or to inquire about educational licensing options, please contact:
 
 - Email: legal@jobseekers4highschools.com
 - Address: 123 Education Lane, San Francisco, CA 94105, USA
