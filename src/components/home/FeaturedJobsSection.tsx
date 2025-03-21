@@ -67,27 +67,28 @@ const FeaturedJobsSection = () => {
 
   return (
     <section className={`py-12 ${user ? 'bg-slate-50' : 'bg-white'} ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-          <div>
-            <h2 id="featured-jobs-heading" className="text-2xl font-bold text-gray-900 sm:text-3xl mb-1">
-              Featured Jobs
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Hand-picked opportunities from top employers
-            </p>
-          </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mb-6 md:mb-8 flex flex-col items-center">
+          <h2 
+            id="featured-jobs-heading" 
+            className="text-2xl font-bold sm:text-3xl mb-1 bg-gradient-to-r from-black via-brand-600 to-amber-500 bg-clip-text text-transparent"
+          >
+            Featured Jobs
+          </h2>
+          <p className="text-base text-muted-foreground max-w-md mx-auto">
+            Hand-picked opportunities from top employers
+          </p>
           <Button 
             onClick={() => navigate('/jobs')}
             variant="outline"
-            className="mt-3 sm:mt-0"
+            className="mt-4"
           >
             View All Jobs
           </Button>
         </div>
         
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="rounded-lg border border-border bg-card p-4 h-64 animate-pulse">
                 <div className="flex gap-3 items-start mb-4">
@@ -106,7 +107,7 @@ const FeaturedJobsSection = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {featuredJobs.map((job, index) => (
               <JobCard job={job} key={job.id} index={index} />
             ))}
