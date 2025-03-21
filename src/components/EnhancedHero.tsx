@@ -39,7 +39,7 @@ const EnhancedHero = () => {
           <FeatureCard 
             icon="🔎" 
             title="Enhanced Location Search" 
-            description="Find opportunities within Jacksonville with our improved geolocation features. Use your current location or save searches for later." 
+            description="Find opportunities within Jacksonville and surrounding counties. Use the adjustable radius filter to search up to 50 miles from your location." 
           />
           <FeatureCard 
             icon="💰" 
