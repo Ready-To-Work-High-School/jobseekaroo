@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { NotificationCenter } from '@/components/NotificationCenter';
+import AuthStatus from '@/components/AuthStatus';
 import {
   Menu,
   Search,
@@ -92,7 +92,6 @@ const Navbar = () => {
   const isMobile = useIsMobile();
   const [atTop, setAtTop] = useState(true);
   
-  // Handle scroll for sticky header with shadow
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 10);
@@ -124,7 +123,6 @@ const Navbar = () => {
       className={`sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md ${
         atTop ? 'border-b border-border/40' : 'border-b border-border shadow-sm'
       }`}
-      // Add important accessibility attributes
       role="banner"
       aria-label="Main navigation"
     >
@@ -240,69 +238,13 @@ const Navbar = () => {
             </form>
           )}
           
-          {user ? (
-            <div className="flex items-center gap-2">
+          {user && (
+            <div className="flex items-center">
               <NotificationCenter />
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="User menu">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile">
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/saved-jobs">
-                        <BookMarked className="mr-2 h-4 w-4" />
-                        Saved Jobs
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/applications">
-                        <CheckSquare className="mr-2 h-4 w-4" />
-                        Applications
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/resume-assistant">
-                        <FileText className="mr-2 h-4 w-4" />
-                        Resume Assistant
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    className="text-red-500 focus:text-red-500"
-                    onClick={() => {
-                      signOut();
-                      navigate('/');
-                    }}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="outline" asChild className="hidden sm:flex">
-                <Link to="/sign-in">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link to="/sign-up">Sign Up</Link>
-              </Button>
             </div>
           )}
+          
+          <AuthStatus />
         </div>
       </div>
     </header>
