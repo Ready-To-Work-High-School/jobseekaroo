@@ -1,6 +1,11 @@
 
-import { createApplication, updateApplicationStatus, getApplications, deleteApplication } from './applicationService';
 import { JobApplication, ApplicationStatus } from '@/types/application';
+import { 
+  createApplication as createApplicationOp,
+  updateApplicationStatus as updateApplicationStatusOp,
+  getApplications as getApplicationsOp,
+  deleteApplication as deleteApplicationOp
+} from './applicationOperations';
 
 /**
  * Service functions for handling application-related operations
@@ -11,7 +16,7 @@ export const applicationService = {
       console.error('User must be logged in to create an application');
       return Promise.reject(new Error('User must be logged in to create an application'));
     }
-    return createApplication(userId, application);
+    return createApplicationOp(userId, application);
   },
   
   updateApplicationStatus: (userId: string, applicationId: string, status: ApplicationStatus): Promise<void> => {
@@ -19,7 +24,7 @@ export const applicationService = {
       console.error('User must be logged in to update an application');
       return Promise.reject(new Error('User must be logged in to update an application'));
     }
-    return updateApplicationStatus(userId, applicationId, status);
+    return updateApplicationStatusOp(userId, applicationId, status);
   },
   
   getApplications: (userId: string): Promise<JobApplication[]> => {
@@ -27,7 +32,7 @@ export const applicationService = {
       console.log('No user, no applications');
       return Promise.resolve([]);
     }
-    return getApplications(userId);
+    return getApplicationsOp(userId);
   },
   
   deleteApplication: (userId: string, applicationId: string): Promise<void> => {
@@ -35,6 +40,6 @@ export const applicationService = {
       console.error('User must be logged in to delete an application');
       return Promise.reject(new Error('User must be logged in to delete an application'));
     }
-    return deleteApplication(userId, applicationId);
+    return deleteApplicationOp(userId, applicationId);
   }
 };
