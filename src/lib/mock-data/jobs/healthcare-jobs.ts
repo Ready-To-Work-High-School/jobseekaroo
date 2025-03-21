@@ -5,7 +5,9 @@ export const healthcareJobs: Job[] = [
   {
     id: '4',
     title: 'Healthcare Receptionist',
-    company: 'Jacksonville Medical Center',
+    company: {
+      name: 'Jacksonville Medical Center'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
@@ -33,7 +35,9 @@ export const healthcareJobs: Job[] = [
   {
     id: '6',
     title: 'Veterinary Assistant Trainee',
-    company: 'Jacksonville Animal Care',
+    company: {
+      name: 'Jacksonville Animal Care'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',

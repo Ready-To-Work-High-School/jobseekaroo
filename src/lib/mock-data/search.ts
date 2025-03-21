@@ -68,13 +68,15 @@ export const searchJobsByZipCode = (zipCode: string, filters: JobSearchFilters =
   // Add salary filter functionality
   if (filters.salary?.min !== undefined) {
     filtered = filtered.filter(job => 
-      job.salary?.min !== undefined && job.salary.min >= (filters.salary?.min || 0)
+      (job.salary?.min !== undefined && job.salary.min >= (filters.salary?.min || 0)) ||
+      (job.payRate.min * 2080 >= (filters.salary?.min || 0)) // Approximate annual salary based on hourly rate
     );
   }
   
   if (filters.salary?.max !== undefined) {
     filtered = filtered.filter(job => 
-      job.salary?.max !== undefined && job.salary.max <= (filters.salary?.max || Infinity)
+      (job.salary?.max !== undefined && job.salary.max <= (filters.salary?.max || Infinity)) ||
+      (job.payRate.max * 2080 <= (filters.salary?.max || Infinity)) // Approximate annual salary based on hourly rate
     );
   }
   
@@ -102,7 +104,7 @@ export const searchJobsByZipCode = (zipCode: string, filters: JobSearchFilters =
     const cutoffDate = new Date(now.setDate(now.getDate() - filters.postedWithin));
     
     filtered = filtered.filter(job => {
-      const postedDate = new Date(job.postedAt);
+      const postedDate = new Date(job.postedDate);
       return postedDate >= cutoffDate;
     });
   }

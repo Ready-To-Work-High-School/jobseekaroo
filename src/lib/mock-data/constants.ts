@@ -9,7 +9,8 @@ export const jobTypes: Array<{ value: JobType; label: string }> = [
   { value: 'contract', label: 'Contract' },
   { value: 'temporary', label: 'Temporary' },
   { value: 'summer', label: 'Summer' },
-  { value: 'weekend', label: 'Weekend' }
+  { value: 'weekend', label: 'Weekend' },
+  { value: 'apprenticeship', label: 'Apprenticeship' }
 ];
 
 // Experience levels with display names

@@ -1,10 +1,13 @@
+
 import { Job } from '../../../types/job';
 
 export const retailJobs: Job[] = [
   {
     id: '1',
     title: 'Retail Sales Associate',
-    company: 'Jacksonville Electronics',
+    company: {
+      name: 'Jacksonville Electronics'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
@@ -32,7 +35,9 @@ export const retailJobs: Job[] = [
   {
     id: '9',
     title: 'Hotel Front Desk Trainee',
-    company: 'Jacksonville Waterfront Hotel',
+    company: {
+      name: 'Jacksonville Waterfront Hotel'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',

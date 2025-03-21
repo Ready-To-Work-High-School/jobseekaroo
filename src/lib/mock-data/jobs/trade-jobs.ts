@@ -5,7 +5,9 @@ export const tradeJobs: Job[] = [
   {
     id: '5',
     title: 'Electrical Apprentice',
-    company: 'Jacksonville Electric',
+    company: {
+      name: 'Jacksonville Electric'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
@@ -33,7 +35,9 @@ export const tradeJobs: Job[] = [
   {
     id: '8',
     title: 'Carpentry Apprentice',
-    company: 'Jacksonville Builders',
+    company: {
+      name: 'Jacksonville Builders'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
@@ -61,7 +65,9 @@ export const tradeJobs: Job[] = [
   {
     id: '10',
     title: 'HVAC Apprentice',
-    company: 'Cool Air Solutions',
+    company: {
+      name: 'Cool Air Solutions'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',

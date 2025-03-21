@@ -5,7 +5,9 @@ export const techJobs: Job[] = [
   {
     id: '2',
     title: 'IT Help Desk Apprentice',
-    company: 'TechSolutions Jacksonville',
+    company: {
+      name: 'TechSolutions Jacksonville'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',

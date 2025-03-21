@@ -5,7 +5,9 @@ export const officeJobs: Job[] = [
   {
     id: '3',
     title: 'Office Assistant',
-    company: 'River City Legal',
+    company: {
+      name: 'River City Legal'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
@@ -33,7 +35,9 @@ export const officeJobs: Job[] = [
   {
     id: '7',
     title: 'Banking Associate Trainee',
-    company: 'First Jacksonville Bank',
+    company: {
+      name: 'First Jacksonville Bank'
+    },
     location: {
       city: 'Jacksonville',
       state: 'FL',
