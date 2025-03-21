@@ -8,7 +8,7 @@ import { UserProfile } from '@/types/user';
 import { AuthContextType } from './auth/authContext.types';
 
 // Import services
-import { signIn, signUp, signInWithApple, signOut } from './auth/authService';
+import { signIn, signUp, signInWithApple, signInWithGoogle, signOut } from './auth/authService';
 import { 
   saveJob, 
   unsaveJob, 
@@ -100,7 +100,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleSignIn = async (email: string, password: string) => {
     try {
       await signIn(email, password);
-      navigate('/');
+      
+      // Check if there's a saved redirect URL
+      const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+      if (redirectUrl) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        navigate(redirectUrl);
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       throw error;
     }
@@ -127,6 +135,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleSignInWithApple = async () => {
     try {
       await signInWithApple();
+      // Note: No need to navigate since OAuth redirects
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
       // Note: No need to navigate since OAuth redirects
     } catch (error) {
       throw error;
@@ -186,6 +203,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp: handleSignUp,
     signOut: handleSignOut,
     signInWithApple: handleSignInWithApple,
+    signInWithGoogle: handleSignInWithGoogle,
     saveJob: handleSaveJob,
     unsaveJob: handleUnsaveJob,
     isSavedJob: handleIsSavedJob,

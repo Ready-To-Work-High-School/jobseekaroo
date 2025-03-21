@@ -38,6 +38,14 @@ export const signInWithApple = async (): Promise<void> => {
   if (error) throw error;
 };
 
+export const signInWithGoogle = async (): Promise<void> => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+  });
+  
+  if (error) throw error;
+};
+
 export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
