@@ -22,10 +22,10 @@ const JobCardHeader = ({
   return (
     <div className="flex items-start gap-3 sm:gap-4">
       <div className="flex-1 min-w-0">
-        <h3 className={`font-semibold text-base sm:text-lg truncate text-black`}>
+        <h3 className={`font-semibold text-base sm:text-lg line-clamp-2 h-auto min-h-[3rem] text-black`}>
           {title}
         </h3>
-        <p className={`text-sm ${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>
+        <p className={`text-sm ${useAmberStyling ? 'text-amber-700' : 'text-black'} truncate`}>
           {companyName}
         </p>
       </div>
