@@ -73,7 +73,7 @@
 
 @layer components {
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20;
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-card;
   }
   
   .text-balance {
@@ -86,6 +86,44 @@
   
   .container-custom {
     @apply container px-4 sm:px-6 lg:px-8 mx-auto;
+  }
+
+  /* Enhanced card styles */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-card-hover transform hover:-translate-y-1;
+  }
+  
+  /* Enhanced button styles */
+  .btn-primary {
+    @apply px-6 py-3 rounded-full bg-primary text-white font-medium 
+           hover:bg-primary/90 transition-all duration-300 shadow-button
+           focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 rounded-full bg-secondary text-primary font-medium 
+           hover:bg-secondary/80 transition-all duration-300 shadow-sm
+           focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:ring-offset-2;
+  }
+  
+  .btn-amber {
+    @apply px-6 py-3 rounded-full bg-amber-500 text-white font-medium 
+           hover:bg-amber-600 transition-all duration-300 shadow-button
+           focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:ring-offset-2;
+  }
+  
+  /* Feature badge */
+  .feature-badge {
+    @apply px-2.5 py-1 rounded-md text-xs font-medium;
+  }
+  
+  /* Section styles */
+  .section-title {
+    @apply text-3xl font-bold mb-4;
+  }
+  
+  .section-description {
+    @apply text-lg text-muted-foreground mb-8 max-w-3xl;
   }
 }
 
@@ -113,4 +151,31 @@
 /* Focus styles */
 .focus-ring {
   @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-shadow duration-200;
+}
+
+/* Enhanced transitions */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-[1.02];
+}
+
+/* Background gradients */
+.bg-gradient-brand {
+  @apply bg-gradient-to-r from-brand-600 to-brand-800;
+}
+
+.bg-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-600;
+}
+
+/* Text gradients */
+.text-gradient-primary {
+  @apply bg-gradient-to-r from-primary to-brand-700 bg-clip-text text-transparent;
+}
+
+.text-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-700 bg-clip-text text-transparent;
 }
