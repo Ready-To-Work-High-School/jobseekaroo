@@ -1,102 +1,23 @@
+
 import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
-import { MapPin, Clock, BriefcaseIcon, CalendarIcon, BookmarkIcon } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import ShareButton from './ShareButton';
-import LazyImage from './LazyImage';
+import { Clock } from 'lucide-react';
+import { isJacksonvilleCompany, formatRelativeDate, formatPayRange } from './job/JobCardUtils';
+import JobCardLogo from './job/JobCardLogo';
+import JobCardHeader from './job/JobCardHeader';
+import JobCardDetails from './job/JobCardDetails';
+import JobCardFeatures from './job/JobCardFeatures';
 
 interface JobCardProps {
   job: Job;
   index: number;
 }
 
-const JobCard = ({
-  job,
-  index
-}: JobCardProps) => {
+const JobCard = ({ job, index }: JobCardProps) => {
   const animation = useFadeIn(100 + index * 50);
-  const { user, saveJob, unsaveJob, isSavedJob } = useAuth();
-  const [isSaved, setIsSaved] = useState(false);
-  const { toast } = useToast();
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const useAmberStyling = isJacksonvilleCompany(job.company.name);
   
-  useEffect(() => {
-    if (user) {
-      const checkSaved = async () => {
-        const saved = await isSavedJob(job.id);
-        setIsSaved(saved);
-      };
-      checkSaved();
-    } else {
-      setIsSaved(false);
-    }
-  }, [user, job.id, isSavedJob]);
-
-  const formatRelativeDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
-  };
-
-  const formatPayRange = (min: number, max: number, period: string) => {
-    return `$${min}${max > min ? `-$${max}` : ''} ${period}`;
-  };
-
-  const handleSaveToggle = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to save jobs",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    try {
-      if (isSaved) {
-        await unsaveJob(job.id);
-        setIsSaved(false);
-        toast({
-          title: "Job removed",
-          description: "Job removed from your saved jobs",
-        });
-      } else {
-        await saveJob(job.id);
-        setIsSaved(true);
-        toast({
-          title: "Job saved",
-          description: "Job added to your saved jobs",
-        });
-      }
-    } catch (error) {
-      console.error("Error toggling job save status:", error);
-      toast({
-        title: "Error",
-        description: "There was an error updating your saved jobs",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const jacksonvilleCompanies = [
-    "Jacksonville Electronics", 
-    "Jacksonville Waterfront Hotel", 
-    "TechSolutions Jacksonville"
-  ];
-  const useAmberStyling = jacksonvilleCompanies.includes(job.company.name);
-
   return (
     <Link 
       to={`/jobs/${job.id}`} 
@@ -108,69 +29,20 @@ const JobCard = ({
         role="article"
       >
         <div className="flex items-start gap-3 sm:gap-4">
-          {job.logoUrl ? (
-            <div 
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}
-              aria-hidden="true"
-            >
-              <LazyImage
-                src={job.logoUrl}
-                alt={`${job.company.name} logo`}
-                className="w-full h-full object-cover"
-                onLoad={() => setImageLoaded(true)}
-                width="48"
-                height="48"
-              />
-            </div>
-          ) : (
-            <div 
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md border ${useAmberStyling ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}
-              aria-hidden="true"
-            >
-              <span className={`${useAmberStyling ? 'text-amber-600' : 'text-primary'} font-medium text-base sm:text-lg`}>
-                {job.company.name.substring(0, 1)}
-              </span>
-            </div>
-          )}
+          <JobCardLogo 
+            logoUrl={job.logoUrl} 
+            companyName={job.company.name}
+            useAmberStyling={useAmberStyling}
+          />
           
-          <div className="flex-1 min-w-0">
-            <h3 className={`font-semibold text-base sm:text-lg truncate text-black`}>
-              {job.title}
-            </h3>
-            <p className={`text-sm ${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>
-              {job.company.name}
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden sm:flex items-center gap-1 text-xs text-black whitespace-nowrap">
-              <Clock className="h-3 w-3" aria-hidden="true" />
-              <span aria-label={`Posted ${formatRelativeDate(job.postedDate)}`}>
-                {formatRelativeDate(job.postedDate)}
-              </span>
-            </div>
-            
-            <div className="flex items-center gap-1">
-              <ShareButton
-                jobId={job.id}
-                jobTitle={job.title}
-                companyName={job.company.name}
-                className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'}`}
-              />
-              
-              <button 
-                onClick={handleSaveToggle}
-                className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors p-1 sm:p-0 focus-visible:ring`}
-                aria-label={isSaved ? `Unsave ${job.title} job` : `Save ${job.title} job`}
-                aria-pressed={isSaved}
-              >
-                <BookmarkIcon 
-                  className={`h-5 w-5 ${isSaved ? (useAmberStyling ? 'fill-amber-500 text-amber-600' : 'fill-primary text-primary') : 'fill-none'}`} 
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
-          </div>
+          <JobCardHeader 
+            title={job.title}
+            companyName={job.company.name}
+            postedDate={job.postedDate}
+            jobId={job.id}
+            useAmberStyling={useAmberStyling}
+            formatRelativeDate={formatRelativeDate}
+          />
         </div>
 
         <div className="sm:hidden flex items-center gap-2 text-xs text-black">
@@ -178,40 +50,19 @@ const JobCard = ({
           <span>{formatRelativeDate(job.postedDate)}</span>
         </div>
 
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs sm:text-sm text-black">
-          <div className="flex items-center gap-1" aria-label={`Location: ${job.location.city}, ${job.location.state}`}>
-            <MapPin className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} aria-hidden="true" />
-            <span>{job.location.city}, {job.location.state}</span>
-          </div>
-          
-          <div className="flex items-center gap-1" aria-label={`Salary: ${formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}`}>
-            <BriefcaseIcon className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} aria-hidden="true" />
-            <span>{formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}</span>
-          </div>
-          
-          <div className="flex items-center gap-1" aria-label={`Job type: ${job.type.replace('-', ' ')}`}>
-            <CalendarIcon className={`h-3 w-3 sm:h-4 sm:w-4 ${useAmberStyling ? "text-amber-600" : ""}`} aria-hidden="true" />
-            <span className="capitalize">{job.type.replace('-', ' ')}</span>
-          </div>
-        </div>
+        <JobCardDetails 
+          location={job.location}
+          payRange={formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
+          jobType={job.type}
+          useAmberStyling={useAmberStyling}
+        />
 
-        <div className="flex flex-wrap gap-1.5 sm:gap-2" aria-label="Job features">
-          {job.isRemote && (
-            <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md bg-primary/10 text-primary text-[10px] sm:text-xs font-medium">
-              Remote
-            </span>
-          )}
-          
-          {job.isFlexible && (
-            <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-[10px] sm:text-xs font-medium`}>
-              Flexible
-            </span>
-          )}
-          
-          <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md ${useAmberStyling ? 'bg-amber-500 text-white' : 'bg-amber-500 text-white'} text-[10px] sm:text-xs font-medium capitalize`}>
-            {job.experienceLevel.replace('-', ' ')}
-          </span>
-        </div>
+        <JobCardFeatures 
+          isRemote={job.isRemote}
+          isFlexible={job.isFlexible}
+          experienceLevel={job.experienceLevel}
+          useAmberStyling={useAmberStyling}
+        />
 
         <p className="text-xs sm:text-sm text-black line-clamp-2">
           {job.description}
