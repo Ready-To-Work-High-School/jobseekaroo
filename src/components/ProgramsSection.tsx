@@ -18,9 +18,6 @@ const ProgramsSection = () => {
           <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <span className="inline-block mb-2 px-3 py-1 rounded-full text-xs bg-amber-500 text-stone-950 font-bold">
-                  Employer Resources
-                </span>
                 <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight mt-2 text-center")}>
                   <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
                     <em>For Employers Only</em>
