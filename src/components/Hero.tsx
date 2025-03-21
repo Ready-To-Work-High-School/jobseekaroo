@@ -33,14 +33,14 @@ const Hero = () => {
           * <em>This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy</em>
         </p>
         
-        <div className={cn("mb-12 flex justify-center", searchAnimation)}>
-          <SearchForm />
-        </div>
-        
-        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto", infoAnimation)}>
+        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12", infoAnimation)}>
           <FeatureCard icon="🔎" title="How Far Can You Travel?" description="Find opportunities within Jacksonville, surrounding counties or beyond. Use the adjustable radius filter to search up to 50 miles from your location." />
           <FeatureCard icon="💰" title="Apprenticeships" description="Discover paid training programs where you can learn valuable skills while earning income." />
           <FeatureCard icon="💼" title="Entry Level Positions" description="Explore positions specifically designed for high school students beginning their career journey." />
+        </div>
+        
+        <div className={cn("mb-12 flex justify-center", searchAnimation)}>
+          <SearchForm />
         </div>
       </div>
     </section>;
