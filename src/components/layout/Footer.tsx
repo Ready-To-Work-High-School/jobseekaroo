@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -10,6 +9,7 @@ const Footer = () => {
     { href: "/for-employers", label: "For Employers" },
     { href: "/faq", label: "FAQ" },
     { href: "/success-stories", label: "Success Stories" },
+    { href: "/license", label: "License" },
   ];
 
   return (
@@ -66,6 +66,9 @@ const Footer = () => {
           <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
             <p>
               &copy; {new Date().getFullYear()} Job Seekers 4 High Schools. All rights reserved.
+            </p>
+            <p className="mt-1">
+              All content, design, and functionality on this site is protected by copyright law and may not be reproduced without permission.
             </p>
           </div>
         </div>

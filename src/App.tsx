@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -26,6 +25,7 @@ const ResumeAssistant = lazy(() => import('./pages/ResumeAssistant'));
 const SavedJobs = lazy(() => import('./pages/SavedJobs'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const SuccessStories = lazy(() => import('./pages/SuccessStories'));
+const License = lazy(() => import('./pages/License'));
 
 // Loading component
 const PageLoader = () => (
@@ -60,6 +60,7 @@ function App() {
               <Route path="/saved-jobs" element={<SavedJobs />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/license" element={<License />} />
               
               {/* 404 Page */}
               <Route path="*" element={<NotFound />} />
