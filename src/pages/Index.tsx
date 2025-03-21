@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import ResourcesSection from '@/components/home/ResourcesSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
+import SearchSection from '@/components/home/SearchSection';
 
 const Index = () => {
   const { user } = useAuth();
@@ -25,6 +26,9 @@ const Index = () => {
         
         {/* Featured Jobs Section - moved up directly after Hero */}
         <FeaturedJobsSection />
+        
+        {/* Search Section - moved after Featured Jobs */}
+        <SearchSection />
         
         {/* User-specific recommendation section */}
         {user && <UserRecommendationsSection />}

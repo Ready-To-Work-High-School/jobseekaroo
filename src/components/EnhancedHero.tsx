@@ -1,15 +1,11 @@
 
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import EnhancedSearchForm from './EnhancedSearchForm';
 import FeatureCard from './FeatureCard';
 
 const EnhancedHero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
-  const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
 
   return (
@@ -51,28 +47,6 @@ const EnhancedHero = () => {
             title="Advanced Filtering" 
             description="Use our powerful filters to narrow down jobs by type, experience level, and sort by relevance, date, or salary." 
           />
-        </div>
-        
-        <div className={cn("mb-8 flex justify-center", searchAnimation)}>
-          <EnhancedSearchForm />
-        </div>
-
-        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12", searchAnimation)}>
-          <Link to="/jobs" className="col-span-1">
-            <Button variant="outline" size="lg" className="w-full">
-              Entry Level Jobs
-            </Button>
-          </Link>
-          <Link to="/jobs" className="col-span-1">
-            <Button variant="default" size="lg" className="w-full">
-              Find Jobs
-            </Button>
-          </Link>
-          <Link to="/jobs" className="col-span-1">
-            <Button variant="outline" size="lg" className="w-full">
-              Internships
-            </Button>
-          </Link>
         </div>
       </div>
     </section>
