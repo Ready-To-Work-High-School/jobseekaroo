@@ -12,7 +12,9 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-1 w-full">
-        {children}
+        <div className="container-custom py-4">
+          {children}
+        </div>
       </main>
       <Footer />
     </div>
