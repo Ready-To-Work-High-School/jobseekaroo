@@ -71,11 +71,11 @@ const FeaturedJobsSection = () => {
         <div className="mb-6 md:mb-8 flex flex-col items-center">
           <h2 
             id="featured-jobs-heading" 
-            className="text-2xl font-bold sm:text-3xl mb-1 bg-gradient-to-r from-black via-brand-600 to-amber-500 bg-clip-text text-transparent"
+            className="text-3xl font-bold sm:text-4xl mb-2 bg-gradient-to-r from-black via-brand-600 to-amber-500 bg-clip-text text-transparent"
           >
             Featured Jobs
           </h2>
-          <p className="text-base text-muted-foreground max-w-md mx-auto">
+          <p className="text-lg text-muted-foreground max-w-md mx-auto">
             Hand-picked opportunities from top employers
           </p>
           <Button 
