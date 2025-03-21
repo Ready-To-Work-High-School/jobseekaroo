@@ -50,6 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    console.log('Setting up auth state listener');
+    
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change:', event, session);
       setSession(session);
@@ -64,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     });
 
+    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session:', session);
       setSession(session);
@@ -98,23 +102,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const handleSignIn = async (email: string, password: string) => {
-    const response = await authSignIn(email, password);
-    navigate('/');
-    return response;
+    try {
+      const response = await authSignIn(email, password);
+      console.log('Sign in response:', response);
+      navigate('/');
+      return response;
+    } catch (error) {
+      console.error('Sign in error:', error);
+      throw error;
+    }
   };
 
   const handleSignUp = async (email: string, password: string, firstName: string, lastName: string) => {
-    const response = await authSignUp(email, password, firstName, lastName);
-    if (response.data.session) {
-      navigate('/');
+    try {
+      const response = await authSignUp(email, password, firstName, lastName);
+      console.log('Sign up response:', response);
+      if (response.data.session) {
+        navigate('/');
+      }
+      return response;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      throw error;
     }
-    return response;
   };
 
   const handleSignOut = async () => {
-    const result = await authSignOut();
-    navigate('/');
-    return result;
+    try {
+      const result = await authSignOut();
+      navigate('/');
+      return result;
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
   };
 
   const value: AuthContextType = {

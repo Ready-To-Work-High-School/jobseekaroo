@@ -2,7 +2,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,6 @@ const SignIn = () => {
   const [isAppleLoading, setIsAppleLoading] = useState(false);
   const { signIn, signInWithApple } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -38,13 +37,14 @@ const SignIn = () => {
   const onSubmit = async (values: SignInValues) => {
     setIsLoading(true);
     try {
+      console.log("Attempting to sign in with:", values.email);
       await signIn(values.email, values.password);
       toast({
         title: "Success",
         description: "You have successfully signed in",
       });
     } catch (error: any) {
-      console.error(error);
+      console.error("Sign in error:", error);
       toast({
         title: "Error",
         description: error.message || "Invalid email or password",
@@ -61,12 +61,13 @@ const SignIn = () => {
       await signInWithApple();
       // Note: No need to show success toast or navigate since OAuth redirects
     } catch (error: any) {
-      console.error(error);
+      console.error("Apple sign in error:", error);
       toast({
         title: "Error",
         description: error.message || "Could not sign in with Apple",
         variant: "destructive",
       });
+    } finally {
       setIsAppleLoading(false);
     }
   };

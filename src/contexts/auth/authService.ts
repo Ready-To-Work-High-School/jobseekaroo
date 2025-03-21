@@ -6,11 +6,13 @@ export const signIn = async (
   email: string, 
   password: string
 ): Promise<AuthResponse> => {
+  console.log('Auth service: signIn called with email:', email);
   const response = await supabase.auth.signInWithPassword({
     email,
     password,
   });
   
+  console.log('Auth service: signIn response:', response);
   if (response.error) throw response.error;
   
   return response;
@@ -22,6 +24,7 @@ export const signUp = async (
   firstName: string,
   lastName: string
 ): Promise<AuthResponse> => {
+  console.log('Auth service: signUp called with email:', email);
   const response = await supabase.auth.signUp({
     email,
     password,
@@ -33,12 +36,14 @@ export const signUp = async (
     },
   });
   
+  console.log('Auth service: signUp response:', response);
   if (response.error) throw response.error;
   
   return response;
 };
 
 export const signInWithApple = async () => {
+  console.log('Auth service: signInWithApple called');
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
   });
@@ -48,6 +53,7 @@ export const signInWithApple = async () => {
 };
 
 export const signOut = async () => {
+  console.log('Auth service: signOut called');
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
   
