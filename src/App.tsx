@@ -2,6 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { NotificationsProvider } from '@/contexts/NotificationsContext';
 
 // Import main page components directly
 import Index from './pages/Index';
@@ -37,32 +38,34 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            
-            {/* Protected Routes */}
-            <Route path="/jobs" element={<JobListings />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/interview-prep" element={<InterviewPrep />} />
-            <Route path="/jobs/:id" element={<JobDetails />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/for-employers" element={<ForEmployers />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/resume-assistant" element={<ResumeAssistant />} />
-            <Route path="/saved-jobs" element={<SavedJobs />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/success-stories" element={<SuccessStories />} />
-            
-            {/* 404 Page */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <NotificationsProvider>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+              
+              {/* Protected Routes */}
+              <Route path="/jobs" element={<JobListings />} />
+              <Route path="/skills" element={<Skills />} />
+              <Route path="/interview-prep" element={<InterviewPrep />} />
+              <Route path="/jobs/:id" element={<JobDetails />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/for-employers" element={<ForEmployers />} />
+              <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/applications" element={<Applications />} />
+              <Route path="/resume-assistant" element={<ResumeAssistant />} />
+              <Route path="/saved-jobs" element={<SavedJobs />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/success-stories" element={<SuccessStories />} />
+              
+              {/* 404 Page */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </NotificationsProvider>
       </AuthProvider>
     </Router>
   );

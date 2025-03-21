@@ -1,7 +1,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { SearchBar } from './SearchBar';
-import { NotificationCenter } from '@/components/NotificationCenter';
+import { NotificationCenter } from '@/components/notifications/NotificationCenter';
 import AuthStatus from '@/components/AuthStatus';
 
 export const NavbarRight = () => {
