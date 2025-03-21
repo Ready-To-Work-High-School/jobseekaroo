@@ -28,11 +28,14 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Search Section */}
-        <SearchSection />
-        
         {/* Featured Jobs Section */}
         <FeaturedJobsSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
+        {/* Search Section */}
+        <SearchSection />
         
         {/* Separator */}
         <SectionSeparator />

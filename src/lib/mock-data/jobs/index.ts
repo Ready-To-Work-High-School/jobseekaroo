@@ -14,3 +14,11 @@ export const mockJobs: Job[] = [
   ...healthcareJobs,
   ...tradeJobs
 ];
+
+// Helper function to get featured jobs
+export const getFeaturedJobs = (): Job[] => {
+  return mockJobs
+    .filter(job => job.isFeatured)
+    .sort(() => 0.5 - Math.random()) // Shuffle
+    .slice(0, 3);  // Take exactly 3 featured jobs
+};

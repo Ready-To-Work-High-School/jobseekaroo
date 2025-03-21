@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useFadeIn } from '@/utils/animations';
 import { getJobs } from '@/lib/mock-data';
+import { getFeaturedJobs } from '@/lib/mock-data/jobs';
 import { getAllJobs } from '@/lib/supabase';
 import { Job } from '@/types/job';
 import JobCard from '@/components/JobCard';
@@ -33,16 +34,15 @@ const FeaturedJobsSection = () => {
             .sort(() => 0.5 - Math.random()) // Shuffle
             .slice(0, 3);  // Take exactly 3 featured jobs
           
-          setFeaturedJobs(featured);
+          if (featured.length === 3) {
+            setFeaturedJobs(featured);
+          } else {
+            // If we don't have exactly 3 featured jobs, use mock data
+            setFeaturedJobs(getFeaturedJobs());
+          }
         } else {
           // Fallback to mock data if no jobs in Supabase
-          const allMockJobs = getJobs();
-          const featured = allMockJobs
-            .filter(job => job.isFeatured)
-            .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 3);  // Take exactly 3 featured jobs
-          
-          setFeaturedJobs(featured);
+          setFeaturedJobs(getFeaturedJobs());
           
           // Show a toast that we're using mock data
           if (user) {
@@ -56,13 +56,7 @@ const FeaturedJobsSection = () => {
         console.error('Error loading jobs:', error);
         
         // Fallback to mock data on error
-        const allJobs = getJobs();
-        const featured = allJobs
-          .filter(job => job.isFeatured)
-          .sort(() => 0.5 - Math.random()) // Shuffle
-          .slice(0, 3);  // Take exactly 3 featured jobs
-        
-        setFeaturedJobs(featured);
+        setFeaturedJobs(getFeaturedJobs());
       } finally {
         setIsLoading(false);
       }
