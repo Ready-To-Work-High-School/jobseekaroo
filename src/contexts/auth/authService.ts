@@ -8,14 +8,19 @@ export const signIn = async (
 ): Promise<AuthResponse> => {
   console.log('Auth service: signIn called with email:', email);
   
-  const response = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  
-  console.log('Auth service: signIn response:', response);
-  
-  return response;
+  try {
+    const response = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    console.log('Auth service: signIn response:', response);
+    
+    return response;
+  } catch (error) {
+    console.error('Auth service: signIn error caught:', error);
+    throw error;
+  }
 };
 
 export const signUp = async (
@@ -26,46 +31,61 @@ export const signUp = async (
 ): Promise<AuthResponse> => {
   console.log('Auth service: signUp called with email:', email);
   
-  const response = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        first_name: firstName,
-        last_name: lastName,
+  try {
+    const response = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+        },
       },
-    },
-  });
-  
-  console.log('Auth service: signUp response:', response);
-  
-  return response;
+    });
+    
+    console.log('Auth service: signUp response:', response);
+    
+    return response;
+  } catch (error) {
+    console.error('Auth service: signUp error caught:', error);
+    throw error;
+  }
 };
 
 export const signInWithApple = async () => {
   console.log('Auth service: signInWithApple called');
   
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'apple',
-  });
-  
-  if (error) {
-    console.error('Auth service: signInWithApple error:', error);
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+    });
+    
+    if (error) {
+      console.error('Auth service: signInWithApple error:', error);
+      throw error;
+    }
+    
+    return { success: true, data };
+  } catch (error) {
+    console.error('Auth service: signInWithApple error caught:', error);
     throw error;
   }
-  
-  return { success: true, data };
 };
 
 export const signOut = async () => {
   console.log('Auth service: signOut called');
   
-  const { error } = await supabase.auth.signOut();
-  
-  if (error) {
-    console.error('Auth service: signOut error:', error);
+  try {
+    const { error } = await supabase.auth.signOut();
+    
+    if (error) {
+      console.error('Auth service: signOut error:', error);
+      throw error;
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Auth service: signOut error caught:', error);
     throw error;
   }
-  
-  return { success: true };
 };

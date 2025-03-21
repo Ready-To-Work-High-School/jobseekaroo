@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,11 +28,12 @@ const SignIn = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  if (user) {
-    console.log("SignIn: User already logged in, redirecting to home");
-    navigate('/');
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      console.log("SignIn: User already logged in, redirecting to home");
+      navigate('/');
+    }
+  }, [user, navigate]);
   
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
