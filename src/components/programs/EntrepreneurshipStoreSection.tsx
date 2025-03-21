@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import LazyImage from '@/components/LazyImage';
+
 const EntrepreneurshipStoreSection = () => {
   return <div className="mb-16">
       <Card className="overflow-hidden border-amber-300 bg-amber-50/60">
