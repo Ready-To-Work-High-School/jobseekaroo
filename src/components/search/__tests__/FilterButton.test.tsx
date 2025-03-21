@@ -14,8 +14,12 @@ vi.mock('@/components/ui/popover', () => {
     PopoverTrigger: ({ children, asChild }: any) => (
       <div data-testid="popover-trigger">{children}</div>
     ),
-    PopoverContent: ({ children, align }: any) => (
-      <div data-testid="popover-content" data-align={align}>
+    PopoverContent: ({ children, align, side, sideOffset, alignOffset, onEscapeKeyDown, onInteractOutside }: any) => (
+      <div 
+        data-testid="popover-content" 
+        data-align={align}
+        data-side={side}
+      >
         {open ? children : null}
       </div>
     ),
@@ -31,6 +35,13 @@ vi.mock('../SearchFilters', () => ({
       <button onClick={props.onResetFilters}>Reset Filters</button>
     </div>
   ),
+}));
+
+// Mock toast
+vi.mock('@/components/ui/use-toast', () => ({
+  useToast: () => ({
+    toast: vi.fn()
+  })
 }));
 
 describe('FilterButton', () => {

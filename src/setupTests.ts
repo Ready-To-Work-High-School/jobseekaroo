@@ -44,3 +44,14 @@ if (typeof window !== 'undefined') {
 afterEach(() => {
   cleanup();
 });
+
+// Add additional mocks or setup for testing
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
+// This helps with animations
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+window.HTMLElement.prototype.scrollTo = vi.fn();
