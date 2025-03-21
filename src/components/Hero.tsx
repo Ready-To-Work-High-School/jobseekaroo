@@ -5,14 +5,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import SearchForm from './SearchForm';
 import FeatureCard from './FeatureCard';
-import { Mail } from 'lucide-react';
 
 const Hero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const searchAnimation = useSlideIn(500);
   const infoAnimation = useFadeIn(700);
-  const contactAnimation = useFadeIn(900);
 
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
@@ -49,16 +47,6 @@ const Hero = () => {
               Browse All Jobs
             </Button>
           </Link>
-        </div>
-
-        <div className={cn("mt-6 mb-4", contactAnimation)}>
-          <a 
-            href="mailto:Colemanp3@duvalschools.org"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors shadow-md"
-          >
-            <Mail className="h-4 w-4" />
-            <span className="font-medium">For more information contact me</span>
-          </a>
         </div>
       </div>
     </section>;
