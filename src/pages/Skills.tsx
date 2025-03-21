@@ -21,11 +21,11 @@ import {
   Target,
 } from 'lucide-react';
 
-// Lazy load components
-const SkillGapAnalysis = lazy(() => import('@/components/skills/SkillGapAnalysis'));
-const SkillList = lazy(() => import('@/components/skills/SkillList'));
-const SkillResourcesList = lazy(() => import('@/components/skills/SkillResourcesList'));
-const SkillProgressTracker = lazy(() => import('@/components/skills/SkillProgressTracker'));
+// Import components directly instead of lazy loading for now
+import { SkillGapAnalysis } from '@/components/skills/SkillGapAnalysis';
+import { SkillList } from '@/components/skills/SkillList';
+import { SkillResourcesList } from '@/components/skills/SkillResourcesList';
+import { SkillProgressTracker } from '@/components/skills/SkillProgressTracker';
 
 // Loading component for tabs
 const TabLoader = () => (
