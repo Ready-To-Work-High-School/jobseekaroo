@@ -87,6 +87,75 @@ export type Database = {
         }
         Relationships: []
       }
+      jobs: {
+        Row: {
+          company_name: string
+          created_at: string
+          description: string
+          experience_level: string
+          id: string
+          is_featured: boolean | null
+          is_flexible: boolean | null
+          is_remote: boolean | null
+          job_type: string
+          location_city: string
+          location_state: string
+          location_zip: string
+          logo_url: string | null
+          pay_rate_max: number
+          pay_rate_min: number
+          pay_rate_period: string
+          posted_date: string
+          requirements: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          description: string
+          experience_level: string
+          id?: string
+          is_featured?: boolean | null
+          is_flexible?: boolean | null
+          is_remote?: boolean | null
+          job_type: string
+          location_city: string
+          location_state: string
+          location_zip: string
+          logo_url?: string | null
+          pay_rate_max: number
+          pay_rate_min: number
+          pay_rate_period: string
+          posted_date?: string
+          requirements: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          description?: string
+          experience_level?: string
+          id?: string
+          is_featured?: boolean | null
+          is_flexible?: boolean | null
+          is_remote?: boolean | null
+          job_type?: string
+          location_city?: string
+          location_state?: string
+          location_zip?: string
+          logo_url?: string | null
+          pay_rate_max?: number
+          pay_rate_min?: number
+          pay_rate_period?: string
+          posted_date?: string
+          requirements?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -152,7 +221,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_job_recommendations: {
+        Args: {
+          user_id_param: string
+        }
+        Returns: undefined
+      }
+      update_all_user_recommendations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

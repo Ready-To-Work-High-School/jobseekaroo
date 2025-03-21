@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
@@ -37,13 +36,10 @@ const JobCard = ({
   }, [user, job.id, isSavedJob]);
 
   useEffect(() => {
-    // Implement lazy loading for images
     if (imageRef.current) {
       if ('loading' in HTMLImageElement.prototype) {
-        // Native lazy loading is supported
         imageRef.current.loading = 'lazy';
       } else {
-        // Fallback to Intersection Observer for older browsers
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting && imageRef.current && imageRef.current.src !== job.logoUrl) {

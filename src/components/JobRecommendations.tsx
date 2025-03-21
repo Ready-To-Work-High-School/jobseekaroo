@@ -1,8 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getJobRecommendations } from '@/lib/supabase';
-import { getJobById } from '@/lib/mock-data';
+import { getJobRecommendations, getJobById } from '@/lib/supabase';
 import { Job } from '@/types/job';
 import { JobRecommendation } from '@/types/user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,7 +43,7 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
         // Get the job details for each recommendation
         const recommendationsWithJobs = await Promise.all(
           recommendationsData.slice(0, limit).map(async (rec) => {
-            const job = getJobById(rec.job_id);
+            const job = await getJobById(rec.job_id);
             return { ...rec, job };
           })
         );

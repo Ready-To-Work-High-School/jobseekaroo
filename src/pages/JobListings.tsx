@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -6,6 +5,7 @@ import JobCard from '@/components/JobCard';
 import SearchForm from '@/components/SearchForm';
 import JobFilter from '@/components/JobFilter';
 import { searchJobsByZipCode, JobSearchFilters } from '@/lib/mock-data/search';
+import { getAllJobs } from '@/lib/supabase';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
@@ -29,22 +29,18 @@ const JobListings = () => {
   const animation = useFadeIn(200);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5;
 
-  // Apply filters function
   const applyFilters = (filters: JobSearchFilters) => {
     setLoading(true);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
     
-    // Search for jobs with the provided filters
     const searchFilters: JobSearchFilters = {
       ...filters,
       radius: radiusParam > 0 ? radiusParam : undefined
     };
     
-    // Simulate API call
     setTimeout(() => {
       const results = searchJobsByZipCode(zipCodeParam, searchFilters);
       setJobs(results);
@@ -52,72 +48,75 @@ const JobListings = () => {
     }, 800);
   };
 
-  // Search for jobs based on URL params
   useEffect(() => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const searchFilters: JobSearchFilters = {
-        radius: radiusParam > 0 ? radiusParam : undefined
-      };
-      
-      // Get job type filter
-      const jobTypeParam = searchParams.get('jobType');
-      if (jobTypeParam) {
-        searchFilters.type = jobTypeParam;
+    const fetchJobs = async () => {
+      try {
+        const allJobs = await getAllJobs();
+        
+        const searchFilters: JobSearchFilters = {
+          radius: radiusParam > 0 ? radiusParam : undefined
+        };
+        
+        const jobTypeParam = searchParams.get('jobType');
+        if (jobTypeParam) {
+          searchFilters.type = jobTypeParam;
+        }
+        
+        const expLevelParam = searchParams.get('experienceLevel');
+        if (expLevelParam) {
+          searchFilters.experienceLevel = expLevelParam;
+        }
+        
+        if (searchParams.has('remote')) {
+          searchFilters.isRemote = searchParams.get('remote') === 'true';
+        }
+        
+        if (searchParams.has('flexible')) {
+          searchFilters.isFlexible = searchParams.get('flexible') === 'true';
+        }
+        
+        const salaryMinParam = searchParams.get('salaryMin');
+        const salaryMaxParam = searchParams.get('salaryMax');
+        if (salaryMinParam || salaryMaxParam) {
+          searchFilters.salary = {};
+          if (salaryMinParam) searchFilters.salary.min = parseInt(salaryMinParam);
+          if (salaryMaxParam) searchFilters.salary.max = parseInt(salaryMaxParam);
+        }
+        
+        const postedWithinParam = searchParams.get('postedWithin');
+        if (postedWithinParam) {
+          searchFilters.postedWithin = parseInt(postedWithinParam);
+        }
+        
+        const keywordParam = searchParams.get('keyword');
+        if (keywordParam) {
+          searchFilters.keywords = [keywordParam];
+        }
+        
+        let filteredJobs = allJobs;
+        if (zipCodeParam) {
+          filteredJobs = searchJobsByZipCode(zipCodeParam, searchFilters, allJobs);
+        }
+        
+        setJobs(filteredJobs);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+        setJobs([]);
+        setLoading(false);
       }
-      
-      // Get experience level filter
-      const expLevelParam = searchParams.get('experienceLevel');
-      if (expLevelParam) {
-        searchFilters.experienceLevel = expLevelParam;
-      }
-      
-      // Get remote work filter
-      if (searchParams.has('remote')) {
-        searchFilters.isRemote = searchParams.get('remote') === 'true';
-      }
-      
-      // Get flexible schedule filter
-      if (searchParams.has('flexible')) {
-        searchFilters.isFlexible = searchParams.get('flexible') === 'true';
-      }
-      
-      // Get salary range filter
-      const salaryMinParam = searchParams.get('salaryMin');
-      const salaryMaxParam = searchParams.get('salaryMax');
-      if (salaryMinParam || salaryMaxParam) {
-        searchFilters.salary = {};
-        if (salaryMinParam) searchFilters.salary.min = parseInt(salaryMinParam);
-        if (salaryMaxParam) searchFilters.salary.max = parseInt(salaryMaxParam);
-      }
-      
-      // Get posted within filter
-      const postedWithinParam = searchParams.get('postedWithin');
-      if (postedWithinParam) {
-        searchFilters.postedWithin = parseInt(postedWithinParam);
-      }
-      
-      // Get keyword filter
-      const keywordParam = searchParams.get('keyword');
-      if (keywordParam) {
-        searchFilters.keywords = [keywordParam];
-      }
-      
-      const results = searchJobsByZipCode(zipCodeParam, searchFilters);
-      setJobs(results);
-      setLoading(false);
-    }, 800);
+    };
+    
+    fetchJobs();
   }, [searchParams, zipCodeParam, radiusParam]);
 
-  // Get current jobs for pagination
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-  // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
@@ -155,7 +154,6 @@ const JobListings = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Desktop Filters */}
           <div className="hidden md:block md:col-span-1">
             <JobFilter 
               onFilterChange={applyFilters} 
@@ -163,7 +161,6 @@ const JobListings = () => {
             />
           </div>
           
-          {/* Mobile Filter Button */}
           <div className="md:hidden mb-4">
             <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
               <SheetTrigger asChild>
