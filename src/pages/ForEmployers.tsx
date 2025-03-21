@@ -7,7 +7,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Building, Briefcase, Medal, FileCheck, Phone, Calendar, Mail, ExternalLink } from 'lucide-react';
+import { 
+  Building, 
+  Briefcase, 
+  Medal, 
+  FileCheck, 
+  Phone, 
+  Calendar, 
+  Mail, 
+  ExternalLink,
+  FileText,
+  Users,
+  MessageCircle,
+  Award,
+  LineChart,
+  Share2
+} from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -37,6 +52,49 @@ const ForEmployers = () => {
       title: "Direct Connection",
       description: "Work directly with the academy to find the best candidates for your positions.",
       icon: Phone
+    }
+  ];
+  
+  const employerBenefits = [
+    {
+      title: "Company Profile",
+      description: "Create and customize your company profile to showcase your brand and culture to students.",
+      icon: Building
+    },
+    {
+      title: "Job Listings",
+      description: "Post unlimited job listings with detailed descriptions and requirements.",
+      icon: FileText
+    },
+    {
+      title: "Applicant Management",
+      description: "Review applicants through our streamlined candidate management system.",
+      icon: Users
+    },
+    {
+      title: "Interview Scheduling",
+      description: "Schedule interviews directly through our integrated calendar.",
+      icon: Calendar
+    },
+    {
+      title: "Candidate Messaging",
+      description: "Message candidates to coordinate hiring details.",
+      icon: MessageCircle
+    },
+    {
+      title: "Apprenticeship Programs",
+      description: "Offer apprenticeships and training programs to develop student talents.",
+      icon: Award
+    },
+    {
+      title: "Performance Analytics",
+      description: "Access analytics on job posting performance and candidate engagement.",
+      icon: LineChart
+    },
+    {
+      title: "Career Events",
+      description: "Participate in career events and connect with promising students.",
+      icon: Share2
     }
   ];
   
@@ -89,6 +147,31 @@ const ForEmployers = () => {
           </TabsList>
           
           <TabsContent value="benefits" className="space-y-8">
+            {/* What You'll Get Access To Section */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-xl">What You'll Get Access To</CardTitle>
+                <CardDescription>
+                  Our employer portal provides powerful tools to find and hire qualified students
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {employerBenefits.map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="p-2 rounded-full bg-primary/10">
+                        <benefit.icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium">{benefit.title}</h4>
+                        <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {benefits.map((benefit, index) => (
                 <Card key={index}>
