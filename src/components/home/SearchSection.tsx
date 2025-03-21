@@ -19,7 +19,7 @@ const SearchSection = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <Link to="/jobs" className="col-span-1">
+            <Link to="/jobs?experienceLevel=entry-level" className="col-span-1">
               <Button variant="outline" size="lg" className="w-full">
                 Entry Level Jobs
               </Button>
@@ -29,7 +29,7 @@ const SearchSection = () => {
                 Find Jobs
               </Button>
             </Link>
-            <Link to="/jobs" className="col-span-1">
+            <Link to="/jobs?jobType=internship" className="col-span-1">
               <Button variant="outline" size="lg" className="w-full">
                 Internships
               </Button>

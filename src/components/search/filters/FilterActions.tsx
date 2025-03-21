@@ -8,19 +8,20 @@ interface FilterActionsProps {
 
 const FilterActions = ({ onResetFilters, onApplyFilters }: FilterActionsProps) => {
   return (
-    <div className="flex justify-between pt-2">
-      <Button 
-        type="button" 
-        variant="ghost" 
+    <div className="flex items-center justify-between mt-6 pt-4 border-t">
+      <Button
+        type="button"
+        variant="ghost"
         size="sm"
         onClick={onResetFilters}
+        className="text-muted-foreground hover:text-foreground transition-colors"
       >
         Reset
       </Button>
       <Button 
-        type="button" 
-        size="sm"
+        type="button"
         onClick={onApplyFilters}
+        size="sm"
       >
         Apply Filters
       </Button>
