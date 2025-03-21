@@ -1,3 +1,4 @@
+
 import { supabase } from '@/lib/supabase';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -52,12 +53,13 @@ export const signUp = async (
   return data;
 };
 
-export const signInWithApple = async (): Promise<void> => {
+export const signInWithApple = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
   });
   
   if (error) throw error;
+  return { success: true };
 };
 
 export const signOut = async (navigate: NavigateFunction) => {
@@ -66,4 +68,5 @@ export const signOut = async (navigate: NavigateFunction) => {
   
   // Ensure navigation happens after successful signout
   navigate('/');
+  return { success: true };
 };

@@ -12,8 +12,8 @@ export interface AuthContextType {
   profileLoading: boolean;
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string, firstName: string, lastName: string, navigate: NavigateFunction) => Promise<any>;
-  signOut: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
+  signOut: () => Promise<any>;
+  signInWithApple: () => Promise<any>;
   saveJob: (jobId: string) => Promise<void>;
   unsaveJob: (jobId: string) => Promise<void>;
   isSavedJob: (jobId: string) => Promise<boolean>;
