@@ -1,6 +1,8 @@
 
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import SearchForm from './SearchForm';
 import FeatureCard from './FeatureCard';
 
@@ -39,8 +41,21 @@ const Hero = () => {
           <FeatureCard icon="💼" title="Entry Level Positions" description="Explore positions specifically designed for high school students beginning their career journey." />
         </div>
         
-        <div className={cn("mb-12 flex justify-center", searchAnimation)}>
+        <div className={cn("mb-8 flex justify-center", searchAnimation)}>
           <SearchForm />
+        </div>
+
+        <div className={cn("mb-12 flex justify-center gap-4", searchAnimation)}>
+          <Link to="/jobs">
+            <Button variant="default" size="lg">
+              Browse All Jobs
+            </Button>
+          </Link>
+          <Link to="/resume-assistant">
+            <Button variant="outline" size="lg">
+              AI Resume Helper
+            </Button>
+          </Link>
         </div>
       </div>
     </section>;

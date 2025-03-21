@@ -15,6 +15,7 @@ import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import ResumeAssistant from "./pages/ResumeAssistant";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/applications" element={<Applications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/resume-assistant" element={<ResumeAssistant />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />

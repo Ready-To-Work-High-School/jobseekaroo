@@ -51,6 +51,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 text-black">
           <NavLink to="/" label="Home" currentPath={location.pathname} />
           <NavLink to="/jobs" label="Find Jobs" currentPath={location.pathname} />
+          <NavLink to="/resume-assistant" label="Resume Help" currentPath={location.pathname} />
           <NavLink to="/resources" label="Resources" currentPath={location.pathname} />
         </nav>
 
@@ -81,6 +82,9 @@ const Navbar = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/jobs">My Applications</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/resume-assistant">Resume Assistant</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => signOut()}>
