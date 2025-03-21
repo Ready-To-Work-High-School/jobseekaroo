@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -10,10 +11,14 @@ import {
   getJobsByLocation,
   getSavedSearches 
 } from '@/lib/mock-data';
+import { getAllJobs } from '@/lib/supabase';
 import { Job } from '@/types/job';
 import JobCard from '@/components/JobCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { ExternalLink } from 'lucide-react';
+import JobRecommendations from '@/components/JobRecommendations';
+import { TriggerRecommendations } from '@/components/TriggerRecommendations';
+import { toast } from 'sonner';
 
 const Index = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
@@ -27,9 +32,59 @@ const Index = () => {
   const fadeInSlow = useFadeIn(600);
   
   useEffect(() => {
-    const fetchFeaturedJobs = () => {
+    const fetchJobs = async () => {
       try {
-        // Get some featured job recommendations
+        setIsLoading(true);
+        
+        // First try to get jobs from Supabase
+        const allJobs = await getAllJobs();
+        
+        if (allJobs.length > 0) {
+          // If we have jobs in Supabase, use those
+          const featured = allJobs
+            .filter(job => job.isFeatured)
+            .sort(() => 0.5 - Math.random()) // Shuffle
+            .slice(0, 4);
+          
+          setFeaturedJobs(featured);
+          
+          // Find Jacksonville jobs
+          const jacksonvilleJobs = allJobs
+            .filter(job => 
+              job.location?.city === 'Jacksonville' && 
+              job.location?.state === 'FL'
+            )
+            .slice(0, 4);
+          
+          setLocalJobs(jacksonvilleJobs.length > 0 ? jacksonvilleJobs : allJobs.slice(0, 4));
+        } else {
+          // Fallback to mock data if no jobs in Supabase
+          const allMockJobs = getJobs();
+          const featured = allMockJobs
+            .filter(job => job.isFeatured)
+            .sort(() => 0.5 - Math.random()) // Shuffle
+            .slice(0, 4);
+          
+          setFeaturedJobs(featured);
+          
+          // Get some jobs from Jacksonville
+          const jacksonvilleJobs = getJobsByLocation('Jacksonville', 'FL')
+            .slice(0, 4);
+          
+          setLocalJobs(jacksonvilleJobs);
+          
+          // Show a toast that we're using mock data
+          if (user) {
+            toast.info(
+              'Using mock job data. Use the "Sync Mock Data" button in the Jobs page to load data to Supabase.',
+              { duration: 5000 }
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+        
+        // Fallback to mock data on error
         const allJobs = getJobs();
         const featured = allJobs
           .filter(job => job.isFeatured)
@@ -43,15 +98,13 @@ const Index = () => {
           .slice(0, 4);
         
         setLocalJobs(jacksonvilleJobs);
-      } catch (error) {
-        console.error('Error loading featured jobs:', error);
       } finally {
         setIsLoading(false);
       }
     };
     
-    fetchFeaturedJobs();
-  }, []);
+    fetchJobs();
+  }, [user]);
   
   return (
     <Layout>
@@ -63,8 +116,24 @@ const Index = () => {
       <div id="main-content">
         <EnhancedHero />
         
+        {/* User-specific recommendation section */}
+        {user && (
+          <section className={`py-12 bg-white ${fadeInFast}`}>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <JobRecommendations limit={3} />
+                </div>
+                <div className="md:col-span-1">
+                  <TriggerRecommendations />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+        
         {/* Featured Jobs Section */}
-        <section className={`py-12 bg-white ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
+        <section className={`py-12 ${user ? 'bg-slate-50' : 'bg-white'} ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
