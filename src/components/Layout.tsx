@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import Navbar from './Navbar';
 import { cn } from '@/lib/utils';
+import { Mail } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -32,6 +33,16 @@ const Layout = ({
       
       <footer className="py-8 bg-secondary/30">
         <div className="container-custom">
+          <div className="flex justify-center mb-6">
+            <a 
+              href="mailto:Colemanp3@duvalschools.org"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors shadow-md text-lg"
+            >
+              <Mail className="h-5 w-5" />
+              <span className="font-medium">For more information contact me</span>
+            </a>
+          </div>
+          
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <span className="text-xl font-medium">
