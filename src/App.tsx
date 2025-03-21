@@ -21,8 +21,8 @@ import InterviewPrep from './pages/InterviewPrep';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/jobs" element={<JobListings />} />
@@ -38,8 +38,8 @@ function App() {
           <Route path="/resume-assistant" element={<ResumeAssistant />} />
           <Route path="/saved-jobs" element={<SavedJobs />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
