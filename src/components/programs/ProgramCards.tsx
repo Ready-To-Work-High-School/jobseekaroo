@@ -45,6 +45,7 @@ const ProgramCards = () => {
           title={program.title}
           description={program.description}
           employerBenefits={program.employerBenefits}
+          index={index}
         />
       ))}
     </div>
