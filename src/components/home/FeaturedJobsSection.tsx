@@ -98,7 +98,7 @@ const FeaturedJobsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {featuredJobs.map((job, index) => (
-              <div key={job.id} className="border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div key={job.id} className="rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
                 <JobCard job={job} index={index} />
               </div>
             ))}
