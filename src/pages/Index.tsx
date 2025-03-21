@@ -5,7 +5,6 @@ import EnhancedHero from '@/components/EnhancedHero';
 import ProgramsSection from '@/components/ProgramsSection';
 import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
-import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import ResourcesSection from '@/components/home/ResourcesSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import SearchSection from '@/components/home/SearchSection';
@@ -25,18 +24,10 @@ const Index = () => {
       <div id="main-content">
         <EnhancedHero />
         
-        {/* Separator above Featured Jobs */}
-        <SectionSeparator />
-        
-        {/* Featured Jobs Section - moved up directly after Hero */}
-        <div className="bg-white">
-          <FeaturedJobsSection />
-        </div>
-        
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Search Section - moved after Featured Jobs */}
+        {/* Search Section - moved up since Featured Jobs was removed */}
         <SearchSection />
         
         {/* User-specific recommendation section */}
