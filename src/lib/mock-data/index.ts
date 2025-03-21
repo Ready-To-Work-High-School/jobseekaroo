@@ -1,5 +1,7 @@
 
 // Export all mock data functions from a single entry point
+import { mockJobs } from './jobs';
+
 export { mockJobs } from './jobs';
 export { searchJobsByZipCode, getSavedSearches } from './search';
 export { getJobById } from './job';
