@@ -9,6 +9,7 @@ import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
+import { Button } from './ui/button';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -16,17 +17,17 @@ const ProgramsSection = () => {
   return (
     <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
-        {/* Removing the SectionSeparator that was here */}
+        {/* For Employers Only heading placed outside the blue section */}
+        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
+          <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+            <em>For Employers Only</em>
+          </span>
+        </h2>
         
         {/* Employers Section */}
         <div className="border border-amber-300 rounded-lg p-6 mb-12 bg-sky-600">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex-1">
-              <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight mt-2 text-center")}>
-                <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
-                  <em>For Employers Only</em>
-                </span>
-              </h2>
               <p className="text-center font-bold text-zinc-900">
                 Learn how students in the Entrepreneurship Academy receive intensive specialized curriculum that prepares them with verified skills and credentials employers value
               </p>
@@ -38,7 +39,9 @@ const ProgramsSection = () => {
             <AlertTriangle className="h-4 w-4 text-red-700 font-extrabold" />
             <AlertTitle className="text-zinc-900 font-extrabold">Hiring Opportunity</AlertTitle>
             <AlertDescription className="text-center font-bold text-zinc-900">
-              Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+              <a href="mailto:your-email@example.com" className="text-blue-600 hover:underline">
+                Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+              </a>
             </AlertDescription>
           </Alert>
         </div>
