@@ -2,6 +2,7 @@
 import { User, Session } from '@supabase/supabase-js';
 import { JobApplication, ApplicationStatus } from '@/types/application';
 import { UserProfile } from '@/types/user';
+import { NavigateFunction } from 'react-router-dom';
 
 export interface AuthContextType {
   user: User | null;
@@ -10,7 +11,7 @@ export interface AuthContextType {
   isLoading: boolean;
   profileLoading: boolean;
   signIn: (email: string, password: string) => Promise<any>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, navigate: any) => Promise<any>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, navigate: NavigateFunction) => Promise<any>;
   signOut: () => Promise<void>;
   signInWithApple: () => Promise<void>;
   saveJob: (jobId: string) => Promise<void>;
