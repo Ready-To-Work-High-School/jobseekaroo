@@ -7,6 +7,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { X } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -51,8 +53,11 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 text-black">
           <NavLink to="/" label="Home" currentPath={location.pathname} />
           <NavLink to="/jobs" label="Find Jobs" currentPath={location.pathname} />
+          <NavLink to="/for-employers" label="For Employers" currentPath={location.pathname} />
+          <NavLink to="/success-stories" label="Success Stories" currentPath={location.pathname} />
           <NavLink to="/resume-assistant" label="Resume Help" currentPath={location.pathname} />
           <NavLink to="/resources" label="Resources" currentPath={location.pathname} />
+          <NavLink to="/faq" label="FAQ" currentPath={location.pathname} />
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -101,13 +106,69 @@ const Navbar = () => {
               </Link>
             </>}
 
-          <button className="flex md:hidden p-2 rounded-md text-black hover:text-foreground focus-ring" aria-label="Toggle menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="4" x2="20" y1="12" y2="12" />
-              <line x1="4" x2="20" y1="6" y2="6" />
-              <line x1="4" x2="20" y1="18" y2="18" />
-            </svg>
-          </button>
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="flex md:hidden p-2 rounded-md text-black hover:text-foreground focus-ring" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="4" x2="20" y1="12" y2="12" />
+                  <line x1="4" x2="20" y1="6" y2="6" />
+                  <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+              </button>
+            </SheetTrigger>
+            <SheetContent className="flex flex-col h-full">
+              <div className="flex items-center justify-between py-4 border-b">
+                <span className="text-lg font-semibold">Menu</span>
+                <SheetTrigger>
+                  <X className="h-5 w-5" />
+                </SheetTrigger>
+              </div>
+              <nav className="flex flex-col gap-2 py-4">
+                <MobileNavLink to="/" label="Home" />
+                <MobileNavLink to="/jobs" label="Find Jobs" />
+                <MobileNavLink to="/for-employers" label="For Employers" />
+                <MobileNavLink to="/success-stories" label="Success Stories" />
+                <MobileNavLink to="/resume-assistant" label="Resume Help" />
+                <MobileNavLink to="/resources" label="Resources" />
+                <MobileNavLink to="/faq" label="FAQ" />
+              </nav>
+              <div className="mt-auto py-4 border-t">
+                {user ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt="User" />
+                        <AvatarFallback>{getUserInitials()}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">{user.user_metadata?.first_name} {user.user_metadata?.last_name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" className="w-full justify-start" asChild>
+                      <Link to="/profile">My Profile</Link>
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start" asChild>
+                      <Link to="/applications">My Applications</Link>
+                    </Button>
+                    <Button variant="destructive" className="w-full" onClick={() => signOut()}>
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Button className="w-full" asChild>
+                      <Link to="/sign-in">Sign In</Link>
+                    </Button>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link to="/sign-up">Create Account</Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>;
@@ -128,6 +189,17 @@ const NavLink = ({
   return <Link to={to} className="text-black">
       {label}
     </Link>;
+};
+
+const MobileNavLink = ({ to, label }: { to: string; label: string }) => {
+  return (
+    <Link 
+      to={to} 
+      className="flex items-center px-4 py-3 hover:bg-secondary/50 rounded-md transition-colors"
+    >
+      <span className="font-medium">{label}</span>
+    </Link>
+  );
 };
 
 export default Navbar;

@@ -12,6 +12,9 @@ import SavedJobs from "./pages/SavedJobs";
 import Profile from "./pages/Profile";
 import Applications from "./pages/Applications";
 import Resources from "./pages/Resources";
+import ForEmployers from "./pages/ForEmployers";
+import SuccessStories from "./pages/SuccessStories";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -34,6 +37,9 @@ const App = () => (
             <Route path="/applications" element={<Applications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/for-employers" element={<ForEmployers />} />
+            <Route path="/success-stories" element={<SuccessStories />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/resume-assistant" element={<ResumeAssistant />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
