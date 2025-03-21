@@ -394,3 +394,4 @@ const DetailItem = ({ icon, label, children }: DetailItemProps) => (
 );
 
 export default JobDetails;
+
