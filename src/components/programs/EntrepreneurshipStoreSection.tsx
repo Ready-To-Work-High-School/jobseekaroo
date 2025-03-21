@@ -54,7 +54,7 @@ const EntrepreneurshipStoreSection = () => {
                         <img 
                           src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" 
                           alt="Getting Started with Artificial Intelligence" 
-                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                          className="h-32 w-auto object-contain mb-2 transition-transform hover:scale-105" 
                         />
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
                       </div>
@@ -66,7 +66,7 @@ const EntrepreneurshipStoreSection = () => {
                         <img 
                           src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" 
                           alt="Entrepreneurship Business Essentials" 
-                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                          className="h-32 w-auto object-contain mb-2 transition-transform hover:scale-105" 
                         />
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
                       </div>
@@ -78,7 +78,7 @@ const EntrepreneurshipStoreSection = () => {
                         <img 
                           src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" 
                           alt="Explore Emerging Tech" 
-                          className="h-28 w-auto object-contain mb-2 transition-transform hover:scale-105" 
+                          className="h-32 w-auto object-contain mb-2 transition-transform hover:scale-105" 
                         />
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
                       </div>
