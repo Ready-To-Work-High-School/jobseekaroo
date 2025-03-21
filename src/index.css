@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -125,6 +124,23 @@
   .section-description {
     @apply text-lg text-muted-foreground mb-8 max-w-3xl;
   }
+  
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-in-out forwards;
+  }
+  
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-in-out forwards;
+  }
+  
+  .animate-pulse-once {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 1;
+  }
 }
 
 /* Page transition animations */
@@ -178,4 +194,152 @@
 
 .text-gradient-amber {
   @apply bg-gradient-to-r from-amber-500 to-amber-700 bg-clip-text text-transparent;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Accessibility Styles */
+html.high-contrast {
+  filter: contrast(1.2);
+}
+
+html.high-contrast body {
+  background-color: #fff;
+  color: #000;
+}
+
+html.high-contrast a {
+  color: #0000EE !important;
+  text-decoration: underline !important;
+}
+
+html.high-contrast button,
+html.high-contrast [role="button"] {
+  border: 2px solid currentColor !important;
+}
+
+html.high-contrast .primary {
+  color: #00008B !important;
+  background-color: #fff !important;
+  border: 2px solid #00008B !important;
+}
+
+html.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Focus styles */
+:focus {
+  outline: 2px solid #7E69AB !important;
+  outline-offset: 2px !important;
+}
+
+html.sr-optimized .visually-hidden-unless-focused {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+html.sr-optimized .visually-hidden-unless-focused:focus,
+html.sr-optimized .visually-hidden-unless-focused:active {
+  clip: auto;
+  clip-path: none;
+  height: auto;
+  overflow: visible;
+  position: static;
+  white-space: normal;
+  width: auto;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Image loading optimization */
+img.lazy-load {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img.lazy-load.loaded {
+  opacity: 1;
+}
+
+/* Focus visible utility */
+.focus-visible\:ring:focus-visible {
+  outline: 2px solid #7E69AB !important;
+  outline-offset: 2px !important;
+}
+
+/* Performance optimizations for image rendering */
+img {
+  content-visibility: auto;
+}
+
+/* Accessible hiding */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

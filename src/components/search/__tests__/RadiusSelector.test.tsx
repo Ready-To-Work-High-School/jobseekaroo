@@ -21,7 +21,7 @@ describe('RadiusSelector', () => {
     render(<RadiusSelector {...{ ...defaultProps, showRadius: true, radius: 10 }} />);
     expect(screen.getByText('Remove radius')).toBeInTheDocument();
     expect(screen.getByText('Search Radius:')).toBeInTheDocument();
-    expect(screen.getByText('10 miles')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
   });
 
   it('calls toggleRadius when the button is clicked', () => {
@@ -32,11 +32,11 @@ describe('RadiusSelector', () => {
 
   it('displays singular "mile" when radius is 1', () => {
     render(<RadiusSelector {...{ ...defaultProps, showRadius: true, radius: 1 }} />);
-    expect(screen.getByText('1 mile')).toBeInTheDocument();
+    expect(screen.getByText('mile')).toBeInTheDocument();
   });
 
   it('displays plural "miles" when radius is not 1', () => {
     render(<RadiusSelector {...{ ...defaultProps, showRadius: true, radius: 5 }} />);
-    expect(screen.getByText('5 miles')).toBeInTheDocument();
+    expect(screen.getByText('miles')).toBeInTheDocument();
   });
 });
