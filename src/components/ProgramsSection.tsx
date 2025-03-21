@@ -39,7 +39,7 @@ const ProgramsSection = () => {
             <AlertTriangle className="h-4 w-4 text-red-700 font-extrabold" />
             <AlertTitle className="text-zinc-900 font-extrabold">Hiring Opportunity</AlertTitle>
             <AlertDescription className="text-center font-bold text-zinc-900">
-              <a href="mailto:your-email@example.com" className="text-blue-600 hover:underline">
+              <a href="mailto:ColemanP3@duvalschools.org" className="text-blue-600 hover:underline">
                 Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
               </a>
             </AlertDescription>
