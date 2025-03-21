@@ -12,7 +12,8 @@ const ProgramCards = () => {
         "Students understand business fundamentals",
         "Candidates with proven initiative and leadership",
         "Experience with project planning and execution"
-      ]
+      ],
+      learnMoreLink: "https://certiport.pearsonvue.com/Certifications/ESB/Certification/Overview.aspx"
     },
     {
       image: "/lovable-uploads/e3cddfb1-0795-425f-9b41-401d7156b350.png",
