@@ -23,7 +23,8 @@ const ProgramCards = () => {
         "Students with advanced training in professional skills",
         "Proven time management and organization abilities",
         "Experience with academic and professional writing"
-      ]
+      ],
+      learnMoreLink: "https://www.fbla.org/high-school/"
     },
     {
       image: "/lovable-uploads/521bdc87-8068-492d-8a0c-7281a4c42c5a.png",
