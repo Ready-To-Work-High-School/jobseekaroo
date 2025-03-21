@@ -9,19 +9,9 @@ import { AuthContext } from './AuthContext';
 
 // Import services
 import { signIn as authSignIn, signUp as authSignUp, signInWithApple, signOut as authSignOut } from './authService';
-import { 
-  saveJob, 
-  unsaveJob, 
-  isSavedJob, 
-  getSavedJobs 
-} from './savedJobsService';
-import {
-  createApplication,
-  updateApplicationStatus,
-  getApplications,
-  deleteApplication
-} from './applicationService';
-import { fetchUserProfile, handleUpdateProfile } from './profileService';
+import { userProfileService } from './userProfileService';
+import { jobService } from './jobService';
+import { applicationService } from './applicationService';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -79,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshUserProfile = async (userId: string) => {
     setProfileLoading(true);
     try {
-      const profile = await fetchUserProfile(userId);
+      const profile = await userProfileService.refreshUserProfile(userId);
       setUserProfile(profile);
     } finally {
       setProfileLoading(false);
@@ -102,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     
     try {
-      const updatedProfile = await handleUpdateProfile(user.id, profileData);
+      const updatedProfile = await userProfileService.updateProfile(user.id, profileData);
       setUserProfile(updatedProfile as UserProfile);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -178,62 +168,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp: handleSignUp,
     signOut: handleSignOut,
     signInWithApple,
-    saveJob: (jobId) => {
-      if (!user) {
-        console.error('User must be logged in to save jobs');
-        return Promise.reject(new Error('User must be logged in to save jobs'));
-      }
-      return saveJob(user.id, jobId);
-    },
-    unsaveJob: (jobId) => {
-      if (!user) {
-        console.error('User must be logged in to unsave jobs');
-        return Promise.reject(new Error('User must be logged in to unsave jobs'));
-      }
-      return unsaveJob(user.id, jobId);
-    },
-    isSavedJob: (jobId) => {
-      if (!user) {
-        console.log('No user, job cannot be saved');
-        return Promise.resolve(false);
-      }
-      return isSavedJob(user.id, jobId);
-    },
-    getSavedJobs: () => {
-      if (!user) {
-        console.log('No user, no saved jobs');
-        return Promise.resolve([]);
-      }
-      return getSavedJobs(user.id);
-    },
-    createApplication: (application) => {
-      if (!user) {
-        console.error('User must be logged in to create an application');
-        return Promise.reject(new Error('User must be logged in to create an application'));
-      }
-      return createApplication(user.id, application);
-    },
-    updateApplicationStatus: (applicationId, status) => {
-      if (!user) {
-        console.error('User must be logged in to update an application');
-        return Promise.reject(new Error('User must be logged in to update an application'));
-      }
-      return updateApplicationStatus(user.id, applicationId, status);
-    },
-    getApplications: () => {
-      if (!user) {
-        console.log('No user, no applications');
-        return Promise.resolve([]);
-      }
-      return getApplications(user.id);
-    },
-    deleteApplication: (applicationId) => {
-      if (!user) {
-        console.error('User must be logged in to delete an application');
-        return Promise.reject(new Error('User must be logged in to delete an application'));
-      }
-      return deleteApplication(user.id, applicationId);
-    },
+    saveJob: (jobId) => jobService.saveJob(user?.id || '', jobId),
+    unsaveJob: (jobId) => jobService.unsaveJob(user?.id || '', jobId),
+    isSavedJob: (jobId) => jobService.isSavedJob(user?.id || '', jobId),
+    getSavedJobs: () => jobService.getSavedJobs(user?.id || ''),
+    createApplication: (application) => applicationService.createApplication(user?.id || '', application),
+    updateApplicationStatus: (applicationId, status) => applicationService.updateApplicationStatus(user?.id || '', applicationId, status),
+    getApplications: () => applicationService.getApplications(user?.id || ''),
+    deleteApplication: (applicationId) => applicationService.deleteApplication(user?.id || '', applicationId),
     updateProfile,
     refreshProfile,
   };
