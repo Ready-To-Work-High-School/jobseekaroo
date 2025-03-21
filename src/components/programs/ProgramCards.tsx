@@ -37,7 +37,7 @@ const ProgramCards = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16 p-2">
       {programs.map((program, index) => (
         <ProgramCard 
           key={index}
