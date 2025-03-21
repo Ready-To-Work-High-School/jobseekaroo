@@ -6,6 +6,7 @@ import './App.css';
 
 // Import main page components directly
 import Index from './pages/Index';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy load all other pages
 const JobListings = lazy(() => import('./pages/JobListings'));
@@ -37,20 +38,22 @@ function App() {
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/jobs" element={<JobListings />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/interview-prep" element={<InterviewPrep />} />
-            <Route path="/jobs/:id" element={<JobDetails />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/for-employers" element={<ForEmployers />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/analytics" element={<Analytics />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/resume-assistant" element={<ResumeAssistant />} />
-            <Route path="/saved-jobs" element={<SavedJobs />} />
+            
+            {/* Protected Routes */}
+            <Route path="/jobs" element={<ProtectedRoute><JobListings /></ProtectedRoute>} />
+            <Route path="/skills" element={<ProtectedRoute><Skills /></ProtectedRoute>} />
+            <Route path="/interview-prep" element={<ProtectedRoute><InterviewPrep /></ProtectedRoute>} />
+            <Route path="/jobs/:id" element={<ProtectedRoute><JobDetails /></ProtectedRoute>} />
+            <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+            <Route path="/for-employers" element={<ProtectedRoute><ForEmployers /></ProtectedRoute>} />
+            <Route path="/employer-dashboard" element={<ProtectedRoute><EmployerDashboard /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
+            <Route path="/resume-assistant" element={<ProtectedRoute><ResumeAssistant /></ProtectedRoute>} />
+            <Route path="/saved-jobs" element={<ProtectedRoute><SavedJobs /></ProtectedRoute>} />
           </Routes>
         </Suspense>
       </AuthProvider>

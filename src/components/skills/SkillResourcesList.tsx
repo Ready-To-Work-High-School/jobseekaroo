@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { SkillResource } from '@/types/skills';
 import {
@@ -51,8 +52,18 @@ const SkillResourcesList = ({
         r.description?.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
     
-    return matchesSearch;
+    const matchesSkill = selectedSkill ? r.skill_name === selectedSkill : true;
+    
+    return matchesSearch && matchesSkill;
   });
+  
+  // Function to safely open resource URL
+  const openResourceUrl = (url: string) => {
+    // Ensure URL has protocol
+    const hasProtocol = url.startsWith('http://') || url.startsWith('https://');
+    const properUrl = hasProtocol ? url : `https://${url}`;
+    window.open(properUrl, '_blank', 'noopener,noreferrer');
+  };
   
   return (
     <div className="space-y-4">
@@ -136,11 +147,12 @@ const SkillResourcesList = ({
                 </p>
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full">
-                  <a href={resource.resource_url} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Visit Resource
-                  </a>
+                <Button 
+                  className="w-full"
+                  onClick={() => openResourceUrl(resource.resource_url)}
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Visit Resource
                 </Button>
               </CardFooter>
             </Card>
