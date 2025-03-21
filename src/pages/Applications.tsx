@@ -179,7 +179,7 @@ const Applications = () => {
 
   const prefillWithSavedJob = (job: Job) => {
     form.setValue('job_title', job.title);
-    form.setValue('company', job.company);
+    form.setValue('company', job.company.name);
     setSelectedJob(job);
     setShowSavedJobs(false);
   };
@@ -370,7 +370,7 @@ const Applications = () => {
                         onClick={() => prefillWithSavedJob(job)}
                       >
                         <div className="font-medium">{job.title}</div>
-                        <div className="text-sm text-muted-foreground">{job.company}</div>
+                        <div className="text-sm text-muted-foreground">{job.company.name}</div>
                       </div>
                     ))}
                   </div>
@@ -594,4 +594,3 @@ const Applications = () => {
 };
 
 export default Applications;
-

@@ -90,7 +90,7 @@ const JobDetails = () => {
           <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl animate-slide-up">
             <h3 className="text-xl font-bold mb-4">Application Submitted!</h3>
             <p className="mb-6 text-muted-foreground">
-              Your application for the {job.title} position at {job.company} has been successfully submitted.
+              Your application for the {job.title} position at {job.company.name} has been successfully submitted.
             </p>
             <div className="flex justify-end">
               <button
@@ -122,21 +122,21 @@ const JobDetails = () => {
             <div className="w-16 h-16 rounded-lg border border-border overflow-hidden bg-white flex-shrink-0">
               <img 
                 src={job.logoUrl} 
-                alt={`${job.company} logo`} 
+                alt={`${job.company.name} logo`} 
                 className="w-full h-full object-cover"
               />
             </div>
           ) : (
             <div className="w-16 h-16 rounded-lg border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
               <span className="text-primary font-semibold text-2xl">
-                {job.company.substring(0, 1)}
+                {job.company.name.substring(0, 1)}
               </span>
             </div>
           )}
           
           <div>
             <h1 className="text-3xl font-bold mb-1">{job.title}</h1>
-            <p className="text-lg text-muted-foreground">{job.company}</p>
+            <p className="text-lg text-muted-foreground">{job.company.name}</p>
           </div>
         </div>
         
@@ -221,7 +221,7 @@ const JobDetails = () => {
               
               <div className="space-y-4">
                 <DetailItem icon="building" label="Company">
-                  {job.company}
+                  {job.company.name}
                 </DetailItem>
                 
                 <DetailItem icon="calendar" label="Posted On">
