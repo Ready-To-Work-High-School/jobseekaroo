@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { SkillResource } from '@/types/skills';
 import {
@@ -21,12 +20,12 @@ interface SkillResourcesListProps {
   isLoading: boolean;
 }
 
-export function SkillResourcesList({ 
+const SkillResourcesList = ({ 
   resources, 
   selectedSkill, 
   onSelectSkill,
   isLoading 
-}: SkillResourcesListProps) {
+}: SkillResourcesListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   
   const resourceTypeColor = (type: string) => {
@@ -162,4 +161,6 @@ export function SkillResourcesList({
       )}
     </div>
   );
-}
+};
+
+export default SkillResourcesList;

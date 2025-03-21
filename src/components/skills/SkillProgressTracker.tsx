@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,12 +15,12 @@ interface SkillProgressTrackerProps {
   onViewResources: (skillName: string) => void;
 }
 
-export function SkillProgressTracker({ 
+const SkillProgressTracker = ({ 
   userSkills, 
   resources, 
   isLoading,
   onViewResources 
-}: SkillProgressTrackerProps) {
+}: SkillProgressTrackerProps) => {
   const [selectedSkill, setSelectedSkill] = useState<UserSkill | null>(null);
   const [showProgressDialog, setShowProgressDialog] = useState(false);
   
@@ -373,4 +372,6 @@ export function SkillProgressTracker({
       </Dialog>
     </div>
   );
-}
+};
+
+export default SkillProgressTracker;

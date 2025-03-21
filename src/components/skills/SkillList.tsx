@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { UserSkill } from '@/types/skills';
 import {
@@ -58,14 +57,14 @@ interface SkillListProps {
   onSelectSkill: (skillName: string) => void;
 }
 
-export function SkillList({ 
+const SkillList = ({ 
   skills, 
   isLoading, 
   onAddSkill, 
   onUpdateSkill, 
   onDeleteSkill,
   onSelectSkill 
-}: SkillListProps) {
+}: SkillListProps) => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingSkill, setEditingSkill] = useState<UserSkill | null>(null);
   
@@ -83,7 +82,6 @@ export function SkillList({
     if (editingSkill) {
       await onUpdateSkill(editingSkill.id, values);
     } else {
-      // Fix: Ensure we're passing a non-optional skill_name to match the required type
       const skillData: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'> = {
         skill_name: values.skill_name,
         proficiency_level: values.proficiency_level,
@@ -363,4 +361,6 @@ export function SkillList({
       </Dialog>
     </div>
   );
-}
+};
+
+export default SkillList;

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserSkill, SkillGap } from '@/types/skills';
@@ -47,7 +46,7 @@ interface SkillGapAnalysisProps {
   onAddSkill: (skill: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<void>;
 }
 
-export function SkillGapAnalysis({ userSkills, onAddSkill }: SkillGapAnalysisProps) {
+const SkillGapAnalysis = ({ userSkills, onAddSkill }: SkillGapAnalysisProps) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
@@ -462,4 +461,6 @@ export function SkillGapAnalysis({ userSkills, onAddSkill }: SkillGapAnalysisPro
       </Dialog>
     </div>
   );
-}
+};
+
+export default SkillGapAnalysis;
