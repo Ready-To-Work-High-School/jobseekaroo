@@ -5,12 +5,13 @@ import WestsideAcademy from './programs/WestsideAcademy';
 import ProgramCards from './programs/ProgramCards';
 import CredentialsBadges from './programs/CredentialsBadges';
 import { Separator } from './ui/separator';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Mail } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
+  const contactAnimation = useFadeIn(500);
   return <>
       <Separator className="max-w-4xl mx-auto my-8" />
       <section className={`py-16 bg-secondary/5 ${animation}`}>
@@ -37,6 +38,16 @@ const ProgramsSection = () => {
                 Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
               </AlertDescription>
             </Alert>
+
+            <div className={cn("mt-6 flex justify-center", contactAnimation)}>
+              <a 
+                href="mailto:Colemanp3@duvalschools.org"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors shadow-md text-lg"
+              >
+                <Mail className="h-5 w-5" />
+                <span className="font-medium">For more information contact me</span>
+              </a>
+            </div>
           </div>
           
           <div className="space-y-16">

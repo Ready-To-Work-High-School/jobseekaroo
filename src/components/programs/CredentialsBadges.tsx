@@ -3,13 +3,11 @@ import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, ExternalLink, Mail } from 'lucide-react';
+import { CheckCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { useFadeIn } from '@/utils/animations';
 
 const CredentialsBadges = () => {
-  const contactAnimation = useFadeIn(900);
   const badges = [
     {
       image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
@@ -92,16 +90,6 @@ const CredentialsBadges = () => {
               <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
-        </div>
-        
-        <div className={cn("mt-8 text-center", contactAnimation)}>
-          <a 
-            href="mailto:Colemanp3@duvalschools.org"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md"
-          >
-            <Mail className="h-4 w-4" />
-            <span className="font-medium">For more information contact me</span>
-          </a>
         </div>
       </div>
     </div>
