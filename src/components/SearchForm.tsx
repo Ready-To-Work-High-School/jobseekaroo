@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
+import { MapPin } from 'lucide-react';
 
 interface SearchFormProps {
   className?: string;
@@ -134,6 +135,10 @@ const SearchForm = ({
         {showRadius && (
           <div className="flex-1 flex flex-col gap-1 px-2">
             <div className="flex items-center gap-2">
+              <div className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md text-xs flex items-center gap-1 font-medium">
+                <MapPin size={12} />
+                <span>Search Radius</span>
+              </div>
               <Slider
                 value={[radius]}
                 min={1}
