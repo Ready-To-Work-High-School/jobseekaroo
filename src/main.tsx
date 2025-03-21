@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-// Simple and direct rendering approach
+// Simple and direct rendering approach with error handling
 const rootElement = document.getElementById('root')
 
 if (rootElement) {

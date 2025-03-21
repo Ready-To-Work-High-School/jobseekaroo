@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -69,7 +68,6 @@ const Layout = ({ children }: LayoutProps) => {
     ]),
   ];
 
-  // Bottom navigation links
   const bottomNavLinks = [
     { href: "/", label: "Home" },
     { href: "/jobs", label: "Jobs" },
@@ -83,63 +81,56 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="bg-secondary border-b sticky top-0 z-10">
-        <div className="container flex items-center h-16 space-x-4 sm:justify-between sm:space-x-0">
-          <div className="flex items-center gap-4">
-            {isMobile && (
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button size="icon" variant="ghost">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-[250px] sm:w-[300px]">
-                  <div className="flex flex-col gap-6 py-4">
-                    <Link to="/" className="font-bold text-lg px-2 bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
-                      Job Seekers 4 High Schools
-                    </Link>
-                    
-                    <nav className="flex flex-col space-y-1">
-                      {mobileNavItems.map((item, index) => (
-                        <Link 
-                          key={index} 
-                          to={item.href}
-                          className={cn(
-                            "flex items-center gap-3 px-2 py-2 text-sm rounded-md hover:bg-accent",
-                            location.pathname === item.href ? "bg-accent text-accent-foreground font-medium" : "text-foreground"
-                          )}
-                        >
-                          <item.icon className="h-4 w-4" />
-                          {item.label}
-                        </Link>
-                      ))}
-                    </nav>
-                    
-                    {!user && (
-                      <div className="flex flex-col gap-2 px-2 mt-4">
-                        <Link to="/sign-in" className={cn(
-                          "text-sm font-medium py-2 px-4 rounded-md border border-input",
-                          "hover:bg-accent hover:text-accent-foreground"
-                        )}>
-                          Sign In
-                        </Link>
-                        <Link to="/sign-up" className={cn(
-                          "text-sm font-medium py-2 px-4 rounded-md bg-primary text-primary-foreground",
-                          "hover:bg-primary/90"
-                        )}>
-                          Sign Up
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                </SheetContent>
-              </Sheet>
-            )}
-            
-            <Link to="/" className="font-bold text-lg flex items-center gap-2">
-              <Home className="h-5 w-5" />
-              <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">Job Seekers 4 High Schools</span>
-            </Link>
-          </div>
+        <div className="container mx-auto flex items-center h-16 space-x-4 sm:justify-between sm:space-x-0">
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button size="icon" variant="ghost">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[250px] sm:w-[300px]">
+                <div className="flex flex-col gap-6 py-4">
+                  <Link to="/" className="font-bold text-lg px-2 bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
+                    Job Seekers 4 High Schools
+                  </Link>
+                  
+                  <nav className="flex flex-col space-y-1">
+                    {mobileNavItems.map((item, index) => (
+                      <Link 
+                        key={index} 
+                        to={item.href}
+                        className={cn(
+                          "flex items-center gap-3 px-2 py-2 text-sm rounded-md hover:bg-accent",
+                          location.pathname === item.href ? "bg-accent text-accent-foreground font-medium" : "text-foreground"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    ))}
+                  </nav>
+                  
+                  {!user && (
+                    <div className="flex flex-col gap-2 px-2 mt-4">
+                      <Link to="/sign-in" className={cn(
+                        "text-sm font-medium py-2 px-4 rounded-md border border-input",
+                        "hover:bg-accent hover:text-accent-foreground"
+                      )}>
+                        Sign In
+                      </Link>
+                      <Link to="/sign-up" className={cn(
+                        "text-sm font-medium py-2 px-4 rounded-md bg-primary text-primary-foreground",
+                        "hover:bg-primary/90"
+                      )}>
+                        Sign Up
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
           
           <div className="flex items-center space-x-4">
             <nav className="hidden md:flex items-center space-x-4">
@@ -240,10 +231,11 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </header>
       <main className="flex-1">
-        {children}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {children}
+        </div>
       </main>
       
-      {/* Bottom Navigation Links */}
       <div className="bg-muted py-4 border-t">
         <div className="container mx-auto px-4">
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">

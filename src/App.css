@@ -1,3 +1,7 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+}
 
 @media (max-width: 768px) {
   #root {
@@ -24,7 +28,6 @@
   }
 }
 
-/* Keep the existing animations section */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -48,7 +51,6 @@
   color: #888;
 }
 
-/* Mobile-first responsive classes */
 .responsive-container {
   width: 100%;
   padding-right: 1rem;
@@ -85,23 +87,19 @@
   }
 }
 
-/* Touch-friendly styles for mobile */
-@media (max-width: 768px) {
-  button, 
-  a,
-  [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  input,
-  select,
-  textarea {
-    font-size: 16px; /* Prevents iOS zoom on focus */
-  }
+button, 
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
 }
 
-/* Typography scaling */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
 h1 {
   font-size: clamp(1.75rem, 5vw, 3rem);
   line-height: 1.2;
@@ -122,7 +120,6 @@ p {
   line-height: 1.5;
 }
 
-/* Accessibility Styles */
 html.high-contrast {
   filter: contrast(1.2);
 }
@@ -153,7 +150,6 @@ html.reduce-motion * {
   transition: none !important;
 }
 
-/* Focus styles */
 :focus {
   outline: 2px solid #7E69AB !important;
   outline-offset: 2px !important;
@@ -180,7 +176,6 @@ html.sr-optimized .visually-hidden-unless-focused:active {
   width: auto;
 }
 
-/* Skip link for keyboard navigation */
 .skip-link {
   position: absolute;
   top: -40px;
@@ -195,7 +190,6 @@ html.sr-optimized .visually-hidden-unless-focused:active {
   top: 0;
 }
 
-/* Image loading optimization */
 img.lazy-load {
   opacity: 0;
   transition: opacity 0.3s;
@@ -205,18 +199,15 @@ img.lazy-load.loaded {
   opacity: 1;
 }
 
-/* Focus visible utility */
 .focus-visible\:ring:focus-visible {
   outline: 2px solid #7E69AB !important;
   outline-offset: 2px !important;
 }
 
-/* Performance optimizations for image rendering */
 img {
   content-visibility: auto;
 }
 
-/* Accessible hiding */
 .sr-only {
   position: absolute;
   width: 1px;
