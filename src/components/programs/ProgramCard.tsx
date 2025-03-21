@@ -32,6 +32,9 @@ const ProgramCard = ({
     return gradients[cardIndex % gradients.length];
   };
 
+  // Check if this is the long entrepreneurship title
+  const isLongTitle = title.includes("Westside High School Entrepreneurship");
+  
   return (
     <div 
       className={cn(
@@ -44,10 +47,18 @@ const ProgramCard = ({
       <div className="relative bg-white rounded-lg h-full z-10">
         <Card className="relative overflow-hidden hover:shadow-md transition-shadow border-blue-100 h-full">
           <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center border-b border-blue-100">
-            {image && <img src={image} alt={title} className="w-full h-full object-scale-down" />}
+            {image && <img src={image} alt={title.substring(0, 50)} className="w-full h-full object-scale-down" />}
           </div>
-          <CardHeader className={cn("bg-blue-50/50", title.includes("Entrepreneurship") ? "bg-amber-50/60" : "")}>
-            <CardTitle>{title}</CardTitle>
+          <CardHeader className={cn(
+            "bg-blue-50/50", 
+            title.includes("Westside High School Entrepreneurship") ? "bg-amber-50/60" : ""
+          )}>
+            <CardTitle className={cn(
+              isLongTitle ? "text-sm font-normal" : "text-xl font-semibold",
+              "leading-tight"
+            )}>
+              {title}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">

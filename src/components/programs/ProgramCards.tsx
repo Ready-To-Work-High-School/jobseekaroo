@@ -6,7 +6,7 @@ const ProgramCards = () => {
   const programs = [
     {
       image: "/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png",
-      title: "Entrepreneurship & Small Business",
+      title: "The Westside High School Entrepreneurship School Store was a remarkable success, giving students real-world business experience by managing daily operations, handling finances, and providing customer service. Through running the store and working concessions at events, students gained valuable skills in sales, inventory management, and marketing. They also developed financial literacy by budgeting, tracking profits, and making business decisions. The revenue generated supported the entrepreneurship program and other school initiatives, fostering growth and future expansion plans. This hands-on experience empowered students with practical skills and an entrepreneurial mindset, preparing them for future careers.",
       description: "Learn the fundamentals of starting and running your own business with the ESB certification program. Created by Ms. Coleman, Entrepreneurship Academy.",
       employerBenefits: [
         "Students understand business fundamentals",
