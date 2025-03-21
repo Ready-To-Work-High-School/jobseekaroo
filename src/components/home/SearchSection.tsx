@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import EnhancedSearchForm from '@/components/EnhancedSearchForm';
 import { useFadeIn } from '@/utils/animations';
+import { Separator } from '@/components/ui/separator';
 
 const SearchSection = () => {
   const searchAnimation = useFadeIn(400);
@@ -36,6 +37,11 @@ const SearchSection = () => {
             </Link>
           </div>
         </div>
+      </div>
+      
+      {/* Add separator at the end of the section */}
+      <div className="container mx-auto px-4 mt-8">
+        <Separator className="max-w-4xl mx-auto" />
       </div>
     </section>
   );
