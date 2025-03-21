@@ -1,13 +1,11 @@
 
 import { Button } from '@/components/ui/button';
 import { ExperienceLevel } from '@/types/job';
+import { useJobFilter } from './JobFilterContext';
 
-interface ExperienceLevelFilterProps {
-  experienceLevel: ExperienceLevel | 'all';
-  setExperienceLevel: (level: ExperienceLevel | 'all') => void;
-}
-
-const ExperienceLevelFilter = ({ experienceLevel, setExperienceLevel }: ExperienceLevelFilterProps) => {
+const ExperienceLevelFilter = () => {
+  const { experienceLevel, setExperienceLevel } = useJobFilter();
+  
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-medium">Experience Level</h4>

@@ -1,20 +1,11 @@
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { useJobFilter } from './JobFilterContext';
 
-interface JobFeaturesFilterProps {
-  isRemote: boolean | null;
-  setIsRemote: (remote: boolean | null) => void;
-  isFlexible: boolean | null;
-  setIsFlexible: (flexible: boolean | null) => void;
-}
-
-const JobFeaturesFilter = ({ 
-  isRemote, 
-  setIsRemote, 
-  isFlexible, 
-  setIsFlexible 
-}: JobFeaturesFilterProps) => {
+const JobFeaturesFilter = () => {
+  const { isRemote, setIsRemote, isFlexible, setIsFlexible } = useJobFilter();
+  
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-medium">Job Features</h4>

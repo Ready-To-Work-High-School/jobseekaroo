@@ -1,45 +1,105 @@
 
 import { JobApplication, ApplicationStatus } from '@/types/application';
-import { 
-  createApplication as createApplicationOp,
-  updateApplicationStatus as updateApplicationStatusOp,
-  getApplications as getApplicationsOp,
-  deleteApplication as deleteApplicationOp
-} from './applicationOperations';
+import * as db from '@/lib/supabase/database';
+import { validateApplicationStatus } from '@/lib/supabase/utils';
+
+const TABLE_NAME = 'job_applications';
 
 /**
  * Service functions for handling application-related operations
  */
 export const applicationService = {
-  createApplication: (userId: string, application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<string> => {
+  createApplication: async (userId: string, application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<string> => {
     if (!userId) {
-      console.error('User must be logged in to create an application');
-      return Promise.reject(new Error('User must be logged in to create an application'));
+      throw new Error('User must be logged in to create an application');
     }
-    return createApplicationOp(userId, application);
+    
+    const applicationData = {
+      user_id: userId,
+      job_id: application.job_id,
+      job_title: application.job_title,
+      company: application.company,
+      applied_date: application.applied_date,
+      status: application.status || 'applied',
+      notes: application.notes || '',
+      contact_name: application.contact_name || '',
+      contact_email: application.contact_email || '',
+      next_step: application.next_step || '',
+      next_step_date: application.next_step_date || null,
+    };
+
+    const result = await db.insertItem<JobApplication & { id: string }>(TABLE_NAME, applicationData);
+    return result.id;
   },
   
-  updateApplicationStatus: (userId: string, applicationId: string, status: ApplicationStatus): Promise<void> => {
+  updateApplicationStatus: async (userId: string, applicationId: string, status: ApplicationStatus): Promise<void> => {
     if (!userId) {
-      console.error('User must be logged in to update an application');
-      return Promise.reject(new Error('User must be logged in to update an application'));
+      throw new Error('User must be logged in to update an application');
     }
-    return updateApplicationStatusOp(userId, applicationId, status);
+    
+    // Validate the status
+    if (!validateApplicationStatus(status)) {
+      throw new Error(`Invalid application status: ${status}`);
+    }
+
+    // First verify the application belongs to the user
+    const applications = await db.getItems<JobApplication>(
+      TABLE_NAME, 
+      { id: applicationId, user_id: userId }
+    );
+    
+    if (applications.length === 0) {
+      throw new Error('Application not found or does not belong to the user');
+    }
+    
+    await db.updateItem(
+      TABLE_NAME, 
+      applicationId, 
+      { 
+        status, 
+        updated_at: new Date().toISOString() 
+      }
+    );
   },
   
-  getApplications: (userId: string): Promise<JobApplication[]> => {
+  getApplications: async (userId: string): Promise<JobApplication[]> => {
     if (!userId) {
-      console.log('No user, no applications');
-      return Promise.resolve([]);
+      return [];
     }
-    return getApplicationsOp(userId);
+    
+    const applications = await db.getItems<JobApplication>(
+      TABLE_NAME, 
+      { user_id: userId },
+      { 
+        orderBy: { 
+          column: 'applied_date', 
+          ascending: false 
+        } 
+      }
+    );
+    
+    // Ensure the status field is properly typed as ApplicationStatus
+    return applications.map(app => ({
+      ...app,
+      status: app.status as ApplicationStatus
+    }));
   },
   
-  deleteApplication: (userId: string, applicationId: string): Promise<void> => {
+  deleteApplication: async (userId: string, applicationId: string): Promise<void> => {
     if (!userId) {
-      console.error('User must be logged in to delete an application');
-      return Promise.reject(new Error('User must be logged in to delete an application'));
+      throw new Error('User must be logged in to delete an application');
     }
-    return deleteApplicationOp(userId, applicationId);
+    
+    // First verify the application belongs to the user
+    const applications = await db.getItems<JobApplication>(
+      TABLE_NAME, 
+      { id: applicationId, user_id: userId }
+    );
+    
+    if (applications.length === 0) {
+      throw new Error('Application not found or does not belong to the user');
+    }
+    
+    await db.deleteItem(TABLE_NAME, applicationId);
   }
 };
