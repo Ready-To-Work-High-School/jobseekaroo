@@ -216,6 +216,69 @@ export type Database = {
         }
         Relationships: []
       }
+      skill_resources: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          resource_title: string
+          resource_type: string
+          resource_url: string
+          skill_name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          resource_title: string
+          resource_type: string
+          resource_url: string
+          skill_name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          resource_title?: string
+          resource_type?: string
+          resource_url?: string
+          skill_name?: string
+        }
+        Relationships: []
+      }
+      user_skills: {
+        Row: {
+          created_at: string
+          id: string
+          is_learning: boolean
+          proficiency_level: number
+          skill_name: string
+          target_level: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_learning?: boolean
+          proficiency_level?: number
+          skill_name: string
+          target_level?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_learning?: boolean
+          proficiency_level?: number
+          skill_name?: string
+          target_level?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

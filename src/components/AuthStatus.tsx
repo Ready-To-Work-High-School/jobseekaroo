@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, BookMarked, CheckSquare, FileText } from 'lucide-react';
+import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp } from 'lucide-react';
 
 const AuthStatus = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -63,6 +63,12 @@ const AuthStatus = () => {
               <Link to="/profile" className="flex items-center cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/skills" className="flex items-center cursor-pointer">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                <span>Skills</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>

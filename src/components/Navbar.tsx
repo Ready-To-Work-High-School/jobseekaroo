@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,7 +19,8 @@ import {
   CheckSquare,
   LogOut,
   X,
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  TrendingUp
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -164,6 +166,10 @@ const Navbar = () => {
                   {user && (
                     <>
                       <div className="border-t border-border/60 my-2"></div>
+                      <MobileNavLink to="/skills">
+                        <TrendingUp className="h-5 w-5" />
+                        Skills
+                      </MobileNavLink>
                       <MobileNavLink to="/saved-jobs">
                         <BookMarked className="h-5 w-5" />
                         Saved Jobs
@@ -214,6 +220,8 @@ const Navbar = () => {
             <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
               <NavLink to="/">Home</NavLink>
               <NavLink to="/jobs">Find Jobs</NavLink>
+              {user && <NavLink to="/skills">Skills</NavLink>}
+              {user && <NavLink to="/applications">Applications</NavLink>}
               <NavLink to="/resources">Resources</NavLink>
               <NavLink to="/for-employers">For Employers</NavLink>
               <NavLink to="/resume-assistant">Resume Assistant</NavLink>
