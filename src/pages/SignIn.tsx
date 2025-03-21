@@ -2,7 +2,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -23,8 +23,15 @@ type SignInValues = z.infer<typeof signInSchema>;
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppleLoading, setIsAppleLoading] = useState(false);
-  const { signIn, signInWithApple } = useAuth();
+  const { signIn, signInWithApple, user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  if (user) {
+    console.log("SignIn: User already logged in, redirecting to home");
+    navigate('/');
+    return null;
+  }
   
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -35,22 +42,28 @@ const SignIn = () => {
   });
 
   const onSubmit = async (values: SignInValues) => {
+    console.log("SignIn: Form submitted with values:", values);
     setIsLoading(true);
+    
     try {
       console.log("SignIn: Attempting to sign in with:", values.email);
       const result = await signIn(values.email, values.password);
       console.log("SignIn: Sign in result:", result);
       
       if (result.error) {
+        console.error("SignIn: Error during sign in:", result.error);
         throw result.error;
       }
       
+      console.log("SignIn: Successfully signed in");
       toast({
         title: "Success",
         description: "You have successfully signed in",
       });
+      
+      navigate('/');
     } catch (error: any) {
-      console.error("SignIn: Sign in error:", error);
+      console.error("SignIn: Sign in error caught:", error);
       toast({
         title: "Error",
         description: error.message || "Invalid email or password",
@@ -66,7 +79,6 @@ const SignIn = () => {
     try {
       console.log("SignIn: Attempting to sign in with Apple");
       await signInWithApple();
-      // Note: No need to show success toast or navigate since OAuth redirects
     } catch (error: any) {
       console.error("SignIn: Apple sign in error:", error);
       toast({

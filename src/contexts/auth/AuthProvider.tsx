@@ -38,6 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const fetchUserProfile = async (userId: string) => {
     if (!userId) {
       console.log('fetchUserProfile: No user ID provided');
+      setProfileLoading(false);
       return;
     }
     
@@ -58,14 +59,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('Setting up auth state listener');
     
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state change:', event, session?.user?.id);
-      setSession(session);
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log('Auth state change event:', event);
+      console.log('Auth state change session:', newSession?.user?.id);
       
-      if (session?.user) {
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+      
+      if (newSession?.user) {
         console.log('Auth state change: user is logged in, fetching profile');
-        fetchUserProfile(session.user.id);
+        fetchUserProfile(newSession.user.id);
       } else {
         console.log('Auth state change: no user, clearing profile');
         setUserProfile(null);
@@ -75,16 +78,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session check:', session?.user?.id);
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
+      console.log('Initial session check:', existingSession?.user?.id);
+      setSession(existingSession);
+      setUser(existingSession?.user ?? null);
       
-      if (session?.user) {
+      if (existingSession?.user) {
         console.log('Initial session: user is logged in, fetching profile');
-        fetchUserProfile(session.user.id);
+        fetchUserProfile(existingSession.user.id);
       } else {
         console.log('Initial session: no user');
+        setProfileLoading(false);
       }
       
       setIsLoading(false);
@@ -123,50 +127,56 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const handleSignIn = async (email: string, password: string) => {
+    console.log('handleSignIn: Starting sign in with email:', email);
+    
     try {
-      console.log('handleSignIn: Signing in with email:', email);
       const response = await authSignIn(email, password);
-      console.log('handleSignIn: Sign in response:', response);
+      console.log('handleSignIn: Sign in response received:', response);
       
-      if (response.data.session) {
-        console.log('handleSignIn: Successfully signed in, navigating to home');
-        navigate('/');
+      if (response.error) {
+        console.error('handleSignIn: Sign in error:', response.error);
+        throw response.error;
       }
+      
+      // Session will be handled by onAuthStateChange
+      console.log('handleSignIn: Successfully signed in');
       
       return response;
     } catch (error) {
-      console.error('handleSignIn: Sign in error:', error);
+      console.error('handleSignIn: Sign in error caught:', error);
       throw error;
     }
   };
 
   const handleSignUp = async (email: string, password: string, firstName: string, lastName: string) => {
+    console.log('handleSignUp: Starting sign up with email:', email);
+    
     try {
-      console.log('handleSignUp: Signing up with email:', email);
       const response = await authSignUp(email, password, firstName, lastName);
-      console.log('handleSignUp: Sign up response:', response);
+      console.log('handleSignUp: Sign up response received:', response);
       
-      if (response.data.session) {
-        console.log('handleSignUp: Session created, navigating to home');
-        navigate('/');
-      } else if (!response.error) {
-        console.log('handleSignUp: Successful signup but email confirmation required');
-        // Could redirect to a confirmation page here
+      if (response.error) {
+        console.error('handleSignUp: Sign up error:', response.error);
+        throw response.error;
       }
+      
+      // Session will be handled by onAuthStateChange if auto-confirm is enabled
+      console.log('handleSignUp: Successfully signed up');
       
       return response;
     } catch (error) {
-      console.error('handleSignUp: Sign up error:', error);
+      console.error('handleSignUp: Sign up error caught:', error);
       throw error;
     }
   };
 
   const handleSignOut = async () => {
+    console.log('handleSignOut: Starting sign out');
+    
     try {
-      console.log('handleSignOut: Signing out');
       const result = await authSignOut();
       console.log('handleSignOut: Sign out successful');
-      navigate('/');
+      // Session clean up will be handled by onAuthStateChange
       return result;
     } catch (error) {
       console.error('handleSignOut: Sign out error:', error);
