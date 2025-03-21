@@ -135,21 +135,23 @@ const SearchForm = ({
         {showRadius && (
           <div className="flex-1 flex flex-col gap-1 px-2">
             <div className="flex items-center gap-2">
-              <div className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md text-xs flex items-center gap-1 font-medium">
-                <MapPin size={12} />
-                <span>Search Radius</span>
+              <div className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md text-xs flex items-center font-medium flex-1">
+                <MapPin size={12} className="flex-shrink-0 mr-1" />
+                <span className="mr-2">Search Radius:</span>
+                <div className="flex-1 flex items-center gap-2">
+                  <Slider
+                    value={[radius]}
+                    min={1}
+                    max={50}
+                    step={1}
+                    onValueChange={(values) => setRadius(values[0])}
+                    className="flex-1"
+                  />
+                  <span className="text-xs font-medium min-w-[45px] ml-1">
+                    {radius} mile{radius !== 1 ? 's' : ''}
+                  </span>
+                </div>
               </div>
-              <Slider
-                value={[radius]}
-                min={1}
-                max={50}
-                step={1}
-                onValueChange={(values) => setRadius(values[0])}
-                className="flex-1"
-              />
-              <span className="text-xs font-medium min-w-[45px]">
-                {radius} mile{radius !== 1 ? 's' : ''}
-              </span>
             </div>
             <Progress value={(radius / 50) * 100} className="h-1" />
           </div>
