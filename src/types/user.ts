@@ -13,6 +13,10 @@ export interface UserProfile {
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
   notification_preferences?: NotificationPreferences;
+  education?: Education[];
+  work_experience?: WorkExperience[];
+  certifications?: Certification[];
+  languages?: Language[];
 }
 
 export interface SavedSearch {
@@ -46,4 +50,43 @@ export interface NotificationPreferences {
   application_updates: boolean;
   saved_search_alerts: boolean;
   newsletter: boolean;
+}
+
+export interface Education {
+  id: string;
+  institution: string;
+  degree: string;
+  field_of_study: string;
+  start_date: string;
+  end_date: string | null;
+  current: boolean;
+  description: string | null;
+}
+
+export interface WorkExperience {
+  id: string;
+  company: string;
+  position: string;
+  location: string | null;
+  start_date: string;
+  end_date: string | null;
+  current: boolean;
+  description: string | null;
+  responsibilities: string[] | null;
+  achievements: string[] | null;
+}
+
+export interface Certification {
+  id: string;
+  name: string;
+  issuing_organization: string;
+  issue_date: string;
+  expiration_date: string | null;
+  credential_id: string | null;
+  credential_url: string | null;
+}
+
+export interface Language {
+  name: string;
+  proficiency: 'beginner' | 'intermediate' | 'advanced' | 'fluent' | 'native';
 }

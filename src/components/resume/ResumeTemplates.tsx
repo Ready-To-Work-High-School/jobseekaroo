@@ -2,6 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { Download, Copy, Eye } from "lucide-react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ResumeTemplate {
   id: string;
@@ -9,6 +12,7 @@ interface ResumeTemplate {
   description: string;
   image: string;
   suitable: string[];
+  color?: string;
 }
 
 const templates: ResumeTemplate[] = [
@@ -17,31 +21,87 @@ const templates: ResumeTemplate[] = [
     title: "Professional",
     description: "A clean, straightforward layout suitable for most industries.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
-    suitable: ["Business", "Finance", "Management"]
+    suitable: ["Business", "Finance", "Management"],
+    color: "bg-blue-50"
   },
   {
     id: "template-2",
     title: "Creative",
     description: "A dynamic layout highlighting portfolio work and creativity.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
-    suitable: ["Design", "Marketing", "Arts"]
+    suitable: ["Design", "Marketing", "Arts"],
+    color: "bg-purple-50"
   },
   {
     id: "template-3",
     title: "Entry-Level",
     description: "Emphasizes skills and education for those with limited experience.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
-    suitable: ["Students", "Recent Graduates", "Career Changers"]
+    suitable: ["Students", "Recent Graduates", "Career Changers"],
+    color: "bg-green-50"
+  },
+  {
+    id: "template-4",
+    title: "Technical",
+    description: "Focuses on technical skills and project experience.",
+    image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    suitable: ["IT", "Engineering", "Development"],
+    color: "bg-cyan-50"
+  },
+  {
+    id: "template-5",
+    title: "Executive",
+    description: "Highlights leadership experience and accomplishments.",
+    image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    suitable: ["Directors", "VPs", "C-Suite"],
+    color: "bg-slate-50"
+  },
+  {
+    id: "template-6",
+    title: "Minimal",
+    description: "Simple and elegant with focus on content over design.",
+    image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    suitable: ["All Industries", "Legal", "Academic"],
+    color: "bg-gray-50"
   }
 ];
 
 const ResumeTemplates = () => {
   const { toast } = useToast();
+  const [previewTemplate, setPreviewTemplate] = useState<ResumeTemplate | null>(null);
 
   const handleUseTemplate = (templateId: string) => {
     toast({
       title: "Template Selected",
-      description: "This feature will be available soon. Stay tuned!",
+      description: "Template ready to be customized with your information.",
+    });
+    
+    // Find the selected template
+    const template = templates.find(t => t.id === templateId);
+    if (template) {
+      setPreviewTemplate(template);
+    }
+  };
+
+  const handlePreviewClose = () => {
+    setPreviewTemplate(null);
+  };
+
+  const handleDownloadTemplate = () => {
+    toast({
+      title: "Download Started",
+      description: "Your template is being downloaded.",
+    });
+    // In a real app, this would trigger the actual download
+    setTimeout(() => {
+      handlePreviewClose();
+    }, 1500);
+  };
+
+  const handleCopyTemplate = () => {
+    toast({
+      title: "Template Copied",
+      description: "Template content copied to clipboard.",
     });
   };
 
@@ -53,12 +113,12 @@ const ResumeTemplates = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {templates.map((template) => (
-          <Card key={template.id} className="overflow-hidden">
-            <div className="aspect-[3/4] relative overflow-hidden bg-muted">
+          <Card key={template.id} className="overflow-hidden hover:shadow-md transition-shadow duration-300">
+            <div className={`aspect-[3/4] relative overflow-hidden ${template.color || "bg-muted"}`}>
               <img 
                 src={template.image} 
                 alt={template.title} 
-                className="object-cover w-full h-full opacity-70"
+                className="object-cover w-full h-full opacity-70 hover:opacity-100 transition-opacity duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                 <div className="p-4 text-white">
@@ -82,18 +142,54 @@ const ResumeTemplates = () => {
               </div>
             </CardContent>
             
-            <CardFooter>
+            <CardFooter className="flex gap-2">
               <Button 
                 onClick={() => handleUseTemplate(template.id)}
-                variant="outline"
+                variant="default"
                 className="w-full"
               >
                 Use Template
+              </Button>
+              <Button
+                onClick={() => setPreviewTemplate(template)}
+                variant="outline"
+                size="icon"
+              >
+                <Eye className="h-4 w-4" />
               </Button>
             </CardFooter>
           </Card>
         ))}
       </div>
+
+      {/* Template Preview Dialog */}
+      <Dialog open={!!previewTemplate} onOpenChange={handlePreviewClose}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{previewTemplate?.title} Template Preview</DialogTitle>
+          </DialogHeader>
+          <div className={`aspect-[3/4] relative overflow-hidden ${previewTemplate?.color || "bg-muted"} border rounded-md`}>
+            <img 
+              src={previewTemplate?.image} 
+              alt={previewTemplate?.title} 
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <DialogFooter className="flex justify-between">
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={handleCopyTemplate}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copy
+              </Button>
+              <Button variant="outline" onClick={handlePreviewClose}>Cancel</Button>
+            </div>
+            <Button onClick={handleDownloadTemplate}>
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

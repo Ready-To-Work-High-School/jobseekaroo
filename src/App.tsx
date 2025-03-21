@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ResumeAssistant from "./pages/ResumeAssistant";
+import ResumeBuilder from "./pages/ResumeBuilder";
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import './App.css';
 
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/success-stories" element={<SuccessStories />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/resume-assistant" element={<ResumeAssistant />} />
+            <Route path="/resume-builder" element={<ResumeBuilder />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
