@@ -10,6 +10,7 @@ interface ProgramCardProps {
   description: string;
   employerBenefits?: string[];
   index?: number;
+  learnMoreLink?: string;
 }
 
 const ProgramCard = ({
@@ -17,7 +18,8 @@ const ProgramCard = ({
   title,
   description,
   employerBenefits = [],
-  index = 0
+  index = 0,
+  learnMoreLink
 }: ProgramCardProps) => {
   // Function to get a different accent color for each program card
   const getAccentGradient = (cardIndex: number) => {
@@ -68,7 +70,14 @@ const ProgramCard = ({
               </div>
             )}
             
-            <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-800">
+            <Button 
+              variant="link" 
+              className="p-0 h-auto text-blue-600 hover:text-blue-800"
+              as={learnMoreLink ? "a" : "button"}
+              href={learnMoreLink}
+              target={learnMoreLink ? "_blank" : undefined}
+              rel={learnMoreLink ? "noopener noreferrer" : undefined}
+            >
               Learn more
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                 <path d="M5 12h14" />

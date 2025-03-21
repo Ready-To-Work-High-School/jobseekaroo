@@ -32,7 +32,8 @@ const ProgramCards = () => {
         "Verified career readiness skills",
         "Students have completed industry-standard training",
         "Experience with real-world workplace scenarios"
-      ]
+      ],
+      learnMoreLink: "https://www.floridareadytowork.com/softskills"
     }
   ];
 
@@ -46,6 +47,7 @@ const ProgramCards = () => {
           description={program.description}
           employerBenefits={program.employerBenefits}
           index={index}
+          learnMoreLink={program.learnMoreLink}
         />
       ))}
     </div>
