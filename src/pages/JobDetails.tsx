@@ -6,6 +6,7 @@ import { getJobById } from '@/lib/mock-data';
 import { Job } from '@/types/job';
 import { cn } from '@/lib/utils';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
+import ShareJobButton from '@/components/ShareJobButton';
 
 const JobDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -134,10 +135,17 @@ const JobDetails = () => {
             </div>
           )}
           
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-bold mb-1">{job.title}</h1>
             <p className="text-lg text-muted-foreground">{job.company.name}</p>
           </div>
+          
+          <ShareJobButton 
+            jobId={job.id} 
+            jobTitle={job.title} 
+            companyName={job.company.name} 
+            className="self-start"
+          />
         </div>
         
         <div className="flex flex-wrap gap-3">
@@ -205,12 +213,20 @@ const JobDetails = () => {
               you're interested in this role.
             </p>
             
-            <button
-              onClick={handleApply}
-              className="w-full md:w-auto px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors focus-ring"
-            >
-              Apply Now
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleApply}
+                className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors focus-ring"
+              >
+                Apply Now
+              </button>
+              
+              <ShareJobButton 
+                jobId={job.id} 
+                jobTitle={job.title} 
+                companyName={job.company.name}
+              />
+            </div>
           </div>
         </div>
         
@@ -394,4 +410,3 @@ const DetailItem = ({ icon, label, children }: DetailItemProps) => (
 );
 
 export default JobDetails;
-

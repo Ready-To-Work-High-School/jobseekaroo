@@ -6,6 +6,7 @@ import { MapPin, Clock, BriefcaseIcon, CalendarIcon, BookmarkIcon } from 'lucide
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import ShareButton from './ShareButton';
 
 interface JobCardProps {
   job: Job;
@@ -179,17 +180,26 @@ const JobCard = ({
               </span>
             </div>
             
-            <button 
-              onClick={handleSaveToggle}
-              className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors p-1 sm:p-0 focus-visible:ring`}
-              aria-label={isSaved ? `Unsave ${job.title} job` : `Save ${job.title} job`}
-              aria-pressed={isSaved}
-            >
-              <BookmarkIcon 
-                className={`h-5 w-5 ${isSaved ? (useAmberStyling ? 'fill-amber-500 text-amber-600' : 'fill-primary text-primary') : 'fill-none'}`} 
-                aria-hidden="true"
+            <div className="flex items-center gap-1">
+              <ShareButton
+                jobId={job.id}
+                jobTitle={job.title}
+                companyName={job.company.name}
+                className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'}`}
               />
-            </button>
+              
+              <button 
+                onClick={handleSaveToggle}
+                className={`${useAmberStyling ? 'text-amber-600 hover:text-amber-800' : 'text-black hover:text-primary'} transition-colors p-1 sm:p-0 focus-visible:ring`}
+                aria-label={isSaved ? `Unsave ${job.title} job` : `Save ${job.title} job`}
+                aria-pressed={isSaved}
+              >
+                <BookmarkIcon 
+                  className={`h-5 w-5 ${isSaved ? (useAmberStyling ? 'fill-amber-500 text-amber-600' : 'fill-primary text-primary') : 'fill-none'}`} 
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
           </div>
         </div>
 
