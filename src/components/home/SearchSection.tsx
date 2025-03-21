@@ -5,7 +5,7 @@ import EnhancedSearchForm from '@/components/EnhancedSearchForm';
 import { useFadeIn } from '@/utils/animations';
 const SearchSection = () => {
   const searchAnimation = useFadeIn(400);
-  return <section className="py-12 bg-blue-200">
+  return <section className="py-12 bg-blue-100">
       <div className="container mx-auto px-4">
         <div className={cn("max-w-3xl mx-auto text-center", searchAnimation)}>
           <h2 className="text-2xl font-bold mb-6">Find Your Next Opportunity</h2>
