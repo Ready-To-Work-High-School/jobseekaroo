@@ -2,7 +2,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+import './styles/index.css'
 
 // Simple and direct rendering approach with error handling
 const rootElement = document.getElementById('root')

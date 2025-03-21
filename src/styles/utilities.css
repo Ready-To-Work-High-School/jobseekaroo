@@ -1,0 +1,65 @@
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/30;
+}
+
+/* Custom selection */
+::selection {
+  @apply bg-primary/20;
+}
+
+/* Image loading optimization */
+img.lazy-load {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img.lazy-load.loaded {
+  opacity: 1;
+}
+
+/* Performance optimizations for image rendering */
+img {
+  content-visibility: auto;
+}
+
+/* Enhanced transitions */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-[1.02];
+}
+
+/* Background gradients */
+.bg-gradient-brand {
+  @apply bg-gradient-to-r from-brand-600 to-brand-800;
+}
+
+.bg-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-600;
+}
+
+/* Text gradients */
+.text-gradient-primary {
+  @apply bg-gradient-to-r from-primary to-brand-700 bg-clip-text text-transparent;
+}
+
+.text-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-700 bg-clip-text text-transparent;
+}

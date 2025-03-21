@@ -1,0 +1,11 @@
+
+/* Import base styles with Tailwind directives */
+@import './base.css';
+
+/* Import component-specific styles */
+@import './layout.css';
+@import './typography.css';
+@import './components.css';
+@import './animations.css';
+@import './accessibility.css';
+@import './utilities.css';

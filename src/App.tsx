@@ -2,7 +2,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
-import './App.css';
 
 // Import main page components directly
 import Index from './pages/Index';
