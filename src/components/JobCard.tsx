@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
 import { useFadeIn } from '@/utils/animations';
 import { MapPin, Clock, BriefcaseIcon, CalendarIcon, BookmarkIcon } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import ShareButton from './ShareButton';
+import LazyImage from './LazyImage';
 
 interface JobCardProps {
   job: Job;
@@ -21,7 +22,6 @@ const JobCard = ({
   const [isSaved, setIsSaved] = useState(false);
   const { toast } = useToast();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const imageRef = useRef<HTMLImageElement>(null);
   
   useEffect(() => {
     if (user) {
@@ -34,30 +34,6 @@ const JobCard = ({
       setIsSaved(false);
     }
   }, [user, job.id, isSavedJob]);
-
-  useEffect(() => {
-    if (imageRef.current) {
-      if ('loading' in HTMLImageElement.prototype) {
-        imageRef.current.loading = 'lazy';
-      } else {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && imageRef.current && imageRef.current.src !== job.logoUrl) {
-              imageRef.current.src = job.logoUrl || '';
-              observer.unobserve(entry.target);
-            }
-          });
-        });
-        
-        observer.observe(imageRef.current);
-        return () => {
-          if (imageRef.current) {
-            observer.unobserve(imageRef.current);
-          }
-        };
-      }
-    }
-  }, [job.logoUrl]);
 
   const formatRelativeDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -125,7 +101,7 @@ const JobCard = ({
     <Link 
       to={`/jobs/${job.id}`} 
       className={animation}
-      aria-label={`${job.title} at ${job.company.name}, ${formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}`}
+      aria-label={`${job.title} at ${job.company.name}, ${job.payRate ? formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period) : ''}`}
     >
       <div 
         className={`flex flex-col space-y-3 sm:space-y-4 p-4 sm:p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}
@@ -137,12 +113,10 @@ const JobCard = ({
               className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}
               aria-hidden="true"
             >
-              <img 
-                ref={imageRef}
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
-                data-src={job.logoUrl}
+              <LazyImage
+                src={job.logoUrl}
                 alt={`${job.company.name} logo`}
-                className={`w-full h-full object-cover lazy-load ${imageLoaded ? 'loaded' : ''}`}
+                className="w-full h-full object-cover"
                 onLoad={() => setImageLoaded(true)}
                 width="48"
                 height="48"

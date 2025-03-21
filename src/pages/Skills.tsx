@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,10 +7,6 @@ import { useFadeIn } from '@/utils/animations';
 import { UserSkill, SkillResource } from '@/types/skills';
 import { getUserSkills, createUserSkill, updateUserSkill, deleteUserSkill, getSkillResources } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
-import { SkillGapAnalysis } from '@/components/skills/SkillGapAnalysis';
-import { SkillList } from '@/components/skills/SkillList';
-import { SkillResourcesList } from '@/components/skills/SkillResourcesList';
-import { SkillProgressTracker } from '@/components/skills/SkillProgressTracker';
 import {
   Tabs,
   TabsContent,
@@ -24,6 +20,19 @@ import {
   Book,
   Target,
 } from 'lucide-react';
+
+// Lazy load components
+const SkillGapAnalysis = lazy(() => import('@/components/skills/SkillGapAnalysis'));
+const SkillList = lazy(() => import('@/components/skills/SkillList'));
+const SkillResourcesList = lazy(() => import('@/components/skills/SkillResourcesList'));
+const SkillProgressTracker = lazy(() => import('@/components/skills/SkillProgressTracker'));
+
+// Loading component for tabs
+const TabLoader = () => (
+  <div className="flex items-center justify-center py-12">
+    <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
 const Skills = () => {
   const [skills, setSkills] = useState<UserSkill[]>([]);
@@ -169,45 +178,61 @@ const Skills = () => {
             </TabsList>
             
             <TabsContent value="my-skills" className="mt-6">
-              <SkillList 
-                skills={skills} 
-                onAddSkill={handleAddSkill}
-                onUpdateSkill={handleUpdateSkill}
-                onDeleteSkill={handleDeleteSkill}
-                isLoading={isLoading}
-                onSelectSkill={(skill) => {
-                  setSelectedSkill(skill);
-                  setActiveTab('resources');
-                }}
-              />
+              <Suspense fallback={<TabLoader />}>
+                {activeTab === 'my-skills' && (
+                  <SkillList 
+                    skills={skills} 
+                    onAddSkill={handleAddSkill}
+                    onUpdateSkill={handleUpdateSkill}
+                    onDeleteSkill={handleDeleteSkill}
+                    isLoading={isLoading}
+                    onSelectSkill={(skill) => {
+                      setSelectedSkill(skill);
+                      setActiveTab('resources');
+                    }}
+                  />
+                )}
+              </Suspense>
             </TabsContent>
             
             <TabsContent value="progress" className="mt-6">
-              <SkillProgressTracker
-                userSkills={skills}
-                resources={resources}
-                isLoading={isLoading}
-                onViewResources={(skillName) => {
-                  setSelectedSkill(skillName);
-                  setActiveTab('resources');
-                }}
-              />
+              <Suspense fallback={<TabLoader />}>
+                {activeTab === 'progress' && (
+                  <SkillProgressTracker
+                    userSkills={skills}
+                    resources={resources}
+                    isLoading={isLoading}
+                    onViewResources={(skillName) => {
+                      setSelectedSkill(skillName);
+                      setActiveTab('resources');
+                    }}
+                  />
+                )}
+              </Suspense>
             </TabsContent>
             
             <TabsContent value="skill-gaps" className="mt-6">
-              <SkillGapAnalysis 
-                userSkills={skills}
-                onAddSkill={handleAddSkill}
-              />
+              <Suspense fallback={<TabLoader />}>
+                {activeTab === 'skill-gaps' && (
+                  <SkillGapAnalysis 
+                    userSkills={skills}
+                    onAddSkill={handleAddSkill}
+                  />
+                )}
+              </Suspense>
             </TabsContent>
             
             <TabsContent value="resources" className="mt-6">
-              <SkillResourcesList 
-                resources={resources} 
-                selectedSkill={selectedSkill}
-                onSelectSkill={setSelectedSkill}
-                isLoading={isLoading}
-              />
+              <Suspense fallback={<TabLoader />}>
+                {activeTab === 'resources' && (
+                  <SkillResourcesList 
+                    resources={resources} 
+                    selectedSkill={selectedSkill}
+                    onSelectSkill={setSelectedSkill}
+                    isLoading={isLoading}
+                  />
+                )}
+              </Suspense>
             </TabsContent>
           </Tabs>
         </div>
