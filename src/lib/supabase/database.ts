@@ -1,6 +1,6 @@
 
 import { supabase } from './index';
-import { PostgrestFilterBuilder } from '@supabase/supabase-js';
+import { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 /**
  * Generic data access layer for Supabase
@@ -18,11 +18,15 @@ export interface QueryOptions {
   offset?: number;
 }
 
+// Allowed table names for type safety
+export type TableName = 'job_applications' | 'jobs' | 'profiles' | 'saved_jobs' |
+  'job_recommendations' | 'skill_resources' | 'user_skills';
+
 /**
  * Get a single item by ID
  */
 export async function getById<T>(
-  table: string,
+  table: TableName,
   id: string,
   options: { columns?: string } = {}
 ): Promise<T> {
@@ -44,7 +48,7 @@ export async function getById<T>(
  * Get multiple items with optional filtering
  */
 export async function getItems<T>(
-  table: string,
+  table: TableName,
   filters?: Record<string, any>,
   options: QueryOptions = {}
 ): Promise<T[]> {
@@ -85,8 +89,8 @@ export async function getItems<T>(
  * Insert a new item
  */
 export async function insertItem<T>(
-  table: string, 
-  item: Record<string, any>
+  table: TableName, 
+  item: any
 ): Promise<T> {
   const { data, error } = await supabase
     .from(table)
@@ -106,7 +110,7 @@ export async function insertItem<T>(
  * Update an existing item
  */
 export async function updateItem(
-  table: string, 
+  table: TableName, 
   id: string, 
   updates: Record<string, any>
 ): Promise<void> {
@@ -125,7 +129,7 @@ export async function updateItem(
  * Delete an item
  */
 export async function deleteItem(
-  table: string, 
+  table: TableName, 
   id: string
 ): Promise<void> {
   const { error } = await supabase
@@ -144,9 +148,9 @@ export async function deleteItem(
  * Helper function to handle different filter types
  */
 function applyFilters(
-  query: PostgrestFilterBuilder<any, any, any, any>,
+  query: any,
   filters: Record<string, any>
-): PostgrestFilterBuilder<any, any, any, any> {
+): any {
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       if (typeof value === 'object' && 'operator' in value) {

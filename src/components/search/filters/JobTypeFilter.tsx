@@ -3,8 +3,15 @@ import { Button } from '@/components/ui/button';
 import { JobType } from '@/types/job';
 import { useJobFilter } from './JobFilterContext';
 
-const JobTypeFilter = () => {
-  const { jobType, setJobType } = useJobFilter();
+interface JobTypeFilterProps {
+  jobType?: JobType | 'all';
+  setJobType?: (type: JobType | 'all') => void;
+}
+
+const JobTypeFilter = (props: JobTypeFilterProps = {}) => {
+  // If props are provided, use them, otherwise use the context
+  const context = useJobFilter();
+  const { jobType = context.jobType, setJobType = context.setJobType } = props;
   
   return (
     <div className="space-y-2">

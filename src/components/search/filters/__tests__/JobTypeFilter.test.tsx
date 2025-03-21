@@ -3,6 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import JobTypeFilter from '../JobTypeFilter';
 import { vi } from 'vitest';
 
+// Mock the JobFilterContext to avoid errors
+vi.mock('../JobFilterContext', () => ({
+  useJobFilter: () => ({
+    jobType: 'all',
+    setJobType: vi.fn(),
+  }),
+}));
+
 describe('JobTypeFilter', () => {
   const mockSetJobType = vi.fn();
   
@@ -17,7 +25,7 @@ describe('JobTypeFilter', () => {
     expect(screen.getByText('All Types')).toBeInTheDocument();
     expect(screen.getByText('Full Time')).toBeInTheDocument();
     expect(screen.getByText('Part Time')).toBeInTheDocument();
-    expect(screen.getByText('Internship')).toBeInTheDocument();
+    expect(screen.getByText('Contract')).toBeInTheDocument();
   });
 
   it('highlights the selected job type', () => {
@@ -41,8 +49,8 @@ describe('JobTypeFilter', () => {
     fireEvent.click(screen.getByText('Full Time'));
     expect(mockSetJobType).toHaveBeenCalledWith('full-time');
     
-    fireEvent.click(screen.getByText('Internship'));
-    expect(mockSetJobType).toHaveBeenCalledWith('internship');
+    fireEvent.click(screen.getByText('Contract'));
+    expect(mockSetJobType).toHaveBeenCalledWith('contract');
     
     fireEvent.click(screen.getByText('All Types'));
     expect(mockSetJobType).toHaveBeenCalledWith('all');

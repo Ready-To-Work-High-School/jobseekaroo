@@ -3,8 +3,18 @@ import { Button } from '@/components/ui/button';
 import { ExperienceLevel } from '@/types/job';
 import { useJobFilter } from './JobFilterContext';
 
-const ExperienceLevelFilter = () => {
-  const { experienceLevel, setExperienceLevel } = useJobFilter();
+interface ExperienceLevelFilterProps {
+  experienceLevel?: ExperienceLevel | 'all';
+  setExperienceLevel?: (level: ExperienceLevel | 'all') => void;
+}
+
+const ExperienceLevelFilter = (props: ExperienceLevelFilterProps = {}) => {
+  // If props are provided, use them, otherwise use the context
+  const context = useJobFilter();
+  const { 
+    experienceLevel = context.experienceLevel, 
+    setExperienceLevel = context.setExperienceLevel 
+  } = props;
   
   return (
     <div className="space-y-2">
