@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Layout from '@/components/Layout';
+import { supabase } from '@/lib/supabase'; // Added missing Supabase import
 import {
   Card,
   CardContent,
