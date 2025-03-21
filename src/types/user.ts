@@ -10,6 +10,16 @@ export interface UserProfile {
   preferences: Record<string, any> | null;
   created_at: string;
   updated_at: string;
+  saved_searches?: SavedSearch[];
+}
+
+export interface SavedSearch {
+  id: string;
+  name: string;
+  zipCode: string;
+  radius?: number;
+  filters: Record<string, any>;
+  created_at: string;
 }
 
 export interface JobRecommendation {

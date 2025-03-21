@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +18,8 @@ import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ResumeAssistant from "./pages/ResumeAssistant";
+import EnhancedJobListings from './pages/EnhancedJobListings';
+import EnhancedHero from './components/EnhancedHero';
 
 const queryClient = new QueryClient();
 
@@ -31,7 +32,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/jobs" element={<JobListings />} />
+            <Route path="/jobs" element={<EnhancedJobListings />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/saved-jobs" element={<SavedJobs />} />
             <Route path="/applications" element={<Applications />} />
