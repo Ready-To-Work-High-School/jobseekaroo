@@ -3,6 +3,7 @@ import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
 import ProgramCards from './programs/ProgramCards';
+import EntrepreneurshipStoreSection from './programs/EntrepreneurshipStoreSection';
 import CredentialsBadges from './programs/CredentialsBadges';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -44,6 +45,8 @@ const ProgramsSection = () => {
         
         <div className="space-y-16">
           <WestsideAcademy />
+          
+          <EntrepreneurshipStoreSection />
           
           <ProgramCards />
           
