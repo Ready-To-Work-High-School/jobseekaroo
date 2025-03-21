@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './pages/Index';
@@ -14,8 +15,9 @@ import SavedJobs from './pages/SavedJobs';
 import { AuthProvider } from '@/contexts/AuthContext';
 import './App.css';
 
-// Import our new components
+// Import our components
 import Skills from './pages/Skills';
+import InterviewPrep from './pages/InterviewPrep';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/jobs" element={<JobListings />} />
           <Route path="/skills" element={<Skills />} />
+          <Route path="/interview-prep" element={<InterviewPrep />} />
           <Route path="/jobs/:id" element={<JobDetails />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/for-employers" element={<ForEmployers />} />

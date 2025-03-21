@@ -26,3 +26,21 @@ export interface SkillGap {
   current_level: number;
   gap: number;
 }
+
+export interface InterviewQuestion {
+  id: string;
+  role: string;
+  question: string;
+  category: 'behavioral' | 'technical' | 'situational';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+export interface PracticeSession {
+  id: string;
+  user_id: string;
+  date: string;
+  duration: number;
+  questions_attempted: number;
+  feedback: string;
+  recording_url?: string;
+}
