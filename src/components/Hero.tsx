@@ -17,10 +17,6 @@ const Hero = () => {
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       <div className="max-w-3xl mx-auto py-8 mt-10">
-        <span className={cn("inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium", "bg-primary/10 text-primary", titleAnimation)}>
-          For Westside High School Students
-        </span>
-        
         <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", titleAnimation)}>
           <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
             Find the perfect entry level job for credential holders
