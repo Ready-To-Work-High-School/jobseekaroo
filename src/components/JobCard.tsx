@@ -92,7 +92,7 @@ const JobCard = ({
     "Jacksonville Waterfront Hotel", 
     "TechSolutions Jacksonville"
   ];
-  const useAmberStyling = jacksonvilleCompanies.includes(job.company);
+  const useAmberStyling = jacksonvilleCompanies.includes(job.company.name);
 
   return (
     <Link to={`/jobs/${job.id}`} className={animation}>
@@ -100,19 +100,19 @@ const JobCard = ({
         <div className="flex items-start gap-4">
           {job.logoUrl ? (
             <div className={`w-12 h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}>
-              <img src={job.logoUrl} alt={`${job.company} logo`} className="w-full h-full object-cover" loading="lazy" />
+              <img src={job.logoUrl} alt={`${job.company.name} logo`} className="w-full h-full object-cover" loading="lazy" />
             </div>
           ) : (
             <div className={`w-12 h-12 rounded-md border ${useAmberStyling ? 'border-amber-400 bg-amber-50' : 'border-border bg-primary/10'} flex items-center justify-center flex-shrink-0`}>
               <span className={`${useAmberStyling ? 'text-amber-600' : 'text-primary'} font-medium text-lg`}>
-                {job.company.substring(0, 1)}
+                {job.company.name.substring(0, 1)}
               </span>
             </div>
           )}
           
           <div className="flex-1 min-w-0">
             <h3 className={`font-semibold text-lg truncate text-black`}>{job.title}</h3>
-            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>{job.company}</p>
+            <p className={`${useAmberStyling ? 'text-amber-700' : 'text-black'}`}>{job.company.name}</p>
           </div>
           
           <div className="flex items-center gap-3">

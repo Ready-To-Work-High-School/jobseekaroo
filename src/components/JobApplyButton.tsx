@@ -50,10 +50,10 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
       await createApplication({
         job_id: job.id,
         job_title: job.title,
-        company: job.company,
+        company: job.company.name,
         status: 'applied',
         applied_date: new Date().toISOString().substring(0, 10),
-        notes: `Applied for ${job.title} at ${job.company}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
+        notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
       });
       
       // Show success dialog
@@ -103,7 +103,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
           <DialogHeader>
             <DialogTitle>Application Submitted!</DialogTitle>
             <DialogDescription>
-              Your application for the {job.title} position at {job.company} has been successfully submitted.
+              Your application for the {job.title} position at {job.company.name} has been successfully submitted.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
