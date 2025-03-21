@@ -7,6 +7,7 @@ import './App.css';
 // Import main page components directly
 import Index from './pages/Index';
 import ProtectedRoute from './components/ProtectedRoute';
+import NotFound from './pages/NotFound';
 
 // Lazy load all other pages
 const JobListings = lazy(() => import('./pages/JobListings'));
@@ -23,6 +24,8 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Applications = lazy(() => import('./pages/Applications'));
 const ResumeAssistant = lazy(() => import('./pages/ResumeAssistant'));
 const SavedJobs = lazy(() => import('./pages/SavedJobs'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const SuccessStories = lazy(() => import('./pages/SuccessStories'));
 
 // Loading component
 const PageLoader = () => (
@@ -54,6 +57,11 @@ function App() {
             <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
             <Route path="/resume-assistant" element={<ProtectedRoute><ResumeAssistant /></ProtectedRoute>} />
             <Route path="/saved-jobs" element={<ProtectedRoute><SavedJobs /></ProtectedRoute>} />
+            <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
+            <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
+            
+            {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </AuthProvider>

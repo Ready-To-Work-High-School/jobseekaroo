@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, Menu, X, BarChart2, Briefcase, Book, 
-  FileText, Search, BookmarkCheck, User
+  FileText, Search, BookmarkCheck, User, Home
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -53,6 +53,7 @@ const Layout = ({ children }: LayoutProps) => {
   const isEmployer = userProfile?.user_type === 'employer';
 
   const mobileNavItems = [
+    { href: "/", label: "Home", icon: Home },
     { href: "/jobs", label: "Find Jobs", icon: Search },
     ...(user ? [
       { href: "/applications", label: "Applications", icon: FileText },
@@ -66,6 +67,17 @@ const Layout = ({ children }: LayoutProps) => {
     ] : [
       { href: "/for-employers", label: "For Employers", icon: Briefcase },
     ]),
+  ];
+
+  // Bottom navigation links
+  const bottomNavLinks = [
+    { href: "/", label: "Home" },
+    { href: "/jobs", label: "Jobs" },
+    { href: "/resources", label: "Resources" },
+    { href: "/skills", label: "Skills" },
+    { href: "/for-employers", label: "For Employers" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/success-stories", label: "Success Stories" },
   ];
 
   return (
@@ -83,7 +95,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <SheetContent side="left" className="w-[250px] sm:w-[300px]">
                   <div className="flex flex-col gap-6 py-4">
                     <Link to="/" className="font-bold text-lg px-2">
-                      Jobly
+                      Job Seekers 4 High Schools
                     </Link>
                     
                     <nav className="flex flex-col space-y-1">
@@ -123,13 +135,17 @@ const Layout = ({ children }: LayoutProps) => {
               </Sheet>
             )}
             
-            <Link to="/" className="font-bold text-lg">
-              Jobly
+            <Link to="/" className="font-bold text-lg flex items-center gap-2">
+              <Home className="h-5 w-5" />
+              <span>Job Seekers 4 High Schools</span>
             </Link>
           </div>
           
           <div className="flex items-center space-x-4">
             <nav className="hidden md:flex items-center space-x-4">
+              <Link to="/" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/' ? 'text-primary' : 'text-foreground')}>
+                Home
+              </Link>
               <Link to="/jobs" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/jobs' ? 'text-primary' : 'text-foreground')}>
                 Jobs
               </Link>
@@ -226,11 +242,29 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="flex-1">
         {children}
       </main>
+      
+      {/* Bottom Navigation Links */}
+      <div className="bg-muted py-4 border-t">
+        <div className="container mx-auto px-4">
+          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {bottomNavLinks.map((link) => (
+              <Link 
+                key={link.href} 
+                to={link.href}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </div>
+      
       <footer className="bg-secondary border-t py-6">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-bold text-lg mb-3">Jobly</h3>
+              <h3 className="font-bold text-lg mb-3">Job Seekers 4 High Schools</h3>
               <p className="text-sm text-muted-foreground">
                 Connecting students with credential-ready opportunities.
               </p>
@@ -261,7 +295,7 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
           <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
             <p>
-              &copy; {new Date().getFullYear()} Jobly. All rights reserved.
+              &copy; {new Date().getFullYear()} Job Seekers 4 High Schools. All rights reserved.
             </p>
           </div>
         </div>

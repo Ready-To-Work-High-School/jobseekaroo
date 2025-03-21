@@ -143,7 +143,7 @@ const Navbar = () => {
                 </SheetHeader>
                 <nav className="flex flex-col border-t">
                   <MobileNavLink to="/">
-                    <Briefcase className="h-5 w-5" />
+                    <Home className="h-5 w-5" />
                     Home
                   </MobileNavLink>
                   <MobileNavLink to="/jobs">
@@ -212,8 +212,8 @@ const Navbar = () => {
           )}
           
           <Link to="/" className="flex items-center gap-2">
-            <Briefcase className="h-6 w-6 text-primary" aria-hidden="true" />
-            <span className="text-xl font-bold">Job<span className="text-primary">Match</span></span>
+            <Home className="h-6 w-6 text-primary" aria-hidden="true" />
+            <span className="text-xl font-bold">Job Seekers 4 High Schools</span>
           </Link>
 
           {!isMobile && (
