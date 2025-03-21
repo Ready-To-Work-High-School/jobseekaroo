@@ -7,9 +7,11 @@ import { JobRecommendation } from '@/types/user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Sparkles, ChevronRight, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import LoadingSpinner from './ui/LoadingSpinner';
+import ErrorMessage from './ui/ErrorMessage';
 
 interface JobRecommendationsProps {
   limit?: number;
@@ -23,57 +25,62 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
   const { user } = useAuth();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (!user) return;
+  const fetchRecommendations = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Fetch recommendations from Supabase
+      const recommendationsData = await getJobRecommendations(user.id);
       
-      setLoading(true);
-      setError(null);
+      if (recommendationsData.length === 0) {
+        console.log('No recommendations found for user:', user.id);
+      } else {
+        console.log(`Found ${recommendationsData.length} recommendations for user:`, user.id);
+      }
       
-      try {
-        // Fetch recommendations from Supabase
-        const recommendationsData = await getJobRecommendations(user.id);
-        
-        if (recommendationsData.length === 0) {
-          console.log('No recommendations found for user:', user.id);
-        } else {
-          console.log(`Found ${recommendationsData.length} recommendations for user:`, user.id);
-        }
-        
-        // Get the job details for each recommendation
-        const recommendationsWithJobs = await Promise.all(
-          recommendationsData.slice(0, limit).map(async (rec) => {
+      // Get the job details for each recommendation
+      const recommendationsWithJobs = await Promise.all(
+        recommendationsData.slice(0, limit).map(async (rec) => {
+          try {
             const job = await getJobById(rec.job_id);
             return { ...rec, job };
-          })
-        );
-        
-        // Filter out any recommendations where we couldn't find the job
-        const validRecommendations = recommendationsWithJobs.filter(rec => rec.job) as (JobRecommendation & { job: Job })[];
-        
-        if (validRecommendations.length === 0 && recommendationsData.length > 0) {
-          console.warn('Could not find job details for any recommendations');
-          toast({
-            title: "Job data issue",
-            description: "Could not load job details for your recommendations",
-            variant: "destructive",
-          });
-        }
-        
-        setRecommendations(validRecommendations);
-      } catch (error) {
-        console.error('Error fetching job recommendations:', error);
-        setError('Failed to load job recommendations');
+          } catch (err) {
+            console.error(`Error fetching job ${rec.job_id}:`, err);
+            return { ...rec, job: undefined };
+          }
+        })
+      );
+      
+      // Filter out any recommendations where we couldn't find the job
+      const validRecommendations = recommendationsWithJobs.filter(rec => rec.job) as (JobRecommendation & { job: Job })[];
+      
+      if (validRecommendations.length === 0 && recommendationsData.length > 0) {
+        console.warn('Could not find job details for any recommendations');
         toast({
-          title: "Error",
-          description: "Failed to load job recommendations",
+          title: "Job data issue",
+          description: "Could not load job details for your recommendations",
           variant: "destructive",
         });
-      } finally {
-        setLoading(false);
       }
-    };
-    
+      
+      setRecommendations(validRecommendations);
+    } catch (error: any) {
+      console.error('Error fetching job recommendations:', error);
+      setError(error.message || 'Failed to load job recommendations');
+      toast({
+        title: "Error",
+        description: "Failed to load job recommendations",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchRecommendations();
   }, [user, limit, toast]);
 
@@ -87,9 +94,7 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-center py-6">
-            <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-          </div>
+          <LoadingSpinner className="py-6" />
         </CardContent>
       </Card>
     );
@@ -105,10 +110,15 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center py-6 text-destructive gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            <span>{error}</span>
-          </div>
+          <ErrorMessage message={error} />
+          <Button 
+            variant="outline" 
+            className="w-full mt-4"
+            onClick={fetchRecommendations}
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Try Again
+          </Button>
         </CardContent>
       </Card>
     );

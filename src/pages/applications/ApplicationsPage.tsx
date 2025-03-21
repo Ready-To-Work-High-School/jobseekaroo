@@ -15,11 +15,15 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ApplicationsHeader } from './ApplicationsHeader';
 import { AddApplicationDialog } from './AddApplicationDialog';
 import { NoApplicationsFound } from './NoApplicationsFound';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 const ApplicationsPage = () => {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<JobApplication[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<ApplicationStatus | 'all'>('all');
@@ -37,13 +41,18 @@ const ApplicationsPage = () => {
   }, [user, navigate]);
 
   const loadApplications = async () => {
-    setIsLoading(true);
+    if (isRefreshing) return;
+    
+    setIsRefreshing(true);
+    setError(null);
+    
     try {
       const appData = await getApplications();
       setApplications(appData);
       updateStatusCounts(appData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading applications:', error);
+      setError(error.message || 'Failed to load applications');
       toast({
         title: 'Error',
         description: 'Failed to load applications',
@@ -51,6 +60,7 @@ const ApplicationsPage = () => {
       });
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -107,10 +117,16 @@ const ApplicationsPage = () => {
         <div className="flex flex-col gap-6">
           <ApplicationsHeader 
             onAddApplication={() => setShowAddDialog(true)}
-            onRefresh={loadApplications}
+            onRefresh={() => {
+              setIsRefreshing(true);
+              loadApplications();
+            }}
+            isRefreshing={isRefreshing}
           />
 
-          {applications.length > 0 && (
+          {error && <ErrorMessage message={error} />}
+
+          {applications.length > 0 && !isLoading && !error && (
             <ApplicationStats 
               statusCounts={statusCounts} 
               totalApplications={applications.length}
@@ -125,12 +141,13 @@ const ApplicationsPage = () => {
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                disabled={isLoading}
               />
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground hidden md:inline">Filter:</span>
             </div>
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} disabled={isLoading}>
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="applied">Applied</TabsTrigger>
@@ -142,8 +159,10 @@ const ApplicationsPage = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <LoadingSpinner size="large" className="py-12" />
+          ) : error ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Button onClick={loadApplications} variant="outline">Try Again</Button>
             </div>
           ) : filteredApplications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
