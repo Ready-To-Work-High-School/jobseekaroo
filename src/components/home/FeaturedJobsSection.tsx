@@ -107,9 +107,11 @@ const FeaturedJobsSection = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {featuredJobs.map((job, index) => (
-              <JobCard job={job} key={job.id} index={index} />
+              <div key={job.id} className={`${index === 0 ? 'border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow' : 'border-amber-400 border-2 rounded-lg overflow-hidden hover:shadow-xl transition-shadow'}`}>
+                <JobCard job={job} index={index} />
+              </div>
             ))}
           </div>
         )}
