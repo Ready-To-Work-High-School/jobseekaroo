@@ -9,6 +9,7 @@ import ResourcesSection from '@/components/home/ResourcesSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import SearchSection from '@/components/home/SearchSection';
 import SectionSeparator from '@/components/home/SectionSeparator';
+import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 
 const Index = () => {
   const { user } = useAuth();
@@ -27,8 +28,14 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Search Section - moved up since Featured Jobs was removed */}
+        {/* Search Section */}
         <SearchSection />
+        
+        {/* Featured Jobs Section */}
+        <FeaturedJobsSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
         
         {/* User-specific recommendation section */}
         {user && (
