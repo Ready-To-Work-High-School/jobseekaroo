@@ -5,11 +5,10 @@ import { ApplicationStatus } from '@/types/application';
 export const validateApplicationStatus = (status: string): ApplicationStatus => {
   const validStatuses: ApplicationStatus[] = [
     'applied',
-    'reviewing',
-    'interview',
-    'offer',
-    'rejected',
+    'interviewing',
+    'offered',
     'accepted',
+    'rejected',
     'withdrawn'
   ];
   

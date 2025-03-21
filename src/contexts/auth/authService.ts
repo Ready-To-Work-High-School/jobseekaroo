@@ -38,7 +38,7 @@ export const signUp = async (
   }
 };
 
-export const signInWithApple = async () => {
+export const signInWithApple = async (): Promise<void> => {
   try {
     const redirectUrl = getRedirectUrl();
     console.log(`Redirecting to: ${redirectUrl}`);
@@ -51,7 +51,6 @@ export const signInWithApple = async () => {
     });
     
     if (error) throw error;
-    return true;
   } catch (error) {
     console.error('Error signing in with Apple:', error);
     throw error;

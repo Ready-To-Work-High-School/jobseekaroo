@@ -145,15 +145,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const handleSignInWithApple = async () => {
+    try {
+      await signInWithApple();
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Methods that require the user id
   const handleSaveJob = async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to save jobs');
-    return saveJob(user.id, jobId);
+    await saveJob(user.id, jobId);
   };
 
   const handleUnsaveJob = async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to unsave jobs');
-    return unsaveJob(user.id, jobId);
+    await unsaveJob(user.id, jobId);
   };
 
   const handleIsSavedJob = async (jobId: string) => {
@@ -197,7 +205,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn: handleSignIn,
     signUp: handleSignUp,
     signOut: handleSignOut,
-    signInWithApple,
+    signInWithApple: handleSignInWithApple,
     saveJob: handleSaveJob,
     unsaveJob: handleUnsaveJob,
     isSavedJob: handleIsSavedJob,
