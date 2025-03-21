@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 const EntrepreneurshipStoreSection = () => {
@@ -6,7 +7,24 @@ const EntrepreneurshipStoreSection = () => {
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-full md:w-1/3 flex-shrink-0">
-              
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col items-center">
+                  <img src="/lovable-uploads/7a8cdc49-c423-4d1d-ba37-61d9420a1056.png" alt="Microsoft Certified Fundamentals" className="h-24 w-auto object-contain mb-2" />
+                  <span className="text-xs text-center font-medium">Microsoft Certified Fundamentals</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-24 w-auto object-contain mb-2" />
+                  <span className="text-xs text-center font-medium">AI Fundamentals<br />IBM SkillsBuild</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" alt="Entrepreneurship Business Essentials" className="h-24 w-auto object-contain mb-2" />
+                  <span className="text-xs text-center font-medium">Business Essentials<br />IBM SkillsBuild</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" alt="Explore Emerging Tech" className="h-24 w-auto object-contain mb-2" />
+                  <span className="text-xs text-center font-medium">Emerging Tech<br />IBM SkillsBuild</span>
+                </div>
+              </div>
             </div>
             
             <div className="w-full md:w-2/3">
@@ -27,24 +45,6 @@ const EntrepreneurshipStoreSection = () => {
                 
                 <div className="mt-6">
                   <h4 className="text-lg font-bold text-blue-800 mb-3">Industry-Recognized Certifications</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/7a8cdc49-c423-4d1d-ba37-61d9420a1056.png" alt="Microsoft Certified Fundamentals" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">Microsoft Certified Fundamentals</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">AI Fundamentals<br />IBM SkillsBuild</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" alt="Entrepreneurship Business Essentials" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">Business Essentials<br />IBM SkillsBuild</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <img src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" alt="Explore Emerging Tech" className="h-24 w-auto object-contain mb-2" />
-                      <span className="text-xs text-center font-medium">Emerging Tech<br />IBM SkillsBuild</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
