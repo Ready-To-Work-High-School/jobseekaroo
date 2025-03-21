@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useJobFilter } from './JobFilterContext';
+import { RefreshCw } from 'lucide-react';
 
 interface FilterHeaderProps {
   title: string;
@@ -17,7 +18,9 @@ const FilterHeader = ({ title }: FilterHeaderProps) => {
         size="sm" 
         onClick={resetFilters}
         disabled={appliedFilters.length === 0}
+        className="gap-1"
       >
+        <RefreshCw className="h-3 w-3" />
         Reset All
       </Button>
     </div>
