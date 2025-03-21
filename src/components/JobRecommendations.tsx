@@ -8,8 +8,9 @@ import { JobRecommendation } from '@/types/user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ChevronRight } from 'lucide-react';
+import { Sparkles, ChevronRight, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface JobRecommendationsProps {
   limit?: number;
@@ -19,15 +20,26 @@ interface JobRecommendationsProps {
 export default function JobRecommendations({ limit = 3, showReason = true }: JobRecommendationsProps) {
   const [recommendations, setRecommendations] = useState<(JobRecommendation & { job?: Job })[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       if (!user) return;
       
       setLoading(true);
+      setError(null);
+      
       try {
+        // Fetch recommendations from Supabase
         const recommendationsData = await getJobRecommendations(user.id);
+        
+        if (recommendationsData.length === 0) {
+          console.log('No recommendations found for user:', user.id);
+        } else {
+          console.log(`Found ${recommendationsData.length} recommendations for user:`, user.id);
+        }
         
         // Get the job details for each recommendation
         const recommendationsWithJobs = await Promise.all(
@@ -37,16 +49,34 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
           })
         );
         
-        setRecommendations(recommendationsWithJobs.filter(rec => rec.job) as (JobRecommendation & { job: Job })[]);
+        // Filter out any recommendations where we couldn't find the job
+        const validRecommendations = recommendationsWithJobs.filter(rec => rec.job) as (JobRecommendation & { job: Job })[];
+        
+        if (validRecommendations.length === 0 && recommendationsData.length > 0) {
+          console.warn('Could not find job details for any recommendations');
+          toast({
+            title: "Job data issue",
+            description: "Could not load job details for your recommendations",
+            variant: "destructive",
+          });
+        }
+        
+        setRecommendations(validRecommendations);
       } catch (error) {
         console.error('Error fetching job recommendations:', error);
+        setError('Failed to load job recommendations');
+        toast({
+          title: "Error",
+          description: "Failed to load job recommendations",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
     
     fetchRecommendations();
-  }, [user, limit]);
+  }, [user, limit, toast]);
 
   if (loading) {
     return (
@@ -60,6 +90,25 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
         <CardContent>
           <div className="flex justify-center py-6">
             <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-amber-500" />
+            Recommended Jobs
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-6 text-destructive gap-2">
+            <AlertTriangle className="h-5 w-5" />
+            <span>{error}</span>
           </div>
         </CardContent>
       </Card>

@@ -71,17 +71,21 @@ export async function updateUserProfile(userId: string, profileData: Partial<{
 
 // Helper to get job recommendations for a user
 export async function getJobRecommendations(userId: string) {
-  const { data, error } = await supabase
-    .from('job_recommendations')
-    .select('*')
-    .eq('user_id', userId)
-    .order('score', { ascending: false });
-  
-  if (error) {
-    console.error('Error fetching job recommendations:', error);
+  try {
+    const { data, error } = await supabase
+      .from('job_recommendations')
+      .select('*')
+      .eq('user_id', userId)
+      .order('score', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching job recommendations:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Exception fetching job recommendations:', error);
     return [];
   }
-  
-  return data;
 }
-
