@@ -17,16 +17,11 @@ const Hero = () => {
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       <div className="max-w-3xl mx-auto py-8 mt-10">
-        <div className={cn("relative mb-8", titleAnimation)}>
-          <div className="absolute -inset-1 bg-gradient-to-r from-amber-600 to-amber-500 rounded-lg blur-md opacity-75"></div>
-          <div className="relative bg-white rounded-lg p-5 border border-amber-300 shadow-md">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
-                Find the perfect entry level job for credential holders
-              </span>
-            </h1>
-          </div>
-        </div>
+        <h1 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight mt-6", titleAnimation)}>
+          <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+            Find the perfect entry level job for credential holders
+          </span>
+        </h1>
         
         <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>
           Many jobs offer competitive salaries, opportunities for growth and professional development, and long-term career potential.
