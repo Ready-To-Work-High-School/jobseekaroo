@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 const CredentialsBadges = () => {
   const badges = [
@@ -35,6 +36,20 @@ const CredentialsBadges = () => {
 
   return (
     <div className="p-8 rounded-xl shadow-xl border-2 border-blue-200 bg-gradient-to-br from-sky-100 to-blue-100">
+      {/* Fancy border above High School Scholars Distinction */}
+      <div className="mb-8">
+        <div className="relative py-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t-4 border-dashed border-amber-400"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <div className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-white font-bold shadow-md">
+              Scholar Achievement
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <SectionHeading 
         eyebrow="" 
         title="High School Scholars Distinction" 
