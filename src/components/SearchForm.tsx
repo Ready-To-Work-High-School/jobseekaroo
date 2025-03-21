@@ -1,12 +1,8 @@
 
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { JobType, ExperienceLevel } from '@/types/job';
-import { toast } from '@/components/ui/use-toast';
 import FilterButton from './search/FilterButton';
 import RadiusSelector from './search/RadiusSelector';
+import { useJobSearch } from '@/hooks/useJobSearch';
 
 interface SearchFormProps {
   className?: string;
@@ -21,118 +17,28 @@ const SearchForm = ({
   initialZipCode = '',
   initialRadius = 0
 }: SearchFormProps) => {
-  const [searchParams] = useSearchParams();
-  const [zipCode, setZipCode] = useState(initialZipCode);
-  const [radius, setRadius] = useState(initialRadius);
-  const [isValid, setIsValid] = useState(true);
-  const [showRadius, setShowRadius] = useState(initialRadius > 0);
-  const navigate = useNavigate();
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  
-  // Advanced filters state
-  const [jobType, setJobType] = useState<JobType | 'all'>('all');
-  const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | 'all'>('all');
-  const [isRemote, setIsRemote] = useState<boolean | null>(null);
-  const [isFlexible, setIsFlexible] = useState<boolean | null>(null);
-  const [appliedFiltersCount, setAppliedFiltersCount] = useState(0);
-
-  useEffect(() => {
-    // Initialize filters from URL params
-    const jobTypeParam = searchParams.get('jobType') as JobType | 'all';
-    const expLevelParam = searchParams.get('experienceLevel') as ExperienceLevel | 'all';
-    const remoteParam = searchParams.has('remote') ? searchParams.get('remote') === 'true' : null;
-    const flexibleParam = searchParams.has('flexible') ? searchParams.get('flexible') === 'true' : null;
-    
-    if (jobTypeParam) setJobType(jobTypeParam || 'all');
-    if (expLevelParam) setExperienceLevel(expLevelParam || 'all');
-    setIsRemote(remoteParam);
-    setIsFlexible(flexibleParam);
-    
-    // Count applied filters
-    let count = 0;
-    if (jobTypeParam && jobTypeParam !== 'all') count++;
-    if (expLevelParam && expLevelParam !== 'all') count++;
-    if (remoteParam !== null) count++;
-    if (flexibleParam !== null) count++;
-    setAppliedFiltersCount(count);
-  }, [searchParams]);
-
-  const validateZipCode = (zip: string) => {
-    // Basic validation for US zip code (5 digits)
-    return /^\d{5}$/.test(zip);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!zipCode.trim()) {
-      setIsValid(false);
-      return;
-    }
-    
-    const isZipValid = validateZipCode(zipCode);
-    setIsValid(isZipValid);
-    
-    if (isZipValid) {
-      const params = new URLSearchParams(searchParams);
-      params.set('zipCode', zipCode);
-      
-      if (radius > 0) {
-        params.set('radius', radius.toString());
-      } else {
-        params.delete('radius');
-      }
-      
-      // Add advanced filters to URL
-      if (jobType !== 'all') {
-        params.set('jobType', jobType);
-      } else {
-        params.delete('jobType');
-      }
-      
-      if (experienceLevel !== 'all') {
-        params.set('experienceLevel', experienceLevel);
-      } else {
-        params.delete('experienceLevel');
-      }
-      
-      if (isRemote !== null) {
-        params.set('remote', isRemote.toString());
-      } else {
-        params.delete('remote');
-      }
-      
-      if (isFlexible !== null) {
-        params.set('flexible', isFlexible.toString());
-      } else {
-        params.delete('flexible');
-      }
-      
-      navigate(`/jobs?${params.toString()}`);
-      toast({
-        title: "Search updated",
-        description: "Your job search has been updated with new filters"
-      });
-    }
-  };
-
-  const toggleRadius = () => {
-    setShowRadius(!showRadius);
-    if (!showRadius) {
-      setRadius(10); // Default radius when toggled on
-    } else {
-      setRadius(0); // Reset radius when toggled off
-    }
-  };
-
-  const resetFilters = () => {
-    setJobType('all');
-    setExperienceLevel('all');
-    setIsRemote(null);
-    setIsFlexible(null);
-    setAppliedFiltersCount(0);
-    setIsFilterOpen(false);
-  };
+  const {
+    zipCode,
+    setZipCode,
+    radius,
+    setRadius,
+    isValid,
+    showRadius,
+    toggleRadius,
+    isFilterOpen,
+    setIsFilterOpen,
+    jobType,
+    setJobType,
+    experienceLevel,
+    setExperienceLevel,
+    isRemote,
+    setIsRemote,
+    isFlexible,
+    setIsFlexible,
+    appliedFiltersCount,
+    handleSubmit,
+    resetFilters
+  } = useJobSearch({ initialZipCode, initialRadius });
 
   return (
     <form 
