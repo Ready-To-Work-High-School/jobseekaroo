@@ -3,16 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import JobFeaturesFilter from '../JobFeaturesFilter';
 import { vi } from 'vitest';
 
-// Mock the JobFilterContext to avoid errors
-vi.mock('../JobFilterContext', () => ({
-  useJobFilter: () => ({
-    isRemote: null,
-    setIsRemote: vi.fn(),
-    isFlexible: null,
-    setIsFlexible: vi.fn(),
-  }),
-}));
-
 describe('JobFeaturesFilter', () => {
   const mockSetIsRemote = vi.fn();
   const mockSetIsFlexible = vi.fn();

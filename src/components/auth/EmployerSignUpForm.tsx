@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NavigateFunction } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -33,10 +34,8 @@ type EmployerSignUpValues = z.infer<typeof employerSignUpSchema>;
 
 interface EmployerSignUpFormProps {
   isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
   isAppleLoading: boolean;
   handleAppleSignIn: () => Promise<void>;
-  navigate: NavigateFunction;
 }
 
 const employerBenefits = [
@@ -76,13 +75,12 @@ const employerBenefits = [
 
 const EmployerSignUpForm = ({
   isLoading,
-  setIsLoading,
   isAppleLoading,
   handleAppleSignIn,
-  navigate,
 }: EmployerSignUpFormProps) => {
   const { signUp } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<EmployerSignUpValues>({
     resolver: zodResolver(employerSignUpSchema),
@@ -97,8 +95,8 @@ const EmployerSignUpForm = ({
   });
 
   const onSubmit = async (values: EmployerSignUpValues) => {
-    setIsLoading(true);
     try {
+      // Additional employer-specific logic could go here
       await signUp(
         values.email, 
         values.password, 
@@ -109,7 +107,7 @@ const EmployerSignUpForm = ({
         title: "Employer account created",
         description: "You have successfully created an employer account",
       });
-      setIsLoading(false);
+      navigate('/');
     } catch (error: any) {
       console.error(error);
       toast({
@@ -117,7 +115,6 @@ const EmployerSignUpForm = ({
         description: error.message || "Failed to create employer account. Please try again.",
         variant: "destructive",
       });
-      setIsLoading(false);
     }
   };
 

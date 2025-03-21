@@ -1,18 +1,14 @@
 
 import { Button } from '@/components/ui/button';
+import { Briefcase } from 'lucide-react';
 import { JobType } from '@/types/job';
-import { useJobFilter } from './JobFilterContext';
 
 interface JobTypeFilterProps {
-  jobType?: JobType | 'all';
-  setJobType?: (type: JobType | 'all') => void;
+  jobType: JobType | 'all';
+  setJobType: (type: JobType | 'all') => void;
 }
 
-const JobTypeFilter = (props: JobTypeFilterProps = {}) => {
-  // If props are provided, use them, otherwise use the context
-  const context = useJobFilter();
-  const { jobType = context.jobType, setJobType = context.setJobType } = props;
-  
+const JobTypeFilter = ({ jobType, setJobType }: JobTypeFilterProps) => {
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-medium">Job Type</h4>
@@ -24,16 +20,8 @@ const JobTypeFilter = (props: JobTypeFilterProps = {}) => {
           onClick={() => setJobType('all')}
           className="justify-start"
         >
+          <Briefcase className="mr-2 h-3.5 w-3.5" />
           All Types
-        </Button>
-        <Button 
-          type="button" 
-          variant={jobType === 'full-time' ? "default" : "outline"}
-          size="sm"
-          onClick={() => setJobType('full-time')}
-          className="justify-start"
-        >
-          Full Time
         </Button>
         <Button 
           type="button" 
@@ -42,16 +30,28 @@ const JobTypeFilter = (props: JobTypeFilterProps = {}) => {
           onClick={() => setJobType('part-time')}
           className="justify-start"
         >
+          <Briefcase className="mr-2 h-3.5 w-3.5" />
           Part Time
         </Button>
         <Button 
           type="button" 
-          variant={jobType === 'contract' ? "default" : "outline"}
+          variant={jobType === 'full-time' ? "default" : "outline"}
           size="sm"
-          onClick={() => setJobType('contract')}
+          onClick={() => setJobType('full-time')}
           className="justify-start"
         >
-          Contract
+          <Briefcase className="mr-2 h-3.5 w-3.5" />
+          Full Time
+        </Button>
+        <Button 
+          type="button" 
+          variant={jobType === 'internship' ? "default" : "outline"}
+          size="sm"
+          onClick={() => setJobType('internship')}
+          className="justify-start"
+        >
+          <Briefcase className="mr-2 h-3.5 w-3.5" />
+          Internship
         </Button>
       </div>
     </div>

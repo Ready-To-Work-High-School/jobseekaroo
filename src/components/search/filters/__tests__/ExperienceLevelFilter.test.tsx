@@ -3,14 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ExperienceLevelFilter from '../ExperienceLevelFilter';
 import { vi } from 'vitest';
 
-// Mock the JobFilterContext to avoid errors
-vi.mock('../JobFilterContext', () => ({
-  useJobFilter: () => ({
-    experienceLevel: 'all',
-    setExperienceLevel: vi.fn(),
-  }),
-}));
-
 describe('ExperienceLevelFilter', () => {
   const mockSetExperienceLevel = vi.fn();
   

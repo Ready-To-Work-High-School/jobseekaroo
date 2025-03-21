@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
@@ -8,9 +8,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { JobType, ExperienceLevel } from '@/types/job';
 import { Briefcase, Clock, DollarSign } from 'lucide-react';
 
-// Import our refactored filter components
+// Import our new filter components
 import { JobFilterProvider } from '@/components/search/filters/JobFilterContext';
 import FilterHeader from '@/components/search/filters/FilterHeader';
 import AppliedFilters from '@/components/search/filters/AppliedFilters';
@@ -28,6 +29,94 @@ interface JobFilterProps {
 }
 
 const JobFilter = ({ className, onFilterChange }: JobFilterProps) => {
+  const [searchParams] = useSearchParams();
+  
+  // Filter states
+  const [jobType, setJobType] = useState<JobType | 'all'>('all');
+  const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | 'all'>('all');
+  const [isRemote, setIsRemote] = useState<boolean | null>(null);
+  const [isFlexible, setIsFlexible] = useState<boolean | null>(null);
+  const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 100000]);
+  const [postedWithin, setPostedWithin] = useState<number | null>(null);
+  const [keyword, setKeyword] = useState('');
+  const [appliedFilters, setAppliedFilters] = useState<Array<{key: string, value: string}>>([]);
+  
+  // Initialize filters from URL
+  useEffect(() => {
+    const jobTypeParam = searchParams.get('jobType') as JobType | 'all';
+    const expLevelParam = searchParams.get('experienceLevel') as ExperienceLevel | 'all';
+    const remoteParam = searchParams.has('remote') ? searchParams.get('remote') === 'true' : null;
+    const flexibleParam = searchParams.has('flexible') ? searchParams.get('flexible') === 'true' : null;
+    const salaryMinParam = searchParams.get('salaryMin');
+    const salaryMaxParam = searchParams.get('salaryMax');
+    const postedWithinParam = searchParams.get('postedWithin');
+    const keywordParam = searchParams.get('keyword') || '';
+    
+    if (jobTypeParam) setJobType(jobTypeParam);
+    if (expLevelParam) setExperienceLevel(expLevelParam);
+    setIsRemote(remoteParam);
+    setIsFlexible(flexibleParam);
+    
+    if (salaryMinParam && salaryMaxParam) {
+      setSalaryRange([parseInt(salaryMinParam), parseInt(salaryMaxParam)]);
+    }
+    
+    if (postedWithinParam) {
+      setPostedWithin(parseInt(postedWithinParam));
+    }
+    
+    setKeyword(keywordParam);
+    
+    // Update applied filters for badge display
+    const newAppliedFilters: Array<{key: string, value: string}> = [];
+    
+    if (jobTypeParam && jobTypeParam !== 'all') {
+      newAppliedFilters.push({ 
+        key: 'jobType', 
+        value: jobTypeParam.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())
+      });
+    }
+    
+    if (expLevelParam && expLevelParam !== 'all') {
+      newAppliedFilters.push({ 
+        key: 'experienceLevel', 
+        value: expLevelParam.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())
+      });
+    }
+    
+    if (remoteParam !== null) {
+      newAppliedFilters.push({ key: 'remote', value: 'Remote' });
+    }
+    
+    if (flexibleParam !== null) {
+      newAppliedFilters.push({ key: 'flexible', value: 'Flexible Schedule' });
+    }
+    
+    if (salaryMinParam && salaryMaxParam) {
+      newAppliedFilters.push({ key: 'salary', value: `$${parseInt(salaryMinParam)/1000}k - $${parseInt(salaryMaxParam)/1000}k` });
+    }
+    
+    if (postedWithinParam) {
+      const POST_DATE_OPTIONS = [
+        { value: 1, label: 'Last 24 hours' },
+        { value: 7, label: 'Last week' },
+        { value: 14, label: 'Last 2 weeks' },
+        { value: 30, label: 'Last month' },
+        { value: 90, label: 'Last 3 months' },
+      ];
+      const dateOption = POST_DATE_OPTIONS.find(option => option.value.toString() === postedWithinParam);
+      if (dateOption) {
+        newAppliedFilters.push({ key: 'postedWithin', value: dateOption.label });
+      }
+    }
+    
+    if (keywordParam) {
+      newAppliedFilters.push({ key: 'keyword', value: `"${keywordParam}"` });
+    }
+    
+    setAppliedFilters(newAppliedFilters);
+  }, [searchParams]);
+  
   return (
     <JobFilterProvider onFilterChange={onFilterChange}>
       <div className={cn("rounded-lg bg-white border p-4 shadow-sm", className)}>
@@ -47,7 +136,10 @@ const JobFilter = ({ className, onFilterChange }: JobFilterProps) => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <JobTypeFilter />
+              <JobTypeFilter 
+                jobType={jobType} 
+                setJobType={setJobType} 
+              />
             </AccordionContent>
           </AccordionItem>
           
@@ -64,7 +156,10 @@ const JobFilter = ({ className, onFilterChange }: JobFilterProps) => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ExperienceLevelFilter />
+              <ExperienceLevelFilter 
+                experienceLevel={experienceLevel} 
+                setExperienceLevel={setExperienceLevel} 
+              />
             </AccordionContent>
           </AccordionItem>
           
@@ -82,7 +177,12 @@ const JobFilter = ({ className, onFilterChange }: JobFilterProps) => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <JobFeaturesFilter />
+              <JobFeaturesFilter 
+                isRemote={isRemote} 
+                setIsRemote={setIsRemote}
+                isFlexible={isFlexible}
+                setIsFlexible={setIsFlexible}
+              />
             </AccordionContent>
           </AccordionItem>
           
