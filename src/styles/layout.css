@@ -1,13 +1,15 @@
 
+/* Remove the max-width from the root element to allow proper routing */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
   #root {
-    max-width: 100%;
-    padding: 1rem;
+    padding: 0;
   }
   
   .card {
@@ -17,15 +19,13 @@
 
 @media (min-width: 769px) and (max-width: 1280px) {
   #root {
-    max-width: 1024px;
-    padding: 1.5rem;
+    padding: 0;
   }
 }
 
 @media (min-width: 1281px) {
   #root {
-    max-width: 1280px;
-    padding: 2rem;
+    padding: 0;
   }
 }
 
