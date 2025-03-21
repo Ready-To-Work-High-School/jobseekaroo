@@ -23,6 +23,9 @@ const buttonVariants = cva(
         brand: "bg-brand-500 text-white hover:bg-brand-600 shadow-sm",
         subtle: "bg-muted hover:bg-muted/80 text-muted-foreground",
         gradient: "bg-gradient-to-r from-primary to-brand-600 text-white hover:shadow-md hover:brightness-105",
+        success: "bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm",
+        info: "bg-blue-500 text-white hover:bg-blue-600 shadow-sm",
+        warning: "bg-yellow-500 text-white hover:bg-yellow-600 shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -1,10 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Layout from '@/components/Layout';
-import { supabase } from '@/integrations/supabase/client';
 import {
   Card,
   CardContent,
@@ -30,9 +30,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Bookmark, UserCircle, Briefcase } from 'lucide-react';
+import { Bookmark, UserCircle, Briefcase, Settings, BookOpen, Plus, X } from 'lucide-react';
 import { useFadeIn } from '@/utils/animations';
 import JobCard from '@/components/JobCard';
 import { Job } from '@/types/job';
@@ -46,6 +47,7 @@ const profileSchema = z.object({
   bio: z.string().optional(),
   location: z.string().optional(),
   phone: z.string().optional(),
+  newSkill: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -55,7 +57,9 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const [savedJobs, setSavedJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const { user, getSavedJobs } = useAuth();
+  const [skills, setSkills] = useState<string[]>([]);
+  const [newSkill, setNewSkill] = useState('');
+  const { user, userProfile, getSavedJobs, updateProfile, profileLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const animation = useFadeIn(200);
@@ -63,12 +67,13 @@ const Profile = () => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: user?.user_metadata?.first_name || '',
-      lastName: user?.user_metadata?.last_name || '',
+      firstName: '',
+      lastName: '',
       email: user?.email || '',
-      bio: user?.user_metadata?.bio || '',
-      location: user?.user_metadata?.location || '',
-      phone: user?.user_metadata?.phone || '',
+      bio: '',
+      location: '',
+      phone: '',
+      newSkill: '',
     },
   });
 
@@ -79,17 +84,20 @@ const Profile = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    if (user) {
+    if (userProfile) {
       form.reset({
-        firstName: user.user_metadata?.first_name || '',
-        lastName: user.user_metadata?.last_name || '',
-        email: user.email || '',
-        bio: user.user_metadata?.bio || '',
-        location: user.user_metadata?.location || '',
-        phone: user.user_metadata?.phone || '',
+        firstName: userProfile.first_name || '',
+        lastName: userProfile.last_name || '',
+        email: user?.email || '',
+        bio: userProfile.bio || '',
+        location: userProfile.location || '',
+        phone: user?.user_metadata?.phone || '',
+        newSkill: '',
       });
+      
+      setSkills(userProfile.skills || []);
     }
-  }, [user, form]);
+  }, [userProfile, user, form]);
 
   useEffect(() => {
     const fetchSavedJobs = async () => {
@@ -115,17 +123,23 @@ const Profile = () => {
   const onSubmit = async (values: ProfileFormValues) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.updateUser({
+      // Update profile in Supabase
+      await updateProfile({
+        first_name: values.firstName,
+        last_name: values.lastName,
+        bio: values.bio || null,
+        location: values.location || null,
+        skills: skills,
+      });
+      
+      // Update user metadata
+      await supabase.auth.updateUser({
         data: {
           first_name: values.firstName,
           last_name: values.lastName,
-          bio: values.bio,
-          location: values.location,
           phone: values.phone,
         }
       });
-      
-      if (error) throw error;
       
       toast({
         title: "Profile updated",
@@ -142,6 +156,28 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
+
+  const handleAddSkill = () => {
+    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+      const updatedSkills = [...skills, newSkill.trim()];
+      setSkills(updatedSkills);
+      setNewSkill('');
+    }
+  };
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    setSkills(skills.filter(skill => skill !== skillToRemove));
+  };
+
+  if (profileLoading) {
+    return (
+      <Layout>
+        <div className="container max-w-4xl py-8 flex items-center justify-center min-h-[60vh]">
+          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -274,6 +310,45 @@ const Profile = () => {
                           </FormItem>
                         )}
                       />
+                      
+                      <div>
+                        <FormLabel>Skills</FormLabel>
+                        <div className="flex flex-wrap gap-2 mt-2 mb-3">
+                          {skills.map((skill) => (
+                            <Badge key={skill} variant="secondary" className="gap-1">
+                              {skill}
+                              <button 
+                                type="button" 
+                                onClick={() => handleRemoveSkill(skill)}
+                                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder="Add a skill (e.g. Customer Service)"
+                            value={newSkill}
+                            onChange={(e) => setNewSkill(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleAddSkill();
+                              }
+                            }}
+                          />
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            onClick={handleAddSkill}
+                            variant="outline"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
                       
                       <div>
                         <Button 

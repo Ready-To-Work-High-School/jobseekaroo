@@ -1,13 +1,16 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase, validateApplicationStatus, getRedirectUrl } from '@/lib/supabase';
+import { supabase, validateApplicationStatus, getRedirectUrl, getUserProfile, updateUserProfile } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { JobApplication, ApplicationStatus } from '@/types/application';
+import { UserProfile } from '@/types/user';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  userProfile: UserProfile | null;
   isLoading: boolean;
+  profileLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -20,6 +23,8 @@ interface AuthContextType {
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
   getApplications: () => Promise<JobApplication[]>;
   deleteApplication: (applicationId: string) => Promise<void>;
+  updateProfile: (profileData: Partial<UserProfile>) => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,24 +32,70 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
+
+  const fetchUserProfile = async (userId: string) => {
+    if (!userId) return;
+    
+    setProfileLoading(true);
+    try {
+      const profileData = await getUserProfile(userId);
+      setUserProfile(profileData as UserProfile);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setUserProfile(null);
+      }
+      
       setIsLoading(false);
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      }
+      
       setIsLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchUserProfile(user.id);
+    }
+  };
+
+  const updateProfile = async (profileData: Partial<UserProfile>) => {
+    if (!user) throw new Error('User must be logged in to update profile');
+    
+    try {
+      const updatedProfile = await updateUserProfile(user.id, profileData);
+      setUserProfile(updatedProfile as UserProfile);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  };
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -283,7 +334,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user,
     session,
+    userProfile,
     isLoading,
+    profileLoading,
     signIn,
     signUp,
     signOut,
@@ -296,6 +349,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updateApplicationStatus,
     getApplications,
     deleteApplication,
+    updateProfile,
+    refreshProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

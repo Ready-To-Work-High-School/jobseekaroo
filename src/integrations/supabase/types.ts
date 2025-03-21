@@ -60,6 +60,72 @@ export type Database = {
         }
         Relationships: []
       }
+      job_recommendations: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: string
+          reason: string | null
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: string
+          reason?: string | null
+          score: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: string
+          reason?: string | null
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          location: string | null
+          preferences: Json | null
+          resume_url: string | null
+          skills: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          location?: string | null
+          preferences?: Json | null
+          resume_url?: string | null
+          skills?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          location?: string | null
+          preferences?: Json | null
+          resume_url?: string | null
+          skills?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       saved_jobs: {
         Row: {
           created_at: string
