@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
@@ -103,9 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     profileLoading,
     signIn: (email, password) => signIn(email, password, navigate),
-    signUp: (email, password, firstName, lastName) => signUp(email, password, firstName, lastName, navigate),
+    signUp: (email, password, firstName, lastName, navigate) => signUp(email, password, firstName, lastName, navigate),
     signOut: () => signOut(navigate),
-    signInWithApple: () => signInWithApple(),
+    signInWithApple,
     saveJob: (jobId) => user ? saveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to save jobs')),
     unsaveJob: (jobId) => user ? unsaveJob(user.id, jobId) : Promise.reject(new Error('User must be logged in to unsave jobs')),
     isSavedJob: (jobId) => user ? isSavedJob(user.id, jobId) : Promise.resolve(false),
