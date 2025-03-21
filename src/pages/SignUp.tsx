@@ -12,7 +12,20 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, GraduationCap, Briefcase } from "lucide-react";
+import { 
+  CheckCircle2, 
+  GraduationCap, 
+  Briefcase, 
+  Building, 
+  Users, 
+  FileText, 
+  Calendar, 
+  LineChart, 
+  MessageCircle,
+  Award,
+  HandshakeIcon,
+  Share2
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const signUpSchema = z.object({
@@ -22,16 +35,27 @@ const signUpSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+const employerSignUpSchema = z.object({
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  jobTitle: z.string().min(2, "Job title must be at least 2 characters"),
+});
+
 type SignUpValues = z.infer<typeof signUpSchema>;
+type EmployerSignUpValues = z.infer<typeof employerSignUpSchema>;
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppleLoading, setIsAppleLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("student");
   const { signUp, signInWithApple } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const form = useForm<SignUpValues>({
+  const studentForm = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       firstName: "",
@@ -41,7 +65,19 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = async (values: SignUpValues) => {
+  const employerForm = useForm<EmployerSignUpValues>({
+    resolver: zodResolver(employerSignUpSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      companyName: "",
+      jobTitle: "",
+    },
+  });
+
+  const onStudentSubmit = async (values: SignUpValues) => {
     setIsLoading(true);
     try {
       await signUp(
@@ -52,7 +88,7 @@ const SignUp = () => {
       );
       toast({
         title: "Account created",
-        description: "You have successfully created an account",
+        description: "You have successfully created a student account",
       });
       navigate('/');
     } catch (error: any) {
@@ -60,6 +96,33 @@ const SignUp = () => {
       toast({
         title: "Error",
         description: error.message || "Failed to create account. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onEmployerSubmit = async (values: EmployerSignUpValues) => {
+    setIsLoading(true);
+    try {
+      // Additional employer-specific logic could go here
+      await signUp(
+        values.email, 
+        values.password, 
+        values.firstName, 
+        values.lastName
+      );
+      toast({
+        title: "Employer account created",
+        description: "You have successfully created an employer account",
+      });
+      navigate('/');
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create employer account. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -91,7 +154,11 @@ const SignUp = () => {
           <p className="text-muted-foreground mt-2">Sign up to start exploring jobs</p>
         </div>
         
-        <Tabs defaultValue="student" className="w-full mb-6">
+        <Tabs 
+          defaultValue="student" 
+          className="w-full mb-6"
+          onValueChange={(value) => setActiveTab(value)}
+        >
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
             <TabsTrigger value="student">
               <GraduationCap className="h-4 w-4 mr-2" />
@@ -106,11 +173,11 @@ const SignUp = () => {
           <TabsContent value="student" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
               <div className="md:col-span-3 bg-card border rounded-lg shadow-sm p-6">
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <Form {...studentForm}>
+                  <form onSubmit={studentForm.handleSubmit(onStudentSubmit)} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <FormField
-                        control={form.control}
+                        control={studentForm.control}
                         name="firstName"
                         render={({ field }) => (
                           <FormItem>
@@ -127,7 +194,7 @@ const SignUp = () => {
                         )}
                       />
                       <FormField
-                        control={form.control}
+                        control={studentForm.control}
                         name="lastName"
                         render={({ field }) => (
                           <FormItem>
@@ -145,7 +212,7 @@ const SignUp = () => {
                       />
                     </div>
                     <FormField
-                      control={form.control}
+                      control={studentForm.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
@@ -163,7 +230,7 @@ const SignUp = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={studentForm.control}
                       name="password"
                       render={({ field }) => (
                         <FormItem>
@@ -268,11 +335,11 @@ const SignUp = () => {
           <TabsContent value="employer" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
               <div className="md:col-span-3 bg-card border rounded-lg shadow-sm p-6">
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <Form {...employerForm}>
+                  <form onSubmit={employerForm.handleSubmit(onEmployerSubmit)} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <FormField
-                        control={form.control}
+                        control={employerForm.control}
                         name="firstName"
                         render={({ field }) => (
                           <FormItem>
@@ -289,7 +356,7 @@ const SignUp = () => {
                         )}
                       />
                       <FormField
-                        control={form.control}
+                        control={employerForm.control}
                         name="lastName"
                         render={({ field }) => (
                           <FormItem>
@@ -306,15 +373,53 @@ const SignUp = () => {
                         )}
                       />
                     </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={employerForm.control}
+                        name="companyName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Company Name</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="Your company" 
+                                disabled={isLoading} 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={employerForm.control}
+                        name="jobTitle"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Your Job Title</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="e.g. HR Manager" 
+                                disabled={isLoading} 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
                     <FormField
-                      control={form.control}
+                      control={employerForm.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Work Email</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="Enter your email" 
+                              placeholder="Enter your work email" 
                               type="email" 
                               disabled={isLoading} 
                               {...field} 
@@ -325,7 +430,7 @@ const SignUp = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={employerForm.control}
                       name="password"
                       render={({ field }) => (
                         <FormItem>
@@ -395,34 +500,42 @@ const SignUp = () => {
                     
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>Post Job Opportunities</strong> directly to our student network</span>
+                        <Building className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Create Company Profile</strong> to showcase your brand and culture to students</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>Access Talent Pipeline</strong> of qualified high school students</span>
+                        <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Post Unlimited Job Listings</strong> with detailed descriptions and requirements</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>Manage Applications</strong> through our streamlined dashboard</span>
+                        <Users className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Review Applicants</strong> through our streamlined candidate management system</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>Schedule Interviews</strong> and communicate with candidates</span>
+                        <Calendar className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Schedule Interviews</strong> directly through our integrated calendar</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>Build Your Brand</strong> with company profiles and success stories</span>
+                        <MessageCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Message Candidates</strong> to coordinate hiring details</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span><strong>View Analytics</strong> on job performance and applicant engagement</span>
+                        <Award className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Offer Apprenticeships</strong> and training programs to develop student talents</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <LineChart className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Access Analytics</strong> on job posting performance and candidate engagement</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Share2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span><strong>Participate in Career Events</strong> and connect with promising students</span>
                       </li>
                     </ul>
                     
                     <div className="mt-6 bg-green-50 border border-green-200 rounded-md p-3">
                       <p className="text-sm text-green-800">
-                        <strong>Partner with us today!</strong> Create an employer account to connect with motivated students and develop your future workforce.
+                        <strong>Partner with us today!</strong> Create an employer account to gain access to our talent pipeline of motivated high school students ready to contribute to your workforce.
                       </p>
                     </div>
                   </CardContent>

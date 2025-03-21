@@ -42,7 +42,7 @@ const Index = () => {
           const featured = allJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 4);  // Take 4 featured jobs
+            .slice(0, 3);  // Take 3 featured jobs
           
           setFeaturedJobs(featured);
         } else {
@@ -51,7 +51,7 @@ const Index = () => {
           const featured = allMockJobs
             .filter(job => job.isFeatured)
             .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, 4);  // Take 4 featured jobs
+            .slice(0, 3);  // Take 3 featured jobs
           
           setFeaturedJobs(featured);
           
@@ -71,7 +71,7 @@ const Index = () => {
         const featured = allJobs
           .filter(job => job.isFeatured)
           .sort(() => 0.5 - Math.random()) // Shuffle
-          .slice(0, 4);  // Take 4 featured jobs
+          .slice(0, 3);  // Take 3 featured jobs
         
         setFeaturedJobs(featured);
       } finally {
@@ -149,7 +149,7 @@ const Index = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {featuredJobs.map((job, index) => (
                   <JobCard job={job} key={job.id} index={index} />
                 ))}
