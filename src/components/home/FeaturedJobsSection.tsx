@@ -113,7 +113,7 @@ const FeaturedJobsSection = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {featuredJobs.slice(0, 3).map((job, index) => (
+            {featuredJobs.map((job, index) => (
               <JobCard job={job} key={job.id} index={index} />
             ))}
           </div>
