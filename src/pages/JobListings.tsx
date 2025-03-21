@@ -14,6 +14,7 @@ import { MapPin } from 'lucide-react';
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const zipCodeParam = searchParams.get('zipCode') || '';
+  const radiusParam = searchParams.get('radius') ? parseInt(searchParams.get('radius') || '0', 10) : 0;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const animation = useFadeIn(200);
@@ -78,7 +79,7 @@ const JobListings = () => {
     // Simulate API call
     setTimeout(() => {
       const filters = getFiltersFromUrl();
-      const filterObj: Partial<Job> = {};
+      const filterObj: Partial<Job> & { radius?: number } = {};
       
       if (filters.jobType !== 'all') {
         filterObj.type = filters.jobType;
@@ -96,11 +97,16 @@ const JobListings = () => {
         filterObj.isFlexible = filters.isFlexible;
       }
       
+      // Add radius filter if present
+      if (radiusParam > 0) {
+        filterObj.radius = radiusParam;
+      }
+      
       const results = searchJobsByZipCode(zipCodeParam, filterObj);
       setJobs(results);
       setLoading(false);
     }, 800);
-  }, [searchParams, zipCodeParam]);
+  }, [searchParams, zipCodeParam, radiusParam]);
 
   // Get current jobs for pagination
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -122,7 +128,12 @@ const JobListings = () => {
                 {zipCodeParam && (
                   <>
                     <MapPin className="h-4 w-4 mr-1 text-primary" />
-                    <p>Jobs in ZIP code <span className="font-medium">{zipCodeParam}</span></p>
+                    <p>
+                      Jobs in ZIP code <span className="font-medium">{zipCodeParam}</span>
+                      {radiusParam > 0 && (
+                        <span> within <span className="font-medium">{radiusParam} mile{radiusParam !== 1 ? 's' : ''}</span></span>
+                      )}
+                    </p>
                   </>
                 )}
                 {!zipCodeParam && (
@@ -134,6 +145,7 @@ const JobListings = () => {
             <SearchForm 
               variant="minimal" 
               initialZipCode={zipCodeParam} 
+              initialRadius={radiusParam}
               className="w-full md:w-auto"
             />
           </div>
