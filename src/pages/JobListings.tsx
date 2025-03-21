@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -97,7 +98,8 @@ const JobListings = () => {
         
         let filteredJobs = allJobs;
         if (zipCodeParam) {
-          filteredJobs = searchJobsByZipCode(zipCodeParam, searchFilters, allJobs);
+          // Remove the third parameter (allJobs) as searchJobsByZipCode only accepts 2 parameters
+          filteredJobs = searchJobsByZipCode(zipCodeParam, searchFilters);
         }
         
         setJobs(filteredJobs);
