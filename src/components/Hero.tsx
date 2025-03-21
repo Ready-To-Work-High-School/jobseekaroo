@@ -38,7 +38,7 @@ const Hero = () => {
         </div>
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto", infoAnimation)}>
-          <FeatureCard icon="🔎" title="How Far Can You Travel?" description="Find opportunities within Jacksonville with our adjustable radius filter - search up to 50 miles from your location." />
+          <FeatureCard icon="🔎" title="How Far Can You Travel?" description="Find opportunities within Jacksonville, surrounding counties or beyond. Use adjustable radius filter to search up to 50 miles from your location." />
           <FeatureCard icon="💰" title="Apprenticeships" description="Discover paid training programs where you can learn valuable skills while earning income." />
           <FeatureCard icon="💼" title="Entry Level Positions" description="Explore positions specifically designed for high school students beginning their career journey." />
         </div>
