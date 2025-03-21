@@ -19,7 +19,7 @@ const ProgramsSection = () => {
         {/* Removing the SectionSeparator that was here */}
         
         {/* Employers Section */}
-        <div className="border border-amber-300 rounded-lg p-6 mb-8 bg-sky-600">
+        <div className="border border-amber-300 rounded-lg p-6 mb-12 bg-sky-600">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex-1">
               <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight mt-2 text-center")}>

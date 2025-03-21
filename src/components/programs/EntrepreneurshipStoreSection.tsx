@@ -5,23 +5,25 @@ import LazyImage from '@/components/LazyImage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const EntrepreneurshipStoreSection = () => {
-  return <div className="mb-16">
+  return (
+    <div className="mb-16">
+      {/* Capstone Badge - Moved to top of section and increased in size */}
+      <div className="flex justify-center mb-6">
+        <div className="flex flex-col items-center">
+          <img 
+            src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" 
+            alt="ESB Certification Badge" 
+            className="h-40 w-auto object-contain mb-3" 
+          />
+          <span className="text-sm font-medium text-center">Entrepreneurship & Small Business</span>
+        </div>
+      </div>
+      
       <Card className="overflow-hidden border-amber-300 bg-amber-50/60">
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6 items-center">
-              <div className="w-full md:w-1/3 flex-shrink-0">
-                <div className="flex flex-col items-center">
-                  <img 
-                    src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" 
-                    alt="ESB Certification Badge" 
-                    className="h-24 w-auto object-contain mb-2" 
-                  />
-                  <span className="text-xs text-center font-medium">Entrepreneurship & Small Business</span>
-                </div>
-              </div>
-              
-              <div className="w-full md:w-2/3">
+              <div className="w-full">
                 <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-2xl font-bold mb-4 text-blue-800 text-center">Westside High School Entrepreneurship School Store</h3>
                 
                 <div className="prose text-gray-700">
@@ -64,6 +66,7 @@ const EntrepreneurshipStoreSection = () => {
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
 export default EntrepreneurshipStoreSection;
