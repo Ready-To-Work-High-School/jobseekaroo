@@ -125,8 +125,8 @@ const SearchForm = ({
           type="button" 
           onClick={toggleRadius}
           className={cn(
-            "text-xs underline text-primary px-2 py-1",
-            "hover:text-primary/80 transition-colors"
+            "text-xs bg-blue-100 text-blue-600 px-3 py-1.5 rounded-full",
+            "hover:bg-blue-200 transition-colors font-medium border border-blue-200"
           )}
         >
           {showRadius ? "Remove radius" : "Add radius filter"}
