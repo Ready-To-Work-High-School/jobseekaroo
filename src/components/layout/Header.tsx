@@ -1,27 +1,8 @@
 
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
-} from "@/components/ui/dropdown-menu"
-import { 
-  Settings, Menu, X, BarChart2, Briefcase, Book, 
-  FileText, Search, BookmarkCheck, User, Home
-} from 'lucide-react';
-import { Button } from '../ui/button';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Navbar from '../navbar/Navbar';
 
 const Header = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -46,11 +27,9 @@ const Header = () => {
     }
   };
 
-  return (
-    <header className="bg-secondary border-b sticky top-0 z-10">
-      <Navbar />
-    </header>
-  );
+  // We're using Navbar component directly in App.tsx now, so this component
+  // is no longer needed but kept for backward compatibility
+  return null;
 };
 
 export default Header;

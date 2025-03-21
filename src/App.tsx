@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { SkillsProvider } from '@/contexts/SkillsContext';
 import Layout from '@/components/Layout';
+import Navbar from '@/components/navbar/Navbar';
 import Index from '@/pages/Index';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
@@ -32,6 +33,7 @@ function App() {
     <Router>
       <AuthProvider>
         <SkillsProvider>
+          <Navbar />
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
