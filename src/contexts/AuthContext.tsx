@@ -5,6 +5,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { JobApplication, ApplicationStatus } from '@/types/application';
 import { UserProfile } from '@/types/user';
+import { AuthContextType } from './auth/authContext.types';
 
 // Import services
 import { signIn, signUp, signInWithApple, signOut } from './auth/authService';
@@ -24,28 +25,6 @@ import {
   getUserProfile as getUserProfileService, 
   updateUserProfile 
 } from './auth/authUtils';
-
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  userProfile: UserProfile | null;
-  isLoading: boolean;
-  profileLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
-  saveJob: (jobId: string) => Promise<void>;
-  unsaveJob: (jobId: string) => Promise<void>;
-  isSavedJob: (jobId: string) => Promise<boolean>;
-  getSavedJobs: () => Promise<string[]>;
-  createApplication: (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<string>;
-  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
-  getApplications: () => Promise<JobApplication[]>;
-  deleteApplication: (applicationId: string) => Promise<void>;
-  updateProfile: (profileData: Partial<UserProfile>) => Promise<void>;
-  refreshProfile: () => Promise<void>;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -148,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleSignInWithApple = async () => {
     try {
       await signInWithApple();
+      // Note: No need to navigate since OAuth redirects
     } catch (error) {
       throw error;
     }
@@ -196,7 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return deleteAppService(user.id, applicationId);
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     session,
     userProfile,

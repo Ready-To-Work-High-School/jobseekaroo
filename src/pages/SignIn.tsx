@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -11,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Building, FileText, Users, Calendar, MessageCircle } from "lucide-react";
+import { CheckCircle2, Building, FileText, Users, Calendar, MessageCircle, BarChart2, UserCheck, Lock } from "lucide-react";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -207,6 +208,22 @@ const SignIn = () => {
                     <li className="flex items-start gap-2">
                       <Calendar className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                       <span><strong>Interview Scheduling:</strong> Schedule and track interviews with applicants.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <MessageCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong>Messaging:</strong> Communicate directly with potential candidates.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <BarChart2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong>Analytics:</strong> Track engagement and view application statistics.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <UserCheck className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong>Talent Matching:</strong> Find qualified candidates based on skill requirements.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Lock className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong>Privacy Controls:</strong> Manage who can view and apply to your listings.</span>
                     </li>
                   </ul>
                 </div>
