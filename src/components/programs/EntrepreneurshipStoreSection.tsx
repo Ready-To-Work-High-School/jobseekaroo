@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import LazyImage from '@/components/LazyImage';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const EntrepreneurshipStoreSection = () => {
   return <div className="mb-16">
@@ -11,7 +12,11 @@ const EntrepreneurshipStoreSection = () => {
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full md:w-1/3 flex-shrink-0">
                 <div className="flex flex-col items-center">
-                  <img src="/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png" alt="ESB Badge" className="h-24 w-auto object-contain mb-2" />
+                  <img 
+                    src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" 
+                    alt="ESB Certification Badge" 
+                    className="h-24 w-auto object-contain mb-2" 
+                  />
                   <span className="text-xs text-center font-medium">Entrepreneurship & Small Business</span>
                 </div>
               </div>
