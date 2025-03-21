@@ -32,4 +32,5 @@ export interface Job {
   logoUrl?: string;
   isRemote: boolean;
   isFlexible: boolean;
+  isFeatured?: boolean;
 }
