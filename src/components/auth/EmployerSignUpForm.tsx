@@ -4,9 +4,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -22,6 +19,7 @@ import {
 } from "lucide-react";
 import SignUpFormShared from "./SignUpFormShared";
 import SignUpBenefitCard from "./SignUpBenefitCard";
+import SignUpFormFields from "./SignUpFormFields";
 
 const employerSignUpSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -129,127 +127,13 @@ const EmployerSignUpForm = ({
           handleAppleSignIn={handleAppleSignIn}
           submitButtonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
         >
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="First name" 
-                          disabled={isLoading} 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Last name" 
-                          disabled={isLoading} 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Your company" 
-                          disabled={isLoading} 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="jobTitle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Job Title</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="e.g. HR Manager" 
-                          disabled={isLoading} 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Work Email</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Enter your work email" 
-                        type="email" 
-                        disabled={isLoading} 
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Create a password" 
-                        type="password" 
-                        disabled={isLoading} 
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating account..." : "Sign Up as Employer"}
-              </Button>
-            </form>
-          </Form>
+          <SignUpFormFields
+            form={form}
+            onSubmit={onSubmit}
+            isLoading={isLoading}
+            buttonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
+            isEmployer={true}
+          />
         </SignUpFormShared>
       </div>
       
