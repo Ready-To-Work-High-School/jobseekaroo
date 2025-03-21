@@ -40,9 +40,7 @@ const CredentialsBadges = () => {
       <div className="mb-8">
         <div className="relative py-4">
           <div className="absolute inset-0 flex items-center">
-            <svg className="w-full" height="12" viewBox="0 0 1200 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-              <path d="M0 6C100 2 200 10 300 6C400 2 500 10 600 6C700 2 800 10 900 6C1000 2 1100 10 1200 6" stroke="#FBBF24" strokeWidth="4" />
-            </svg>
+            <div className="w-full h-0.5 bg-amber-400"></div>
           </div>
           <div className="relative flex justify-center">
             <div className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-white font-bold shadow-md">
