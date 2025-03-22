@@ -106,12 +106,12 @@ const CourseCurriculum = () => {
         <h4 className="text-lg font-semibold text-center">Course Curriculum</h4>
       </div>
       
-      <Accordion type="single" collapsible className="bg-white rounded-lg shadow-sm border border-border">
+      <Accordion type="single" collapsible className="bg-white rounded-lg p-5 shadow-sm border border-border">
         <AccordionItem value="year1" className="border-b">
-          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+          <AccordionTrigger className="px-0 py-3 hover:no-underline">
             <span className="text-base font-bold">Year 1: Introduction to Entrepreneurship</span>
           </AccordionTrigger>
-          <AccordionContent className="px-5 pb-4 pt-0">
+          <AccordionContent className="pt-0 pb-3">
             <ul className="space-y-3">
               {["Business Fundamentals & Career Planning", "Introduction to Business Ownership Models", 
                 "Marketing & Sales Foundations", "Communication Skills for Business"].map((item, index) => (
@@ -125,10 +125,10 @@ const CourseCurriculum = () => {
         </AccordionItem>
         
         <AccordionItem value="year2" className="border-b">
-          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+          <AccordionTrigger className="px-0 py-3 hover:no-underline">
             <span className="text-base font-bold">Year 2: Business Management &amp; Law</span>
           </AccordionTrigger>
-          <AccordionContent className="px-5 pb-4 pt-0">
+          <AccordionContent className="pt-0 pb-3">
             <ul className="space-y-3">
               {["Financial Literacy & Accounting Basics", "Business Plan Development", 
                 "Market Research & Analysis", "Digital Marketing Strategies"].map((item, index) => (
@@ -142,10 +142,10 @@ const CourseCurriculum = () => {
         </AccordionItem>
         
         <AccordionItem value="year3" className="border-b">
-          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+          <AccordionTrigger className="px-0 py-3 hover:no-underline">
             <span className="text-base font-bold">Year 3: Business Ownership</span>
           </AccordionTrigger>
-          <AccordionContent className="px-5 pb-4 pt-0">
+          <AccordionContent className="pt-0 pb-3">
             <ul className="space-y-3">
               {["Startup Funding & Investment Strategies", "Business Law & Ethics", 
                 "E-commerce & Digital Business Models", "Leadership & Team Management"].map((item, index) => (
@@ -159,10 +159,10 @@ const CourseCurriculum = () => {
         </AccordionItem>
         
         <AccordionItem value="year4">
-          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+          <AccordionTrigger className="px-0 py-3 hover:no-underline">
             <span className="text-base font-bold">Capstone &amp; Certification</span>
           </AccordionTrigger>
-          <AccordionContent className="px-5 pb-4 pt-0">
+          <AccordionContent className="pt-0 pb-3">
             <ul className="space-y-3">
               {["Business Launch Project (Capstone)", "ESB Certification Preparation", 
                 "Advanced Business Operations", "Internship & Professional Portfolio Development"].map((item, index) => (
@@ -176,34 +176,6 @@ const CourseCurriculum = () => {
         </AccordionItem>
       </Accordion>
     </div>;
-};
-
-const CourseYearItem = ({
-  value,
-  title,
-  children
-}) => {
-  return <AccordionItem value={value}>
-      <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-        <span className="text-base font-bold">{title}</span>
-      </AccordionTrigger>
-      <AccordionContent className="px-5 pb-4 pt-0">
-        {children}
-      </AccordionContent>
-    </AccordionItem>;
-};
-
-const CourseItemList = ({
-  items
-}) => {
-  return <ul className="space-y-3">
-      {items.map((item, index) => (
-        <li key={index} className="flex items-start gap-2">
-          <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span className="font-bold">{item}</span>
-        </li>
-      ))}
-    </ul>;
 };
 
 export default WestsideAcademy;
