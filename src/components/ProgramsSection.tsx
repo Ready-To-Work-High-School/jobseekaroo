@@ -16,11 +16,20 @@ const ProgramsSection = () => {
   
   return (
     <section className={`py-16 bg-secondary/5 ${animation}`}>
+      {/* Advanced Academy Accreditation Banner at the top of the page */}
+      <div className="w-full mb-8 overflow-hidden">
+        <img 
+          src="/lovable-uploads/09aa9c55-7120-40c3-8212-c2c0ab608abc.png" 
+          alt="Advanced Academy Accreditation" 
+          className="w-full h-auto object-cover"
+        />
+      </div>
+      
       <div className="container-custom">
-        {/* For Employers Only heading placed outside the blue section */}
-        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
+        {/* For Employers Only heading with smaller text size */}
+        <h2 className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight text-center")}>
           <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
-            <em className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent text-7xl px-0 mx-0">For Employers Only</em>
+            <em className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-0 mx-0">For Employers Only</em>
           </span>
         </h2>
         

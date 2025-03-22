@@ -4,38 +4,27 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 const WestsideAcademy = () => {
   return (
-    <>
-      {/* Advanced Academy Accreditation Banner */}
-      <div className="w-full mb-6 overflow-hidden">
-        <img 
-          src="/lovable-uploads/09aa9c55-7120-40c3-8212-c2c0ab608abc.png" 
-          alt="Advanced Academy Accreditation" 
-          className="w-full h-auto object-cover"
-        />
-      </div>
-      
-      <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
-        <div className="p-6 md:p-8 bg-sky-100">
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
-            <div className="flex-shrink-0">
-              <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
-              <p className="text-base text-gray-950">Career Technical Education | Duval County School District</p>
-            </div>
+    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
+      <div className="p-6 md:p-8 bg-sky-100">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+          <div className="flex-shrink-0">
+            <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
           </div>
-          
-          <AcademyDescription />
-          
-          <div className="flex flex-col md:flex-row gap-6">
-            <ProgramBenefits />
-            <CourseCurriculum />
+          <div>
+            <h3 className="text-2xl font-bold">Entrepreneurship Academy at Westside High School</h3>
+            <p className="text-base text-gray-950">Career Technical Education | Duval County School District</p>
           </div>
         </div>
-        <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-300"></div>
+        
+        <AcademyDescription />
+        
+        <div className="flex flex-col md:flex-row gap-6">
+          <ProgramBenefits />
+          <CourseCurriculum />
+        </div>
       </div>
-    </>
+      <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-300"></div>
+    </div>
   );
 };
 
