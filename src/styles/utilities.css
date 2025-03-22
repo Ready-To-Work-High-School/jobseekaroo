@@ -73,15 +73,27 @@ img {
   @apply shadow-[0_0_20px_rgba(14,165,233,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(14,165,233,0.6)];
 }
 
+.glow-purple {
+  @apply shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(139,92,246,0.6)];
+}
+
+.glow-emerald {
+  @apply shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)];
+}
+
+.glow-pink {
+  @apply shadow-[0_0_20px_rgba(217,70,239,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)];
+}
+
 .glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite alternate;
 }
 
 @keyframes glow-pulse {
   from {
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
   }
   to {
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.7);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.7);
   }
 }
