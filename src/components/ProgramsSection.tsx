@@ -1,4 +1,3 @@
-
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -10,22 +9,19 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
 import { Button } from './ui/button';
-
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
-  
-  return (
-    <section className={`py-16 bg-secondary/5 ${animation}`}>
+  return <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
-        {/* For Employers Only heading with smaller text size */}
-        <h2 className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight text-center")}>
+        {/* For Employers Only heading placed outside the blue section */}
+        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
           <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
-            <em className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-0 mx-0">For Employers Only</em>
+            <em>For Employers Only</em>
           </span>
         </h2>
         
         {/* Employers Section */}
-        <div className="border border-amber-300 rounded-lg p-6 mb-12 bg-sky-600">
+        <div className="border border-amber-300 rounded-lg p-6 mb-12 bg-brand-300">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex-1">
               <p className="text-center font-bold text-zinc-900">
@@ -56,8 +52,6 @@ const ProgramsSection = () => {
           <CredentialsBadges />
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ProgramsSection;
