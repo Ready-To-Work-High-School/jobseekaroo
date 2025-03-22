@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -145,10 +146,12 @@ const CourseItemList = ({
   items
 }) => {
   return <ul className="space-y-2">
-      {items.map((item, index) => <li key={index} className="flex items-start gap-2">
+      {items.map((item, index) => (
+        <li key={index} className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
           <span className="font-bold">{item}</span>
-        </li>)}
+        </li>
+      ))}
     </ul>;
 };
 
