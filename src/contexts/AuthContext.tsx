@@ -3,52 +3,49 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { supabase } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
-import { JobApplication, ApplicationStatus } from '@/types/application';
-import { UserProfile } from '@/types/user';
 import { AuthContextType } from './auth/authContext.types';
-
-// Import services
-import { signIn, signUp, signInWithApple, signInWithGoogle, signOut } from './auth/authService';
-import { 
-  saveJob, 
-  unsaveJob, 
-  isSavedJob, 
-  getSavedJobs 
-} from './auth/savedJobsService';
-import {
-  createApplication as createAppService,
-  updateApplicationStatus as updateAppStatusService,
-  getApplications as getAppsService,
-  deleteApplication as deleteAppService
-} from './auth/applicationService';
-import { 
-  getUserProfile as getUserProfileService, 
-  updateUserProfile 
-} from './auth/authUtils';
+import { useAuthMethods } from './auth/useAuthMethods';
+import { useProfileManagement } from './auth/useProfileManagement';
+import { useJobManagement } from './auth/useJobManagement';
+import { useApplicationManagement } from './auth/useApplicationManagement';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
-
-  const fetchUserProfile = async (userId: string) => {
-    if (!userId) return;
-    
-    setProfileLoading(true);
-    try {
-      const profileData = await getUserProfileService(userId);
-      setUserProfile(profileData as UserProfile);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    } finally {
-      setProfileLoading(false);
-    }
-  };
+  
+  const { 
+    userProfile, 
+    profileLoading, 
+    fetchUserProfile, 
+    updateProfile, 
+    refreshProfile 
+  } = useProfileManagement(user);
+  
+  const { 
+    handleSignIn, 
+    handleSignUp, 
+    handleSignOut, 
+    handleSignInWithApple, 
+    handleSignInWithGoogle 
+  } = useAuthMethods(navigate, fetchUserProfile);
+  
+  const {
+    handleSaveJob,
+    handleUnsaveJob,
+    handleIsSavedJob,
+    handleGetSavedJobs
+  } = useJobManagement(user);
+  
+  const {
+    handleCreateApplication,
+    handleUpdateApplicationStatus,
+    handleGetApplications,
+    handleDeleteApplication
+  } = useApplicationManagement(user);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -58,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         fetchUserProfile(session.user.id);
       } else {
-        setUserProfile(null);
+        // User has signed out or is not authenticated
       }
       
       setIsLoading(false);
@@ -76,122 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
-
-  const refreshProfile = async () => {
-    if (user) {
-      await fetchUserProfile(user.id);
-    }
-  };
-
-  const updateProfile = async (profileData: Partial<UserProfile>) => {
-    if (!user) throw new Error('User must be logged in to update profile');
-    
-    try {
-      const updatedProfile = await updateUserProfile(user.id, profileData);
-      setUserProfile(updatedProfile as UserProfile);
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      throw error;
-    }
-  };
-
-  // Auth methods that use the navigator
-  const handleSignIn = async (email: string, password: string) => {
-    try {
-      await signIn(email, password);
-      
-      // Check if there's a saved redirect URL
-      const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
-        sessionStorage.removeItem('redirectAfterLogin');
-        navigate(redirectUrl);
-      } else {
-        navigate('/');
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSignUp = async (email: string, password: string, firstName: string, lastName: string) => {
-    try {
-      await signUp(email, password, firstName, lastName);
-      navigate('/');
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      navigate('/');
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSignInWithApple = async () => {
-    try {
-      await signInWithApple();
-      // Note: No need to navigate since OAuth redirects
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSignInWithGoogle = async () => {
-    try {
-      await signInWithGoogle();
-      // Note: No need to navigate since OAuth redirects
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  // Methods that require the user id
-  const handleSaveJob = async (jobId: string) => {
-    if (!user) throw new Error('User must be logged in to save jobs');
-    await saveJob(user.id, jobId);
-  };
-
-  const handleUnsaveJob = async (jobId: string) => {
-    if (!user) throw new Error('User must be logged in to unsave jobs');
-    await unsaveJob(user.id, jobId);
-  };
-
-  const handleIsSavedJob = async (jobId: string) => {
-    if (!user) return false;
-    return isSavedJob(user.id, jobId);
-  };
-
-  const handleGetSavedJobs = async () => {
-    if (!user) return [];
-    return getSavedJobs(user.id);
-  };
-
-  const handleCreateApplication = async (
-    application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>
-  ) => {
-    if (!user) throw new Error('User must be logged in to create an application');
-    return createAppService(user.id, application);
-  };
-
-  const handleUpdateApplicationStatus = async (applicationId: string, status: ApplicationStatus) => {
-    if (!user) throw new Error('User must be logged in to update an application');
-    return updateAppStatusService(user.id, applicationId, status);
-  };
-
-  const handleGetApplications = async () => {
-    if (!user) return [];
-    return getAppsService(user.id);
-  };
-
-  const handleDeleteApplication = async (applicationId: string) => {
-    if (!user) throw new Error('User must be logged in to delete an application');
-    return deleteAppService(user.id, applicationId);
-  };
+  }, [fetchUserProfile]);
 
   const value: AuthContextType = {
     user,
