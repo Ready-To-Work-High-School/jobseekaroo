@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import LazyImage from '@/components/LazyImage';
@@ -14,11 +15,14 @@ const EntrepreneurshipStoreSection = () => {
       </div>
       
       <Card className="overflow-hidden border-amber-300 bg-amber-50/60">
+        {/* Store Heading - Now full width and outside the card content for maximum stretch */}
+        <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-3 font-bold text-blue-800 text-center text-3xl md:text-4xl w-full">Westside High School Entrepreneurship School Store</h3>
+        
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full">
-                <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full font-bold mb-4 text-blue-800 text-center text-3xl">Westside High School Entrepreneurship School Store</h3>
+                {/* Removed the heading from here since it's now outside the CardContent */}
                 
                 <div className="prose text-gray-700">
                   <p className="mb-4">
