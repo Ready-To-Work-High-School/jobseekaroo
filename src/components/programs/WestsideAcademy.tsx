@@ -1,8 +1,16 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 const WestsideAcademy = () => {
-  return <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
+  return (
+    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
+      <div className="w-full bg-[#8BC34A] py-4 px-6 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold text-[#F7F3CE]">
+          Advanced Academy Accreditation
+        </h2>
+      </div>
+      
       <div className="p-6 md:p-8 bg-sky-100">
         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
           <div className="flex-shrink-0">
@@ -22,8 +30,10 @@ const WestsideAcademy = () => {
         </div>
       </div>
       <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-300"></div>
-    </div>;
+    </div>
+  );
 };
+
 const AcademyDescription = () => {
   return <div className="bg-white p-4 rounded-lg mb-6">
       <div className="flex items-start gap-3">
@@ -42,6 +52,7 @@ const AcademyDescription = () => {
       </div>
     </div>;
 };
+
 const ProgramBenefits = () => {
   return <div className="md:w-1/2">
       <div className="flex items-center gap-2 mb-4 mx-[45px]">
@@ -72,6 +83,7 @@ const ProgramBenefits = () => {
       </ul>
     </div>;
 };
+
 const CourseCurriculum = () => {
   return <div className="md:w-1/2">
       <div className="flex items-center gap-2 mb-4 mx-[47px]">
@@ -107,6 +119,7 @@ const CourseCurriculum = () => {
       </Accordion>
     </div>;
 };
+
 const CourseYearItem = ({
   value,
   title,
@@ -121,6 +134,7 @@ const CourseYearItem = ({
       </AccordionContent>
     </AccordionItem>;
 };
+
 const CourseItemList = ({
   items
 }) => {
@@ -131,4 +145,5 @@ const CourseItemList = ({
         </li>)}
     </ul>;
 };
+
 export default WestsideAcademy;
