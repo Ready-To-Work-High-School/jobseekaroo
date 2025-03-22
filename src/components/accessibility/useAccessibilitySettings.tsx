@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { AccessibilitySettings } from '@/types/user';
-import { UseToastReturn } from '@/hooks/use-toast';
+import { toast as toastType } from '@/hooks/use-toast';
 
 interface UseAccessibilitySettingsProps {
-  toast: UseToastReturn['toast'];
+  toast: typeof toastType;
   user: any;
   userProfile: any;
   updateProfile: (profile: any) => Promise<void>;

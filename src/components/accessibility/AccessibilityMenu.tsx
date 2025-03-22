@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from 'react';
 import { Accessibility } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { AccessibilitySettings } from '@/types/user';
 import { AccessibilityMenuContent } from './AccessibilityMenuContent';
 import { useAccessibilitySettings } from './useAccessibilitySettings';
 
@@ -20,10 +18,7 @@ export const AccessibilityMenu = () => {
   const { user, userProfile, updateProfile } = useAuth();
   const { 
     settings, 
-    setSettings, 
     fontSize, 
-    setFontSize, 
-    defaultSettings,
     handleSettingChange,
     handleFontSizeChange,
     resetSettings 
