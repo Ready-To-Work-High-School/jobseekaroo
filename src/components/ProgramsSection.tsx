@@ -16,6 +16,15 @@ const ProgramsSection = () => {
   
   return (
     <section className={`py-16 bg-secondary/5 ${animation}`}>
+      {/* Advanced Academy Accreditation Banner that spans the entire width */}
+      <div className="w-full mb-8 overflow-hidden max-w-full">
+        <img 
+          src="/lovable-uploads/09aa9c55-7120-40c3-8212-c2c0ab608abc.png" 
+          alt="Advanced Academy Accreditation" 
+          className="w-full h-auto object-cover"
+        />
+      </div>
+      
       <div className="container-custom">
         {/* For Employers Only heading with smaller text size */}
         <h2 className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight text-center")}>

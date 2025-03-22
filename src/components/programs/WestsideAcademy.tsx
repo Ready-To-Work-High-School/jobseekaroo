@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -7,13 +6,8 @@ const WestsideAcademy = () => {
   return (
     <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
       <div className="p-6 md:p-8 bg-sky-100">
-        {/* Academy Logo and Image Banner */}
+        {/* Academy Logo and Info */}
         <div className="mb-6">
-          <img 
-            src="/lovable-uploads/09aa9c55-7120-40c3-8212-c2c0ab608abc.png" 
-            alt="Advanced Academy Accreditation" 
-            className="w-full h-auto object-cover mb-4 rounded-lg"
-          />
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="flex-shrink-0">
               <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
