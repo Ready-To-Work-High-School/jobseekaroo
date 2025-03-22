@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -9,8 +10,18 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
+  const { user } = useAuth();
+
+  // Function to get the redirect path based on auth status
+  const getPath = (authenticatedPath: string) => {
+    return user ? authenticatedPath : "/sign-in";
+  };
+
   return <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
         {/* For Employers Only heading placed outside the blue section */}

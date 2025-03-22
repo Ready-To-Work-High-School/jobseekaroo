@@ -1,11 +1,20 @@
+
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Footer = () => {
+  const { user } = useAuth();
+  
+  // Function to get the redirect path based on auth status
+  const getPath = (authenticatedPath: string) => {
+    return user ? authenticatedPath : "/sign-in";
+  };
+
   const bottomNavLinks = [
     { href: "/", label: "Home" },
     { href: "/jobs", label: "Jobs" },
     { href: "/resources", label: "Resources" },
-    { href: "/skills", label: "Skills" },
+    { href: getPath("/skills"), label: "Skills" },
     { href: "/for-employers", label: "For Employers" },
     { href: "/faq", label: "FAQ" },
     { href: "/success-stories", label: "Success Stories" },
@@ -43,23 +52,23 @@ const Footer = () => {
               <h4 className="font-medium mb-3">For Job Seekers</h4>
               <ul className="space-y-2">
                 <li><Link to="/jobs" className="text-sm text-muted-foreground hover:text-foreground">Browse Jobs</Link></li>
-                <li><Link to="/skills" className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
-                <li><Link to="/resume-assistant" className="text-sm text-muted-foreground hover:text-foreground">Resume Help</Link></li>
-                <li><Link to="/interview-prep" className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link></li>
+                <li><Link to={getPath("/skills")} className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
+                <li><Link to={getPath("/resume-assistant")} className="text-sm text-muted-foreground hover:text-foreground">Resume Help</Link></li>
+                <li><Link to={getPath("/interview-prep")} className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-medium mb-3">For Employers</h4>
               <ul className="space-y-2">
                 <li><Link to="/for-employers" className="text-sm text-muted-foreground hover:text-foreground">Employer Overview</Link></li>
-                <li><Link to="/employer-dashboard" className="text-sm text-muted-foreground hover:text-foreground">Employer Dashboard</Link></li>
+                <li><Link to={getPath("/employer-dashboard")} className="text-sm text-muted-foreground hover:text-foreground">Employer Dashboard</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-medium mb-3">Resources</h4>
               <ul className="space-y-2">
                 <li><Link to="/resources" className="text-sm text-muted-foreground hover:text-foreground">Career Resources</Link></li>
-                <li><Link to="/analytics" className="text-sm text-muted-foreground hover:text-foreground">Analytics Dashboard</Link></li>
+                <li><Link to={getPath("/analytics")} className="text-sm text-muted-foreground hover:text-foreground">Analytics Dashboard</Link></li>
               </ul>
             </div>
           </div>

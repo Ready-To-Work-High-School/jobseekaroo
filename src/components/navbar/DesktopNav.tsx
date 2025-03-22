@@ -9,11 +9,11 @@ export const DesktopNav = () => {
     <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
       <NavLink to="/">Home</NavLink>
       <NavLink to="/jobs">Find Jobs</NavLink>
-      {user && <NavLink to="/skills">Skills</NavLink>}
-      {user && <NavLink to="/applications">Applications</NavLink>}
+      <NavLink to={user ? "/skills" : "/sign-in"}>Skills</NavLink>
+      <NavLink to={user ? "/applications" : "/sign-in"}>Applications</NavLink>
       <NavLink to="/resources">Resources</NavLink>
       <NavLink to="/for-employers">For Employers</NavLink>
-      <NavLink to="/resume-assistant">Resume Assistant</NavLink>
+      <NavLink to={user ? "/resume-assistant" : "/sign-in"}>Resume Assistant</NavLink>
     </nav>
   );
 };

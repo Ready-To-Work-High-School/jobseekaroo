@@ -29,6 +29,11 @@ const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
 
+  // Function to get the redirect path based on auth status
+  const getPath = (authenticatedPath: string) => {
+    return user ? authenticatedPath : "/sign-in";
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -61,7 +66,7 @@ const Header = () => {
             <Link to="/jobs" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/jobs' ? 'text-primary' : 'text-foreground')}>
               Jobs
             </Link>
-            {user && (
+            {user ? (
               <>
                 <Link to="/applications" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/applications' ? 'text-primary' : 'text-foreground')}>
                   Applications
@@ -71,6 +76,13 @@ const Header = () => {
                 </Link>
                 <Link to="/analytics" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/analytics' ? 'text-primary' : 'text-foreground')}>
                   Analytics
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/sign-in" className={cn("text-sm font-medium transition-colors hover:text-primary", 
+                  location.pathname === '/applications' || location.pathname === '/skills' || location.pathname === '/analytics' ? 'text-primary' : 'text-foreground')}>
+                  Student Portal
                 </Link>
               </>
             )}

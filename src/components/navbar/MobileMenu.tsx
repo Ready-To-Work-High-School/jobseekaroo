@@ -28,6 +28,11 @@ export const MobileMenu = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
+  // Function to get the redirect path based on auth status
+  const getPath = (authenticatedPath: string) => {
+    return user ? authenticatedPath : "/sign-in";
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -56,12 +61,12 @@ export const MobileMenu = () => {
             <Building2 className="h-5 w-5" />
             For Employers
           </MobileNavLink>
-          <MobileNavLink to="/resume-assistant">
+          <MobileNavLink to={getPath("/resume-assistant")}>
             <FileText className="h-5 w-5" />
             Resume Assistant
           </MobileNavLink>
           
-          {user && (
+          {user ? (
             <>
               <div className="border-t border-border/60 my-2"></div>
               <MobileNavLink to="/skills">
@@ -91,9 +96,7 @@ export const MobileMenu = () => {
                 Sign Out
               </div>
             </>
-          )}
-          
-          {!user && (
+          ) : (
             <>
               <div className="border-t border-border/60 my-2"></div>
               <MobileNavLink to="/sign-in">
