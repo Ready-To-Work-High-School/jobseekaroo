@@ -1,21 +1,17 @@
-
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import FeatureCard from './FeatureCard';
-
 const EnhancedHero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const infoAnimation = useFadeIn(700);
-  
-  return (
-    <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
+  return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       <div className="max-w-3xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight md:text-8xl">
             <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
               Job Seekers 4 High Schools
             </span>
@@ -37,8 +33,6 @@ const EnhancedHero = () => {
           <FeatureCard icon="💼" title="Advanced Filtering" description="Use our powerful filters to narrow down jobs by type, experience level, and sort by relevance, date, or salary." />
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default EnhancedHero;
