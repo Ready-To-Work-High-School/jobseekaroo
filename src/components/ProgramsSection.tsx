@@ -36,9 +36,9 @@ const ProgramsSection = () => {
             <div className="relative">
               <img src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" alt="Burst background" className="w-full max-w-3xl mx-auto h-auto" />
               <div className="absolute inset-0 flex items-center justify-center text-center p-4">
-                <div>
-                  <h3 className="font-extrabold text-xl mb-1 text-gray-900">Hiring Opportunity</h3>
-                  <p className="font-medium text-zinc-800">
+                <div className="max-w-xs">
+                  <h3 className="font-extrabold text-xl md:text-2xl mb-1 text-zinc-800">Hiring Opportunity</h3>
+                  <p className="font-medium text-zinc-800 text-sm md:text-base">
                     <a href="mailto:ColemanP3@duvalschools.org" className="hover:underline">
                       Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                     </a>
