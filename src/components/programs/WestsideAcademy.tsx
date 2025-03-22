@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -108,21 +107,73 @@ const CourseCurriculum = () => {
       </div>
       
       <Accordion type="single" collapsible className="bg-white rounded-lg shadow-sm border border-border">
-        <CourseYearItem value="year1" title="Year 1: Introduction to Entrepreneurship">
-          <CourseItemList items={["Business Fundamentals & Career Planning", "Introduction to Business Ownership Models", "Marketing & Sales Foundations", "Communication Skills for Business"]} />
-        </CourseYearItem>
+        <AccordionItem value="year1" className="border-b">
+          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+            <span className="text-base font-bold">Year 1: Introduction to Entrepreneurship</span>
+          </AccordionTrigger>
+          <AccordionContent className="px-5 pb-4 pt-0">
+            <ul className="space-y-3">
+              {["Business Fundamentals & Career Planning", "Introduction to Business Ownership Models", 
+                "Marketing & Sales Foundations", "Communication Skills for Business"].map((item, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="font-bold">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
         
-        <CourseYearItem value="year2" title="Year 2: Business Management &amp; Law">
-          <CourseItemList items={["Financial Literacy & Accounting Basics", "Business Plan Development", "Market Research & Analysis", "Digital Marketing Strategies"]} />
-        </CourseYearItem>
+        <AccordionItem value="year2" className="border-b">
+          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+            <span className="text-base font-bold">Year 2: Business Management &amp; Law</span>
+          </AccordionTrigger>
+          <AccordionContent className="px-5 pb-4 pt-0">
+            <ul className="space-y-3">
+              {["Financial Literacy & Accounting Basics", "Business Plan Development", 
+                "Market Research & Analysis", "Digital Marketing Strategies"].map((item, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="font-bold">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
         
-        <CourseYearItem value="year3" title="Year 3: Business Ownership">
-          <CourseItemList items={["Startup Funding & Investment Strategies", "Business Law & Ethics", "E-commerce & Digital Business Models", "Leadership & Team Management"]} />
-        </CourseYearItem>
+        <AccordionItem value="year3" className="border-b">
+          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+            <span className="text-base font-bold">Year 3: Business Ownership</span>
+          </AccordionTrigger>
+          <AccordionContent className="px-5 pb-4 pt-0">
+            <ul className="space-y-3">
+              {["Startup Funding & Investment Strategies", "Business Law & Ethics", 
+                "E-commerce & Digital Business Models", "Leadership & Team Management"].map((item, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="font-bold">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
         
-        <CourseYearItem value="year4" title="Capstone &amp; Certification">
-          <CourseItemList items={["Business Launch Project (Capstone)", "ESB Certification Preparation", "Advanced Business Operations", "Internship & Professional Portfolio Development"]} />
-        </CourseYearItem>
+        <AccordionItem value="year4">
+          <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
+            <span className="text-base font-bold">Capstone &amp; Certification</span>
+          </AccordionTrigger>
+          <AccordionContent className="px-5 pb-4 pt-0">
+            <ul className="space-y-3">
+              {["Business Launch Project (Capstone)", "ESB Certification Preparation", 
+                "Advanced Business Operations", "Internship & Professional Portfolio Development"].map((item, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="font-bold">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </div>;
 };
@@ -145,7 +196,7 @@ const CourseYearItem = ({
 const CourseItemList = ({
   items
 }) => {
-  return <ul className="space-y-2">
+  return <ul className="space-y-3">
       {items.map((item, index) => (
         <li key={index} className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
