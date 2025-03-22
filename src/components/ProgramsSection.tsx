@@ -5,11 +5,9 @@ import WestsideAcademy from './programs/WestsideAcademy';
 import ProgramCards from './programs/ProgramCards';
 import EntrepreneurshipStoreSection from './programs/EntrepreneurshipStoreSection';
 import CredentialsBadges from './programs/CredentialsBadges';
-import { AlertTriangle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Alert, AlertDescription } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
-import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -42,15 +40,26 @@ const ProgramsSection = () => {
             <img src="/lovable-uploads/262213b1-e3e3-45bb-b551-e52e343ed995.png" alt="Career & Technical Education Logo" className="h-12 md:h-22 w-auto object-scale-down" />
           </div>
           
-          <Alert className="mt-4 border-amber-300 bg-zinc-50">
-            <AlertTriangle className="h-4 w-4 text-red-700 font-extrabold" />
-            <AlertTitle className="text-zinc-900 font-extrabold">Hiring Opportunity</AlertTitle>
-            <AlertDescription className="text-center font-bold text-zinc-900">
-              <a href="mailto:ColemanP3@duvalschools.org" className="text-blue-600 hover:underline">
-                Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-              </a>
-            </AlertDescription>
-          </Alert>
+          {/* Replacing the alert with an image-based burst */}
+          <div className="mt-4 relative">
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
+                alt="Burst background" 
+                className="w-full max-w-3xl mx-auto h-auto"
+              />
+              <div className="absolute inset-0 flex items-center justify-center text-center p-4">
+                <div>
+                  <h3 className="text-white font-extrabold text-xl mb-1">Hiring Opportunity</h3>
+                  <p className="text-white font-medium">
+                    <a href="mailto:ColemanP3@duvalschools.org" className="hover:underline">
+                      Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div className="space-y-16">
