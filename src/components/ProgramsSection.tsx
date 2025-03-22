@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -28,10 +29,8 @@ const ProgramsSection = () => {
           </span>
         </h2>
         
-        {/* Employers Section */}
-        <div className="border border-amber-300 rounded-lg p-6 mb-12 bg-brand-300">
-          
-          
+        {/* Employers Section - Removed border and background */}
+        <div className="mb-12">
           {/* Replacing the alert with an image-based burst */}
           <div className="mt-4 relative">
             <div className="relative">
