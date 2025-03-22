@@ -18,7 +18,7 @@ const EntrepreneurshipStoreSection = () => {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full">
-                <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full text-2xl font-bold mb-4 text-blue-800 text-center">Westside High School Entrepreneurship School Store</h3>
+                <h3 className="bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 px-6 py-2 rounded-full font-bold mb-4 text-blue-800 text-center text-3xl">Westside High School Entrepreneurship School Store</h3>
                 
                 <div className="prose text-gray-700">
                   <p className="mb-4">
@@ -42,7 +42,7 @@ const EntrepreneurshipStoreSection = () => {
                 <CardContent className="p-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex flex-col items-center group">
-                      <div className="relative text-center">
+                      <div className="relative">
                         <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-36 w-auto object-contain mb-2 transition-transform group-hover:scale-110 shadow-md rounded-sm" />
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
