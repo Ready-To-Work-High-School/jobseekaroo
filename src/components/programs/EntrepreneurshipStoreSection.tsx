@@ -16,9 +16,9 @@ const EntrepreneurshipStoreSection = () => {
       </div>
       
       <Card className="overflow-hidden border-amber-300 bg-amber-50/60">
-        {/* Full-width label that spans across the entire card */}
-        <div className="w-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 py-3">
-          <h3 className="text-2xl font-bold text-blue-800 text-center">Westside High School Entrepreneurship School Store</h3>
+        {/* Full-width label that spans across the entire card - increased padding and font size */}
+        <div className="w-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 py-4">
+          <h3 className="text-3xl md:text-4xl font-bold text-blue-800 text-center tracking-tight">Westside High School Entrepreneurship School Store</h3>
         </div>
         
         <CardContent className="p-6 md:p-8">
