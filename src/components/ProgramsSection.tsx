@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -9,9 +10,12 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
 import { Button } from './ui/button';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
-  return <section className={`py-16 bg-secondary/5 ${animation}`}>
+  
+  return (
+    <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
         {/* For Employers Only heading placed outside the blue section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
@@ -52,6 +56,8 @@ const ProgramsSection = () => {
           <CredentialsBadges />
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ProgramsSection;
