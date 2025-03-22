@@ -31,9 +31,9 @@ const ProgramsSection = () => {
         
         {/* Employers Section - Removed border and background */}
         <div className="mb-12">
-          {/* Replacing the alert with an image-based burst */}
+          {/* Adding glowing accent to the burst image */}
           <div className="mt-4 relative">
-            <div className="relative">
+            <div className="relative rounded-full overflow-hidden shadow-[0_0_25px_rgba(245,158,11,0.4)] transition-all duration-500 hover:shadow-[0_0_35px_rgba(245,158,11,0.6)]">
               <img src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" alt="Burst background" className="w-full max-w-3xl mx-auto h-auto" />
               <div className="absolute inset-0 flex items-center justify-center text-center p-4">
                 <div className="max-w-xs">
