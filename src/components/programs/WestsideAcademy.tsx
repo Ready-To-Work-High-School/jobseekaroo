@@ -44,13 +44,13 @@ const AcademyDescription = () => {
 };
 const ProgramBenefits = () => {
   return <div className="md:w-1/2">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 mx-[45px]">
         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
           </svg>
         </div>
-        <h4 className="text-lg font-semibold">Program Benefits</h4>
+        <h4 className="text-lg font-semibold text-center">Program Benefits</h4>
       </div>
       <ul className="bg-white rounded-lg p-5 shadow-sm border border-border space-y-3">
         <li className="flex items-start gap-2">
@@ -59,7 +59,7 @@ const ProgramBenefits = () => {
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-          <span className="font-bold">College credit through dual enrollment opportunities</span>
+          <span className="font-bold text-base">College credit through dual enrollment opportunities</span>
         </li>
         <li className="flex items-start gap-2">
           <ChevronRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -74,7 +74,7 @@ const ProgramBenefits = () => {
 };
 const CourseCurriculum = () => {
   return <div className="md:w-1/2">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 mx-[47px]">
         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -85,7 +85,7 @@ const CourseCurriculum = () => {
             <path d="M8 16h.01" />
           </svg>
         </div>
-        <h4 className="text-lg font-semibold">Course Curriculum</h4>
+        <h4 className="text-lg font-semibold text-center">Course Curriculum</h4>
       </div>
       
       <Accordion type="single" collapsible className="bg-white rounded-lg shadow-sm border border-border">
@@ -114,7 +114,7 @@ const CourseYearItem = ({
 }) => {
   return <AccordionItem value={value}>
       <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-        <span className="font-semibold text-left">{title}</span>
+        <span className="text-base font-bold">{title}</span>
       </AccordionTrigger>
       <AccordionContent className="px-5 pb-4 pt-0">
         {children}
