@@ -1,13 +1,10 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-
 const EntrepreneurshipStoreSection = () => {
-  return (
-    <div className="mb-8">
+  return <div className="mb-8">
       <Card className="overflow-hidden border-amber-300 bg-gradient-to-br from-gray-200 to-gray-100">
         {/* Store Heading - Now full width and outside the card content for maximum stretch */}
-        <h3 className="bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-gray-100 text-center text-3xl md:text-4xl w-full">Westside High School Entrepreneurship School Store</h3>
+        <h3 className="bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-gray-100 text-center text-3xl md:text-4xl w-full">Entrepreneurship School Store</h3>
         
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col gap-6">
@@ -31,8 +28,6 @@ const EntrepreneurshipStoreSection = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default EntrepreneurshipStoreSection;
