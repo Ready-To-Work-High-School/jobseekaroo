@@ -12,7 +12,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useRef } from 'react';
 import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
-import { Sparkles, GraduationCap, ArrowRight } from 'lucide-react';
+import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
+import { Badge } from './ui/badge';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -35,6 +36,42 @@ const ProgramsSection = () => {
 
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
+        {/* ESB and IBM Badges Display */}
+        <div className="mb-8 text-center">
+          <h3 className="text-2xl font-bold text-blue-800 mb-4">Industry Recognized Certifications</h3>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-6">
+            {/* ESB Badge */}
+            <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-amber-200">
+              <div className="relative">
+                <Badge variant="amber" className="absolute -top-2 -right-2">ESB Certified</Badge>
+                <img 
+                  src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+                  alt="ESB Certification" 
+                  className="w-32 h-32 object-contain" 
+                />
+              </div>
+              <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
+              <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
+            </div>
+            
+            {/* IBM Badge */}
+            <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
+              <div className="relative">
+                <Badge variant="info" className="absolute -top-2 -right-2">
+                  <BadgeCheck className="h-4 w-4 mr-1" /> IBM
+                </Badge>
+                <img 
+                  src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" 
+                  alt="IBM Skills Build" 
+                  className="w-32 h-32 object-contain" 
+                />
+              </div>
+              <p className="mt-2 font-medium text-center">IBM Skills Build</p>
+              <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
+            </div>
+          </div>
+        </div>
+        
         {/* Academy Link Banner */}
         <div className="mb-10 text-center">
           <Link to="/entrepreneurship-academy" className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 transition-colors">
