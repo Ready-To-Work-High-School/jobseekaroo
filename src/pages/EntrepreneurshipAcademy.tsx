@@ -27,18 +27,18 @@ const EntrepreneurshipAcademy = () => {
       <CompetitiveEdgeSection />
       
       <div className="container mx-auto px-4 py-8">
+        {/* Academy Program Details - Moved above Program Cards */}
+        <section className={fadeIn}>
+          <div className="mb-12">
+            <WestsideAcademy />
+          </div>
+        </section>
+        
         {/* Program Cards */}
         <section className={fadeIn}>
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Our Programs</h2>
             <ProgramCards />
-          </div>
-        </section>
-        
-        {/* Academy Program Details */}
-        <section className={fadeIn}>
-          <div className="mb-12">
-            <WestsideAcademy />
           </div>
         </section>
         
