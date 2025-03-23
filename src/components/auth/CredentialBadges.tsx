@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 const CredentialBadges = () => {
@@ -44,26 +45,27 @@ const CredentialBadges = () => {
         </h3>
         <div className="flex flex-wrap justify-center gap-8">
           {/* ESB Certification Badge with enhanced styling and increased size */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-b from-blue-80 to-amber-20 rounded-lg shadow-lg border border-amber-400">
+          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-amber-50 to-amber-100 rounded-lg shadow-lg border border-amber-400">
             <div className="relative">
               <Badge variant="amber" className="absolute -top-2 -right-6 z-20 py-1 text-sm px-[22px] my-0 mx-0">ESB Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-lg animate-pulse"></div>
                 <div className="absolute inset-0 bg-amber-400/40 rounded-full blur-md animate-pulse delay-700"></div>
-                <img src={esbBadge} alt="ESB Certification" className="w-48 h-48 object-contain relative z-10" />
+                <img src={esbBadge} alt="ESB Certification" className="w-56 h-56 object-contain relative z-10" />
               </div>
             </div>
             <p className="mt-3 font-bold text-center text-lg">Entrepreneurship & Small Business</p>
             <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
           </div>
           
-          {/* NCLEX Badge (previously Medical) with enhanced styling */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-b from-blue-100 to-blue-200 rounded-lg shadow-lg border border-blue-300">
+          {/* NCLEX Badge with enhanced styling */}
+          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300">
             <div className="relative">
               <Badge variant="info" className="absolute -top-2 -right-7 z-20 px-4 py-1 text-sm">NCLEX Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-lg animate-pulse"></div>
-                <img alt="NCLEX Certification" className="w-40 h-40 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
+                <div className="absolute inset-0 bg-red-400/20 rounded-full blur-md animate-pulse delay-500"></div>
+                <img alt="NCLEX Certification" className="w-52 h-52 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
               </div>
             </div>
             <p className="mt-3 font-bold text-center text-lg">Medical Academy</p>
