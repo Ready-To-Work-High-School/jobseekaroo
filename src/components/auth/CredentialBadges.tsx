@@ -46,6 +46,51 @@ const CredentialBadges = () => {
   
   return (
     <div className="space-y-6">
+      {/* Industry Certifications - Moved to the top */}
+      <div>
+        <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
+          <Award className="h-5 w-5 text-amber-500" />
+          Industry Certifications
+        </h3>
+        <div className="flex flex-wrap justify-center gap-8">
+          {/* ESB Certification Badge with enhanced styling */}
+          <div className="flex flex-col items-center p-5 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-lg border border-amber-300">
+            <div className="relative">
+              <Badge variant="amber" className="absolute -top-2 -right-2 z-20 px-4 py-1 text-sm">ESB Certified</Badge>
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-lg animate-pulse"></div>
+                <div className="absolute inset-0 bg-amber-400/40 rounded-full blur-md animate-pulse delay-700"></div>
+                <img 
+                  src={esbBadge} 
+                  alt="ESB Certification" 
+                  className="w-40 h-40 object-contain relative z-10" 
+                />
+              </div>
+            </div>
+            <p className="mt-3 font-bold text-center text-lg">Entrepreneurship & Small Business</p>
+            <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
+          </div>
+          
+          {/* NCLEX Badge (previously Medical) with enhanced styling */}
+          <div className="flex flex-col items-center p-5 bg-gradient-to-b from-blue-100 to-blue-200 rounded-lg shadow-lg border border-blue-300">
+            <div className="relative">
+              <Badge variant="info" className="absolute -top-2 -right-2 z-20 px-4 py-1 text-sm">NCLEX Certified</Badge>
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-lg animate-pulse"></div>
+                <img 
+                  alt="NCLEX Certification" 
+                  className="w-40 h-40 object-contain relative z-10" 
+                  src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                />
+              </div>
+            </div>
+            <p className="mt-3 font-bold text-center text-lg">Medical Academy</p>
+            <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Ready to Work Credentials - Moved down */}
       <div>
         <h3 className="text-lg font-semibold mb-3 text-blue-800">Ready to Work Credentials</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -62,49 +107,6 @@ const CredentialBadges = () => {
               <p className="text-sm font-medium text-center">{badge.name}</p>
             </div>
           ))}
-        </div>
-      </div>
-      
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
-          <Award className="h-5 w-5 text-amber-500" />
-          Industry Certifications
-        </h3>
-        <div className="flex flex-wrap justify-center gap-6">
-          {/* ESB Certification Badge with badge in front */}
-          <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-md border border-amber-200">
-            <div className="relative">
-              <Badge variant="amber" className="absolute -top-2 -right-2 z-20">ESB Certified</Badge>
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-md animate-pulse"></div>
-                <div className="absolute inset-0 bg-amber-400/30 rounded-full blur-md animate-pulse delay-700"></div>
-                <img 
-                  src={esbBadge} 
-                  alt="ESB Certification" 
-                  className="w-32 h-32 object-contain relative z-10" 
-                />
-              </div>
-            </div>
-            <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
-            <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
-          </div>
-          
-          {/* Medical Academy Badge with badge in front */}
-          <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-blue-100 rounded-lg shadow-md border border-blue-200">
-            <div className="relative">
-              <Badge variant="info" className="absolute -top-2 -right-2 z-20">Medical</Badge>
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-sm animate-pulse"></div>
-                <img 
-                  alt="Medical Academy" 
-                  className="w-32 h-32 object-contain relative z-10" 
-                  src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
-                />
-              </div>
-            </div>
-            <p className="mt-2 font-medium text-center">Medical Academy</p>
-            <p className="text-xs text-gray-600 text-center">Healthcare career pathway</p>
-          </div>
         </div>
       </div>
       
