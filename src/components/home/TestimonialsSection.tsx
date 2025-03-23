@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Quote, Award, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Testimonial data
@@ -133,6 +133,43 @@ const TestimonialsSection = () => {
                     <ChevronRight size={20} />
                   </Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-12 p-6 bg-white shadow-md rounded-lg">
+          <h3 className="text-xl font-bold mb-4 text-gray-900">Digital Credentials for Student Success</h3>
+          <p className="text-gray-700 mb-4">
+            As students complete each learning path, they earn digital credentials from leading platforms, including:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-50 p-4 rounded-lg flex items-start gap-3">
+              <Award className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-gray-900">IBM</h4>
+                <p className="text-sm text-gray-600">Digital badges validating skills in emerging technologies</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg flex items-start gap-3">
+              <GraduationCap className="h-6 w-6 text-green-600 flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-gray-900">Everfi</h4>
+                <p className="text-sm text-gray-600">Certifications in financial literacy, data science, and workplace skills</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg flex items-start gap-3">
+              <Award className="h-6 w-6 text-amber-600 flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-gray-900">Florida Ready to Work</h4>
+                <p className="text-sm text-gray-600">Four credentials showcasing job readiness and employability skills</p>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg flex items-start gap-3">
+              <Award className="h-6 w-6 text-purple-600 flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-gray-900">Industry Certification in ESB</h4>
+                <p className="text-sm text-gray-600">Demonstrating expertise in business management and marketing</p>
               </div>
             </div>
           </div>
