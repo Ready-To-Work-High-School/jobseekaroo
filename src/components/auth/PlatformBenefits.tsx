@@ -1,9 +1,6 @@
-
 import { CheckCircle2, Building, FileText, Users, Calendar, MessageCircle, BarChart2, UserCheck, Lock } from "lucide-react";
-
 const PlatformBenefits = () => {
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       <div className="space-y-4">
         <h3 className="font-medium text-base">For Students</h3>
         <ul className="space-y-3">
@@ -66,13 +63,7 @@ const PlatformBenefits = () => {
         </ul>
       </div>
       
-      <div className="mt-6 bg-amber-50 border border-amber-200 rounded-md p-3">
-        <p className="text-sm text-amber-800">
-          <strong>Note:</strong> This platform is exclusively for Westside High School students enrolled in the Entrepreneurship Academy and their employer partners.
-        </p>
-      </div>
-    </div>
-  );
+      
+    </div>;
 };
-
 export default PlatformBenefits;
