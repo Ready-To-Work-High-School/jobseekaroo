@@ -97,7 +97,7 @@ const SuccessStories = () => {
               <CardContent className="pt-4">
                 {story.image && (
                   <div className="mb-4 flex justify-center">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-slate-200">
+                    <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-slate-200">
                       <img 
                         src={story.image} 
                         alt={story.name} 

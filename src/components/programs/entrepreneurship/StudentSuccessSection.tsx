@@ -46,7 +46,7 @@ const StudentSuccessSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.id} className="overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-amber-200">
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-72 overflow-hidden">
                 <img 
                   src={testimonial.imageUrl} 
                   alt={testimonial.name} 
