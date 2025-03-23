@@ -3,8 +3,6 @@ import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
 import ProgramCards from './programs/ProgramCards';
-import EntrepreneurshipStoreSection from './programs/EntrepreneurshipStoreSection';
-import CredentialsBadges from './programs/CredentialsBadges';
 import { Alert, AlertDescription } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
@@ -13,7 +11,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useRef } from 'react';
 import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, GraduationCap, ExternalLink } from 'lucide-react';
+import { Button } from './ui/button';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -71,13 +70,37 @@ const ProgramsSection = () => {
         </div>
         
         <div className="space-y-16">
-          <WestsideAcademy />
-          
-          <EntrepreneurshipStoreSection />
+          {/* Academy Card with Link to Full Page */}
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-200">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+                <div className="flex-shrink-0">
+                  <img src="/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png" alt="Westside High School Logo" className="h-14 w-auto object-fill" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-left">Entrepreneurship Academy at Westside High School</h3>
+                  <p className="text-base text-gray-950">Career Technical Education | Duval County School District</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-700 mb-6">
+                The Entrepreneurship Academy is designated as an Advanced Academy, offering a rigorous curriculum with accelerated coursework, 
+                industry certifications, and college credit opportunities. Students gain real-world business experience through managing the school store 
+                and participate in professional development opportunities.
+              </p>
+              
+              <div className="flex justify-center">
+                <Button className="bg-blue-700 hover:bg-blue-800" asChild>
+                  <Link to="/academy">
+                    <GraduationCap className="mr-2 h-4 w-4" />
+                    Learn More About Our Academy
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
           
           <ProgramCards />
-          
-          <CredentialsBadges />
         </div>
       </div>
     </section>;

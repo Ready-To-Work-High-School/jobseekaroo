@@ -12,8 +12,9 @@ import SectionSeparator from '@/components/home/SectionSeparator';
 import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
-import { Card, CardContent } from '@/components/ui/card';
-import { Bot, Database, Cloud } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { GraduationCap } from 'lucide-react';
 
 const Index = () => {
   const { user } = useAuth();
@@ -33,57 +34,22 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Advanced Curriculum Section - NEW */}
+        {/* Advanced Curriculum CTA - Simplified with link to Academy page */}
         <section className={`py-12 bg-gradient-to-r from-blue-50 to-white ${contentAnimation}`}>
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-900">Advanced Technology Curriculum</h2>
-              <p className="text-gray-700 mb-8 text-center">
-                Westside High School students are gaining a competitive edge in the workforce before they even graduate through an advanced-level curriculum that covers Artificial Intelligence Foundations, Blockchain, Cloud Computing, Emerging Technologies, and the Internet of Things (IoT).
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="bg-blue-100 p-3 rounded-full mb-4">
-                        <Bot className="h-8 w-8 text-blue-700" />
-                      </div>
-                      <h3 className="font-bold mb-2">AI Foundations</h3>
-                      <p className="text-sm text-gray-600">Understanding machine learning algorithms and natural language processing</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="bg-purple-100 p-3 rounded-full mb-4">
-                        <Database className="h-8 w-8 text-purple-700" />
-                      </div>
-                      <h3 className="font-bold mb-2">Blockchain</h3>
-                      <p className="text-sm text-gray-600">Exploring distributed ledger technology and smart contracts</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="bg-sky-100 p-3 rounded-full mb-4">
-                        <Cloud className="h-8 w-8 text-sky-700" />
-                      </div>
-                      <h3 className="font-bold mb-2">Cloud Computing</h3>
-                      <p className="text-sm text-gray-600">Learning infrastructure, platforms, and software as a service</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              
-              <p className="text-gray-700 text-center">
-                By mastering these in-demand skills and earning industry-recognized credentials, students develop a strong foundation in current technology trends and gain practical, real-world expertise. Their hands-on experience and proven competencies make them highly valuable to employers, ready to contribute effectively and drive innovation from day one.
-              </p>
-            </div>
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">Advanced Technology Curriculum</h2>
+            <p className="text-gray-700 mb-6 max-w-3xl mx-auto">
+              Westside High School students are gaining a competitive edge in the workforce before they even graduate through 
+              an advanced-level curriculum that covers Artificial Intelligence Foundations, Blockchain, Cloud Computing, 
+              and Internet of Things (IoT).
+            </p>
+            
+            <Button className="bg-blue-700 hover:bg-blue-800" asChild>
+              <Link to="/academy">
+                <GraduationCap className="mr-2 h-4 w-4" />
+                Explore Our Academy Program
+              </Link>
+            </Button>
           </div>
         </section>
         
@@ -122,7 +88,7 @@ const Index = () => {
           </>
         )}
         
-        {/* Training & Certification Section */}
+        {/* Training & Certification Section - Simplified */}
         <div className={fadeInSlow}>
           <ProgramsSection />
         </div>

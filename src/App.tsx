@@ -27,6 +27,7 @@ const SavedJobs = lazy(() => import('./pages/SavedJobs'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const SuccessStories = lazy(() => import('./pages/SuccessStories'));
 const License = lazy(() => import('./pages/License'));
+const EntrepreneurshipAcademy = lazy(() => import('./pages/EntrepreneurshipAcademy'));
 
 // Loading component
 const PageLoader = () => (
@@ -56,6 +57,7 @@ function App() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/success-stories" element={<SuccessStories />} />
                 <Route path="/license" element={<License />} />
+                <Route path="/academy" element={<EntrepreneurshipAcademy />} />
                 
                 {/* Protected Routes */}
                 <Route path="/jobs" element={
