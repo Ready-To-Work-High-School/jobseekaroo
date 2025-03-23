@@ -63,7 +63,7 @@ const CredentialBadges = () => {
             <div className="relative">
               <Badge className="absolute -top-2 -right-2 bg-blue-500">IBM Skills</Badge>
               <img 
-                src="/lovable-uploads/010059ca-3c6a-4e41-bcc3-d47749b4bd09.png" 
+                src={ibmBadge} 
                 alt="IBM Skills Build" 
                 className="w-24 h-24 object-contain mb-2" 
               />
