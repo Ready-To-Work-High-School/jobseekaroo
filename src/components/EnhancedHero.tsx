@@ -28,7 +28,7 @@ const EnhancedHero = () => {
               </span>
             </h1>
           </div>
-          <p className="text-xl font-medium mt-6 text-blue-900">Let Your Next Chapter Start Now </p>
+          <p className="text-xl font-medium mt-6 text-blue-900"><em>Let Your Next Chapter Start Now</em></p>
         </div>
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-8", infoAnimation)}>
