@@ -36,9 +36,9 @@ const ProgramsSection = () => {
 
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
-        {/* For Employers Only heading placed outside the blue section */}
-        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
-          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-6 py-3 font-bold text-blue-800 text-center text-3xl w-full md:text-5xl">
+        {/* For Employers Only heading placed outside the blue section - stretched full width */}
+        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
+          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 py-3 font-bold text-blue-800 text-center text-3xl w-full block md:text-5xl">
             For Employers Only
           </span>
         </h2>
