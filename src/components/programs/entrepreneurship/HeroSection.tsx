@@ -8,16 +8,14 @@ const HeroSection = () => {
     <section className="py-12 md:py-16 bg-gradient-to-b from-blue-50 to-amber-50/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-8 relative">
-            {/* Reduced opacity and blur for less overwhelming effect */}
-            <div className="absolute inset-0 blur-md bg-gradient-to-r from-blue-400 via-amber-300 to-blue-500 opacity-40 rounded-xl"></div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-blue-800 relative z-10">
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-blue-800">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-amber-400 to-blue-500">
                 Entrepreneurship Academy
               </span>
               <span className="block mt-2">at <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-gray-800 to-black">Westside High <span className="text-black">School</span></span></span>
             </h1>
-            <p className="text-xl text-gray-700 mb-8 relative z-10">
+            <p className="text-xl text-gray-700 mb-8">
               Developing the next generation of business leaders and innovators
             </p>
           </div>

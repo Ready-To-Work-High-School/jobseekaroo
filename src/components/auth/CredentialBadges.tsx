@@ -71,19 +71,17 @@ const CredentialBadges = () => {
           Industry Certifications
         </h3>
         <div className="flex flex-wrap justify-center gap-6">
-          {/* ESB Certification Badge with enhanced glow */}
+          {/* ESB Certification Badge with badge in front */}
           <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-md border border-amber-200">
             <div className="relative">
-              <Badge variant="amber" className="absolute -top-2 -right-2">ESB Certified</Badge>
+              <Badge variant="amber" className="absolute -top-2 -right-2 z-20">ESB Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-md animate-pulse"></div>
                 <div className="absolute inset-0 bg-amber-400/30 rounded-full blur-md animate-pulse delay-700"></div>
-                <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-lg animate-pulse"></div>
-                <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-lg animate-pulse delay-500"></div>
                 <img 
                   src={esbBadge} 
                   alt="ESB Certification" 
-                  className="w-32 h-32 object-contain relative z-10 glow-amber" 
+                  className="w-32 h-32 object-contain relative z-10" 
                 />
               </div>
             </div>
@@ -91,10 +89,10 @@ const CredentialBadges = () => {
             <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
           </div>
           
-          {/* Medical Academy Badge (previously IBM Skills Build Badge) */}
+          {/* Medical Academy Badge with badge in front */}
           <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-blue-100 rounded-lg shadow-md border border-blue-200">
             <div className="relative">
-              <Badge variant="info" className="absolute -top-2 -right-2">Medical</Badge>
+              <Badge variant="info" className="absolute -top-2 -right-2 z-20">Medical</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-sm animate-pulse"></div>
                 <img 
@@ -119,7 +117,7 @@ const CredentialBadges = () => {
           {ibmBadges.map((badge, index) => (
             <div key={index} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
               <div className="relative">
-                <Badge variant="info" className="absolute -top-2 -right-2">IBM</Badge>
+                <Badge variant="info" className="absolute -top-2 -right-2 z-20">IBM</Badge>
                 <img 
                   src={badge.image} 
                   alt={badge.name} 

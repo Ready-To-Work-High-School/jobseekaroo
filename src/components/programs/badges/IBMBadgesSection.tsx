@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface BadgeProps {
   image: string;
@@ -48,7 +49,8 @@ const IBMBadgesSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {ibmBadges.map((badge, index) => (
               <div key={index} className="flex flex-col items-center">
-                <div className="bg-gradient-to-b from-cyan-50 to-cyan-100 p-3 rounded-lg hover:shadow-md transition-shadow">
+                <div className="bg-gradient-to-b from-cyan-50 to-cyan-100 p-3 rounded-lg hover:shadow-md transition-shadow relative">
+                  <Badge className="absolute -top-2 right-0 z-20 bg-blue-600">IBM</Badge>
                   <img 
                     src={badge.image} 
                     alt={badge.name} 

@@ -31,7 +31,8 @@ const MicrosoftBadgesSection = () => {
       <Card className="border-blue-100 shadow-sm">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="max-w-[220px]">
+            <div className="max-w-[220px] relative">
+              <Badge className="absolute -top-2 right-0 z-20 bg-blue-600">Microsoft</Badge>
               <img 
                 src={microsoftBadges[0].image} 
                 alt={microsoftBadges[0].name} 

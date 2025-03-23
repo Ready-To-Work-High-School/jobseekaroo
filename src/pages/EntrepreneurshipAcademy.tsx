@@ -3,7 +3,6 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import WestsideAcademy from '@/components/programs/WestsideAcademy';
-import EntrepreneurshipStoreSection from '@/components/programs/EntrepreneurshipStoreSection';
 import { Separator } from '@/components/ui/separator';
 import ProgramCards from '@/components/programs/ProgramCards';
 import HeroSection from '@/components/programs/entrepreneurship/HeroSection';
@@ -54,13 +53,6 @@ const EntrepreneurshipAcademy = () => {
         </section>
         
         <Separator className="my-16" />
-        
-        {/* School Store Section */}
-        <section className={fadeIn}>
-          <div className="mb-12">
-            <EntrepreneurshipStoreSection />
-          </div>
-        </section>
         
         <Separator className="my-16" />
         
