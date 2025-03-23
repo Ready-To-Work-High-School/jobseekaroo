@@ -36,6 +36,40 @@ const ProgramsSection = () => {
 
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
+        {/* For Employers Only heading placed at the top of the section */}
+        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
+          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 py-3 font-bold text-blue-800 text-center text-3xl w-full block md:text-5xl">
+            For Employers Only
+          </span>
+        </h2>
+        
+        {/* Employers Section - Simplified without burst image */}
+        <div className="mb-12">
+          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
+            <Card className="w-full glow-purple rounded-xl overflow-hidden border-purple-300 shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex items-center justify-center mb-4">
+                  <Sparkles className="h-6 w-6 text-purple-500 mr-2" />
+                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
+                    Hiring Opportunity
+                  </h3>
+                </div>
+                
+                <p className="font-medium text-lg mb-6">
+                  Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+                </p>
+                
+                <a 
+                  href="mailto:ColemanP3@duvalschools.org" 
+                  className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+                >
+                  Contact Us Today
+                </a>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        
         {/* ESB and IBM Badges Display */}
         <div className="mb-8 text-center">
           <h3 className="text-2xl font-bold text-blue-800 mb-4">Industry Recognized Certifications</h3>
@@ -80,40 +114,6 @@ const ProgramsSection = () => {
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
           <p className="mt-3 text-sm text-gray-600">Learn more about our advanced Entrepreneurship program at Westside High School</p>
-        </div>
-        
-        {/* For Employers Only heading placed outside the blue section - stretched full width */}
-        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
-          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 py-3 font-bold text-blue-800 text-center text-3xl w-full block md:text-5xl">
-            For Employers Only
-          </span>
-        </h2>
-        
-        {/* Employers Section - Simplified without burst image */}
-        <div className="mb-12">
-          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
-            <Card className="w-full glow-purple rounded-xl overflow-hidden border-purple-300 shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-purple-500 mr-2" />
-                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
-                    Hiring Opportunity
-                  </h3>
-                </div>
-                
-                <p className="font-medium text-lg mb-6">
-                  Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-                </p>
-                
-                <a 
-                  href="mailto:ColemanP3@duvalschools.org" 
-                  className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-                >
-                  Contact Us Today
-                </a>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     </section>;

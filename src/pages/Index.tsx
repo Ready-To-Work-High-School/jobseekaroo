@@ -36,7 +36,7 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Job Placements Section - NEW */}
+        {/* Job Placements Section */}
         <JobPlacementsSection />
         
         {/* Separator */}
@@ -48,7 +48,15 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Testimonials Section - NEW */}
+        {/* For Employers Only Section - MOVED UP */}
+        <div className={fadeInSlow}>
+          <ProgramsSection />
+        </div>
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
+        {/* Testimonials Section - NOW AFTER EMPLOYERS SECTION */}
         <TestimonialsSection />
         
         {/* Separator */}
@@ -61,14 +69,6 @@ const Index = () => {
             <SectionSeparator />
           </>
         )}
-        
-        {/* Training & Certification Section */}
-        <div className={fadeInSlow}>
-          <ProgramsSection />
-        </div>
-        
-        {/* Separator */}
-        <SectionSeparator />
         
         {/* Resources Section */}
         <ResourcesSection />
