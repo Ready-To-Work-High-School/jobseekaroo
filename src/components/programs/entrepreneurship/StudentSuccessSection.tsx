@@ -23,9 +23,9 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Marcus Williams",
-    imageUrl: "/lovable-uploads/d9e85ca7-a9c3-445e-9aa5-468cdcc95775.png",
-    content: "Working in the school store gave me real business experience. I learned how to manage inventory, handle transactions, and provide customer service - skills I'm using in my retail management internship.",
+    name: "Jordan Wheeler",
+    imageUrl: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
+    content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
     year: "Class of 2023"
   }
 ];

@@ -33,13 +33,13 @@ const SuccessStories = () => {
       color: "bg-amber-500"
     },
     {
-      name: "David Thompson",
-      role: "Junior Tech Support",
-      company: "Tech Solutions Inc.",
-      image: "/lovable-uploads/d9e85ca7-a9c3-445e-9aa5-468cdcc95775.png",
-      initials: "DT",
-      quote: "The technical skills I learned in the program directly translated to my job. My employer was impressed by how prepared I was on day one.",
-      credentials: ["Technology Fundamentals", "Entrepreneurship Certification"],
+      name: "Jordan Wheeler",
+      role: "Professional Welder",
+      company: "WW Gay Mechanical Contractors, Inc.",
+      image: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
+      initials: "JW",
+      quote: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. These qualifications helped me stand out to employers and secure gainful employment as a welder apprentice. With hands-on training and experience, I am now advancing toward a successful career as a professional welder.",
+      credentials: ["Industry Certification in Entrepreneurship & Small Business", "Florida Ready to Work"],
       color: "bg-green-600"
     }
   ];
