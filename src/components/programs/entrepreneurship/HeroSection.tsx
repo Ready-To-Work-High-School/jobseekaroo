@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Briefcase, Award } from 'lucide-react';
-
 const HeroSection = () => {
   return <section className="py-12 bg-gradient-to-b from-gray-900 to-gray-800 md:py-0">
       <div className="container mx-auto px-4">
@@ -33,7 +31,7 @@ const HeroSection = () => {
                   </div>
                   <div className="flex items-center gap-3 rounded-full bg-gray-900/80 px-4 py-2 border border-red-900">
                     <Award className="h-5 w-5 text-amber-500" />
-                    <span className="font-medium text-amber-100">College Credit</span>
+                    <span className="font-medium text-amber-100">Dual Enrollment Credit</span>
                   </div>
                 </div>
                 <p className="text-gray-300">
@@ -47,5 +45,4 @@ const HeroSection = () => {
       </div>
     </section>;
 };
-
 export default HeroSection;
