@@ -11,7 +11,7 @@ interface BadgeProps {
 const IBMBadgesSection = () => {
   const ibmBadges: BadgeProps[] = [
     {
-      image: "/lovable-uploads/f2b5c7b2-f480-4840-b7a7-50f8a96aa12a.png",
+      image: "/lovable-uploads/03298561-15fc-43ee-920b-39fcb0e27266.png", // Updated to the nursing academy image
       name: "AI Foundations",
       subtitle: "A collaboration of ISTE and IBM"
     },
