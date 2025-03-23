@@ -1,6 +1,5 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CredentialBadges from "./CredentialBadges";
 import PlatformBenefits from "./PlatformBenefits";
 
 const SignInBenefitsCard = () => {
@@ -11,7 +10,7 @@ const SignInBenefitsCard = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <PlatformBenefits />
-        <CredentialBadges />
+        {/* CredentialBadges component removed */}
       </CardContent>
     </Card>
   );
