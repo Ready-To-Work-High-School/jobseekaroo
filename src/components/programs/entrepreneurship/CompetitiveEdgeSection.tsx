@@ -1,46 +1,35 @@
-
 import React from 'react';
 import { Cpu, Sparkles, BarChart3, Globe, Flame, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
 const CompetitiveEdgeSection = () => {
-  const features = [
-    {
-      icon: <Cpu className="h-8 w-8 text-red-600" />,
-      title: "Technology Skills",
-      description: "Students develop technical proficiency that gives them an advantage in modern workplaces"
-    },
-    {
-      icon: <BarChart3 className="h-8 w-8 text-amber-600" />,
-      title: "Business Analytics",
-      description: "Learn to analyze market trends and make data-driven business decisions"
-    },
-    {
-      icon: <Globe className="h-8 w-8 text-[#6e1212]" />,
-      title: "Global Perspective",
-      description: "Understand international business practices and global market opportunities"
-    },
-    {
-      icon: <Flame className="h-8 w-8 text-amber-500" />,
-      title: "Entrepreneurial Mindset",
-      description: "Develop creative problem-solving and innovative thinking skills"
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8 text-gray-700" />,
-      title: "Growth Strategy",
-      description: "Learn business growth tactics and strategic planning fundamentals"
-    },
-    {
-      icon: <Sparkles className="h-8 w-8 text-amber-600" />,
-      title: "Digital Credentials",
-      description: "Earn industry-recognized certifications and digital badges"
-    }
-  ];
-
-  return (
-    <section className="w-full py-16 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-200">
+  const features = [{
+    icon: <Cpu className="h-8 w-8 text-red-600" />,
+    title: "Technology Skills",
+    description: "Students develop technical proficiency that gives them an advantage in modern workplaces"
+  }, {
+    icon: <BarChart3 className="h-8 w-8 text-amber-600" />,
+    title: "Business Analytics",
+    description: "Learn to analyze market trends and make data-driven business decisions"
+  }, {
+    icon: <Globe className="h-8 w-8 text-[#6e1212]" />,
+    title: "Global Perspective",
+    description: "Understand international business practices and global market opportunities"
+  }, {
+    icon: <Flame className="h-8 w-8 text-amber-500" />,
+    title: "Entrepreneurial Mindset",
+    description: "Develop creative problem-solving and innovative thinking skills"
+  }, {
+    icon: <TrendingUp className="h-8 w-8 text-gray-700" />,
+    title: "Growth Strategy",
+    description: "Learn business growth tactics and strategic planning fundamentals"
+  }, {
+    icon: <Sparkles className="h-8 w-8 text-amber-600" />,
+    title: "Digital Credentials",
+    description: "Earn industry-recognized certifications and digital badges"
+  }];
+  return <section className="w-full py-16 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-200 bg-amber-100">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto bg-amber-100">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[#6e1212] mb-4">Competitive Edge in the Workforce</h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
@@ -90,26 +79,16 @@ const CompetitiveEdgeSection = () => {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className={cn(
-                  "bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
-                  index % 2 === 0 ? "border-[#6e1212]/50 hover:border-[#6e1212]" : "border-amber-300 hover:border-amber-500"
-                )}
-              >
+            {features.map((feature, index) => <div key={index} className={cn("bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg", index % 2 === 0 ? "border-[#6e1212]/50 hover:border-[#6e1212]" : "border-amber-300 hover:border-amber-500")}>
                 <div className="mb-4">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default CompetitiveEdgeSection;
