@@ -20,6 +20,30 @@ const CredentialBadges = () => {
   
   const esbBadge = "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png";
   
+  // IBM SkillsBuild badge data
+  const ibmBadges = [
+    {
+      image: "/lovable-uploads/19e761ce-d27d-4894-a1e6-0cb63237cbcf.png",
+      name: "AI Foundations",
+      description: "A collaboration of ISTE and IBM"
+    },
+    {
+      image: "/lovable-uploads/73338594-5fa4-499d-8fa6-880f21b770ef.png",
+      name: "Explore Emerging Tech",
+      description: "IBM SkillsBuild"
+    },
+    {
+      image: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
+      name: "IBM AI Foundations for Educators",
+      description: "Online and On-Demand Institutes"
+    },
+    {
+      image: "/lovable-uploads/54345058-d5eb-4d91-a38b-197094c4ea72.png",
+      name: "Entrepreneurship Business Essentials",
+      description: "IBM SkillsBuild"
+    }
+  ];
+  
   return (
     <div className="space-y-6">
       <div>
@@ -44,9 +68,10 @@ const CredentialBadges = () => {
       <div>
         <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
           <Award className="h-5 w-5 text-amber-500" />
-          Industry Certification
+          Industry Certifications
         </h3>
-        <div className="flex justify-center">
+        <div className="flex flex-wrap justify-center gap-6">
+          {/* ESB Certification Badge */}
           <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-md border border-amber-200">
             <div className="relative">
               <Badge variant="amber" className="absolute -top-2 -right-2">ESB Certified</Badge>
@@ -63,27 +88,46 @@ const CredentialBadges = () => {
             <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
             <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
           </div>
+          
+          {/* IBM Skills Build Badge moved next to ESB */}
+          <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-blue-100 rounded-lg shadow-md border border-blue-200">
+            <div className="relative">
+              <Badge variant="info" className="absolute -top-2 -right-2">IBM</Badge>
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-sm animate-pulse"></div>
+                <img 
+                  alt="IBM Skills Build" 
+                  className="w-32 h-32 object-contain relative z-10" 
+                  src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                />
+              </div>
+            </div>
+            <p className="mt-2 font-medium text-center">IBM Skills Build</p>
+            <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
+          </div>
         </div>
       </div>
       
       <div className="mt-4">
         <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
           <BadgeCheck className="h-5 w-5 text-blue-500" />
-          IBM Skills Build
+          IBM Skills Build Credentials
         </h3>
-        <div className="flex justify-center">
-          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
-            <div className="relative">
-              <Badge variant="info" className="absolute -top-2 -right-2">IBM</Badge>
-              <img 
-                alt="IBM Skills Build" 
-                className="w-32 h-32 object-contain" 
-                src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {ibmBadges.map((badge, index) => (
+            <div key={index} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
+              <div className="relative">
+                <Badge variant="info" className="absolute -top-2 -right-2">IBM</Badge>
+                <img 
+                  src={badge.image} 
+                  alt={badge.name} 
+                  className="w-28 h-28 object-contain" 
+                />
+              </div>
+              <p className="mt-2 font-medium text-center">{badge.name}</p>
+              <p className="text-xs text-gray-600 text-center">{badge.description}</p>
             </div>
-            <p className="mt-2 font-medium text-center">IBM Skills Build</p>
-            <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
-          </div>
+          ))}
         </div>
       </div>
     </div>
