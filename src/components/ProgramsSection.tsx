@@ -1,4 +1,3 @@
-
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -14,7 +13,6 @@ import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
 import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from './ui/badge';
-
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
@@ -33,7 +31,6 @@ const ProgramsSection = () => {
       protectElement(sectionRef.current);
     }
   }, []);
-  
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
@@ -74,8 +71,8 @@ const ProgramsSection = () => {
             {/* ESB Badge */}
             <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-amber-200">
               <div className="relative">
-                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-red-800">ESB Certified</Badge>
-                <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="w-32 h-32 object-contain" />
+                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-blue-700">ESB Certified</Badge>
+                <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="w-32 h-32 object-cover" />
               </div>
               <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
               <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
@@ -84,10 +81,10 @@ const ProgramsSection = () => {
             {/* IBM Badge */}
             <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-red-200">
               <div className="relative">
-                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-red-800 px-[29px]">
+                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 px-[29px] bg-blue-700">
                   <BadgeCheck className="h-4 w-4 mr-1" /> IBM
                 </Badge>
-                <img alt="IBM Skills Build" className="w-32 h-32 object-contain" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
+                <img alt="IBM Skills Build" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" className="w-32 h-32 object-cover" />
               </div>
               <p className="mt-2 font-medium text-center">IBM Skills Build</p>
               <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
@@ -107,5 +104,4 @@ const ProgramsSection = () => {
       </div>
     </section>;
 };
-
 export default ProgramsSection;

@@ -1,20 +1,19 @@
-
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import EnhancedSearchForm from '@/components/EnhancedSearchForm';
 import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
-
 const SearchSection = () => {
   const searchAnimation = useFadeIn(400);
-  const { user } = useAuth();
-  
+  const {
+    user
+  } = useAuth();
+
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
-  
   return <section className="py-12 bg-blue-100">
       <div className="container mx-auto px-4">
         <div className={cn("max-w-3xl mx-auto text-center", searchAnimation)}>
