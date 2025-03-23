@@ -20,9 +20,9 @@ const CredentialBadges = () => {
         <Badge variant="brandSolid" className="mb-2">Florida Ready to Work</Badge>
       </div>
       
-      <div className="flex justify-center flex-wrap gap-2 mb-4">
+      <div className="flex justify-center flex-wrap gap-3 mb-4">
         {readyToWorkBadges.map((badge, index) => (
-          <div key={index} className="relative w-14 h-14">
+          <div key={index} className="relative w-20 h-20">
             <img 
               src={badge} 
               alt="Ready to Work Badge" 
@@ -38,7 +38,7 @@ const CredentialBadges = () => {
       </div>
       
       <div className="flex justify-center mb-4">
-        <div className="relative w-24 h-24">
+        <div className="relative w-28 h-28">
           <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
           <img 
             src={esbBadge} 
