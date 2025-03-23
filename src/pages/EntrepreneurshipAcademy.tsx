@@ -23,17 +23,17 @@ const EntrepreneurshipAcademy = () => {
         <HeroSection />
       </div>
       
+      {/* Advanced Academy Section - Moved to top after hero */}
+      <section className={fadeIn}>
+        <div className="container mx-auto px-4 py-8">
+          <WestsideAcademy />
+        </div>
+      </section>
+      
       {/* New Competitive Edge Section */}
       <CompetitiveEdgeSection />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Academy Program Details - Moved above Program Cards */}
-        <section className={fadeIn}>
-          <div className="mb-12">
-            <WestsideAcademy />
-          </div>
-        </section>
-        
         {/* Program Cards */}
         <section className={fadeIn}>
           <div className="mb-12">
