@@ -31,14 +31,14 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
-      {/* Credentials & Certifications - MOVED UP above Tech Credentials */}
+      {/* Credentials & Certifications */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-gray-50 to-gray-100">
           <BusinessCredentialsSection />
         </div>
       </section>
       
-      {/* Program Cards - MOVED UP above Tech Credentials */}
+      {/* Program Cards - MOVED UP above Tech Credentials as requested */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8">
           <div className="mb-12">

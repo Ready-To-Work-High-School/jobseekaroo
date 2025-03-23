@@ -10,11 +10,11 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-amber-600">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-700 via-amber-600 to-blue-600">
                 Entrepreneurship Academy
               </span>
               <span className="block mt-2">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-red-600">at</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-gray-900">Westside High <span className="text-gray-700">School</span></span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-700 via-gray-600 to-gray-800">at</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-amber-600 to-blue-700">Westside High <span className="text-gray-700">School</span></span>
               </span>
             </h1>
             <p className="text-xl text-gray-700 mb-8">
@@ -23,8 +23,9 @@ const HeroSection = () => {
           </div>
           
           <div>
-            <Card className="bg-white/80 backdrop-blur border-red-700/50 shadow-md">
-              <CardContent className="p-6">
+            <Card className="bg-white/80 backdrop-blur border-red-700/50 shadow-md overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-amber-50 to-blue-50 opacity-50"></div>
+              <CardContent className="p-6 relative">
                 <p className="text-gray-700">
                   The Entrepreneurship Academy is a specialized program that provides students with real-world business experience,
                   industry-recognized certifications, and a pathway to college and career readiness.
