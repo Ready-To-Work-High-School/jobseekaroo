@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -13,6 +14,7 @@ import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
 import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from './ui/badge';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
@@ -31,11 +33,12 @@ const ProgramsSection = () => {
       protectElement(sectionRef.current);
     }
   }, []);
+  
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
-          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 py-3 font-bold text-blue-800 text-center text-3xl w-full block md:text-5xl">
+          <span className="bg-gradient-to-r from-red-800 via-amber-600 to-red-900 py-3 font-bold text-gray-100 text-center text-3xl w-full block md:text-5xl">
             For Employers Only
           </span>
         </h2>
@@ -43,11 +46,11 @@ const ProgramsSection = () => {
         {/* Employers Section - Simplified without burst image */}
         <div className="mb-12">
           <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
-            <Card className="w-full glow-purple rounded-xl overflow-hidden border-purple-300 shadow-lg">
+            <Card className="w-full rounded-xl overflow-hidden border-red-300 shadow-lg bg-gradient-to-br from-gray-100 to-gray-200">
               <CardContent className="p-8">
                 <div className="flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-purple-500 mr-2" />
-                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
+                  <Sparkles className="h-6 w-6 text-red-800 mr-2" />
+                  <h3 className="font-extrabold text-xl md:text-2xl text-red-900">
                     Hiring Opportunity
                   </h3>
                 </div>
@@ -56,7 +59,7 @@ const ProgramsSection = () => {
                   Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
-                <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors">
+                <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-colors">
                   Contact Us Today
                 </a>
               </CardContent>
@@ -66,12 +69,12 @@ const ProgramsSection = () => {
         
         {/* ESB and IBM Badges Display */}
         <div className="mb-8 text-center">
-          <h3 className="text-2xl font-bold text-blue-800 mb-4">Industry Recognized Certifications</h3>
+          <h3 className="text-2xl font-bold text-red-900 mb-4">Industry Recognized Certifications</h3>
           <div className="flex flex-col md:flex-row justify-center items-center gap-6">
             {/* ESB Badge */}
-            <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-amber-200">
+            <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-amber-200">
               <div className="relative">
-                <Badge variant="amber" className="absolute -top-2 -right-12px-[11px]">ESB Certified</Badge>
+                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-red-800">ESB Certified</Badge>
                 <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="w-32 h-32 object-contain" />
               </div>
               <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
@@ -79,9 +82,9 @@ const ProgramsSection = () => {
             </div>
             
             {/* IBM Badge */}
-            <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
+            <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-red-200">
               <div className="relative">
-                <Badge variant="info" className="absolute -top-2 -right-2 px-[29px]">
+                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-red-800 px-[29px]">
                   <BadgeCheck className="h-4 w-4 mr-1" /> IBM
                 </Badge>
                 <img alt="IBM Skills Build" className="w-32 h-32 object-contain" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
@@ -94,7 +97,7 @@ const ProgramsSection = () => {
         
         {/* Academy Link Banner */}
         <div className="mb-10 text-center">
-          <Link to="/entrepreneurship-academy" className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 transition-colors">
+          <Link to="/entrepreneurship-academy" className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-gradient-to-r from-red-800 to-amber-800 rounded-md hover:from-red-700 hover:to-amber-700 transition-colors">
             <GraduationCap className="mr-2 h-5 w-5" />
             Visit Entrepreneurship Academy
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -104,4 +107,5 @@ const ProgramsSection = () => {
       </div>
     </section>;
 };
+
 export default ProgramsSection;

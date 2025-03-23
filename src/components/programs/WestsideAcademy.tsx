@@ -8,7 +8,7 @@ import EntrepreneurshipStoreSection from './EntrepreneurshipStoreSection';
 
 const WestsideAcademy = () => {
   return (
-    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10 relative">
+    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 relative">
       {/* Academy Banner Image - Spans full width */}
       <div className="w-full overflow-hidden">
         <img 
@@ -18,24 +18,24 @@ const WestsideAcademy = () => {
         />
       </div>
       
-      <div className="p-6 md:p-8 bg-sky-100 relative">
+      <div className="p-6 md:p-8 bg-gradient-to-b from-gray-100 to-gray-200 relative">
         {/* Academy Logo and Info */}
         <div className="relative z-10">
           <AcademyHeader />
           <AcademyDescription />
           
+          {/* Added School Store Section - Moved up before the program benefits */}
+          <div className="mb-10">
+            <EntrepreneurshipStoreSection />
+          </div>
+          
           <div className="flex flex-col md:flex-row gap-6">
             <ProgramBenefits />
             <CourseCurriculum />
           </div>
-          
-          {/* Added School Store Section */}
-          <div className="mt-10">
-            <EntrepreneurshipStoreSection />
-          </div>
         </div>
       </div>
-      <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-300"></div>
+      <div className="h-1 w-full bg-gradient-to-r from-red-800 via-amber-500 to-red-800"></div>
     </div>
   );
 };

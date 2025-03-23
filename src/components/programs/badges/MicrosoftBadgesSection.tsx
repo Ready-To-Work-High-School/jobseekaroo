@@ -20,19 +20,19 @@ const MicrosoftBadgesSection = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-4 text-blue-800 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-blue-600">
+      <h3 className="text-xl font-semibold mb-4 text-red-800 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-red-700">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
         Microsoft Certifications
       </h3>
 
-      <Card className="border-blue-100 shadow-sm">
+      <Card className="border-red-200 shadow-sm bg-gradient-to-br from-gray-50 to-gray-100">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="max-w-[220px] relative">
-              <Badge className="absolute -top-2 right-0 z-20 bg-blue-600">Microsoft</Badge>
+              <Badge className="absolute -top-2 right-0 z-20 bg-red-700">Microsoft</Badge>
               <img 
                 src={microsoftBadges[0].image} 
                 alt={microsoftBadges[0].name} 
@@ -44,7 +44,7 @@ const MicrosoftBadgesSection = () => {
               <p className="text-gray-700">
                 Students can earn Microsoft Fundamentals certifications, validating their knowledge of cloud concepts, core Microsoft 365 services, and security, compliance, and privacy in Microsoft 365. These certifications provide a foundation for future technology education and career paths.
               </p>
-              <Badge className="mt-3 bg-blue-600 text-white">Industry-recognized credential</Badge>
+              <Badge className="mt-3 bg-red-800 text-white">Industry-recognized credential</Badge>
             </div>
           </div>
         </CardContent>
