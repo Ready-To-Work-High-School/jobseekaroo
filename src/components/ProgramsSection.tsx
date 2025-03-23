@@ -41,37 +41,23 @@ const ProgramsSection = () => {
           </span>
         </h2>
         
-        {/* Employers Section - Redesigned with slanted burst */}
+        {/* Employers Section - Simplified without burst image */}
         <div className="mb-12">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            {/* Burst image slanted - removed glow effect */}
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <img 
-                  src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
-                  alt="Burst background" 
-                  className="w-full h-full object-cover transform rotate-45 scale-110"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800 transform -rotate-12">
-                    Hiring Opportunity
-                  </h3>
-                </div>
-              </div>
-            </div>
+          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
+            <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
+              Hiring Opportunity
+            </h3>
             
-            {/* Text placed outside the burst image */}
-            <div className="max-w-md text-center md:text-left">
-              <p className="font-medium text-lg mb-4">
-                Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-              </p>
-              <a 
-                href="mailto:ColemanP3@duvalschools.org" 
-                className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-              >
-                Contact Us Today
-              </a>
-            </div>
+            <p className="font-medium text-lg mb-4">
+              Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+            </p>
+            
+            <a 
+              href="mailto:ColemanP3@duvalschools.org" 
+              className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+            >
+              Contact Us Today
+            </a>
           </div>
         </div>
         
