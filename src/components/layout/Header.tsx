@@ -2,101 +2,166 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuGroup,
+} from "@/components/ui/dropdown-menu"
+import { 
+  Settings, Menu, X, BarChart2, Briefcase, Book, 
+  FileText, Search, BookmarkCheck, User, Home
+} from 'lucide-react';
+import { Button } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from './MobileMenu';
-import { BriefcaseBusiness, Users, GraduationCap, Menu, X } from 'lucide-react';
 
 const Header = () => {
-  const { user, userProfile } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
+  const { toast } = useToast();
   const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  const isActive = (path: string) => {
-    return location.pathname === path;
+  const isMobile = useIsMobile();
+
+  // Function to get the redirect path based on auth status
+  const getPath = (authenticatedPath: string) => {
+    return user ? authenticatedPath : "/sign-in";
   };
-  
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+    } catch (error: any) {
+      console.error('Sign out error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const isEmployer = userProfile?.user_type === 'employer';
+
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-40 w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo and brand name */}
-          <Link to="/" className="flex items-center">
-            <span className="font-bold text-xl text-primary">JS4HS</span>
-            <span className="ml-1 text-gray-500 hidden sm:inline">| Job Seekers 4 High Schools</span>
-          </Link>
-          
-          {/* Main navigation - desktop */}
-          <nav className="hidden md:flex space-x-4">
-            <Link to="/" 
-              className={`font-medium text-sm ${isActive('/') ? 'text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
+    <header className="bg-secondary border-b sticky top-0 z-10">
+      <div className="container mx-auto flex items-center h-16 space-x-4 sm:justify-between sm:space-x-0">
+        {isMobile && <MobileMenu />}
+        
+        <div className="flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-4">
+            <Link to="/" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/' ? 'text-primary' : 'text-foreground')}>
               Home
             </Link>
-            <Link to="/jobs" 
-              className={`font-medium text-sm ${isActive('/jobs') ? 'text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              Find Jobs
+            <Link to={getPath("/jobs")} className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/jobs' ? 'text-primary' : 'text-foreground')}>
+              Jobs
             </Link>
-            <Link to="/resources" 
-              className={`font-medium text-sm ${isActive('/resources') ? 'text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              Resources
-            </Link>
-            <Link to="/academy" 
-              className={`font-medium text-sm ${isActive('/academy') ? 'text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              <span className="flex items-center">
-                <GraduationCap className="h-4 w-4 mr-1" />
-                Academy
-              </span>
-            </Link>
-            <Link to="/for-employers" 
-              className={`font-medium text-sm ${isActive('/for-employers') ? 'text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              <span className="flex items-center">
-                <BriefcaseBusiness className="h-4 w-4 mr-1" />
-                For Employers
-              </span>
-            </Link>
-          </nav>
-          
-          {/* Auth buttons */}
-          <div className="hidden md:flex items-center space-x-2">
             {user ? (
-              <div className="flex items-center space-x-2">
-                <Link to={userProfile?.user_type === 'employer' ? '/employer-dashboard' : '/profile'}>
-                  <Button variant="outline" size="sm">
-                    <Users className="h-4 w-4 mr-1" />
-                    {userProfile?.user_type === 'employer' ? 'Dashboard' : 'My Profile'}
-                  </Button>
+              <>
+                <Link to="/applications" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/applications' ? 'text-primary' : 'text-foreground')}>
+                  Applications
                 </Link>
-              </div>
+                <Link to="/skills" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/skills' ? 'text-primary' : 'text-foreground')}>
+                  Skills
+                </Link>
+                <Link to="/analytics" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/analytics' ? 'text-primary' : 'text-foreground')}>
+                  Analytics
+                </Link>
+              </>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link to="/sign-in">
-                  <Button variant="outline" size="sm">Sign In</Button>
+              <>
+                <Link to="/sign-in" className={cn("text-sm font-medium transition-colors hover:text-primary", 
+                  location.pathname === '/applications' || location.pathname === '/skills' || location.pathname === '/analytics' ? 'text-primary' : 'text-foreground')}>
+                  Student Portal
                 </Link>
-                <Link to="/sign-up">
-                  <Button size="sm">Sign Up</Button>
-                </Link>
-              </div>
+              </>
             )}
-          </div>
-          
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-600 hover:text-gray-900 focus:outline-none"
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+            
+            {isEmployer ? (
+              <Link to="/employer-dashboard" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/employer-dashboard' ? 'text-primary' : 'text-foreground')}>
+                Employer Dashboard
+              </Link>
+            ) : (
+              <Link to="/for-employers" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/for-employers' ? 'text-primary' : 'text-foreground')}>
+                For Employers
+              </Link>
+            )}
+          </nav>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.email} />
+                    <AvatarFallback>{userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/analytics" className="cursor-pointer">
+                      <BarChart2 className="mr-2 h-4 w-4" />
+                      <span>Analytics</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/saved-jobs" className="cursor-pointer">
+                      <BookmarkCheck className="mr-2 h-4 w-4" />
+                      <span>Saved Jobs</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                {isEmployer && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/employer-dashboard" className="cursor-pointer">
+                        <Briefcase className="mr-2 h-4 w-4" />
+                        <span>Employer Dashboard</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="hidden md:flex items-center space-x-2">
+              <Link to="/sign-in" className="text-sm font-medium transition-colors hover:text-primary">
+                Sign In
+              </Link>
+              <Link to="/sign-up" className={cn(
+                "inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 text-sm font-medium transition-colors",
+              )}>
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-      
-      {/* Mobile menu drawer */}
-      {isMenuOpen && <MobileMenu />}
     </header>
   );
 };

@@ -3,7 +3,6 @@ import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import FeatureCard from './FeatureCard';
-import { Award, Cpu, Globe } from 'lucide-react';
 
 const EnhancedHero = () => {
   const isMobile = useIsMobile();
@@ -38,31 +37,10 @@ const EnhancedHero = () => {
           <p className="text-xl font-medium mt-6 text-blue-900"><em>Let Your Next Chapter Start Now</em></p>
         </div>
         
-        <div className={cn("mb-8 max-w-2xl mx-auto", subtitleAnimation)}>
-          <p className="text-base text-gray-700">
-            Westside High School students are gaining a competitive edge in the workforce through an advanced-level curriculum covering AI Foundations, Blockchain, Cloud Computing, and IoT.
-          </p>
-        </div>
-        
-        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-8 mb-8", infoAnimation)}>
+        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-8", infoAnimation)}>
           <FeatureCard icon="🔎" title="Location Search" description="Find opportunities within Jacksonville and surrounding counties. Search up to 50 miles from your location." />
           <FeatureCard icon="💰" title="Apprenticeships" description="Discover paid training programs where you can learn valuable skills while earning income." />
           <FeatureCard icon="💼" title="Advanced Filtering" description="Use our powerful filters to narrow down jobs by type, experience level, and sort by relevance, date, or salary." />
-        </div>
-        
-        <div className={cn("flex flex-wrap justify-center gap-4 mt-4", benefitsAnimation)}>
-          <div className="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full text-sm">
-            <Award className="h-4 w-4 text-amber-500" />
-            <span>IBM Digital Badges</span>
-          </div>
-          <div className="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full text-sm">
-            <Cpu className="h-4 w-4 text-blue-500" />
-            <span>Everfi Certifications</span>
-          </div>
-          <div className="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full text-sm">
-            <Globe className="h-4 w-4 text-green-500" />
-            <span>Ready to Work Credentials</span>
-          </div>
         </div>
         
         <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto mt-6 py-2 px-4 bg-blue-50/50 rounded-lg inline-block", benefitsAnimation)}>
