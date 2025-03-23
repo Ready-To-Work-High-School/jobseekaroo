@@ -13,7 +13,7 @@ const SignIn = () => {
           <p className="text-muted-foreground mt-2">Sign in to access your account</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <div className="md:col-span-3">
             <SignInForm />
           </div>
@@ -23,8 +23,8 @@ const SignIn = () => {
           </div>
         </div>
         
-        {/* Industry Recognized Credentials Section - reduced margin for better spacing */}
-        <div className="mt-6">
+        {/* Industry Recognized Credentials Section - moved up with less spacing */}
+        <div className="mt-4"> {/* Further reduced margin top */}
           <CredentialsBadgesSection />
         </div>
       </div>
