@@ -70,11 +70,11 @@ const TestimonialsSection = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 md:p-8">
               <div className="md:col-span-1 flex flex-col items-center justify-center">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-blue-100 shadow-md mb-4">
+                <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-blue-100 shadow-md mb-4">
                   <img 
                     src={activeTestimonial.imageUrl} 
                     alt={activeTestimonial.name} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 text-center">
