@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
-import { Menu, Home, Search, Book, FileText, BookmarkCheck, User, Briefcase } from 'lucide-react';
+import { Menu, Home, Search, Book, FileText, BookmarkCheck, User, Briefcase, GraduationCap } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -16,6 +16,7 @@ const MobileMenu = () => {
   const mobileNavItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/jobs", label: "Find Jobs", icon: Search },
+    { href: "/entrepreneurship-academy", label: "Academy", icon: GraduationCap },
     ...(user ? [
       { href: "/applications", label: "Applications", icon: FileText },
       { href: "/saved-jobs", label: "Saved Jobs", icon: BookmarkCheck },

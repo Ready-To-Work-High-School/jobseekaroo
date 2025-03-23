@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, Menu, X, BarChart2, Briefcase, Book, 
-  FileText, Search, BookmarkCheck, User, Home
+  FileText, Search, BookmarkCheck, User, Home, GraduationCap
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -65,6 +65,9 @@ const Header = () => {
             </Link>
             <Link to={getPath("/jobs")} className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/jobs' ? 'text-primary' : 'text-foreground')}>
               Jobs
+            </Link>
+            <Link to="/entrepreneurship-academy" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/entrepreneurship-academy' ? 'text-primary' : 'text-foreground')}>
+              Academy
             </Link>
             {user ? (
               <>

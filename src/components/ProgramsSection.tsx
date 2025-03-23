@@ -13,7 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useRef } from 'react';
 import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, GraduationCap, ArrowRight } from 'lucide-react';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -36,6 +36,16 @@ const ProgramsSection = () => {
 
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
+        {/* Academy Link Banner */}
+        <div className="mb-10 text-center">
+          <Link to="/entrepreneurship-academy" className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-blue-700 rounded-md hover:bg-blue-800 transition-colors">
+            <GraduationCap className="mr-2 h-5 w-5" />
+            Visit Entrepreneurship Academy
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+          <p className="mt-3 text-sm text-gray-600">Learn more about our advanced Entrepreneurship program at Westside High School</p>
+        </div>
+        
         {/* For Employers Only heading placed outside the blue section - stretched full width */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
           <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 py-3 font-bold text-blue-800 text-center text-3xl w-full block md:text-5xl">
@@ -71,13 +81,7 @@ const ProgramsSection = () => {
         </div>
         
         <div className="space-y-16">
-          <WestsideAcademy />
-          
-          <EntrepreneurshipStoreSection />
-          
           <ProgramCards />
-          
-          <CredentialsBadges />
         </div>
       </div>
     </section>;
