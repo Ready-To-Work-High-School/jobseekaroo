@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useRef } from 'react';
 import { protectElement } from '@/utils/textProtection';
+import { Card, CardContent } from './ui/card';
+import { Sparkles } from 'lucide-react';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
@@ -44,20 +46,27 @@ const ProgramsSection = () => {
         {/* Employers Section - Simplified without burst image */}
         <div className="mb-12">
           <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
-            <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
-              Hiring Opportunity
-            </h3>
-            
-            <p className="font-medium text-lg mb-4">
-              Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-            </p>
-            
-            <a 
-              href="mailto:ColemanP3@duvalschools.org" 
-              className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-            >
-              Contact Us Today
-            </a>
+            <Card className="w-full glow-purple rounded-xl overflow-hidden border-purple-300 shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex items-center justify-center mb-4">
+                  <Sparkles className="h-6 w-6 text-purple-500 mr-2" />
+                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
+                    Hiring Opportunity
+                  </h3>
+                </div>
+                
+                <p className="font-medium text-lg mb-6">
+                  Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+                </p>
+                
+                <a 
+                  href="mailto:ColemanP3@duvalschools.org" 
+                  className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+                >
+                  Contact Us Today
+                </a>
+              </CardContent>
+            </Card>
           </div>
         </div>
         
