@@ -1,16 +1,18 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Briefcase, Award } from 'lucide-react';
+
 const HeroSection = () => {
   return <section className="py-12 bg-gradient-to-b from-gray-900 to-gray-800 md:py-0">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-redr-400 via-red-200 via-amber-300 to-amber-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-red-200 via-amber-300 to-amber-500">
                 Entrepreneurship Academy
               </span>
-              <span className="block mt-2">at <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-gray-200 to-red-800">Westside High <span className="text-gray-300">School</span></span></span>
+              <span className="block mt-2 text-gray-100">at <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-gray-200 to-red-800">Westside High <span className="text-gray-300">School</span></span></span>
             </h1>
             <p className="text-xl text-gray-300 mb-8">
               Developing the next generation of business leaders and innovators
@@ -45,4 +47,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
