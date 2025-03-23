@@ -32,7 +32,7 @@ const testimonials = [
     role: "FBLA Officer",
     company: "Westside High School",
     imageUrl: "/lovable-uploads/d455b1eb-c367-4c4c-8797-eeeb18c1898c.png",
-    content: "Earning my Florida Ready to Work credentials showcased my proficiency in essential employability and soft skills, such as communication, problem-solving, and teamwork. As an FBLA officer, I have strengthened my leadership abilities through competitive events and collaboration with my peers.",
+    content: "Earning my Florida Ready to Work credentials showcased my proficiency in essential employability skills. As an FBLA officer, I've strengthened my leadership abilities through competitive events and peer collaboration.",
     graduation: "Westside High School, 2025"
   },
   {
