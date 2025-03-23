@@ -1,14 +1,11 @@
-
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import FeatureCard from './FeatureCard';
-
 const EnhancedHero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const infoAnimation = useFadeIn(700);
   const benefitsAnimation = useFadeIn(900);
-
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
@@ -38,10 +35,9 @@ const EnhancedHero = () => {
         </div>
         
         <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto mt-6 py-2 px-4 bg-blue-50/50 rounded-lg inline-block", benefitsAnimation)}>
-          <em>Competitive Salaries, Health Benefits, 401 Savings and More</em>
+          <em>Competitive Salaries, Health Benefits, 401K Savings and More</em>
         </p>
       </div>
     </section>;
 };
-
 export default EnhancedHero;
