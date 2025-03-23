@@ -44,9 +44,9 @@ const ProgramsSection = () => {
         {/* Employers Section - Redesigned with slanted burst */}
         <div className="mb-12">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            {/* Burst image slanted */}
+            {/* Burst image slanted - removed glow effect */}
             <div className="relative w-64 h-64 md:w-80 md:h-80">
-              <div className="absolute inset-0 rounded-full overflow-hidden glow-primary">
+              <div className="absolute inset-0 rounded-full overflow-hidden">
                 <img 
                   src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
                   alt="Burst background" 
