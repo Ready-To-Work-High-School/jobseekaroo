@@ -41,22 +41,36 @@ const ProgramsSection = () => {
           </span>
         </h2>
         
-        {/* Employers Section - Removed border and background */}
+        {/* Employers Section - Redesigned with rotated burst and external text */}
         <div className="mb-12">
-          {/* Adding glowing accent to the burst image */}
-          <div className="mt-4 relative">
-            <div className="relative rounded-full overflow-hidden glow-primary">
-              <img src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" alt="Burst background" className="w-full max-w-3xl mx-auto h-auto" />
-              <div className="absolute inset-0 flex items-center justify-center text-center p-4">
-                <div className="max-w-xs">
-                  <h3 className="font-extrabold text-xl md:text-2xl mb-1 text-zinc-800">Hiring Opportunity</h3>
-                  <p className="font-medium text-zinc-800 text-sm md:text-base">
-                    <a href="mailto:ColemanP3@duvalschools.org" className="hover:underline">
-                      Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-                    </a>
-                  </p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            {/* Burst image rotated 90 degrees and enlarged */}
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div className="absolute inset-0 rounded-full overflow-hidden glow-primary">
+                <img 
+                  src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
+                  alt="Burst background" 
+                  className="w-full h-full object-cover transform rotate-90"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800 bg-white/80 px-4 py-2 rounded-full">
+                    Hiring Opportunity
+                  </h3>
                 </div>
               </div>
+            </div>
+            
+            {/* Text placed outside the burst image */}
+            <div className="max-w-md text-center md:text-left">
+              <p className="font-medium text-lg mb-4">
+                Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+              </p>
+              <a 
+                href="mailto:ColemanP3@duvalschools.org" 
+                className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+              >
+                Contact Us Today
+              </a>
             </div>
           </div>
         </div>
