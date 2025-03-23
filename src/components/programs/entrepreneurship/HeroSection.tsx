@@ -9,7 +9,7 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-red-200 via-amber-300 to-amber-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-amber-500 to-blue-500">
                 Entrepreneurship Academy
               </span>
               <span className="block mt-2">
