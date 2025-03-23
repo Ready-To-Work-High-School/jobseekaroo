@@ -11,6 +11,7 @@ import TechCredentialsSection from '@/components/programs/entrepreneurship/TechC
 import BusinessCredentialsSection from '@/components/programs/entrepreneurship/BusinessCredentialsSection';
 import ContactEnrollmentSection from '@/components/programs/entrepreneurship/ContactEnrollmentSection';
 import StudentSuccessSection from '@/components/programs/entrepreneurship/StudentSuccessSection';
+import SectionSeparator from '@/components/home/SectionSeparator';
 
 const EntrepreneurshipAcademy = () => {
   const fadeIn = useFadeIn(300);
@@ -59,11 +60,7 @@ const EntrepreneurshipAcademy = () => {
           </div>
         </section>
         
-        <Separator className="my-16 bg-amber-500/50" />
-        
-        <Separator className="my-16 bg-amber-500/50" />
-        
-        <Separator className="my-16 bg-amber-500/50" />
+        <SectionSeparator className="my-8" />
         
         {/* Contact & Enrollment */}
         <section className={fadeIn}>
