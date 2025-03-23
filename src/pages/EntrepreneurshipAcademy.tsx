@@ -31,17 +31,17 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
-      {/* Tech Credentials & IBM/Microsoft Badges Section - Moved up above Competitive Edge */}
-      <section className={fadeIn}>
-        <div className="container mx-auto px-4 py-8">
-          <TechCredentialsSection />
-        </div>
-      </section>
-      
-      {/* Credentials & Certifications */}
+      {/* Credentials & Certifications - MOVED UP above Tech Credentials */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-gray-50 to-gray-100">
           <BusinessCredentialsSection />
+        </div>
+      </section>
+      
+      {/* Tech Credentials & IBM/Microsoft Badges Section - Now below Credentials & Certifications */}
+      <section className={fadeIn}>
+        <div className="container mx-auto px-4 py-8">
+          <TechCredentialsSection />
         </div>
       </section>
       

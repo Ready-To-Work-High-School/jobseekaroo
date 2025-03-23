@@ -10,11 +10,11 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-700 via-red-600 to-amber-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-amber-600">
                 Entrepreneurship Academy
               </span>
               <span className="block mt-2">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-700 via-red-700 to-red-800">at</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-900 via-red-800 to-gray-900">Westside High <span className="text-gray-700">School</span></span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-red-600">at</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-red-700 to-gray-900">Westside High <span className="text-gray-700">School</span></span>
               </span>
             </h1>
             <p className="text-xl text-gray-700 mb-8">
