@@ -1,8 +1,17 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProgramCard from './ProgramCard';
+import { protectElement } from '@/utils/textProtection';
 
 const ProgramCards = () => {
+  const cardsRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (cardsRef.current) {
+      protectElement(cardsRef.current);
+    }
+  }, []);
+
   const programs = [
     {
       image: "/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png",
@@ -40,7 +49,7 @@ const ProgramCards = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-2">
+    <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-2 protected-content">
       {programs.map((program, index) => (
         <ProgramCard 
           key={index}

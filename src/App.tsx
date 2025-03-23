@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -35,73 +34,80 @@ const PageLoader = () => (
   </div>
 );
 
+import CopyProtection from './components/CopyProtection';
+
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <NotificationsProvider>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/sign-in" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/jobs" element={<JobListings />} />
-              <Route path="/jobs/:id" element={<JobDetails />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/license" element={<License />} />
-              
-              {/* Protected Routes */}
-              <Route path="/skills" element={
-                <ProtectedRoute>
-                  <Skills />
-                </ProtectedRoute>
-              } />
-              <Route path="/interview-prep" element={
-                <ProtectedRoute>
-                  <InterviewPrep />
-                </ProtectedRoute>
-              } />
-              <Route path="/employer-dashboard" element={
-                <ProtectedRoute>
-                  <EmployerDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/analytics" element={
-                <ProtectedRoute>
-                  <Analytics />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path="/applications" element={
-                <ProtectedRoute>
-                  <Applications />
-                </ProtectedRoute>
-              } />
-              <Route path="/resume-assistant" element={
-                <ProtectedRoute>
-                  <ResumeAssistant />
-                </ProtectedRoute>
-              } />
-              <Route path="/saved-jobs" element={
-                <ProtectedRoute>
-                  <SavedJobs />
-                </ProtectedRoute>
-              } />
-              
-              {/* 404 Page */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </NotificationsProvider>
-      </AuthProvider>
-    </Router>
+    <div className="app">
+      {/* Add Copy Protection */}
+      <CopyProtection showNotice={true} />
+      
+      <Router>
+        <AuthProvider>
+          <NotificationsProvider>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/jobs" element={<JobListings />} />
+                <Route path="/jobs/:id" element={<JobDetails />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/for-employers" element={<ForEmployers />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/success-stories" element={<SuccessStories />} />
+                <Route path="/license" element={<License />} />
+                
+                {/* Protected Routes */}
+                <Route path="/skills" element={
+                  <ProtectedRoute>
+                    <Skills />
+                  </ProtectedRoute>
+                } />
+                <Route path="/interview-prep" element={
+                  <ProtectedRoute>
+                    <InterviewPrep />
+                  </ProtectedRoute>
+                } />
+                <Route path="/employer-dashboard" element={
+                  <ProtectedRoute>
+                    <EmployerDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/analytics" element={
+                  <ProtectedRoute>
+                    <Analytics />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/applications" element={
+                  <ProtectedRoute>
+                    <Applications />
+                  </ProtectedRoute>
+                } />
+                <Route path="/resume-assistant" element={
+                  <ProtectedRoute>
+                    <ResumeAssistant />
+                  </ProtectedRoute>
+                } />
+                <Route path="/saved-jobs" element={
+                  <ProtectedRoute>
+                    <SavedJobs />
+                  </ProtectedRoute>
+                } />
+                
+                {/* 404 Page */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </NotificationsProvider>
+        </AuthProvider>
+      </Router>
+    </div>
   );
 }
 

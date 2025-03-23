@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -9,17 +10,29 @@ import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useRef } from 'react';
+import { protectElement } from '@/utils/textProtection';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
     user
   } = useAuth();
+  const sectionRef = useRef<HTMLElement>(null);
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
-  return <section className={`py-16 bg-secondary/5 ${animation}`}>
+
+  // Apply text protection to the section
+  useEffect(() => {
+    if (sectionRef.current) {
+      protectElement(sectionRef.current);
+    }
+  }, []);
+
+  return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed outside the blue section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
