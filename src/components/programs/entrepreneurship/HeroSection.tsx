@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Briefcase, Award } from 'lucide-react';
+
 const HeroSection = () => {
   return <section className="py-12 bg-inherit md:py-0">
       <div className="container mx-auto px-4">
@@ -22,7 +24,20 @@ const HeroSection = () => {
           <div>
             <Card className="bg-white/80 backdrop-blur border-amber-700/50 shadow-md">
               <CardContent className="p-6">
-                
+                <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-4">
+                  <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 border border-red-900">
+                    <GraduationCap className="h-5 w-5 text-amber-500" />
+                    <span className="font-medium text-gray-800">Advanced Academy</span>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 border border-amber-700">
+                    <Briefcase className="h-5 w-5 text-amber-500" />
+                    <span className="font-medium text-gray-800">Industry Certifications</span>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 border border-red-900">
+                    <Award className="h-5 w-5 text-amber-500" />
+                    <span className="font-medium text-gray-800">Dual Enrollment Credit</span>
+                  </div>
+                </div>
                 <p className="text-gray-700">
                   The Entrepreneurship Academy is a specialized program that provides students with real-world business experience,
                   industry-recognized certifications, and a pathway to college and career readiness.
@@ -34,4 +49,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
