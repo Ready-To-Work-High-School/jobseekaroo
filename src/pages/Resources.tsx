@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, BookOpen, Video, Download, ExternalLink, FileCheck, Briefcase, MessageSquare } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
+import EducationalVideoSection from '@/components/resources/EducationalVideoSection';
 
 const Resources = () => {
   const [activeTab, setActiveTab] = useState("resume");
@@ -139,7 +139,6 @@ const Resources = () => {
     }
   ];
 
-  // Map resources based on active tab
   const getActiveResources = () => {
     switch(activeTab) {
       case "resume": return resumeResources;
@@ -223,6 +222,8 @@ const Resources = () => {
             </div>
           </div>
         </Tabs>
+        
+        <EducationalVideoSection />
         
         <Separator className="max-w-4xl mx-auto my-16" />
         
