@@ -8,6 +8,7 @@ import CredentialBadges from '@/components/auth/CredentialBadges';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Briefcase, Award } from 'lucide-react';
+import ProgramCards from '@/components/programs/ProgramCards';
 
 const EntrepreneurshipAcademy = () => {
   const fadeIn = useFadeIn(300);
@@ -57,6 +58,14 @@ const EntrepreneurshipAcademy = () => {
       </section>
       
       <div className="container mx-auto px-4 py-8">
+        {/* Program Cards */}
+        <section className={fadeIn}>
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Our Programs</h2>
+            <ProgramCards />
+          </div>
+        </section>
+        
         {/* Academy Program Details */}
         <section className={fadeIn}>
           <div className="mb-12">
