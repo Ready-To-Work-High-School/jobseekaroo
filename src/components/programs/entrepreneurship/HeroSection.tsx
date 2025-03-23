@@ -9,12 +9,12 @@ const HeroSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8 relative">
-            <div className="absolute inset-0 blur-lg bg-gradient-to-r from-blue-400 via-amber-300 to-blue-500 opacity-60 animate-pulse-slow rounded-xl"></div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-blue-800 relative z-10 glow-pulse">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-amber-500 to-blue-600 animate-pulse-slow">
+            <div className="absolute inset-0 blur-lg bg-gradient-to-r from-blue-400 via-amber-300 to-blue-500 opacity-70 animate-pulse-slow rounded-xl"></div>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-blue-800 relative z-10">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-amber-400 to-blue-500 animate-pulse-slow glow-blue-gold">
                 Entrepreneurship Academy
               </span>
-              <span className="block mt-2 text-red-800">at <span className="text-gray-800">Westside High <span className="text-black">School</span></span></span>
+              <span className="block mt-2">at <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-gray-800 to-black">Westside High <span className="text-black">School</span></span></span>
             </h1>
             <p className="text-xl text-gray-700 mb-8 relative z-10">
               Developing the next generation of business leaders and innovators

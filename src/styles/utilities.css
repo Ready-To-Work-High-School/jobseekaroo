@@ -1,3 +1,4 @@
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -88,5 +89,24 @@ img {
   to {
     box-shadow: 0 0 30px rgba(14, 165, 233, 0.7), 0 0 20px rgba(245, 158, 11, 0.7);
     text-shadow: 0 0 10px rgba(14, 165, 233, 0.7), 0 0 15px rgba(245, 158, 11, 0.7);
+  }
+}
+
+/* New enhanced blue-gold gradient for Entrepreneurship Academy */
+.blue-gold-gradient {
+  background: linear-gradient(-45deg, #1e40af, #fbbf24, #3b82f6, #f59e0b);
+  background-size: 400% 400%;
+  animation: gradient 6s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
