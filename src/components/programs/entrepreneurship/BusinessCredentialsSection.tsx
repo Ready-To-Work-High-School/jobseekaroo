@@ -1,3 +1,4 @@
+
 import React from 'react';
 import CredentialBadges from '@/components/auth/CredentialBadges';
 const BusinessCredentialsSection = () => {

@@ -1,8 +1,9 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
 import EntrepreneurshipStoreSection from './programs/EntrepreneurshipStoreSection';
-import CredentialsBadges from './programs/CredentialsBadges';
+import CredentialBadges from './auth/CredentialBadges';
 import { Alert, AlertDescription } from './ui/alert';
 import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
@@ -64,43 +65,8 @@ const ProgramsSection = () => {
           </div>
         </div>
         
-        {/* ESB and IBM Badges Display */}
-        <div className="mb-8 text-center">
-          <h3 className="text-2xl font-bold text-red-900 mb-4">Industry Recognized Certifications</h3>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-6">
-            {/* ESB Badge */}
-            <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-amber-200">
-              <div className="relative">
-                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 bg-blue-700">ESB Certified</Badge>
-                <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="w-32 h-32 object-cover" />
-              </div>
-              <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
-              <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
-            </div>
-            
-            {/* IBM Badge */}
-            <div className="flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-red-200">
-              <div className="relative">
-                <Badge variant="destructive" className="absolute -top-2 -right-2 z-10 px-[29px] bg-blue-700">
-                  <BadgeCheck className="h-4 w-4 mr-1" /> IBM
-                </Badge>
-                <img alt="IBM Skills Build" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" className="w-32 h-32 object-cover" />
-              </div>
-              <p className="mt-2 font-medium text-center">IBM Skills Build</p>
-              <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Academy Link Banner */}
-        <div className="mb-10 text-center">
-          <Link to="/entrepreneurship-academy" className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-gradient-to-r from-red-800 to-amber-800 rounded-md hover:from-red-700 hover:to-amber-700 transition-colors">
-            <GraduationCap className="mr-2 h-5 w-5" />
-            Visit Entrepreneurship Academy
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-          <p className="mt-3 text-sm text-gray-600">Learn more about our advanced Entrepreneurship program at Westside High School</p>
-        </div>
+        {/* Display our updated CredentialBadges component here */}
+        <CredentialBadges />
       </div>
     </section>;
 };
