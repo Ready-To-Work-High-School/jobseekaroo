@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 const CredentialBadges = () => {
@@ -76,7 +75,7 @@ const CredentialBadges = () => {
       
       {/* Technology Credentials Text - Added above Ready To Work section */}
       <div className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 p-6 rounded-lg mb-4">
-        <h3 className="text-xl font-bold text-blue-800 mb-3">Technology Credentials</h3>
+        <h3 className="text-3xl font-bold text-blue-800 mb-8 text-center">Technology Credentials</h3>
         <p className="text-lg text-gray-800">
           Our students gain valuable digital credentials in emerging technologies, 
           preparing them for the future of work. These digital badges showcase technical proficiency
