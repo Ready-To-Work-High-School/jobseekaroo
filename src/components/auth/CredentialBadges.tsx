@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 
@@ -53,7 +52,7 @@ const CredentialBadges = () => {
           Industry Certifications
         </h3>
         <div className="flex flex-wrap justify-center gap-8">
-          {/* ESB Certification Badge with enhanced styling */}
+          {/* ESB Certification Badge with enhanced styling and increased size */}
           <div className="flex flex-col items-center p-5 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-lg border border-amber-300">
             <div className="relative">
               <Badge variant="amber" className="absolute -top-2 -right-2 z-20 px-4 py-1 text-sm">ESB Certified</Badge>
@@ -63,7 +62,7 @@ const CredentialBadges = () => {
                 <img 
                   src={esbBadge} 
                   alt="ESB Certification" 
-                  className="w-40 h-40 object-contain relative z-10" 
+                  className="w-48 h-48 object-contain relative z-10" 
                 />
               </div>
             </div>
@@ -137,3 +136,4 @@ const CredentialBadges = () => {
 };
 
 export default CredentialBadges;
+
