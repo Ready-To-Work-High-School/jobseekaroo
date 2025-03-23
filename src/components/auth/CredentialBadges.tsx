@@ -1,6 +1,6 @@
 
 import { Badge } from "@/components/ui/badge";
-import { Award, Shield, BadgeCheck } from "lucide-react";
+import { Award, BadgeCheck, Shield } from "lucide-react";
 
 const CredentialBadges = () => {
   // Credential badge data
@@ -47,14 +47,18 @@ const CredentialBadges = () => {
           Industry Certification
         </h3>
         <div className="flex justify-center">
-          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-amber-200">
+          <div className="flex flex-col items-center p-4 bg-gradient-to-b from-blue-50 to-amber-50 rounded-lg shadow-md border border-amber-200">
             <div className="relative">
               <Badge variant="amber" className="absolute -top-2 -right-2">ESB Certified</Badge>
-              <img 
-                src={esbBadge} 
-                alt="ESB Certification" 
-                className="w-32 h-32 object-contain" 
-              />
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400/30 rounded-full blur-sm animate-pulse"></div>
+                <div className="absolute inset-0 bg-amber-400/20 rounded-full blur-sm animate-pulse delay-700"></div>
+                <img 
+                  src={esbBadge} 
+                  alt="ESB Certification" 
+                  className="w-32 h-32 object-contain relative z-10" 
+                />
+              </div>
             </div>
             <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
             <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>

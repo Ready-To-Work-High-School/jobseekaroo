@@ -57,9 +57,9 @@ const EmployerBenefits = () => {
   ];
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="text-xl">What You'll Get Access To</CardTitle>
+    <Card className="mb-6 border-blue-300 shadow-md">
+      <CardHeader className="bg-blue-50 border-b border-blue-200">
+        <CardTitle className="text-xl text-blue-800">What You'll Get Access To</CardTitle>
         <CardDescription>
           Our employer portal provides powerful tools to find and hire qualified students
         </CardDescription>

@@ -4,9 +4,9 @@ import PlatformBenefits from "./PlatformBenefits";
 
 const SignInBenefitsCard = () => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">What You'll Get Access To</CardTitle>
+    <Card className="border-blue-300 shadow-md">
+      <CardHeader className="bg-blue-50 border-b border-blue-200">
+        <CardTitle className="text-xl text-blue-800">What You'll Get Access To</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <PlatformBenefits />
