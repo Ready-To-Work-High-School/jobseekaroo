@@ -40,36 +40,9 @@ const EntrepreneurshipStoreSection = () => {
             </div>
             
             <div>
-              <h4 className="text-lg font-bold text-blue-800 mb-3">Industry-Recognized Certifications</h4>
+              
               <Card className="border-amber-200 bg-amber-50/30">
-                <CardContent className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col items-center group">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                        <img src="/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png" alt="Getting Started with Artificial Intelligence" className="h-36 w-auto object-contain mb-2 transition-transform group-hover:scale-110 shadow-md rounded-sm" />
-                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
-                      </div>
-                      <span className="text-sm text-center font-medium">AI Fundamentals<br />IBM SkillsBuild</span>
-                    </div>
-                    <div className="flex flex-col items-center group">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                        <img src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png" alt="Entrepreneurship Business Essentials" className="h-36 w-auto object-contain mb-2 transition-transform group-hover:scale-110 shadow-md rounded-sm" />
-                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
-                      </div>
-                      <span className="text-sm text-center font-medium">Business Essentials<br />IBM SkillsBuild</span>
-                    </div>
-                    <div className="flex flex-col items-center group">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-blue-200 rounded-lg blur-sm opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                        <img src="/lovable-uploads/b6c94ff2-8f7b-47ce-8274-51bed1ec0a42.png" alt="Explore Emerging Tech" className="h-36 w-auto object-contain mb-2 transition-transform group-hover:scale-110 shadow-md rounded-sm" />
-                        <Badge className="absolute -top-2 -right-2 bg-amber-500 text-white">IBM</Badge>
-                      </div>
-                      <span className="text-sm text-center font-medium">Emerging Tech<br />IBM SkillsBuild</span>
-                    </div>
-                  </div>
-                </CardContent>
+                
               </Card>
             </div>
           </div>
