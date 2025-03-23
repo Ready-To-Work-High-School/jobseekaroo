@@ -10,7 +10,6 @@ const SignInBenefitsCard = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <PlatformBenefits />
-        {/* CredentialBadges component removed */}
       </CardContent>
     </Card>
   );
