@@ -35,10 +35,7 @@ const JobPlacementsSection = () => {
     <section className={cn("py-16 bg-white", fadeInSlow)}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          {/* Added accent around Projected Goals */}
-          <div className="inline-block bg-gradient-to-r from-blue-50 to-blue-100 px-8 py-3 rounded-full border border-blue-200 shadow-sm">
-            <h2 className="text-3xl font-bold text-blue-800">Projected Goals</h2>
-          </div>
+          <h2 className="text-3xl font-bold text-gray-900">Projected Goals</h2>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
             Our platform connects credentialed high school students with meaningful career opportunities
           </p>
