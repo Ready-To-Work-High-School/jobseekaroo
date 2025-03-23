@@ -41,7 +41,7 @@ const testimonials = [
     role: "Student Entrepreneur",
     company: "Westside High School",
     imageUrl: "/lovable-uploads/feb3e164-f882-43e2-8086-2739076c1d61.png",
-    content: "The Entrepreneurship Academy helped me develop a strong understanding of the foundations of entrepreneurship, including business planning, financial management, and marketing. Through the program, I gained essential soft skills such as discipline, persistence, and adaptability—key traits for navigating the challenges of running a business.",
+    content: "The Entrepreneurship Academy helped me develop business planning, financial management, and marketing skills. I've gained discipline, persistence, and adaptability—key traits for running a successful business.",
     graduation: "Westside High School, 2025"
   }
 ];
