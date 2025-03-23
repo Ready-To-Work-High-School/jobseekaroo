@@ -14,10 +14,9 @@ const Layout = ({ children }: LayoutProps) => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   
   useEffect(() => {
-    // Only show disclaimer on home, jobs, and for-employers pages
-    // Exclude the sign-in page from showing the disclaimer
-    const pathsToShowDisclaimer = ['/', '/jobs', '/for-employers'];
-    setShowDisclaimer(pathsToShowDisclaimer.includes(location.pathname) && location.pathname !== '/sign-in');
+    // Show disclaimer on home, jobs, for-employers, and sign-in pages
+    const pathsToShowDisclaimer = ['/', '/jobs', '/for-employers', '/sign-in'];
+    setShowDisclaimer(pathsToShowDisclaimer.includes(location.pathname));
   }, [location.pathname]);
 
   return (
