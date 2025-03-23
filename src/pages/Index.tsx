@@ -42,7 +42,7 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
-        {/* Testimonials Section - MOVED ABOVE Search Section */}
+        {/* Student Success Stories - MOVED ABOVE Search Section */}
         <TestimonialsSection />
         
         {/* Separator */}
