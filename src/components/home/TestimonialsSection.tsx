@@ -70,6 +70,15 @@ const testimonials = [
     imageUrl: "/lovable-uploads/3948d33f-61a8-4bc4-a88a-ebbeae71c65c.png",
     content: "The IT certification courses prepared me for real-world tech challenges. I've earned multiple credentials that employers value and found mentors who guide my career path.",
     graduation: "Westside High School, 2024"
+  },
+  {
+    id: 8,
+    name: "Taylor Edwards",
+    role: "Welder",
+    company: "WW Gay Construction Mechanical Contractors",
+    imageUrl: "/placeholder.svg",
+    content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
+    graduation: "Westside High School, 2023"
   }
 ];
 
