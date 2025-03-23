@@ -1,3 +1,4 @@
+
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
@@ -29,6 +30,35 @@ const CredentialsBadges = () => {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
     name: "Problem Solving"
   }];
+  
+  const additionalBadges = [
+    {
+      image: "/lovable-uploads/010059ca-3c6a-4e41-bcc3-d47749b4bd09.png",
+      name: "Getting Started with AI",
+      issuer: "IBM SkillsBuild"
+    },
+    {
+      image: "/lovable-uploads/c9f00526-d2b8-49f3-850d-81bf63640baa.png",
+      name: "Explore Emerging Tech",
+      issuer: "IBM SkillsBuild"
+    },
+    {
+      image: "/lovable-uploads/5d60294c-1d85-4c16-b0e2-e3060c0b36f4.png",
+      name: "Business Essentials",
+      issuer: "IBM SkillsBuild"
+    },
+    {
+      image: "/lovable-uploads/1fd371ba-b6b6-4c2e-942b-4489f5e883d5.png",
+      name: "AI Foundations for Educators",
+      issuer: "IBM SkillsBuild"
+    },
+    {
+      image: "/lovable-uploads/535a5afb-2d01-4358-a4a7-4844cd3ad3cf.png",
+      name: "Microsoft Certified",
+      issuer: "Microsoft"
+    }
+  ];
+  
   return <div className="p-8 rounded-xl shadow-xl border-2 border-blue-200 bg-gradient-to-br from-sky-100 to-blue-100">
       {/* Fancy border above High School Scholars Distinction */}
       <div className="mb-8">
@@ -46,14 +76,32 @@ const CredentialsBadges = () => {
       
       <SectionHeading eyebrow="" title="High School Scholars Distinction" description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" eyebrowColor="" titleClassName="text-4xl sm:text-5xl md:text-6xl bg-gradient-to-r from-purple-600 via-blue-600 to-amber-500 bg-clip-text text-transparent font-extrabold" />
       
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6 mb-8">
         {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
-        
-        {/* ESB Badge */}
+      </div>
+      
+      <h3 className="text-xl font-bold text-blue-900 mb-4 text-center">Industry-Recognized Certifications</h3>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mb-8 bg-white/80 p-6 rounded-lg shadow-md border border-blue-200">
+        {additionalBadges.map((badge, index) => (
+          <div key={index} className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img src={badge.image} alt={badge.name} className="rounded-lg shadow-lg h-24 md:h-32 w-auto mx-auto relative z-10 object-contain" />
+              <Badge className={`absolute -top-2 -right-2 ${badge.issuer === 'Microsoft' ? 'bg-blue-700' : 'bg-amber-500'} text-white shadow-md z-20`}>
+                {badge.issuer}
+              </Badge>
+            </div>
+            <p className="text-center text-sm font-semibold mt-2">{badge.name}</p>
+          </div>
+        ))}
+      </div>
+      
+      {/* ESB Badge */}
+      <div className="w-full flex justify-center mb-8">
         <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" />
+            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="rounded-lg shadow-lg h-32 md:h-40 w-auto mx-auto relative z-10 object-fill" />
             <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
           </div>
           <p className="text-center text-sm font-semibold mt-2">Entrepreneurship &amp; Small Business</p>

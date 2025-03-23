@@ -38,6 +38,17 @@ const CredentialsBadgesSection = () => {
   ];
   
   const esbBadge = "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png";
+  const ibmBadges = [
+    {
+      image: "/lovable-uploads/010059ca-3c6a-4e41-bcc3-d47749b4bd09.png",
+      name: "Getting Started with AI"
+    },
+    {
+      image: "/lovable-uploads/c9f00526-d2b8-49f3-850d-81bf63640baa.png",
+      name: "Explore Emerging Tech"
+    }
+  ];
+  const microsoftBadge = "/lovable-uploads/535a5afb-2d01-4358-a4a7-4844cd3ad3cf.png";
   
   return (
     <Card className="border-blue-200 shadow-md">
@@ -77,21 +88,59 @@ const CredentialsBadgesSection = () => {
           ))}
         </div>
         
-        <div className="flex flex-col items-center mb-6">
-          <Badge variant="new" className="text-sm py-1 mb-3">
-            <Shield className="h-4 w-4 mr-1" />
-            ESB Industry Certification
-          </Badge>
-          
-          <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
-            <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <img 
-              src={esbBadge} 
-              alt="ESB Certification" 
-              className="w-full h-full object-contain relative z-10 rounded-md" 
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3">
+              <Shield className="h-4 w-4 mr-1" />
+              ESB Industry Certification
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img 
+                src={esbBadge} 
+                alt="ESB Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+              />
+            </div>
+            <p className="text-xs text-center mt-2">Entrepreneurship & Small Business</p>
           </div>
-          <p className="text-xs text-center mt-2">Entrepreneurship & Small Business</p>
+          
+          {/* IBM Skills Build */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3 bg-blue-600">
+              <Shield className="h-4 w-4 mr-1" />
+              IBM SkillsBuild
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img 
+                src={ibmBadges[0].image} 
+                alt="IBM SkillsBuild" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+              />
+            </div>
+            <p className="text-xs text-center mt-2">AI & Emerging Technologies</p>
+          </div>
+          
+          {/* Microsoft Certification */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3 bg-blue-700">
+              <Shield className="h-4 w-4 mr-1" />
+              Microsoft Certified
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img 
+                src={microsoftBadge} 
+                alt="Microsoft Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+              />
+            </div>
+            <p className="text-xs text-center mt-2">Microsoft Fundamentals</p>
+          </div>
         </div>
         
         <p className="text-xs text-center text-muted-foreground">
