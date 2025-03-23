@@ -2,7 +2,6 @@
 import Layout from "@/components/Layout";
 import SignInForm from "@/components/auth/SignInForm";
 import SignInBenefitsCard from "@/components/auth/SignInBenefitsCard";
-import CredentialsBadgesSection from "@/components/auth/CredentialsBadgesSection";
 
 const SignIn = () => {
   return (
@@ -21,11 +20,6 @@ const SignIn = () => {
           <div className="md:col-span-2">
             <SignInBenefitsCard />
           </div>
-        </div>
-        
-        {/* Industry Recognized Credentials Section - reduced margin for better spacing */}
-        <div className="mt-6">
-          <CredentialsBadgesSection />
         </div>
       </div>
     </Layout>
