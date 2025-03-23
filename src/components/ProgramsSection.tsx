@@ -41,23 +41,35 @@ const ProgramsSection = () => {
           </span>
         </h2>
         
-        {/* Employers Section - Simplified without burst image */}
+        {/* Employers Section - With tilted burst and angled text */}
         <div className="mb-12">
-          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
-            <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800">
-              Hiring Opportunity
-            </h3>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+            {/* Burst image with tilt and angled text */}
+            <div className="relative w-64 h-64 md:w-72 md:h-72 transform rotate-12">
+              <img 
+                src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
+                alt="Burst background" 
+                className="w-full h-full object-contain"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <h3 className="font-extrabold text-xl md:text-3xl text-zinc-800 transform -rotate-15 translate-y-2">
+                  Hiring Opportunity
+                </h3>
+              </div>
+            </div>
             
-            <p className="font-medium text-lg mb-4">
-              Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-            </p>
-            
-            <a 
-              href="mailto:ColemanP3@duvalschools.org" 
-              className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-            >
-              Contact Us Today
-            </a>
+            {/* Text placed outside the burst image */}
+            <div className="max-w-md text-center md:text-left">
+              <p className="font-medium text-lg mb-4">
+                Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+              </p>
+              <a 
+                href="mailto:ColemanP3@duvalschools.org" 
+                className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+              >
+                Contact Us Today
+              </a>
+            </div>
           </div>
         </div>
         
