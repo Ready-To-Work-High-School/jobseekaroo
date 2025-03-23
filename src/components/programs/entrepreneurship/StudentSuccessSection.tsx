@@ -10,23 +10,23 @@ const testimonials = [
   {
     id: 1,
     name: "Tara Thompson",
-    imageUrl: "/lovable-uploads/36e59658-587d-4ee6-b32e-b81ebde8adec.png",
+    imageUrl: "/lovable-uploads/a585f4d8-beac-4716-bafc-20991924d911.png",
     content: "I'm amazed by the ways entrepreneurs create amazing innovations from problems. I love Accounting and will apply what I learned to my career goals.",
-    year: "Class of 2024"
+    year: "Class of 2026"
   },
   {
     id: 2,
     name: "Dulce Luna-Flores",
     imageUrl: "/lovable-uploads/fc414304-b47e-41e7-889b-1c04d9a221ec.png",
     content: "The best part of being in entrepreneurship academy is the way Ms. Coleman keeps us learning new insights and how to become a leader. She prepares us for the real world. I really enjoyed the many traveling opportunities too.",
-    year: "Class of 2023"
+    year: "Class of 2025"
   },
   {
     id: 3,
-    name: "Jordan Wheeler",
-    imageUrl: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
-    content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
-    year: "Class of 2024"
+    name: "Elijah Jones",
+    imageUrl: "/lovable-uploads/d455b1eb-c367-4c4c-8797-eeeb18c1898c.png",
+    content: "Earning my Florida Ready to Work credentials showcased my proficiency in essential employability and soft skills, such as communication, problem-solving, and teamwork. As an FBLA officer, I have strengthened my leadership abilities through competitive events and collaboration with my peers. I plan to leverage these skills and experiences after graduation to excel in the workforce, confidently take on leadership roles, and pursue future career opportunities.",
+    year: "Class of 2025"
   },
   {
     id: 4,

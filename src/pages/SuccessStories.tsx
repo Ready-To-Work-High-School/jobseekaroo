@@ -33,13 +33,13 @@ const SuccessStories = () => {
       color: "bg-amber-500"
     },
     {
-      name: "Jordan Wheeler",
-      role: "Professional Welder",
-      company: "WW Gay Mechanical Contractors, Inc.",
-      image: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
-      initials: "JW",
-      quote: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. These qualifications helped me stand out to employers and secure gainful employment as a welder apprentice. With hands-on training and experience, I am now advancing toward a successful career as a professional welder.",
-      credentials: ["Industry Certification in Entrepreneurship & Small Business", "Florida Ready to Work"],
+      name: "Elijah Jones",
+      role: "FBLA Officer",
+      company: "Westside High School",
+      image: "/lovable-uploads/d455b1eb-c367-4c4c-8797-eeeb18c1898c.png",
+      initials: "EJ",
+      quote: "Earning my Florida Ready to Work credentials showcased my proficiency in essential employability and soft skills, such as communication, problem-solving, and teamwork. As an FBLA officer, I have strengthened my leadership abilities through competitive events and collaboration with my peers. I plan to leverage these skills and experiences after graduation to excel in the workforce, confidently take on leadership roles, and pursue future career opportunities.",
+      credentials: ["Florida Ready to Work", "Leadership Skills"],
       color: "bg-green-600"
     },
     {

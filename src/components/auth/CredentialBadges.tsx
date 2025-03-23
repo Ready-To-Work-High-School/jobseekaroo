@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 const CredentialBadges = () => {
@@ -57,17 +58,17 @@ const CredentialBadges = () => {
             <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
           </div>
           
-          {/* NCLEX Badge with enhanced styling */}
+          {/* NCLEX Badge with enhanced styling - Changed text to black and label to red */}
           <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300">
             <div className="relative">
-              <Badge variant="info" className="absolute -top-2 -right-7 z-20 px-4 py-1 text-sm">NCLEX Certified</Badge>
+              <Badge variant="destructive" className="absolute -top-2 -right-7 z-20 px-4 py-1 text-sm">NCLEX Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-lg animate-pulse"></div>
                 <div className="absolute inset-0 bg-red-400/20 rounded-full blur-md animate-pulse delay-500"></div>
                 <img alt="NCLEX Certification" className="w-52 h-52 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
               </div>
             </div>
-            <p className="mt-3 font-bold text-center text-lg text-red-800">Medical Academy</p>
+            <p className="mt-3 font-bold text-center text-lg text-black">Medical Academy</p>
             <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
           </div>
         </div>
@@ -103,4 +104,3 @@ const CredentialBadges = () => {
     </div>;
 };
 export default CredentialBadges;
-

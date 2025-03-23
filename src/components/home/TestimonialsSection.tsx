@@ -28,12 +28,12 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Jordan Wheeler",
-    role: "Professional Welder",
-    company: "WW Gay Mechanical Contractors, Inc.",
-    imageUrl: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
-    content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
-    graduation: "Westside High School, 2024"
+    name: "Elijah Jones",
+    role: "FBLA Officer",
+    company: "Westside High School",
+    imageUrl: "/lovable-uploads/d455b1eb-c367-4c4c-8797-eeeb18c1898c.png",
+    content: "Earning my Florida Ready to Work credentials showcased my proficiency in essential employability and soft skills, such as communication, problem-solving, and teamwork. As an FBLA officer, I have strengthened my leadership abilities through competitive events and collaboration with my peers.",
+    graduation: "Westside High School, 2025"
   },
   {
     id: 4,
