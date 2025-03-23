@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 const CredentialBadges = () => {
@@ -68,7 +67,7 @@ const CredentialBadges = () => {
                 <img alt="NCLEX Certification" className="w-52 h-52 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
               </div>
             </div>
-            <p className="mt-3 font-bold text-center text-lg">Medical Academy</p>
+            <p className="mt-3 font-bold text-center text-lg text-red-800">Medical Academy</p>
             <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
           </div>
         </div>
@@ -104,3 +103,4 @@ const CredentialBadges = () => {
     </div>;
 };
 export default CredentialBadges;
+
