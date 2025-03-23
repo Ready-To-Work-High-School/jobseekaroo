@@ -24,7 +24,7 @@ const SignIn = () => {
         </div>
         
         {/* Industry Recognized Credentials Section - moved up with less spacing */}
-        <div className="mt-8"> {/* Reduced margin top */}
+        <div className="mt-4"> {/* Further reduced margin top */}
           <CredentialsBadgesSection />
         </div>
       </div>
