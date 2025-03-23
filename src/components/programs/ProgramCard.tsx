@@ -35,14 +35,14 @@ const ProgramCard = ({
   return (
     <div 
       className={cn(
-        "relative p-[2px] rounded-lg overflow-hidden hover:shadow-xl transition-shadow h-full",
+        "relative p-[2px] rounded-lg overflow-hidden hover:shadow-xl transition-shadow h-full flex-1",
         "before:absolute before:inset-0 before:rounded-lg",
         `before:bg-gradient-to-br ${getAccentGradient(index)}`,
         "before:content-[''] before:z-0"
       )}
     >
       <div className="relative bg-white rounded-lg h-full z-10">
-        <Card className="relative overflow-hidden hover:shadow-md transition-shadow border-blue-100 h-full">
+        <Card className="relative overflow-hidden hover:shadow-md transition-shadow border-blue-100 h-full flex flex-col">
           <div className="w-full relative h-40 overflow-hidden bg-[#f8f8f8] flex items-center justify-center border-b border-blue-100">
             {image && <img src={image} alt={title} className="w-full h-full object-scale-down" />}
           </div>
@@ -53,7 +53,7 @@ const ProgramCard = ({
               {title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 flex-grow">
             <p className="text-muted-foreground">
               {description}
             </p>
@@ -74,32 +74,34 @@ const ProgramCard = ({
               </div>
             )}
             
-            {learnMoreLink ? (
-              <Button 
-                variant="link" 
-                className="p-0 h-auto text-blue-600 hover:text-blue-800"
-                asChild
-              >
-                <a href={learnMoreLink} target="_blank" rel="noopener noreferrer">
+            <div className="mt-auto pt-2">
+              {learnMoreLink ? (
+                <Button 
+                  variant="link" 
+                  className="p-0 h-auto text-blue-600 hover:text-blue-800"
+                  asChild
+                >
+                  <a href={learnMoreLink} target="_blank" rel="noopener noreferrer">
+                    Learn more
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </a>
+                </Button>
+              ) : (
+                <Button 
+                  variant="link" 
+                  className="p-0 h-auto text-blue-600 hover:text-blue-800"
+                >
                   Learn more
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
                   </svg>
-                </a>
-              </Button>
-            ) : (
-              <Button 
-                variant="link" 
-                className="p-0 h-auto text-blue-600 hover:text-blue-800"
-              >
-                Learn more
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </Button>
-            )}
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>
