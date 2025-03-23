@@ -1,4 +1,3 @@
-
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -14,7 +13,6 @@ import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
 import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from './ui/badge';
-
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
@@ -33,7 +31,6 @@ const ProgramsSection = () => {
       protectElement(sectionRef.current);
     }
   }, []);
-
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
@@ -59,10 +56,7 @@ const ProgramsSection = () => {
                   Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
-                <a 
-                  href="mailto:ColemanP3@duvalschools.org" 
-                  className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-                >
+                <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors">
                   Contact Us Today
                 </a>
               </CardContent>
@@ -77,12 +71,8 @@ const ProgramsSection = () => {
             {/* ESB Badge */}
             <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-amber-200">
               <div className="relative">
-                <Badge variant="amber" className="absolute -top-2 -right-2">ESB Certified</Badge>
-                <img 
-                  src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
-                  alt="ESB Certification" 
-                  className="w-32 h-32 object-contain" 
-                />
+                <Badge variant="amber" className="absolute -top-2 -right-12px-[11px]">ESB Certified</Badge>
+                <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="w-32 h-32 object-contain" />
               </div>
               <p className="mt-2 font-medium text-center">Entrepreneurship & Small Business</p>
               <p className="text-xs text-gray-600 text-center">Industry-standard credential by Certiport</p>
@@ -91,14 +81,10 @@ const ProgramsSection = () => {
             {/* IBM Badge */}
             <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
               <div className="relative">
-                <Badge variant="info" className="absolute -top-2 -right-2">
+                <Badge variant="info" className="absolute -top-2 -right-2 px-[29px]">
                   <BadgeCheck className="h-4 w-4 mr-1" /> IBM
                 </Badge>
-                <img 
-                  src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" 
-                  alt="IBM Skills Build" 
-                  className="w-32 h-32 object-contain" 
-                />
+                <img alt="IBM Skills Build" className="w-32 h-32 object-contain" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
               </div>
               <p className="mt-2 font-medium text-center">IBM Skills Build</p>
               <p className="text-xs text-gray-600 text-center">Career readiness certification pathway</p>
