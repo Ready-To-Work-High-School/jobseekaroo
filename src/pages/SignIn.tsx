@@ -2,6 +2,7 @@
 import Layout from "@/components/Layout";
 import SignInForm from "@/components/auth/SignInForm";
 import SignInBenefitsCard from "@/components/auth/SignInBenefitsCard";
+import CredentialsBadgesSection from "@/components/auth/CredentialsBadgesSection";
 
 const SignIn = () => {
   return (
@@ -12,7 +13,7 @@ const SignIn = () => {
           <p className="text-muted-foreground mt-2">Sign in to access your account</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           <div className="md:col-span-3">
             <SignInForm />
           </div>
@@ -21,6 +22,9 @@ const SignIn = () => {
             <SignInBenefitsCard />
           </div>
         </div>
+        
+        {/* Industry Recognized Credentials Section */}
+        <CredentialsBadgesSection />
       </div>
     </Layout>
   );
