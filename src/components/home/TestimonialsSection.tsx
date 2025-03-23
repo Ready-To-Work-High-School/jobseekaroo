@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
@@ -43,6 +42,33 @@ const testimonials = [
     imageUrl: "/lovable-uploads/feb3e164-f882-43e2-8086-2739076c1d61.png",
     content: "The Entrepreneurship Academy helped me develop business planning, financial management, and marketing skills. I've gained discipline, persistence, and adaptability—key traits for running a successful business.",
     graduation: "Westside High School, 2025"
+  },
+  {
+    id: 5,
+    name: "Tara Thompson",
+    role: "Culinary Arts Student",
+    company: "Westside High School",
+    imageUrl: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
+    content: "The career platform helped me find mentorship opportunities in the culinary field. The resume building tools and interview practice gave me confidence to apply for competitive positions.",
+    graduation: "Westside High School, 2024"
+  },
+  {
+    id: 6,
+    name: "Dulce-Luna Flores",
+    role: "Healthcare Academy Student",
+    company: "Westside High School",
+    imageUrl: "/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png",
+    content: "Through the healthcare academy program, I've gained hands-on clinical experience and certifications that will give me an advantage when applying to nursing school.",
+    graduation: "Westside High School, 2024"
+  },
+  {
+    id: 7,
+    name: "Jordan Wheeler",
+    role: "IT Student",
+    company: "Westside High School",
+    imageUrl: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
+    content: "The IT certification courses prepared me for real-world tech challenges. I've earned multiple credentials that employers value and found mentors who guide my career path.",
+    graduation: "Westside High School, 2024"
   }
 ];
 
