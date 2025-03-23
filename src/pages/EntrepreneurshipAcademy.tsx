@@ -5,6 +5,7 @@ import { useFadeIn, useSlideIn } from '@/utils/animations';
 import WestsideAcademy from '@/components/programs/WestsideAcademy';
 import EntrepreneurshipStoreSection from '@/components/programs/EntrepreneurshipStoreSection';
 import CredentialBadges from '@/components/auth/CredentialBadges';
+import TechCredentialBadges from '@/components/programs/TechCredentialBadges';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Briefcase, Award, Sparkles, Cpu } from 'lucide-react';
@@ -162,10 +163,26 @@ const EntrepreneurshipAcademy = () => {
         
         <Separator className="my-16" />
         
+        {/* Tech Credentials & IBM/Microsoft Badges - NEW SECTION */}
+        <section className={fadeIn}>
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Technology Credentials</h2>
+            <div className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 p-6 rounded-lg mb-10">
+              <p className="text-lg text-center text-gray-800 italic">
+                "Our students gain valuable digital credentials in emerging technologies, 
+                preparing them for the future of work."
+              </p>
+            </div>
+            <TechCredentialBadges />
+          </div>
+        </section>
+        
+        <Separator className="my-16" />
+        
         {/* Credentials & Certifications */}
         <section className={fadeIn}>
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Credentials & Certifications</h2>
+            <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Business Credentials & Certifications</h2>
             <CredentialBadges />
           </div>
         </section>
