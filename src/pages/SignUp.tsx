@@ -40,40 +40,44 @@ const SignUp = () => {
           <p className="text-muted-foreground mt-2">Sign up to start exploring jobs</p>
         </div>
         
-        <Tabs 
-          defaultValue="student" 
-          className="w-full mb-6"
-          onValueChange={(value) => setActiveTab(value)}
-        >
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-            <TabsTrigger value="student">
-              <GraduationCap className="h-4 w-4 mr-2" />
-              Student
-            </TabsTrigger>
-            <TabsTrigger value="employer">
-              <Briefcase className="h-4 w-4 mr-2" />
-              Employer
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="student" className="mt-6">
-            <StudentSignUpForm 
-              isLoading={isLoading}
-              isAppleLoading={isAppleLoading}
-              handleAppleSignIn={handleAppleSignIn}
-            />
-          </TabsContent>
-          
-          <TabsContent value="employer" className="mt-6">
-            <EmployerSignUpForm 
-              isLoading={isLoading}
-              isAppleLoading={isAppleLoading}
-              handleAppleSignIn={handleAppleSignIn}
-            />
-          </TabsContent>
-        </Tabs>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
+          <div className="md:col-span-5">
+            <Tabs 
+              defaultValue="student" 
+              className="w-full mb-6"
+              onValueChange={(value) => setActiveTab(value)}
+            >
+              <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+                <TabsTrigger value="student">
+                  <GraduationCap className="h-4 w-4 mr-2" />
+                  Student
+                </TabsTrigger>
+                <TabsTrigger value="employer">
+                  <Briefcase className="h-4 w-4 mr-2" />
+                  Employer
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="student" className="mt-6">
+                <StudentSignUpForm 
+                  isLoading={isLoading}
+                  isAppleLoading={isAppleLoading}
+                  handleAppleSignIn={handleAppleSignIn}
+                />
+              </TabsContent>
+              
+              <TabsContent value="employer" className="mt-6">
+                <EmployerSignUpForm 
+                  isLoading={isLoading}
+                  isAppleLoading={isAppleLoading}
+                  handleAppleSignIn={handleAppleSignIn}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
         
-        {/* Added new section to fill the gap */}
+        {/* Platform information section to fill the gap */}
         <SignUpInfoSection />
       </div>
     </Layout>
