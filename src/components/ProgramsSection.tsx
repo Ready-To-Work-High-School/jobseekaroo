@@ -1,4 +1,3 @@
-
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -10,7 +9,6 @@ import { cn } from '@/lib/utils';
 import SectionSeparator from './home/SectionSeparator';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
@@ -21,12 +19,11 @@ const ProgramsSection = () => {
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
-
   return <section className={`py-16 bg-secondary/5 ${animation}`}>
       <div className="container-custom">
         {/* For Employers Only heading placed outside the blue section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center")}>
-          <span className="bg-gradient-to-r from-zinc-800 via-amber-700 to-zinc-900 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-6 py-3 font-bold text-blue-800 text-center text-3xl md:text-4xl w-full">
             For Employers Only
           </span>
         </h2>
@@ -63,5 +60,4 @@ const ProgramsSection = () => {
       </div>
     </section>;
 };
-
 export default ProgramsSection;
