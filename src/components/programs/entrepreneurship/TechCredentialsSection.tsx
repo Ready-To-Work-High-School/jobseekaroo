@@ -1,5 +1,7 @@
+
 import React from 'react';
 import TechCredentialBadges from '../TechCredentialBadges';
+
 const TechCredentialsSection = () => {
   return <div className="mb-12">
       
@@ -12,4 +14,5 @@ const TechCredentialsSection = () => {
       <TechCredentialBadges />
     </div>;
 };
+
 export default TechCredentialsSection;
