@@ -24,7 +24,7 @@ const testimonials = [
   {
     id: 3,
     name: "Marcus Williams",
-    imageUrl: "/lovable-uploads/ba8ac4f2-a90c-4df4-93cb-e0cb7a4a4eb9.png",
+    imageUrl: "/lovable-uploads/d9e85ca7-a9c3-445e-9aa5-468cdcc95775.png",
     content: "Working in the school store gave me real business experience. I learned how to manage inventory, handle transactions, and provide customer service - skills I'm using in my retail management internship.",
     year: "Class of 2023"
   }

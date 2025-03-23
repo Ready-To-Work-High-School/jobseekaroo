@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
@@ -31,7 +30,7 @@ const testimonials = [
     name: "Jordan Wheeler",
     role: "Junior Project Coordinator",
     company: "BuildRight Construction",
-    imageUrl: "/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png",
+    imageUrl: "/lovable-uploads/d9e85ca7-a9c3-445e-9aa5-468cdcc95775.png",
     content: "The apprenticeship connection feature changed my career path! I never considered construction management until seeing the opportunities. Now I'm earning while learning advanced skills.",
     graduation: "Westside High School, 2022"
   }

@@ -36,7 +36,7 @@ const SuccessStories = () => {
       name: "David Thompson",
       role: "Junior Tech Support",
       company: "Tech Solutions Inc.",
-      image: null,
+      image: "/lovable-uploads/d9e85ca7-a9c3-445e-9aa5-468cdcc95775.png",
       initials: "DT",
       quote: "The technical skills I learned in the program directly translated to my job. My employer was impressed by how prepared I was on day one.",
       credentials: ["Technology Fundamentals", "Entrepreneurship Certification"],
@@ -95,6 +95,17 @@ const SuccessStories = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
+                {story.image && (
+                  <div className="mb-4 flex justify-center">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-slate-200">
+                      <img 
+                        src={story.image} 
+                        alt={story.name} 
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                )}
                 <p className="text-base italic">"{story.quote}"</p>
               </CardContent>
               <CardFooter className="flex-col items-start border-t pt-4">
