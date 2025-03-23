@@ -7,6 +7,7 @@ const EnhancedHero = () => {
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const infoAnimation = useFadeIn(700);
+  const benefitsAnimation = useFadeIn(900);
 
   return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
@@ -30,13 +31,15 @@ const EnhancedHero = () => {
           <p className="text-xl font-medium mt-6 text-blue-900">Let Your Next Chapter Start Now </p>
         </div>
         
-        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>Competitive Salaries, Health Benefits, 401 Savings and More</p>
-        
-        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12", infoAnimation)}>
+        <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-8", infoAnimation)}>
           <FeatureCard icon="🔎" title="Location Search" description="Find opportunities within Jacksonville and surrounding counties. Search up to 50 miles from your location." />
           <FeatureCard icon="💰" title="Apprenticeships" description="Discover paid training programs where you can learn valuable skills while earning income." />
           <FeatureCard icon="💼" title="Advanced Filtering" description="Use our powerful filters to narrow down jobs by type, experience level, and sort by relevance, date, or salary." />
         </div>
+        
+        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto mt-6 py-2 px-4 bg-amber-100/50 rounded-lg inline-block", benefitsAnimation)}>
+          Competitive Salaries, Health Benefits, 401 Savings and More
+        </p>
       </div>
     </section>;
 };
