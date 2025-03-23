@@ -16,7 +16,7 @@ const CompetitiveEdgeSection = () => {
       description: "Learn to analyze market trends and make data-driven business decisions"
     },
     {
-      icon: <Globe className="h-8 w-8 text-red-800" />,
+      icon: <Globe className="h-8 w-8 text-[#6e1212]" />,
       title: "Global Perspective",
       description: "Understand international business practices and global market opportunities"
     },
@@ -42,7 +42,7 @@ const CompetitiveEdgeSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-red-900 mb-4">Competitive Edge in the Workforce</h2>
+            <h2 className="text-3xl font-bold text-[#6e1212] mb-4">Competitive Edge in the Workforce</h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               Westside High School students are gaining a competitive edge in the workforce before they even graduate through an 
               advanced-level curriculum that covers Entrepreneurship which may lead to Industry Certification curriculum.
@@ -52,7 +52,7 @@ const CompetitiveEdgeSection = () => {
           <div className="flex flex-col md:flex-row items-center justify-between mb-12">
             <div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8">
               <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl p-6 shadow-lg border border-gray-300">
-                <h3 className="text-xl font-semibold text-red-800 mb-4">Industry-Leading Preparation</h3>
+                <h3 className="text-xl font-semibold text-[#6e1212] mb-4">Industry-Leading Preparation</h3>
                 <p className="text-gray-700 mb-4">
                   Our entrepreneurship program prepares students for real-world success with practical skills and industry knowledge that employers value.
                 </p>
@@ -63,7 +63,7 @@ const CompetitiveEdgeSection = () => {
             </div>
             
             <div className="md:w-1/2">
-              <div className="bg-gradient-to-r from-gray-900 to-red-900 rounded-xl p-6 shadow-lg border border-red-800">
+              <div className="bg-gradient-to-r from-gray-900 to-[#6e1212] rounded-xl p-6 shadow-lg border border-[#6e1212]">
                 <h3 className="text-xl font-semibold text-amber-400 mb-4">Career-Ready Advantages</h3>
                 <ul className="space-y-3">
                   <li className="flex items-center">
@@ -95,7 +95,7 @@ const CompetitiveEdgeSection = () => {
                 key={index}
                 className={cn(
                   "bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
-                  index % 2 === 0 ? "border-red-300 hover:border-red-500" : "border-amber-300 hover:border-amber-500"
+                  index % 2 === 0 ? "border-[#6e1212]/50 hover:border-[#6e1212]" : "border-amber-300 hover:border-amber-500"
                 )}
               >
                 <div className="mb-4">

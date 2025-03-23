@@ -35,7 +35,7 @@ const WestsideAcademy = () => {
           </div>
         </div>
       </div>
-      <div className="h-1 w-full bg-gradient-to-r from-red-800 via-amber-500 to-red-800"></div>
+      <div className="h-1 w-full bg-gradient-to-r from-[#6e1212] via-amber-500 to-[#6e1212]"></div>
     </div>
   );
 };

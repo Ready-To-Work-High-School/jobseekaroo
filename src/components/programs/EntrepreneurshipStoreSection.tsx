@@ -7,7 +7,7 @@ const EntrepreneurshipStoreSection = () => {
     <div className="mb-8">
       <Card className="overflow-hidden border-amber-300 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100">
         {/* Store Heading - Now full width and outside the card content for maximum stretch */}
-        <h3 className="bg-gradient-to-r from-red-900 via-amber-600 to-red-800 px-6 py-3 font-bold text-gray-100 text-center text-3xl md:text-4xl w-full">Westside High School Entrepreneurship School Store</h3>
+        <h3 className="bg-gradient-to-r from-[#6e1212] via-amber-600 to-[#5a0e0e] px-6 py-3 font-bold text-gray-100 text-center text-3xl md:text-4xl w-full">Westside High School Entrepreneurship School Store</h3>
         
         <CardContent className="p-6 md:p-8">
           <div className="flex flex-col gap-6">

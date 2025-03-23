@@ -37,7 +37,7 @@ const StudentSuccessSection = () => {
     <section className={cn("py-12 bg-gradient-to-br from-amber-50 to-white", fadeIn)}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-blue-800 mb-3">Student Success Stories</h2>
+          <h2 className="text-3xl font-bold text-[#6e1212] mb-3">Student Success Stories</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Hear from our entrepreneurship academy students about their experiences and accomplishments
           </p>
@@ -54,10 +54,10 @@ const StudentSuccessSection = () => {
                 />
               </div>
               <CardContent className="p-5 bg-gradient-to-b from-amber-50 to-white relative">
-                <div className="absolute -top-6 right-4 bg-blue-100 p-2 rounded-full shadow-md">
-                  <Quote className="h-5 w-5 text-blue-600" />
+                <div className="absolute -top-6 right-4 bg-[#6e1212]/10 p-2 rounded-full shadow-md">
+                  <Quote className="h-5 w-5 text-[#6e1212]" />
                 </div>
-                <h3 className="font-bold text-lg text-blue-800 mb-2">{testimonial.name}</h3>
+                <h3 className="font-bold text-lg text-[#6e1212] mb-2">{testimonial.name}</h3>
                 <p className="text-sm text-amber-600 mb-3">{testimonial.year}</p>
                 <p className="text-gray-700 italic">"{testimonial.content}"</p>
               </CardContent>

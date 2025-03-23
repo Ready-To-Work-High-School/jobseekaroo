@@ -5,11 +5,11 @@ import { GraduationCap, Briefcase, Award } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-b from-gray-900 via-red-900 to-gray-900">
+    <section className="py-12 md:py-16 bg-gradient-to-b from-gray-900 via-[#6e1212] to-gray-900">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-amber-400">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">
                 Entrepreneurship Academy
               </span>
