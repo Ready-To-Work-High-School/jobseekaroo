@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import CredentialBadges from '@/components/auth/CredentialBadges';
 import { 
   Building, 
   Briefcase, 
@@ -97,17 +98,6 @@ const ForEmployers = () => {
       icon: Share2
     }
   ];
-  
-  const industries = [
-    { name: "Retail", color: "bg-blue-100 text-blue-800" },
-    { name: "Office Administration", color: "bg-amber-100 text-amber-800" },
-    { name: "Food Service", color: "bg-green-100 text-green-800" },
-    { name: "Customer Service", color: "bg-purple-100 text-purple-800" },
-    { name: "Technology", color: "bg-red-100 text-red-800" },
-    { name: "Healthcare", color: "bg-sky-100 text-sky-800" },
-    { name: "Hospitality", color: "bg-pink-100 text-pink-800" },
-    { name: "Logistics", color: "bg-indigo-100 text-indigo-800" }
-  ];
 
   return (
     <Layout>
@@ -190,16 +180,18 @@ const ForEmployers = () => {
               ))}
             </div>
             
-            <div className="bg-secondary/30 rounded-lg p-6 mt-8">
-              <h3 className="text-xl font-semibold mb-4">Industries Our Students Are Trained For</h3>
-              <div className="flex flex-wrap gap-2">
-                {industries.map((industry, index) => (
-                  <Badge key={index} className={industry.color}>
-                    {industry.name}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+            {/* Credential Badges Section - Replacing Industries Section */}
+            <Card className="border-blue-200">
+              <CardHeader className="bg-blue-50 border-b border-blue-200">
+                <CardTitle className="text-blue-800">Student Credentials & Certifications</CardTitle>
+                <CardDescription>
+                  Our students earn industry-recognized credentials that validate their skills and knowledge
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <CredentialBadges />
+              </CardContent>
+            </Card>
           </TabsContent>
           
           <TabsContent value="post-job">
