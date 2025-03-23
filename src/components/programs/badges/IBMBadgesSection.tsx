@@ -41,10 +41,14 @@ const IBMBadgesSection = () => {
         IBM SkillsBuild Digital Credentials
       </h3>
 
-      <Card className="border-blue-100 shadow-sm">
+      <Card className="border-blue-100 shadow-sm mb-6">
         <CardContent className="p-6">
+          <p className="text-gray-700 mb-4 text-lg italic">
+            "Our students gain valuable digital credentials in emerging technologies, 
+            preparing them for the future of work."
+          </p>
           <p className="text-gray-700 mb-4">
-            Students earn these industry-recognized digital credentials through IBM SkillsBuild, demonstrating their proficiency in emerging technologies:
+            Students earn these industry-recognized digital credentials through IBM SkillsBuild, demonstrating their proficiency in emerging technologies and gaining a competitive edge in the workforce. These credentials validate skills in areas like artificial intelligence, entrepreneurship, and digital literacy.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {ibmBadges.map((badge, index) => (

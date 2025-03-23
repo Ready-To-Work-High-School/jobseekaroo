@@ -30,7 +30,14 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
-      {/* Credentials & Certifications - Moved up near Academy section */}
+      {/* Tech Credentials & IBM/Microsoft Badges Section - Moved up above Competitive Edge */}
+      <section className={fadeIn}>
+        <div className="container mx-auto px-4 py-8">
+          <TechCredentialsSection />
+        </div>
+      </section>
+      
+      {/* Credentials & Certifications */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-gray-50 to-gray-100">
           <BusinessCredentialsSection />
@@ -40,7 +47,7 @@ const EntrepreneurshipAcademy = () => {
       {/* New Competitive Edge Section */}
       <CompetitiveEdgeSection />
       
-      {/* Student Success Stories Section - Added new section */}
+      {/* Student Success Stories Section */}
       <StudentSuccessSection />
       
       <div className="container mx-auto px-4 py-8">
@@ -55,11 +62,6 @@ const EntrepreneurshipAcademy = () => {
         <Separator className="my-16 bg-amber-500/50" />
         
         <Separator className="my-16 bg-amber-500/50" />
-        
-        {/* Tech Credentials & IBM/Microsoft Badges Section */}
-        <section className={fadeIn}>
-          <TechCredentialsSection />
-        </section>
         
         <Separator className="my-16 bg-amber-500/50" />
         

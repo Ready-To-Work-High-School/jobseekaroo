@@ -74,6 +74,16 @@ const CredentialBadges = () => {
         </div>
       </div>
       
+      {/* Technology Credentials Text - Added above Ready To Work section */}
+      <div className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 p-6 rounded-lg mb-4">
+        <h3 className="text-xl font-bold text-blue-800 mb-3">Technology Credentials</h3>
+        <p className="text-lg text-gray-800">
+          Our students gain valuable digital credentials in emerging technologies, 
+          preparing them for the future of work. These digital badges showcase technical proficiency
+          and industry-recognized skills that give students a competitive advantage in today's job market.
+        </p>
+      </div>
+      
       {/* Ready to Work Credentials - Moved down */}
       <div>
         <h3 className="text-lg font-semibold mb-3 text-blue-800">Ready to Work Credentials</h3>
