@@ -36,11 +36,14 @@ const JobPlacementsSection = () => {
     <section className={cn("py-16 bg-white", fadeInSlow)}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <Card className="inline-block border-blue-300 bg-blue-50 shadow-md mb-4">
-            <CardContent className="px-8 py-3">
-              <h2 className="text-3xl font-bold text-gray-900">Projected Goals</h2>
-            </CardContent>
-          </Card>
+          <div className="inline-block relative">
+            <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-blue-500 to-amber-400 opacity-75 blur-sm"></div>
+            <Card className="relative inline-block border-blue-300 bg-blue-50 shadow-md mb-4">
+              <CardContent className="px-8 py-3">
+                <h2 className="text-3xl font-bold text-gray-900">Projected Goals</h2>
+              </CardContent>
+            </Card>
+          </div>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
             Our platform connects credentialed high school students with meaningful career opportunities
           </p>

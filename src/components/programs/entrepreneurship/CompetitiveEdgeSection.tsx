@@ -22,7 +22,8 @@ const CompetitiveEdgeSection = () => {
               </Card>
               
               <div className="relative mb-6">
-                <Card className="border-amber-300 shadow-md">
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-amber-400 to-blue-500 opacity-75 blur-sm"></div>
+                <Card className="relative border-amber-300 shadow-md">
                   <CardContent className="p-5 bg-amber-50">
                     <p className="text-lg text-gray-700 font-medium">
                       Competitive salaries, health benefits, and professional development opportunities await our credentialed graduates.

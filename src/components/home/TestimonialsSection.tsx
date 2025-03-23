@@ -28,7 +28,7 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Jasmine Williams",
+    name: "Jordan Wheeler",
     role: "Junior Project Coordinator",
     company: "BuildRight Construction",
     imageUrl: "/lovable-uploads/8c05db9e-7d7f-4a4c-9cfc-18a0cf8ed175.png",
