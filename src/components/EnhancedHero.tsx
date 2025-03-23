@@ -1,12 +1,18 @@
+
 import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 import FeatureCard from './FeatureCard';
+
 const EnhancedHero = () => {
+  const isMobile = useIsMobile();
   const titleAnimation = useSlideIn(100);
   const subtitleAnimation = useSlideIn(300);
   const infoAnimation = useFadeIn(700);
   const benefitsAnimation = useFadeIn(900);
-  return <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
+  
+  return (
+    <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-blue-50/50 to-white">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
@@ -20,7 +26,10 @@ const EnhancedHero = () => {
             
             {/* Main title with background */}
             <h1 className="relative bg-white/90 backdrop-blur-sm rounded-lg p-4 text-4xl sm:text-5xl font-bold tracking-tight md:text-8xl shadow-xl">
-              <span className="bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent text-7xl px-0 mx-0">
+              <span className={cn(
+                "bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-0 mx-0",
+                isMobile ? "text-4xl" : "text-7xl"
+              )}>
                 Job Seekers 4 High Schools
               </span>
             </h1>
@@ -38,6 +47,8 @@ const EnhancedHero = () => {
           <em>Competitive Salaries, Health Benefits, 401K Savings and More</em>
         </p>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default EnhancedHero;

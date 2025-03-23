@@ -10,6 +10,8 @@ import UserRecommendationsSection from '@/components/home/UserRecommendationsSec
 import SearchSection from '@/components/home/SearchSection';
 import SectionSeparator from '@/components/home/SectionSeparator';
 import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
+import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 
 const Index = () => {
   const { user } = useAuth();
@@ -34,8 +36,20 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
+        {/* Job Placements Section - NEW */}
+        <JobPlacementsSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
         {/* Search Section */}
         <SearchSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
+        {/* Testimonials Section - NEW */}
+        <TestimonialsSection />
         
         {/* Separator */}
         <SectionSeparator />
