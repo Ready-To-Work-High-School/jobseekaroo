@@ -42,7 +42,7 @@ const IBMBadgesSection = () => {
             <div>
               <h4 className="text-lg font-semibold mb-2">{ibmBadges[0].name}</h4>
               <p className="text-gray-700">
-                Students can earn IBM Digital Badges in areas such as Cloud Computing, Cybersecurity, Data Science, and AI. These credentials are recognized by employers worldwide and demonstrate proficiency in cutting-edge technologies that are in high demand in today's job market.
+                This IBM Digital Badge is for teachers who complete specialized training. Teachers can earn these credentials in Cloud Computing, Cybersecurity, Data Science, and AI, enabling them to effectively instruct students in these high-demand technology fields. The badge represents professional development and instructional expertise recognized by employers worldwide.
               </p>
               <Badge className="mt-3 bg-blue-800 text-white">Industry-recognized credential</Badge>
             </div>

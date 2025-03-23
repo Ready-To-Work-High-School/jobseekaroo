@@ -38,20 +38,20 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
-      {/* Program Cards - MOVED UP above Tech Credentials as requested */}
+      {/* Tech Credentials & IBM/Microsoft Badges Section - Now ABOVE Program Cards */}
+      <section className={fadeIn}>
+        <div className="container mx-auto px-4 py-8">
+          <TechCredentialsSection />
+        </div>
+      </section>
+      
+      {/* Program Cards - Now below Tech Credentials */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8">
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-red-900 mb-8 text-center">Our Programs</h2>
             <ProgramCards />
           </div>
-        </div>
-      </section>
-      
-      {/* Tech Credentials & IBM/Microsoft Badges Section - Now below Program Cards */}
-      <section className={fadeIn}>
-        <div className="container mx-auto px-4 py-8">
-          <TechCredentialsSection />
         </div>
       </section>
       
