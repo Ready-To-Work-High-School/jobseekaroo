@@ -11,6 +11,7 @@ import CompetitiveEdgeSection from '@/components/programs/entrepreneurship/Compe
 import TechCredentialsSection from '@/components/programs/entrepreneurship/TechCredentialsSection';
 import BusinessCredentialsSection from '@/components/programs/entrepreneurship/BusinessCredentialsSection';
 import ContactEnrollmentSection from '@/components/programs/entrepreneurship/ContactEnrollmentSection';
+import StudentSuccessSection from '@/components/programs/entrepreneurship/StudentSuccessSection';
 
 const EntrepreneurshipAcademy = () => {
   const fadeIn = useFadeIn(300);
@@ -32,6 +33,9 @@ const EntrepreneurshipAcademy = () => {
       
       {/* New Competitive Edge Section */}
       <CompetitiveEdgeSection />
+      
+      {/* Student Success Stories Section - Added new section */}
+      <StudentSuccessSection />
       
       <div className="container mx-auto px-4 py-8">
         {/* Program Cards */}
