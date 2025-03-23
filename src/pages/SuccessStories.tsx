@@ -41,6 +41,16 @@ const SuccessStories = () => {
       quote: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. These qualifications helped me stand out to employers and secure gainful employment as a welder apprentice. With hands-on training and experience, I am now advancing toward a successful career as a professional welder.",
       credentials: ["Industry Certification in Entrepreneurship & Small Business", "Florida Ready to Work"],
       color: "bg-green-600"
+    },
+    {
+      name: "Ronald King",
+      role: "Student Entrepreneur",
+      company: "Westside High School",
+      image: "/lovable-uploads/feb3e164-f882-43e2-8086-2739076c1d61.png",
+      initials: "RK",
+      quote: "The Entrepreneurship Academy helped me develop a strong understanding of the foundations of entrepreneurship, including business planning, financial management, and marketing. Through the program, I gained essential soft skills such as discipline, persistence, and adaptability—key traits for navigating the challenges of running a business. This experience has equipped me with the confidence and resilience needed to succeed as a young entrepreneur.",
+      credentials: ["Entrepreneurship Foundations", "Business Planning"],
+      color: "bg-purple-600"
     }
   ];
   
@@ -81,7 +91,7 @@ const SuccessStories = () => {
       </div>
       
       <div className={contentAnimation}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
           {stories.map((story, index) => (
             <Card key={index} className="overflow-hidden border-t-4" style={{ borderTopColor: story.color }}>
               <CardHeader className="pb-2 relative">

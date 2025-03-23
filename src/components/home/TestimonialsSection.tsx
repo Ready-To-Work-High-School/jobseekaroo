@@ -34,6 +34,15 @@ const testimonials = [
     imageUrl: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
     content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
     graduation: "Westside High School, 2024"
+  },
+  {
+    id: 4,
+    name: "Ronald King",
+    role: "Student Entrepreneur",
+    company: "Westside High School",
+    imageUrl: "/lovable-uploads/feb3e164-f882-43e2-8086-2739076c1d61.png",
+    content: "The Entrepreneurship Academy helped me develop a strong understanding of the foundations of entrepreneurship, including business planning, financial management, and marketing. Through the program, I gained essential soft skills such as discipline, persistence, and adaptability—key traits for navigating the challenges of running a business.",
+    graduation: "Westside High School, 2025"
   }
 ];
 

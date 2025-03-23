@@ -27,6 +27,13 @@ const testimonials = [
     imageUrl: "/lovable-uploads/a226fbf9-a89c-4157-ab94-0bb2e52b807f.png",
     content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
     year: "Class of 2024"
+  },
+  {
+    id: 4,
+    name: "Ronald King",
+    imageUrl: "/lovable-uploads/feb3e164-f882-43e2-8086-2739076c1d61.png",
+    content: "The Entrepreneurship Academy helped me develop a strong understanding of the foundations of entrepreneurship, including business planning, financial management, and marketing. Through the program, I gained essential soft skills such as discipline, persistence, and adaptability—key traits for navigating the challenges of running a business. This experience has equipped me with the confidence and resilience needed to succeed as a young entrepreneur.",
+    year: "Class of 2025"
   }
 ];
 
@@ -43,10 +50,10 @@ const StudentSuccessSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.id} className="overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-amber-200">
-              <div className="relative h-96 overflow-hidden">
+              <div className="relative h-80 overflow-hidden">
                 <img 
                   src={testimonial.imageUrl} 
                   alt={testimonial.name} 
