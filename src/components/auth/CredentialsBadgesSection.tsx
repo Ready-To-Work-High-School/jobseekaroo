@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Award, BadgeCheck, Shield } from 'lucide-react';
@@ -91,7 +90,7 @@ const CredentialsBadgesSection = () => {
               className="w-full h-full object-contain relative z-10 rounded-md" 
             />
           </div>
-          <p className="text-xs text-center mt-2">Entrepreneurship & Small Business</p>
+          <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
         </div>
         
         <p className="text-xs text-center text-muted-foreground">
