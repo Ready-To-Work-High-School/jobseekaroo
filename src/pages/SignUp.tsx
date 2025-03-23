@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GraduationCap, Briefcase } from "lucide-react";
 import StudentSignUpForm from "@/components/auth/StudentSignUpForm";
 import EmployerSignUpForm from "@/components/auth/EmployerSignUpForm";
+import SignUpInfoSection from "@/components/auth/SignUpInfoSection";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,9 @@ const SignUp = () => {
             />
           </TabsContent>
         </Tabs>
+        
+        {/* Added new section to fill the gap */}
+        <SignUpInfoSection />
       </div>
     </Layout>
   );
