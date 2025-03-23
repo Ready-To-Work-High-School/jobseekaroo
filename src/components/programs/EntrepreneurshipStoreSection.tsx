@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import LazyImage from '@/components/LazyImage';
@@ -9,7 +8,7 @@ const EntrepreneurshipStoreSection = () => {
       {/* Capstone Badge - Moved to top of section and increased in size */}
       <div className="flex justify-center mb-6">
         <div className="flex flex-col items-center">
-          <img src="/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png" alt="ESB Certification Badge" className="h-40 w-auto object-contain mb-3" />
+          
           
         </div>
       </div>

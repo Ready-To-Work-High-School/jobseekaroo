@@ -16,16 +16,12 @@ const EnhancedHero = () => {
               Job Seekers 4 High Schools
             </span>
           </h1>
-          <p className="text-xl font-medium mt-2 text-primary/90">Your Gateway to Career Success</p>
+          <p className="text-xl font-medium mt-2 text-blue-900">Let Your Next Chapter Start Now </p>
         </div>
         
-        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>
-          Many jobs offer competitive salaries, opportunities for growth and professional development, and long-term career potential.
-        </p>
+        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto", subtitleAnimation)}>Competitive Salaries, Health Benefits, 401 Savings and More</p>
 
-        <p className="font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-600 text-base">
-          * <em>This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy</em>
-        </p>
+        
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12", infoAnimation)}>
           <FeatureCard icon="🔎" title="Location Search" description="Find opportunities within Jacksonville and surrounding counties. Search up to 50 miles from your location." />
