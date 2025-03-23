@@ -7,7 +7,10 @@ import CourseCurriculum from './academy/CourseCurriculum';
 
 const WestsideAcademy = () => {
   return (
-    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10">
+    <div className="rounded-xl overflow-hidden shadow-md mb-12 bg-secondary/10 relative">
+      {/* Glowing accent for the Academy section */}
+      <div className="absolute inset-0 -z-10 glow-amber opacity-60"></div>
+      
       {/* Academy Banner Image - Spans full width */}
       <div className="w-full overflow-hidden">
         <img 
@@ -17,14 +20,19 @@ const WestsideAcademy = () => {
         />
       </div>
       
-      <div className="p-6 md:p-8 bg-sky-100">
-        {/* Academy Logo and Info */}
-        <AcademyHeader />
-        <AcademyDescription />
+      <div className="p-6 md:p-8 bg-sky-100 relative">
+        {/* Extra glow effect inside the content area */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-100/40 via-amber-100/40 to-blue-100/40 animate-pulse-slow"></div>
         
-        <div className="flex flex-col md:flex-row gap-6">
-          <ProgramBenefits />
-          <CourseCurriculum />
+        {/* Academy Logo and Info */}
+        <div className="relative z-10">
+          <AcademyHeader />
+          <AcademyDescription />
+          
+          <div className="flex flex-col md:flex-row gap-6">
+            <ProgramBenefits />
+            <CourseCurriculum />
+          </div>
         </div>
       </div>
       <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-300"></div>
