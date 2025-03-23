@@ -7,7 +7,7 @@ import MobileMenu from './MobileMenu';
 import { BriefcaseBusiness, Users, GraduationCap, Menu, X } from 'lucide-react';
 
 const Header = () => {
-  const { user, userType } = useAuth();
+  const { user, userProfile } = useAuth();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
@@ -64,10 +64,10 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-2">
             {user ? (
               <div className="flex items-center space-x-2">
-                <Link to={userType === 'employer' ? '/employer-dashboard' : '/profile'}>
+                <Link to={userProfile?.user_type === 'employer' ? '/employer-dashboard' : '/profile'}>
                   <Button variant="outline" size="sm">
                     <Users className="h-4 w-4 mr-1" />
-                    {userType === 'employer' ? 'Dashboard' : 'My Profile'}
+                    {userProfile?.user_type === 'employer' ? 'Dashboard' : 'My Profile'}
                   </Button>
                 </Link>
               </div>
@@ -96,7 +96,7 @@ const Header = () => {
       </div>
       
       {/* Mobile menu drawer */}
-      {isMenuOpen && <MobileMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />}
+      {isMenuOpen && <MobileMenu />}
     </header>
   );
 };
