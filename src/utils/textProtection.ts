@@ -3,11 +3,14 @@
  * Utility to prevent unauthorized copying/pasting of content
  */
 
+type CopyAttemptCallback = () => void;
+
 // Add text protection to prevent unauthorized copying
-export const enableTextProtection = () => {
+export const enableTextProtection = (onCopyAttempt?: CopyAttemptCallback) => {
   // Prevent right-click context menu
   document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
+    if (onCopyAttempt) onCopyAttempt();
     return false;
   });
 
@@ -16,6 +19,7 @@ export const enableTextProtection = () => {
     // Ctrl+C, Ctrl+X, Ctrl+V, Ctrl+P
     if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'p')) {
       e.preventDefault();
+      if (onCopyAttempt) onCopyAttempt();
       return false;
     }
   });
@@ -45,11 +49,17 @@ export const disableTextProtection = () => {
 };
 
 // Apply protection to specific element
-export const protectElement = (element: HTMLElement) => {
+export const protectElement = (element: HTMLElement, onCopyAttempt?: CopyAttemptCallback) => {
   if (element) {
     element.classList.add('protected-content');
-    element.addEventListener('copy', (e) => e.preventDefault());
-    element.addEventListener('cut', (e) => e.preventDefault());
-    element.addEventListener('paste', (e) => e.preventDefault());
+    
+    const preventWithCallback = (e: Event) => {
+      e.preventDefault();
+      if (onCopyAttempt) onCopyAttempt();
+    };
+    
+    element.addEventListener('copy', preventWithCallback);
+    element.addEventListener('cut', preventWithCallback);
+    element.addEventListener('paste', preventWithCallback);
   }
 };

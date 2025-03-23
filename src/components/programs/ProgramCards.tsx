@@ -1,14 +1,23 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ProgramCard from './ProgramCard';
 import { protectElement } from '@/utils/textProtection';
+import { toast } from '@/hooks/use-toast';
 
 const ProgramCards = () => {
   const cardsRef = useRef<HTMLDivElement>(null);
   
+  const handleCopyAttempt = () => {
+    toast({
+      title: "Protected Content",
+      description: "Unauthorized copying or redistribution of content is prohibited.",
+      variant: "destructive",
+    });
+  };
+  
   useEffect(() => {
     if (cardsRef.current) {
-      protectElement(cardsRef.current);
+      protectElement(cardsRef.current, handleCopyAttempt);
     }
   }, []);
 
