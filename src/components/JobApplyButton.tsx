@@ -39,6 +39,10 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         description: "Please sign in to track your applications",
         variant: "destructive",
       });
+      
+      // Store the current job path to redirect back after login
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+      
       navigate('/sign-in');
       return;
     }
@@ -72,6 +76,20 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
   };
   
   const onExternalApply = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to apply for jobs",
+        variant: "destructive",
+      });
+      
+      // Store the current job path to redirect back after login
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+      
+      navigate('/sign-in');
+      return;
+    }
+    
     // Simulate external application
     setShowSuccessDialog(true);
   };

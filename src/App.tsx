@@ -1,3 +1,4 @@
+
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -50,8 +51,6 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/jobs" element={<JobListings />} />
-                <Route path="/jobs/:id" element={<JobDetails />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/for-employers" element={<ForEmployers />} />
                 <Route path="/faq" element={<FAQ />} />
@@ -59,6 +58,16 @@ function App() {
                 <Route path="/license" element={<License />} />
                 
                 {/* Protected Routes */}
+                <Route path="/jobs" element={
+                  <ProtectedRoute>
+                    <JobListings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/jobs/:id" element={
+                  <ProtectedRoute>
+                    <JobDetails />
+                  </ProtectedRoute>
+                } />
                 <Route path="/skills" element={
                   <ProtectedRoute>
                     <Skills />
