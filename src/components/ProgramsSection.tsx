@@ -41,19 +41,19 @@ const ProgramsSection = () => {
           </span>
         </h2>
         
-        {/* Employers Section - Redesigned with rotated burst and external text */}
+        {/* Employers Section - Redesigned with slanted burst */}
         <div className="mb-12">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            {/* Burst image rotated 90 degrees and enlarged */}
+            {/* Burst image slanted */}
             <div className="relative w-64 h-64 md:w-80 md:h-80">
               <div className="absolute inset-0 rounded-full overflow-hidden glow-primary">
                 <img 
                   src="/lovable-uploads/868d46bf-1273-4a3b-831c-d14f7a7b5af9.png" 
                   alt="Burst background" 
-                  className="w-full h-full object-cover transform rotate-90"
+                  className="w-full h-full object-cover transform rotate-45 scale-110"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800 bg-white/80 px-4 py-2 rounded-full">
+                  <h3 className="font-extrabold text-xl md:text-2xl text-zinc-800 transform -rotate-12">
                     Hiring Opportunity
                   </h3>
                 </div>
