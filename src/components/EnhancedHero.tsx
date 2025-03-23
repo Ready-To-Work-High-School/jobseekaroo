@@ -37,8 +37,8 @@ const EnhancedHero = () => {
           <FeatureCard icon="💼" title="Advanced Filtering" description="Use our powerful filters to narrow down jobs by type, experience level, and sort by relevance, date, or salary." />
         </div>
         
-        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto mt-6 py-2 px-4 bg-amber-100/50 rounded-lg inline-block", benefitsAnimation)}>
-          Competitive Salaries, Health Benefits, 401 Savings and More
+        <p className={cn("text-lg mb-8 text-black max-w-2xl mx-auto mt-6 py-2 px-4 bg-blue-50/50 rounded-lg inline-block", benefitsAnimation)}>
+          <em>Competitive Salaries, Health Benefits, 401 Savings and More</em>
         </p>
       </div>
     </section>;
