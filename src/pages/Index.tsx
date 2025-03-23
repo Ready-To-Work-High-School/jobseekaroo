@@ -42,22 +42,22 @@ const Index = () => {
         {/* Separator */}
         <SectionSeparator />
         
+        {/* Testimonials Section - MOVED ABOVE Search Section */}
+        <TestimonialsSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
         {/* Search Section */}
         <SearchSection />
         
         {/* Separator */}
         <SectionSeparator />
         
-        {/* For Employers Only Section - MOVED UP */}
+        {/* For Employers Only Section */}
         <div className={fadeInSlow}>
           <ProgramsSection />
         </div>
-        
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* Testimonials Section - NOW AFTER EMPLOYERS SECTION */}
-        <TestimonialsSection />
         
         {/* Separator */}
         <SectionSeparator />

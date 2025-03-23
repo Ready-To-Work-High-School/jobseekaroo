@@ -31,15 +31,15 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
+      {/* Student Success Stories Section - MOVED UP above Tech Credentials */}
+      <StudentSuccessSection />
+      
       {/* Credentials & Certifications */}
       <section className={fadeIn}>
         <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-gray-50 to-gray-100">
           <BusinessCredentialsSection />
         </div>
       </section>
-      
-      {/* Student Success Stories Section - MOVED UP above Tech Credentials */}
-      <StudentSuccessSection />
       
       {/* Tech Credentials & IBM/Microsoft Badges Section */}
       <section className={fadeIn}>
