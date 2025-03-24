@@ -30,16 +30,20 @@ export async function validateRedemptionCode(
       };
     }
 
+    // Since the data may be coming from Supabase, we need to handle it safely
+    // We know the shape should be correct, but TypeScript doesn't
+    const dataAny = data as any;
+
     // Transform the database record to match our interface
     const redemptionCode: RedemptionCode = {
-      id: data.id,
-      code: data.code,
-      type: data.type,
-      used: data.used,
-      usedBy: data.used_by,
-      usedAt: data.used_at ? new Date(data.used_at) : undefined,
-      createdAt: new Date(data.created_at),
-      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+      id: dataAny.id,
+      code: dataAny.code,
+      type: dataAny.type,
+      used: dataAny.used,
+      usedBy: dataAny.used_by,
+      usedAt: dataAny.used_at ? new Date(dataAny.used_at) : undefined,
+      createdAt: new Date(dataAny.created_at),
+      expiresAt: dataAny.expires_at ? new Date(dataAny.expires_at) : undefined
     };
 
     // Check if code is already used
@@ -131,16 +135,19 @@ export async function generateRedemptionCode(
       return null;
     }
 
+    // Cast data to any since TypeScript doesn't know the shape
+    const dataAny = data as any;
+
     // Transform the database record to match our interface
     const redemptionCode: RedemptionCode = {
-      id: data.id,
-      code: data.code,
-      type: data.type,
-      used: data.used,
-      usedBy: data.used_by,
-      usedAt: data.used_at ? new Date(data.used_at) : undefined,
-      createdAt: new Date(data.created_at),
-      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+      id: dataAny.id,
+      code: dataAny.code,
+      type: dataAny.type,
+      used: dataAny.used,
+      usedBy: dataAny.used_by,
+      usedAt: dataAny.used_at ? new Date(dataAny.used_at) : undefined,
+      createdAt: new Date(dataAny.created_at),
+      expiresAt: dataAny.expires_at ? new Date(dataAny.expires_at) : undefined
     };
 
     return redemptionCode;
@@ -179,16 +186,21 @@ export async function listRedemptionCodes(
     }
 
     // Transform the database records to match our interface
-    const redemptionCodes: RedemptionCode[] = data.map(item => ({
-      id: item.id,
-      code: item.code,
-      type: item.type,
-      used: item.used,
-      usedBy: item.used_by,
-      usedAt: item.used_at ? new Date(item.used_at) : undefined,
-      createdAt: new Date(item.created_at),
-      expiresAt: item.expires_at ? new Date(item.expires_at) : undefined
-    }));
+    const redemptionCodes: RedemptionCode[] = data.map(item => {
+      // Cast item to any since TypeScript doesn't know the shape
+      const itemAny = item as any;
+      
+      return {
+        id: itemAny.id,
+        code: itemAny.code,
+        type: itemAny.type,
+        used: itemAny.used,
+        usedBy: itemAny.used_by,
+        usedAt: itemAny.used_at ? new Date(itemAny.used_at) : undefined,
+        createdAt: new Date(itemAny.created_at),
+        expiresAt: itemAny.expires_at ? new Date(itemAny.expires_at) : undefined
+      };
+    });
 
     return redemptionCodes;
   } catch (error) {
