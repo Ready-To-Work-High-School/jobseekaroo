@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { RedemptionCode } from '@/types/redemption';
@@ -17,6 +16,10 @@ export function useRedemptionCodes() {
   const [allSelected, setAllSelected] = useState(false);
   const { toast } = useToast();
   
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCodes, setTotalCodes] = useState(0);
+  
   const [stats, setStats] = useState({
     totalCodes: 0,
     usedCodes: 0,
@@ -28,28 +31,37 @@ export function useRedemptionCodes() {
   const fetchCodes = async () => {
     setIsLoading(true);
     try {
-      let filteredCodes: RedemptionCode[] = [];
+      let filterType: 'student' | 'employer' | undefined;
+      let filterUsed: boolean | undefined;
       
       switch (activeTab) {
         case 'used':
-          filteredCodes = await listRedemptionCodes(undefined, true);
+          filterUsed = true;
           break;
         case 'unused':
-          filteredCodes = await listRedemptionCodes(undefined, false);
+          filterUsed = false;
           break;
         case 'students':
-          filteredCodes = await listRedemptionCodes('student');
+          filterType = 'student';
           break;
         case 'employers':
-          filteredCodes = await listRedemptionCodes('employer');
+          filterType = 'employer';
           break;
         default:
-          filteredCodes = await listRedemptionCodes();
+          break;
       }
       
-      setCodes(filteredCodes);
+      const { data: filteredCodes, count } = await listRedemptionCodes(
+        filterType, 
+        filterUsed, 
+        { page: currentPage, pageSize }
+      );
       
-      const allCodes = await listRedemptionCodes();
+      setCodes(filteredCodes);
+      setTotalCodes(count);
+      
+      const { data: allCodes } = await listRedemptionCodes();
+      
       const usedCodesCount = allCodes.filter(code => code.used).length;
       const studentCodesCount = allCodes.filter(code => code.type === 'student').length;
       const employerCodesCount = allCodes.filter(code => code.type === 'employer').length;
@@ -63,7 +75,7 @@ export function useRedemptionCodes() {
       }).length;
       
       setStats({
-        totalCodes: allCodes.length,
+        totalCodes: count,
         usedCodes: usedCodesCount,
         studentCodes: studentCodesCount,
         employerCodes: employerCodesCount,
@@ -84,9 +96,10 @@ export function useRedemptionCodes() {
 
   useEffect(() => {
     fetchCodes();
-  }, [activeTab]);
+  }, [activeTab, currentPage, pageSize]);
 
   useEffect(() => {
+    setCurrentPage(1);
     setSelectedCodes([]);
     setAllSelected(false);
   }, [activeTab]);
@@ -169,7 +182,7 @@ export function useRedemptionCodes() {
     try {
       const newCodes: RedemptionCode[] = [];
       const validType = userType === 'student' || userType === 'employer' ? 
-        userType : 'student'; // Default to student for non-standard types
+        userType : 'student';
       
       for (let i = 0; i < amount; i++) {
         const code = await generateRedemptionCode(validType as 'student' | 'employer', expiresInDays);
@@ -269,6 +282,15 @@ export function useRedemptionCodes() {
     a.click();
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
   return {
     codes,
     stats,
@@ -277,6 +299,13 @@ export function useRedemptionCodes() {
     activeTab,
     selectedCodes,
     allSelected,
+    
+    currentPage,
+    pageSize,
+    totalCodes,
+    handlePageChange,
+    handlePageSizeChange,
+    
     setActiveTab,
     handleGenerateCode,
     handleBulkGenerate,

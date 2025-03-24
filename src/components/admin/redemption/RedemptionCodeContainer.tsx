@@ -9,6 +9,7 @@ import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
 import RedemptionCodeActions from '../RedemptionCodeActions';
 import RedemptionCodesTable from '../RedemptionCodesTable';
 import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
+import RedemptionCodesPagination from './RedemptionCodesPagination';
 
 const RedemptionCodeContainer: React.FC = () => {
   const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
@@ -22,6 +23,11 @@ const RedemptionCodeContainer: React.FC = () => {
     activeTab,
     selectedCodes,
     allSelected,
+    currentPage,
+    pageSize,
+    totalCodes,
+    handlePageChange,
+    handlePageSizeChange,
     setActiveTab,
     handleGenerateCode,
     handleBulkGenerate,
@@ -92,6 +98,14 @@ const RedemptionCodeContainer: React.FC = () => {
                   onCopyCode={handleCopyCode}
                   onEmailCode={handleEmailCode}
                   onViewDetails={handleViewDetails}
+                />
+                
+                <RedemptionCodesPagination 
+                  currentPage={currentPage}
+                  pageSize={pageSize}
+                  totalItems={totalCodes}
+                  onPageChange={handlePageChange}
+                  onPageSizeChange={handlePageSizeChange}
                 />
               </TabsContent>
             </Tabs>

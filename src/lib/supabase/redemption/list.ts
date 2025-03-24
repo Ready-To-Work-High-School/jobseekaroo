@@ -2,18 +2,52 @@
 import { supabase } from '../index';
 import { RedemptionCode } from '@/types/redemption';
 
+interface PaginationOptions {
+  page?: number;
+  pageSize?: number;
+}
+
 /**
- * List redemption codes with optional filters
+ * List redemption codes with optional filters and pagination
  */
 export async function listRedemptionCodes(
   type?: 'student' | 'employer',
-  usedOnly?: boolean
-): Promise<RedemptionCode[]> {
+  usedOnly?: boolean,
+  paginationOptions?: PaginationOptions
+): Promise<{ data: RedemptionCode[], count: number }> {
   try {
+    // Set default pagination values
+    const page = paginationOptions?.page || 1;
+    const pageSize = paginationOptions?.pageSize || 10;
+    const startRange = (page - 1) * pageSize;
+    const endRange = startRange + pageSize - 1;
+
+    // First get the total count for pagination
+    let countQuery = supabase
+      .from('redemption_codes' as any)
+      .select('id', { count: 'exact' });
+    
+    if (type) {
+      countQuery = countQuery.eq('type', type);
+    }
+
+    if (usedOnly !== undefined) {
+      countQuery = countQuery.eq('used', usedOnly);
+    }
+
+    const { count: totalCount, error: countError } = await countQuery;
+
+    if (countError) {
+      console.error('Error counting redemption codes:', countError);
+      return { data: [], count: 0 };
+    }
+
+    // Then get the paginated data
     let query = supabase
       .from('redemption_codes' as any)
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(startRange, endRange);
 
     if (type) {
       query = query.eq('type', type);
@@ -27,7 +61,7 @@ export async function listRedemptionCodes(
 
     if (error || !data) {
       console.error('Error listing redemption codes:', error);
-      return [];
+      return { data: [], count: 0 };
     }
 
     // Transform the database records to match our interface
@@ -47,9 +81,9 @@ export async function listRedemptionCodes(
       };
     });
 
-    return redemptionCodes;
+    return { data: redemptionCodes, count: totalCount || 0 };
   } catch (error) {
     console.error('Error listing redemption codes:', error);
-    return [];
+    return { data: [], count: 0 };
   }
 }
