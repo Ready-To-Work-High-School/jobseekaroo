@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRedemptionCodes } from '@/hooks/useRedemptionCodes';
 import { useRedemptionCodeDetailView } from './RedemptionCodeDetailView';
+import { useRedemptionCodeDialog } from '@/hooks/redemption/useRedemptionCodeDialog';
 import RedemptionCodeStats from '../RedemptionCodeStats';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
 import RedemptionCodeActions from '../RedemptionCodeActions';
@@ -13,8 +14,6 @@ import RedemptionCodesPagination from './RedemptionCodesPagination';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 
 const RedemptionCodeContainer: React.FC = () => {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  
   const {
     codes,
     stats,
@@ -50,10 +49,22 @@ const RedemptionCodeContainer: React.FC = () => {
   const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
   const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
 
+  const { 
+    showDeleteDialog, 
+    selectedForDelete, 
+    openDeleteDialog, 
+    closeDeleteDialog 
+  } = useRedemptionCodeDialog();
+
   const handleShowDeleteDialog = () => {
     if (selectedCodes.length > 0) {
-      setShowDeleteDialog(true);
+      openDeleteDialog(selectedCodes);
     }
+  };
+
+  const handleConfirmDelete = async () => {
+    await handleDeleteSelectedCodes();
+    closeDeleteDialog();
   };
 
   return (
@@ -132,9 +143,9 @@ const RedemptionCodeContainer: React.FC = () => {
 
       <DeleteRedemptionCodeDialog
         isOpen={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
-        onConfirm={handleDeleteSelectedCodes}
-        selectedCodes={selectedCodes}
+        onClose={closeDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        selectedCodes={selectedForDelete}
       />
     </div>
   );
