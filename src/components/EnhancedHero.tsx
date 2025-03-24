@@ -16,15 +16,15 @@ const EnhancedHero = () => {
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
-      <div className="max-w-3xl mx-auto py-8 mt-10">
+      <div className="w-full max-w-6xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
-          {/* Title with accent border and background */}
-          <div className="inline-block relative mb-3">
+          {/* Title with accent border and background - expanded width */}
+          <div className="relative mb-3 w-full">
             {/* Decorative accent elements */}
             <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-sm"></div>
             <div className="absolute -inset-2.5 rounded-lg bg-gradient-to-r from-blue-700 to-amber-400 opacity-20 animate-pulse"></div>
             
-            {/* Main title with background */}
+            {/* Main title with background - expanded */}
             <h1 className="relative bg-white/90 backdrop-blur-sm rounded-lg p-4 text-4xl sm:text-5xl font-bold tracking-tight md:text-8xl shadow-xl">
               <span className={cn(
                 "bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-0 mx-0",
