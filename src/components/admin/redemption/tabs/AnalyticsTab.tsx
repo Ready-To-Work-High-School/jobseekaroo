@@ -10,10 +10,28 @@ interface AnalyticsTabProps {
     employerCodes: number;
     expiringThisMonth: number;
   };
+  usageOverTime?: {
+    date: string;
+    count: number;
+  }[];
+  generationOverTime?: {
+    date: string;
+    count: number;
+  }[];
 }
 
-const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ stats }) => {
-  return <CodeAnalyticsDashboard stats={stats} />;
+const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ 
+  stats, 
+  usageOverTime, 
+  generationOverTime 
+}) => {
+  return (
+    <CodeAnalyticsDashboard 
+      stats={stats} 
+      usageOverTime={usageOverTime}
+      generationOverTime={generationOverTime}
+    />
+  );
 };
 
 export default AnalyticsTab;
