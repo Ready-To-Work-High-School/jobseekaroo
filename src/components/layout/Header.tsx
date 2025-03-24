@@ -119,7 +119,7 @@ const Header = () => {
                     <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.email} />
                     <AvatarFallback>{userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}</AvatarFallback>
                   </Avatar>
-                  {userProfile?.user_type && userProfile.user_type !== 'basic' && (
+                  {userProfile?.user_type && (
                     <div className="absolute -top-2 -right-2">
                       <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
                     </div>
