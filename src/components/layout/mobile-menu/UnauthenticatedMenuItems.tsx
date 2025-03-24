@@ -38,7 +38,8 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
         to="/admin" 
         icon={Shield}
         onClick={() => setIsOpen(false)}
-        activeCheck={(pathname) => pathname.startsWith('/admin')}
+        // Fix: Use activeCheck to properly maintain active state for admin routes
+        activeCheck={(pathname) => pathname === "/admin" || pathname.startsWith("/admin/")}
       >
         Admin
       </MobileMenuItem>
