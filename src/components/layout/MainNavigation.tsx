@@ -11,6 +11,10 @@ interface MainNavigationProps {
 const MainNavigation = ({ className }: MainNavigationProps) => {
   const { user, userProfile } = useAuth();
   const isAdmin = userProfile?.user_type === 'admin';
+  
+  // Debug logs
+  console.log("MainNavigation - User profile:", userProfile);
+  console.log("MainNavigation - Is admin:", isAdmin);
 
   return (
     <nav className={cn("flex items-center space-x-1", className)}>

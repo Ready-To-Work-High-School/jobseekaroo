@@ -1,3 +1,4 @@
+
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,10 @@ export const MobileMenu = () => {
   const { user, signOut, userProfile } = useAuth();
   const navigate = useNavigate();
   const isAdmin = userProfile?.user_type === 'admin';
+  
+  // Debug logs
+  console.log("MobileMenu - User profile:", userProfile);
+  console.log("MobileMenu - Is admin:", isAdmin);
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {

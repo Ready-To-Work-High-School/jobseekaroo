@@ -49,6 +49,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // Debug log
+      console.log("Auth state change event:", event, "Session:", session?.user?.id);
+      
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -62,6 +65,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      // Debug log
+      console.log("Initial session check:", session?.user?.id);
+      
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -74,6 +80,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => subscription.unsubscribe();
   }, [fetchUserProfile]);
+
+  // Add debug log to show profile when it changes
+  useEffect(() => {
+    console.log("AuthContext - Current user profile:", userProfile);
+  }, [userProfile]);
 
   const value: AuthContextType = {
     user,

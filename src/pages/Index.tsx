@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import EnhancedHero from '@/components/EnhancedHero';
@@ -12,6 +11,7 @@ import SectionSeparator from '@/components/home/SectionSeparator';
 import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
+import TestAdmin from '@/components/TestAdmin';
 
 const Index = () => {
   const { user } = useAuth();
@@ -72,6 +72,11 @@ const Index = () => {
         
         {/* Resources Section */}
         <ResourcesSection />
+        
+        {/* Add TestAdmin component at the bottom of the page */}
+        <div className="mt-8 w-full max-w-4xl mx-auto">
+          <TestAdmin />
+        </div>
       </div>
     </Layout>
   );
