@@ -9,8 +9,9 @@ export async function validateRedemptionCode(
   code: string
 ): Promise<RedemptionCodeValidation> {
   try {
+    // Use any type to work around TypeScript limitations until types are regenerated
     const { data, error } = await supabase
-      .from('redemption_codes')
+      .from('redemption_codes' as any)
       .select('*')
       .eq('code', code)
       .single();
@@ -22,7 +23,17 @@ export async function validateRedemptionCode(
       };
     }
 
-    const redemptionCode = data as RedemptionCode;
+    // Transform the database record to match our interface
+    const redemptionCode: RedemptionCode = {
+      id: data.id,
+      code: data.code,
+      type: data.type,
+      used: data.used,
+      usedBy: data.used_by,
+      usedAt: data.used_at ? new Date(data.used_at) : undefined,
+      createdAt: new Date(data.created_at),
+      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+    };
 
     // Check if code is already used
     if (redemptionCode.used) {
@@ -63,11 +74,11 @@ export async function useRedemptionCode(
 ): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from('redemption_codes')
+      .from('redemption_codes' as any)
       .update({
         used: true,
-        usedBy: userId,
-        usedAt: new Date().toISOString(),
+        used_by: userId,
+        used_at: new Date().toISOString(),
       })
       .eq('id', codeId);
 
@@ -97,13 +108,13 @@ export async function generateRedemptionCode(
     }
 
     const { data, error } = await supabase
-      .from('redemption_codes')
+      .from('redemption_codes' as any)
       .insert({
         code,
         type,
         used: false,
-        createdAt: new Date().toISOString(),
-        expiresAt,
+        created_at: new Date().toISOString(),
+        expires_at: expiresAt,
       })
       .select()
       .single();
@@ -113,7 +124,19 @@ export async function generateRedemptionCode(
       return null;
     }
 
-    return data as RedemptionCode;
+    // Transform the database record to match our interface
+    const redemptionCode: RedemptionCode = {
+      id: data.id,
+      code: data.code,
+      type: data.type,
+      used: data.used,
+      usedBy: data.used_by,
+      usedAt: data.used_at ? new Date(data.used_at) : undefined,
+      createdAt: new Date(data.created_at),
+      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+    };
+
+    return redemptionCode;
   } catch (error) {
     console.error('Error generating redemption code:', error);
     return null;
@@ -129,9 +152,9 @@ export async function listRedemptionCodes(
 ): Promise<RedemptionCode[]> {
   try {
     let query = supabase
-      .from('redemption_codes')
+      .from('redemption_codes' as any)
       .select('*')
-      .order('createdAt', { ascending: false });
+      .order('created_at', { ascending: false });
 
     if (type) {
       query = query.eq('type', type);
@@ -148,7 +171,19 @@ export async function listRedemptionCodes(
       return [];
     }
 
-    return data as RedemptionCode[];
+    // Transform the database records to match our interface
+    const redemptionCodes: RedemptionCode[] = data.map(item => ({
+      id: item.id,
+      code: item.code,
+      type: item.type,
+      used: item.used,
+      usedBy: item.used_by,
+      usedAt: item.used_at ? new Date(item.used_at) : undefined,
+      createdAt: new Date(item.created_at),
+      expiresAt: item.expires_at ? new Date(item.expires_at) : undefined
+    }));
+
+    return redemptionCodes;
   } catch (error) {
     console.error('Error listing redemption codes:', error);
     return [];

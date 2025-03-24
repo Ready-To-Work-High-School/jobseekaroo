@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileMenu } from './MobileMenu';
-import { DesktopNav } from './DesktopNav';
+import DesktopNav from './DesktopNav';
 import { NavbarBrand } from './NavbarBrand';
 import { NavbarRight } from './NavbarRight';
 
@@ -35,7 +35,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2 md:gap-6">
           {isMobile && <MobileMenu />}
           <NavbarBrand />
-          <DesktopNav />
+          <DesktopNav className="hidden md:flex" />
         </div>
 
         <NavbarRight />
