@@ -1,12 +1,13 @@
 
 import { useState } from 'react';
 import { RedemptionCode } from '@/types/redemption';
-import { useRedemptionCodeUtils } from '@/hooks/redemption/useRedemptionCodeUtils';
-import { useClipboard } from '@/hooks/useClipboard';
 import { useToast } from '@/hooks/use-toast';
 import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
 import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
 import { useCodeDetailView } from './useCodeDetailView';
+import { useBasicHandlers } from './useBasicHandlers';
+import { useEmailHandlers } from './useEmailHandlers';
+import { useDeleteHandlers } from './useDeleteHandlers';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionContainerHandlersProps {
@@ -50,8 +51,23 @@ export function useRedemptionContainerHandlers({
   scheduleEmail,
   isScheduling
 }: RedemptionContainerHandlersProps) {
-  const { toast } = useToast();
-  const { copyToClipboard } = useClipboard();
+  // Use the specialized handlers
+  const {
+    handleCopyCode,
+    handleRefresh,
+    handleExport,
+    handlePrint,
+    handleApplyFilters
+  } = useBasicHandlers({ fetchCodes, exportCodes });
+  
+  const {
+    handleEmailCode,
+    handleEmailSelected
+  } = useEmailHandlers({ formatDate, selectedCodes, scheduleEmail, isScheduling });
+  
+  const {
+    handleDeleteSelected
+  } = useDeleteHandlers({ selectedCodes, openDeleteDialog });
   
   // Use the useCodeGenerationHandler hook
   const {
@@ -81,102 +97,6 @@ export function useRedemptionContainerHandlers({
     openDeleteDialog,
     closeDeleteDialog
   });
-  
-  // Handle copying code to clipboard
-  const handleCopyCode = (code: string) => {
-    copyToClipboard(code);
-    toast({
-      title: 'Copied to clipboard',
-      description: `Code ${code} copied to clipboard.`,
-    });
-  };
-  
-  // Handle email code
-  const handleEmailCode = (code: RedemptionCode) => {
-    // Open email dialog with selected code
-    toast({
-      title: 'Email Feature',
-      description: 'Sending email feature initiated.',
-    });
-    
-    // Logic to email code would go here
-    const emailSubject = `Your Redemption Code: ${code.code}`;
-    const emailBody = `
-      Here is your redemption code: ${code.code}
-      
-      You can redeem this code at: ${window.location.origin}/redemption-code
-      
-      This code will expire on: ${formatDate(code.expiresAt)}
-    `;
-    
-    // Create a mailto link
-    const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    window.open(mailtoLink);
-  };
-  
-  // Handle email selected codes
-  const handleEmailSelected = (codes: RedemptionCode[]) => {
-    if (codes.length === 0) {
-      toast({
-        title: 'No Codes Selected',
-        description: 'Please select at least one code to email.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    
-    // Logic to email multiple codes would go here
-    const emailSubject = `Your Redemption Codes`;
-    const emailBody = `
-      Here are your redemption codes:
-      ${codes.map(code => `- ${code.code} (Expires: ${formatDate(code.expiresAt)})`).join('\n')}
-      
-      You can redeem these codes at: ${window.location.origin}/redemption-code
-    `;
-    
-    // Create a mailto link
-    const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    window.open(mailtoLink);
-  };
-  
-  // Handle refresh
-  const handleRefresh = async () => {
-    await fetchCodes();
-    toast({
-      title: 'Refreshed',
-      description: 'The code list has been refreshed.',
-    });
-  };
-  
-  // Handle export
-  const handleExport = () => {
-    exportCodes(filteredCodes, 'csv');
-  };
-  
-  // Handle print
-  const handlePrint = () => {
-    window.print();
-  };
-  
-  // Handle apply filters
-  const handleApplyFilters = (filters: any) => {
-    console.log('Applying filters:', filters);
-    // Logic to apply filters would go here
-  };
-  
-  // Handle delete selected
-  const handleDeleteSelected = () => {
-    if (selectedCodes.length === 0) {
-      toast({
-        title: 'No Codes Selected',
-        description: 'Please select at least one code to delete.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    
-    openDeleteDialog(selectedCodes);
-  };
 
   // Use the useCodeDetailView hook for details and QR code functionality
   const {
@@ -185,6 +105,7 @@ export function useRedemptionContainerHandlers({
     handleViewQRCode
   } = useCodeDetailView(handleCopyCode, formatDate);
   
+  // Combine all handlers into a single object
   const handlers = {
     onApplyFilters: handleApplyFilters,
     onSelectCode: (code: RedemptionCode, isSelected: boolean) => {
@@ -203,7 +124,7 @@ export function useRedemptionContainerHandlers({
     onWizardGeneration: handleWizardGeneration,
     onScheduleEmail: scheduleEmail,
     onRefresh: handleRefresh,
-    onExport: handleExport,
+    onExport: () => handleExport(filteredCodes),
     onPrint: handlePrint,
     onEmailSelected: handleEmailSelected,
     onDeleteSelected: handleDeleteSelected,

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   useRedemptionCodeData,
@@ -18,7 +17,6 @@ import { prepareDefaultUsageData, prepareDefaultGenerationData } from './analyti
 const RedemptionCodeContainer: React.FC = () => {
   const [activeTab, setActiveTab] = useState('codes');
   
-  // Use individual hooks for data and operations
   const {
     codes,
     stats,
@@ -34,13 +32,10 @@ const RedemptionCodeContainer: React.FC = () => {
     updateCodes
   } = useRedemptionCodeData();
 
-  // Advanced filtering
   const { filters, applyFilters, filteredCodes } = useAdvancedCodeFiltering(codes);
 
-  // Bulk export
   const { exportCodes, isExporting } = useBulkExport();
 
-  // Email scheduling
   const { scheduleEmail, isScheduling } = useScheduledEmails();
 
   const {
@@ -62,7 +57,6 @@ const RedemptionCodeContainer: React.FC = () => {
 
   const { formatDate } = useRedemptionCodeUtils();
 
-  // Use dialog management hook
   const { 
     showDeleteDialog, 
     selectedForDelete, 
@@ -70,15 +64,12 @@ const RedemptionCodeContainer: React.FC = () => {
     closeDeleteDialog 
   } = useRedemptionCodeDialog();
 
-  // Local state for code generation options
   const [codeType, setCodeType] = React.useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = React.useState<number>(30);
 
-  // Prepare mock usage data for demo purposes - this would normally come from the API
   const usageOverTime = prepareDefaultUsageData();
   const generationOverTime = prepareDefaultGenerationData();
 
-  // Use our new handlers hook
   const {
     handlers,
     detailsView,
