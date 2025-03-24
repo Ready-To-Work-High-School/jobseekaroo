@@ -1,7 +1,7 @@
 
 import React from 'react';
 import MobileMenuItem from './MobileMenuItem';
-import { BookOpen, ExternalLink, Building2 } from 'lucide-react';
+import { BookOpen, ExternalLink, Building2, Shield } from 'lucide-react';
 
 interface UnauthenticatedMenuItemsProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -32,6 +32,15 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
         onClick={() => setIsOpen(false)}
       >
         Sign Up
+      </MobileMenuItem>
+      
+      <MobileMenuItem 
+        to="/admin" 
+        icon={Shield}
+        onClick={() => setIsOpen(false)}
+        activeCheck={(pathname) => pathname.startsWith('/admin')}
+      >
+        Admin
       </MobileMenuItem>
     </>
   );
