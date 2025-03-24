@@ -6,8 +6,8 @@ import AdvancedSearchFilters from '../filters/AdvancedSearchFilters';
 import RedemptionCodeActions from '../../RedemptionCodeActions';
 import RedemptionCodesTable from '../../RedemptionCodesTable';
 import RedemptionCodeGenerators from '../RedemptionCodeGenerators';
-import RedemptionCodeStats from '../../RedemptionCodeStats'; // Fixed import path
-import Pagination from '../pagination/Pagination';
+import RedemptionCodeStats from '../../RedemptionCodeStats';
+import RedemptionCodesPagination from '../RedemptionCodesPagination'; // Fixed import path
 import { RedemptionCode } from '@/types/redemption';
 
 interface CodesTabProps {
@@ -139,7 +139,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
             />
             
             <div className="mt-4">
-              <Pagination
+              <RedemptionCodesPagination
                 currentPage={currentPage}
                 totalItems={totalCodes}
                 pageSize={pageSize}
