@@ -6,9 +6,10 @@ interface MobileNavLinkProps {
   to: string;
   children: React.ReactNode;
   end?: boolean;
+  className?: string; // Add className as an optional prop
 }
 
-export const MobileNavLink = ({ to, children }: MobileNavLinkProps) => {
+export const MobileNavLink = ({ to, children, className }: MobileNavLinkProps) => {
   const location = useLocation();
   const isActive = location.pathname === to || 
     (to !== '/' && location.pathname.startsWith(to));
@@ -21,7 +22,7 @@ export const MobileNavLink = ({ to, children }: MobileNavLinkProps) => {
           isActive 
             ? 'bg-primary/10 text-primary font-medium' 
             : 'hover:bg-muted'
-        }`}
+        } ${className || ''}`}
       >
         {children}
       </Link>
