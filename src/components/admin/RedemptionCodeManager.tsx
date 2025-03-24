@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   generateRedemptionCode, 
-  listRedemptionCodes 
+  listRedemptionCodes,
+  sendRedemptionCodeEmail
 } from '@/lib/supabase/redemption';
 import { RedemptionCode } from '@/types/redemption';
 import RedemptionCodeStats from './RedemptionCodeStats';
@@ -14,6 +14,7 @@ import RedemptionCodeActions from './RedemptionCodeActions';
 import RedemptionCodesTable from './RedemptionCodesTable';
 import RedemptionCodeDetails from './RedemptionCodeDetails';
 import EmailRedemptionCodeDialog from './EmailRedemptionCodeDialog';
+import AutomatedCodeGenerator from './AutomatedCodeGenerator';
 
 const RedemptionCodeManager: React.FC = () => {
   const [codes, setCodes] = useState<RedemptionCode[]>([]);
@@ -166,6 +167,69 @@ const RedemptionCodeManager: React.FC = () => {
     }
   };
 
+  const handleAutomatedCodeGeneration = async (
+    userType: string, 
+    amount: number, 
+    expiresInDays: number,
+    emailDomain: string
+  ) => {
+    setIsGenerating(true);
+    
+    try {
+      const newCodes: RedemptionCode[] = [];
+      const validType = userType === 'student' || userType === 'employer' ? 
+        userType : 'student'; // Default to student for non-standard types
+      
+      for (let i = 0; i < amount; i++) {
+        const code = await generateRedemptionCode(validType as 'student' | 'employer', expiresInDays);
+        if (code) newCodes.push(code);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      if (newCodes.length === 0) {
+        throw new Error('Failed to generate any redemption codes');
+      }
+      
+      const emailSubject = `${userType.charAt(0).toUpperCase() + userType.slice(1)} Access Codes`;
+      const emailMessage = `
+        Here are your requested access codes for ${userType} users:
+        
+        These codes can be distributed to users with @${emailDomain} email addresses.
+        
+        Users can redeem these codes at the following URL: ${window.location.origin}/redemption-code
+        
+        These codes will expire in ${expiresInDays} days.
+      `;
+      
+      const sendResult = await sendRedemptionCodeEmail({
+        to: `admin@${emailDomain}`,
+        subject: emailSubject,
+        message: emailMessage,
+        codes: newCodes
+      });
+      
+      if (!sendResult) {
+        throw new Error('Generated codes but failed to send email');
+      }
+      
+      setCodes(prev => [...newCodes, ...prev]);
+      
+      toast({
+        title: 'Success',
+        description: `Generated and emailed ${newCodes.length} ${userType} codes to admin@${emailDomain}`,
+      });
+    } catch (error) {
+      console.error('Error in automated code generation:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to generate or distribute codes',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     toast({
@@ -255,22 +319,29 @@ const RedemptionCodeManager: React.FC = () => {
     <div className="space-y-6">
       <RedemptionCodeStats stats={stats} />
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <RedemptionCodeGenerator
+          onGenerateCode={handleGenerateCode}
+          onBulkGenerate={handleBulkGenerate}
+          isGenerating={isGenerating}
+          codeType={codeType}
+          setCodeType={setCodeType}
+          expireDays={expireDays}
+          setExpireDays={setExpireDays}
+        />
+        
+        <AutomatedCodeGenerator
+          onGenerateCodes={handleAutomatedCodeGeneration}
+          isGenerating={isGenerating}
+        />
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Redemption Codes</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <RedemptionCodeGenerator
-              onGenerateCode={handleGenerateCode}
-              onBulkGenerate={handleBulkGenerate}
-              isGenerating={isGenerating}
-              codeType={codeType}
-              setCodeType={setCodeType}
-              expireDays={expireDays}
-              setExpireDays={setExpireDays}
-            />
-
             <RedemptionCodeActions
               selectedCount={selectedCodes.length}
               onRefresh={fetchCodes}
