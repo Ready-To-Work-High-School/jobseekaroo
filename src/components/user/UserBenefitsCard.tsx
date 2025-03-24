@@ -50,6 +50,14 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           { name: 'Analytics dashboard', active: true },
           { name: 'System configuration', active: true }
         ];
+      case 'teacher':
+        return [
+          { name: 'Student progress tracking', active: true },
+          { name: 'Career pathway management', active: true },
+          { name: 'Employer connection tools', active: true },
+          { name: 'Curriculum resources', active: true },
+          { name: 'Student assessment tools', active: true }
+        ];
       default:
         return [
           { name: 'Basic job search', active: true },
@@ -68,6 +76,8 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
         return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>;
       case 'admin':
         return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">Administrator</Badge>;
+      case 'teacher':
+        return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">Teacher</Badge>;
       default:
         return <Badge variant="outline">Basic</Badge>;
     }
@@ -109,9 +119,9 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
             ))}
           </ul>
           
-          {accountType !== 'basic' && (
+          {accountType !== 'basic' && userProfile?.redeemed_at && (
             <div className="text-sm text-muted-foreground pt-2 border-t">
-              <p>Account upgraded on {formatDate(new Date())}</p>
+              <p>Account upgraded on {formatDate(userProfile.redeemed_at)}</p>
             </div>
           )}
         </div>

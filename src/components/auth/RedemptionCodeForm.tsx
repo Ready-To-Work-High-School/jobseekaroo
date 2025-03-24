@@ -9,6 +9,7 @@ import { validateRedemptionCode, useRedemptionCode } from '@/lib/supabase/redemp
 import { useAuth } from '@/contexts/AuthContext';
 import RedemptionConfirmationDialog from './RedemptionConfirmationDialog';
 import { RedemptionCode } from '@/types/redemption';
+import { updateUserProfile } from '@/contexts/auth/authUtils';
 
 interface RedemptionCodeFormProps {
   onSuccess?: () => void;
@@ -74,6 +75,15 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({
         });
         setIsSubmitting(false);
         return;
+      }
+
+      // Update user profile with redemption info and user type
+      if (user) {
+        await updateUserProfile(user.id, {
+          user_type: validation.code.type,
+          redeemed_at: new Date(),
+          redeemed_code: validation.code.code
+        });
       }
 
       // Set the redeemed code for the confirmation dialog

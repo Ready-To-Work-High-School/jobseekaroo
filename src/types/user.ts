@@ -22,7 +22,7 @@ export interface UserProfileUpdate {
   resume_url?: string;
   skills?: string[];
   preferences?: Record<string, any>;
-  user_type?: 'student' | 'employer' | 'admin';
+  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
 }
 
 export interface SavedSearch {

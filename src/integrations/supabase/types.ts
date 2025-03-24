@@ -156,6 +156,53 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          customer_id: string | null
+          id: string
+          payment_id: string | null
+          payment_method: string | null
+          payment_status: string
+          redemption_code_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          customer_id?: string | null
+          id?: string
+          payment_id?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          redemption_code_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          customer_id?: string | null
+          id?: string
+          payment_id?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          redemption_code_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_redemption_code_id_fkey"
+            columns: ["redemption_code_id"]
+            isOneToOne: false
+            referencedRelation: "redemption_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -165,9 +212,12 @@ export type Database = {
           last_name: string | null
           location: string | null
           preferences: Json | null
+          redeemed_at: string | null
+          redeemed_code: string | null
           resume_url: string | null
           skills: string[] | null
           updated_at: string
+          user_type: string | null
         }
         Insert: {
           bio?: string | null
@@ -177,9 +227,12 @@ export type Database = {
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
+          redeemed_at?: string | null
+          redeemed_code?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string
+          user_type?: string | null
         }
         Update: {
           bio?: string | null
@@ -189,9 +242,45 @@ export type Database = {
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
+          redeemed_at?: string | null
+          redeemed_code?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string
+          user_type?: string | null
+        }
+        Relationships: []
+      }
+      redemption_codes: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          type: string
+          used: boolean
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          type: string
+          used?: boolean
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          type?: string
+          used?: boolean
+          used_at?: string | null
+          used_by?: string | null
         }
         Relationships: []
       }
