@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
+import AccountTypeBadge from './layout/AccountTypeBadge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp } from 'lucide-react';
+import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp, Award } from 'lucide-react';
 
 const AuthStatus = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -45,13 +46,23 @@ const AuthStatus = () => {
                 <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.email || ''} />
                 <AvatarFallback>{userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}</AvatarFallback>
               </Avatar>
+              {userProfile?.user_type && userProfile.user_type !== 'basic' && (
+                <div className="absolute -top-2 -right-2">
+                  <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
+                </div>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel>
               {userProfile ? (
                 <div className="flex flex-col">
-                  <span>{userProfile.first_name} {userProfile.last_name}</span>
+                  <div className="flex items-center justify-between">
+                    <span>{userProfile.first_name} {userProfile.last_name}</span>
+                    {userProfile.user_type && (
+                      <AccountTypeBadge userProfile={userProfile} />
+                    )}
+                  </div>
                   <span className="text-xs text-muted-foreground">{user.email}</span>
                 </div>
               ) : (
@@ -63,6 +74,12 @@ const AuthStatus = () => {
               <Link to="/profile" className="flex items-center cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/account-benefits" className="flex items-center cursor-pointer">
+                <Award className="mr-2 h-4 w-4" />
+                <span>Account Benefits</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>

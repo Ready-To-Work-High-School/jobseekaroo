@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from "@/components/ui/label";
 import { 
   generateRedemptionCode, 
   listRedemptionCodes 
@@ -20,14 +20,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Download, Filter, Info, Printer, RefreshCcw, Copy, UserCircle, Briefcase, AlertCircle, CheckCircle, CalendarIcon } from 'lucide-react';
@@ -45,7 +38,6 @@ const RedemptionCodeManager: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<string>('all');
   
-  // Statistics
   const [stats, setStats] = useState({
     totalCodes: 0,
     usedCodes: 0,
@@ -78,13 +70,11 @@ const RedemptionCodeManager: React.FC = () => {
       
       setCodes(filteredCodes);
       
-      // Calculate statistics
       const allCodes = await listRedemptionCodes();
       const usedCodesCount = allCodes.filter(code => code.used).length;
       const studentCodesCount = allCodes.filter(code => code.type === 'student').length;
       const employerCodesCount = allCodes.filter(code => code.type === 'employer').length;
       
-      // Codes expiring this month
       const today = new Date();
       const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       const expiringCodes = allCodes.filter(code => {
@@ -154,11 +144,9 @@ const RedemptionCodeManager: React.FC = () => {
     try {
       const newCodes: RedemptionCode[] = [];
       
-      // Generate multiple codes
       for (let i = 0; i < bulkGenerateAmount; i++) {
         const code = await generateRedemptionCode(codeType, expireDays);
         if (code) newCodes.push(code);
-        // Short delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 100));
       }
       
@@ -210,11 +198,8 @@ const RedemptionCodeManager: React.FC = () => {
   };
   
   const exportCodes = () => {
-    // Create CSV content
     const csvContent = [
-      // Header row
       ['Code', 'Type', 'Status', 'Created', 'Expires', 'Used By', 'Used At'].join(','),
-      // Data rows
       ...codes.map(code => [
         code.code,
         code.type,
@@ -226,7 +211,6 @@ const RedemptionCodeManager: React.FC = () => {
       ].join(','))
     ].join('\n');
     
-    // Create blob and download link
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -237,7 +221,6 @@ const RedemptionCodeManager: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-4">
@@ -305,7 +288,6 @@ const RedemptionCodeManager: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            {/* Generate Code Section */}
             <div className="bg-gray-50 p-4 rounded-md">
               <h3 className="text-lg font-medium mb-3">Generate New Code</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -341,7 +323,6 @@ const RedemptionCodeManager: React.FC = () => {
               </div>
             </div>
 
-            {/* Action Bar */}
             <div className="flex flex-wrap justify-between items-center gap-2">
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={fetchCodes}>
@@ -359,7 +340,6 @@ const RedemptionCodeManager: React.FC = () => {
               </div>
             </div>
 
-            {/* Code List Section */}
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="mb-4">
                 <TabsTrigger value="all">All Codes</TabsTrigger>
@@ -442,7 +422,6 @@ const RedemptionCodeManager: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Bulk Generate Dialog */}
       <Dialog open={showBulkDialog} onOpenChange={setShowBulkDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -471,7 +450,6 @@ const RedemptionCodeManager: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Code Details Dialog */}
       <Dialog open={showCodeDetails} onOpenChange={setShowCodeDetails}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

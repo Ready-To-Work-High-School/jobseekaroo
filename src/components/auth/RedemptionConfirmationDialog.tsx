@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { CheckCircle, AlertCircle, UserCircle, Briefcase, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { CheckCircle, AlertCircle, UserCircle, Briefcase, ShieldCheck, Sparkles } from 'lucide-react';
 import { RedemptionCode } from '@/types/redemption';
 import { UserProfile } from '@/types/user';
 import {
@@ -29,15 +29,25 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   userProfile,
   onDashboardClick
 }) => {
+  const [showConfetti, setShowConfetti] = useState(false);
+  
+  useEffect(() => {
+    if (isOpen) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+  
   // Get icon based on the redemption code type
   const getIcon = () => {
     switch (redemptionCode.type) {
       case 'student':
-        return <UserCircle className="h-16 w-16 text-primary" />;
+        return <UserCircle className="h-16 w-16 text-primary animate-pulse" />;
       case 'employer':
-        return <Briefcase className="h-16 w-16 text-primary" />;
+        return <Briefcase className="h-16 w-16 text-primary animate-pulse" />;
       default:
-        return <ShieldCheck className="h-16 w-16 text-primary" />;
+        return <ShieldCheck className="h-16 w-16 text-primary animate-pulse" />;
     }
   };
 
@@ -78,9 +88,27 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
+        {showConfetti && (
+          <div className="confetti-container">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="confetti"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                }}
+              />
+            ))}
+          </div>
+        )}
+        
         <DialogHeader>
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
             {getIcon()}
+            <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', right: '150px' }} />
+            <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', left: '150px', animationDelay: '0.5s' }} />
           </div>
           <DialogTitle className="text-xl text-center">Redemption Successful!</DialogTitle>
           <DialogDescription className="text-center">
@@ -107,11 +135,13 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          {onDashboardClick && (
-            <Button onClick={onDashboardClick}>
-              Go to Dashboard
-            </Button>
-          )}
+          <Button 
+            variant="brand" 
+            className="animate-pulse" 
+            onClick={onDashboardClick || (() => window.location.href = '/account-benefits')}
+          >
+            View All Benefits
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

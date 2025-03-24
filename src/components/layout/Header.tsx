@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, Menu, X, BarChart2, Briefcase, Book, 
-  FileText, Search, BookmarkCheck, User, Home, GraduationCap
+  FileText, Search, BookmarkCheck, User, Home, GraduationCap, Award
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from './MobileMenu';
+import AccountTypeBadge from './AccountTypeBadge';
 
 const Header = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -52,6 +53,7 @@ const Header = () => {
   };
 
   const isEmployer = userProfile?.user_type === 'employer';
+  const isAdmin = userProfile?.user_type === 'admin';
 
   return (
     <header className="bg-secondary border-b sticky top-0 z-10">
@@ -80,6 +82,14 @@ const Header = () => {
                 <Link to="/analytics" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/analytics' ? 'text-primary' : 'text-foreground')}>
                   Analytics
                 </Link>
+                <Link to="/account-benefits" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/account-benefits' ? 'text-primary' : 'text-foreground')}>
+                  Benefits
+                </Link>
+                {isAdmin && (
+                  <Link to="/admin/redemption-codes" className={cn("text-sm font-medium transition-colors hover:text-primary", location.pathname === '/admin/redemption-codes' ? 'text-primary' : 'text-foreground')}>
+                    Admin
+                  </Link>
+                )}
               </>
             ) : (
               <>
@@ -109,16 +119,41 @@ const Header = () => {
                     <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.email} />
                     <AvatarFallback>{userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}</AvatarFallback>
                   </Avatar>
+                  {userProfile?.user_type && userProfile.user_type !== 'basic' && (
+                    <div className="absolute -top-2 -right-2">
+                      <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
+                    </div>
+                  )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {userProfile ? (
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between">
+                        <span>{userProfile.first_name} {userProfile.last_name}</span>
+                        {userProfile.user_type && (
+                          <AccountTypeBadge userProfile={userProfile} />
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">{user.email}</span>
+                    </div>
+                  ) : (
+                    <span>My Account</span>
+                  )}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/account-benefits" className="cursor-pointer">
+                      <Award className="mr-2 h-4 w-4" />
+                      <span>Account Benefits</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -135,12 +170,31 @@ const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
+                {!userProfile?.redeemed_at && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/redeem-code" className="cursor-pointer">
+                      <Award className="mr-2 h-4 w-4" />
+                      <span>Redeem Code</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 {isEmployer && (
                   <>
                     <DropdownMenuItem asChild>
                       <Link to="/employer-dashboard" className="cursor-pointer">
                         <Briefcase className="mr-2 h-4 w-4" />
                         <span>Employer Dashboard</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin/redemption-codes" className="cursor-pointer">
+                        <Award className="mr-2 h-4 w-4" />
+                        <span>Manage Redemption Codes</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
