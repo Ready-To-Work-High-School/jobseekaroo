@@ -73,7 +73,7 @@ const testimonials = [
   },
   {
     id: 8,
-    name: "Taylor Edwards",
+    name: "Jordan Wheeler",
     role: "Welder",
     company: "WW Gay Construction Mechanical Contractors",
     imageUrl: "/placeholder.svg",
