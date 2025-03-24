@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { AccessibilitySettings } from '@/types/user';
 import { toast as toastType } from '@/hooks/use-toast';
@@ -108,7 +107,7 @@ export const useAccessibilitySettings = ({
     
     // Show toast
     toast({
-      title: `${key.replace(/_/g, ' ')} ${!settings[key] ? 'enabled' : 'disabled'}`,
+      title: `${key.toString().replace(/_/g, ' ')} ${!settings[key] ? 'enabled' : 'disabled'}`,
       description: `This setting has been ${!settings[key] ? 'enabled' : 'disabled'} and will be saved for your next visit.`
     });
   };

@@ -9,6 +9,8 @@ export interface UserProfile {
   skills: string[] | null;
   preferences: Record<string, any> | null;
   user_type?: 'student' | 'employer' | 'admin' | null;
+  saved_searches?: SavedSearch[];
+  accessibility_settings?: AccessibilitySettings;
 }
 
 export interface UserProfileUpdate {
@@ -20,4 +22,29 @@ export interface UserProfileUpdate {
   skills?: string[];
   preferences?: Record<string, any>;
   user_type?: 'student' | 'employer' | 'admin';
+}
+
+export interface SavedSearch {
+  id: string;
+  name: string;
+  zipCode: string;
+  radius?: number;
+  filters: Record<string, any>;
+  created_at?: string;
+}
+
+export interface JobRecommendation {
+  id: string;
+  user_id: string;
+  job_id: string;
+  score: number;
+  reason: string | null;
+  created_at: string;
+}
+
+export interface AccessibilitySettings {
+  high_contrast: boolean;
+  increased_font_size: boolean;
+  reduce_motion: boolean;
+  screen_reader_optimized: boolean;
 }

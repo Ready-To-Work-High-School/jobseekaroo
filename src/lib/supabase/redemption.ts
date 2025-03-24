@@ -9,7 +9,7 @@ export async function validateRedemptionCode(
   code: string
 ): Promise<RedemptionCodeValidation> {
   try {
-    // Use any type to work around TypeScript limitations until types are regenerated
+    // Use explicit casting with any to work around TypeScript limitations
     const { data, error } = await supabase
       .from('redemption_codes' as any)
       .select('*')
@@ -20,6 +20,13 @@ export async function validateRedemptionCode(
       return {
         isValid: false,
         message: 'Invalid redemption code',
+      };
+    }
+
+    if (!data) {
+      return {
+        isValid: false,
+        message: 'Code not found',
       };
     }
 
@@ -119,7 +126,7 @@ export async function generateRedemptionCode(
       .select()
       .single();
 
-    if (error) {
+    if (error || !data) {
       console.error('Error generating redemption code:', error);
       return null;
     }
@@ -166,7 +173,7 @@ export async function listRedemptionCodes(
 
     const { data, error } = await query;
 
-    if (error) {
+    if (error || !data) {
       console.error('Error listing redemption codes:', error);
       return [];
     }
