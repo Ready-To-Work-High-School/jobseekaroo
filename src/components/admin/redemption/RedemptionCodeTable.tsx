@@ -1,17 +1,15 @@
 
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { RedemptionCode } from '@/types/redemption';
 import RedemptionCodesTable from '../RedemptionCodesTable';
 import RedemptionCodesPagination from './RedemptionCodesPagination';
 import RedemptionCodeActions from '../RedemptionCodeActions';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle, Filter } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import MobileActionsSheet from './table/MobileActionsSheet';
+import RedemptionCodeTabsList from './table/RedemptionCodeTabsList';
+import RedemptionCodeTableLoading from './table/RedemptionCodeTableLoading';
+import RedemptionCodeNoResults from './table/RedemptionCodeNoResults';
 
 interface RedemptionCodeTableProps {
   codes: RedemptionCode[];
@@ -82,74 +80,15 @@ const RedemptionCodeTable: React.FC<RedemptionCodeTableProps> = ({
       <CardContent className="p-0 sm:p-6">
         <div className="space-y-6">
           {/* Mobile Actions Sheet */}
-          <div className="flex md:hidden justify-between items-center p-4 border-b">
-            <h3 className="text-base font-semibold">Redemption Codes</h3>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 gap-1">
-                  <Filter className="h-3.5 w-3.5" />
-                  Actions
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="py-4">
-                  <h3 className="text-lg font-semibold mb-4">Code Actions</h3>
-                  <div className="flex flex-col space-y-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleRefresh}
-                      disabled={isRefreshing}
-                      className="justify-start"
-                    >
-                      {isRefreshing ? 'Refreshing...' : 'Refresh Codes'}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={onExport}
-                      className="justify-start"
-                    >
-                      Export Codes
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={onPrint}
-                      className="justify-start"
-                    >
-                      Print Codes
-                    </Button>
-                    
-                    {selectedCodes.length > 0 && (
-                      <>
-                        <div className="h-px bg-gray-200 my-2" />
-                        <div className="text-sm font-medium text-muted-foreground mb-2">
-                          Selected: {selectedCodes.length} codes
-                        </div>
-                        <Button 
-                          variant="secondary" 
-                          size="sm" 
-                          onClick={onEmailSelected}
-                          className="justify-start"
-                        >
-                          Email Selected
-                        </Button>
-                        <Button 
-                          variant="destructive" 
-                          size="sm" 
-                          onClick={onDeleteSelected}
-                          className="justify-start"
-                        >
-                          Delete Selected
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+          <MobileActionsSheet 
+            selectedCodesCount={selectedCodes.length}
+            isRefreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            onExport={onExport}
+            onPrint={onPrint}
+            onEmailSelected={onEmailSelected}
+            onDeleteSelected={onDeleteSelected}
+          />
 
           {/* Desktop Actions */}
           <div className="hidden md:block">
@@ -165,48 +104,17 @@ const RedemptionCodeTable: React.FC<RedemptionCodeTableProps> = ({
           </div>
 
           <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap h-auto p-1">
-              <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-                All Codes
-                <Badge variant="outline" className="ml-2 bg-background text-foreground">
-                  {totalCodes}
-                </Badge>
-              </TabsTrigger>
-              <TabsTrigger value="unused" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-                Unused
-                <Badge variant="outline" className="ml-2 bg-background text-foreground">
-                  {totalCodes > 0 ? unusedCount : '—'}
-                </Badge>
-              </TabsTrigger>
-              <TabsTrigger value="used" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-                Used
-                <Badge variant="outline" className="ml-2 bg-background text-foreground">
-                  {totalCodes > 0 ? usedCount : '—'}
-                </Badge>
-              </TabsTrigger>
-              <TabsTrigger value="students" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-                Students
-                <Badge variant="outline" className="ml-2 bg-background text-foreground">
-                  {totalCodes > 0 ? studentCount : '—'}
-                </Badge>
-              </TabsTrigger>
-              <TabsTrigger value="employers" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-                Employers
-                <Badge variant="outline" className="ml-2 bg-background text-foreground">
-                  {totalCodes > 0 ? employerCount : '—'}
-                </Badge>
-              </TabsTrigger>
-            </TabsList>
+            <RedemptionCodeTabsList 
+              totalCodes={totalCodes}
+              unusedCount={unusedCount}
+              usedCount={usedCount}
+              studentCount={studentCount}
+              employerCount={employerCount}
+            />
             
             <TabsContent value={activeTab} className="mt-0">
               {isLoading ? (
-                <div className="space-y-4">
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                </div>
+                <RedemptionCodeTableLoading />
               ) : codes.length > 0 ? (
                 <RedemptionCodesTable
                   codes={codes}
@@ -221,12 +129,7 @@ const RedemptionCodeTable: React.FC<RedemptionCodeTableProps> = ({
                   onViewDetails={onViewDetails}
                 />
               ) : (
-                <Alert variant="default" className="border-dashed bg-muted/50 mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-sm text-muted-foreground">
-                    No redemption codes found for the selected filter. Try generating some codes or changing the filter.
-                  </AlertDescription>
-                </Alert>
+                <RedemptionCodeNoResults />
               )}
               
               {!isLoading && codes.length > 0 && (
