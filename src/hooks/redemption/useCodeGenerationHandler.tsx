@@ -1,6 +1,6 @@
 
-import { useCallback } from 'react';
 import { RedemptionCode } from '@/types/redemption';
+import { useCallback } from 'react';
 
 interface CodeGenerationHandlerProps {
   handleGenerateCode: (type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode | null>;

@@ -1,5 +1,7 @@
 
 import { RedemptionCode } from '@/types/redemption';
+import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
+import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
 
 interface CodeOperationHandlersProps {
   handleGenerateCode: (type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode | null>;
@@ -32,54 +34,41 @@ export function useCodeOperationHandlers({
   openDeleteDialog,
   closeDeleteDialog
 }: CodeOperationHandlersProps) {
-  // Handlers for operations that combine multiple hooks
-  const handleCodeGeneration = async () => {
-    const newCode = await handleGenerateCode(codeType, expireDays);
-    if (newCode) {
-      updateCodes([newCode]);
-      await fetchCodes();
-    }
-  };
-
-  const handleBulkGeneration = async (amount: number) => {
-    const newCodes = await handleBulkGenerate(amount, codeType, expireDays);
-    if (newCodes.length > 0) {
-      updateCodes(newCodes);
-      await fetchCodes();
-    }
-  };
-
-  const handleAutomatedGeneration = async (
-    userType: string, 
-    amount: number, 
-    expiresInDays: number,
-    emailDomain: string
-  ) => {
-    const newCodes = await handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain);
-    if (newCodes.length > 0) {
-      updateCodes(newCodes);
-      await fetchCodes();
-    }
-  };
-
-  const handleShowDeleteDialog = () => {
-    if (selectedCodes.length > 0) {
-      openDeleteDialog(selectedCodes);
-    }
-  };
-
-  const handleConfirmDelete = async () => {
-    await handleDeleteSelectedCodes(selectedForDelete.map(code => code.id));
-    clearSelection();
-    closeDeleteDialog();
-    await fetchCodes();
-  };
+  // Use the useCodeGenerationHandler hook
+  const {
+    handleCodeGeneration,
+    handleBulkGeneration,
+    handleAutomatedGeneration,
+    handleWizardGeneration
+  } = useCodeGenerationHandler({
+    handleGenerateCode,
+    handleBulkGenerate,
+    handleAutomatedCodeGeneration,
+    codeType,
+    expireDays,
+    updateCodes,
+    fetchCodes
+  });
+  
+  // Use the useDeleteCodeHandler hook
+  const {
+    handleConfirmDelete
+  } = useDeleteCodeHandler({
+    handleDeleteSelectedCodes,
+    selectedCodes,
+    selectedForDelete,
+    fetchCodes,
+    clearSelection,
+    openDeleteDialog,
+    closeDeleteDialog
+  });
 
   return {
     handleCodeGeneration,
     handleBulkGeneration,
     handleAutomatedGeneration,
-    handleShowDeleteDialog,
+    handleWizardGeneration,
+    handleShowDeleteDialog: () => openDeleteDialog(selectedCodes),
     handleConfirmDelete
   };
 }

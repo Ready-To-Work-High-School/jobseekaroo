@@ -25,6 +25,12 @@ export function useDeleteCodeHandler({
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const handleShowDeleteDialog = () => {
+    if (selectedCodes.length > 0) {
+      openDeleteDialog(selectedCodes);
+    }
+  };
+
   const handleConfirmDelete = async () => {
     if (selectedForDelete.length === 0) return;
     
@@ -63,6 +69,7 @@ export function useDeleteCodeHandler({
 
   return {
     isDeleting,
+    handleShowDeleteDialog,
     handleConfirmDelete
   };
 }
