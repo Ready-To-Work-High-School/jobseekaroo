@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -23,6 +22,7 @@ import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from './MobileMenu';
 import AccountTypeBadge from './AccountTypeBadge';
+import { NotificationCenter } from '../notifications/NotificationCenter';
 
 const Header = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -30,7 +30,6 @@ const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
 
-  // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
@@ -110,6 +109,10 @@ const Header = () => {
               </Link>
             )}
           </nav>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          {user && <NotificationCenter />}
 
           {user ? (
             <DropdownMenu>

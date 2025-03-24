@@ -1,162 +1,233 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { User } from '@supabase/supabase-js';
-import { SavedSearch } from '@/types/user';
-import { getJobs } from '@/lib/mock-data';
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  date: Date;
-  read: boolean;
-  link?: string;
-}
+import { supabase } from '@/lib/supabase';
+import { Notification } from '@/types/notification';
+import { useAuth } from './AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 interface NotificationsContextType {
   notifications: Notification[];
   unreadCount: number;
-  markAsRead: (notificationId: string) => void;
+  addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => void;
+  markAsRead: (id: string) => void;
   markAllAsRead: () => void;
-  refreshNotifications: () => void;
+  removeNotification: (id: string) => void;
+  clearAll: () => void;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
-export function NotificationsProvider({ children }: { children: ReactNode }) {
+export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const { user, userProfile } = useAuth();
+  const { user } = useAuth();
+  const { toast } = useToast();
 
-  // Load notifications from localStorage
+  // Count unread notifications
+  const unreadCount = notifications.filter(notification => !notification.read).length;
+
   useEffect(() => {
-    if (user) {
-      const storedNotifications = localStorage.getItem(`notifications-${user.id}`);
-      if (storedNotifications) {
-        try {
-          const parsedNotifications = JSON.parse(storedNotifications);
-          setNotifications(parsedNotifications);
-          setUnreadCount(parsedNotifications.filter((n: Notification) => !n.read).length);
-        } catch (error) {
-          console.error('Error parsing stored notifications:', error);
-        }
+    if (!user) {
+      setNotifications([]);
+      return;
+    }
+
+    const fetchNotifications = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('notifications')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        
+        setNotifications(data || []);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        setNotifications([]);
       }
-    }
-  }, [user]);
+    };
 
-  // Generate notifications based on saved searches
-  const refreshNotifications = () => {
-    if (!user || !userProfile?.saved_searches) return;
+    fetchNotifications();
 
-    // Only check once a day in real app
-    const lastChecked = localStorage.getItem(`lastNotificationCheck-${user.id}`);
-    const today = new Date().toDateString();
-    
-    if (lastChecked === today) {
-      return; // Already checked today
-    }
-    
-    // Set today as last checked
-    localStorage.setItem(`lastNotificationCheck-${user.id}`, today);
-    
-    generateNotificationsFromSavedSearches(user, userProfile.saved_searches);
-  };
-
-  // Auto-refresh on initial load
-  useEffect(() => {
-    refreshNotifications();
-  }, [user, userProfile]);
-
-  const generateNotificationsFromSavedSearches = (user: User, savedSearches: SavedSearch[]) => {
-    // For each saved search, find matching jobs
-    const allJobs = getJobs();
-    const newNotifications: Notification[] = [];
-    
-    savedSearches.forEach(search => {
-      // Simple matching - in a real app, this would use the actual search criteria
-      const matchingJobs = allJobs
-        .filter(job => {
-          // Basic filtering based on location
-          if (search.zipCode && job.location.zipCode) {
-            return job.location.zipCode === search.zipCode;
+    // Set up a subscription for real-time updates
+    const subscription = supabase
+      .channel('public:notifications')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`
+        }, 
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setNotifications(prev => [payload.new as Notification, ...prev]);
+            
+            // Show toast for new notification
+            toast({
+              title: payload.new.title,
+              description: payload.new.message,
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setNotifications(prev => 
+              prev.map(n => n.id === payload.new.id ? payload.new as Notification : n)
+            );
+          } else if (payload.eventType === 'DELETE') {
+            setNotifications(prev => 
+              prev.filter(n => n.id !== payload.old.id)
+            );
           }
-          return job.title.toLowerCase().includes(search.name.toLowerCase());
-        })
-        .slice(0, 2); // Limit to 2 matches per saved search
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user, toast]);
+
+  // Add a new notification
+  const addNotification = async (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
+    if (!user) return;
+
+    const newNotification: Notification = {
+      id: uuidv4(),
+      ...notification,
+      user_id: user.id,
+      createdAt: new Date().toISOString(),
+      read: false
+    };
+
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .insert([newNotification]);
+
+      if (error) throw error;
       
-      matchingJobs.forEach(job => {
-        newNotifications.push({
-          id: `${search.id}-${job.id}`,
-          title: `New match for "${search.name}"`,
-          message: `${job.title} at ${job.company.name} matches your saved search.`,
-          date: new Date(),
-          read: false,
-          link: `/jobs/${job.id}`
-        });
+      // Optimistically update the UI
+      setNotifications(prev => [newNotification, ...prev]);
+      
+      // Show toast notification
+      toast({
+        title: notification.title,
+        description: notification.message,
       });
-    });
-    
-    // Add sample onboarding notification if no matches
-    if (newNotifications.length === 0 && savedSearches.length > 0) {
-      newNotifications.push({
-        id: 'welcome-1',
-        title: 'Welcome to Job Alerts',
-        message: 'We\'ll notify you when new jobs match your saved searches.',
-        date: new Date(),
-        read: false
-      });
-    }
-    
-    // Cache notifications
-    if (user) {
-      localStorage.setItem(`notifications-${user.id}`, JSON.stringify(newNotifications));
-    }
-    
-    setNotifications(newNotifications);
-    setUnreadCount(newNotifications.length);
-  };
-
-  const markAsRead = (notificationId: string) => {
-    const updatedNotifications = notifications.map(n => 
-      n.id === notificationId ? { ...n, read: true } : n
-    );
-    
-    setNotifications(updatedNotifications);
-    setUnreadCount(updatedNotifications.filter(n => !n.read).length);
-    
-    // Save to localStorage
-    if (user) {
-      localStorage.setItem(`notifications-${user.id}`, JSON.stringify(updatedNotifications));
+    } catch (error) {
+      console.error('Error adding notification:', error);
     }
   };
 
-  const markAllAsRead = () => {
-    const updatedNotifications = notifications.map(n => ({ ...n, read: true }));
-    setNotifications(updatedNotifications);
-    setUnreadCount(0);
-    
-    // Save to localStorage
-    if (user) {
-      localStorage.setItem(`notifications-${user.id}`, JSON.stringify(updatedNotifications));
+  // Mark a notification as read
+  const markAsRead = async (id: string) => {
+    try {
+      // Update in Supabase
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      // Update locally
+      setNotifications(prev => 
+        prev.map(notification => 
+          notification.id === id 
+            ? { ...notification, read: true } 
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
     }
   };
 
-  const value: NotificationsContextType = {
+  // Mark all notifications as read
+  const markAllAsRead = async () => {
+    if (notifications.length === 0) return;
+    
+    try {
+      // Update in Supabase
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('user_id', user?.id)
+        .eq('read', false);
+
+      if (error) throw error;
+      
+      // Update locally
+      setNotifications(prev => 
+        prev.map(notification => ({ ...notification, read: true }))
+      );
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
+  // Remove a notification
+  const removeNotification = async (id: string) => {
+    try {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      // Update locally
+      setNotifications(prev => 
+        prev.filter(notification => notification.id !== id)
+      );
+    } catch (error) {
+      console.error('Error removing notification:', error);
+    }
+  };
+
+  // Clear all notifications
+  const clearAll = async () => {
+    if (notifications.length === 0) return;
+    
+    try {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+      
+      // Update locally
+      setNotifications([]);
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
+
+  const value = {
     notifications,
     unreadCount,
+    addNotification,
     markAsRead,
     markAllAsRead,
-    refreshNotifications
+    removeNotification,
+    clearAll
   };
 
-  return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>;
-}
+  return (
+    <NotificationsContext.Provider value={value}>
+      {children}
+    </NotificationsContext.Provider>
+  );
+};
 
-export function useNotifications() {
+export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (context === undefined) {
     throw new Error('useNotifications must be used within a NotificationsProvider');
   }
   return context;
-}
+};
