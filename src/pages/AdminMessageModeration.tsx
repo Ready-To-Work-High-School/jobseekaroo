@@ -5,6 +5,7 @@ import { useModerationMessages } from '@/hooks/useModerationMessages';
 import { ModerationMessageItem } from '@/components/admin/ModerationMessageItem';
 import { ModerationEmptyState } from '@/components/admin/ModerationEmptyState';
 import { ModerationLoadingState } from '@/components/admin/ModerationLoadingState';
+import { ModerationInstructions } from '@/components/admin/ModerationInstructions';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import CopyProtection from '@/components/CopyProtection';
@@ -27,6 +28,8 @@ const AdminMessageModeration = () => {
           <p className="text-muted-foreground mb-6">
             Review and approve messages that require moderation before they are visible to recipients.
           </p>
+          
+          <ModerationInstructions />
           
           <ErrorBoundary>
             {error && (
