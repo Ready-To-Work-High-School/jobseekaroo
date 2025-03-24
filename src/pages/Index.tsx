@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import EnhancedHero from '@/components/EnhancedHero';
@@ -73,8 +74,12 @@ const Index = () => {
         {/* Resources Section */}
         <ResourcesSection />
         
-        {/* Add TestAdmin component at the bottom of the page */}
+        {/* Add TestAdmin component at the bottom of the page with clear heading */}
         <div className="mt-8 w-full max-w-4xl mx-auto">
+          <div className="text-center mb-4">
+            <h2 className="text-2xl font-bold">Admin Testing Section</h2>
+            <p className="text-gray-600">Use this panel to test admin functionality</p>
+          </div>
           <TestAdmin />
         </div>
       </div>
