@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CheckIcon, XIcon } from 'lucide-react';
+import { CheckIcon, XIcon, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ModerationMessage } from '@/lib/supabase/messaging/types';
 
@@ -19,6 +19,27 @@ export const ModerationMessageItem = ({
   onApprove, 
   onReject 
 }: ModerationMessageItemProps) => {
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
+
+  const handleApprove = async () => {
+    try {
+      setIsApproving(true);
+      await onApprove(message.id);
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      setIsRejecting(true);
+      await onReject(message.id);
+    } finally {
+      setIsRejecting(false);
+    }
+  };
+
   return (
     <Card key={message.id} className="overflow-hidden">
       <CardHeader className="pb-2">
@@ -46,21 +67,31 @@ export const ModerationMessageItem = ({
         <p className="mb-4 whitespace-pre-wrap">{message.content}</p>
         <div className="flex justify-end space-x-2">
           <Button 
-            onClick={() => onReject(message.id)} 
+            onClick={handleReject} 
             variant="outline"
             size="sm"
             className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+            disabled={isRejecting || isApproving}
           >
-            <XIcon className="h-4 w-4 mr-1" />
+            {isRejecting ? (
+              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <XIcon className="h-4 w-4 mr-1" />
+            )}
             Reject
           </Button>
           <Button 
-            onClick={() => onApprove(message.id)}
+            onClick={handleApprove}
             variant="default"
             size="sm"
             className="bg-green-600 hover:bg-green-700"
+            disabled={isApproving || isRejecting}
           >
-            <CheckIcon className="h-4 w-4 mr-1" />
+            {isApproving ? (
+              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <CheckIcon className="h-4 w-4 mr-1" />
+            )}
             Approve
           </Button>
         </div>

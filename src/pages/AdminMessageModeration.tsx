@@ -1,38 +1,44 @@
 
-import { useEffect } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { useModerationMessages } from '@/hooks/useModerationMessages';
 import { ModerationMessageItem } from '@/components/admin/ModerationMessageItem';
 import { ModerationEmptyState } from '@/components/admin/ModerationEmptyState';
 import { ModerationLoadingState } from '@/components/admin/ModerationLoadingState';
-import { useModerationMessages } from '@/hooks/useModerationMessages';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const AdminMessageModeration = () => {
-  const { userProfile } = useAuth();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const { messages, isLoading, approveMessage, rejectMessage } = useModerationMessages();
-
-  useEffect(() => {
-    if (userProfile?.user_type !== 'admin') {
-      navigate('/');
-      toast({
-        title: "Access denied",
-        description: "You don't have permission to access this page",
-        variant: "destructive",
-      });
-    }
-  }, [userProfile, navigate, toast]);
+  const { 
+    messages, 
+    isLoading, 
+    approveMessage, 
+    rejectMessage,
+    refreshMessages,
+    error
+  } = useModerationMessages();
 
   return (
     <Layout>
-      <ProtectedRoute requiredRoles={['admin']} adminOnly={true}>
-        <div className="container py-6">
-          <h1 className="text-2xl font-bold mb-6">Message Moderation</h1>
-          
+      <div className="container max-w-4xl py-8">
+        <h1 className="text-3xl font-bold mb-2">Message Moderation</h1>
+        <p className="text-muted-foreground mb-6">
+          Review and approve messages that require moderation before they are visible to recipients.
+        </p>
+        
+        <ErrorBoundary>
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+              <h3 className="text-red-800 font-medium">Error loading messages</h3>
+              <p className="text-red-600">{error.message}</p>
+              <button 
+                onClick={refreshMessages}
+                className="mt-2 px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+        
           {isLoading ? (
             <ModerationLoadingState />
           ) : messages.length === 0 ? (
@@ -40,7 +46,7 @@ const AdminMessageModeration = () => {
           ) : (
             <div className="space-y-4">
               {messages.map((message) => (
-                <ModerationMessageItem 
+                <ModerationMessageItem
                   key={message.id}
                   message={message}
                   onApprove={approveMessage}
@@ -49,8 +55,8 @@ const AdminMessageModeration = () => {
               ))}
             </div>
           )}
-        </div>
-      </ProtectedRoute>
+        </ErrorBoundary>
+      </div>
     </Layout>
   );
 };
