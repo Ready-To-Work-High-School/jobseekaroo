@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
@@ -23,6 +22,7 @@ const SocialAuthButtons = ({
   
   const handleGoogleSignIn = async () => {
     try {
+      console.log('Initiating Google sign-in from SocialAuthButtons');
       await onGoogleSignIn();
     } catch (error: any) {
       console.error('Google sign-in error in component:', error);

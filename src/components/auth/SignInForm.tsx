@@ -54,7 +54,6 @@ const SignInForm = () => {
         description: error.message || "Could not sign in with Apple",
         variant: "destructive",
       });
-    } finally {
       setIsAppleLoading(false);
     }
   };
@@ -63,6 +62,11 @@ const SignInForm = () => {
     setIsGoogleLoading(true);
     try {
       console.log("Initiating Google sign-in from SignInForm");
+      // Store current location to redirect back after login
+      if (location.state?.from) {
+        sessionStorage.setItem('redirectAfterLogin', location.state.from.pathname);
+      }
+      
       await signInWithGoogle();
       // OAuth redirects will happen automatically
     } catch (error: any) {

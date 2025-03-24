@@ -6,10 +6,20 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
   console.log(`Initiating ${provider} sign-in`);
   
   try {
+    // Store redirect info in session storage to handle auth redirects
+    const redirectUrl = `${window.location.origin}/auth/callback`;
+    sessionStorage.setItem('redirectAfterLogin', '/'); // Default to home page
+    
+    console.log(`${provider} redirect URL:`, redirectUrl);
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: redirectUrl,
+        queryParams: provider === 'google' ? {
+          access_type: 'offline',
+          prompt: 'consent',
+        } : undefined,
       },
     });
     
