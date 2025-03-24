@@ -1,6 +1,6 @@
 
 import React from 'react';
-import CodeAnalyticsDashboard from '../analytics/CodeAnalyticsDashboard';
+import AnalyticsDashboard from '../analytics/dashboard/AnalyticsDashboard';
 
 interface AnalyticsTabProps {
   stats: {
@@ -22,11 +22,11 @@ interface AnalyticsTabProps {
 
 const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ 
   stats, 
-  usageOverTime, 
-  generationOverTime 
+  usageOverTime = [], 
+  generationOverTime = [] 
 }) => {
   return (
-    <CodeAnalyticsDashboard 
+    <AnalyticsDashboard 
       stats={stats} 
       usageOverTime={usageOverTime}
       generationOverTime={generationOverTime}

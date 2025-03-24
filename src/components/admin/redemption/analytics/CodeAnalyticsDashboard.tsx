@@ -1,14 +1,9 @@
 
 import React from 'react';
-import UsageOverTimeChart from './charts/UsageOverTimeChart';
-import GenerationOverTimeChart from './charts/GenerationOverTimeChart';
-import UsageDistributionChart from './charts/UsageDistributionChart';
-import TypeDistributionChart from './charts/TypeDistributionChart';
+import AnalyticsDashboard from './dashboard/AnalyticsDashboard';
 import { 
   prepareDefaultUsageData, 
-  prepareDefaultGenerationData,
-  prepareUsageDistributionData,
-  prepareTypeDistributionData
+  prepareDefaultGenerationData
 } from './utils/chartData';
 
 interface CodeAnalyticsDashboardProps {
@@ -43,30 +38,12 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
     ? prepareDefaultGenerationData() 
     : generationOverTime;
 
-  // Create data for charts
-  const { totalCodes, usedCodes, studentCodes, employerCodes } = stats;
-  
-  const distributionData = prepareUsageDistributionData(usedCodes, totalCodes);
-  const typeData = prepareTypeDistributionData(studentCodes, employerCodes);
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Redemption Code Analytics</h2>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Usage Over Time */}
-        <UsageOverTimeChart data={defaultUsageData} />
-
-        {/* Generation Over Time */}
-        <GenerationOverTimeChart data={defaultGenerationData} />
-
-        {/* Usage Distribution */}
-        <UsageDistributionChart data={distributionData} totalCodes={totalCodes} />
-
-        {/* Type Distribution */}
-        <TypeDistributionChart data={typeData} totalCodes={totalCodes} />
-      </div>
-    </div>
+    <AnalyticsDashboard
+      stats={stats}
+      usageOverTime={defaultUsageData}
+      generationOverTime={defaultGenerationData}
+    />
   );
 };
 

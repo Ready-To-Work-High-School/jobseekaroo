@@ -52,7 +52,7 @@ interface RedemptionTabManagerProps {
     onRefresh: () => Promise<void>;
     onExport: () => void;
     onPrint: () => void;
-    onEmailSelected: () => void;
+    onEmailSelected: (codes: RedemptionCode[]) => void;
     onDeleteSelected: () => void;
     onPageChange: (page: number) => void;
     onPageSizeChange: (size: number) => void;
@@ -125,7 +125,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
           onRefresh={handlers.onRefresh}
           onExport={handlers.onExport}
           onPrint={handlers.onPrint}
-          onEmailSelected={handlers.onEmailSelected}
+          onEmailSelected={() => handlers.onEmailSelected(selectedCodes)}
           onDeleteSelected={handlers.onDeleteSelected}
           onPageChange={handlers.onPageChange}
           onPageSizeChange={handlers.onPageSizeChange}
