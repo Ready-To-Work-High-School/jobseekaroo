@@ -1,176 +1,66 @@
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+
+import { useState } from 'react';
 import { RedemptionCode } from '@/types/redemption';
-import { 
-  generateRedemptionCode, 
-  listRedemptionCodes,
-  sendRedemptionCodeEmail,
-  deleteRedemptionCode,
-  deleteRedemptionCodes
-} from '@/lib/supabase/redemption';
+import { useRedemptionCodeData } from './redemption/useRedemptionCodeData';
+import { useRedemptionCodeOperations } from './redemption/useRedemptionCodeOperations';
+import { useRedemptionCodeSelection } from './redemption/useRedemptionCodeSelection';
+import { useRedemptionCodeUtils } from './redemption/useRedemptionCodeUtils';
 
 export function useRedemptionCodes() {
-  const [codes, setCodes] = useState<RedemptionCode[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('all');
-  const [selectedCodes, setSelectedCodes] = useState<RedemptionCode[]>([]);
-  const [allSelected, setAllSelected] = useState(false);
-  const { toast } = useToast();
-  
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalCodes, setTotalCodes] = useState(0);
-  
-  const [stats, setStats] = useState({
-    totalCodes: 0,
-    usedCodes: 0,
-    studentCodes: 0,
-    employerCodes: 0,
-    expiringThisMonth: 0
-  });
+  const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
+  const [expireDays, setExpireDays] = useState<number>(30);
 
-  const fetchCodes = async () => {
-    setIsLoading(true);
-    try {
-      let filterType: 'student' | 'employer' | undefined;
-      let filterUsed: boolean | undefined;
-      
-      switch (activeTab) {
-        case 'used':
-          filterUsed = true;
-          break;
-        case 'unused':
-          filterUsed = false;
-          break;
-        case 'students':
-          filterType = 'student';
-          break;
-        case 'employers':
-          filterType = 'employer';
-          break;
-        default:
-          break;
-      }
-      
-      const { data: filteredCodes, count } = await listRedemptionCodes(
-        filterType, 
-        filterUsed, 
-        { page: currentPage, pageSize }
-      );
-      
-      setCodes(filteredCodes);
-      setTotalCodes(count);
-      
-      const { data: allCodes } = await listRedemptionCodes();
-      
-      const usedCodesCount = allCodes.filter(code => code.used).length;
-      const studentCodesCount = allCodes.filter(code => code.type === 'student').length;
-      const employerCodesCount = allCodes.filter(code => code.type === 'employer').length;
-      
-      const today = new Date();
-      const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      const expiringCodes = allCodes.filter(code => {
-        if (!code.expiresAt) return false;
-        const expDate = new Date(code.expiresAt);
-        return expDate <= endOfMonth && expDate >= today && !code.used;
-      }).length;
-      
-      setStats({
-        totalCodes: count,
-        usedCodes: usedCodesCount,
-        studentCodes: studentCodesCount,
-        employerCodes: employerCodesCount,
-        expiringThisMonth: expiringCodes
-      });
-      
-    } catch (error) {
-      console.error('Error fetching redemption codes:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load redemption codes',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
+  // Import functionalities from separate hooks
+  const {
+    codes,
+    stats,
+    isLoading,
+    activeTab,
+    setActiveTab,
+    currentPage,
+    pageSize,
+    totalCodes,
+    fetchCodes,
+    handlePageChange,
+    handlePageSizeChange,
+    updateCodes,
+    removeCodes
+  } = useRedemptionCodeData();
+
+  const {
+    isGenerating,
+    isDeleting,
+    handleGenerateCode: generateCode,
+    handleBulkGenerate: bulkGenerate,
+    handleAutomatedCodeGeneration: automatedGenerate,
+    handleDeleteCode: deleteCode,
+    handleDeleteSelectedCodes: deleteSelectedCodes
+  } = useRedemptionCodeOperations();
+
+  const {
+    selectedCodes,
+    allSelected,
+    handleSelectCode,
+    handleSelectAll,
+    clearSelection
+  } = useRedemptionCodeSelection(codes);
+
+  const { formatDate, exportCodes } = useRedemptionCodeUtils();
+
+  // Wrapper functions to integrate the different hooks
+  const handleGenerateCode = async () => {
+    const newCode = await generateCode(codeType, expireDays);
+    if (newCode) {
+      updateCodes([newCode]);
+      await fetchCodes();
     }
   };
 
-  useEffect(() => {
-    fetchCodes();
-  }, [activeTab, currentPage, pageSize]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-    setSelectedCodes([]);
-    setAllSelected(false);
-  }, [activeTab]);
-
-  const handleGenerateCode = async (codeType: 'student' | 'employer', expireDays: number) => {
-    setIsGenerating(true);
-    try {
-      const newCode = await generateRedemptionCode(codeType, expireDays);
-      
-      if (newCode) {
-        setCodes([newCode, ...codes]);
-        toast({
-          title: 'Success',
-          description: `New ${codeType} code generated: ${newCode.code}`,
-        });
-      } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to generate redemption code',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error generating redemption code:', error);
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleBulkGenerate = async (amount: number, codeType: 'student' | 'employer', expireDays: number) => {
-    setIsGenerating(true);
-    
-    try {
-      const newCodes: RedemptionCode[] = [];
-      
-      for (let i = 0; i < amount; i++) {
-        const code = await generateRedemptionCode(codeType, expireDays);
-        if (code) newCodes.push(code);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      if (newCodes.length > 0) {
-        setCodes([...newCodes, ...codes]);
-        toast({
-          title: 'Success',
-          description: `Generated ${newCodes.length} new redemption codes`,
-        });
-      } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to generate redemption codes',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error generating redemption codes:', error);
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred during bulk generation',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsGenerating(false);
+  const handleBulkGenerate = async (amount: number) => {
+    const newCodes = await bulkGenerate(amount, codeType, expireDays);
+    if (newCodes.length > 0) {
+      updateCodes(newCodes);
+      await fetchCodes();
     }
   };
 
@@ -180,194 +70,36 @@ export function useRedemptionCodes() {
     expiresInDays: number,
     emailDomain: string
   ) => {
-    setIsGenerating(true);
-    
-    try {
-      const newCodes: RedemptionCode[] = [];
-      const validType = userType === 'student' || userType === 'employer' ? 
-        userType : 'student';
-      
-      for (let i = 0; i < amount; i++) {
-        const code = await generateRedemptionCode(validType as 'student' | 'employer', expiresInDays);
-        if (code) newCodes.push(code);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      if (newCodes.length === 0) {
-        throw new Error('Failed to generate any redemption codes');
-      }
-      
-      const emailSubject = `${userType.charAt(0).toUpperCase() + userType.slice(1)} Access Codes`;
-      const emailMessage = `
-        Here are your requested access codes for ${userType} users:
-        
-        These codes can be distributed to users with @${emailDomain} email addresses.
-        
-        Users can redeem these codes at the following URL: ${window.location.origin}/redemption-code
-        
-        These codes will expire in ${expiresInDays} days.
-      `;
-      
-      const sendResult = await sendRedemptionCodeEmail({
-        to: `admin@${emailDomain}`,
-        subject: emailSubject,
-        message: emailMessage,
-        codes: newCodes
-      });
-      
-      if (!sendResult) {
-        throw new Error('Generated codes but failed to send email');
-      }
-      
-      setCodes(prev => [...newCodes, ...prev]);
-      
-      toast({
-        title: 'Success',
-        description: `Generated and emailed ${newCodes.length} ${userType} codes to admin@${emailDomain}`,
-      });
-    } catch (error) {
-      console.error('Error in automated code generation:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to generate or distribute codes',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsGenerating(false);
+    const newCodes = await automatedGenerate(userType, amount, expiresInDays, emailDomain);
+    if (newCodes.length > 0) {
+      updateCodes(newCodes);
+      await fetchCodes();
     }
   };
 
   const handleDeleteCode = async (code: RedemptionCode) => {
-    setIsDeleting(true);
-    try {
-      const success = await deleteRedemptionCode(code.id);
-      
-      if (success) {
-        setCodes(prev => prev.filter(c => c.id !== code.id));
-        setSelectedCodes(prev => prev.filter(c => c.id !== code.id));
-        
-        toast({
-          title: 'Success',
-          description: `Redemption code ${code.code} deleted successfully`,
-        });
-        
-        await fetchCodes(); // Refresh data
-      } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to delete redemption code',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error deleting redemption code:', error);
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsDeleting(false);
+    const success = await deleteCode(code);
+    if (success) {
+      removeCodes([code.id]);
+      await fetchCodes();
     }
   };
 
   const handleDeleteSelectedCodes = async () => {
     if (selectedCodes.length === 0) return;
     
-    setIsDeleting(true);
-    try {
-      const codeIds = selectedCodes.map(code => code.id);
-      const deletedCount = await deleteRedemptionCodes(codeIds);
-      
-      if (deletedCount > 0) {
-        toast({
-          title: 'Success',
-          description: `Deleted ${deletedCount} redemption codes successfully`,
-        });
-        
-        // Remove deleted codes from state
-        setCodes(prev => prev.filter(c => !codeIds.includes(c.id)));
-        setSelectedCodes([]);
-        setAllSelected(false);
-        
-        await fetchCodes(); // Refresh data
-      } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to delete redemption codes',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error deleting redemption codes:', error);
-      toast({
-        title: 'Error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  const handleSelectCode = (code: RedemptionCode, isSelected: boolean) => {
-    if (isSelected) {
-      setSelectedCodes(prev => [...prev, code]);
-    } else {
-      setSelectedCodes(prev => prev.filter(c => c.id !== code.id));
-    }
-  };
-
-  const handleSelectAll = (isSelected: boolean) => {
-    setAllSelected(isSelected);
-    if (isSelected) {
-      setSelectedCodes(codes.filter(code => !code.used));
-    } else {
-      setSelectedCodes([]);
-    }
-  };
-
-  const formatDate = (dateString?: Date | string) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-  
-  const exportCodes = () => {
-    const csvContent = [
-      ['Code', 'Type', 'Status', 'Created', 'Expires', 'Used By', 'Used At'].join(','),
-      ...codes.map(code => [
-        code.code,
-        code.type,
-        code.used ? 'Used' : 'Available',
-        formatDate(code.createdAt),
-        formatDate(code.expiresAt || ''),
-        code.usedBy || 'N/A',
-        formatDate(code.usedAt || '')
-      ].join(','))
-    ].join('\n');
+    const codeIds = selectedCodes.map(code => code.id);
+    const deletedCount = await deleteSelectedCodes(codeIds);
     
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `redemption-codes-${new Date().toISOString().slice(0,10)}.csv`);
-    a.click();
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(1);
+    if (deletedCount > 0) {
+      removeCodes(codeIds);
+      clearSelection();
+      await fetchCodes();
+    }
   };
 
   return {
+    // Export all the necessary functions and state
     codes,
     stats,
     isLoading,
@@ -393,6 +125,12 @@ export function useRedemptionCodes() {
     handleDeleteSelectedCodes,
     fetchCodes,
     formatDate,
-    exportCodes
+    exportCodes,
+    
+    // Type controls
+    codeType,
+    setCodeType,
+    expireDays,
+    setExpireDays
   };
 }
