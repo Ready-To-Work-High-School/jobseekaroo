@@ -6,19 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-
-interface ModerationMessage {
-  id: string;
-  conversation_id: string;
-  content: string;
-  created_at: string;
-  sender_id: string;
-  receiver_id: string;
-  sender_name: string;
-  sender_avatar?: string;
-  receiver_name: string;
-  receiver_avatar?: string;
-}
+import { ModerationMessage } from '@/lib/supabase/messaging/types';
 
 interface ModerationMessageItemProps {
   message: ModerationMessage;

@@ -16,3 +16,11 @@ export interface MessageCreatePayload {
 export interface ConversationCreatePayload {
   participant_ids: string[];
 }
+
+// Add ModerationMessage type to extend the Message type with additional properties
+export interface ModerationMessage extends Message {
+  sender_name: string;
+  sender_avatar?: string;
+  receiver_name: string;
+  receiver_avatar?: string;
+}

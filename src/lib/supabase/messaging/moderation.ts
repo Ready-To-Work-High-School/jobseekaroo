@@ -1,11 +1,11 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Message } from './types';
+import { ModerationMessage } from './types';
 
 /**
  * Fetch messages that need moderation
  */
-export const fetchMessagesForModeration = async (): Promise<Message[]> => {
+export const fetchMessagesForModeration = async (): Promise<ModerationMessage[]> => {
   const { data, error } = await supabase
     .from('messages_for_moderation_view')
     .select('*')

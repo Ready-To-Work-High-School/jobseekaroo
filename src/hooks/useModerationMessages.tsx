@@ -7,10 +7,10 @@ import {
   approveMessage as approveMessageApi, 
   rejectMessage as rejectMessageApi 
 } from '@/lib/supabase/messaging';
-import { Message } from '@/types/message';
+import { ModerationMessage } from '@/lib/supabase/messaging/types';
 
 export const useModerationMessages = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ModerationMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   
