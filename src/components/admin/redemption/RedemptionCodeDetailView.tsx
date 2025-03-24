@@ -9,17 +9,7 @@ interface RedemptionCodeDetailViewProps {
   formatDate: (date?: Date | string) => string;
 }
 
-interface DetailViewReturn {
-  view: React.ReactNode;
-  handlers: {
-    handleCopyCode: (code: string) => void;
-    handleViewDetails: (code: RedemptionCode) => void;
-    handleEmailCode: (code: RedemptionCode) => void;
-    handleBulkEmail: (selectedCodes: RedemptionCode[]) => void;
-  };
-}
-
-export function useRedemptionCodeDetailView({ formatDate }: RedemptionCodeDetailViewProps): DetailViewReturn {
+export function useRedemptionCodeDetailView({ formatDate }: RedemptionCodeDetailViewProps) {
   const [selectedCode, setSelectedCode] = useState<RedemptionCode | null>(null);
   const [showCodeDetails, setShowCodeDetails] = useState(false);
   const [showEmailDialog, setShowEmailDialog] = useState(false);
@@ -60,25 +50,27 @@ export function useRedemptionCodeDetailView({ formatDate }: RedemptionCodeDetail
     setShowEmailDialog(true);
   };
 
+  const view = (
+    <>
+      <RedemptionCodeDetails
+        isOpen={showCodeDetails}
+        onClose={() => setShowCodeDetails(false)}
+        selectedCode={selectedCode}
+        onCopyCode={handleCopyCode}
+        formatDate={formatDate}
+      />
+      
+      <EmailRedemptionCodeDialog 
+        isOpen={showEmailDialog}
+        onClose={() => setShowEmailDialog(false)}
+        code={emailSelectedCode || undefined}
+        selectedCodes={emailSelectedCode ? [] : selectedCodes}
+      />
+    </>
+  );
+
   return {
-    view: (
-      <>
-        <RedemptionCodeDetails
-          isOpen={showCodeDetails}
-          onClose={() => setShowCodeDetails(false)}
-          selectedCode={selectedCode}
-          onCopyCode={handleCopyCode}
-          formatDate={formatDate}
-        />
-        
-        <EmailRedemptionCodeDialog 
-          isOpen={showEmailDialog}
-          onClose={() => setShowEmailDialog(false)}
-          code={emailSelectedCode || undefined}
-          selectedCodes={emailSelectedCode ? [] : selectedCodes}
-        />
-      </>
-    ),
+    view,
     handlers: {
       handleCopyCode,
       handleViewDetails,
