@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAdvancedCodeFiltering } from '@/hooks/redemption/useAdvancedCodeFiltering';
 import { useBulkExport } from '@/hooks/redemption/useBulkExport';
+import { useScheduledEmails } from '@/hooks/redemption/useScheduledEmails';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 import RedemptionCodeStats from '../RedemptionCodeStats';
 import CodeGenerationPanel from './code-generation/CodeGenerationPanel';
@@ -19,7 +20,10 @@ import { useCodeOperationHandlers } from './hooks/useCodeOperationHandlers';
 import { useCodeDetailView } from './hooks/useCodeDetailView';
 import CodeAnalyticsDashboard from './analytics/CodeAnalyticsDashboard';
 import AdvancedSearchFilters from './filters/AdvancedSearchFilters';
-import BulkExport from './bulk-actions/BulkExport';
+import ExportOptions from './exporting/ExportOptions';
+import UserRedemptionReport from './reporting/UserRedemptionReport';
+import CodeGenerationWizard from './wizard/CodeGenerationWizard';
+import EmailScheduler from './scheduling/EmailScheduler';
 
 const RedemptionCodeContainer: React.FC = () => {
   const [activeTab, setActiveTab] = useState('codes');
@@ -45,6 +49,9 @@ const RedemptionCodeContainer: React.FC = () => {
 
   // Bulk export
   const { exportCodes, isExporting } = useBulkExport();
+
+  // Email scheduling
+  const { scheduleEmail, isScheduling } = useScheduledEmails();
 
   const {
     isGenerating,
@@ -104,13 +111,49 @@ const RedemptionCodeContainer: React.FC = () => {
   const { detailsView, handlers } = useCodeDetailView({ formatDate });
   const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
 
+  // Handler for wizard-generated codes
+  const handleWizardGeneration = async (params: {
+    codeType: 'student' | 'employer';
+    amount: number;
+    expiresInDays: number;
+    emailDomain: string;
+    sendEmail: boolean;
+  }) => {
+    if (params.sendEmail) {
+      return handleAutomatedGeneration(
+        params.codeType, 
+        params.amount, 
+        params.expiresInDays, 
+        params.emailDomain
+      );
+    } else {
+      return handleBulkGeneration(params.amount);
+    }
+  };
+
+  // Handler for email scheduling
+  const handleScheduleEmail = async (params: {
+    recipients: string;
+    subject: string;
+    message: string;
+    codeType: 'student' | 'employer';
+    amount: number;
+    expiresInDays: number;
+    scheduleDate: Date;
+    scheduleTime: string;
+  }) => {
+    return scheduleEmail(params);
+  };
+
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="codes">Redemption Codes</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>
+          <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>
         </TabsList>
         
         <TabsContent value="codes" className="space-y-6">
@@ -120,10 +163,9 @@ const RedemptionCodeContainer: React.FC = () => {
             <div className="text-2xl font-bold">Redemption Code Management</div>
             
             <div className="flex flex-wrap gap-2">
-              <BulkExport 
+              <ExportOptions 
                 selectedCodes={selectedCodes}
                 allCodes={codes}
-                onExport={exportCodes}
               />
             </div>
           </div>
@@ -180,13 +222,22 @@ const RedemptionCodeContainer: React.FC = () => {
           <CodeAnalyticsDashboard stats={stats} />
         </TabsContent>
         
-        <TabsContent value="settings">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Redemption Code Settings</h2>
-              {/* Settings content would go here - moved to separate tab for better organization */}
-            </CardContent>
-          </Card>
+        <TabsContent value="reports">
+          <UserRedemptionReport codes={codes} formatDate={formatDate} />
+        </TabsContent>
+        
+        <TabsContent value="wizard">
+          <CodeGenerationWizard 
+            onGenerate={handleWizardGeneration}
+            isGenerating={isGenerating}
+          />
+        </TabsContent>
+        
+        <TabsContent value="scheduler">
+          <EmailScheduler 
+            onSchedule={handleScheduleEmail}
+            isScheduling={isScheduling}
+          />
         </TabsContent>
       </Tabs>
 

@@ -86,19 +86,17 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
   };
 
   // Custom tooltip formatter for percentage calculations
-  const formatPieTooltipContent = (payload: any) => {
-    if (payload && payload.length > 0) {
-      const total = totalCodes;
+  const renderCustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length > 0) {
       const item = payload[0];
+      const total = totalCodes;
       const percent = total > 0 ? Math.round((item.value / total) * 100) : 0;
       return (
-        <div className="recharts-tooltip-wrapper">
-          <div className="recharts-default-tooltip">
-            <p className="recharts-tooltip-label">{item.name}</p>
-            <p className="recharts-tooltip-item">
-              {item.value} ({percent}%)
-            </p>
-          </div>
+        <div className="bg-white p-2 border rounded shadow-sm">
+          <p className="font-medium">{item.name}</p>
+          <p>
+            {item.value} ({percent}%)
+          </p>
         </div>
       );
     }
@@ -177,7 +175,7 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ChartContainer className="h-full" config={chartConfig}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={distributionData}
@@ -193,16 +191,9 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <ChartTooltip 
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return formatPieTooltipContent(payload);
-                      }
-                      return null;
-                    }}
-                  />
+                  <Tooltip content={renderCustomTooltip} />
                 </PieChart>
-              </ChartContainer>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
@@ -214,7 +205,7 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ChartContainer className="h-full" config={chartConfig}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={typeData}
@@ -230,16 +221,9 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <ChartTooltip 
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return formatPieTooltipContent(payload);
-                      }
-                      return null;
-                    }}
-                  />
+                  <Tooltip content={renderCustomTooltip} />
                 </PieChart>
-              </ChartContainer>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
