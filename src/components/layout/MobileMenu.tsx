@@ -150,7 +150,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                     to="/admin"
                     className={cn(
                       "px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md flex items-center font-bold",
-                      location.pathname.startsWith("/admin") && "bg-red-700"
+                      (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) && "bg-red-700"
                     )}
                     onClick={() => setIsOpen(false)}
                   >

@@ -1,6 +1,6 @@
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MobileNavLink } from './MobileNavLink';
 import {
@@ -28,11 +28,13 @@ import {
 export const MobileMenu = () => {
   const { user, signOut, userProfile } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const isAdmin = userProfile?.user_type === 'admin';
   
   // Debug logs
-  console.log("MobileMenu - User profile:", userProfile);
-  console.log("MobileMenu - Is admin:", isAdmin);
+  console.log("MobileMenu (navbar) - User profile:", userProfile);
+  console.log("MobileMenu (navbar) - Is admin:", isAdmin);
+  console.log("MobileMenu (navbar) - Current path:", location.pathname);
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
@@ -73,7 +75,12 @@ export const MobileMenu = () => {
           </MobileNavLink>
           
           {user && isAdmin && (
-            <MobileNavLink to="/admin" className="text-white bg-red-600 hover:bg-red-700 my-2">
+            <MobileNavLink 
+              to="/admin" 
+              className={`text-white bg-red-600 hover:bg-red-700 my-2 ${
+                (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) ? "bg-red-700" : ""
+              }`}
+            >
               <Shield className="h-5 w-5" />
               Admin Panel
             </MobileNavLink>

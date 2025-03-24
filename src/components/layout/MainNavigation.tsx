@@ -71,7 +71,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
               to="/admin" 
               className={cn(
                 "px-3 py-2 text-sm font-medium rounded-md hover:bg-accent/90 flex items-center gap-1 bg-red-600 text-white font-bold",
-                location.pathname.startsWith("/admin") && "bg-red-700"
+                (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) && "bg-red-700"
               )}
             >
               <Shield className="h-4 w-4" />
