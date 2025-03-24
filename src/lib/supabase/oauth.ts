@@ -8,9 +8,13 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
   try {
     // Store redirect info in session storage to handle auth redirects
     const redirectUrl = `${window.location.origin}/auth/callback`;
-    sessionStorage.setItem('redirectAfterLogin', '/'); // Default to home page
+    const currentPath = sessionStorage.getItem('redirectAfterLogin') || '/';
+    
+    // Always update the stored path in case user navigated before clicking login
+    sessionStorage.setItem('redirectAfterLogin', currentPath);
     
     console.log(`${provider} redirect URL:`, redirectUrl);
+    console.log(`Will redirect back to:`, currentPath);
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,

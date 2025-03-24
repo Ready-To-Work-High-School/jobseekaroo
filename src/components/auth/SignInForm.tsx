@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,6 +16,16 @@ const SignInForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Store the current location on component mount
+  useEffect(() => {
+    // Store current path to redirect back after login
+    if (location.state?.from) {
+      sessionStorage.setItem('redirectAfterLogin', location.state.from.pathname);
+    } else {
+      sessionStorage.setItem('redirectAfterLogin', '/');
+    }
+  }, [location]);
   
   const handleEmailPasswordSubmit = async (values: SignInValues) => {
     setIsLoading(true);
@@ -44,6 +54,7 @@ const SignInForm = () => {
   const handleAppleSignIn = async () => {
     setIsAppleLoading(true);
     try {
+      console.log("Initiating Apple sign-in from SignInForm");
       await signInWithApple();
       // OAuth redirects will happen automatically
       // Success toast will be shown after redirect completes
@@ -62,11 +73,10 @@ const SignInForm = () => {
     setIsGoogleLoading(true);
     try {
       console.log("Initiating Google sign-in from SignInForm");
-      // Store current location to redirect back after login
-      if (location.state?.from) {
-        sessionStorage.setItem('redirectAfterLogin', location.state.from.pathname);
-      }
-      
+      // getCurrentPath is just a debug log to verify the path
+      const currentPath = window.location.pathname;
+      console.log("Current path before Google login:", currentPath);
+            
       await signInWithGoogle();
       // OAuth redirects will happen automatically
     } catch (error: any) {

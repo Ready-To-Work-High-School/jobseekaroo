@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 interface SocialAuthButtonsProps {
   onAppleSignIn: () => Promise<void>;
@@ -19,13 +20,20 @@ const SocialAuthButtons = ({
   isFormLoading
 }: SocialAuthButtonsProps) => {
   const { toast } = useToast();
+  const [googleError, setGoogleError] = useState<string | null>(null);
+  const [appleError, setAppleError] = useState<string | null>(null);
   
   const handleGoogleSignIn = async () => {
     try {
+      setGoogleError(null);
       console.log('Initiating Google sign-in from SocialAuthButtons');
+      // Store current path before redirecting
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
       await onGoogleSignIn();
+      // OAuth redirects will happen automatically
     } catch (error: any) {
       console.error('Google sign-in error in component:', error);
+      setGoogleError(error?.message || "Sign-in failed");
       toast({
         title: "Google Sign-In Error",
         description: error?.message || "Could not sign in with Google. Please try again.",
@@ -36,9 +44,14 @@ const SocialAuthButtons = ({
   
   const handleAppleSignIn = async () => {
     try {
+      setAppleError(null);
+      // Store current path before redirecting
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
       await onAppleSignIn();
+      // OAuth redirects will happen automatically
     } catch (error: any) {
       console.error('Apple sign-in error in component:', error);
+      setAppleError(error?.message || "Sign-in failed");
       toast({
         title: "Apple Sign-In Error",
         description: error?.message || "Could not sign in with Apple. Please try again.",
@@ -72,6 +85,7 @@ const SocialAuthButtons = ({
           </>
         )}
       </Button>
+      {googleError && <div className="text-sm text-red-500">{googleError}</div>}
       
       <Button
         variant="outline"
@@ -94,6 +108,7 @@ const SocialAuthButtons = ({
           </>
         )}
       </Button>
+      {appleError && <div className="text-sm text-red-500">{appleError}</div>}
     </div>
   );
 };
