@@ -19,11 +19,39 @@ const SocialAuthButtons = ({
   isGoogleLoading,
   isFormLoading
 }: SocialAuthButtonsProps) => {
+  const { toast } = useToast();
+  
+  const handleGoogleSignIn = async () => {
+    try {
+      await onGoogleSignIn();
+    } catch (error: any) {
+      console.error('Google sign-in error in component:', error);
+      toast({
+        title: "Google Sign-In Error",
+        description: error?.message || "Could not sign in with Google. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const handleAppleSignIn = async () => {
+    try {
+      await onAppleSignIn();
+    } catch (error: any) {
+      console.error('Apple sign-in error in component:', error);
+      toast({
+        title: "Apple Sign-In Error",
+        description: error?.message || "Could not sign in with Apple. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+  
   return (
     <div className="space-y-3">
       <Button
         variant="outline"
-        onClick={onGoogleSignIn}
+        onClick={handleGoogleSignIn}
         disabled={isGoogleLoading || isFormLoading}
         className="w-full flex justify-center items-center gap-2 transition-all border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
       >
@@ -47,7 +75,7 @@ const SocialAuthButtons = ({
       
       <Button
         variant="outline"
-        onClick={onAppleSignIn}
+        onClick={handleAppleSignIn}
         disabled={isAppleLoading || isFormLoading}
         className="w-full flex justify-center items-center gap-2 transition-all border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
       >

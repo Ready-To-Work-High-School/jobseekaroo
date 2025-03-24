@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -28,6 +27,7 @@ import RedemptionCode from './pages/RedemptionCode';
 import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
 import License from './pages/License';
 import NotFound from './pages/NotFound';
+import AuthCallback from './pages/AuthCallback';
 import { AuthProvider } from './contexts/AuthContext';
 import Dashboard from './pages/Dashboard';
 import Messages from './pages/Messages';
@@ -77,6 +77,7 @@ function App() {
           <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
           <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
           <Route path="/license" element={<License />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>

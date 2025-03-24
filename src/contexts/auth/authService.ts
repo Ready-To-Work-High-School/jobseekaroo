@@ -1,6 +1,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { sendEmail } from '@/lib/supabase/email';
+import { signInWithOAuth } from '@/lib/supabase/oauth';
 
 export const signIn = async (email: string, password: string) => {
   const { error } = await supabase.auth.signInWithPassword({
@@ -54,22 +55,11 @@ export const signUp = async (
 };
 
 export const signInWithApple = async (): Promise<void> => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'apple',
-  });
-  
-  if (error) throw error;
+  await signInWithOAuth('apple');
 };
 
 export const signInWithGoogle = async (): Promise<void> => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
-  });
-  
-  if (error) throw error;
+  await signInWithOAuth('google');
 };
 
 export const signOut = async () => {

@@ -30,7 +30,7 @@ const SignInForm = () => {
       const from = location.state?.from?.pathname || '/';
       navigate(from);
     } catch (error: any) {
-      console.error(error);
+      console.error("Sign in error:", error);
       toast({
         title: "Error",
         description: error.message || "Invalid email or password",
@@ -45,14 +45,16 @@ const SignInForm = () => {
     setIsAppleLoading(true);
     try {
       await signInWithApple();
-      // Note: No need to show success toast or navigate since OAuth redirects
+      // OAuth redirects will happen automatically
+      // Success toast will be shown after redirect completes
     } catch (error: any) {
-      console.error(error);
+      console.error("Apple sign-in error:", error);
       toast({
         title: "Error",
         description: error.message || "Could not sign in with Apple",
         variant: "destructive",
       });
+    } finally {
       setIsAppleLoading(false);
     }
   };
@@ -60,10 +62,11 @@ const SignInForm = () => {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
+      console.log("Initiating Google sign-in from SignInForm");
       await signInWithGoogle();
-      // Note: No need to show success toast or navigate since OAuth redirects
+      // OAuth redirects will happen automatically
     } catch (error: any) {
-      console.error(error);
+      console.error("Google sign-in error in form:", error);
       toast({
         title: "Error",
         description: error.message || "Could not sign in with Google",
