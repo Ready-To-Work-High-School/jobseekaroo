@@ -1,84 +1,176 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  HomeIcon,
+  Briefcase,
+  BookOpen,
+  LayoutDashboard,
+  ListChecks,
+  FileText,
+  Lightbulb,
+  GraduationCap,
+  ExternalLink,
+  Bell,
+  Building2,
+  HelpCircle,
+  LucideIcon
+} from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { useAuth } from '@/contexts/AuthContext';
-import { cn } from '@/lib/utils';
-import { Menu, Home, Search, Book, FileText, BookmarkCheck, User, Briefcase, GraduationCap } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from '@/components/ui/button';
 
-const MobileMenu = () => {
-  const { user, userProfile } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  const isEmployer = userProfile?.user_type === 'employer';
+interface MobileMenuProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
 
-  const mobileNavItems = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/jobs", label: "Find Jobs", icon: Search },
-    { href: "/entrepreneurship-academy", label: "Academy", icon: GraduationCap },
-    ...(user ? [
-      { href: "/applications", label: "Applications", icon: FileText },
-      { href: "/saved-jobs", label: "Saved Jobs", icon: BookmarkCheck },
-      { href: "/skills", label: "Skills", icon: Book },
-      { href: "/analytics", label: "Analytics", icon: Briefcase },
-      { href: "/profile", label: "Profile", icon: User },
-    ] : []),
-    ...(isEmployer ? [
-      { href: "/employer-dashboard", label: "Employer Dashboard", icon: Briefcase },
-    ] : [
-      { href: "/for-employers", label: "For Employers", icon: Briefcase },
-    ]),
-  ];
+const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
+  const { user, signOut } = useAuth();
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <Menu className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[250px] sm:w-[300px]">
-        <div className="flex flex-col gap-6 py-4">
-          <Link to="/" className="font-bold text-lg px-2 bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent">
-            Job Seekers 4 High Schools
-          </Link>
-          
-          <nav className="flex flex-col space-y-1">
-            {mobileNavItems.map((item, index) => (
+    <div>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-sm rounded-lg">
+          <DialogHeader>
+            <DialogTitle>Menu</DialogTitle>
+          </DialogHeader>
+          <nav className="flex flex-col space-y-1 py-4">
+            <Link 
+              to="/" 
+              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
+              <HomeIcon className="h-5 w-5 mr-3" />
+              Home
+            </Link>
+            
+            {user && (
               <Link 
-                key={index} 
-                to={item.href}
-                className={cn(
-                  "flex items-center gap-3 px-2 py-2 text-sm rounded-md hover:bg-accent",
-                  location.pathname === item.href ? "bg-accent text-accent-foreground font-medium" : "text-foreground"
-                )}
+                to="/dashboard" 
+                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                onClick={() => setIsOpen(false)}
               >
-                <item.icon className="h-4 w-4" />
-                {item.label}
+                <LayoutDashboard className="h-5 w-5 mr-3" />
+                Dashboard
               </Link>
-            ))}
+            )}
+
+            <Link 
+              to="/jobs" 
+              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
+              <Briefcase className="h-5 w-5 mr-3" />
+              Find Jobs
+            </Link>
+            
+            {user ? (
+              <>
+                <Link
+                  to="/skills"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <BookOpen className="h-5 w-5 mr-3" />
+                  Skills
+                </Link>
+                <Link
+                  to="/applications"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <ListChecks className="h-5 w-5 mr-3" />
+                  Applications
+                </Link>
+                <Link
+                  to="/resume"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FileText className="h-5 w-5 mr-3" />
+                  Resume
+                </Link>
+                <Link
+                  to="/saved-jobs"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Lightbulb className="h-5 w-5 mr-3" />
+                  Saved Jobs
+                </Link>
+                <Link
+                  to="/notifications"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Bell className="h-5 w-5 mr-3" />
+                  Notifications
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/resources"
+                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                onClick={() => setIsOpen(false)}
+              >
+                <BookOpen className="h-5 w-5 mr-3" />
+                Resources
+              </Link>
+            )}
+            <Link
+              to="/entrepreneurship-academy"
+              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
+              <GraduationCap className="h-5 w-5 mr-3" />
+              Academy
+            </Link>
+            {user ? (
+              <Button variant="ghost" className="justify-start px-4 py-2 hover:bg-accent rounded-md flex items-center" onClick={() => {
+                signOut();
+                setIsOpen(false);
+              }}>
+                <ExternalLink className="h-5 w-5 mr-3" />
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Link
+                  to="/sign-in"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <ExternalLink className="h-5 w-5 mr-3" />
+                  Sign In
+                </Link>
+                <Link
+                  to="/sign-up"
+                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Building2 className="h-5 w-5 mr-3" />
+                  Sign Up
+                </Link>
+              </>
+            )}
+            <Link
+              to="/faq"
+              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
+              <HelpCircle className="h-5 w-5 mr-3" />
+              FAQ
+            </Link>
           </nav>
-          
-          {!user && (
-            <div className="flex flex-col gap-2 px-2 mt-4">
-              <Link to="/sign-in" className={cn(
-                "text-sm font-medium py-2 px-4 rounded-md border border-input",
-                "hover:bg-accent hover:text-accent-foreground"
-              )}>
-                Sign In
-              </Link>
-              <Link to="/sign-up" className={cn(
-                "text-sm font-medium py-2 px-4 rounded-md bg-primary text-primary-foreground",
-                "hover:bg-primary/90"
-              )}>
-                Sign Up
-              </Link>
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

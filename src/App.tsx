@@ -1,74 +1,78 @@
-
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import NotFound from './pages/NotFound';
+import ForgotPassword from './pages/ForgotPassword';
 import JobListings from './pages/JobListings';
 import JobDetails from './pages/JobDetails';
-import Profile from './pages/Profile';
-import Skills from './pages/Skills';
 import Applications from './pages/Applications';
-import SavedJobs from './pages/SavedJobs';
+import Skills from './pages/Skills';
 import ResumeAssistant from './pages/ResumeAssistant';
-import Analytics from './pages/Analytics';
-import ForgotPassword from './pages/ForgotPassword';
 import ResumeBuilder from './pages/ResumeBuilder';
-import ForEmployers from './pages/ForEmployers';
-import EmployerDashboard from './pages/EmployerDashboard';
-import FAQ from './pages/FAQ';
-import License from './pages/License';
-import SuccessStories from './pages/SuccessStories';
+import InterviewPrep from './pages/InterviewPrep';
+import SavedJobs from './pages/SavedJobs';
+import Analytics from './pages/Analytics';
 import Resources from './pages/Resources';
 import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
-import InterviewPrep from './pages/InterviewPrep';
-import EnhancedJobListings from './pages/EnhancedJobListings';
-import { AuthProvider } from './contexts/AuthContext';
-import { NotificationsProvider } from './contexts/NotificationsContext';
-import { Toaster } from './components/ui/toaster';
-import RedemptionCode from './pages/RedemptionCode';
-import AccountBenefits from './pages/AccountBenefits';
-import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
 import Notifications from './pages/Notifications';
-import './styles/index.css';
+import ForEmployers from './pages/ForEmployers';
+import EnhancedJobListings from './pages/EnhancedJobListings';
+import SuccessStories from './pages/SuccessStories';
+import Profile from './pages/Profile';
+import EmployerDashboard from './pages/EmployerDashboard';
+import AccountBenefits from './pages/AccountBenefits';
+import FAQ from './pages/FAQ';
+import RedemptionCode from './pages/RedemptionCode';
+import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
+import License from './pages/License';
+import NotFound from './pages/NotFound';
+import { AuthProvider } from './contexts/AuthContext';
+import Dashboard from './pages/Dashboard';
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
   return (
     <Router>
       <AuthProvider>
-        <NotificationsProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/jobs" element={<JobListings />} />
-            <Route path="/enhanced-jobs" element={<EnhancedJobListings />} />
-            <Route path="/jobs/:id" element={<JobDetails />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/saved-jobs" element={<SavedJobs />} />
-            <Route path="/resume-assistant" element={<ResumeAssistant />} />
-            <Route path="/resume-builder" element={<ResumeBuilder />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/for-employers" element={<ForEmployers />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/license" element={<License />} />
-            <Route path="/success-stories" element={<SuccessStories />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
-            <Route path="/interview-prep" element={<InterviewPrep />} />
-            <Route path="/redeem-code" element={<RedemptionCode />} />
-            <Route path="/account-benefits" element={<AccountBenefits />} />
-            <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/notification-preferences" element={<Notifications />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Toaster />
-        </NotificationsProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/jobs" element={<JobListings />} />
+          <Route path="/jobs/:id" element={<JobDetails />} />
+          <Route path="/dashboard" element={<Dashboard />} /> {/* Add this line */}
+          <Route path="/applications" element={<Applications />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/resume" element={<ResumeAssistant />} />
+          <Route path="/resume/builder" element={<ResumeBuilder />} />
+          <Route path="/interview-prep" element={<InterviewPrep />} />
+          <Route path="/saved-jobs" element={<SavedJobs />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/for-employers" element={<ForEmployers />} />
+          <Route path="/enhanced-job-listings" element={<EnhancedJobListings />} />
+          <Route path="/success-stories" element={<SuccessStories />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+          <Route path="/account-benefits" element={<AccountBenefits />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/redemption-code" element={<RedemptionCode />} />
+          <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
+          <Route path="/license" element={<License />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </AuthProvider>
     </Router>
   );
