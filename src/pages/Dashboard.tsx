@@ -33,7 +33,17 @@ const Dashboard = () => {
       try {
         setIsLoading(true);
         const recommendations = await getSkillBasedJobRecommendations(user.id);
-        setSkillBasedJobs(recommendations);
+        
+        // Add validation to ensure we only set valid job recommendations
+        const validRecommendations = recommendations.filter(job => 
+          job && job.id && job.company && job.company.name
+        );
+        
+        if (validRecommendations.length !== recommendations.length) {
+          console.warn(`Filtered out ${recommendations.length - validRecommendations.length} invalid job recommendations`);
+        }
+        
+        setSkillBasedJobs(validRecommendations);
       } catch (error) {
         console.error('Error loading skill based recommendations:', error);
         toast({
@@ -41,6 +51,8 @@ const Dashboard = () => {
           description: 'Failed to load job recommendations based on your skills',
           variant: 'destructive',
         });
+        // Set empty array on error to prevent rendering with invalid data
+        setSkillBasedJobs([]);
       } finally {
         setIsLoading(false);
       }
