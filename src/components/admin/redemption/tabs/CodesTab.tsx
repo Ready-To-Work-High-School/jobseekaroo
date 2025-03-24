@@ -6,7 +6,7 @@ import AdvancedSearchFilters from '../filters/AdvancedSearchFilters';
 import RedemptionCodeActions from '../../RedemptionCodeActions';
 import RedemptionCodesTable from '../../RedemptionCodesTable';
 import RedemptionCodeGenerators from '../RedemptionCodeGenerators';
-import RedemptionCodeStats from '../analytics/RedemptionCodeStats';
+import RedemptionCodeStats from '../../RedemptionCodeStats'; // Fixed import path
 import Pagination from '../pagination/Pagination';
 import { RedemptionCode } from '@/types/redemption';
 
