@@ -12,7 +12,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Lock, Check, AlertTriangle } from 'lucide-react';
 
-const RedemptionCodeForm: React.FC = () => {
+interface RedemptionCodeFormProps {
+  redirectTo?: string;
+}
+
+const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/dashboard' }) => {
   const [code, setCode] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<{
@@ -106,9 +110,9 @@ const RedemptionCodeForm: React.FC = () => {
       description: 'Code redeemed successfully!',
     });
     
-    // Redirect to appropriate page based on code type
+    // Redirect to appropriate page based on code type or the redirectTo prop
     if (validationResult.code.type === 'student') {
-      navigate('/dashboard');
+      navigate(redirectTo || '/dashboard');
     } else {
       navigate('/employer-dashboard');
     }
