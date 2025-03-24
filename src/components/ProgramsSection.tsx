@@ -1,4 +1,3 @@
-
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -53,7 +52,7 @@ const ProgramsSection = () => {
                   </h3>
                 </div>
                 
-                <p className="font-medium text-lg mb-6">
+                <p className="font-medium text-lg mb-6 text-zinc-800">
                   Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
