@@ -7,9 +7,14 @@ import { useToast } from '@/hooks/use-toast';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRoles?: string[];
+  adminOnly?: boolean;
 }
 
-const ProtectedRoute = ({ children, requiredRoles = [] }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ 
+  children, 
+  requiredRoles = [],
+  adminOnly = false
+}: ProtectedRouteProps) => {
   const { user, isLoading, userProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,9 +34,22 @@ const ProtectedRoute = ({ children, requiredRoles = [] }: ProtectedRouteProps) =
         });
         
         navigate('/sign-in');
+        return;
       }
       
-      // Role-based authorization check (if roles system is implemented in the future)
+      // Admin-only pages check
+      if (adminOnly && userProfile?.user_type !== 'admin') {
+        toast({
+          title: "Admin Access Only",
+          description: "You don't have administrative privileges to access this page.",
+          variant: "destructive",
+        });
+        
+        navigate('/');
+        return;
+      }
+      
+      // Role-based authorization check
       if (requiredRoles.length > 0 && userProfile) {
         const hasRequiredRole = userProfile.user_type && requiredRoles.includes(userProfile.user_type);
         
@@ -43,10 +61,11 @@ const ProtectedRoute = ({ children, requiredRoles = [] }: ProtectedRouteProps) =
           });
           
           navigate('/');
+          return;
         }
       }
     }
-  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile]);
+  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly]);
   
   // Show loading indicator while checking authentication
   if (isLoading) {
@@ -57,7 +76,7 @@ const ProtectedRoute = ({ children, requiredRoles = [] }: ProtectedRouteProps) =
     );
   }
   
-  // Only render children if user is authenticated
+  // Only render children if user is authenticated and authorized
   return user ? <>{children}</> : null;
 };
 

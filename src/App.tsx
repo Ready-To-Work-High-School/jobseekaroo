@@ -28,6 +28,8 @@ const FAQ = lazy(() => import('./pages/FAQ'));
 const SuccessStories = lazy(() => import('./pages/SuccessStories'));
 const EntrepreneurshipAcademy = lazy(() => import('./pages/EntrepreneurshipAcademy'));
 const License = lazy(() => import('./pages/License'));
+const RedemptionCode = lazy(() => import('./pages/RedemptionCode'));
+const AdminRedemptionCodes = lazy(() => import('./pages/AdminRedemptionCodes'));
 
 // Loading component
 const PageLoader = () => (
@@ -58,6 +60,7 @@ function App() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/success-stories" element={<SuccessStories />} />
                 <Route path="/license" element={<License />} />
+                <Route path="/redeem-code" element={<RedemptionCode />} />
                 
                 {/* Protected Routes */}
                 <Route path="/jobs" element={
@@ -109,6 +112,11 @@ function App() {
                   <ProtectedRoute>
                     <SavedJobs />
                   </ProtectedRoute>
+                } />
+                
+                {/* Admin Routes */}
+                <Route path="/admin/redemption-codes" element={
+                  <AdminRedemptionCodes />
                 } />
                 
                 {/* 404 Page */}
