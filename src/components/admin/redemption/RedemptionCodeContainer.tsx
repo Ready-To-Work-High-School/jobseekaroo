@@ -13,8 +13,6 @@ import RedemptionCodesPagination from './RedemptionCodesPagination';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 
 const RedemptionCodeContainer: React.FC = () => {
-  const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
-  const [expireDays, setExpireDays] = useState<number>(30);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
   const {
@@ -40,7 +38,13 @@ const RedemptionCodeContainer: React.FC = () => {
     handleDeleteSelectedCodes,
     fetchCodes,
     formatDate,
-    exportCodes
+    exportCodes,
+    
+    // Type controls
+    codeType,
+    setCodeType,
+    expireDays,
+    setExpireDays
   } = useRedemptionCodes();
 
   const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
@@ -58,8 +62,8 @@ const RedemptionCodeContainer: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <RedemptionCodeGenerator
-          onGenerateCode={() => handleGenerateCode(codeType, expireDays)}
-          onBulkGenerate={(amount) => handleBulkGenerate(amount, codeType, expireDays)}
+          onGenerateCode={handleGenerateCode}
+          onBulkGenerate={handleBulkGenerate}
           isGenerating={isGenerating}
           codeType={codeType}
           setCodeType={setCodeType}
@@ -82,7 +86,7 @@ const RedemptionCodeContainer: React.FC = () => {
             <RedemptionCodeActions
               selectedCount={selectedCodes.length}
               onRefresh={fetchCodes}
-              onExport={exportCodes}
+              onExport={() => exportCodes(codes)}
               onPrint={() => window.print()}
               onEmailSelected={() => handleBulkEmail(selectedCodes)}
               onDeleteSelected={handleShowDeleteDialog}
