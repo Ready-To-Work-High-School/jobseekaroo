@@ -85,6 +85,22 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
     expiring: { color: '#ef4444' },
   };
 
+  // Custom tooltip formatter for percentage calculations
+  const formatPieTooltipContent = (payload: any) => {
+    if (payload && payload.length > 0) {
+      const total = totalCodes;
+      const item = payload[0];
+      const percent = total > 0 ? Math.round((item.value / total) * 100) : 0;
+      return (
+        <ChartTooltipContent
+          title={item.name}
+          content={`${item.value} (${percent}%)`}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Redemption Code Analytics</h2>
@@ -176,12 +192,7 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
                   <ChartTooltip 
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
-                        return (
-                          <ChartTooltipContent
-                            title="Code Distribution"
-                            content={`${payload[0].name}: ${payload[0].value} (${((payload[0].value / totalCodes) * 100).toFixed(1)}%)`}
-                          />
-                        );
+                        return formatPieTooltipContent(payload);
                       }
                       return null;
                     }}
@@ -218,12 +229,7 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
                   <ChartTooltip 
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
-                        return (
-                          <ChartTooltipContent
-                            title="Code Type"
-                            content={`${payload[0].name}: ${payload[0].value} (${((payload[0].value / totalCodes) * 100).toFixed(1)}%)`}
-                          />
-                        );
+                        return formatPieTooltipContent(payload);
                       }
                       return null;
                     }}
