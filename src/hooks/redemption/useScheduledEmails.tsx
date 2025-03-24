@@ -46,7 +46,7 @@ export function useScheduledEmails() {
         .filter(email => email);
       
       // Store the scheduled email in the database
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('scheduled_emails')
         .insert({
           recipients: recipientArray,
@@ -100,11 +100,11 @@ export function useScheduledEmails() {
         recipients: item.recipients,
         subject: item.subject,
         message: item.message,
-        codeType: item.code_type,
+        codeType: item.code_type as 'student' | 'employer',
         amount: item.amount,
         expiresInDays: item.expires_in_days,
         scheduleDate: new Date(item.schedule_date),
-        status: item.status,
+        status: item.status as 'pending' | 'sent' | 'failed',
         createdAt: new Date(item.created_at)
       }));
       
