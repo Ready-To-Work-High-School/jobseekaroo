@@ -40,9 +40,12 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
             Messages
           </Link>
           {isAdmin && (
-            <Link to="/admin" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent flex items-center gap-1 bg-primary text-primary-foreground">
+            <Link 
+              to="/admin" 
+              className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent/90 flex items-center gap-1 bg-red-600 text-white font-bold"
+            >
               <Shield className="h-4 w-4" />
-              <span>Admin</span>
+              <span>Admin Panel</span>
             </Link>
           )}
         </>

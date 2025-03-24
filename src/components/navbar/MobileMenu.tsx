@@ -1,4 +1,3 @@
-
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -21,12 +20,14 @@ import {
   BookMarked,
   CheckSquare,
   User,
-  LogOut
+  LogOut,
+  Shield
 } from 'lucide-react';
 
 export const MobileMenu = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userProfile } = useAuth();
   const navigate = useNavigate();
+  const isAdmin = userProfile?.user_type === 'admin';
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
@@ -65,6 +66,13 @@ export const MobileMenu = () => {
             <FileText className="h-5 w-5" />
             Resume Assistant
           </MobileNavLink>
+          
+          {user && isAdmin && (
+            <MobileNavLink to="/admin" className="text-white bg-red-600 hover:bg-red-700 my-2">
+              <Shield className="h-5 w-5" />
+              Admin Panel
+            </MobileNavLink>
+          )}
           
           {user ? (
             <>

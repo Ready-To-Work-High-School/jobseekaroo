@@ -13,7 +13,7 @@ import {
   Bell,
   Building2,
   HelpCircle,
-  LucideIcon
+  Shield
 } from 'lucide-react';
 import {
   Dialog,
@@ -31,7 +31,8 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userProfile } = useAuth();
+  const isAdmin = userProfile?.user_type === 'admin';
 
   return (
     <div>
@@ -158,6 +159,16 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                   Sign Up
                 </Link>
               </>
+            )}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md flex items-center font-bold"
+                onClick={() => setIsOpen(false)}
+              >
+                <Shield className="h-5 w-5 mr-3" />
+                Admin Panel
+              </Link>
             )}
             <Link
               to="/faq"
