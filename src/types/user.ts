@@ -10,7 +10,7 @@ export interface UserProfile {
   user_type?: 'student' | 'employer' | 'admin' | 'teacher' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
-  redeemed_at?: Date;
+  redeemed_at?: string;
   redeemed_code?: string;
 }
 
@@ -23,6 +23,8 @@ export interface UserProfileUpdate {
   skills?: string[];
   preferences?: Record<string, any>;
   user_type?: 'student' | 'employer' | 'admin' | 'teacher';
+  redeemed_at?: string;
+  redeemed_code?: string;
 }
 
 export interface SavedSearch {

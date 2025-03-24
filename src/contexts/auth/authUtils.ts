@@ -39,9 +39,17 @@ export const updateUserProfile = async (
   userId: string,
   profileData: Partial<UserProfile>
 ): Promise<UserProfile | null> => {
+  // Convert Date objects to ISO strings if needed
+  const formattedData: Record<string, any> = { ...profileData };
+  
+  // If redeemed_at is a Date object, convert it to ISO string
+  if (profileData.redeemed_at instanceof Date) {
+    formattedData.redeemed_at = profileData.redeemed_at.toISOString();
+  }
+  
   const { data, error } = await supabase
     .from('profiles')
-    .update(profileData)
+    .update(formattedData)
     .eq('id', userId)
     .select()
     .single();

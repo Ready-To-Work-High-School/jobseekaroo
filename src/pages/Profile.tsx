@@ -38,6 +38,7 @@ import { useFadeIn } from '@/utils/animations';
 import JobCard from '@/components/JobCard';
 import { Job } from '@/types/job';
 import { getJobById } from '@/lib/mock-data';
+import UserBenefitsCard from '@/components/user/UserBenefitsCard';
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -81,7 +80,7 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({
       if (user) {
         await updateUserProfile(user.id, {
           user_type: validation.code.type,
-          redeemed_at: new Date(),
+          redeemed_at: new Date().toISOString(),
           redeemed_code: validation.code.code
         });
       }
