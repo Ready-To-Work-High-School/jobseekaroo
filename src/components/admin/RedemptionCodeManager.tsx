@@ -23,7 +23,9 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Download, Filter, Info, Printer, RefreshCcw, Copy, UserCircle, Briefcase, AlertCircle, CheckCircle, CalendarIcon } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Download, Filter, Info, Printer, RefreshCcw, Copy, UserCircle, Briefcase, AlertCircle, CheckCircle, CalendarIcon, Mail } from 'lucide-react';
+import EmailRedemptionCodeDialog from './EmailRedemptionCodeDialog';
 
 const RedemptionCodeManager: React.FC = () => {
   const [codes, setCodes] = useState<RedemptionCode[]>([]);
@@ -35,6 +37,10 @@ const RedemptionCodeManager: React.FC = () => {
   const [showCodeDetails, setShowCodeDetails] = useState(false);
   const [bulkGenerateAmount, setBulkGenerateAmount] = useState<number>(5);
   const [showBulkDialog, setShowBulkDialog] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [emailSelectedCode, setEmailSelectedCode] = useState<RedemptionCode | null>(null);
+  const [selectedCodes, setSelectedCodes] = useState<RedemptionCode[]>([]);
+  const [allSelected, setAllSelected] = useState(false);
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<string>('all');
   
@@ -188,6 +194,47 @@ const RedemptionCodeManager: React.FC = () => {
     setShowCodeDetails(true);
   };
 
+  const handleEmailCode = (code: RedemptionCode) => {
+    setEmailSelectedCode(code);
+    setShowEmailDialog(true);
+  };
+
+  const handleBulkEmail = () => {
+    if (selectedCodes.length === 0) {
+      toast({
+        title: 'No codes selected',
+        description: 'Please select at least one code to email',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    setEmailSelectedCode(null);
+    setShowEmailDialog(true);
+  };
+
+  const handleSelectCode = (code: RedemptionCode, isSelected: boolean) => {
+    if (isSelected) {
+      setSelectedCodes(prev => [...prev, code]);
+    } else {
+      setSelectedCodes(prev => prev.filter(c => c.id !== code.id));
+    }
+  };
+
+  const handleSelectAll = (isSelected: boolean) => {
+    setAllSelected(isSelected);
+    if (isSelected) {
+      setSelectedCodes(codes);
+    } else {
+      setSelectedCodes([]);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedCodes([]);
+    setAllSelected(false);
+  }, [activeTab]);
+
   const formatDate = (dateString?: Date | string) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -338,6 +385,13 @@ const RedemptionCodeManager: React.FC = () => {
                   Print
                 </Button>
               </div>
+              
+              {selectedCodes.length > 0 && (
+                <Button variant="secondary" size="sm" onClick={handleBulkEmail}>
+                  <Mail className="h-4 w-4 mr-2" />
+                  Email Selected ({selectedCodes.length})
+                </Button>
+              )}
             </div>
 
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
@@ -363,6 +417,13 @@ const RedemptionCodeManager: React.FC = () => {
                     <Table>
                       <TableHeader>
                         <TableRow>
+                          <TableHead className="w-10">
+                            <Checkbox 
+                              checked={allSelected} 
+                              onCheckedChange={handleSelectAll}
+                              aria-label="Select all codes"
+                            />
+                          </TableHead>
                           <TableHead>Code</TableHead>
                           <TableHead>Type</TableHead>
                           <TableHead>Status</TableHead>
@@ -373,45 +434,69 @@ const RedemptionCodeManager: React.FC = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {codes.map((code) => (
-                          <TableRow key={code.id}>
-                            <TableCell className="font-mono font-medium">
-                              <div className="flex items-center gap-1">
-                                {code.code}
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-6 w-6" 
-                                  onClick={() => handleCopyCode(code.code)}
-                                >
-                                  <Copy className="h-3.5 w-3.5" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={code.type === 'student' ? 'default' : 'outline'}>
-                                {code.type === 'student' ? 'Student' : 'Employer'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={code.used ? 'destructive' : 'success'}>
-                                {code.used ? 'Used' : 'Available'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>{formatDate(code.createdAt)}</TableCell>
-                            <TableCell>{formatDate(code.expiresAt)}</TableCell>
-                            <TableCell>{code.usedBy || 'N/A'}</TableCell>
-                            <TableCell className="text-right">
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => handleViewDetails(code)}
-                              >
-                                Details
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {codes.map((code) => {
+                          const isSelected = selectedCodes.some(c => c.id === code.id);
+                          return (
+                            <TableRow key={code.id}>
+                              <TableCell>
+                                <Checkbox 
+                                  checked={isSelected}
+                                  onCheckedChange={(checked) => handleSelectCode(code, !!checked)}
+                                  aria-label={`Select code ${code.code}`}
+                                  disabled={code.used}
+                                />
+                              </TableCell>
+                              <TableCell className="font-mono font-medium">
+                                <div className="flex items-center gap-1">
+                                  {code.code}
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-6 w-6" 
+                                    onClick={() => handleCopyCode(code.code)}
+                                  >
+                                    <Copy className="h-3.5 w-3.5" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={code.type === 'student' ? 'default' : 'outline'}>
+                                  {code.type === 'student' ? 'Student' : 'Employer'}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={code.used ? 'destructive' : 'success'}>
+                                  {code.used ? 'Used' : 'Available'}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{formatDate(code.createdAt)}</TableCell>
+                              <TableCell>{formatDate(code.expiresAt)}</TableCell>
+                              <TableCell>{code.usedBy || 'N/A'}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end items-center space-x-2">
+                                  {!code.used && (
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm"
+                                      className="h-8 px-2"
+                                      onClick={() => handleEmailCode(code)}
+                                    >
+                                      <Mail className="h-3.5 w-3.5" />
+                                      <span className="sr-only">Email Code</span>
+                                    </Button>
+                                  )}
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={() => handleViewDetails(code)}
+                                  >
+                                    Details
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                       </TableBody>
                     </Table>
                   </div>
@@ -511,6 +596,13 @@ const RedemptionCodeManager: React.FC = () => {
           )}
         </DialogContent>
       </Dialog>
+      
+      <EmailRedemptionCodeDialog 
+        isOpen={showEmailDialog}
+        onClose={() => setShowEmailDialog(false)}
+        code={emailSelectedCode || undefined}
+        selectedCodes={emailSelectedCode ? [] : selectedCodes}
+      />
     </div>
   );
 };
