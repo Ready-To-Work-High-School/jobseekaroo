@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   HomeIcon,
   Briefcase,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/dialog"
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -33,6 +35,12 @@ interface MobileMenuProps {
 const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
   const { user, signOut, userProfile } = useAuth();
   const isAdmin = userProfile?.user_type === 'admin';
+  const location = useLocation();
+  
+  // Debug logs
+  console.log("MobileMenu - User profile:", userProfile);
+  console.log("MobileMenu - Is admin:", isAdmin);
+  console.log("MobileMenu - Current path:", location.pathname);
 
   return (
     <div>
@@ -44,7 +52,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
           <nav className="flex flex-col space-y-1 py-4">
             <Link 
               to="/" 
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              className={cn(
+                "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                location.pathname === "/" && "bg-accent/70"
+              )}
               onClick={() => setIsOpen(false)}
             >
               <HomeIcon className="h-5 w-5 mr-3" />
@@ -54,7 +65,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
             {user && (
               <Link 
                 to="/dashboard" 
-                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                className={cn(
+                  "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                  location.pathname === "/dashboard" && "bg-accent/70"
+                )}
                 onClick={() => setIsOpen(false)}
               >
                 <LayoutDashboard className="h-5 w-5 mr-3" />
@@ -64,7 +78,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
 
             <Link 
               to="/jobs" 
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              className={cn(
+                "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                location.pathname === "/jobs" && "bg-accent/70"
+              )}
               onClick={() => setIsOpen(false)}
             >
               <Briefcase className="h-5 w-5 mr-3" />
@@ -75,7 +92,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
               <>
                 <Link
                   to="/skills"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/skills" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <BookOpen className="h-5 w-5 mr-3" />
@@ -83,7 +103,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
                 <Link
                   to="/applications"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/applications" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <ListChecks className="h-5 w-5 mr-3" />
@@ -91,7 +114,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
                 <Link
                   to="/resume"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/resume" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <FileText className="h-5 w-5 mr-3" />
@@ -99,7 +125,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
                 <Link
                   to="/saved-jobs"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/saved-jobs" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <Lightbulb className="h-5 w-5 mr-3" />
@@ -107,17 +136,36 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
                 <Link
                   to="/notifications"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/notifications" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <Bell className="h-5 w-5 mr-3" />
                   Notifications
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className={cn(
+                      "px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md flex items-center font-bold",
+                      location.pathname.startsWith("/admin") && "bg-red-700"
+                    )}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Shield className="h-5 w-5 mr-3" />
+                    Admin Panel
+                  </Link>
+                )}
               </>
             ) : (
               <Link
                 to="/resources"
-                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                className={cn(
+                  "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                  location.pathname === "/resources" && "bg-accent/70"
+                )}
                 onClick={() => setIsOpen(false)}
               >
                 <BookOpen className="h-5 w-5 mr-3" />
@@ -126,7 +174,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
             )}
             <Link
               to="/entrepreneurship-academy"
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              className={cn(
+                "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                location.pathname === "/entrepreneurship-academy" && "bg-accent/70"
+              )}
               onClick={() => setIsOpen(false)}
             >
               <GraduationCap className="h-5 w-5 mr-3" />
@@ -144,7 +195,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
               <>
                 <Link
                   to="/sign-in"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/sign-in" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <ExternalLink className="h-5 w-5 mr-3" />
@@ -152,7 +206,10 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
                 <Link
                   to="/sign-up"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+                  className={cn(
+                    "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                    location.pathname === "/sign-up" && "bg-accent/70"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <Building2 className="h-5 w-5 mr-3" />
@@ -160,19 +217,12 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
                 </Link>
               </>
             )}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md flex items-center font-bold"
-                onClick={() => setIsOpen(false)}
-              >
-                <Shield className="h-5 w-5 mr-3" />
-                Admin Panel
-              </Link>
-            )}
             <Link
               to="/faq"
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
+              className={cn(
+                "px-4 py-2 hover:bg-accent rounded-md flex items-center",
+                location.pathname === "/faq" && "bg-accent/70"
+              )}
               onClick={() => setIsOpen(false)}
             >
               <HelpCircle className="h-5 w-5 mr-3" />
