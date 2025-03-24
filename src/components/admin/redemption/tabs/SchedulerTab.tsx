@@ -1,19 +1,11 @@
 
 import React from 'react';
 import EmailScheduler from '../scheduling/EmailScheduler';
+import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface SchedulerTabProps {
   isScheduling: boolean;
-  onSchedule: (params: {
-    recipients: string;
-    subject: string;
-    message: string;
-    codeType: 'student' | 'employer';
-    amount: number;
-    expiresInDays: number;
-    scheduleDate: Date;
-    scheduleTime: string;
-  }) => Promise<void>;
+  onSchedule: (params: ScheduleEmailParams) => Promise<boolean>;
 }
 
 const SchedulerTab: React.FC<SchedulerTabProps> = ({

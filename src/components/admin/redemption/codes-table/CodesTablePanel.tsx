@@ -59,11 +59,22 @@ const CodesTablePanel: React.FC<CodesTablePanelProps> = ({
   onPageSizeChange,
   isDeleting
 }) => {
+  // Get count of codes by status for badges
+  const unusedCount = codes.filter(code => !code.used).length;
+  const usedCount = codes.filter(code => code.used).length;
+  const studentCount = codes.filter(code => code.type === 'student').length;
+  const employerCount = codes.filter(code => code.type === 'employer').length;
+
   return (
     <div className="space-y-4">
       <RedemptionCodeTabsList 
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
+        totalCodes={totalCodes}
+        unusedCount={unusedCount}
+        usedCount={usedCount}
+        studentCount={studentCount}
+        employerCount={employerCount}
+        value={activeTab}
+        onValueChange={setActiveTab}
       />
       
       <RedemptionCodeActions

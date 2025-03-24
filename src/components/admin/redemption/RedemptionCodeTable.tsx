@@ -27,6 +27,7 @@ interface RedemptionCodeTableProps {
   onCopyCode: (code: string) => void;
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
+  onViewQRCode: (code: RedemptionCode) => void;
   onRefresh: () => Promise<void>;
   onExport: () => void;
   onPrint: () => void;
@@ -52,6 +53,7 @@ const RedemptionCodeTable: React.FC<RedemptionCodeTableProps> = ({
   onCopyCode,
   onEmailCode,
   onViewDetails,
+  onViewQRCode,
   onRefresh,
   onExport,
   onPrint,
@@ -127,6 +129,7 @@ const RedemptionCodeTable: React.FC<RedemptionCodeTableProps> = ({
                   onCopyCode={onCopyCode}
                   onEmailCode={onEmailCode}
                   onViewDetails={onViewDetails}
+                  onViewQRCode={onViewQRCode}
                 />
               ) : (
                 <RedemptionCodeNoResults />

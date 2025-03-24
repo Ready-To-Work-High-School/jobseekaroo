@@ -9,6 +9,8 @@ interface RedemptionCodeTabsListProps {
   usedCount: number;
   studentCount: number;
   employerCount: number;
+  value?: string;
+  onValueChange?: (value: string) => void;
 }
 
 const RedemptionCodeTabsList: React.FC<RedemptionCodeTabsListProps> = ({
@@ -16,38 +18,40 @@ const RedemptionCodeTabsList: React.FC<RedemptionCodeTabsListProps> = ({
   unusedCount,
   usedCount,
   studentCount,
-  employerCount
+  employerCount,
+  value = 'all',
+  onValueChange
 }) => {
   return (
-    <TabsList className="mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap h-auto p-1">
-      <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
-        All Codes
-        <Badge variant="outline" className="ml-2 bg-background text-foreground">
+    <TabsList className="mb-4 grid grid-cols-5 sm:w-auto w-full">
+      <TabsTrigger value="all" onClick={() => onValueChange?.('all')}>
+        All
+        <Badge variant="outline" className="ml-2 py-0 px-2 h-5 text-xs">
           {totalCodes}
         </Badge>
       </TabsTrigger>
-      <TabsTrigger value="unused" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
+      <TabsTrigger value="unused" onClick={() => onValueChange?.('unused')}>
         Unused
-        <Badge variant="outline" className="ml-2 bg-background text-foreground">
-          {totalCodes > 0 ? unusedCount : '—'}
+        <Badge variant="outline" className="ml-2 py-0 px-2 h-5 text-xs">
+          {unusedCount}
         </Badge>
       </TabsTrigger>
-      <TabsTrigger value="used" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
+      <TabsTrigger value="used" onClick={() => onValueChange?.('used')}>
         Used
-        <Badge variant="outline" className="ml-2 bg-background text-foreground">
-          {totalCodes > 0 ? usedCount : '—'}
+        <Badge variant="outline" className="ml-2 py-0 px-2 h-5 text-xs">
+          {usedCount}
         </Badge>
       </TabsTrigger>
-      <TabsTrigger value="students" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
+      <TabsTrigger value="students" onClick={() => onValueChange?.('students')}>
         Students
-        <Badge variant="outline" className="ml-2 bg-background text-foreground">
-          {totalCodes > 0 ? studentCount : '—'}
+        <Badge variant="outline" className="ml-2 py-0 px-2 h-5 text-xs">
+          {studentCount}
         </Badge>
       </TabsTrigger>
-      <TabsTrigger value="employers" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-[120px]">
+      <TabsTrigger value="employers" onClick={() => onValueChange?.('employers')}>
         Employers
-        <Badge variant="outline" className="ml-2 bg-background text-foreground">
-          {totalCodes > 0 ? employerCount : '—'}
+        <Badge variant="outline" className="ml-2 py-0 px-2 h-5 text-xs">
+          {employerCount}
         </Badge>
       </TabsTrigger>
     </TabsList>

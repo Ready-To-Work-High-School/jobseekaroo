@@ -38,6 +38,7 @@ interface CodesTabProps {
   onCopyCode: (code: string) => void;
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
+  onViewQRCode: (code: RedemptionCode) => void;
   onCodeGeneration: () => Promise<void>;
   onBulkGeneration: (amount: number) => Promise<void>;
   onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
@@ -74,6 +75,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
   onCopyCode,
   onEmailCode,
   onViewDetails,
+  onViewQRCode,
   onCodeGeneration,
   onBulkGeneration,
   onAutomatedGeneration,
@@ -135,6 +137,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
             onCopyCode={onCopyCode}
             onEmailCode={onEmailCode}
             onViewDetails={onViewDetails}
+            onViewQRCode={onViewQRCode}
             onRefresh={onRefresh}
             onExport={onExport}
             onPrint={onPrint}

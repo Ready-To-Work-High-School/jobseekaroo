@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
 import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
 import { useCodeDetailView } from './useCodeDetailView';
+import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionContainerHandlersProps {
   handleGenerateCode: (type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode | null>;
@@ -25,7 +26,7 @@ interface RedemptionContainerHandlersProps {
   closeDeleteDialog: () => void;
   formatDate: (date?: Date | string) => string;
   exportCodes: (codes: RedemptionCode[], format?: 'csv' | 'json' | 'txt') => Promise<void>;
-  scheduleEmail: (params: any) => Promise<boolean>;
+  scheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
   isScheduling: boolean;
 }
 
@@ -73,10 +74,12 @@ export function useRedemptionContainerHandlers({
     handleConfirmDelete
   } = useDeleteCodeHandler({
     handleDeleteSelectedCodes,
+    selectedCodes,
     selectedForDelete,
-    closeDeleteDialog,
+    fetchCodes,
     clearSelection,
-    fetchCodes
+    openDeleteDialog,
+    closeDeleteDialog
   });
   
   // Handle copying code to clipboard

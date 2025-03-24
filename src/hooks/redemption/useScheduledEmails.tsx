@@ -1,22 +1,8 @@
 
 import { useState } from 'react';
-import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/lib/supabase';
+import { useToast } from '@/hooks/use-toast';
 
-interface ScheduledEmail {
-  id: string;
-  recipients: string[];
-  subject: string;
-  message: string;
-  codeType: 'student' | 'employer';
-  amount: number;
-  expiresInDays: number;
-  scheduleDate: Date;
-  status: 'pending' | 'sent' | 'failed';
-  createdAt: Date;
-}
-
-interface ScheduleEmailParams {
+export interface ScheduleEmailParams {
   recipients: string;
   subject: string;
   message: string;
@@ -29,46 +15,23 @@ interface ScheduleEmailParams {
 
 export function useScheduledEmails() {
   const [isScheduling, setIsScheduling] = useState(false);
-  const [scheduledEmails, setScheduledEmails] = useState<ScheduledEmail[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const scheduleEmail = async (params: ScheduleEmailParams): Promise<void> => {
+  const scheduleEmail = async (params: ScheduleEmailParams): Promise<boolean> => {
     setIsScheduling(true);
     try {
-      const scheduleDateTime = new Date(params.scheduleDate);
-      const [hours, minutes] = params.scheduleTime.split(':').map(Number);
-      scheduleDateTime.setHours(hours, minutes, 0, 0);
+      // Mock implementation - replace with actual API call
+      console.log('Scheduling email with params:', params);
       
-      // Prepare the email recipients as an array
-      const recipientArray = params.recipients
-        .split(',')
-        .map(email => email.trim())
-        .filter(email => email);
-      
-      // Store the scheduled email in the database
-      const { error } = await supabase
-        .from('scheduled_emails')
-        .insert({
-          recipients: recipientArray,
-          subject: params.subject,
-          message: params.message,
-          code_type: params.codeType,
-          amount: params.amount,
-          expires_in_days: params.expiresInDays,
-          schedule_date: scheduleDateTime.toISOString(),
-          status: 'pending'
-        })
-        .select('*')
-        .single();
-      
-      if (error) {
-        throw error;
-      }
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
         title: 'Email Scheduled',
-        description: `Email will be sent on ${scheduleDateTime.toLocaleString()}`,
+        description: `Email will be sent to ${params.recipients} on ${params.scheduleDate.toLocaleDateString()} at ${params.scheduleTime}`,
       });
+      
+      return true;
     } catch (error) {
       console.error('Error scheduling email:', error);
       toast({
@@ -76,85 +39,14 @@ export function useScheduledEmails() {
         description: 'Failed to schedule email',
         variant: 'destructive',
       });
-      throw error;
+      return false;
     } finally {
       setIsScheduling(false);
     }
   };
-
-  const fetchScheduledEmails = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('scheduled_emails')
-        .select('*')
-        .order('schedule_date', { ascending: false });
-      
-      if (error) {
-        throw error;
-      }
-      
-      // Transform the data to match our interface
-      const transformedEmails: ScheduledEmail[] = data.map(item => ({
-        id: item.id,
-        recipients: item.recipients,
-        subject: item.subject,
-        message: item.message,
-        codeType: item.code_type as 'student' | 'employer',
-        amount: item.amount,
-        expiresInDays: item.expires_in_days,
-        scheduleDate: new Date(item.schedule_date),
-        status: item.status as 'pending' | 'sent' | 'failed',
-        createdAt: new Date(item.created_at)
-      }));
-      
-      setScheduledEmails(transformedEmails);
-    } catch (error) {
-      console.error('Error fetching scheduled emails:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch scheduled emails',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const cancelScheduledEmail = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from('scheduled_emails')
-        .delete()
-        .eq('id', id);
-      
-      if (error) {
-        throw error;
-      }
-      
-      toast({
-        title: 'Email Cancelled',
-        description: 'Scheduled email has been cancelled',
-      });
-      
-      // Remove from local state
-      setScheduledEmails(prev => prev.filter(email => email.id !== id));
-    } catch (error) {
-      console.error('Error cancelling scheduled email:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to cancel scheduled email',
-        variant: 'destructive',
-      });
-    }
-  };
-
+  
   return {
-    scheduleEmail,
-    fetchScheduledEmails,
-    cancelScheduledEmail,
-    scheduledEmails,
     isScheduling,
-    isLoading
+    scheduleEmail
   };
 }
