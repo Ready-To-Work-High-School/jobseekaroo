@@ -48,9 +48,9 @@ client_id = ""
 secret = ""
 
 [auth.external.google]
-enabled = false
-client_id = "placeholder-client-id"
-secret = "placeholder-secret"
+enabled = true
+client_id = "your-client-id-here"
+secret = "your-client-secret-here"
 
 [functions]
 [functions.send-email]
