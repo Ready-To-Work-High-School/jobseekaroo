@@ -7,22 +7,13 @@ import {
   useRedemptionCodeUtils,
   useRedemptionCodeDialog
 } from '@/hooks/redemption';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAdvancedCodeFiltering } from '@/hooks/redemption/useAdvancedCodeFiltering';
 import { useBulkExport } from '@/hooks/redemption/useBulkExport';
 import { useScheduledEmails } from '@/hooks/redemption/useScheduledEmails';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
-import { useCodeOperationHandlers } from './hooks/useCodeOperationHandlers';
-import { useCodeDetailView } from './hooks/useCodeDetailView';
-import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
-import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
-
-// Import tab components
-import CodesTab from './tabs/CodesTab';
-import AnalyticsTab from './tabs/AnalyticsTab';
-import ReportsTab from './tabs/ReportsTab';
-import WizardTab from './tabs/WizardTab';
-import SchedulerTab from './tabs/SchedulerTab';
+import RedemptionTabManager from './RedemptionTabManager';
+import { useRedemptionContainerHandlers } from './hooks/useRedemptionContainerHandlers';
+import { prepareDefaultUsageData, prepareDefaultGenerationData } from './analytics/utils/chartData';
 
 const RedemptionCodeContainer: React.FC = () => {
   const [activeTab, setActiveTab] = useState('codes');
@@ -83,125 +74,63 @@ const RedemptionCodeContainer: React.FC = () => {
   const [codeType, setCodeType] = React.useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = React.useState<number>(30);
 
-  // Use code generation handlers
+  // Prepare mock usage data for demo purposes - this would normally come from the API
+  const usageOverTime = prepareDefaultUsageData();
+  const generationOverTime = prepareDefaultGenerationData();
+
+  // Use our new handlers hook
   const {
-    handleCodeGeneration,
-    handleBulkGeneration,
-    handleAutomatedGeneration,
-    handleWizardGeneration
-  } = useCodeGenerationHandler({
+    handlers,
+    detailsView,
+    handleConfirmDelete
+  } = useRedemptionContainerHandlers({
     handleGenerateCode,
     handleBulkGenerate,
     handleAutomatedCodeGeneration,
+    handleDeleteSelectedCodes,
     codeType,
     expireDays,
-    updateCodes,
-    fetchCodes
-  });
-
-  // Use delete handlers
-  const {
-    handleShowDeleteDialog,
-    handleConfirmDelete
-  } = useDeleteCodeHandler({
-    handleDeleteSelectedCodes,
     selectedCodes,
     selectedForDelete,
+    filteredCodes,
+    updateCodes,
     fetchCodes,
     clearSelection,
     openDeleteDialog,
-    closeDeleteDialog
+    closeDeleteDialog,
+    formatDate,
+    exportCodes,
+    scheduleEmail,
+    isScheduling
   });
-
-  // Detail view for individual codes
-  const { detailsView, handlers } = useCodeDetailView({ formatDate });
-  const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
-
-  // Handler for email scheduling
-  const handleScheduleEmail = async (params: {
-    recipients: string;
-    subject: string;
-    message: string;
-    codeType: 'student' | 'employer';
-    amount: number;
-    expiresInDays: number;
-    scheduleDate: Date;
-    scheduleTime: string;
-  }) => {
-    await scheduleEmail(params);
-  };
 
   return (
     <div className="space-y-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="codes">Redemption Codes</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>
-          <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="codes">
-          <CodesTab
-            stats={stats}
-            filteredCodes={filteredCodes}
-            selectedCodes={selectedCodes}
-            allSelected={allSelected}
-            isLoading={isLoading}
-            isGenerating={isGenerating}
-            isDeleting={isDeleting}
-            activeTab={codesTab}
-            setActiveTab={setCodesTab}
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCodes={totalCodes}
-            codeType={codeType}
-            setCodeType={setCodeType}
-            expireDays={expireDays}
-            setExpireDays={setExpireDays}
-            formatDate={formatDate}
-            onApplyFilters={applyFilters}
-            onSelectCode={handleSelectCode}
-            onSelectAll={handleSelectAll}
-            onCopyCode={handleCopyCode}
-            onEmailCode={handleEmailCode}
-            onViewDetails={handleViewDetails}
-            onCodeGeneration={handleCodeGeneration}
-            onBulkGeneration={handleBulkGeneration}
-            onAutomatedGeneration={handleAutomatedGeneration}
-            onRefresh={fetchCodes}
-            onExport={() => exportCodes(filteredCodes, 'csv')}
-            onPrint={() => window.print()}
-            onEmailSelected={() => handleBulkEmail(selectedCodes)}
-            onDeleteSelected={handleShowDeleteDialog}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-          />
-        </TabsContent>
-        
-        <TabsContent value="analytics">
-          <AnalyticsTab stats={stats} />
-        </TabsContent>
-        
-        <TabsContent value="reports">
-          <ReportsTab codes={codes} formatDate={formatDate} />
-        </TabsContent>
-        
-        <TabsContent value="wizard">
-          <WizardTab 
-            onGenerate={handleWizardGeneration}
-            isGenerating={isGenerating}
-          />
-        </TabsContent>
-        
-        <TabsContent value="scheduler">
-          <SchedulerTab 
-            onSchedule={handleScheduleEmail}
-            isScheduling={isScheduling}
-          />
-        </TabsContent>
-      </Tabs>
+      <RedemptionTabManager
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        stats={stats}
+        filteredCodes={filteredCodes}
+        selectedCodes={selectedCodes}
+        allSelected={allSelected}
+        isLoading={isLoading}
+        isGenerating={isGenerating}
+        isDeleting={isDeleting}
+        isScheduling={isScheduling}
+        codesTab={codesTab}
+        setCodesTab={setCodesTab}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        totalCodes={totalCodes}
+        codeType={codeType}
+        setCodeType={setCodeType}
+        expireDays={expireDays}
+        setExpireDays={setExpireDays}
+        formatDate={formatDate}
+        usageOverTime={usageOverTime}
+        generationOverTime={generationOverTime}
+        handlers={handlers}
+      />
 
       {detailsView}
 
