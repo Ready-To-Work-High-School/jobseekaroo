@@ -6,6 +6,10 @@ import { useRedemptionCodeOperations } from './redemption/useRedemptionCodeOpera
 import { useRedemptionCodeSelection } from './redemption/useRedemptionCodeSelection';
 import { useRedemptionCodeUtils } from './redemption/useRedemptionCodeUtils';
 
+/**
+ * @deprecated Use the individual hooks from the redemption directory instead. 
+ * This hook is kept for backwards compatibility.
+ */
 export function useRedemptionCodes() {
   const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = useState<number>(30);

@@ -2,9 +2,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRedemptionCodes } from '@/hooks/useRedemptionCodes';
+import { 
+  useRedemptionCodeData,
+  useRedemptionCodeOperations,
+  useRedemptionCodeSelection,
+  useRedemptionCodeUtils,
+  useRedemptionCodeDialog
+} from '@/hooks/redemption';
 import { useRedemptionCodeDetailView } from './RedemptionCodeDetailView';
-import { useRedemptionCodeDialog } from '@/hooks/redemption/useRedemptionCodeDialog';
 import RedemptionCodeStats from '../RedemptionCodeStats';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
 import RedemptionCodeActions from '../RedemptionCodeActions';
@@ -14,47 +19,86 @@ import RedemptionCodesPagination from './RedemptionCodesPagination';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 
 const RedemptionCodeContainer: React.FC = () => {
+  // Use individual hooks instead of the facade hook for more direct access
   const {
     codes,
     stats,
     isLoading,
-    isGenerating,
-    isDeleting,
     activeTab,
-    selectedCodes,
-    allSelected,
+    setActiveTab,
     currentPage,
     pageSize,
     totalCodes,
+    fetchCodes,
     handlePageChange,
     handlePageSizeChange,
-    setActiveTab,
+    updateCodes
+  } = useRedemptionCodeData();
+
+  const {
+    isGenerating,
+    isDeleting,
     handleGenerateCode,
     handleBulkGenerate,
     handleAutomatedCodeGeneration,
+    handleDeleteSelectedCodes
+  } = useRedemptionCodeOperations();
+
+  const {
+    selectedCodes,
+    allSelected,
     handleSelectCode,
     handleSelectAll,
-    handleDeleteSelectedCodes,
-    fetchCodes,
-    formatDate,
-    exportCodes,
-    
-    // Type controls
-    codeType,
-    setCodeType,
-    expireDays,
-    setExpireDays
-  } = useRedemptionCodes();
+    clearSelection
+  } = useRedemptionCodeSelection(codes);
 
-  const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
-  const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
+  const { formatDate, exportCodes } = useRedemptionCodeUtils();
 
+  // Use dialog management hook
   const { 
     showDeleteDialog, 
     selectedForDelete, 
     openDeleteDialog, 
     closeDeleteDialog 
   } = useRedemptionCodeDialog();
+
+  // Local state for code generation options
+  const [codeType, setCodeType] = React.useState<'student' | 'employer'>('student');
+  const [expireDays, setExpireDays] = React.useState<number>(30);
+
+  // Detail view for individual codes
+  const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
+  const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
+
+  // Handlers for operations that combine multiple hooks
+  const handleCodeGeneration = async () => {
+    const newCode = await handleGenerateCode(codeType, expireDays);
+    if (newCode) {
+      updateCodes([newCode]);
+      await fetchCodes();
+    }
+  };
+
+  const handleBulkGeneration = async (amount: number) => {
+    const newCodes = await handleBulkGenerate(amount, codeType, expireDays);
+    if (newCodes.length > 0) {
+      updateCodes(newCodes);
+      await fetchCodes();
+    }
+  };
+
+  const handleAutomatedGeneration = async (
+    userType: string, 
+    amount: number, 
+    expiresInDays: number,
+    emailDomain: string
+  ) => {
+    const newCodes = await handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain);
+    if (newCodes.length > 0) {
+      updateCodes(newCodes);
+      await fetchCodes();
+    }
+  };
 
   const handleShowDeleteDialog = () => {
     if (selectedCodes.length > 0) {
@@ -63,8 +107,10 @@ const RedemptionCodeContainer: React.FC = () => {
   };
 
   const handleConfirmDelete = async () => {
-    await handleDeleteSelectedCodes();
+    await handleDeleteSelectedCodes(selectedForDelete.map(code => code.id));
+    clearSelection();
     closeDeleteDialog();
+    await fetchCodes();
   };
 
   return (
@@ -73,8 +119,8 @@ const RedemptionCodeContainer: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <RedemptionCodeGenerator
-          onGenerateCode={handleGenerateCode}
-          onBulkGenerate={handleBulkGenerate}
+          onGenerateCode={handleCodeGeneration}
+          onBulkGenerate={handleBulkGeneration}
           isGenerating={isGenerating}
           codeType={codeType}
           setCodeType={setCodeType}
@@ -83,7 +129,7 @@ const RedemptionCodeContainer: React.FC = () => {
         />
         
         <AutomatedCodeGenerator
-          onGenerateCodes={handleAutomatedCodeGeneration}
+          onGenerateCodes={handleAutomatedGeneration}
           isGenerating={isGenerating}
         />
       </div>
