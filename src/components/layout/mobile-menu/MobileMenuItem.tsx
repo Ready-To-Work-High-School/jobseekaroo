@@ -22,9 +22,14 @@ const MobileMenuItem: React.FC<MobileMenuItemProps> = ({
   activeCheck
 }) => {
   const location = useLocation();
+  
+  // Determine if the current route is active
   const isActive = activeCheck 
     ? activeCheck(location.pathname)
-    : location.pathname === to;
+    : location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
+  
+  // Debug logs to help troubleshoot
+  console.log(`MobileMenuItem - Path: ${to}, Current: ${location.pathname}, Active: ${isActive}`);
 
   return (
     <Link

@@ -8,6 +8,8 @@ interface UnauthenticatedMenuItemsProps {
 }
 
 const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ setIsOpen }) => {
+  console.log("UnauthenticatedMenuItems - rendering menu items with Admin link");
+  
   return (
     <>
       <MobileMenuItem 
@@ -34,15 +36,15 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
         Sign Up
       </MobileMenuItem>
       
-      {/* Always show admin link for testing */}
+      {/* IMPORTANT: Always show admin link for testing - no conditional rendering */}
       <MobileMenuItem 
         to="/admin" 
         icon={Shield}
         onClick={() => setIsOpen(false)}
-        className="text-white bg-red-600 hover:bg-red-700"
+        className="text-white bg-red-600 hover:bg-red-700 font-bold"
         activeCheck={(pathname) => pathname === "/admin" || pathname.startsWith("/admin/")}
       >
-        Admin Panel
+        Admin Panel (Test)
       </MobileMenuItem>
     </>
   );

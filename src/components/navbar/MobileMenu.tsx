@@ -74,13 +74,13 @@ export const MobileMenu = () => {
             Resume Assistant
           </MobileNavLink>
           
-          {/* Always show admin link for testing purposes */}
+          {/* IMPORTANT: Always show admin link for testing - no conditional rendering */}
           <MobileNavLink 
             to="/admin" 
-            className="text-white bg-red-600 hover:bg-red-700 my-2"
+            className="text-white bg-red-600 hover:bg-red-700 my-2 font-bold"
           >
             <Shield className="h-5 w-5" />
-            Admin Panel
+            Admin Panel (Test)
           </MobileNavLink>
           
           {user ? (
