@@ -1,7 +1,21 @@
-
 import { supabase } from './index';
 import { Notification, NotificationType } from '@/types/notification';
 import { NotificationPreferences } from '@/types/notification-preferences';
+
+// Helper function to transform database object to our Notification type
+const transformNotification = (dbNotification: any): Notification => {
+  return {
+    id: dbNotification.id,
+    user_id: dbNotification.user_id,
+    title: dbNotification.title,
+    message: dbNotification.message,
+    type: dbNotification.type as NotificationType,
+    link: dbNotification.link,
+    read: dbNotification.read,
+    createdAt: dbNotification.created_at,
+    metadata: dbNotification.metadata
+  };
+};
 
 // Fetch notifications from Supabase
 export const fetchNotifications = async (userId: string) => {
@@ -16,7 +30,7 @@ export const fetchNotifications = async (userId: string) => {
     throw error;
   }
 
-  return data as Notification[];
+  return data.map(transformNotification) as Notification[];
 };
 
 // Add a new notification
@@ -41,7 +55,7 @@ export const addNotification = async (notification: Omit<Notification, 'id' | 'c
     throw error;
   }
 
-  return data as Notification;
+  return transformNotification(data);
 };
 
 // Mark a notification as read
@@ -58,7 +72,7 @@ export const markNotificationAsRead = async (id: string) => {
     throw error;
   }
 
-  return data as Notification;
+  return transformNotification(data);
 };
 
 // Mark all notifications as read
@@ -74,7 +88,7 @@ export const markAllNotificationsAsRead = async (userId: string) => {
     throw error;
   }
 
-  return data as Notification[];
+  return data.map(transformNotification) as Notification[];
 };
 
 // Remove a notification

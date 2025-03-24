@@ -1,5 +1,5 @@
 
-import { Notification, NotificationFilters } from '@/types/notification';
+import { Notification, NotificationFilterOptions } from '@/types/notification';
 
 export interface NotificationsContextType {
   notifications: Notification[];
@@ -11,7 +11,7 @@ export interface NotificationsContextType {
   removeNotification: (id: string) => void;
   clearAll: () => void;
   isLoading: boolean;
-  filters: NotificationFilters;
-  setFilters: (filters: Partial<NotificationFilters>) => void;
+  filters: NotificationFilterOptions;
+  setFilters: (filters: Partial<NotificationFilterOptions>) => void;
   errorMessage: string | null;
 }

@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { NotificationFilters, NotificationType } from '@/types/notification';
+import { NotificationFilterOptions, NotificationType } from '@/types/notification';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {

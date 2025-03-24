@@ -13,7 +13,7 @@ export interface Notification {
   metadata?: Record<string, any>;
 }
 
-export interface NotificationFilters {
+export interface NotificationFilterOptions {
   type?: NotificationType | 'all';
   read?: boolean | 'all';
   dateRange?: {
