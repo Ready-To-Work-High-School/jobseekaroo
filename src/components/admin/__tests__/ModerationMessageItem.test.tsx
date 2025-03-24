@@ -15,7 +15,9 @@ describe('ModerationMessageItem', () => {
     sender_avatar: '/avatar.png',
     receiver_name: 'Jane Smith',
     receiver_avatar: '/avatar2.png',
-    is_read: false
+    is_read: false,
+    needs_moderation: true,
+    is_approved: null
   };
 
   const mockOnApprove = vi.fn();
