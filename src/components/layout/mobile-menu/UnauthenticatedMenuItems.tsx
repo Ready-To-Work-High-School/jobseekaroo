@@ -34,14 +34,15 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
         Sign Up
       </MobileMenuItem>
       
+      {/* Always show admin link for testing */}
       <MobileMenuItem 
         to="/admin" 
         icon={Shield}
         onClick={() => setIsOpen(false)}
-        // Fix: Use activeCheck to properly maintain active state for admin routes
+        className="text-white bg-red-600 hover:bg-red-700"
         activeCheck={(pathname) => pathname === "/admin" || pathname.startsWith("/admin/")}
       >
-        Admin
+        Admin Panel
       </MobileMenuItem>
     </>
   );

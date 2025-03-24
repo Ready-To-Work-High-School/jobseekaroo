@@ -6,13 +6,18 @@ interface MobileNavLinkProps {
   to: string;
   children: React.ReactNode;
   end?: boolean;
-  className?: string; // Add className as an optional prop
+  className?: string;
 }
 
 export const MobileNavLink = ({ to, children, className }: MobileNavLinkProps) => {
   const location = useLocation();
+  
+  // Check if current path matches the link or is a subpath
   const isActive = location.pathname === to || 
     (to !== '/' && location.pathname.startsWith(to));
+  
+  // Debug active state
+  console.log(`MobileNavLink - Path: ${to}, Current: ${location.pathname}, Active: ${isActive}`);
   
   return (
     <SheetClose asChild>

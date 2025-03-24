@@ -74,12 +74,10 @@ export const MobileMenu = () => {
             Resume Assistant
           </MobileNavLink>
           
-          {/* Always show admin link for now to debug */}
+          {/* Always show admin link for testing purposes */}
           <MobileNavLink 
             to="/admin" 
-            className={`text-white bg-red-600 hover:bg-red-700 my-2 ${
-              (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) ? "bg-red-700" : ""
-            }`}
+            className="text-white bg-red-600 hover:bg-red-700 my-2"
           >
             <Shield className="h-5 w-5" />
             Admin Panel
