@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RedemptionCode } from '@/types/redemption';
-import RedemptionCodeTable from '../RedemptionCodeTable';
+import RedemptionCodesTable from '../../RedemptionCodesTable';
+import RedemptionCodeActions from '../../RedemptionCodeActions';
+import RedemptionCodesPagination from '../RedemptionCodesPagination';
+import RedemptionCodeTabsList from '../table/RedemptionCodeTabsList';
 
 interface CodesTablePanelProps {
   codes: RedemptionCode[];
@@ -20,6 +22,7 @@ interface CodesTablePanelProps {
   onCopyCode: (code: string) => void;
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
+  onViewQRCode: (code: RedemptionCode) => void;
   onRefresh: () => Promise<void>;
   onExport: () => void;
   onPrint: () => void;
@@ -46,6 +49,7 @@ const CodesTablePanel: React.FC<CodesTablePanelProps> = ({
   onCopyCode,
   onEmailCode,
   onViewDetails,
+  onViewQRCode,
   onRefresh,
   onExport,
   onPrint,
@@ -56,37 +60,44 @@ const CodesTablePanel: React.FC<CodesTablePanelProps> = ({
   isDeleting
 }) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Redemption Codes</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <RedemptionCodeTable
-          codes={codes}
-          selectedCodes={selectedCodes}
-          allSelected={allSelected}
-          isLoading={isLoading}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalCodes={totalCodes}
-          formatDate={formatDate}
-          onSelectCode={onSelectCode}
-          onSelectAll={onSelectAll}
-          onCopyCode={onCopyCode}
-          onEmailCode={onEmailCode}
-          onViewDetails={onViewDetails}
-          onRefresh={onRefresh}
-          onExport={onExport}
-          onPrint={onPrint}
-          onEmailSelected={onEmailSelected}
-          onDeleteSelected={onDeleteSelected}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-        />
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+      <RedemptionCodeTabsList 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+      
+      <RedemptionCodeActions
+        selectedCount={selectedCodes.length}
+        onRefresh={onRefresh}
+        onExport={onExport}
+        onPrint={onPrint}
+        onEmailSelected={onEmailSelected}
+        onDeleteSelected={onDeleteSelected}
+        isRefreshing={isLoading}
+      />
+      
+      <RedemptionCodesTable
+        codes={codes}
+        selectedCodes={selectedCodes}
+        allSelected={allSelected}
+        isLoading={isLoading}
+        formatDate={formatDate}
+        onSelectCode={onSelectCode}
+        onSelectAll={onSelectAll}
+        onCopyCode={onCopyCode}
+        onEmailCode={onEmailCode}
+        onViewDetails={onViewDetails}
+        onViewQRCode={onViewQRCode}
+      />
+      
+      <RedemptionCodesPagination
+        currentPage={currentPage}
+        pageSize={pageSize}
+        totalItems={totalCodes}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
+    </div>
   );
 };
 

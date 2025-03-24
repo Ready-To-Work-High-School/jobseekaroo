@@ -1,21 +1,10 @@
-
 import React from 'react';
-import { RedemptionCode } from '@/types/redemption';
-import { TableCell, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { TableRow, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  Copy, 
-  Mail, 
-  Eye, 
-  CheckCircle2, 
-  ClockIcon, 
-  AlertTriangle
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
+import { CheckCircle, Copy, Mail, Eye, QrCode } from 'lucide-react';
+import { RedemptionCode } from '@/types/redemption';
 import RedemptionCodeStatus from './RedemptionCodeStatus';
 
 interface RedemptionCodeTableRowProps {
@@ -26,6 +15,7 @@ interface RedemptionCodeTableRowProps {
   onCopyCode: (code: string) => void;
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
+  onViewQRCode: (code: RedemptionCode) => void;
 }
 
 const RedemptionCodeTableRow: React.FC<RedemptionCodeTableRowProps> = ({
@@ -35,114 +25,102 @@ const RedemptionCodeTableRow: React.FC<RedemptionCodeTableRowProps> = ({
   onSelectCode,
   onCopyCode,
   onEmailCode,
-  onViewDetails
+  onViewDetails,
+  onViewQRCode
 }) => {
-  const { toast } = useToast();
-  const codeExpired = isExpired(code.expiresAt);
-
-  function isExpired(expiresAt: Date | string | undefined): boolean {
-    if (!expiresAt) return false;
-    return new Date(expiresAt) < new Date();
-  }
-
-  const handleCopyWithFeedback = (code: string) => {
-    onCopyCode(code);
-    toast({
-      title: "Code copied",
-      description: "The code has been copied to your clipboard",
-      variant: "default",
-    });
-  };
-
   return (
-    <TableRow 
-      key={code.id}
-      className={cn(
-        code.used && "bg-muted/20",
-        codeExpired && !code.used && "bg-amber-50/50"
-      )}
-    >
-      <TableCell>
-        <Checkbox 
+    <TableRow className={isSelected ? 'bg-muted/50' : undefined}>
+      <TableCell className="py-2">
+        <input
+          type="checkbox"
           checked={isSelected}
-          onCheckedChange={(checked) => onSelectCode(code, !!checked)}
-          aria-label={`Select code ${code.code}`}
+          onChange={(e) => onSelectCode(code, e.target.checked)}
+          className="h-4 w-4"
           disabled={code.used}
         />
       </TableCell>
-      <TableCell className="font-mono text-xs sm:text-sm font-medium">
-        <div className="flex items-center gap-1">
-          <span className="truncate max-w-[100px] sm:max-w-none">
-            {code.code}
-          </span>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-6 w-6" 
-                onClick={() => handleCopyWithFeedback(code.code)}
-              >
-                <Copy className="h-3.5 w-3.5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Copy code</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
+      <TableCell className="font-mono">
+        {code.code}
       </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <Badge variant={code.type === 'student' ? 'default' : 'outline'}>
-          {code.type === 'student' ? 'Student' : 'Employer'}
+      <TableCell>
+        <Badge
+          variant={code.type === 'student' ? 'default' : 'outline'}
+          className="capitalize"
+        >
+          {code.type}
         </Badge>
       </TableCell>
       <TableCell>
         <RedemptionCodeStatus code={code} />
       </TableCell>
-      <TableCell className="hidden md:table-cell">{formatDate(code.createdAt)}</TableCell>
-      <TableCell className="hidden lg:table-cell">
-        {code.expiresAt ? formatDate(code.expiresAt) : 'Never'}
+      <TableCell className="hidden md:table-cell">
+        {formatDate(code.createdAt)}
       </TableCell>
-      <TableCell className="hidden lg:table-cell">
-        {code.usedBy || 'N/A'}
+      <TableCell className="hidden md:table-cell">
+        {formatDate(code.expiresAt)}
       </TableCell>
-      <TableCell className="text-right">
-        <div className="flex justify-end items-center space-x-1">
+      <TableCell>
+        <div className="flex items-center justify-end space-x-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => onCopyCode(code.code)}
+              >
+                <Copy className="h-4 w-4" />
+                <span className="sr-only">Copy code</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy code</TooltipContent>
+          </Tooltip>
+          
           {!code.used && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
                   size="icon"
+                  variant="ghost"
                   className="h-8 w-8"
                   onClick={() => onEmailCode(code)}
-                  disabled={codeExpired}
                 >
-                  <Mail className="h-3.5 w-3.5" />
-                  <span className="sr-only">Email Code</span>
+                  <Mail className="h-4 w-4" />
+                  <span className="sr-only">Email code</span>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
-                <p>Email this code</p>
-              </TooltipContent>
+              <TooltipContent>Email code</TooltipContent>
             </Tooltip>
           )}
+          
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
+              <Button
                 size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                onClick={() => onViewQRCode(code)}
+              >
+                <QrCode className="h-4 w-4" />
+                <span className="sr-only">Show QR code</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Show QR code</TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
                 className="h-8 w-8"
                 onClick={() => onViewDetails(code)}
               >
-                <Eye className="h-3.5 w-3.5" />
-                <span className="sr-only">View Details</span>
+                <Eye className="h-4 w-4" />
+                <span className="sr-only">View details</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
-              <p>View code details</p>
-            </TooltipContent>
+            <TooltipContent>View details</TooltipContent>
           </Tooltip>
         </div>
       </TableCell>

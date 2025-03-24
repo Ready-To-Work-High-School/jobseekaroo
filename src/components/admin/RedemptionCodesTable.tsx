@@ -5,7 +5,7 @@ import {
   Table, 
   TableBody
 } from '@/components/ui/table';
-import { Tooltip, TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import RedemptionCodeTableRow from './redemption/table/RedemptionCodeTableRow';
 import RedemptionCodeTableHeader from './redemption/table/RedemptionCodeTableHeader';
 import RedemptionCodeEmptyState from './redemption/table/RedemptionCodeEmptyState';
@@ -22,6 +22,7 @@ interface RedemptionCodesTableProps {
   onCopyCode: (code: string) => void;
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
+  onViewQRCode: (code: RedemptionCode) => void;
 }
 
 const RedemptionCodesTable: React.FC<RedemptionCodesTableProps> = ({
@@ -34,7 +35,8 @@ const RedemptionCodesTable: React.FC<RedemptionCodesTableProps> = ({
   onSelectAll,
   onCopyCode,
   onEmailCode,
-  onViewDetails
+  onViewDetails,
+  onViewQRCode
 }) => {
   if (isLoading) {
     return <RedemptionCodeLoadingState />;
@@ -70,6 +72,7 @@ const RedemptionCodesTable: React.FC<RedemptionCodesTableProps> = ({
                   onCopyCode={onCopyCode}
                   onEmailCode={onEmailCode}
                   onViewDetails={onViewDetails}
+                  onViewQRCode={onViewQRCode}
                 />
               );
             })}
