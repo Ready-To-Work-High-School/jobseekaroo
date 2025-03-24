@@ -32,7 +32,7 @@ export function useScheduledEmails() {
   const [scheduledEmails, setScheduledEmails] = useState<ScheduledEmail[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const scheduleEmail = async (params: ScheduleEmailParams) => {
+  const scheduleEmail = async (params: ScheduleEmailParams): Promise<void> => {
     setIsScheduling(true);
     try {
       const scheduleDateTime = new Date(params.scheduleDate);
@@ -58,7 +58,7 @@ export function useScheduledEmails() {
           schedule_date: scheduleDateTime.toISOString(),
           status: 'pending'
         })
-        .select()
+        .select('*')
         .single();
       
       if (error) {
@@ -69,25 +69,6 @@ export function useScheduledEmails() {
         title: 'Email Scheduled',
         description: `Email will be sent on ${scheduleDateTime.toLocaleString()}`,
       });
-      
-      // Since we don't have a real backend for this example, we'll simulate scheduling
-      // by adding the email to our local state
-      const newEmail: ScheduledEmail = {
-        id: data.id,
-        recipients: recipientArray,
-        subject: params.subject,
-        message: params.message,
-        codeType: params.codeType,
-        amount: params.amount,
-        expiresInDays: params.expiresInDays,
-        scheduleDate: scheduleDateTime,
-        status: 'pending',
-        createdAt: new Date()
-      };
-      
-      setScheduledEmails(prev => [...prev, newEmail]);
-      
-      return newEmail;
     } catch (error) {
       console.error('Error scheduling email:', error);
       toast({

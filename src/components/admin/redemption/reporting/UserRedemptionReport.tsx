@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -191,8 +190,20 @@ const UserRedemptionReport: React.FC<UserRedemptionReportProps> = ({ codes, form
                   <Calendar
                     initialFocus
                     mode="range"
-                    selected={dateRange}
-                    onSelect={setDateRange}
+                    selected={{ 
+                      from: dateRange.from || undefined,
+                      to: dateRange.to || undefined
+                    }}
+                    onSelect={(range) => {
+                      if (range?.from) {
+                        setDateRange({ 
+                          from: range.from,
+                          to: range.to || range.from
+                        });
+                      } else {
+                        setDateRange({ from: undefined, to: undefined });
+                      }
+                    }}
                     numberOfMonths={2}
                   />
                 </PopoverContent>

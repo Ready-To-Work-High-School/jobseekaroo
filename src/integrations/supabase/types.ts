@@ -497,6 +497,45 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_emails: {
+        Row: {
+          amount: number
+          code_type: string
+          created_at: string
+          expires_in_days: number
+          id: string
+          message: string
+          recipients: string[]
+          schedule_date: string
+          status: string
+          subject: string
+        }
+        Insert: {
+          amount: number
+          code_type: string
+          created_at?: string
+          expires_in_days: number
+          id?: string
+          message: string
+          recipients: string[]
+          schedule_date: string
+          status?: string
+          subject: string
+        }
+        Update: {
+          amount?: number
+          code_type?: string
+          created_at?: string
+          expires_in_days?: number
+          id?: string
+          message?: string
+          recipients?: string[]
+          schedule_date?: string
+          status?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       skill_resources: {
         Row: {
           created_at: string

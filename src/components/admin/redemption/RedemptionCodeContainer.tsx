@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   useRedemptionCodeData,
@@ -142,7 +141,7 @@ const RedemptionCodeContainer: React.FC = () => {
     scheduleDate: Date;
     scheduleTime: string;
   }) => {
-    return scheduleEmail(params);
+    await scheduleEmail(params);
   };
 
   return (
