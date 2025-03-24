@@ -9,9 +9,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
-import { Mail, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { Mail, ArrowLeft, Loader2, CheckCircle, AlertTriangle } from "lucide-react";
 import { useFadeIn } from "@/utils/animations";
+import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -22,6 +24,7 @@ type FormValues = z.infer<typeof formSchema>;
 const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { toast } = useToast();
   const contentAnimation = useFadeIn(300);
   
@@ -34,10 +37,17 @@ const ForgotPassword = () => {
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
+    setErrorMessage(null);
+    
     try {
-      // We would handle the actual password reset here
-      // For now, we'll just simulate success after 1.5 seconds
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Use Supabase to send password reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      
+      if (error) {
+        throw error;
+      }
       
       setIsSuccess(true);
       toast({
@@ -45,7 +55,8 @@ const ForgotPassword = () => {
         description: "Check your email for password reset instructions",
       });
     } catch (error: any) {
-      console.error(error);
+      console.error("Password reset error:", error);
+      setErrorMessage(error.message || "Could not send reset link. Please try again later.");
       toast({
         title: "Error",
         description: error.message || "Could not send reset link",
@@ -78,6 +89,14 @@ const ForgotPassword = () => {
             {!isSuccess ? (
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  {errorMessage && (
+                    <Alert variant="destructive" className="mb-4">
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertTitle>Error</AlertTitle>
+                      <AlertDescription>{errorMessage}</AlertDescription>
+                    </Alert>
+                  )}
+                  
                   <FormField
                     control={form.control}
                     name="email"
@@ -114,6 +133,10 @@ const ForgotPassword = () => {
                       "Send Reset Link"
                     )}
                   </Button>
+                  
+                  <div className="text-xs text-muted-foreground mt-4">
+                    <p>Note: If you don't receive the email within a few minutes, please check your spam folder or try again.</p>
+                  </div>
                 </form>
               </Form>
             ) : (

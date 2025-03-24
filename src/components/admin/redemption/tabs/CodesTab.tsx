@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { HelpCircle } from 'lucide-react';
 import AdvancedSearchFilters from '../filters/AdvancedSearchFilters';
 import RedemptionCodeActions from '../../RedemptionCodeActions';
 import RedemptionCodesTable from '../../RedemptionCodesTable';
 import RedemptionCodeGenerators from '../RedemptionCodeGenerators';
 import RedemptionCodeStats from '../../RedemptionCodeStats';
-import RedemptionCodesPagination from '../RedemptionCodesPagination'; // Fixed import path
+import RedemptionCodesPagination from '../RedemptionCodesPagination';
 import { RedemptionCode } from '@/types/redemption';
 
 interface CodesTabProps {
@@ -99,7 +101,33 @@ const CodesTab: React.FC<CodesTabProps> = ({
 
   return (
     <div className="space-y-6">
-      <RedemptionCodeStats stats={stats} />
+      <div className="flex items-center justify-between">
+        <RedemptionCodeStats stats={stats} />
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button className="inline-flex items-center justify-center rounded-full h-6 w-6 text-muted-foreground hover:bg-muted">
+                <HelpCircle className="h-5 w-5" />
+                <span className="sr-only">Help</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-md">
+              <div className="space-y-2">
+                <p><strong>Admin Redemption Code Management:</strong></p>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>Generate single or bulk redemption codes for students and employers</li>
+                  <li>Set expiration dates for codes</li>
+                  <li>Email codes directly to recipients</li>
+                  <li>Track code usage and analytics</li>
+                  <li>Schedule automated code distribution</li>
+                  <li>Export reports of code usage</li>
+                </ul>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-6">
