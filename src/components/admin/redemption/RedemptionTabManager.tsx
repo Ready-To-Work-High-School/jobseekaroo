@@ -140,6 +140,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
           stats={stats} 
           usageOverTime={usageOverTime}
           generationOverTime={generationOverTime}
+          codes={filteredCodes}
         />
       </TabsContent>
       
