@@ -12,3 +12,13 @@ export interface Notification {
   createdAt: string;
   metadata?: Record<string, any>;
 }
+
+export interface NotificationFilters {
+  type?: NotificationType | 'all';
+  read?: boolean | 'all';
+  dateRange?: {
+    from: Date | null;
+    to: Date | null;
+  };
+  sortBy: 'newest' | 'oldest';
+}

@@ -156,6 +156,81 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_preferences: {
+        Row: {
+          account_notifications: boolean
+          achievement_notifications: boolean
+          application_notifications: boolean
+          created_at: string
+          email_notifications: boolean
+          id: string
+          job_notifications: boolean
+          message_notifications: boolean
+          push_notifications: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_notifications?: boolean
+          achievement_notifications?: boolean
+          application_notifications?: boolean
+          created_at?: string
+          email_notifications?: boolean
+          id?: string
+          job_notifications?: boolean
+          message_notifications?: boolean
+          push_notifications?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_notifications?: boolean
+          achievement_notifications?: boolean
+          application_notifications?: boolean
+          created_at?: string
+          email_notifications?: boolean
+          id?: string
+          job_notifications?: boolean
+          message_notifications?: boolean
+          push_notifications?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          link: string | null
+          message: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message: string
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payment_transactions: {
         Row: {
           amount: number

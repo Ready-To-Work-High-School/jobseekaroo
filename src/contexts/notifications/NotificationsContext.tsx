@@ -1,21 +1,27 @@
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { NotificationsContextType } from './types';
 import { useNotificationsState } from './useNotificationsState';
 import { useNotificationsData } from './useNotificationsData';
+import { NotificationFilters } from '@/types/notification';
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
   const {
     notifications,
+    filteredNotifications,
     unreadCount,
     addNotification,
     markAsRead,
     markAllAsRead,
     removeNotification,
     clearAll,
-    setNotifications
+    setNotifications,
+    isLoading,
+    filters,
+    setFilters,
+    errorMessage
   } = useNotificationsState();
 
   // Handle data fetching and persistence
@@ -23,12 +29,17 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
 
   const value: NotificationsContextType = {
     notifications,
+    filteredNotifications,
     unreadCount,
     addNotification,
     markAsRead,
     markAllAsRead,
     removeNotification,
-    clearAll
+    clearAll,
+    isLoading,
+    filters,
+    setFilters,
+    errorMessage
   };
 
   return (

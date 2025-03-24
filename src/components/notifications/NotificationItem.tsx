@@ -12,8 +12,16 @@ import {
   GraduationCap, 
   Mail, 
   MessageSquare, 
-  Award
+  Award,
+  Trash2,
+  MoreHorizontal
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface NotificationItemProps {
   notification: Notification;
@@ -25,16 +33,23 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   onClose 
 }) => {
   const navigate = useNavigate();
-  const { markAsRead } = useNotifications();
+  const { markAsRead, removeNotification } = useNotifications();
   const [isHovering, setIsHovering] = useState(false);
   
   const handleClick = () => {
-    markAsRead(notification.id);
+    if (!notification.read) {
+      markAsRead(notification.id);
+    }
     
     if (notification.link) {
       navigate(notification.link);
       onClose();
     }
+  };
+  
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    removeNotification(notification.id);
   };
   
   const getIcon = () => {
@@ -59,19 +74,43 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   return (
     <div 
       className={`p-4 relative transition-colors ${
-        notification.read ? 'bg-transparent' : 'bg-blue-50/50'
-      } ${isHovering ? 'bg-gray-50' : ''}`}
+        notification.read ? 'bg-transparent' : 'bg-blue-50/50 dark:bg-blue-950/20'
+      } ${isHovering ? 'bg-gray-50 dark:bg-gray-800/50' : ''}`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <Button
-        variant="ghost"
-        className="absolute top-2 right-2 h-6 w-6 rounded-full p-0 opacity-0 transition-opacity group-hover:opacity-100"
-        onClick={() => markAsRead(notification.id)}
-      >
-        <span className="sr-only">Mark as read</span>
-        <CheckCircle2 className="h-3 w-3" />
-      </Button>
+      <div className="absolute top-3 right-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {!notification.read && (
+              <DropdownMenuItem onClick={(e) => {
+                e.stopPropagation();
+                markAsRead(notification.id);
+              }}>
+                <CheckCircle2 className="mr-2 h-4 w-4" />
+                Mark as read
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem 
+              onClick={handleDelete}
+              className="text-red-500 focus:text-red-500"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       
       <div 
         className="flex items-start gap-3 cursor-pointer" 
@@ -81,8 +120,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           {getIcon()}
         </div>
         
-        <div className="flex-1 space-y-1 text-sm">
-          <p className={`${notification.read ? 'font-normal' : 'font-medium'}`}>
+        <div className="flex-1 space-y-1 text-sm pr-6">
+          <p className={`${!notification.read ? 'font-medium' : 'font-normal'}`}>
             {notification.title}
           </p>
           

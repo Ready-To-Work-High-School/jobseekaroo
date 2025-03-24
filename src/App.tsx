@@ -29,6 +29,7 @@ import { Toaster } from './components/ui/toaster';
 import RedemptionCode from './pages/RedemptionCode';
 import AccountBenefits from './pages/AccountBenefits';
 import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
+import Notifications from './pages/Notifications';
 import './styles/index.css';
 
 function App() {
@@ -62,6 +63,8 @@ function App() {
             <Route path="/redeem-code" element={<RedemptionCode />} />
             <Route path="/account-benefits" element={<AccountBenefits />} />
             <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/notification-preferences" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
