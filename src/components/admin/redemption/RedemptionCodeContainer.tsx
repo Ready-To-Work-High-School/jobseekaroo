@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   useRedemptionCodeData,
   useRedemptionCodeOperations,
@@ -11,12 +10,10 @@ import {
 } from '@/hooks/redemption';
 import { useRedemptionCodeDetailView } from './RedemptionCodeDetailView';
 import RedemptionCodeStats from '../RedemptionCodeStats';
-import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
-import RedemptionCodeActions from '../RedemptionCodeActions';
-import RedemptionCodesTable from '../RedemptionCodesTable';
-import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
-import RedemptionCodesPagination from './RedemptionCodesPagination';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
+import RedemptionCodeGenerators from './RedemptionCodeGenerators';
+import RedemptionCodeTable from './RedemptionCodeTable';
+import RedemptionCodeOptions from './RedemptionCodeOptions';
 
 const RedemptionCodeContainer: React.FC = () => {
   // Use individual hooks instead of the facade hook for more direct access
@@ -117,71 +114,53 @@ const RedemptionCodeContainer: React.FC = () => {
     <div className="space-y-6">
       <RedemptionCodeStats stats={stats} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <RedemptionCodeGenerator
-          onGenerateCode={handleCodeGeneration}
-          onBulkGenerate={handleBulkGeneration}
-          isGenerating={isGenerating}
-          codeType={codeType}
-          setCodeType={setCodeType}
-          expireDays={expireDays}
-          setExpireDays={setExpireDays}
-        />
-        
-        <AutomatedCodeGenerator
-          onGenerateCodes={handleAutomatedGeneration}
-          isGenerating={isGenerating}
-        />
-      </div>
+      <RedemptionCodeOptions
+        codeType={codeType}
+        setCodeType={setCodeType}
+        expireDays={expireDays}
+        setExpireDays={setExpireDays}
+      />
+
+      <RedemptionCodeGenerators
+        onGenerateCode={handleCodeGeneration}
+        onBulkGenerate={handleBulkGeneration}
+        onAutomatedGeneration={handleAutomatedGeneration}
+        isGenerating={isGenerating}
+        codeType={codeType}
+        setCodeType={setCodeType}
+        expireDays={expireDays}
+        setExpireDays={setExpireDays}
+      />
 
       <Card>
         <CardHeader>
           <CardTitle>Redemption Codes</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            <RedemptionCodeActions
-              selectedCount={selectedCodes.length}
-              onRefresh={fetchCodes}
-              onExport={() => exportCodes(codes)}
-              onPrint={() => window.print()}
-              onEmailSelected={() => handleBulkEmail(selectedCodes)}
-              onDeleteSelected={handleShowDeleteDialog}
-            />
-
-            <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">All Codes</TabsTrigger>
-                <TabsTrigger value="unused">Unused</TabsTrigger>
-                <TabsTrigger value="used">Used</TabsTrigger>
-                <TabsTrigger value="students">Students</TabsTrigger>
-                <TabsTrigger value="employers">Employers</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value={activeTab} className="mt-0">
-                <RedemptionCodesTable
-                  codes={codes}
-                  selectedCodes={selectedCodes}
-                  allSelected={allSelected}
-                  isLoading={isLoading}
-                  formatDate={formatDate}
-                  onSelectCode={handleSelectCode}
-                  onSelectAll={handleSelectAll}
-                  onCopyCode={handleCopyCode}
-                  onEmailCode={handleEmailCode}
-                  onViewDetails={handleViewDetails}
-                />
-                
-                <RedemptionCodesPagination 
-                  currentPage={currentPage}
-                  pageSize={pageSize}
-                  totalItems={totalCodes}
-                  onPageChange={handlePageChange}
-                  onPageSizeChange={handlePageSizeChange}
-                />
-              </TabsContent>
-            </Tabs>
-          </div>
+          <RedemptionCodeTable
+            codes={codes}
+            selectedCodes={selectedCodes}
+            allSelected={allSelected}
+            isLoading={isLoading}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalCodes={totalCodes}
+            formatDate={formatDate}
+            onSelectCode={handleSelectCode}
+            onSelectAll={handleSelectAll}
+            onCopyCode={handleCopyCode}
+            onEmailCode={handleEmailCode}
+            onViewDetails={handleViewDetails}
+            onRefresh={fetchCodes}
+            onExport={() => exportCodes(codes)}
+            onPrint={() => window.print()}
+            onEmailSelected={() => handleBulkEmail(selectedCodes)}
+            onDeleteSelected={handleShowDeleteDialog}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
         </CardContent>
       </Card>
 
