@@ -92,10 +92,14 @@ const CodeAnalyticsDashboard: React.FC<CodeAnalyticsDashboardProps> = ({
       const item = payload[0];
       const percent = total > 0 ? Math.round((item.value / total) * 100) : 0;
       return (
-        <ChartTooltipContent
-          title={item.name}
-          content={`${item.value} (${percent}%)`}
-        />
+        <div className="recharts-tooltip-wrapper">
+          <div className="recharts-default-tooltip">
+            <p className="recharts-tooltip-label">{item.name}</p>
+            <p className="recharts-tooltip-item">
+              {item.value} ({percent}%)
+            </p>
+          </div>
+        </div>
       );
     }
     return null;
