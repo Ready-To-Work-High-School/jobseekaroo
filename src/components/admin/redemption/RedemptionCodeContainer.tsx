@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRedemptionCodes } from '@/hooks/useRedemptionCodes';
-import { RedemptionCodeDetailView } from './RedemptionCodeDetailView';
+import { useRedemptionCodeDetailView } from './RedemptionCodeDetailView';
 import RedemptionCodeStats from '../RedemptionCodeStats';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
 import RedemptionCodeActions from '../RedemptionCodeActions';
@@ -33,7 +33,7 @@ const RedemptionCodeContainer: React.FC = () => {
     exportCodes
   } = useRedemptionCodes();
 
-  const { view: detailsView, handlers } = RedemptionCodeDetailView({ formatDate });
+  const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
   const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
 
   return (

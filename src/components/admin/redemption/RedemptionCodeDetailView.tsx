@@ -9,9 +9,17 @@ interface RedemptionCodeDetailViewProps {
   formatDate: (date?: Date | string) => string;
 }
 
-export const RedemptionCodeDetailView: React.FC<RedemptionCodeDetailViewProps> = ({
-  formatDate
-}) => {
+interface DetailViewReturn {
+  view: React.ReactNode;
+  handlers: {
+    handleCopyCode: (code: string) => void;
+    handleViewDetails: (code: RedemptionCode) => void;
+    handleEmailCode: (code: RedemptionCode) => void;
+    handleBulkEmail: (selectedCodes: RedemptionCode[]) => void;
+  };
+}
+
+export function useRedemptionCodeDetailView({ formatDate }: RedemptionCodeDetailViewProps): DetailViewReturn {
   const [selectedCode, setSelectedCode] = useState<RedemptionCode | null>(null);
   const [showCodeDetails, setShowCodeDetails] = useState(false);
   const [showEmailDialog, setShowEmailDialog] = useState(false);
@@ -78,4 +86,4 @@ export const RedemptionCodeDetailView: React.FC<RedemptionCodeDetailViewProps> =
       handleBulkEmail
     }
   };
-};
+}

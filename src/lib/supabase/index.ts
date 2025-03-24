@@ -11,3 +11,4 @@ export * from './skills';
 export * from './applications';
 export * from './recommendations';
 export * from './utils';
+export * from './redemption';
