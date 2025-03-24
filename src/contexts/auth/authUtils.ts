@@ -42,9 +42,9 @@ export const updateUserProfile = async (
   // Convert Date objects to ISO strings if needed
   const formattedData: Record<string, any> = { ...profileData };
   
-  // If redeemed_at is a Date object, convert it to ISO string
-  if (profileData.redeemed_at instanceof Date) {
-    formattedData.redeemed_at = profileData.redeemed_at.toISOString();
+  // Check if redeemed_at exists and is a Date object
+  if (profileData.redeemed_at && typeof profileData.redeemed_at === 'object') {
+    formattedData.redeemed_at = (profileData.redeemed_at as Date).toISOString();
   }
   
   const { data, error } = await supabase
