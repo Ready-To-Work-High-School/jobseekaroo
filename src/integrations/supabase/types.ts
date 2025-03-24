@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      conversation_participants: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          id: string
+          last_read_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          id?: string
+          last_read_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          last_read_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations_with_participants_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_message: string | null
+          last_message_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applied_date: string
@@ -156,6 +219,57 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          is_read: boolean
+          needs_moderation: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_read?: boolean
+          needs_moderation?: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_read?: boolean
+          needs_moderation?: boolean
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations_with_participants_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_preferences: {
         Row: {
           account_notifications: boolean
@@ -280,6 +394,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           bio: string | null
           created_at: string
           first_name: string | null
@@ -295,6 +410,7 @@ export type Database = {
           user_type: string | null
         }
         Insert: {
+          avatar_url?: string | null
           bio?: string | null
           created_at?: string
           first_name?: string | null
@@ -310,6 +426,7 @@ export type Database = {
           user_type?: string | null
         }
         Update: {
+          avatar_url?: string | null
           bio?: string | null
           created_at?: string
           first_name?: string | null
@@ -445,7 +562,55 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      conversations_with_participants_view: {
+        Row: {
+          created_at: string | null
+          has_pending_moderation: boolean | null
+          id: string | null
+          last_message: string | null
+          last_message_at: string | null
+          last_read_at: string | null
+          participant_avatar: string | null
+          participant_id: string | null
+          participant_name: string | null
+          unread_count: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
+      messages_for_moderation_view: {
+        Row: {
+          content: string | null
+          conversation_id: string | null
+          created_at: string | null
+          id: string | null
+          is_approved: boolean | null
+          needs_moderation: boolean | null
+          receiver_avatar: string | null
+          receiver_id: string | null
+          receiver_name: string | null
+          sender_avatar: string | null
+          sender_id: string | null
+          sender_name: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations_with_participants_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       generate_job_recommendations: {
