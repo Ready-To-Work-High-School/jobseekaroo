@@ -1,4 +1,3 @@
-
 export interface UserProfile {
   id: string;
   first_name: string | null;
@@ -8,9 +7,11 @@ export interface UserProfile {
   resume_url: string | null;
   skills: string[] | null;
   preferences: Record<string, any> | null;
-  user_type?: 'student' | 'employer' | 'admin' | null;
+  user_type?: 'student' | 'employer' | 'admin' | 'teacher' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
+  redeemed_at?: Date;
+  redeemed_code?: string;
 }
 
 export interface UserProfileUpdate {

@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { validateRedemptionCode, useRedemptionCode } from '@/lib/supabase/redemption';
 import { useAuth } from '@/contexts/AuthContext';
+import RedemptionConfirmationDialog from './RedemptionConfirmationDialog';
+import { RedemptionCode } from '@/types/redemption';
 
 interface RedemptionCodeFormProps {
   onSuccess?: () => void;
@@ -19,9 +21,11 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({
 }) => {
   const [code, setCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [redeemedCode, setRedeemedCode] = useState<RedemptionCode | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, userProfile, refreshProfile } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,16 +76,21 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({
         return;
       }
 
+      // Set the redeemed code for the confirmation dialog
+      setRedeemedCode(validation.code);
+      
+      // Refresh user profile to get updated status
+      await refreshProfile();
+      
+      // Show the confirmation dialog
+      setShowConfirmation(true);
+      
       toast({
         title: 'Success',
         description: 'Code redeemed successfully!',
       });
 
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        navigate(redirectTo);
-      }
+      // Don't navigate or call onSuccess right away - we'll do that after dialog is closed if needed
     } catch (error) {
       console.error('Error redeeming code:', error);
       toast({
@@ -94,23 +103,49 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({
     }
   };
 
+  const handleDialogClose = () => {
+    setShowConfirmation(false);
+    
+    // Only call onSuccess or navigate after dialog is closed
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
+
+  const handleDashboardClick = () => {
+    setShowConfirmation(false);
+    navigate('/profile');
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="redemption-code">Redemption Code</Label>
-        <Input
-          id="redemption-code"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder="Enter your code"
-          autoComplete="off"
-          className="uppercase"
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="redemption-code">Redemption Code</Label>
+          <Input
+            id="redemption-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            placeholder="Enter your code"
+            autoComplete="off"
+            className="uppercase"
+          />
+        </div>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? 'Redeeming...' : 'Redeem Code'}
+        </Button>
+      </form>
+
+      {redeemedCode && (
+        <RedemptionConfirmationDialog
+          isOpen={showConfirmation}
+          onClose={handleDialogClose}
+          redemptionCode={redeemedCode}
+          userProfile={userProfile}
+          onDashboardClick={handleDashboardClick}
         />
-      </div>
-      <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? 'Redeeming...' : 'Redeem Code'}
-      </Button>
-    </form>
+      )}
+    </>
   );
 };
 

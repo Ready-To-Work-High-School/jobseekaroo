@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Layout from '@/components/Layout';
-import { supabase } from '@/lib/supabase'; // Added missing Supabase import
+import { supabase } from '@/lib/supabase';
 import {
   Card,
   CardContent,
@@ -34,13 +33,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Bookmark, UserCircle, Briefcase, Settings, BookOpen, Plus, X } from 'lucide-react';
+import { Bookmark, UserCircle, Briefcase, Settings, BookOpen, Plus, X, ShieldCheck } from 'lucide-react';
 import { useFadeIn } from '@/utils/animations';
 import JobCard from '@/components/JobCard';
 import { Job } from '@/types/job';
 import { getJobById } from '@/lib/mock-data';
 
-// Profile form schema
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
@@ -124,7 +122,6 @@ const Profile = () => {
   const onSubmit = async (values: ProfileFormValues) => {
     setIsLoading(true);
     try {
-      // Update profile in Supabase
       await updateProfile({
         first_name: values.firstName,
         last_name: values.lastName,
@@ -133,7 +130,6 @@ const Profile = () => {
         skills: skills,
       });
       
-      // Update user metadata
       await supabase.auth.updateUser({
         data: {
           first_name: values.firstName,
@@ -197,10 +193,14 @@ const Profile = () => {
             onValueChange={setActiveTab} 
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="personal" className="flex items-center gap-2">
                 <UserCircle className="h-4 w-4" />
                 Personal Info
+              </TabsTrigger>
+              <TabsTrigger value="benefits" className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                Account Benefits
               </TabsTrigger>
               <TabsTrigger value="saved-jobs" className="flex items-center gap-2">
                 <Bookmark className="h-4 w-4" />
@@ -363,6 +363,10 @@ const Profile = () => {
                   </Form>
                 </CardContent>
               </Card>
+            </TabsContent>
+            
+            <TabsContent value="benefits" className="mt-6 space-y-4">
+              <UserBenefitsCard userProfile={userProfile} />
             </TabsContent>
             
             <TabsContent value="saved-jobs" className="mt-6 space-y-4">
