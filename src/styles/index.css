@@ -6,6 +6,7 @@
 @import './utilities.css';
 @import './animations.css';
 @import './accessibility.css';
+@import './print.css';
 
 :root {
   --background: 0 0% 100%;
@@ -28,6 +29,10 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 221.2 83.2% 53.3%;
   --radius: 0.5rem;
+  
+  /* Hiring event text color fix - dark text on light background */
+  --hiring-event-text: 215 25% 27%;
+  --hiring-event-background: 210 40% 98%;
 }
 
 .dark {
@@ -50,4 +55,51 @@
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
   --ring: 224.3 76.3% 48%;
+  
+  /* Hiring event text color fix - light text on dark background */
+  --hiring-event-text: 210 40% 98%;
+  --hiring-event-background: 215 25% 27%;
+}
+
+/* Fix for white text on hiring events */
+.hiring-event-card {
+  color: hsl(var(--hiring-event-text)) !important;
+  background-color: hsl(var(--hiring-event-background)) !important;
+}
+
+.hiring-event-card h3,
+.hiring-event-card p,
+.hiring-event-card span {
+  color: hsl(var(--hiring-event-text)) !important;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .responsive-flex {
+    flex-direction: column !important;
+  }
+  
+  .responsive-hide-mobile {
+    display: none !important;
+  }
+  
+  .responsive-padding {
+    padding: 1rem !important;
+  }
+  
+  .responsive-margin {
+    margin: 0.5rem 0 !important;
+  }
+  
+  .responsive-text-center {
+    text-align: center !important;
+  }
+  
+  .responsive-width-full {
+    width: 100% !important;
+  }
 }
