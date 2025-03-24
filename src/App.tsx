@@ -32,6 +32,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Dashboard from './pages/Dashboard';
 import Messages from './pages/Messages';
 import AdminMessageModeration from './pages/AdminMessageModeration';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -71,9 +72,9 @@ function App() {
           <Route path="/employer-dashboard" element={<EmployerDashboard />} />
           <Route path="/account-benefits" element={<AccountBenefits />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/redemption-code" element={<RedemptionCode />} />
+          <Route path="/redeem-code" element={<RedemptionCode />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
-          <Route path="/messages" element={<Messages />} />
           <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
           <Route path="/license" element={<License />} />
           <Route path="*" element={<NotFound />} />

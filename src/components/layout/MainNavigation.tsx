@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+import { Shield } from 'lucide-react';
 
 interface MainNavigationProps {
   className?: string;
@@ -39,8 +40,9 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
             Messages
           </Link>
           {isAdmin && (
-            <Link to="/admin/message-moderation" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent text-primary">
-              Moderation
+            <Link to="/admin/redemption-codes" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent flex items-center gap-1 bg-primary/10 text-primary">
+              <Shield className="h-4 w-4" />
+              <span>Admin</span>
             </Link>
           )}
         </>
