@@ -3,7 +3,7 @@ import { createContext, useContext, ReactNode, useState, useEffect } from 'react
 import { NotificationsContextType } from './types';
 import { useNotificationsState } from './useNotificationsState';
 import { useNotificationsData } from './useNotificationsData';
-import { NotificationFilters } from '@/types/notification';
+import { NotificationFilterOptions } from '@/types/notification';
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
