@@ -43,14 +43,14 @@ double_confirm_changes = true
 enable_confirmations = true
 
 [auth.external.apple]
-enabled = true
+enabled = false
 client_id = ""
 secret = ""
 
 [auth.external.google]
-enabled = true
-client_id = ""
-secret = ""
+enabled = false
+client_id = "placeholder-client-id"
+secret = "placeholder-secret"
 
 [functions]
 [functions.send-email]
