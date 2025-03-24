@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
@@ -76,7 +75,7 @@ const testimonials = [
     name: "Jordan Wheeler",
     role: "Welder",
     company: "WW Gay Construction Mechanical Contractors",
-    imageUrl: "/placeholder.svg",
+    imageUrl: "/lovable-uploads/8eb70332-7245-4c27-910e-cdc668d65e03.png",
     content: "Before graduating from Westside High School, I secured a paid apprenticeship as a welder, thanks to the skills and certifications I gained through the Entrepreneurship Academy. Earning my Industry Certification in Entrepreneurship & Small Business provided me with a strong foundation in business principles, while my Florida Ready to Work credentials demonstrated my proficiency in essential employability and soft skills.",
     graduation: "Westside High School, 2023"
   }
