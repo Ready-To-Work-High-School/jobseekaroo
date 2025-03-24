@@ -9,6 +9,7 @@ interface RedemptionCodeActionsProps {
   onExport: () => void;
   onPrint: () => void;
   onEmailSelected: () => void;
+  onDeleteSelected?: () => void;
 }
 
 const RedemptionCodeActions: React.FC<RedemptionCodeActionsProps> = ({
@@ -16,7 +17,8 @@ const RedemptionCodeActions: React.FC<RedemptionCodeActionsProps> = ({
   onRefresh,
   onExport,
   onPrint,
-  onEmailSelected
+  onEmailSelected,
+  onDeleteSelected
 }) => {
   return (
     <div className="flex flex-wrap justify-between items-center gap-2">
@@ -44,6 +46,12 @@ const RedemptionCodeActions: React.FC<RedemptionCodeActionsProps> = ({
             <Mail className="h-4 w-4 mr-2" />
             Email Selected
           </Button>
+          {onDeleteSelected && (
+            <Button variant="destructive" size="sm" onClick={onDeleteSelected}>
+              <Trash className="h-4 w-4 mr-2" />
+              Delete Selected
+            </Button>
+          )}
         </div>
       )}
     </div>
