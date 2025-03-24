@@ -2,48 +2,23 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
-interface ModerationMessage {
-  id: string;
-  conversation_id: string;
-  content: string;
-  created_at: string;
-  sender_id: string;
-  receiver_id: string;
-  sender_name: string;
-  sender_avatar?: string;
-  receiver_name: string;
-  receiver_avatar?: string;
-  needs_moderation: boolean;
-  is_approved: boolean | null;
-}
+import { 
+  fetchMessagesForModeration, 
+  approveMessage as approveMessageApi, 
+  rejectMessage as rejectMessageApi 
+} from '@/lib/supabase/messaging';
+import { Message } from '@/types/message';
 
 export const useModerationMessages = () => {
-  const [messages, setMessages] = useState<ModerationMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   
-  const fetchMessagesForModeration = async () => {
+  const fetchMessages = async () => {
     try {
       setIsLoading(true);
-      
-      // Get all messages that need moderation
-      const { data, error } = await supabase
-        .from('messages_for_moderation_view')
-        .select('*')
-        .is('is_approved', null)
-        .eq('needs_moderation', true)
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      
-      // Add is_read property to make TypeScript happy
-      const messagesWithIsRead = (data || []).map(msg => ({
-        ...msg,
-        is_read: false // Default value since we don't use it for moderation
-      }));
-      
-      setMessages(messagesWithIsRead);
+      const moderationMessages = await fetchMessagesForModeration();
+      setMessages(moderationMessages);
     } catch (error) {
       console.error('Error fetching messages for moderation:', error);
       toast({
@@ -68,7 +43,7 @@ export const useModerationMessages = () => {
           filter: `needs_moderation=eq.true`
         },
         () => {
-          fetchMessagesForModeration();
+          fetchMessages();
         }
       )
       .on(
@@ -80,7 +55,7 @@ export const useModerationMessages = () => {
           filter: `needs_moderation=eq.true`
         },
         () => {
-          fetchMessagesForModeration();
+          fetchMessages();
         }
       )
       .subscribe();
@@ -90,12 +65,7 @@ export const useModerationMessages = () => {
 
   const approveMessage = async (messageId: string) => {
     try {
-      const { error } = await supabase
-        .from('messages')
-        .update({ is_approved: true })
-        .eq('id', messageId);
-      
-      if (error) throw error;
+      await approveMessageApi(messageId);
       
       toast({
         title: "Message approved",
@@ -116,12 +86,7 @@ export const useModerationMessages = () => {
 
   const rejectMessage = async (messageId: string) => {
     try {
-      const { error } = await supabase
-        .from('messages')
-        .update({ is_approved: false })
-        .eq('id', messageId);
-      
-      if (error) throw error;
+      await rejectMessageApi(messageId);
       
       toast({
         title: "Message rejected",
@@ -141,7 +106,7 @@ export const useModerationMessages = () => {
   };
 
   useEffect(() => {
-    fetchMessagesForModeration();
+    fetchMessages();
     const channel = subscribeToNewMessages();
 
     return () => {
@@ -154,6 +119,6 @@ export const useModerationMessages = () => {
     isLoading,
     approveMessage,
     rejectMessage,
-    refreshMessages: fetchMessagesForModeration
+    refreshMessages: fetchMessages
   };
 };
