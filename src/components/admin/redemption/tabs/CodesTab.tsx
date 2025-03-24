@@ -1,12 +1,14 @@
 
-import React from 'react';
-import { RedemptionCode } from '@/types/redemption';
+import React, { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import RedemptionCodeStats from '../../RedemptionCodeStats';
-import CodeGenerationPanel from '../code-generation/CodeGenerationPanel';
-import CodesTablePanel from '../codes-table/CodesTablePanel';
 import AdvancedSearchFilters from '../filters/AdvancedSearchFilters';
-import ExportOptions from '../exporting/ExportOptions';
+import RedemptionCodeActions from '../../RedemptionCodeActions';
+import RedemptionCodesTable from '../../RedemptionCodesTable';
+import RedemptionCodeGenerators from '../RedemptionCodeGenerators';
+import RedemptionCodeStats from '../analytics/RedemptionCodeStats';
+import Pagination from '../pagination/Pagination';
+import { RedemptionCode } from '@/types/redemption';
 
 interface CodesTabProps {
   stats: {
@@ -87,68 +89,80 @@ const CodesTab: React.FC<CodesTabProps> = ({
   onPageChange,
   onPageSizeChange
 }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await onRefresh();
+    setIsRefreshing(false);
+  };
+
   return (
     <div className="space-y-6">
       <RedemptionCodeStats stats={stats} />
       
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-2">
-        <div className="text-2xl font-bold">Redemption Code Management</div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="mb-6">
+          <TabsTrigger value="all">All Codes</TabsTrigger>
+          <TabsTrigger value="unused">Unused</TabsTrigger>
+          <TabsTrigger value="used">Used</TabsTrigger>
+          <TabsTrigger value="students">Student Codes</TabsTrigger>
+          <TabsTrigger value="employers">Employer Codes</TabsTrigger>
+        </TabsList>
+
+        <AdvancedSearchFilters onSearch={onApplyFilters} />
         
-        <div className="flex flex-wrap gap-2">
-          <ExportOptions 
-            selectedCodes={selectedCodes}
-            allCodes={filteredCodes}
-          />
-        </div>
+        <Card>
+          <CardContent className="p-6">
+            <RedemptionCodeActions
+              selectedCount={selectedCodes.length}
+              onRefresh={handleRefresh}
+              onExport={onExport}
+              onPrint={onPrint}
+              onEmailSelected={onEmailSelected}
+              onDeleteSelected={onDeleteSelected}
+              isRefreshing={isRefreshing}
+            />
+            
+            <RedemptionCodesTable
+              codes={filteredCodes}
+              selectedCodes={selectedCodes}
+              allSelected={allSelected}
+              isLoading={isLoading}
+              formatDate={formatDate}
+              onSelectCode={onSelectCode}
+              onSelectAll={onSelectAll}
+              onCopyCode={onCopyCode}
+              onEmailCode={onEmailCode}
+              onViewDetails={onViewDetails}
+              onViewQRCode={onViewQRCode}
+            />
+            
+            <div className="mt-4">
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCodes}
+                pageSize={pageSize}
+                onPageChange={onPageChange}
+                onPageSizeChange={onPageSizeChange}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </Tabs>
+      
+      <div className="pt-4">
+        <RedemptionCodeGenerators
+          onGenerateCode={onCodeGeneration}
+          onBulkGenerate={onBulkGeneration}
+          onAutomatedGeneration={onAutomatedGeneration}
+          isGenerating={isGenerating}
+          codeType={codeType}
+          setCodeType={setCodeType}
+          expireDays={expireDays}
+          setExpireDays={setExpireDays}
+        />
       </div>
-      
-      <Card>
-        <CardContent className="p-6">
-          <CodeGenerationPanel 
-            onGenerateCode={onCodeGeneration}
-            onBulkGenerate={onBulkGeneration}
-            onAutomatedGeneration={onAutomatedGeneration}
-            isGenerating={isGenerating}
-            codeType={codeType}
-            setCodeType={setCodeType}
-            expireDays={expireDays}
-            setExpireDays={setExpireDays}
-          />
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardContent className="p-6">
-          <AdvancedSearchFilters onSearch={onApplyFilters} />
-          
-          <CodesTablePanel
-            codes={filteredCodes}
-            selectedCodes={selectedCodes}
-            allSelected={allSelected}
-            isLoading={isLoading}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCodes={totalCodes}
-            formatDate={formatDate}
-            onSelectCode={onSelectCode}
-            onSelectAll={onSelectAll}
-            onCopyCode={onCopyCode}
-            onEmailCode={onEmailCode}
-            onViewDetails={onViewDetails}
-            onViewQRCode={onViewQRCode}
-            onRefresh={onRefresh}
-            onExport={onExport}
-            onPrint={onPrint}
-            onEmailSelected={onEmailSelected}
-            onDeleteSelected={onDeleteSelected}
-            onPageChange={onPageChange}
-            onPageSizeChange={onPageSizeChange}
-            isDeleting={isDeleting}
-          />
-        </CardContent>
-      </Card>
     </div>
   );
 };

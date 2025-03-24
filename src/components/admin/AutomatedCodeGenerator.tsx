@@ -1,9 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, Users } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { userTypes } from './redemption/UserTypeDefinitions';
 import AutomatedCodeGeneratorDialog from './redemption/AutomatedCodeGeneratorDialog';
 
 interface AutomatedCodeGeneratorProps {
@@ -16,65 +14,47 @@ const AutomatedCodeGenerator: React.FC<AutomatedCodeGeneratorProps> = ({
   isGenerating
 }) => {
   const [showDialog, setShowDialog] = useState(false);
-  const [userType, setUserType] = useState<string>('student');
-  const [amount, setAmount] = useState<number>(10);
-  const [expireDays, setExpireDays] = useState<number>(90);
-  const [emailDomain, setEmailDomain] = useState<string>('');
-  const { toast } = useToast();
+  const [userType, setUserType] = useState('student');
+  const [amount, setAmount] = useState(10);
+  const [expireDays, setExpireDays] = useState(90);
+  const [emailDomain, setEmailDomain] = useState('students.westsidehigh.edu');
 
-  const handleSubmit = async () => {
-    if (!emailDomain) {
-      toast({
-        title: 'Email Domain Required',
-        description: 'Please enter an email domain to send the generated codes to.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
+  const handleGenerateCodes = async () => {
     await onGenerateCodes(userType, amount, expireDays, emailDomain);
     setShowDialog(false);
   };
 
   return (
-    <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-primary" />
-          Automated Code Generator
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground mb-4">
-          Generate and distribute redemption codes automatically to different user categories.
+    <>
+      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-md border border-indigo-100">
+        <h3 className="text-lg font-medium mb-3 text-indigo-700">Automated Code Distribution</h3>
+        <p className="text-sm text-indigo-700/80 mb-4">
+          Generate and automatically email redemption codes to specific user groups.
         </p>
-
         <Button 
-          variant="default" 
-          className="w-full" 
           onClick={() => setShowDialog(true)}
-          disabled={isGenerating}
+          variant="default"
+          className="bg-indigo-600 hover:bg-indigo-700 w-full"
         >
-          <Users className="mr-2 h-4 w-4" />
-          Generate Codes by User Type
+          Set Up Code Distribution
         </Button>
+      </div>
 
-        <AutomatedCodeGeneratorDialog
-          showDialog={showDialog}
-          setShowDialog={setShowDialog}
-          userType={userType}
-          setUserType={setUserType}
-          amount={amount}
-          setAmount={setAmount}
-          expireDays={expireDays}
-          setExpireDays={setExpireDays}
-          emailDomain={emailDomain}
-          setEmailDomain={setEmailDomain}
-          onSubmit={handleSubmit}
-          isGenerating={isGenerating}
-        />
-      </CardContent>
-    </Card>
+      <AutomatedCodeGeneratorDialog
+        showDialog={showDialog}
+        setShowDialog={setShowDialog}
+        userType={userType}
+        setUserType={setUserType}
+        amount={amount}
+        setAmount={setAmount}
+        expireDays={expireDays}
+        setExpireDays={setExpireDays}
+        emailDomain={emailDomain}
+        setEmailDomain={setEmailDomain}
+        onSubmit={handleGenerateCodes}
+        isGenerating={isGenerating}
+      />
+    </>
   );
 };
 

@@ -90,7 +90,7 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({ onSearch 
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All types</SelectItem>
+                      <SelectItem value="all-types">All types</SelectItem>
                       <SelectItem value="student">Student</SelectItem>
                       <SelectItem value="employer">Employer</SelectItem>
                     </SelectContent>
@@ -107,7 +107,7 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({ onSearch 
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All statuses</SelectItem>
+                      <SelectItem value="all-statuses">All statuses</SelectItem>
                       <SelectItem value="used">Used</SelectItem>
                       <SelectItem value="unused">Unused</SelectItem>
                     </SelectContent>
