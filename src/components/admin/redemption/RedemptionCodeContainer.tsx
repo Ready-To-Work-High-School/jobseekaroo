@@ -10,16 +10,19 @@ import RedemptionCodeActions from '../RedemptionCodeActions';
 import RedemptionCodesTable from '../RedemptionCodesTable';
 import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
 import RedemptionCodesPagination from './RedemptionCodesPagination';
+import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 
 const RedemptionCodeContainer: React.FC = () => {
   const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = useState<number>(30);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
   const {
     codes,
     stats,
     isLoading,
     isGenerating,
+    isDeleting,
     activeTab,
     selectedCodes,
     allSelected,
@@ -34,6 +37,7 @@ const RedemptionCodeContainer: React.FC = () => {
     handleAutomatedCodeGeneration,
     handleSelectCode,
     handleSelectAll,
+    handleDeleteSelectedCodes,
     fetchCodes,
     formatDate,
     exportCodes
@@ -41,6 +45,12 @@ const RedemptionCodeContainer: React.FC = () => {
 
   const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
   const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
+
+  const handleShowDeleteDialog = () => {
+    if (selectedCodes.length > 0) {
+      setShowDeleteDialog(true);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -75,6 +85,7 @@ const RedemptionCodeContainer: React.FC = () => {
               onExport={exportCodes}
               onPrint={() => window.print()}
               onEmailSelected={() => handleBulkEmail(selectedCodes)}
+              onDeleteSelected={handleShowDeleteDialog}
             />
 
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
@@ -114,6 +125,13 @@ const RedemptionCodeContainer: React.FC = () => {
       </Card>
 
       {detailsView}
+
+      <DeleteRedemptionCodeDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleDeleteSelectedCodes}
+        selectedCodes={selectedCodes}
+      />
     </div>
   );
 };

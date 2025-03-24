@@ -613,6 +613,18 @@ export type Database = {
       }
     }
     Functions: {
+      delete_redemption_code: {
+        Args: {
+          code_id: string
+        }
+        Returns: boolean
+      }
+      delete_redemption_codes: {
+        Args: {
+          code_ids: string[]
+        }
+        Returns: number
+      }
       generate_job_recommendations: {
         Args: {
           user_id_param: string

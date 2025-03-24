@@ -12,7 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Copy, Mail } from 'lucide-react';
+import { Copy, Mail, Trash } from 'lucide-react';
 
 interface RedemptionCodesTableProps {
   codes: RedemptionCode[];

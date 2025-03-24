@@ -6,3 +6,4 @@ export * from './list';
 export * from './email';
 export * from './use';
 export * from './types';
+export * from './delete';

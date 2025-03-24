@@ -4,13 +4,16 @@ import { RedemptionCode } from '@/types/redemption';
 import { 
   generateRedemptionCode, 
   listRedemptionCodes,
-  sendRedemptionCodeEmail
+  sendRedemptionCodeEmail,
+  deleteRedemptionCode,
+  deleteRedemptionCodes
 } from '@/lib/supabase/redemption';
 
 export function useRedemptionCodes() {
   const [codes, setCodes] = useState<RedemptionCode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('all');
   const [selectedCodes, setSelectedCodes] = useState<RedemptionCode[]>([]);
   const [allSelected, setAllSelected] = useState(false);
@@ -234,6 +237,79 @@ export function useRedemptionCodes() {
     }
   };
 
+  const handleDeleteCode = async (code: RedemptionCode) => {
+    setIsDeleting(true);
+    try {
+      const success = await deleteRedemptionCode(code.id);
+      
+      if (success) {
+        setCodes(prev => prev.filter(c => c.id !== code.id));
+        setSelectedCodes(prev => prev.filter(c => c.id !== code.id));
+        
+        toast({
+          title: 'Success',
+          description: `Redemption code ${code.code} deleted successfully`,
+        });
+        
+        await fetchCodes(); // Refresh data
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to delete redemption code',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting redemption code:', error);
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteSelectedCodes = async () => {
+    if (selectedCodes.length === 0) return;
+    
+    setIsDeleting(true);
+    try {
+      const codeIds = selectedCodes.map(code => code.id);
+      const deletedCount = await deleteRedemptionCodes(codeIds);
+      
+      if (deletedCount > 0) {
+        toast({
+          title: 'Success',
+          description: `Deleted ${deletedCount} redemption codes successfully`,
+        });
+        
+        // Remove deleted codes from state
+        setCodes(prev => prev.filter(c => !codeIds.includes(c.id)));
+        setSelectedCodes([]);
+        setAllSelected(false);
+        
+        await fetchCodes(); // Refresh data
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to delete redemption codes',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting redemption codes:', error);
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const handleSelectCode = (code: RedemptionCode, isSelected: boolean) => {
     if (isSelected) {
       setSelectedCodes(prev => [...prev, code]);
@@ -296,6 +372,7 @@ export function useRedemptionCodes() {
     stats,
     isLoading,
     isGenerating,
+    isDeleting,
     activeTab,
     selectedCodes,
     allSelected,
@@ -312,6 +389,8 @@ export function useRedemptionCodes() {
     handleAutomatedCodeGeneration,
     handleSelectCode,
     handleSelectAll,
+    handleDeleteCode,
+    handleDeleteSelectedCodes,
     fetchCodes,
     formatDate,
     exportCodes
