@@ -1,29 +1,17 @@
-import { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
-const MainNavigation = () => {
-  const { user, signOut } = useAuth();
-  const { theme, setTheme } = useTheme();
-  const { toast } = useToast();
-  const navigate = useNavigate();
+interface MainNavigationProps {
+  className?: string;
+}
+
+const MainNavigation = ({ className }: MainNavigationProps) => {
+  const { user } = useAuth();
 
   return (
-    <nav className="hidden md:flex items-center space-x-1">
+    <nav className={cn("flex items-center space-x-1", className)}>
       <Link to="/" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent">
         Home
       </Link>
