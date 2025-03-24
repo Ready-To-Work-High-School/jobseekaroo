@@ -1,6 +1,6 @@
 
 import { supabase } from './index';
-import { Conversation, Message } from '@/types/message';
+import { Message, Conversation } from '@/types/message';
 
 /**
  * Create a new conversation between two users
@@ -199,7 +199,13 @@ export async function getMessagesForModeration(): Promise<Message[]> {
     
     if (error) throw error;
     
-    return data || [];
+    // Add is_read field to each message to comply with Message type
+    const messagesWithIsRead = (data || []).map(msg => ({
+      ...msg,
+      is_read: false // Default value since we don't use it for moderation
+    }));
+    
+    return messagesWithIsRead;
   } catch (error) {
     console.error('Error getting messages for moderation:', error);
     return [];
