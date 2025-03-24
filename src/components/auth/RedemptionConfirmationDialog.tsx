@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, AlertCircle, UserCircle, Briefcase, ShieldCheck, Sparkles } from 'lucide-react';
+import { UserCircle, Briefcase, ShieldCheck, Sparkles } from 'lucide-react';
 import { RedemptionCode } from '@/types/redemption';
 import { UserProfile } from '@/types/user';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import SpinningBitcoin from '@/components/animations/SpinningBitcoin';
 
 interface RedemptionConfirmationDialogProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   onDashboardClick
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showMainContent, setShowMainContent] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
@@ -85,6 +87,10 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
     }
   };
 
+  const handleAnimationComplete = () => {
+    setShowMainContent(true);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
@@ -105,44 +111,63 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
         )}
         
         <DialogHeader>
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
-            {getIcon()}
-            <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', right: '150px' }} />
-            <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', left: '150px', animationDelay: '0.5s' }} />
-          </div>
-          <DialogTitle className="text-xl text-center">Redemption Successful!</DialogTitle>
-          <DialogDescription className="text-center">
-            Your account has been upgraded to <Badge variant="outline" className="ml-1 font-semibold">{getAccountTypeText()}</Badge>
-          </DialogDescription>
+          {!showMainContent ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <SpinningBitcoin 
+                size={80} 
+                onAnimationComplete={handleAnimationComplete}
+                className="mb-4"
+              />
+              <p className="text-lg text-center text-muted-foreground animate-pulse">
+                Redeeming your code...
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
+                {getIcon()}
+                <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', right: '150px' }} />
+                <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', left: '150px', animationDelay: '0.5s' }} />
+              </div>
+              <DialogTitle className="text-xl text-center">Redemption Successful!</DialogTitle>
+              <DialogDescription className="text-center">
+                Your account has been upgraded to <Badge variant="outline" className="ml-1 font-semibold">{getAccountTypeText()}</Badge>
+              </DialogDescription>
+            </>
+          )}
         </DialogHeader>
         
-        <div className="space-y-4">
-          <div className="rounded-md bg-muted p-4">
-            <h4 className="font-medium mb-2">Your new benefits include:</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {getBenefits().map((benefit, index) => (
-                <li key={index} className="text-sm">{benefit}</li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className="text-sm text-muted-foreground">
-            <p>Your redemption code <span className="font-mono font-medium">{redemptionCode.code}</span> has been applied to {userProfile?.first_name ? `${userProfile.first_name}'s` : 'your'} account.</p>
-          </div>
-        </div>
+        {showMainContent && (
+          <>
+            <div className="space-y-4">
+              <div className="rounded-md bg-muted p-4">
+                <h4 className="font-medium mb-2">Your new benefits include:</h4>
+                <ul className="list-disc list-inside space-y-1">
+                  {getBenefits().map((benefit, index) => (
+                    <li key={index} className="text-sm">{benefit}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="text-sm text-muted-foreground">
+                <p>Your redemption code <span className="font-mono font-medium">{redemptionCode.code}</span> has been applied to {userProfile?.first_name ? `${userProfile.first_name}'s` : 'your'} account.</p>
+              </div>
+            </div>
 
-        <DialogFooter className="sm:justify-center gap-2 pt-2">
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-          <Button 
-            variant="brand" 
-            className="animate-pulse" 
-            onClick={onDashboardClick || (() => window.location.href = '/account-benefits')}
-          >
-            View All Benefits
-          </Button>
-        </DialogFooter>
+            <DialogFooter className="sm:justify-center gap-2 pt-2">
+              <Button variant="outline" onClick={onClose}>
+                Close
+              </Button>
+              <Button 
+                variant="brand" 
+                className="animate-pulse" 
+                onClick={onDashboardClick || (() => window.location.href = '/account-benefits')}
+              >
+                View All Benefits
+              </Button>
+            </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
