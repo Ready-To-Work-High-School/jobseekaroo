@@ -1,9 +1,10 @@
 
-import { useCallback } from 'react';
+import { useState } from 'react';
 import { RedemptionCode } from '@/types/redemption';
+import { useToast } from '@/hooks/use-toast';
 
-interface DeleteCodeHandlerProps {
-  handleDeleteSelectedCodes: (codeIds: string[]) => Promise<number>;
+export interface DeleteCodeHandlerProps {
+  handleDeleteSelectedCodes: (selectedCodeIds: string[]) => Promise<number>;
   selectedCodes: RedemptionCode[];
   selectedForDelete: RedemptionCode[];
   fetchCodes: () => Promise<void>;
@@ -21,22 +22,47 @@ export function useDeleteCodeHandler({
   openDeleteDialog,
   closeDeleteDialog
 }: DeleteCodeHandlerProps) {
-  
-  const handleShowDeleteDialog = useCallback(() => {
-    if (selectedCodes.length > 0) {
-      openDeleteDialog(selectedCodes);
-    }
-  }, [selectedCodes, openDeleteDialog]);
+  const { toast } = useToast();
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleConfirmDelete = useCallback(async () => {
-    await handleDeleteSelectedCodes(selectedForDelete.map(code => code.id));
-    clearSelection();
-    closeDeleteDialog();
-    await fetchCodes();
-  }, [handleDeleteSelectedCodes, selectedForDelete, clearSelection, closeDeleteDialog, fetchCodes]);
+  const handleConfirmDelete = async () => {
+    if (selectedForDelete.length === 0) return;
+    
+    setIsDeleting(true);
+    try {
+      const codeIds = selectedForDelete.map(code => code.id);
+      const deletedCount = await handleDeleteSelectedCodes(codeIds);
+      
+      if (deletedCount > 0) {
+        await fetchCodes();
+        clearSelection();
+        
+        toast({
+          title: 'Success',
+          description: `Deleted ${deletedCount} codes successfully`,
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to delete the selected codes',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting codes:', error);
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred while deleting codes',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsDeleting(false);
+      closeDeleteDialog();
+    }
+  };
 
   return {
-    handleShowDeleteDialog,
+    isDeleting,
     handleConfirmDelete
   };
 }

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,18 +10,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { CalendarIcon, Clock, Loader2, SendHorizontal } from 'lucide-react';
 import { format } from 'date-fns';
+import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface EmailSchedulerProps {
-  onSchedule: (data: {
-    recipients: string;
-    subject: string;
-    message: string;
-    codeType: 'student' | 'employer';
-    amount: number;
-    expiresInDays: number;
-    scheduleDate: Date;
-    scheduleTime: string;
-  }) => Promise<void>;
+  onSchedule: (params: ScheduleEmailParams) => Promise<boolean>;
   isScheduling: boolean;
 }
 
@@ -58,7 +49,7 @@ const EmailScheduler: React.FC<EmailSchedulerProps> = ({ onSchedule, isSchedulin
     }
     
     try {
-      await onSchedule({
+      const success = await onSchedule({
         recipients,
         subject,
         message,
@@ -69,16 +60,18 @@ const EmailScheduler: React.FC<EmailSchedulerProps> = ({ onSchedule, isSchedulin
         scheduleTime,
       });
       
-      toast({
-        title: 'Success',
-        description: 'Email scheduled successfully',
-      });
-      
-      // Reset form
-      setRecipients('');
-      setSubject('Your Redemption Codes');
-      setMessage('Here are your requested access codes. Please distribute them accordingly.');
-      setAmount(10);
+      if (success) {
+        toast({
+          title: 'Success',
+          description: 'Email scheduled successfully',
+        });
+        
+        // Reset form
+        setRecipients('');
+        setSubject('Your Redemption Codes');
+        setMessage('Here are your requested access codes. Please distribute them accordingly.');
+        setAmount(10);
+      }
     } catch (error) {
       console.error('Error scheduling email:', error);
       toast({

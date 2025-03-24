@@ -7,6 +7,7 @@ import ReportsTab from './tabs/ReportsTab';
 import WizardTab from './tabs/WizardTab';
 import SchedulerTab from './tabs/SchedulerTab';
 import { RedemptionCode } from '@/types/redemption';
+import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionTabManagerProps {
   activeTab: string;
@@ -44,11 +45,12 @@ interface RedemptionTabManagerProps {
     onCopyCode: (code: string) => void;
     onEmailCode: (code: RedemptionCode) => void;
     onViewDetails: (code: RedemptionCode) => void;
+    onViewQRCode: (code: RedemptionCode) => void;
     onCodeGeneration: () => Promise<void>;
     onBulkGeneration: (amount: number) => Promise<void>;
     onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
     onWizardGeneration: (params: any) => Promise<void>;
-    onScheduleEmail: (params: any) => Promise<void>;
+    onScheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
     onRefresh: () => Promise<void>;
     onExport: () => void;
     onPrint: () => void;
@@ -119,6 +121,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
           onCopyCode={handlers.onCopyCode}
           onEmailCode={handlers.onEmailCode}
           onViewDetails={handlers.onViewDetails}
+          onViewQRCode={handlers.onViewQRCode}
           onCodeGeneration={handlers.onCodeGeneration}
           onBulkGeneration={handlers.onBulkGeneration}
           onAutomatedGeneration={handlers.onAutomatedGeneration}
