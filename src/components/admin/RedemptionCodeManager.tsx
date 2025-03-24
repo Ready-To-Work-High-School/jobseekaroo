@@ -1,30 +1,18 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Label } from "@/components/ui/label";
 import { 
   generateRedemptionCode, 
   listRedemptionCodes 
 } from '@/lib/supabase/redemption';
 import { RedemptionCode } from '@/types/redemption';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Download, Filter, Info, Printer, RefreshCcw, Copy, UserCircle, Briefcase, AlertCircle, CheckCircle, CalendarIcon, Mail } from 'lucide-react';
+import RedemptionCodeStats from './RedemptionCodeStats';
+import RedemptionCodeGenerator from './RedemptionCodeGenerator';
+import RedemptionCodeActions from './RedemptionCodeActions';
+import RedemptionCodesTable from './RedemptionCodesTable';
+import RedemptionCodeDetails from './RedemptionCodeDetails';
 import EmailRedemptionCodeDialog from './EmailRedemptionCodeDialog';
 
 const RedemptionCodeManager: React.FC = () => {
@@ -35,8 +23,6 @@ const RedemptionCodeManager: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedCode, setSelectedCode] = useState<RedemptionCode | null>(null);
   const [showCodeDetails, setShowCodeDetails] = useState(false);
-  const [bulkGenerateAmount, setBulkGenerateAmount] = useState<number>(5);
-  const [showBulkDialog, setShowBulkDialog] = useState(false);
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [emailSelectedCode, setEmailSelectedCode] = useState<RedemptionCode | null>(null);
   const [selectedCodes, setSelectedCodes] = useState<RedemptionCode[]>([]);
@@ -143,14 +129,13 @@ const RedemptionCodeManager: React.FC = () => {
     }
   };
 
-  const handleBulkGenerate = async () => {
+  const handleBulkGenerate = async (amount: number) => {
     setIsGenerating(true);
-    setShowBulkDialog(false);
     
     try {
       const newCodes: RedemptionCode[] = [];
       
-      for (let i = 0; i < bulkGenerateAmount; i++) {
+      for (let i = 0; i < amount; i++) {
         const code = await generateRedemptionCode(codeType, expireDays);
         if (code) newCodes.push(code);
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -224,7 +209,7 @@ const RedemptionCodeManager: React.FC = () => {
   const handleSelectAll = (isSelected: boolean) => {
     setAllSelected(isSelected);
     if (isSelected) {
-      setSelectedCodes(codes);
+      setSelectedCodes(codes.filter(code => !code.used));
     } else {
       setSelectedCodes([]);
     }
@@ -268,66 +253,7 @@ const RedemptionCodeManager: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Codes</p>
-                <h3 className="text-2xl font-bold">{stats.totalCodes}</h3>
-              </div>
-              <div className="bg-primary/10 p-2 rounded-full">
-                <CheckCircle className="h-5 w-5 text-primary" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Used Codes</p>
-                <h3 className="text-2xl font-bold">{stats.usedCodes}</h3>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {stats.totalCodes > 0 ? Math.round((stats.usedCodes / stats.totalCodes) * 100) : 0}% of total
-                </p>
-              </div>
-              <div className="bg-blue-100 p-2 rounded-full">
-                <UserCircle className="h-5 w-5 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Student Codes</p>
-                <h3 className="text-2xl font-bold">{stats.studentCodes}</h3>
-              </div>
-              <div className="bg-indigo-100 p-2 rounded-full">
-                <UserCircle className="h-5 w-5 text-indigo-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Employer Codes</p>
-                <h3 className="text-2xl font-bold">{stats.employerCodes}</h3>
-              </div>
-              <div className="bg-amber-100 p-2 rounded-full">
-                <Briefcase className="h-5 w-5 text-amber-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <RedemptionCodeStats stats={stats} />
 
       <Card>
         <CardHeader>
@@ -335,64 +261,23 @@ const RedemptionCodeManager: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="text-lg font-medium mb-3">Generate New Code</h3>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                <div>
-                  <Select 
-                    value={codeType} 
-                    onValueChange={(value) => setCodeType(value as 'student' | 'employer')}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Code Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="employer">Employer</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    value={expireDays.toString()}
-                    onChange={(e) => setExpireDays(parseInt(e.target.value) || 30)}
-                    placeholder="Expires in days"
-                    min={1}
-                  />
-                </div>
-                <Button onClick={handleGenerateCode} disabled={isGenerating}>
-                  {isGenerating ? 'Generating...' : 'Generate Single Code'}
-                </Button>
-                <Button onClick={() => setShowBulkDialog(true)} variant="outline" disabled={isGenerating}>
-                  Bulk Generate
-                </Button>
-              </div>
-            </div>
+            <RedemptionCodeGenerator
+              onGenerateCode={handleGenerateCode}
+              onBulkGenerate={handleBulkGenerate}
+              isGenerating={isGenerating}
+              codeType={codeType}
+              setCodeType={setCodeType}
+              expireDays={expireDays}
+              setExpireDays={setExpireDays}
+            />
 
-            <div className="flex flex-wrap justify-between items-center gap-2">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={fetchCodes}>
-                  <RefreshCcw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
-                <Button variant="outline" size="sm" onClick={exportCodes}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => window.print()}>
-                  <Printer className="h-4 w-4 mr-2" />
-                  Print
-                </Button>
-              </div>
-              
-              {selectedCodes.length > 0 && (
-                <Button variant="secondary" size="sm" onClick={handleBulkEmail}>
-                  <Mail className="h-4 w-4 mr-2" />
-                  Email Selected ({selectedCodes.length})
-                </Button>
-              )}
-            </div>
+            <RedemptionCodeActions
+              selectedCount={selectedCodes.length}
+              onRefresh={fetchCodes}
+              onExport={exportCodes}
+              onPrint={() => window.print()}
+              onEmailSelected={handleBulkEmail}
+            />
 
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="mb-4">
@@ -404,198 +289,31 @@ const RedemptionCodeManager: React.FC = () => {
               </TabsList>
               
               <TabsContent value={activeTab} className="mt-0">
-                {isLoading ? (
-                  <div className="flex justify-center p-4">
-                    <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-                  </div>
-                ) : codes.length === 0 ? (
-                  <div className="text-center p-4 text-gray-500">
-                    No redemption codes found
-                  </div>
-                ) : (
-                  <div className="border rounded-md">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-10">
-                            <Checkbox 
-                              checked={allSelected} 
-                              onCheckedChange={handleSelectAll}
-                              aria-label="Select all codes"
-                            />
-                          </TableHead>
-                          <TableHead>Code</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Created</TableHead>
-                          <TableHead>Expires</TableHead>
-                          <TableHead>Used By</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {codes.map((code) => {
-                          const isSelected = selectedCodes.some(c => c.id === code.id);
-                          return (
-                            <TableRow key={code.id}>
-                              <TableCell>
-                                <Checkbox 
-                                  checked={isSelected}
-                                  onCheckedChange={(checked) => handleSelectCode(code, !!checked)}
-                                  aria-label={`Select code ${code.code}`}
-                                  disabled={code.used}
-                                />
-                              </TableCell>
-                              <TableCell className="font-mono font-medium">
-                                <div className="flex items-center gap-1">
-                                  {code.code}
-                                  <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className="h-6 w-6" 
-                                    onClick={() => handleCopyCode(code.code)}
-                                  >
-                                    <Copy className="h-3.5 w-3.5" />
-                                  </Button>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant={code.type === 'student' ? 'default' : 'outline'}>
-                                  {code.type === 'student' ? 'Student' : 'Employer'}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant={code.used ? 'destructive' : 'success'}>
-                                  {code.used ? 'Used' : 'Available'}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>{formatDate(code.createdAt)}</TableCell>
-                              <TableCell>{formatDate(code.expiresAt)}</TableCell>
-                              <TableCell>{code.usedBy || 'N/A'}</TableCell>
-                              <TableCell className="text-right">
-                                <div className="flex justify-end items-center space-x-2">
-                                  {!code.used && (
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm"
-                                      className="h-8 px-2"
-                                      onClick={() => handleEmailCode(code)}
-                                    >
-                                      <Mail className="h-3.5 w-3.5" />
-                                      <span className="sr-only">Email Code</span>
-                                    </Button>
-                                  )}
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    onClick={() => handleViewDetails(code)}
-                                  >
-                                    Details
-                                  </Button>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
+                <RedemptionCodesTable
+                  codes={codes}
+                  selectedCodes={selectedCodes}
+                  allSelected={allSelected}
+                  isLoading={isLoading}
+                  formatDate={formatDate}
+                  onSelectCode={handleSelectCode}
+                  onSelectAll={handleSelectAll}
+                  onCopyCode={handleCopyCode}
+                  onEmailCode={handleEmailCode}
+                  onViewDetails={handleViewDetails}
+                />
               </TabsContent>
             </Tabs>
           </div>
         </CardContent>
       </Card>
 
-      <Dialog open={showBulkDialog} onOpenChange={setShowBulkDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Bulk Generate Codes</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="amount">Number of Codes</Label>
-              <Input
-                id="amount"
-                type="number"
-                value={bulkGenerateAmount}
-                onChange={(e) => setBulkGenerateAmount(parseInt(e.target.value) || 5)}
-                min={1}
-                max={50}
-              />
-              <p className="text-sm text-muted-foreground">Generates up to 50 codes at once</p>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowBulkDialog(false)}>Cancel</Button>
-            <Button onClick={handleBulkGenerate} disabled={isGenerating}>
-              {isGenerating ? 'Generating...' : 'Generate Codes'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showCodeDetails} onOpenChange={setShowCodeDetails}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Redemption Code Details</DialogTitle>
-          </DialogHeader>
-          {selectedCode && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Code</p>
-                  <p className="font-mono font-medium">{selectedCode.code}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Type</p>
-                  <Badge variant={selectedCode.type === 'student' ? 'default' : 'outline'}>
-                    {selectedCode.type === 'student' ? 'Student' : 'Employer'}
-                  </Badge>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Status</p>
-                  <Badge variant={selectedCode.used ? 'destructive' : 'success'}>
-                    {selectedCode.used ? 'Used' : 'Available'}
-                  </Badge>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Created</p>
-                  <p>{formatDate(selectedCode.createdAt)}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Expires</p>
-                  <p>{formatDate(selectedCode.expiresAt)}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Used By</p>
-                  <p>{selectedCode.usedBy || 'N/A'}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">Used At</p>
-                  <p>{formatDate(selectedCode.usedAt)}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">ID</p>
-                  <p className="text-xs text-muted-foreground truncate">{selectedCode.id}</p>
-                </div>
-              </div>
-              
-              <div className="pt-2 border-t">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full"
-                  onClick={() => handleCopyCode(selectedCode.code)}
-                >
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy Code
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <RedemptionCodeDetails
+        isOpen={showCodeDetails}
+        onClose={() => setShowCodeDetails(false)}
+        selectedCode={selectedCode}
+        onCopyCode={handleCopyCode}
+        formatDate={formatDate}
+      />
       
       <EmailRedemptionCodeDialog 
         isOpen={showEmailDialog}
