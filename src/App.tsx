@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -29,6 +30,8 @@ import License from './pages/License';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './contexts/AuthContext';
 import Dashboard from './pages/Dashboard';
+import Messages from './pages/Messages';
+import AdminMessageModeration from './pages/AdminMessageModeration';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -50,7 +53,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/jobs" element={<JobListings />} />
           <Route path="/jobs/:id" element={<JobDetails />} />
-          <Route path="/dashboard" element={<Dashboard />} /> {/* Add this line */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/skills" element={<Skills />} />
           <Route path="/resume" element={<ResumeAssistant />} />
@@ -70,6 +73,8 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/redemption-code" element={<RedemptionCode />} />
           <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
           <Route path="/license" element={<License />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

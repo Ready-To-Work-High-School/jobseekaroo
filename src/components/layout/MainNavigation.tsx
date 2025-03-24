@@ -8,7 +8,8 @@ interface MainNavigationProps {
 }
 
 const MainNavigation = ({ className }: MainNavigationProps) => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
+  const isAdmin = userProfile?.user_type === 'admin';
 
   return (
     <nav className={cn("flex items-center space-x-1", className)}>
@@ -34,6 +35,14 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
           <Link to="/resume" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent">
             Resume
           </Link>
+          <Link to="/messages" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent">
+            Messages
+          </Link>
+          {isAdmin && (
+            <Link to="/admin/message-moderation" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent text-primary">
+              Moderation
+            </Link>
+          )}
         </>
       ) : (
         <Link to="/resources" className="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent">
