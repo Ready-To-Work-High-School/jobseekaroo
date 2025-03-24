@@ -14,7 +14,7 @@ const HeroSection = () => {
                 Entrepreneurship Academy
               </span>
               <span className="block mt-2">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-700 via-gray-600 to-gray-800">at</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-amber-600 to-blue-700">Westside High <span className="text-gray-700">School</span></span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-700 via-gray-600 to-gray-800">@</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-800 via-amber-600 to-blue-700">Westside High <span className="text-gray-700">School</span></span>
               </span>
             </h1>
             <p className="text-xl text-gray-700 mb-8">
