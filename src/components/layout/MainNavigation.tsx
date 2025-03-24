@@ -2,7 +2,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
-import { Shield } from 'lucide-react';
+import AdminTestLink from '@/components/shared/AdminTestLink';
 
 interface MainNavigationProps {
   className?: string;
@@ -67,16 +67,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
             Messages
           </Link>
           {isAdmin && (
-            <Link 
-              to="/admin" 
-              className={cn(
-                "px-3 py-2 text-sm font-medium rounded-md hover:bg-accent/90 flex items-center gap-1 bg-red-600 text-white font-bold",
-                (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) && "bg-red-700"
-              )}
-            >
-              <Shield className="h-4 w-4" />
-              <span>Admin Panel</span>
-            </Link>
+            <AdminTestLink variant="navbar" />
           )}
         </>
       ) : (
@@ -93,6 +84,9 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
       )}>
         Academy
       </Link>
+      
+      {/* Always show admin link without conditional rendering */}
+      {!isAdmin && !user && <AdminTestLink variant="navbar" />}
     </nav>
   );
 };

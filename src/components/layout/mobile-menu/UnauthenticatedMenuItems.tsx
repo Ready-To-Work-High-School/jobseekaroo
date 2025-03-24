@@ -1,7 +1,8 @@
 
 import React from 'react';
 import MobileMenuItem from './MobileMenuItem';
-import { BookOpen, ExternalLink, Building2, Shield } from 'lucide-react';
+import AdminTestLink from '@/components/shared/AdminTestLink';
+import { BookOpen, ExternalLink, Building2 } from 'lucide-react';
 
 interface UnauthenticatedMenuItemsProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -36,16 +37,13 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
         Sign Up
       </MobileMenuItem>
       
-      {/* IMPORTANT: Always show admin link for testing - no conditional rendering */}
-      <MobileMenuItem 
-        to="/admin" 
-        icon={Shield}
-        onClick={() => setIsOpen(false)}
-        className="text-white bg-red-600 hover:bg-red-700 font-bold"
-        activeCheck={(pathname) => pathname === "/admin" || pathname.startsWith("/admin/")}
-      >
-        Admin Panel (Test)
-      </MobileMenuItem>
+      {/* Using the shared AdminTestLink component */}
+      <div className="mt-2">
+        <AdminTestLink 
+          variant="sidebar" 
+          onClick={() => setIsOpen(false)} 
+        />
+      </div>
     </>
   );
 };

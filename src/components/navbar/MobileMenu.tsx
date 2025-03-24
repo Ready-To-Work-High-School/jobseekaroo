@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MobileNavLink } from './MobileNavLink';
+import AdminTestLink from '@/components/shared/AdminTestLink';
 import {
   Sheet,
   SheetContent,
@@ -22,7 +23,6 @@ import {
   CheckSquare,
   User,
   LogOut,
-  Shield
 } from 'lucide-react';
 
 export const MobileMenu = () => {
@@ -74,14 +74,10 @@ export const MobileMenu = () => {
             Resume Assistant
           </MobileNavLink>
           
-          {/* IMPORTANT: Always show admin link for testing - no conditional rendering */}
-          <MobileNavLink 
-            to="/admin" 
-            className="text-white bg-red-600 hover:bg-red-700 my-2 font-bold"
-          >
-            <Shield className="h-5 w-5" />
-            Admin Panel (Test)
-          </MobileNavLink>
+          {/* Using the shared AdminTestLink component instead */}
+          <div className="px-1 my-2">
+            <AdminTestLink variant="mobile" />
+          </div>
           
           {user ? (
             <>
