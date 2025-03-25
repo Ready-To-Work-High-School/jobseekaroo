@@ -25,18 +25,55 @@ export const useAuthCallbackHandler = () => {
         // Check for hash and query params without logging sensitive info
         hasHashParams: window.location.hash ? 'Yes' : 'No',
         hasQueryParams: window.location.search ? 'Yes' : 'No',
+        googleAuthConfigured: true,
+        supportsThirdPartyCookies: document.hasStorageAccess ? "Checking..." : "Unknown (old browser)",
       };
+      
       setDiagnosticInfo(info);
       console.log("Auth callback diagnostic info:", info);
+      
+      // Check storage access for modern browsers
+      if (document.hasStorageAccess) {
+        document.hasStorageAccess().then(
+          hasAccess => {
+            setDiagnosticInfo(current => ({
+              ...current, 
+              supportsThirdPartyCookies: hasAccess ? "Yes" : "No"
+            }));
+          }
+        ).catch(err => {
+          setDiagnosticInfo(current => ({
+            ...current, 
+            supportsThirdPartyCookies: `Error checking: ${err.message}`
+          }));
+        });
+      }
+      
       return info;
     };
-
-    const diagnostics = collectDiagnostics();
 
     const handleAuthCallback = async () => {
       try {
         console.log("Auth callback initiated");
         console.log("URL:", window.location.href);
+        
+        // Test if we can connect to Google's auth domain
+        try {
+          const googleTest = await fetch('https://accounts.google.com/gsi/status', { 
+            method: 'HEAD',
+            mode: 'no-cors',
+            cache: 'no-cache'
+          });
+          console.log("Google connectivity test completed");
+        } catch (connErr) {
+          console.error('Connection to Google failed:', connErr);
+          setDiagnosticInfo(current => ({
+            ...current,
+            googleConnectionError: connErr.message
+          }));
+          
+          // Don't set an error here, continue with auth flow
+        }
         
         // Check if there's a hash fragment in the URL (OAuth response)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -68,7 +105,14 @@ export const useAuthCallbackHandler = () => {
         
         if (error) {
           console.error('Auth callback error:', error);
-          setError(error.message);
+          
+          // Special handling for connection errors
+          if (error.message?.includes('refused to connect')) {
+            setError(`Connection error: accounts.google.com refused to connect. This could be due to network restrictions, VPN settings, or browser security features.`);
+          } else {
+            setError(error.message);
+          }
+          
           setIsLoading(false);
           toast({
             title: 'Authentication Error',
@@ -110,24 +154,37 @@ export const useAuthCallbackHandler = () => {
         });
       } catch (err: any) {
         console.error('Error in auth callback:', err);
-        setError(err.message || 'Unknown authentication error');
-        setIsLoading(false);
+        
+        // Enhanced error handling
+        let errorMessage = err.message || 'Unknown authentication error';
         
         // Special handling for connection errors
-        if (err.message?.includes('refused to connect') || 
-            err.message?.includes('network') ||
+        if (errorMessage.includes('refused to connect') || 
+            errorMessage.includes('network') ||
             !navigator.onLine) {
-          setError('Connection error: There was a problem connecting to the authentication service. Please check your internet connection and try again.');
+          errorMessage = 'Connection error: accounts.google.com refused to connect. This could be due to network restrictions, VPN settings, or browser security features.';
+          
+          // Add specific diagnostic info
+          setDiagnosticInfo(current => ({
+            ...current,
+            connectionIssue: true,
+            possibleFirewallBlock: true,
+            checkNetworkSettings: true
+          }));
         }
+        
+        setError(errorMessage);
+        setIsLoading(false);
         
         toast({
           title: 'Authentication Error',
-          description: err.message || 'Failed to complete authentication',
+          description: errorMessage || 'Failed to complete authentication',
           variant: 'destructive',
         });
       }
     };
 
+    const diagnostics = collectDiagnostics();
     handleAuthCallback();
   }, [navigate, toast]);
 
