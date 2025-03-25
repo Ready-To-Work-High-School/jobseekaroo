@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +17,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  AreaChart,
+  Area
 } from 'recharts';
 import { Loader2 } from 'lucide-react';
 
@@ -32,14 +33,12 @@ const UserTypeAnalytics: React.FC<AnalyticsProps> = ({ className }) => {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    // Simulate loading data
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Define different analytics data based on user type
   const getAnalyticsData = () => {
     switch (userProfile?.user_type) {
       case 'student':
@@ -137,7 +136,6 @@ const UserTypeAnalytics: React.FC<AnalyticsProps> = ({ className }) => {
         };
       default:
         return {
-          // Default data for users without a specific type
           generalData: [
             { month: 'Jan', activity: 20 },
             { month: 'Feb', activity: 25 },
@@ -166,7 +164,6 @@ const UserTypeAnalytics: React.FC<AnalyticsProps> = ({ className }) => {
     );
   }
 
-  // Render different content based on user type
   const renderAnalyticsContent = () => {
     switch (userProfile?.user_type) {
       case 'student':
