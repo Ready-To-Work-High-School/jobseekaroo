@@ -25,6 +25,7 @@ import AccountBenefits from './pages/AccountBenefits';
 import FAQ from './pages/FAQ';
 import RedemptionCode from './pages/RedemptionCode';
 import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
+import AdminUserManagement from './pages/AdminUserManagement';
 import License from './pages/License';
 import NotFound from './pages/NotFound';
 import AuthCallback from './pages/AuthCallback';
@@ -124,6 +125,7 @@ function App() {
             <Route path="/redeem-code" element={<RedemptionCode />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
+            <Route path="/admin/user-management" element={<AdminUserManagement />} />
             <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
             <Route path="/license" element={<License />} />
             <Route path="/auth/callback" element={<AuthCallback />} />

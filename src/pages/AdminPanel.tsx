@@ -86,8 +86,10 @@ const AdminPanel: React.FC = () => {
                 <p className="mb-4 text-sm">
                   View user profiles, change user types, and manage account access.
                 </p>
-                <Button disabled>
-                  Coming Soon
+                <Button asChild>
+                  <Link to="/admin/user-management">
+                    Manage Users
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
