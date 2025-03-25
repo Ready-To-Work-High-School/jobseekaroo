@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
 const CredentialBadges = () => {
@@ -43,22 +44,22 @@ const CredentialBadges = () => {
           Industry Certifications
         </h3>
         <div className="flex flex-wrap justify-center gap-8">
-          {/* ESB Certification Badge with enhanced styling and increased size */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-amber-50 to-amber-100 rounded-lg shadow-lg border border-amber-400">
+          {/* ESB Certification Badge - Same size and styling as Nursing Academy */}
+          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-amber-50 to-amber-100 rounded-lg shadow-lg border border-amber-400 w-72 h-auto">
             <div className="relative">
               <Badge variant="amber" className="absolute -top-2 -right-6 z-20 text-sm px-[22px] py-[2px] my-[3px] mx-0">ESB Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-lg animate-pulse"></div>
                 <div className="absolute inset-0 bg-amber-400/40 rounded-full blur-md animate-pulse delay-700"></div>
-                <img src={esbBadge} alt="ESB Certification" className="w-56 h-56 object-contain relative z-10" />
+                <img src={esbBadge} alt="ESB Certification" className="w-52 h-52 object-contain relative z-10" />
               </div>
             </div>
             <p className="mt-3 font-bold text-center text-lg">Entrepreneurship & Small Business</p>
             <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
           </div>
           
-          {/* NCLEX Badge with enhanced styling - Changed text to black and label to red */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300">
+          {/* Nursing Academy Badge - Same size and styling as ESB */}
+          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300 w-72 h-auto">
             <div className="relative">
               <Badge variant="destructive" className="absolute -top-2 -right-7 z-20 text-sm mx-[6px] py-[2px] px-[13px] my-[2px]">NCLEX Certified</Badge>
               <div className="relative">
@@ -67,7 +68,7 @@ const CredentialBadges = () => {
                 <img alt="NCLEX Certification" className="w-52 h-52 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
               </div>
             </div>
-            <p className="mt-3 font-bold text-center text-lg text-black">Medical Academy</p>
+            <p className="mt-3 font-bold text-center text-lg text-black">Nursing Academy</p>
             <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
           </div>
         </div>
