@@ -116,7 +116,7 @@ const SignInForm = () => {
       <div className="mt-6 space-y-4">
         <SignInLinks />
         
-        <Alert variant="info" className="bg-blue-50 border-blue-200 text-blue-800">
+        <Alert className="bg-blue-50 border-blue-200 text-blue-800">
           <AlertCircle className="h-4 w-4 text-blue-500" />
           <AlertDescription className="text-sm">
             <span className="block">Having trouble signing in?</span>
