@@ -54,8 +54,8 @@ secret = ""
 
 [auth.external.google]
 enabled = true
-client_id = "your-client-id-here"
-secret = "your-client-secret-here"
+client_id = "435056018915-s4ut4m4sf1muj60eagpnoqatnh4kvl8u.apps.googleusercontent.com"
+secret = "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"
 # Additional params to prevent cookies issues
 additional_provider_parameters = { access_type = "offline", prompt = "consent" }
 

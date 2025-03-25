@@ -21,7 +21,9 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       online: navigator.onLine,
       userAgent: navigator.userAgent,
       secure: window.location.protocol === 'https:',
-      hostname: window.location.hostname
+      hostname: window.location.hostname,
+      googleConfigured: true,
+      clientId: '435056018915-s4ut4m4sf1muj60eagpnoqatnh4kvl8u.apps.googleusercontent.com'
     });
     
     const { data, error } = await supabase.auth.signInWithOAuth({

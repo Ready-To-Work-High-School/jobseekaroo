@@ -1,7 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, AlertTriangle } from "lucide-react";
+import { Loader2, AlertTriangle, InfoIcon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface SocialAuthButtonsProps {
   onAppleSignIn: () => Promise<void>;
@@ -22,6 +24,8 @@ const SocialAuthButtons = ({
   const [googleError, setGoogleError] = useState<string | null>(null);
   const [appleError, setAppleError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [showGoogleDebugInfo, setShowGoogleDebugInfo] = useState(false);
+  const [diagnosticInfo, setDiagnosticInfo] = useState<any>({});
   
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -29,6 +33,37 @@ const SocialAuthButtons = ({
     
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    
+    // Collect diagnostic information
+    const info = {
+      userAgent: navigator.userAgent,
+      protocol: window.location.protocol,
+      host: window.location.host,
+      online: navigator.onLine,
+      cookiesEnabled: navigator.cookieEnabled,
+      thirdPartyCookiesTest: "Unknown (needs testing)",
+      browserSupported: !(/MSIE|Trident/.test(navigator.userAgent)),
+      localStorage: (() => {
+        try {
+          localStorage.setItem('test', 'test');
+          localStorage.removeItem('test');
+          return "Available";
+        } catch (e) {
+          return "Unavailable";
+        }
+      })(),
+      sessionStorage: (() => {
+        try {
+          sessionStorage.setItem('test', 'test');
+          sessionStorage.removeItem('test');
+          return "Available";
+        } catch (e) {
+          return "Unavailable";
+        }
+      })(),
+    };
+    
+    setDiagnosticInfo(info);
     
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -55,7 +90,8 @@ const SocialAuthButtons = ({
       console.log('Connection status:', { 
         online: navigator.onLine,
         protocol: window.location.protocol,
-        hostname: window.location.hostname
+        hostname: window.location.hostname,
+        cookiesEnabled: navigator.cookieEnabled
       });
       
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -66,13 +102,16 @@ const SocialAuthButtons = ({
       let errorMessage = error?.message || "Sign-in failed";
       if (errorMessage.includes("network") || errorMessage.includes("connection") || 
           errorMessage.includes("refused")) {
-        errorMessage = "Connection to Google failed. Please ensure you're online and try again.";
+        errorMessage = "Connection to Google failed. This could be due to:";
+        setGoogleError(errorMessage);
+        setShowGoogleDebugInfo(true);
+      } else {
+        setGoogleError(errorMessage);
       }
       
-      setGoogleError(errorMessage);
       toast({
         title: "Google Sign-In Error",
-        description: errorMessage,
+        description: "Failed to connect to Google authentication. See details below for troubleshooting.",
         variant: "destructive",
       });
     }
@@ -157,12 +196,52 @@ const SocialAuthButtons = ({
           </>
         )}
       </Button>
+      
       {googleError && (
-        <div className="text-sm text-red-500 bg-red-50 p-2 rounded border border-red-200">
+        <div className="text-sm text-red-500 bg-red-50 p-3 rounded border border-red-200">
           <div className="flex items-start">
-            <AlertTriangle className="h-4 w-4 mr-1 mt-0.5 flex-shrink-0" />
-            <div>{googleError}</div>
+            <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+            <div>
+              <p>{googleError}</p>
+              {googleError.includes("Connection to Google failed") && (
+                <ul className="list-disc pl-5 mt-2 text-xs space-y-1">
+                  <li>Browser restrictions on third-party cookies</li>
+                  <li>Network firewall or proxy blocking the connection</li>
+                  <li>Google service disruption</li>
+                  <li>Incorrect OAuth configuration</li>
+                </ul>
+              )}
+            </div>
           </div>
+          
+          <Collapsible open={showGoogleDebugInfo} onOpenChange={setShowGoogleDebugInfo} className="mt-3">
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-xs p-1 h-auto">
+                <InfoIcon className="h-3 w-3 mr-1" />
+                {showGoogleDebugInfo ? "Hide diagnostic info" : "Show diagnostic info"}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2">
+              <div className="bg-white p-2 rounded border text-xs font-mono">
+                <h4 className="font-medium mb-1">Browser Diagnostics:</h4>
+                {Object.entries(diagnosticInfo).map(([key, value]) => (
+                  <div key={key} className="grid grid-cols-5 gap-1 mb-1">
+                    <span className="col-span-2 text-gray-500">{key}:</span>
+                    <span className="col-span-3">{String(value)}</span>
+                  </div>
+                ))}
+                
+                <h4 className="font-medium mt-3 mb-1">Troubleshooting Steps:</h4>
+                <ol className="list-decimal pl-5 space-y-1">
+                  <li>Check if third-party cookies are enabled in your browser</li>
+                  <li>Try a different browser (Chrome, Firefox, etc.)</li>
+                  <li>Verify the Google Cloud Console settings match your domain</li>
+                  <li>Check that JavaScript origins include http://localhost:3000</li>
+                  <li>Clear browser cache and cookies</li>
+                </ol>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       )}
       
