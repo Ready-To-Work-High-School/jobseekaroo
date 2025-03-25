@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Shield } from 'lucide-react';
 import { useSlideIn } from '@/utils/animations';
 
 const EmployerHeader = () => {
@@ -32,6 +32,11 @@ const EmployerHeader = () => {
           <p className="text-sm text-muted-foreground mt-2">
             Post jobs and manage applications in one place
           </p>
+        </div>
+        
+        <div className="mt-6 flex items-center justify-center text-sm text-muted-foreground">
+          <Shield className="h-4 w-4 mr-1 text-green-600" />
+          <span>Secure employer area - All links and content verified for your protection</span>
         </div>
       </div>
     </div>

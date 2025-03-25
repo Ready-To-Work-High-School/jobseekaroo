@@ -1,7 +1,8 @@
 
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Briefcase, Mail } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { Briefcase, Mail, Shield } from 'lucide-react';
 
 const CallToAction = () => {
   return (
@@ -25,6 +26,17 @@ const CallToAction = () => {
           </a>
         </Button>
       </div>
+      
+      <div className="mt-4 flex justify-center">
+        <Badge variant="outline" className="gap-1 py-1.5 border-green-500">
+          <Shield className="h-3.5 w-3.5 text-green-600" />
+          <span className="text-green-700">Secure Communication</span>
+        </Badge>
+      </div>
+      
+      <p className="text-xs text-muted-foreground mt-3">
+        All communication is monitored for your safety. Report suspicious activity to site administrators.
+      </p>
     </div>
   );
 };
