@@ -18,7 +18,7 @@ const EmployerHeader = () => {
           Hire Trained Students with Verified Skills
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Connect with Westside High School's Entrepreneurship Academy to find pre-trained students
+          Connect with Westside High School's Entrepreneurship and Nursing Academy to find pre-trained students
           with industry-recognized credentials who are ready to join your workforce.
         </p>
         

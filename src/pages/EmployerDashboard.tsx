@@ -108,7 +108,8 @@ const EmployerDashboard = () => {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Employer Dashboard</h1>
             <p className="text-muted-foreground">
-              Manage job postings and connect with qualified students
+              Connect with Westside High School's Entrepreneurship and Nursing Academy to find pre-trained students
+              with industry-recognized credentials who are ready to join your workforce.
             </p>
           </div>
           

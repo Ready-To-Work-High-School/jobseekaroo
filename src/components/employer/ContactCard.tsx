@@ -8,7 +8,7 @@ const ContactCard = () => {
       <CardHeader>
         <CardTitle>Get In Touch</CardTitle>
         <CardDescription>
-          Contact us to learn more about our program and how to connect with our students.
+          Contact us to learn more about our programs and how to connect with our students.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -17,7 +17,7 @@ const ContactCard = () => {
             <Building className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <h4 className="font-medium">Westside High School Entrepreneurship Academy</h4>
+            <h4 className="font-medium">Westside High School Entrepreneurship & Nursing Academy</h4>
             <p className="text-muted-foreground">Jacksonville, Florida</p>
           </div>
         </div>

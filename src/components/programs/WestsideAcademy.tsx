@@ -33,6 +33,22 @@ const WestsideAcademy = () => {
             <ProgramBenefits />
             <CourseCurriculum />
           </div>
+          
+          {/* Nursing Academy Section */}
+          <div className="mt-10 p-6 rounded-lg bg-gradient-to-r from-blue-50 to-red-50 border border-blue-100">
+            <h3 className="text-2xl font-bold mb-4 text-blue-800">Nursing Academy</h3>
+            <p className="mb-4">
+              Our Nursing Academy prepares students for healthcare careers through specialized training and industry-recognized credentials.
+              Students learn essential healthcare skills and can earn NCLEX certification.
+            </p>
+            <div className="flex justify-center">
+              <img 
+                src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                alt="Nursing Academy Certification" 
+                className="h-32 w-auto object-contain"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="h-1 w-full bg-gradient-to-r from-red-900 via-amber-500 to-red-900"></div>

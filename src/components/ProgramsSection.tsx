@@ -1,3 +1,4 @@
+
 import { useFadeIn } from '@/utils/animations';
 import SectionHeading from './programs/SectionHeading';
 import WestsideAcademy from './programs/WestsideAcademy';
@@ -13,6 +14,7 @@ import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
 import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from './ui/badge';
+
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
   const {
@@ -31,6 +33,7 @@ const ProgramsSection = () => {
       protectElement(sectionRef.current);
     }
   }, []);
+  
   return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
@@ -53,7 +56,7 @@ const ProgramsSection = () => {
                 </div>
                 
                 <p className="font-medium text-lg mb-6 text-zinc-800">
-                  Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
+                  Connect with our Entrepreneurship and Nursing Academies to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
                 <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-colors">
@@ -69,4 +72,5 @@ const ProgramsSection = () => {
       </div>
     </section>;
 };
+
 export default ProgramsSection;
