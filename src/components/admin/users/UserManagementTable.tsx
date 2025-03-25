@@ -6,8 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Eye, MoreHorizontal, ShieldCheck, GraduationCap, Briefcase, BookOpen } from 'lucide-react';
-import { UserTableEmptyState } from './UserTableEmptyState';
-import { UserTableLoadingState } from './UserTableLoadingState';
+import { UserTableEmptyState, UserTableLoadingState } from './UserTableEmptyState';
 
 interface UserManagementTableProps {
   users: UserProfile[];

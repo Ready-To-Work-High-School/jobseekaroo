@@ -39,9 +39,12 @@ const UserManagementContainer: React.FC = () => {
         throw error;
       }
 
-      setUsers(data || []);
-      setFilteredUsers(data || []);
-      calculateUserStats(data || []);
+      // Transform the data to match the UserProfile type
+      const typedUsers = data?.map(user => user as unknown as UserProfile) || [];
+      
+      setUsers(typedUsers);
+      setFilteredUsers(typedUsers);
+      calculateUserStats(typedUsers);
     } catch (error: any) {
       console.error('Error fetching users:', error.message);
       toast({
@@ -88,13 +91,16 @@ const UserManagementContainer: React.FC = () => {
         throw error;
       }
 
+      // Cast the returned data to UserProfile
+      const updatedUser = data as unknown as UserProfile;
+
       // Update the users list with the updated user
       setUsers(prevUsers => 
-        prevUsers.map(user => user.id === userId ? data : user)
+        prevUsers.map(user => user.id === userId ? updatedUser : user)
       );
       
       setFilteredUsers(prevFilteredUsers => 
-        prevFilteredUsers.map(user => user.id === userId ? data : user)
+        prevFilteredUsers.map(user => user.id === userId ? updatedUser : user)
       );
 
       calculateUserStats(users);

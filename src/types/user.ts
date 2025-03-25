@@ -1,3 +1,4 @@
+
 export interface UserProfile {
   id: string;
   first_name: string | null;
@@ -10,8 +11,11 @@ export interface UserProfile {
   user_type?: 'student' | 'employer' | 'admin' | 'teacher' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
-  redeemed_at?: string;
-  redeemed_code?: string;
+  redeemed_at?: string | null;
+  redeemed_code?: string | null;
+  avatar_url?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface UserProfileUpdate {
