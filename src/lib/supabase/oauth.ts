@@ -6,6 +6,11 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
   console.log(`Initiating ${provider} sign-in`);
   
   try {
+    // Check connectivity before attempting to sign in
+    if (!navigator.onLine) {
+      throw new Error("You appear to be offline. Please check your internet connection.");
+    }
+    
     // Store redirect info in session storage to handle auth redirects
     const redirectUrl = `${window.location.origin}/auth/callback`;
     const currentPath = sessionStorage.getItem('redirectAfterLogin') || '/';
@@ -25,6 +30,19 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       googleConfigured: true,
       clientId: '435056018915-s4ut4m4sf1muj60eagpnoqatnh4kvl8u.apps.googleusercontent.com'
     });
+    
+    // Try a simple fetch to Google to test connectivity before OAuth attempt
+    try {
+      const testResponse = await fetch('https://accounts.google.com/gsi/status', { 
+        method: 'HEAD',
+        mode: 'no-cors', // This allows us to check connectivity without CORS issues
+        cache: 'no-cache'
+      });
+      console.log(`Google connectivity test completed`);
+    } catch (connErr) {
+      console.error('Connection to Google failed:', connErr);
+      // Continue anyway since the no-cors mode might not give us a proper response
+    }
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
