@@ -56,8 +56,8 @@ function App() {
         await fetch('https://accounts.google.com/gsi/status', { 
           method: 'HEAD',
           mode: 'no-cors',
-          cache: 'no-cache',
-          timeout: 5000 // 5 second timeout
+          cache: 'no-cache'
+          // Removed the invalid 'timeout' property
         });
         
         // If successful, no network issue
