@@ -28,13 +28,13 @@ const JobListingsLayout = ({
       <div className={`space-y-8 ${animation}`}>
         <div className="p-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{title}</h1>
               <div className="flex items-center text-muted-foreground">
                 {zipCode ? (
                   <>
                     <MapPin className="h-4 w-4 mr-1 text-primary" />
-                    <p>
+                    <p className="text-base">
                       Jobs in ZIP code <span className="font-medium">{zipCode}</span>
                       {radius && radius > 0 && (
                         <span> within <span className="font-medium">{radius} mile{radius !== 1 ? 's' : ''}</span></span>
@@ -42,12 +42,14 @@ const JobListingsLayout = ({
                     </p>
                   </>
                 ) : (
-                  <p>{description || "Search for jobs by entering your ZIP code"}</p>
+                  <p className="text-base">{description || "Search for jobs by entering your ZIP code"}</p>
                 )}
               </div>
             </div>
             
-            {searchForm}
+            <div className="md:flex-shrink-0">
+              {searchForm}
+            </div>
           </div>
         </div>
         
