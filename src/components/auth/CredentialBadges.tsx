@@ -1,6 +1,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
+
 const CredentialBadges = () => {
   // Credential badge data
   const readyToWorkBadges = [{
@@ -56,6 +58,9 @@ const CredentialBadges = () => {
             </div>
             <p className="mt-3 font-bold text-center text-lg">Entrepreneurship & Small Business</p>
             <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
+            <Link to="/resources" className="mt-3 text-blue-600 hover:underline text-sm">
+              Learn more about this certification
+            </Link>
           </div>
           
           {/* Nursing Academy Badge - Same size and styling as ESB */}
@@ -70,6 +75,9 @@ const CredentialBadges = () => {
             </div>
             <p className="mt-3 font-bold text-center text-lg text-black">Nursing Academy</p>
             <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
+            <Link to="/resources?tab=credentials" className="mt-3 text-blue-600 hover:underline text-sm">
+              View nursing credential details
+            </Link>
           </div>
         </div>
       </div>
@@ -82,6 +90,11 @@ const CredentialBadges = () => {
           preparing them for the future of work. These digital badges showcase technical proficiency
           and industry-recognized skills that give students a competitive advantage in today's job market.
         </p>
+        <div className="text-center mt-4">
+          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline">
+            View all available credentials
+          </Link>
+        </div>
       </div>
       
       {/* Ready to Work Credentials - Removed white background and made badges bigger */}
@@ -95,6 +108,11 @@ const CredentialBadges = () => {
               </div>
               <p className="text-sm font-medium text-center">{badge.name}</p>
             </div>)}
+        </div>
+        <div className="text-center mt-4">
+          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm">
+            Learn more about Ready to Work credentials
+          </Link>
         </div>
       </div>
       
@@ -114,6 +132,11 @@ const CredentialBadges = () => {
               <p className="mt-2 font-medium text-center">{badge.name}</p>
               <p className="text-xs text-gray-600 text-center">{badge.description}</p>
             </div>)}
+        </div>
+        <div className="text-center mt-4">
+          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm">
+            Explore IBM SkillsBuild program details
+          </Link>
         </div>
       </div>
     </div>;

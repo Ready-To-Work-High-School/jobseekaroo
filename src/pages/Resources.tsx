@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,11 +9,22 @@ import { FileText, BookOpen, Video, Download, ExternalLink, FileCheck, Briefcase
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import EducationalVideoSection from '@/components/resources/EducationalVideoSection';
+import { useLocation } from 'react-router-dom';
 
 const Resources = () => {
-  const [activeTab, setActiveTab] = useState("resume");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const tabParam = searchParams.get('tab');
+  
+  const [activeTab, setActiveTab] = useState(tabParam === 'credentials' ? "credentials" : "resume");
   const headerAnimation = useSlideIn(100);
   const contentAnimation = useFadeIn(300);
+  
+  useEffect(() => {
+    if (tabParam === 'credentials') {
+      setActiveTab("credentials");
+    }
+  }, [tabParam]);
   
   const resumeResources = [
     {
@@ -163,7 +174,7 @@ const Resources = () => {
       </div>
       
       <div className={contentAnimation}>
-        <Tabs defaultValue="resume" className="max-w-5xl mx-auto mb-16" onValueChange={setActiveTab}>
+        <Tabs defaultValue={activeTab} value={activeTab} className="max-w-5xl mx-auto mb-16" onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-3xl mx-auto">
             <TabsTrigger value="resume">Resume Writing</TabsTrigger>
             <TabsTrigger value="interview">Interview Prep</TabsTrigger>
