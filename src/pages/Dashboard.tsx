@@ -8,17 +8,20 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SkillsAnalytics from '@/components/dashboard/SkillsAnalytics';
 import SkillMatchJobCard from '@/components/dashboard/SkillMatchJobCard';
+import UserTypeAnalytics from '@/components/dashboard/UserTypeAnalytics';
 import { SkillsProvider } from '@/contexts/SkillsContext';
 import { getSkillBasedJobRecommendations } from '@/lib/supabase/skill-matching';
 import { Job } from '@/types/job';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart3, Briefcase, LineChart, ChevronRight, Sparkles } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Dashboard = () => {
   const fadeInAnimation = useFadeIn(200);
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   const [skillBasedJobs, setSkillBasedJobs] = useState<Array<Job & { matchScore: number; matchedSkills: string[] }>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,10 +68,10 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className={`container py-8 ${fadeInAnimation}`}>
-        <h1 className="text-3xl font-bold mb-6">Your Dashboard</h1>
+      <div className={`container py-4 md:py-8 ${fadeInAnimation}`}>
+        <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Your Dashboard</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           <Card className="md:col-span-1">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
@@ -106,12 +109,15 @@ const Dashboard = () => {
             </Card>
           </SkillsProvider>
         </div>
+
+        {/* New User Type Analytics Section */}
+        <UserTypeAnalytics className="mb-6" />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2">
             <Tabs defaultValue="skill-match">
               <div className="flex justify-between items-center mb-4">
-                <TabsList>
+                <TabsList className={isMobile ? "w-full grid grid-cols-2" : ""}>
                   <TabsTrigger value="skill-match" className="flex items-center gap-1">
                     <Sparkles className="h-4 w-4" />
                     Skill Match
@@ -122,7 +128,7 @@ const Dashboard = () => {
                   </TabsTrigger>
                 </TabsList>
                 <button 
-                  className="text-sm text-primary flex items-center"
+                  className="text-sm text-primary flex items-center hidden md:flex"
                   onClick={() => navigate('/jobs')}
                 >
                   View all jobs
@@ -154,6 +160,17 @@ const Dashboard = () => {
                     </p>
                   </div>
                 )}
+                
+                {/* Mobile-only view all button */}
+                <div className="mt-4 md:hidden">
+                  <button 
+                    className="w-full py-2 text-sm text-primary border border-primary/30 rounded-md flex items-center justify-center"
+                    onClick={() => navigate('/jobs')}
+                  >
+                    View all jobs
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </button>
+                </div>
               </TabsContent>
               
               <TabsContent value="saved">
@@ -162,6 +179,17 @@ const Dashboard = () => {
                   <p className="text-sm mt-2">
                     Browse jobs and save the ones you're interested in
                   </p>
+                </div>
+                
+                {/* Mobile-only view all button */}
+                <div className="mt-4 md:hidden">
+                  <button 
+                    className="w-full py-2 text-sm text-primary border border-primary/30 rounded-md flex items-center justify-center"
+                    onClick={() => navigate('/saved-jobs')}
+                  >
+                    View saved jobs
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </button>
                 </div>
               </TabsContent>
             </Tabs>
