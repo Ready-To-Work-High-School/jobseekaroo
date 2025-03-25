@@ -84,27 +84,32 @@ const CredentialBadges = () => {
         </p>
       </div>
       
-      {/* Ready to Work Credentials - Moved down */}
+      {/* Ready to Work Credentials - Removed white background and made badges bigger */}
       <div>
         <h3 className="text-lg font-semibold mb-3 text-blue-800">Ready to Work Credentials</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {readyToWorkBadges.map((badge, index) => <div key={index} className="flex flex-col items-center bg-white p-3 rounded-lg shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
-              <img src={badge.image} alt={badge.name} className="w-16 h-16 object-contain mb-2" />
+          {readyToWorkBadges.map((badge, index) => <div key={index} className="flex flex-col items-center p-3 rounded-lg hover:shadow-md transition-shadow">
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-lg"></div>
+                <img src={badge.image} alt={badge.name} className="w-24 h-24 object-contain mb-2 relative z-10 glow-primary" />
+              </div>
               <p className="text-sm font-medium text-center">{badge.name}</p>
             </div>)}
         </div>
       </div>
       
+      {/* IBM Skills Build Credentials - Removed white backgrounds and added glow */}
       <div className="mt-4 bg-transparent">
         <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
           <BadgeCheck className="h-5 w-5 text-blue-500" />
           IBM Skills Build Credentials
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {ibmBadges.map((badge, index) => <div key={index} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-blue-200">
+          {ibmBadges.map((badge, index) => <div key={index} className="flex flex-col items-center p-4 rounded-lg">
               <div className="relative">
                 <Badge variant="info" className="absolute -top-2 -right-2 z-20">IBM</Badge>
-                <img src={badge.image} alt={badge.name} className="w-28 h-28 object-contain" />
+                <div className="absolute inset-0 bg-blue-400/10 rounded-full blur-lg"></div>
+                <img src={badge.image} alt={badge.name} className="w-36 h-36 object-contain relative z-10 glow-blue-gold" />
               </div>
               <p className="mt-2 font-medium text-center">{badge.name}</p>
               <p className="text-xs text-gray-600 text-center">{badge.description}</p>
