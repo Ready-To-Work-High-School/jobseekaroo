@@ -36,7 +36,8 @@ additional_redirect_urls = [
   "https://localhost:3000",
   "https://juzawihlfesurtewxgdy.supabase.co/auth/v1/callback",
   "http://localhost:3000",
-  "https://*.lovableproject.com/auth/callback"
+  "https://*.lovableproject.com/auth/callback",
+  "https://*.lovableproject.com/"
 ]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true

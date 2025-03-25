@@ -25,7 +25,7 @@ export const useAuthCallbackHandler = () => {
         // Check for hash and query params without logging sensitive info
         hasHashParams: window.location.hash ? 'Yes' : 'No',
         hasQueryParams: window.location.search ? 'Yes' : 'No',
-        googleAuthConfigured: true,
+        cookiesEnabled: navigator.cookieEnabled,
         supportsThirdPartyCookies: document.hasStorageAccess ? "Checking..." : "Unknown (old browser)",
       };
       
@@ -59,7 +59,7 @@ export const useAuthCallbackHandler = () => {
         
         // Test if we can connect to Google's auth domain
         try {
-          const googleTest = await fetch('https://accounts.google.com/gsi/status', { 
+          await fetch('https://accounts.google.com/gsi/status', { 
             method: 'HEAD',
             mode: 'no-cors',
             cache: 'no-cache'
@@ -71,8 +71,6 @@ export const useAuthCallbackHandler = () => {
             ...current,
             googleConnectionError: connErr.message
           }));
-          
-          // Don't set an error here, continue with auth flow
         }
         
         // Check if there's a hash fragment in the URL (OAuth response)
@@ -97,6 +95,11 @@ export const useAuthCallbackHandler = () => {
           setError(errorMessage);
           setIsLoading(false);
           throw new Error(errorMessage);
+        }
+        
+        // Exchange the auth code for a session
+        if (queryParams.has('code')) {
+          console.log("Found auth code in URL, exchanging for session");
         }
         
         // Get session
