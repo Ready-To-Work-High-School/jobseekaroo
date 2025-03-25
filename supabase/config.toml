@@ -32,7 +32,12 @@ file_size_limit = "50MiB"
 [auth]
 enabled = true
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://localhost:3000"]
+additional_redirect_urls = [
+  "https://localhost:3000",
+  "https://juzawihlfesurtewxgdy.supabase.co/auth/v1/callback",
+  "http://localhost:3000",
+  "https://*.lovableproject.com/auth/callback"
+]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
@@ -51,6 +56,8 @@ secret = ""
 enabled = true
 client_id = "your-client-id-here"
 secret = "your-client-secret-here"
+# Additional params to prevent cookies issues
+additional_provider_parameters = { access_type = "offline", prompt = "consent" }
 
 [functions]
 [functions.send-email]

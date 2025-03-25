@@ -16,6 +16,14 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
     console.log(`${provider} redirect URL:`, redirectUrl);
     console.log(`Will redirect back to:`, currentPath);
     
+    // Add browser and environment diagnostic info
+    console.log('Network info:', {
+      online: navigator.onLine,
+      userAgent: navigator.userAgent,
+      secure: window.location.protocol === 'https:',
+      hostname: window.location.hostname
+    });
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -32,6 +40,15 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
     if (error) {
       console.error(`${provider} sign-in error:`, error);
       throw error;
+    }
+    
+    // If we have a URL, redirect the user (this typically happens automatically)
+    if (data?.url) {
+      console.log(`Redirecting to ${provider} auth URL:`, data.url);
+      window.location.href = data.url;
+    } else {
+      console.error(`No redirect URL returned from ${provider} sign-in`);
+      throw new Error(`Authentication failed: No redirect URL from ${provider}`);
     }
   } catch (err) {
     console.error(`${provider} sign-in unexpected error:`, err);
