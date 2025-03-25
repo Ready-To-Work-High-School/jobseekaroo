@@ -1,12 +1,14 @@
 
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import EmailPasswordForm, { SignInValues } from "./EmailPasswordForm";
 import SocialAuthButtons from "./SocialAuthButtons";
 import SignInLinks from "./SignInLinks";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -111,8 +113,21 @@ const SignInForm = () => {
         isFormLoading={isLoading}
       />
       
-      <div className="mt-6">
+      <div className="mt-6 space-y-4">
         <SignInLinks />
+        
+        <Alert variant="info" className="bg-blue-50 border-blue-200 text-blue-800">
+          <AlertCircle className="h-4 w-4 text-blue-500" />
+          <AlertDescription className="text-sm">
+            <span className="block">Having trouble signing in?</span>
+            <Link 
+              to="/admin?adminTest=true" 
+              className="text-blue-700 hover:underline font-medium"
+            >
+              Access Admin Portal (Test Mode)
+            </Link>
+          </AlertDescription>
+        </Alert>
       </div>
     </div>
   );

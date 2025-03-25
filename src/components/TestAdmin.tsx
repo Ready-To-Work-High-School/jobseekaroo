@@ -3,6 +3,7 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Shield, ExternalLink } from 'lucide-react';
 
 const TestAdmin = () => {
   const { user, userProfile, updateProfile } = useAuth();
@@ -39,12 +40,14 @@ const TestAdmin = () => {
             {JSON.stringify({ user: !!user, userProfile }, null, 2)}
           </pre>
           
-          <Button onClick={makeAdmin} variant="destructive" className="w-full">
+          <Button onClick={makeAdmin} variant="destructive" className="w-full mb-2">
             Make me an admin
           </Button>
-          <p className="text-xs text-gray-500 mt-2">
-            After clicking, refresh the page to see the admin navigation links
-          </p>
+          
+          <Link to="/admin?adminTest=true" className="flex items-center justify-center w-full p-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+            <Shield className="mr-2 h-4 w-4" />
+            Bypass Auth & Access Admin Panel
+          </Link>
         </>
       ) : (
         <div className="space-y-4">
@@ -58,6 +61,11 @@ const TestAdmin = () => {
           <Button asChild className="w-full">
             <Link to="/sign-in">Sign In Now</Link>
           </Button>
+          
+          <Link to="/admin?adminTest=true" className="flex items-center justify-center w-full p-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+            <ExternalLink className="mr-2 h-4 w-4" />
+            Bypass Auth & Access Admin Panel
+          </Link>
         </div>
       )}
     </div>

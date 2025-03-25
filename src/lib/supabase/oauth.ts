@@ -13,7 +13,7 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
     
     // Store redirect info in session storage to handle auth redirects
     const redirectUrl = `${window.location.origin}/auth/callback`;
-    const currentPath = sessionStorage.getItem('redirectAfterLogin') || '/';
+    const currentPath = window.location.pathname;
     
     // Always update the stored path in case user navigated before clicking login
     sessionStorage.setItem('redirectAfterLogin', currentPath);
@@ -28,19 +28,6 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       secure: window.location.protocol === 'https:',
       hostname: window.location.hostname
     });
-    
-    // Try a simple fetch to Google to test connectivity before OAuth attempt
-    try {
-      await fetch('https://accounts.google.com/gsi/status', { 
-        method: 'HEAD',
-        mode: 'no-cors', // This allows us to check connectivity without CORS issues
-        cache: 'no-cache'
-      });
-      console.log(`Google connectivity test completed`);
-    } catch (connErr) {
-      console.error('Connection to Google failed:', connErr);
-      // Continue anyway since the no-cors mode might not give us a proper response
-    }
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
