@@ -20,8 +20,8 @@ const ProtectedRoute = ({
   const location = useLocation();
   const { toast } = useToast();
   
-  // To enable testing of the admin portal, we'll add a bypass mechanism
-  const isAdminTest = location.search.includes('adminTest=true');
+  // To enable testing of the admin portal, we'll check the URL directly
+  const isAdminTest = new URLSearchParams(location.search).get('adminTest') === 'true';
   
   useEffect(() => {
     // Only check auth after loading is complete
