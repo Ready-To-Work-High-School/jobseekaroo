@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -42,9 +41,7 @@ function App() {
   const [networkIssue, setNetworkIssue] = useState(false);
 
   useEffect(() => {
-    // Check network connectivity
     const checkConnectivity = async () => {
-      // If we're already offline, mark network issue
       if (!navigator.onLine) {
         setNetworkIssue(true);
         setLoading(false);
@@ -52,36 +49,29 @@ function App() {
       }
       
       try {
-        // Try to connect to Google services since that's been an issue
         await fetch('https://accounts.google.com/gsi/status', { 
           method: 'HEAD',
           mode: 'no-cors',
           cache: 'no-cache'
-          // Removed the invalid 'timeout' property
         });
         
-        // If successful, no network issue
         setNetworkIssue(false);
       } catch (err) {
         console.error("Network connectivity test failed:", err);
         setNetworkIssue(true);
       } finally {
-        // Stop loading either way
         setLoading(false);
       }
     };
 
-    // Add network status listeners
     const handleOnline = () => setNetworkIssue(false);
     const handleOffline = () => setNetworkIssue(true);
     
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     
-    // Check connectivity
     checkConnectivity();
     
-    // Clean up listeners
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -94,7 +84,6 @@ function App() {
     </div>;
   }
 
-  // Show network issue component if we detect problems
   if (networkIssue) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -138,6 +127,7 @@ function App() {
             <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
             <Route path="/license" element={<License />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
