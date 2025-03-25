@@ -2,25 +2,43 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Shield, ExternalLink } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const TestAdmin = () => {
   const { user, userProfile, updateProfile } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const makeAdmin = async () => {
     if (user && userProfile) {
       try {
         await updateProfile({ user_type: 'admin' });
-        alert('You are now an admin. Refresh the page to see changes.');
+        toast({
+          title: "Success",
+          description: "You are now an admin. Refresh the page to see changes.",
+        });
         console.log('Profile updated to admin');
       } catch (error) {
         console.error('Error making admin:', error);
-        alert('Error making admin: ' + JSON.stringify(error));
+        toast({
+          title: "Error",
+          description: "Failed to update profile to admin.",
+          variant: "destructive",
+        });
       }
     } else {
-      alert('You must be logged in to become an admin');
+      toast({
+        title: "Not Logged In",
+        description: "You must be logged in to become an admin",
+        variant: "destructive",
+      });
     }
+  };
+
+  const goToAdminPanel = () => {
+    navigate('/admin?adminTest=true');
   };
 
   return (
@@ -44,10 +62,10 @@ const TestAdmin = () => {
             Make me an admin
           </Button>
           
-          <Link to="/admin?adminTest=true" className="flex items-center justify-center w-full p-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+          <Button onClick={goToAdminPanel} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
             <Shield className="mr-2 h-4 w-4" />
             Bypass Auth & Access Admin Panel
-          </Link>
+          </Button>
         </>
       ) : (
         <div className="space-y-4">
@@ -62,10 +80,10 @@ const TestAdmin = () => {
             <Link to="/sign-in">Sign In Now</Link>
           </Button>
           
-          <Link to="/admin?adminTest=true" className="flex items-center justify-center w-full p-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+          <Button onClick={goToAdminPanel} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
             <ExternalLink className="mr-2 h-4 w-4" />
             Bypass Auth & Access Admin Panel
-          </Link>
+          </Button>
         </div>
       )}
     </div>

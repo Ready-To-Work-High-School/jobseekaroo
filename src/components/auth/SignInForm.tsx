@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
@@ -7,8 +6,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import EmailPasswordForm, { SignInValues } from "./EmailPasswordForm";
 import SocialAuthButtons from "./SocialAuthButtons";
 import SignInLinks from "./SignInLinks";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +92,11 @@ const SignInForm = () => {
     }
   };
 
+  const goToAdminTestMode = () => {
+    console.log("Navigating to admin test mode");
+    navigate('/admin?adminTest=true');
+  };
+
   return (
     <div className="bg-card border rounded-lg shadow-sm p-6 transition-all hover:shadow-md">
       <EmailPasswordForm 
@@ -115,6 +120,15 @@ const SignInForm = () => {
       
       <div className="mt-6 space-y-4">
         <SignInLinks />
+        
+        <Button 
+          onClick={goToAdminTestMode}
+          className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white"
+          type="button"
+        >
+          <Shield className="mr-2 h-4 w-4" />
+          Access Admin Portal (Test Mode)
+        </Button>
         
         <Alert className="bg-blue-50 border-blue-200 text-blue-800">
           <AlertCircle className="h-4 w-4 text-blue-500" />

@@ -20,8 +20,16 @@ const ProtectedRoute = ({
   const location = useLocation();
   const { toast } = useToast();
   
-  // To enable testing of the admin portal, we'll check the URL directly
-  const isAdminTest = new URLSearchParams(location.search).get('adminTest') === 'true';
+  // Check for admin test mode in URL parameters
+  const params = new URLSearchParams(location.search);
+  const isAdminTest = params.get('adminTest') === 'true';
+  
+  console.log('ProtectedRoute - Admin access check:', { 
+    adminOnly, 
+    isAdminTest, 
+    userType: userProfile?.user_type,
+    searchParams: location.search
+  });
   
   useEffect(() => {
     // Only check auth after loading is complete
@@ -74,7 +82,7 @@ const ProtectedRoute = ({
         }
       }
     }
-  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly, isAdminTest]);
+  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly, isAdminTest, location.search]);
   
   // Show loading indicator while checking authentication
   if (isLoading && !(adminOnly && isAdminTest)) {
