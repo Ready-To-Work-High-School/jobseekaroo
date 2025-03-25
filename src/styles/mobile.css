@@ -52,6 +52,13 @@
   .mobile-nav-spacer {
     height: 4rem; /* Space for the bottom navigation */
   }
+  
+  /* Authentication button adjustments for mobile */
+  .auth-provider-button {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* Custom scrollbars for mobile */
@@ -111,5 +118,26 @@
     right: -8px;
     bottom: -8px;
     z-index: 1;
+  }
+}
+
+/* Apple Sign In specific styles */
+@media (max-width: 768px) {
+  .apple-sign-in-button {
+    min-height: 48px;
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    background-color: black;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .dark .apple-sign-in-button {
+    background-color: white;
+    color: black;
   }
 }

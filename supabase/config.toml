@@ -49,9 +49,11 @@ double_confirm_changes = true
 enable_confirmations = true
 
 [auth.external.apple]
-enabled = false
-client_id = ""
+enabled = true
+client_id = "your.app.bundle.id"
 secret = ""
+# Add any additional Apple-specific parameters if needed
+additional_provider_parameters = { response_mode = "form_post" }
 
 [auth.external.google]
 enabled = true

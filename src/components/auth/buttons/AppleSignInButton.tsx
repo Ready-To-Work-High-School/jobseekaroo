@@ -18,7 +18,8 @@ const AppleSignInButton = ({
       variant="outline"
       onClick={onClick}
       disabled={isLoading || disabled}
-      className="w-full flex justify-center items-center gap-2 transition-all border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+      className="w-full flex justify-center items-center gap-2 transition-all border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 apple-auth-button"
+      aria-label="Sign in with Apple"
     >
       {isLoading ? (
         <span className="flex items-center gap-2">

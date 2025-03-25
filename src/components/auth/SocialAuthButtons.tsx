@@ -27,6 +27,7 @@ const SocialAuthButtons = ({
   const [googleError, setGoogleError] = useState<string | null>(null);
   const [appleError, setAppleError] = useState<string | null>(null);
   const [showGoogleDebugInfo, setShowGoogleDebugInfo] = useState(false);
+  const [showAppleDebugInfo, setShowAppleDebugInfo] = useState(false);
   
   const isOnline = useNetworkStatus();
   const diagnosticInfo = useDiagnosticInfo();
@@ -80,11 +81,41 @@ const SocialAuthButtons = ({
   const handleAppleSignIn = async () => {
     try {
       setAppleError(null);
+      
+      if (!navigator.onLine) {
+        const message = "You appear to be offline. Please check your internet connection.";
+        setAppleError(message);
+        toast({
+          title: "Network Error",
+          description: message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      console.log('Initiating Apple sign-in from SocialAuthButtons');
+      console.log('Connection status:', { 
+        online: navigator.onLine,
+        protocol: window.location.protocol,
+        hostname: window.location.hostname,
+        cookiesEnabled: navigator.cookieEnabled
+      });
+      
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
       await onAppleSignIn();
     } catch (error: any) {
       console.error('Apple sign-in error in component:', error);
-      setAppleError(error?.message || "Sign-in failed");
+      
+      let errorMessage = error?.message || "Sign-in failed";
+      if (errorMessage.includes("network") || errorMessage.includes("connection") || 
+          errorMessage.includes("refused")) {
+        errorMessage = "Connection to Apple failed. This could be due to:";
+        setAppleError(errorMessage);
+        setShowAppleDebugInfo(true);
+      } else {
+        setAppleError(errorMessage);
+      }
+      
       toast({
         title: "Apple Sign-In Error",
         description: error?.message || "Could not sign in with Apple. Please try again.",
@@ -120,7 +151,14 @@ const SocialAuthButtons = ({
         disabled={isFormLoading}
       />
       
-      {appleError && <div className="text-sm text-red-500">{appleError}</div>}
+      {appleError && (
+        <DiagnosticPanel 
+          errorMessage={appleError}
+          diagnosticInfo={diagnosticInfo}
+          showDebugInfo={showAppleDebugInfo}
+          onToggleDebugInfo={() => setShowAppleDebugInfo(!showAppleDebugInfo)}
+        />
+      )}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ children }) => {
   if (!isMobile) return <>{children}</>;
   
   return (
-    <div className="pb-16"> {/* Add padding to the bottom to account for the fixed navbar */}
+    <div className="pb-16 mobile-optimized"> {/* Add padding to the bottom to account for the fixed navbar */}
       {children}
       {user && <MobileNavbar />}
     </div>
