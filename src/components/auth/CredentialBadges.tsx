@@ -65,7 +65,7 @@ const CredentialBadges = () => {
           {/* Nursing Academy Badge - Same size and styling as ESB */}
           <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300 w-72 h-auto">
             <div className="relative">
-              <Badge variant="destructive" className="absolute -top-2 -right-7 z-20 text-sm mx-[6px] py-[2px] px-[13px] my-[2px]">NCLEX Certified</Badge>
+              <Badge variant="destructive" className="absolute -top-2 -right-7 z-20 text-sm py-px px-0 mx-0 my-0">NCLEX Certified</Badge>
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-lg animate-pulse"></div>
                 <div className="absolute inset-0 bg-red-400/20 rounded-full blur-md animate-pulse delay-500"></div>
