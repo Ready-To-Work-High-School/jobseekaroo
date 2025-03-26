@@ -12,6 +12,8 @@ import {
   credentialResources,
   type Resource
 } from '@/lib/mock-data/resourcesData';
+import CompanyDirectory from './CompanyDirectory';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 
 const ResourceTabs = () => {
   const location = useLocation();
@@ -39,11 +41,12 @@ const ResourceTabs = () => {
 
   return (
     <Tabs defaultValue={activeTab} value={activeTab} className="max-w-5xl mx-auto mb-16" onValueChange={setActiveTab}>
-      <TabsList className="grid grid-cols-4 w-full max-w-3xl mx-auto">
+      <TabsList className="grid grid-cols-5 w-full max-w-3xl mx-auto">
         <TabsTrigger value="resume">Resume Writing</TabsTrigger>
         <TabsTrigger value="interview">Interview Prep</TabsTrigger>
         <TabsTrigger value="workplace">Workplace Readiness</TabsTrigger>
         <TabsTrigger value="credentials">Credentials</TabsTrigger>
+        <TabsTrigger value="companies">Top Companies</TabsTrigger>
       </TabsList>
       
       <div className={`mt-8 ${contentAnimation}`}>
@@ -52,6 +55,7 @@ const ResourceTabs = () => {
             {activeTab === "resume" ? "Resume Resources" : 
               activeTab === "interview" ? "Interview Resources" : 
               activeTab === "workplace" ? "Workplace Readiness" : 
+              activeTab === "companies" ? "Top Paying Companies in Jacksonville" :
               "Credential Resources"}
           </h2>
           
@@ -62,7 +66,11 @@ const ResourceTabs = () => {
           )}
         </div>
         
-        <ResourceTab resources={getActiveResources()} />
+        {activeTab !== "companies" ? (
+          <ResourceTab resources={getActiveResources()} />
+        ) : (
+          <CompanyDirectory companies={topJacksonvilleCompanies} />
+        )}
       </div>
     </Tabs>
   );
