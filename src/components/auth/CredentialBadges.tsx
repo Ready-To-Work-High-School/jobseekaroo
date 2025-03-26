@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";

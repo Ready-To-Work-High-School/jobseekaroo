@@ -14,22 +14,6 @@ const EducationalVideoSection = () => {
       date: "Mar 15, 2023",
       thumbnail: "https://img.youtube.com/vi/u75hUSShvnc/maxresdefault.jpg",
       description: "Learn how to create a professional resume that stands out to employers."
-    },
-    {
-      id: 2,
-      title: "Job Interview Techniques",
-      duration: "45 min",
-      date: "Apr 22, 2023",
-      thumbnail: "https://img.youtube.com/vi/HG68Ymazo18/maxresdefault.jpg",
-      description: "Master the art of interviewing with these essential techniques and practice questions."
-    },
-    {
-      id: 3,
-      title: "LinkedIn Profile Optimization",
-      duration: "28 min",
-      date: "May 10, 2023",
-      thumbnail: "https://img.youtube.com/vi/SG5Sb5WTV_g/maxresdefault.jpg",
-      description: "Optimize your LinkedIn profile to attract recruiters and showcase your skills."
     }
   ];
   
@@ -42,7 +26,7 @@ const EducationalVideoSection = () => {
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
         {videos.map((video) => (
           <Card key={video.id} className="overflow-hidden hover:shadow-md transition-shadow">
             <div className="relative aspect-video bg-muted">
