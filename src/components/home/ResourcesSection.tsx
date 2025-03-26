@@ -45,13 +45,13 @@ const ResourcesSection = () => {
           </div>
           
           <div className="p-6 rounded-lg bg-amber-100">
-            <h3 className="text-lg font-semibold mb-2">ESB Certification</h3>
+            <h3 className="text-lg font-semibold mb-2">Interview Warmup</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Learn about the Entrepreneurship & Small Business certification and how it can benefit your career.
+              Practice interviewing with Google's interactive tool to prepare for your next job interview.
             </p>
             <Button variant="outline" className="flex items-center gap-2" asChild>
-              <a href="https://www.youtube.com/watch?v=bjjLKdTgl6g" target="_blank" rel="noopener noreferrer">
-                What is ESB?
+              <a href="https://grow.google/certificates/interview-warmup/" target="_blank" rel="noopener noreferrer">
+                Try Interview Warmup
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>

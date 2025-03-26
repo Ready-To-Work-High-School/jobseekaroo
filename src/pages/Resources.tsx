@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,28 +33,32 @@ const Resources = () => {
       description: "Learn how to create a professional resume that highlights your skills and experience.",
       type: "PDF Guide",
       icon: FileText,
-      action: "Download"
+      action: "Download",
+      url: "" // Added empty url
     },
     {
       title: "Resume Templates for High School Students",
       description: "Ready-to-use templates designed specifically for students with limited work experience.",
       type: "Templates",
       icon: FileCheck,
-      action: "Download"
+      action: "Download",
+      url: "" // Added empty url
     },
     {
       title: "How to List Your Credentials",
       description: "Tips for effectively showcasing your Entrepreneurship Academy credentials.",
       type: "Article",
       icon: BookOpen,
-      action: "Read"
+      action: "Read",
+      url: "" // Added empty url
     },
     {
       title: "Resume Review Checklist",
       description: "A comprehensive checklist to ensure your resume is complete and error-free.",
       type: "Checklist",
       icon: FileCheck,
-      action: "Download"
+      action: "Download",
+      url: "" // Added empty url
     }
   ];
   
@@ -67,25 +72,28 @@ const Resources = () => {
       url: "https://www.youtube.com/watch?v=ytckc4Gljlo"
     },
     {
+      title: "Google Interview Warmup",
+      description: "Practice interviewing with an interactive tool from Google that helps you prepare for interviews.",
+      type: "Interactive Tool",
+      icon: MessageSquare,
+      action: "Use Tool",
+      url: "https://grow.google/certificates/interview-warmup/"
+    },
+    {
       title: "Common Interview Questions",
       description: "Practice answering these frequently asked questions to prepare for your interviews.",
       type: "Guide",
       icon: MessageSquare,
-      action: "View"
+      action: "View",
+      url: "" // Added empty url
     },
     {
       title: "What to Wear to an Interview",
       description: "Guidelines for appropriate interview attire for different types of jobs.",
       type: "Article",
       icon: BookOpen,
-      action: "Read"
-    },
-    {
-      title: "After the Interview: Follow-up Tips",
-      description: "Learn how to follow up professionally after your interview.",
-      type: "Guide",
-      icon: FileText,
-      action: "Read"
+      action: "Read",
+      url: "" // Added empty url
     }
   ];
   
@@ -95,14 +103,16 @@ const Resources = () => {
       description: "Essential tips for professional behavior in the workplace.",
       type: "PDF Guide",
       icon: FileText,
-      action: "Download"
+      action: "Download",
+      url: "" // Added empty url
     },
     {
       title: "Time Management Skills",
       description: "Strategies for balancing school and work responsibilities.",
       type: "Article",
       icon: BookOpen,
-      action: "Read"
+      action: "Read",
+      url: "" // Added empty url
     },
     {
       title: "Florida Ready to Work",
@@ -117,7 +127,8 @@ const Resources = () => {
       description: "A guide to reading your pay stub and understanding taxes and deductions.",
       type: "Guide",
       icon: FileText,
-      action: "View"
+      action: "View",
+      url: "" // Added empty url
     }
   ];
   
@@ -135,21 +146,24 @@ const Resources = () => {
       description: "Information about the ESB certification and how to prepare for it.",
       type: "Guide",
       icon: Briefcase,
-      action: "View"
+      action: "View",
+      url: "" // Added empty url
     },
     {
       title: "Duval Ready Diploma Requirements",
       description: "Learn what you need to do to earn the Duval Ready Diploma designation.",
       type: "Checklist",
       icon: FileCheck,
-      action: "Download"
+      action: "Download",
+      url: "" // Added empty url
     },
     {
       title: "Industry Credentials Overview",
       description: "A comprehensive list of industry credentials available through the academy.",
       type: "List",
       icon: FileText,
-      action: "View"
+      action: "View",
+      url: "" // Added empty url
     }
   ];
 
