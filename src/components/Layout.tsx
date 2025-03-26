@@ -5,6 +5,7 @@ import Header from './layout/Header';
 import Footer from './layout/Footer';
 import PlatformDisclaimer from './PlatformDisclaimer';
 import { NotificationsProvider } from '@/contexts/NotificationsContext';
+import SidePanel from './layout/SidePanel';
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,6 +35,7 @@ const Layout = ({
             {children}
           </div>
           {showDisclaimer && <PlatformDisclaimer />}
+          <SidePanel />
         </main>
         <Footer />
       </div>

@@ -36,19 +36,44 @@ const WestsideAcademy = () => {
         </div>
       </div>
       
-      {/* Separated Nursing Academy Section */}
+      {/* Enhanced Nursing Academy Section with Video */}
       <div className="mt-6 p-6 md:p-8 rounded-lg bg-gradient-to-r from-blue-50 to-red-50 border border-blue-100">
         <h3 className="text-2xl font-bold mb-4 text-blue-800">Nursing Academy</h3>
-        <p className="mb-4">
-          Our Nursing Academy prepares students for healthcare careers through specialized training and industry-recognized credentials.
-          Students learn essential healthcare skills and can earn NCLEX certification.
-        </p>
-        <div className="flex justify-center">
-          <img 
-            src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
-            alt="Nursing Academy Certification" 
-            className="h-32 w-auto object-contain"
-          />
+        
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Video Section */}
+          <div className="lg:w-1/2">
+            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
+              <iframe 
+                width="100%" 
+                height="315" 
+                src="https://www.youtube.com/embed/niuASx8o_TA" 
+                title="Certified Nursing Assistant Program" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-lg"
+              ></iframe>
+            </div>
+          </div>
+          
+          {/* Description Section */}
+          <div className="lg:w-1/2">
+            <p className="mb-4 text-gray-700 leading-relaxed">
+              Students participating in the Certified Nursing Assistant Career Pathway will be prepared with the concepts and skills needed toward becoming competent and productive health care workers. Within this pathway, students learn to translate real-life situations into a caring, confidential, and safe medical environment.
+            </p>
+            <p className="mb-4 text-gray-700">
+              Our Nursing Academy prepares students for healthcare careers through specialized training and industry-recognized credentials.
+              Students learn essential healthcare skills and can earn NCLEX certification.
+            </p>
+            <div className="flex justify-center lg:justify-start">
+              <img 
+                src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                alt="Nursing Academy Certification" 
+                className="h-24 w-auto object-contain"
+              />
+            </div>
+          </div>
         </div>
       </div>
       
