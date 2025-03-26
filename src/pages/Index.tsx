@@ -13,6 +13,8 @@ import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import TestAdmin from '@/components/TestAdmin';
+import CompanyDirectory from '@/components/resources/CompanyDirectory';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 
 const Index = () => {
   const { user } = useAuth();
@@ -33,6 +35,22 @@ const Index = () => {
         
         {/* Featured Jobs Section */}
         <FeaturedJobsSection />
+        
+        {/* Separator */}
+        <SectionSeparator />
+        
+        {/* Top Companies Directory Section - New prominent section */}
+        <section className="py-12 bg-blue-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-8">
+              <h2 className="text-3xl font-bold mb-3">Top Paying Companies in Jacksonville</h2>
+              <p className="text-muted-foreground">
+                Explore opportunities at these leading employers offering competitive salaries
+              </p>
+            </div>
+            <CompanyDirectory companies={topJacksonvilleCompanies} />
+          </div>
+        </section>
         
         {/* Separator */}
         <SectionSeparator />
