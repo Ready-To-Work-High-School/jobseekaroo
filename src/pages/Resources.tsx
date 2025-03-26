@@ -59,18 +59,19 @@ const Resources = () => {
   
   const interviewResources = [
     {
+      title: "Interview Preparation Video",
+      description: "Essential tips and strategies to help you prepare for job interviews and make a great impression.",
+      type: "Video",
+      icon: Video,
+      action: "Watch",
+      url: "https://www.youtube.com/watch?v=ytckc4Gljlo"
+    },
+    {
       title: "Common Interview Questions",
       description: "Practice answering these frequently asked questions to prepare for your interviews.",
       type: "Guide",
       icon: MessageSquare,
       action: "View"
-    },
-    {
-      title: "Interview Preparation Video",
-      description: "Watch this video for tips on how to make a great impression during your interview.",
-      type: "Video",
-      icon: Video,
-      action: "Watch"
     },
     {
       title: "What to Wear to an Interview",
@@ -104,11 +105,12 @@ const Resources = () => {
       action: "Read"
     },
     {
-      title: "Communication in the Workplace",
-      description: "How to communicate effectively with colleagues and supervisors.",
-      type: "Video",
-      icon: Video,
-      action: "Watch"
+      title: "Florida Ready to Work",
+      description: "Learn essential employability skills to enhance your career readiness.",
+      type: "External Resource",
+      icon: ExternalLink,
+      action: "Visit",
+      url: "https://www.floridareadytowork.com/employability-skills"
     },
     {
       title: "Understanding Your First Paycheck",
@@ -120,6 +122,14 @@ const Resources = () => {
   ];
   
   const credentialResources = [
+    {
+      title: "What is ESB Certification?",
+      description: "Learn about the Entrepreneurship & Small Business certification and its benefits.",
+      type: "Video",
+      icon: Video,
+      action: "Watch",
+      url: "https://www.youtube.com/watch?v=bjjLKdTgl6g"
+    },
     {
       title: "Entrepreneurship & Small Business Certification Guide",
       description: "Information about the ESB certification and how to prepare for it.",
@@ -140,13 +150,6 @@ const Resources = () => {
       type: "List",
       icon: FileText,
       action: "View"
-    },
-    {
-      title: "How Credentials Boost Your Career",
-      description: "Understand how industry credentials can give you an advantage in the job market.",
-      type: "Article",
-      icon: BookOpen,
-      action: "Read"
     }
   ];
 
@@ -220,13 +223,25 @@ const Resources = () => {
                     </CardDescription>
                   </CardContent>
                   <CardFooter className="pt-0">
-                    <Button variant="outline" className="gap-2">
-                      {resource.action === "Download" ? <Download className="h-4 w-4" /> :
-                       resource.action === "Watch" ? <Video className="h-4 w-4" /> :
-                       resource.action === "Read" ? <BookOpen className="h-4 w-4" /> :
-                       <ExternalLink className="h-4 w-4" />}
-                      {resource.action}
-                    </Button>
+                    {resource.url ? (
+                      <Button variant="outline" className="gap-2" asChild>
+                        <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                          {resource.action === "Download" ? <Download className="h-4 w-4" /> :
+                           resource.action === "Watch" ? <Video className="h-4 w-4" /> :
+                           resource.action === "Read" ? <BookOpen className="h-4 w-4" /> :
+                           <ExternalLink className="h-4 w-4" />}
+                          {resource.action}
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="outline" className="gap-2">
+                        {resource.action === "Download" ? <Download className="h-4 w-4" /> :
+                         resource.action === "Watch" ? <Video className="h-4 w-4" /> :
+                         resource.action === "Read" ? <BookOpen className="h-4 w-4" /> :
+                         <ExternalLink className="h-4 w-4" />}
+                        {resource.action}
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               ))}

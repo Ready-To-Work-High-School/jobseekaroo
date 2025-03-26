@@ -45,12 +45,15 @@ const ResourcesSection = () => {
           </div>
           
           <div className="p-6 rounded-lg bg-amber-100">
-            <h3 className="text-lg font-semibold mb-2">Success Stories</h3>
+            <h3 className="text-lg font-semibold mb-2">ESB Certification</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Read about people who have found their dream jobs through our platform.
+              Learn about the Entrepreneurship & Small Business certification and how it can benefit your career.
             </p>
-            <Button variant="outline" onClick={() => navigate('/success-stories')}>
-              Read Stories
+            <Button variant="outline" className="flex items-center gap-2" asChild>
+              <a href="https://www.youtube.com/watch?v=bjjLKdTgl6g" target="_blank" rel="noopener noreferrer">
+                What is ESB?
+                <ExternalLink className="h-4 w-4" />
+              </a>
             </Button>
           </div>
         </div>
