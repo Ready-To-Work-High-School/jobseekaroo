@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -19,20 +19,24 @@ const ProtectedRoute = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const [isAdminTest, setIsAdminTest] = useState(false);
   
-  // Check for admin test mode in URL parameters
-  const params = new URLSearchParams(location.search);
-  const isAdminTest = params.get('adminTest') === 'true';
-  
-  console.log('ProtectedRoute - Admin access check:', { 
-    adminOnly, 
-    isAdminTest, 
-    userType: userProfile?.user_type,
-    searchParams: location.search
-  });
+  // Parse URL parameters once to avoid inconsistencies
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const adminTestParam = params.get('adminTest') === 'true';
+    setIsAdminTest(adminTestParam);
+    
+    console.log('ProtectedRoute - Admin access check:', { 
+      adminOnly, 
+      adminTestParam, 
+      userType: userProfile?.user_type,
+      searchParams: location.search
+    });
+  }, [location.search]);
   
   useEffect(() => {
-    // Only check auth after loading is complete
+    // Only check auth after loading is complete and we've determined if it's an admin test
     if (!isLoading) {
       // If this is the admin test route, allow access regardless of auth status
       if (adminOnly && isAdminTest) {
@@ -42,7 +46,7 @@ const ProtectedRoute = ({
       
       if (!user) {
         // Store the attempted URL to redirect back after login
-        sessionStorage.setItem('redirectAfterLogin', location.pathname);
+        sessionStorage.setItem('redirectAfterLogin', location.pathname + location.search);
         
         toast({
           title: "Access Restricted",
@@ -82,7 +86,7 @@ const ProtectedRoute = ({
         }
       }
     }
-  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly, isAdminTest, location.search]);
+  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly, isAdminTest]);
   
   // Show loading indicator while checking authentication
   if (isLoading && !(adminOnly && isAdminTest)) {

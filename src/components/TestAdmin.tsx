@@ -37,8 +37,10 @@ const TestAdmin = () => {
     }
   };
 
-  const goToAdminPanel = () => {
-    navigate('/admin?adminTest=true');
+  const goToAdminTestMode = () => {
+    console.log("Navigating to admin test mode");
+    // Use direct navigation to avoid any authentication checks that might redirect
+    window.location.href = '/admin?adminTest=true';
   };
 
   return (
@@ -62,7 +64,7 @@ const TestAdmin = () => {
             Make me an admin
           </Button>
           
-          <Button onClick={goToAdminPanel} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
+          <Button onClick={goToAdminTestMode} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
             <Shield className="mr-2 h-4 w-4" />
             Bypass Auth & Access Admin Panel
           </Button>
@@ -80,7 +82,7 @@ const TestAdmin = () => {
             <Link to="/sign-in">Sign In Now</Link>
           </Button>
           
-          <Button onClick={goToAdminPanel} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
+          <Button onClick={goToAdminTestMode} className="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white mt-2">
             <ExternalLink className="mr-2 h-4 w-4" />
             Bypass Auth & Access Admin Panel
           </Button>

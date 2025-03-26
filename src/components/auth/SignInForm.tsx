@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
@@ -94,7 +95,8 @@ const SignInForm = () => {
 
   const goToAdminTestMode = () => {
     console.log("Navigating to admin test mode");
-    navigate('/admin?adminTest=true');
+    // Use direct navigation to avoid any authentication checks that might redirect
+    window.location.href = '/admin?adminTest=true';
   };
 
   return (
@@ -121,25 +123,20 @@ const SignInForm = () => {
       <div className="mt-6 space-y-4">
         <SignInLinks />
         
-        <Button 
-          onClick={goToAdminTestMode}
-          className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white"
-          type="button"
-        >
-          <Shield className="mr-2 h-4 w-4" />
-          Access Admin Portal (Test Mode)
-        </Button>
-        
-        <Alert className="bg-blue-50 border-blue-200 text-blue-800">
-          <AlertCircle className="h-4 w-4 text-blue-500" />
+        <Alert className="bg-amber-50 border-amber-200 text-amber-800">
+          <AlertCircle className="h-4 w-4 text-amber-500" />
           <AlertDescription className="text-sm">
-            <span className="block">Having trouble signing in?</span>
-            <Link 
-              to="/admin?adminTest=true" 
-              className="text-blue-700 hover:underline font-medium"
-            >
-              Access Admin Portal (Test Mode)
-            </Link>
+            <div className="flex flex-col space-y-2">
+              <span>Having trouble signing in?</span>
+              <Button 
+                onClick={goToAdminTestMode}
+                className="w-full flex items-center justify-center bg-amber-600 hover:bg-amber-700 text-white"
+                type="button"
+              >
+                <Shield className="mr-2 h-4 w-4" />
+                Access Admin Portal (Test Mode)
+              </Button>
+            </div>
           </AlertDescription>
         </Alert>
       </div>
