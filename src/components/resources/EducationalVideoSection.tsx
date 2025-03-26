@@ -30,14 +30,6 @@ const EducationalVideoSection = () => {
       date: "May 10, 2023",
       thumbnail: "https://img.youtube.com/vi/SG5Sb5WTV_g/maxresdefault.jpg",
       description: "Optimize your LinkedIn profile to attract recruiters and showcase your skills."
-    },
-    {
-      id: 4,
-      title: "Entrepreneurship Basics",
-      duration: "52 min",
-      date: "June 5, 2023",
-      thumbnail: "https://img.youtube.com/vi/Yz13nEFlGpw/maxresdefault.jpg",
-      description: "Learn the fundamentals of entrepreneurship and how to start your own business."
     }
   ];
   

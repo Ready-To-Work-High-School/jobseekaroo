@@ -239,58 +239,25 @@ const Resources = () => {
         <Separator className="max-w-4xl mx-auto my-16" />
         
         <div className="max-w-4xl mx-auto mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Schedule a Meeting</CardTitle>
-                <CardDescription>
-                  Get personalized assistance with your job search or career questions.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">
-                  Schedule a one-on-one meeting with Ms. Coleman, our Entrepreneurship Academy director,
-                  for personalized guidance on your career path.
-                </p>
-                <Button variant="default" asChild>
-                  <a href="mailto:Colemanp3@duvalschools.org">
-                    Request a Meeting
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Additional Resources</CardTitle>
-                <CardDescription>
-                  External resources to help with your job search and career development.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2">
-                    <ExternalLink className="h-4 w-4 text-blue-600" />
-                    <a href="https://www.careeronestop.org/getmyfuture" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      CareerOneStop Youth Resources
-                    </a>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <ExternalLink className="h-4 w-4 text-blue-600" />
-                    <a href="https://www.dol.gov/agencies/odep/program-areas/youth" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      Youth Employment Resources
-                    </a>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <ExternalLink className="h-4 w-4 text-blue-600" />
-                    <a href="https://www.mynextmove.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      My Next Move Career Exploration
-                    </a>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Schedule a Meeting</CardTitle>
+              <CardDescription>
+                Get personalized assistance with your job search or career questions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                Schedule a one-on-one meeting with Ms. Coleman, our Entrepreneurship Academy director,
+                for personalized guidance on your career path.
+              </p>
+              <Button variant="default" asChild>
+                <a href="mailto:Colemanp3@duvalschools.org">
+                  Request a Meeting
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </Layout>

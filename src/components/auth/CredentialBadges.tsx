@@ -1,7 +1,8 @@
 
 import { Badge } from "@/components/ui/badge";
-import { Award, BadgeCheck, Shield } from "lucide-react";
+import { Award, BadgeCheck, Shield, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const CredentialBadges = () => {
   // Credential badge data
@@ -109,10 +110,16 @@ const CredentialBadges = () => {
               <p className="text-sm font-medium text-center">{badge.name}</p>
             </div>)}
         </div>
-        <div className="text-center mt-4">
-          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm">
+        <div className="text-center mt-4 space-y-2">
+          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm block">
             Learn more about Ready to Work credentials
           </Link>
+          <Button variant="outline" size="sm" className="flex items-center gap-2" asChild>
+            <a href="https://www.floridareadytowork.com/employability-skills" target="_blank" rel="noopener noreferrer">
+              Florida Ready to Work Employability Skills
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
         </div>
       </div>
       
