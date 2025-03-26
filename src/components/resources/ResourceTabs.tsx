@@ -20,12 +20,15 @@ const ResourceTabs = () => {
   const searchParams = new URLSearchParams(location.search);
   const tabParam = searchParams.get('tab');
   
-  const [activeTab, setActiveTab] = useState(tabParam === 'credentials' ? "credentials" : "resume");
+  const [activeTab, setActiveTab] = useState(tabParam === 'credentials' ? "credentials" : 
+                                   tabParam === 'companies' ? "companies" : "resume");
   const contentAnimation = useFadeIn(300);
   
   useEffect(() => {
     if (tabParam === 'credentials') {
       setActiveTab("credentials");
+    } else if (tabParam === 'companies') {
+      setActiveTab("companies");
     }
   }, [tabParam]);
   
@@ -42,11 +45,11 @@ const ResourceTabs = () => {
   return (
     <Tabs defaultValue={activeTab} value={activeTab} className="max-w-5xl mx-auto mb-16" onValueChange={setActiveTab}>
       <TabsList className="grid grid-cols-5 w-full max-w-3xl mx-auto">
+        <TabsTrigger value="companies" className="bg-blue-50 font-semibold">Top Companies</TabsTrigger>
         <TabsTrigger value="resume">Resume Writing</TabsTrigger>
         <TabsTrigger value="interview">Interview Prep</TabsTrigger>
         <TabsTrigger value="workplace">Workplace Readiness</TabsTrigger>
         <TabsTrigger value="credentials">Credentials</TabsTrigger>
-        <TabsTrigger value="companies">Top Companies</TabsTrigger>
       </TabsList>
       
       <div className={`mt-8 ${contentAnimation}`}>
