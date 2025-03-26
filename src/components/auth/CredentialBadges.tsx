@@ -2,7 +2,6 @@ import { Badge } from "@/components/ui/badge";
 import { Award, BadgeCheck, Shield, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
 const CredentialBadges = () => {
   // Credential badge data
   const readyToWorkBadges = [{
@@ -91,9 +90,7 @@ const CredentialBadges = () => {
           and industry-recognized skills that give students a competitive advantage in today's job market.
         </p>
         <div className="text-center mt-4">
-          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline">
-            View all available credentials
-          </Link>
+          
         </div>
       </div>
       
