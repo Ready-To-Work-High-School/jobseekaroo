@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { 
-  Translate, 
+  Languages, 
   Accessibility, 
-  Sitemap, 
+  Map, 
   Contact, 
   Share, 
   Mail, 
@@ -26,9 +26,9 @@ const SidePanel = () => {
   };
 
   const links = [
-    { icon: Translate, label: 'Translate', href: '#translate' },
+    { icon: Languages, label: 'Translate', href: '#translate' },
     { icon: Accessibility, label: 'Accessibility', href: '#accessibility' },
-    { icon: Sitemap, label: 'Sitemap', href: '#sitemap' },
+    { icon: Map, label: 'Sitemap', href: '#sitemap' },
     { icon: Contact, label: 'Contact', href: '#contact' },
     { icon: Share, label: 'Share', href: '#share' },
     { icon: Mail, label: 'Mail', href: 'mailto:contact@jobseekers4hs.org' },
