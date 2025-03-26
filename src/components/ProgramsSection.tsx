@@ -17,9 +17,7 @@ import { Badge } from './ui/badge';
 
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
 
   // Function to get the redirect path based on auth status
@@ -34,7 +32,8 @@ const ProgramsSection = () => {
     }
   }, []);
   
-  return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
+  return (
+    <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
@@ -70,7 +69,8 @@ const ProgramsSection = () => {
         {/* Display our updated CredentialBadges component here */}
         <CredentialBadges />
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default ProgramsSection;

@@ -48,7 +48,7 @@ img {
 
 /* Background gradients */
 .bg-gradient-brand {
-  @apply bg-gradient-to-r from-brand-600 to-brand-800;
+  @apply bg-gradient-to-r from-blue-600 to-blue-800;
 }
 
 .bg-gradient-amber {
@@ -57,7 +57,7 @@ img {
 
 /* Text gradients */
 .text-gradient-primary {
-  @apply bg-gradient-to-r from-primary to-brand-700 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-primary to-blue-700 bg-clip-text text-transparent;
 }
 
 .text-gradient-amber {
