@@ -1,7 +1,6 @@
 
 import React from 'react';
 import MobileMenuItem from './MobileMenuItem';
-import AdminTestLink from '@/components/shared/AdminTestLink';
 import { BookOpen, ExternalLink, Building2 } from 'lucide-react';
 
 interface UnauthenticatedMenuItemsProps {
@@ -9,7 +8,7 @@ interface UnauthenticatedMenuItemsProps {
 }
 
 const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ setIsOpen }) => {
-  console.log("UnauthenticatedMenuItems - rendering menu items with Admin link");
+  console.log("UnauthenticatedMenuItems - rendering menu items");
   
   return (
     <>
@@ -36,14 +35,6 @@ const UnauthenticatedMenuItems: React.FC<UnauthenticatedMenuItemsProps> = ({ set
       >
         Sign Up
       </MobileMenuItem>
-      
-      {/* Using the shared AdminTestLink component */}
-      <div className="mt-2">
-        <AdminTestLink 
-          variant="sidebar" 
-          onClick={() => setIsOpen(false)} 
-        />
-      </div>
     </>
   );
 };

@@ -3,7 +3,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MobileNavLink } from './MobileNavLink';
-import AdminTestLink from '@/components/shared/AdminTestLink';
 import {
   Sheet,
   SheetContent,
@@ -23,6 +22,7 @@ import {
   CheckSquare,
   User,
   LogOut,
+  Shield,
 } from 'lucide-react';
 
 export const MobileMenu = () => {
@@ -74,11 +74,6 @@ export const MobileMenu = () => {
             Resume Assistant
           </MobileNavLink>
           
-          {/* Using the shared AdminTestLink component instead */}
-          <div className="px-1 my-2">
-            <AdminTestLink variant="mobile" />
-          </div>
-          
           {user ? (
             <>
               <div className="border-t border-border/60 my-2"></div>
@@ -98,6 +93,14 @@ export const MobileMenu = () => {
                 <User className="h-5 w-5" />
                 Profile
               </MobileNavLink>
+              
+              {isAdmin && (
+                <MobileNavLink to="/admin">
+                  <Shield className="h-5 w-5" />
+                  Admin Panel
+                </MobileNavLink>
+              )}
+              
               <div 
                 className="flex items-center gap-3 px-4 py-3 text-base cursor-pointer hover:bg-muted"
                 onClick={() => {

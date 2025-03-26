@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import EmailPasswordForm, { SignInValues } from "./EmailPasswordForm";
 import SocialAuthButtons from "./SocialAuthButtons";
 import SignInLinks from "./SignInLinks";
-import { AlertCircle, Shield } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
@@ -93,12 +93,6 @@ const SignInForm = () => {
     }
   };
 
-  const goToAdminTestMode = () => {
-    console.log("Navigating to admin test mode");
-    // Use direct navigation to avoid any authentication checks that might redirect
-    window.location.href = '/admin?adminTest=true';
-  };
-
   return (
     <div className="bg-card border rounded-lg shadow-sm p-6 transition-all hover:shadow-md">
       <EmailPasswordForm 
@@ -126,17 +120,7 @@ const SignInForm = () => {
         <Alert className="bg-amber-50 border-amber-200 text-amber-800">
           <AlertCircle className="h-4 w-4 text-amber-500" />
           <AlertDescription className="text-sm">
-            <div className="flex flex-col space-y-2">
-              <span>Having trouble signing in?</span>
-              <Button 
-                onClick={goToAdminTestMode}
-                className="w-full flex items-center justify-center bg-amber-600 hover:bg-amber-700 text-white"
-                type="button"
-              >
-                <Shield className="mr-2 h-4 w-4" />
-                Access Admin Portal (Test Mode)
-              </Button>
-            </div>
+            <span>Having trouble signing in? Please contact support.</span>
           </AlertDescription>
         </Alert>
       </div>
