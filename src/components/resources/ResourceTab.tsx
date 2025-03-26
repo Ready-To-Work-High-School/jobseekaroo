@@ -3,16 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, ExternalLink, Video } from 'lucide-react';
-import { type LucideIcon } from 'lucide-react';
-
-type Resource = {
-  title: string;
-  description: string;
-  type: string;
-  icon: LucideIcon;
-  action: string;
-  url: string;
-};
+import { type Resource } from '@/lib/mock-data/resourcesData';
 
 interface ResourceTabProps {
   resources: Resource[];
