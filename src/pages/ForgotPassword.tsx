@@ -61,9 +61,21 @@ const ForgotPassword = () => {
       
       setIsSuccess(true);
       console.log('Password reset email sent successfully via Supabase auth');
+      
+      // Show a toast notification
+      toast({
+        title: "Reset link sent",
+        description: "If an account exists with this email, you'll receive password reset instructions shortly.",
+      });
     } catch (err: any) {
-      setError(err.message || "Failed to send reset email. Please try again later.");
       console.error('Password reset error:', err);
+      setError(err.message || "Failed to send reset email. Please try again later.");
+      
+      toast({
+        variant: "destructive",
+        title: "Error sending reset link",
+        description: err.message || "Failed to send reset email. Please try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }

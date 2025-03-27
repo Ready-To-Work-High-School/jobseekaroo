@@ -36,12 +36,17 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check for URL errors
+  // Check for URL errors and access token
   useEffect(() => {
+    // First check for hash parameters (Supabase auth redirects use hash fragments)
     const searchParams = new URLSearchParams(location.hash.substring(1));
     const urlError = searchParams.get("error");
     const urlErrorDescription = searchParams.get("error_description");
-
+    
+    // Debug info for troubleshooting
+    console.log("Location hash:", location.hash);
+    console.log("Search params from hash:", Object.fromEntries(searchParams.entries()));
+    
     if (urlError && urlErrorDescription) {
       const readableError = urlErrorDescription.replace(/\+/g, ' ');
       setError(readableError);
@@ -53,8 +58,25 @@ const ResetPassword = () => {
       
       // If token expired, redirect to forgot password after a delay
       if (urlError === "access_denied" && urlErrorDescription.includes("expired")) {
+        toast({
+          title: "Link expired",
+          description: "Your password reset link has expired. We'll redirect you to request a new one.",
+        });
         setTimeout(() => navigate("/forgot-password"), 5000);
       }
+    }
+    
+    // Also check for access_token to ensure we're on a valid reset page
+    const hasAccessToken = searchParams.has("access_token");
+    console.log("Has access token:", hasAccessToken);
+    
+    if (!hasAccessToken && !urlError) {
+      toast({
+        variant: "destructive",
+        title: "Invalid reset link",
+        description: "This password reset link appears to be invalid. Please request a new one.",
+      });
+      setTimeout(() => navigate("/forgot-password"), 3000);
     }
   }, [location, navigate]);
 
@@ -71,12 +93,17 @@ const ResetPassword = () => {
     setError(null);
     
     try {
+      console.log("Attempting to update password");
       const { error } = await supabase.auth.updateUser({
         password: values.password
       });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Update password error:", error);
+        throw error;
+      }
       
+      console.log("Password updated successfully");
       setIsResetComplete(true);
       toast({
         title: "Password reset successful",
@@ -86,8 +113,13 @@ const ResetPassword = () => {
       // Redirect to sign-in page after 3 seconds
       setTimeout(() => navigate("/sign-in"), 3000);
     } catch (err: any) {
-      setError(err.message || "Failed to reset password. Please try again or request a new reset link.");
       console.error('Password reset error:', err);
+      setError(err.message || "Failed to reset password. Please try again or request a new reset link.");
+      toast({
+        variant: "destructive",
+        title: "Password reset failed",
+        description: err.message || "Failed to reset password. Please try again or request a new reset link.",
+      });
     } finally {
       setIsSubmitting(false);
     }
