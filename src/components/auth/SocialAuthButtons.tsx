@@ -63,7 +63,7 @@ const SocialAuthButtons = ({
       let errorMessage = error?.message || "Sign-in failed";
       if (errorMessage.includes("network") || errorMessage.includes("connection") || 
           errorMessage.includes("refused")) {
-        errorMessage = "Connection to Google failed. This could be due to:";
+        errorMessage = "Connection to Google failed. This could be due to network issues or browser settings:";
         setGoogleError(errorMessage);
         setShowGoogleDebugInfo(true);
       } else {
@@ -109,7 +109,7 @@ const SocialAuthButtons = ({
       let errorMessage = error?.message || "Sign-in failed";
       if (errorMessage.includes("network") || errorMessage.includes("connection") || 
           errorMessage.includes("refused")) {
-        errorMessage = "Connection to Apple failed. This could be due to:";
+        errorMessage = "Connection to Apple failed. This could be due to network issues or browser settings:";
         setAppleError(errorMessage);
         setShowAppleDebugInfo(true);
       } else {
@@ -142,6 +142,7 @@ const SocialAuthButtons = ({
           diagnosticInfo={diagnosticInfo}
           showDebugInfo={showGoogleDebugInfo}
           onToggleDebugInfo={() => setShowGoogleDebugInfo(!showGoogleDebugInfo)}
+          provider="google"
         />
       )}
       
@@ -157,6 +158,7 @@ const SocialAuthButtons = ({
           diagnosticInfo={diagnosticInfo}
           showDebugInfo={showAppleDebugInfo}
           onToggleDebugInfo={() => setShowAppleDebugInfo(!showAppleDebugInfo)}
+          provider="apple"
         />
       )}
     </div>

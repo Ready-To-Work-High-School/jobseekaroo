@@ -21,12 +21,23 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
     console.log(`${provider} redirect URL:`, redirectUrl);
     console.log(`Will redirect back to:`, currentPath);
     
-    // Simplified provider options to avoid connection issues
+    // Configure options based on provider for better error handling
+    const options = {
+      redirectTo: redirectUrl,
+      queryParams: {}
+    };
+    
+    // If provider is apple, add specific scopes
+    if (provider === 'apple') {
+      options.queryParams = {
+        scope: 'name email'
+      };
+    }
+    
+    // Initiate OAuth sign-in
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo: redirectUrl,
-      },
+      options
     });
     
     console.log(`${provider} sign-in response:`, { data, error });

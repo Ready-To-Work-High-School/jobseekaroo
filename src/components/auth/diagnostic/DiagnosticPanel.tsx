@@ -1,68 +1,113 @@
 
+import React, { useState } from 'react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, InfoIcon } from "lucide-react";
-import { useState } from "react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { AlertCircle, ChevronDown, ChevronUp, Wifi, Globe, ShieldAlert } from "lucide-react";
 
 interface DiagnosticPanelProps {
   errorMessage: string;
   diagnosticInfo: Record<string, any>;
   showDebugInfo: boolean;
   onToggleDebugInfo: () => void;
+  provider?: 'google' | 'apple';
 }
 
 const DiagnosticPanel = ({ 
   errorMessage, 
   diagnosticInfo, 
   showDebugInfo, 
-  onToggleDebugInfo 
+  onToggleDebugInfo,
+  provider
 }: DiagnosticPanelProps) => {
+  const truncatedDiagnostics = Object.entries(diagnosticInfo).slice(0, 5);
+  
+  const getProviderSpecificHelp = () => {
+    if (provider === 'google') {
+      return (
+        <div className="pt-2 border-t border-gray-200 mt-2 text-xs">
+          <p className="font-medium mb-1">Google Sign-In Troubleshooting:</p>
+          <ul className="list-disc pl-4 space-y-1">
+            <li>Check if third-party cookies are enabled in your browser</li>
+            <li>Try using Chrome or Edge instead of Safari</li>
+            <li>Check if your browser is in private/incognito mode</li>
+          </ul>
+        </div>
+      );
+    } else if (provider === 'apple') {
+      return (
+        <div className="pt-2 border-t border-gray-200 mt-2 text-xs">
+          <p className="font-medium mb-1">Apple Sign-In Troubleshooting:</p>
+          <ul className="list-disc pl-4 space-y-1">
+            <li>Make sure you're signed in to your Apple ID on your device</li>
+            <li>Check if your browser allows popups from this site</li>
+            <li>Try using Safari for the most seamless Apple Sign-In experience</li>
+          </ul>
+        </div>
+      );
+    }
+    return null;
+  };
+  
   return (
-    <div className="text-sm text-red-500 bg-red-50 p-3 rounded border border-red-200">
-      <div className="flex items-start">
-        <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
-        <div>
-          <p>{errorMessage}</p>
-          {errorMessage.includes("Connection to Google failed") && (
-            <ul className="list-disc pl-5 mt-2 text-xs space-y-1">
-              <li>Browser restrictions on third-party cookies</li>
-              <li>Network firewall or proxy blocking the connection</li>
-              <li>Google service disruption</li>
-              <li>Incorrect OAuth configuration</li>
-            </ul>
+    <Alert variant="destructive" className="text-xs bg-red-50 border-red-200 text-red-800">
+      <div className="flex items-start gap-2">
+        <AlertCircle className="h-4 w-4 text-red-600 mt-0.5" />
+        <div className="flex-1">
+          <AlertDescription className="font-medium">
+            {errorMessage}
+          </AlertDescription>
+          
+          {getProviderSpecificHelp()}
+          
+          <div className="flex items-center justify-between mt-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="h-auto py-1 px-2 text-xs flex items-center text-red-700 hover:text-red-800 hover:bg-red-100"
+              onClick={onToggleDebugInfo}
+            >
+              {showDebugInfo ? (
+                <>
+                  <ChevronUp className="h-3 w-3 mr-1" />
+                  Hide troubleshooting info
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3 w-3 mr-1" />
+                  Show troubleshooting info
+                </>
+              )}
+            </Button>
+          </div>
+          
+          {showDebugInfo && (
+            <div className="mt-2 border-t border-red-200 pt-2 space-y-2">
+              <div className="flex items-center gap-1 text-red-700">
+                <Wifi className="h-3 w-3" />
+                <span>Network: {diagnosticInfo.online ? 'Online' : 'Offline'}</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-red-700">
+                <Globe className="h-3 w-3" />
+                <span>Protocol: {diagnosticInfo.protocol}</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-red-700">
+                <ShieldAlert className="h-3 w-3" />
+                <span>Cookies: {diagnosticInfo.cookiesEnabled ? 'Enabled' : 'Disabled'}</span>
+              </div>
+              
+              {truncatedDiagnostics.map(([key, value]) => (
+                <div key={key} className="text-xs text-red-700">
+                  <span className="font-mono">{key}: </span>
+                  <span className="font-mono">{typeof value === 'object' ? JSON.stringify(value) : String(value)}</span>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
-      
-      <Collapsible open={showDebugInfo} onOpenChange={onToggleDebugInfo} className="mt-3">
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="sm" className="text-xs p-1 h-auto">
-            <InfoIcon className="h-3 w-3 mr-1" />
-            {showDebugInfo ? "Hide diagnostic info" : "Show diagnostic info"}
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2">
-          <div className="bg-white p-2 rounded border text-xs font-mono">
-            <h4 className="font-medium mb-1">Browser Diagnostics:</h4>
-            {Object.entries(diagnosticInfo).map(([key, value]) => (
-              <div key={key} className="grid grid-cols-5 gap-1 mb-1">
-                <span className="col-span-2 text-gray-500">{key}:</span>
-                <span className="col-span-3">{String(value)}</span>
-              </div>
-            ))}
-            
-            <h4 className="font-medium mt-3 mb-1">Troubleshooting Steps:</h4>
-            <ol className="list-decimal pl-5 space-y-1">
-              <li>Check if third-party cookies are enabled in your browser</li>
-              <li>Try a different browser (Chrome, Firefox, etc.)</li>
-              <li>Verify the Google Cloud Console settings match your domain</li>
-              <li>Check that JavaScript origins include http://localhost:3000</li>
-              <li>Clear browser cache and cookies</li>
-            </ol>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-    </div>
+    </Alert>
   );
 };
 

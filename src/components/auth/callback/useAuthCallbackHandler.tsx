@@ -27,6 +27,8 @@ export const useAuthCallbackHandler = () => {
         hasQueryParams: window.location.search ? 'Yes' : 'No',
         cookiesEnabled: navigator.cookieEnabled,
         supportsThirdPartyCookies: document.hasStorageAccess ? "Checking..." : "Unknown (old browser)",
+        provider: window.location.href.includes('google') ? 'google' : 
+                  window.location.href.includes('apple') ? 'apple' : 'unknown'
       };
       
       setDiagnosticInfo(info);
@@ -57,19 +59,31 @@ export const useAuthCallbackHandler = () => {
         console.log("Auth callback initiated");
         console.log("URL:", window.location.href);
         
-        // Test if we can connect to Google's auth domain
+        // Test provider connectivity based on the URL
+        const provider = window.location.href.includes('google') ? 'google' : 
+                         window.location.href.includes('apple') ? 'apple' : 'unknown';
+                         
+        console.log(`Detected provider: ${provider}`);
+        
+        // Test if we can connect to the provider's auth domain
         try {
-          await fetch('https://accounts.google.com/gsi/status', { 
-            method: 'HEAD',
-            mode: 'no-cors',
-            cache: 'no-cache'
-          });
-          console.log("Google connectivity test completed");
+          if (provider === 'google') {
+            await fetch('https://accounts.google.com/gsi/status', { 
+              method: 'HEAD',
+              mode: 'no-cors',
+              cache: 'no-cache'
+            });
+            console.log("Google connectivity test completed");
+          } else if (provider === 'apple') {
+            // Apple's Sign-In service doesn't have a good endpoint to test,
+            // so we'll just log that we're proceeding with Apple auth
+            console.log("Proceeding with Apple authentication callback");
+          }
         } catch (connErr) {
-          console.error('Connection to Google failed:', connErr);
+          console.error(`Connection to ${provider} failed:`, connErr);
           setDiagnosticInfo(current => ({
             ...current,
-            googleConnectionError: connErr.message
+            providerConnectionError: connErr.message
           }));
         }
         
@@ -111,7 +125,7 @@ export const useAuthCallbackHandler = () => {
           
           // Special handling for connection errors
           if (error.message?.includes('refused to connect')) {
-            setError(`Connection error: accounts.google.com refused to connect. This could be due to network restrictions, VPN settings, or browser security features.`);
+            setError(`Connection error: ${provider} refused to connect. This could be due to network restrictions, VPN settings, or browser security features.`);
           } else {
             setError(error.message);
           }
@@ -160,12 +174,14 @@ export const useAuthCallbackHandler = () => {
         
         // Enhanced error handling
         let errorMessage = err.message || 'Unknown authentication error';
+        const provider = window.location.href.includes('google') ? 'Google' : 
+                        window.location.href.includes('apple') ? 'Apple' : 'the authentication provider';
         
         // Special handling for connection errors
         if (errorMessage.includes('refused to connect') || 
             errorMessage.includes('network') ||
             !navigator.onLine) {
-          errorMessage = 'Connection error: accounts.google.com refused to connect. This could be due to network restrictions, VPN settings, or browser security features.';
+          errorMessage = `Connection error: ${provider} refused to connect. This could be due to network restrictions, VPN settings, or browser security features.`;
           
           // Add specific diagnostic info
           setDiagnosticInfo(current => ({
