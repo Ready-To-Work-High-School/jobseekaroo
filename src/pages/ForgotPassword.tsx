@@ -43,19 +43,15 @@ const ForgotPassword = () => {
     setError(null);
     
     try {
-      // Get current origin without using localhost
-      const currentOrigin = window.location.origin;
+      // Get the current origin for the redirect URL to work in any environment
+      const origin = window.location.origin;
+      const redirectTo = `${origin}/reset-password`;
       
-      // Make sure the URL is valid - check protocol
-      const redirectUrl = currentOrigin.includes('localhost') 
-        ? `http://localhost:3000/reset-password` 
-        : `${currentOrigin}/reset-password`;
+      console.log('Using redirect URL:', redirectTo);
       
-      console.log('Using redirect URL:', redirectUrl);
-      
-      // Use Supabase's built-in password reset functionality with the correct origin
+      // Use Supabase's built-in password reset functionality
       const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
-        redirectTo: redirectUrl,
+        redirectTo,
       });
       
       if (error) throw error;
