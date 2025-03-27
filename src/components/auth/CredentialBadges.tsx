@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Award, BadgeCheck, Shield } from 'lucide-react';
+import { Award, BadgeCheck, Shield, Copyright } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CredentialBadges = () => {
@@ -50,9 +50,10 @@ const CredentialBadges = () => {
       <CardContent className="pt-6">
         <div className="text-center mb-6">
           <h3 className="text-lg font-semibold mb-2">High School Scholars Distinction</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-muted-foreground mb-1">
             Students can earn these digital badges which showcase career-ready skills and enhanced knowledge
           </p>
+          <p className="text-xs text-blue-800 italic mb-4">Created by Pamela Coleman, Entrepreneurship Academy</p>
           
           <div className="inline-flex items-center gap-2 mb-4">
             <Badge variant="brandSolid" className="text-sm py-1">
@@ -122,9 +123,22 @@ const CredentialBadges = () => {
           <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
         </div>
         
-        <p className="text-xs text-center text-muted-foreground">
+        <p className="text-xs text-center text-muted-foreground mb-4">
           Sign in or sign up to see more details about these valuable credentials and how they can boost your career
         </p>
+
+        {/* Intellectual Property Rights Notice */}
+        <div className="bg-gray-50 border border-gray-200 rounded-md p-3 mt-2">
+          <div className="flex items-center gap-2 mb-2 justify-center">
+            <Copyright className="h-4 w-4 text-gray-700" />
+            <p className="text-xs font-medium text-gray-700">Intellectual Property Notice</p>
+          </div>
+          <p className="text-xs text-gray-600 text-center">
+            All credential badges, designs, and associated materials are protected by copyright and intellectual property laws.
+            Unauthorized reproduction, distribution, or use is strictly prohibited. These materials are the exclusive property
+            of Pamela Coleman and the Entrepreneurship Academy program.
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
