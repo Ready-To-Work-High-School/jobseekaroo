@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,8 +70,8 @@ const ForgotPassword = () => {
     }
   };
 
-  // If there's an error in the URL, display it
-  useState(() => {
+  // Check for URL errors only once when the component mounts
+  useEffect(() => {
     if (urlError && urlErrorDescription) {
       const readableError = urlErrorDescription.replace(/\+/g, ' ');
       setError(readableError);
