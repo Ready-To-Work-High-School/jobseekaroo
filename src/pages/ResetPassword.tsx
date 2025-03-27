@@ -1,128 +1,25 @@
 
-import { useState, useEffect } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { toast } from "@/components/ui/use-toast";
-
-const passwordSchema = z.object({
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
-  confirmPassword: z.string(),
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
-
-type PasswordFormValues = z.infer<typeof passwordSchema>;
+import { ArrowLeft } from "lucide-react";
+import PasswordResetForm from "@/components/auth/PasswordResetForm";
+import PasswordResetSuccess from "@/components/auth/PasswordResetSuccess";
+import PasswordResetTokenValidator from "@/components/auth/PasswordResetTokenValidator";
 
 const ResetPassword = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isResetComplete, setIsResetComplete] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Check for URL errors and access token
-  useEffect(() => {
-    // First check for hash parameters (Supabase auth redirects use hash fragments)
-    const searchParams = new URLSearchParams(location.hash.substring(1));
-    const urlError = searchParams.get("error");
-    const urlErrorDescription = searchParams.get("error_description");
-    
-    // Debug info for troubleshooting
-    console.log("Location hash:", location.hash);
-    console.log("Search params from hash:", Object.fromEntries(searchParams.entries()));
-    
-    if (urlError && urlErrorDescription) {
-      const readableError = urlErrorDescription.replace(/\+/g, ' ');
-      setError(readableError);
-      toast({
-        variant: "destructive",
-        title: "Reset link error",
-        description: readableError,
-      });
-      
-      // If token expired, redirect to forgot password after a delay
-      if (urlError === "access_denied" && urlErrorDescription.includes("expired")) {
-        toast({
-          title: "Link expired",
-          description: "Your password reset link has expired. We'll redirect you to request a new one.",
-        });
-        setTimeout(() => navigate("/forgot-password"), 5000);
-      }
-    }
-    
-    // Also check for access_token to ensure we're on a valid reset page
-    const hasAccessToken = searchParams.has("access_token");
-    console.log("Has access token:", hasAccessToken);
-    
-    if (!hasAccessToken && !urlError) {
-      toast({
-        variant: "destructive",
-        title: "Invalid reset link",
-        description: "This password reset link appears to be invalid. Please request a new one.",
-      });
-      setTimeout(() => navigate("/forgot-password"), 3000);
-    }
-  }, [location, navigate]);
+  const handleTokenError = (errorMessage: string) => {
+    setError(errorMessage);
+  };
 
-  const form = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  const onSubmit = async (values: PasswordFormValues) => {
-    setIsSubmitting(true);
-    setError(null);
-    
-    try {
-      console.log("Attempting to update password");
-      const { error } = await supabase.auth.updateUser({
-        password: values.password
-      });
-      
-      if (error) {
-        console.error("Update password error:", error);
-        throw error;
-      }
-      
-      console.log("Password updated successfully");
-      setIsResetComplete(true);
-      toast({
-        title: "Password reset successful",
-        description: "Your password has been updated. You can now sign in with your new password.",
-      });
-      
-      // Redirect to sign-in page after 3 seconds
-      setTimeout(() => navigate("/sign-in"), 3000);
-    } catch (err: any) {
-      console.error('Password reset error:', err);
-      setError(err.message || "Failed to reset password. Please try again or request a new reset link.");
-      toast({
-        variant: "destructive",
-        title: "Password reset failed",
-        description: err.message || "Failed to reset password. Please try again or request a new reset link.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleResetSuccess = () => {
+    setIsResetComplete(true);
   };
 
   return (
@@ -136,72 +33,12 @@ const ResetPassword = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <PasswordResetTokenValidator onError={handleTokenError} />
+            
             {isResetComplete ? (
-              <Alert className="bg-green-50 border-green-200 text-green-800">
-                <AlertDescription>
-                  Your password has been reset successfully! You will be redirected to the sign in page.
-                </AlertDescription>
-              </Alert>
+              <PasswordResetSuccess />
             ) : (
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>New Password</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password"
-                            placeholder="••••••••" 
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password"
-                            placeholder="••••••••" 
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Updating Password...
-                      </>
-                    ) : "Reset Password"}
-                  </Button>
-                </form>
-              </Form>
+              <PasswordResetForm onSuccess={handleResetSuccess} />
             )}
           </CardContent>
           <CardFooter className="flex justify-center border-t pt-4">
