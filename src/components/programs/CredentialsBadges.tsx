@@ -1,11 +1,13 @@
+
 import React from 'react';
 import SkillBadge from './SkillBadge';
 import SectionHeading from './SectionHeading';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, ExternalLink } from 'lucide-react';
+import { CheckCircle, ExternalLink, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+
 const CredentialsBadges = () => {
   const badges = [{
     image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
@@ -29,6 +31,7 @@ const CredentialsBadges = () => {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
     name: "Problem Solving"
   }];
+  
   return <div className="p-8 rounded-xl shadow-xl border-2 border-blue-200 bg-gradient-to-br from-sky-100 to-blue-100">
       {/* Fancy border above High School Scholars Distinction */}
       <div className="mb-8">
@@ -45,6 +48,37 @@ const CredentialsBadges = () => {
       </div>
       
       <SectionHeading eyebrow="" title="High School Scholars Distinction" description="Students may earn highly skilled digital badges, certificates and credentials which showcase career-ready skills, enhanced emerging technology knowledge and industry certification to potential employers" eyebrowColor="" titleClassName="text-4xl sm:text-5xl md:text-6xl bg-gradient-to-r from-purple-600 via-blue-600 to-amber-500 bg-clip-text text-transparent font-extrabold" />
+      
+      {/* Florida Ready to Work Stats */}
+      <div className="mb-8 p-4 bg-white/70 rounded-lg shadow-sm border border-blue-200">
+        <h3 className="text-xl font-bold mb-3 text-center text-blue-800">Florida Ready to Work</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">699</p>
+            <p className="text-sm text-blue-700">Learners Enrolled</p>
+          </div>
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">259</p>
+            <p className="text-sm text-blue-700">Active Learners</p>
+          </div>
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">874</p>
+            <p className="text-sm text-blue-700">Hours Logged</p>
+          </div>
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">347</p>
+            <p className="text-sm text-blue-700">eBadges Earned</p>
+          </div>
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">63</p>
+            <p className="text-sm text-blue-700">Certificates Earned</p>
+          </div>
+          <div className="text-center p-2 bg-blue-50 rounded-md">
+            <p className="text-blue-800 font-bold text-2xl">50</p>
+            <p className="text-sm text-blue-700">Credentials Earned</p>
+          </div>
+        </div>
+      </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
         {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
@@ -97,4 +131,5 @@ const CredentialsBadges = () => {
       </div>
     </div>;
 };
+
 export default CredentialsBadges;

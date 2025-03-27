@@ -1,147 +1,133 @@
-import { Badge } from "@/components/ui/badge";
-import { Award, BadgeCheck, Shield, ExternalLink } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Award, BadgeCheck } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 const CredentialBadges = () => {
   // Credential badge data
-  const readyToWorkBadges = [{
-    image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
-    name: "Career Exploration"
-  }, {
-    image: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.png",
-    name: "Communication"
-  }, {
-    image: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png",
-    name: "Professionalism"
-  }, {
-    image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
-    name: "Florida Soft Skills"
-  }];
+  const readyToWorkBadges = [
+    {
+      image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
+      name: "Career Exploration"
+    },
+    {
+      image: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.png",
+      name: "Communication"
+    },
+    {
+      image: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png",
+      name: "Professionalism"
+    },
+    {
+      image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
+      name: "Florida Soft Skills"
+    },
+    {
+      image: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.png",
+      name: "Team Building"
+    },
+    {
+      image: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png",
+      name: "Capstone Experience"
+    },
+    {
+      image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
+      name: "Problem Solving"
+    }
+  ];
+  
   const esbBadge = "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png";
-
-  // IBM SkillsBuild badge data
-  const ibmBadges = [{
-    image: "/lovable-uploads/19e761ce-d27d-4894-a1e6-0cb63237cbcf.png",
-    name: "AI Foundations",
-    description: "A collaboration of ISTE and IBM"
-  }, {
-    image: "/lovable-uploads/73338594-5fa4-499d-8fa6-880f21b770ef.png",
-    name: "Explore Emerging Tech",
-    description: "IBM SkillsBuild"
-  }, {
-    image: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
-    name: "IBM AI Foundations for Educators",
-    description: "Online and On-Demand Institutes"
-  }, {
-    image: "/lovable-uploads/54345058-d5eb-4d91-a38b-197094c4ea72.png",
-    name: "Entrepreneurship Business Essentials",
-    description: "IBM SkillsBuild"
-  }];
-  return <div className="space-y-6">
-      {/* Industry Certifications - Moved to the top */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
-          <Award className="h-5 w-5 text-amber-500" />
-          Industry Certifications
-        </h3>
-        <div className="flex flex-wrap justify-center gap-8">
-          {/* ESB Certification Badge - Same size and styling as Nursing Academy */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-amber-50 to-amber-100 rounded-lg shadow-lg border border-amber-400 w-72 h-auto">
-            <div className="relative">
-              <Badge variant="amber" className="absolute -top-2 -right-6 z-20 text-sm px-[22px] py-[2px] my-[3px] mx-0">ESB Certified</Badge>
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-400/40 rounded-full blur-lg animate-pulse"></div>
-                <div className="absolute inset-0 bg-amber-400/40 rounded-full blur-md animate-pulse delay-700"></div>
-                <img src={esbBadge} alt="ESB Certification" className="w-52 h-52 object-contain relative z-10" />
-              </div>
-            </div>
-            <p className="mt-3 font-bold text-center text-lg">Entrepreneurship & Small Business</p>
-            <p className="text-sm text-gray-600 text-center">Industry-standard credential by Certiport</p>
-            <Link to="/resources" className="mt-3 text-blue-600 hover:underline text-sm">
-              Learn more about this certification
-            </Link>
+  
+  return (
+    <Card className="border-blue-200 shadow-md">
+      <CardHeader className="bg-blue-50 border-b border-blue-200">
+        <CardTitle className="text-xl flex items-center gap-2">
+          <BadgeCheck className="h-5 w-5 text-blue-600" />
+          Industry-Recognized Credentials
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <div className="text-center mb-6">
+          <h3 className="text-lg font-semibold mb-2">High School Scholars Distinction</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Students can earn these digital badges which showcase career-ready skills and enhanced knowledge
+          </p>
+          
+          <div className="inline-flex items-center gap-2 mb-4">
+            <Badge variant="brandSolid" className="text-sm py-1">
+              <Award className="h-4 w-4 mr-1" />
+              Florida Ready to Work
+            </Badge>
           </div>
           
-          {/* Nursing Academy Badge - Same size and styling as ESB */}
-          <div className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100 via-blue-50 to-red-50 rounded-lg shadow-lg border border-blue-300 w-72 h-auto">
-            <div className="relative">
-              <Badge variant="destructive" className="absolute -top-2 -right-7 z-20 text-sm py-px px-0 mx-0 my-0">NCLEX Certified</Badge>
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-lg animate-pulse"></div>
-                <div className="absolute inset-0 bg-red-400/20 rounded-full blur-md animate-pulse delay-500"></div>
-                <img alt="NCLEX Certification" className="w-52 h-52 object-contain relative z-10" src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" />
-              </div>
+          {/* Florida Ready to Work Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 max-w-md mx-auto bg-blue-50 p-3 rounded-md">
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">699</p>
+              <p className="text-xs text-blue-600">Learners Enrolled</p>
             </div>
-            <p className="mt-3 font-bold text-center text-lg text-black">Nursing Academy</p>
-            <p className="text-sm text-gray-600 text-center">Healthcare career pathway</p>
-            <Link to="/resources?tab=credentials" className="mt-3 text-blue-600 hover:underline text-sm">
-              View nursing credential details
-            </Link>
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">259</p>
+              <p className="text-xs text-blue-600">Active Learners</p>
+            </div>
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">874</p>
+              <p className="text-xs text-blue-600">Hours Logged</p>
+            </div>
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">347</p>
+              <p className="text-xs text-blue-600">eBadges Earned</p>
+            </div>
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">63</p>
+              <p className="text-xs text-blue-600">Certificates Earned</p>
+            </div>
+            <div className="text-center">
+              <p className="text-blue-700 font-bold text-xl">50</p>
+              <p className="text-xs text-blue-600">Credentials Earned</p>
+            </div>
           </div>
         </div>
-      </div>
-      
-      {/* Technology Credentials Text - Added above Ready To Work section */}
-      <div className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 p-6 rounded-lg mb-4">
-        <h3 className="text-3xl font-bold text-blue-800 mb-8 text-center">Technology Credentials</h3>
-        <p className="text-lg text-gray-800">
-          Our students gain valuable digital credentials in emerging technologies, 
-          preparing them for the future of work. These digital badges showcase technical proficiency
-          and industry-recognized skills that give students a competitive advantage in today's job market.
+        
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-6">
+          {readyToWorkBadges.map((badge, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className="w-16 h-16 md:w-20 md:h-20 relative hover:scale-110 transition-transform duration-200">
+                <img 
+                  src={badge.image} 
+                  alt={badge.name} 
+                  className="w-full h-full object-contain" 
+                />
+              </div>
+              <p className="text-xs text-center mt-1">{badge.name}</p>
+            </div>
+          ))}
+        </div>
+        
+        <div className="flex flex-col items-center mb-6">
+          <Badge variant="new" className="text-sm py-1 mb-3">
+            <Shield className="h-4 w-4 mr-1" />
+            ESB Industry Certification
+          </Badge>
+          
+          <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+            <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+            <img 
+              src={esbBadge} 
+              alt="ESB Certification" 
+              className="w-full h-full object-contain relative z-10 rounded-md" 
+            />
+          </div>
+          <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
+        </div>
+        
+        <p className="text-xs text-center text-muted-foreground">
+          Sign in or sign up to see more details about these valuable credentials and how they can boost your career
         </p>
-        <div className="text-center mt-4">
-          
-        </div>
-      </div>
-      
-      {/* Ready to Work Credentials - Removed white background and made badges bigger */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-blue-800">Ready to Work Credentials</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {readyToWorkBadges.map((badge, index) => <div key={index} className="flex flex-col items-center p-3 rounded-lg hover:shadow-md transition-shadow">
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-lg"></div>
-                <img src={badge.image} alt={badge.name} className="w-24 h-24 object-contain mb-2 relative z-10 glow-primary" />
-              </div>
-              <p className="text-sm font-medium text-center">{badge.name}</p>
-            </div>)}
-        </div>
-        <div className="text-center mt-4 space-y-2">
-          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm block">
-            Learn more about Ready to Work credentials
-          </Link>
-          <Button variant="outline" size="sm" className="flex items-center gap-2" asChild>
-            <a href="https://www.floridareadytowork.com/employability-skills" target="_blank" rel="noopener noreferrer">
-              Florida Ready to Work Employability Skills
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </Button>
-        </div>
-      </div>
-      
-      {/* IBM Skills Build Credentials - Removed white backgrounds and added glow */}
-      <div className="mt-4 bg-transparent">
-        <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
-          <BadgeCheck className="h-5 w-5 text-blue-500" />
-          IBM Skills Build Credentials
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {ibmBadges.map((badge, index) => <div key={index} className="flex flex-col items-center p-4 rounded-lg">
-              <div className="relative">
-                <Badge variant="info" className="absolute -top-2 -right-2 z-20">IBM</Badge>
-                <div className="absolute inset-0 bg-blue-400/10 rounded-full blur-lg"></div>
-                <img src={badge.image} alt={badge.name} className="w-36 h-36 object-contain relative z-10 glow-blue-gold" />
-              </div>
-              <p className="mt-2 font-medium text-center">{badge.name}</p>
-              <p className="text-xs text-gray-600 text-center">{badge.description}</p>
-            </div>)}
-        </div>
-        <div className="text-center mt-4">
-          <Link to="/resources?tab=credentials" className="text-blue-600 hover:underline text-sm">
-            Explore IBM SkillsBuild program details
-          </Link>
-        </div>
-      </div>
-    </div>;
+      </CardContent>
+    </Card>
+  );
 };
+
 export default CredentialBadges;
