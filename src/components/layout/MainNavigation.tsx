@@ -39,6 +39,12 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
       )}>
         Find Jobs
       </Link>
+      <Link to="/for-employers" className={cn(
+        "px-3 py-2 text-sm font-medium rounded-md hover:bg-accent",
+        location.pathname === "/for-employers" && "bg-accent/70"
+      )}>
+        For Employers
+      </Link>
       {user ? (
         <>
           <Link to="/skills" className={cn(
@@ -65,14 +71,6 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
           )}>
             Messages
           </Link>
-          {isAdmin && (
-            <Link to="/admin" className={cn(
-              "px-3 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700",
-              (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) && "bg-red-700"
-            )}>
-              Admin Panel
-            </Link>
-          )}
         </>
       ) : (
         <Link to="/resources" className={cn(
