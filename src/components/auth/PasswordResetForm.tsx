@@ -3,7 +3,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -35,6 +35,7 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
@@ -49,7 +50,23 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
     setError(null);
     
     try {
-      console.log("Attempting to update password");
+      // Get token from URL hash
+      const searchParams = new URLSearchParams(location.hash.substring(1));
+      const accessToken = searchParams.get("access_token");
+      
+      if (!accessToken) {
+        throw new Error("No access token found in URL. Please request a new password reset link.");
+      }
+      
+      console.log("Attempting to update password using token");
+      
+      // First set the session with the access token
+      await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: "",
+      });
+      
+      // Then update the password
       const { error } = await supabase.auth.updateUser({
         password: values.password
       });
@@ -65,6 +82,9 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
         title: "Password reset successful",
         description: "Your password has been updated. You can now sign in with your new password.",
       });
+      
+      // Sign out after password reset to clear the temporary session
+      await supabase.auth.signOut();
       
       // Redirect to sign-in page after 3 seconds
       setTimeout(() => navigate("/sign-in"), 3000);

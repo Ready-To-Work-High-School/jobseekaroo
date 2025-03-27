@@ -12,6 +12,8 @@ vi.mock('@/lib/supabase', () => ({
   supabase: {
     auth: {
       updateUser: vi.fn(),
+      setSession: vi.fn(),
+      signOut: vi.fn(),
     },
   },
 }));
@@ -25,6 +27,9 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => vi.fn(),
+    useLocation: () => ({
+      hash: '#access_token=valid_token',
+    }),
   };
 });
 
@@ -78,10 +83,17 @@ describe('PasswordResetForm Component', () => {
 
   test('submits valid form successfully', async () => {
     const onSuccess = vi.fn();
-    // Fix the type issue - provide proper object with user property to match Supabase's expected return type
+    // Mock the necessary functions
+    vi.mocked(supabase.auth.setSession).mockResolvedValue({ 
+      data: { session: null }, 
+      error: null 
+    });
     vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
       data: { user: null }, 
       error: null 
+    });
+    vi.mocked(supabase.auth.signOut).mockResolvedValue({
+      error: null
     });
     
     render(
@@ -97,12 +109,17 @@ describe('PasswordResetForm Component', () => {
     // Submit form
     fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
     
-    // Check if updateUser was called with correct parameters
+    // Check if all the functions were called in order
     await waitFor(() => {
+      expect(supabase.auth.setSession).toHaveBeenCalledWith({
+        access_token: 'valid_token',
+        refresh_token: '',
+      });
       expect(supabase.auth.updateUser).toHaveBeenCalledWith({
         password: 'Password123'
       });
       expect(onSuccess).toHaveBeenCalled();
+      expect(supabase.auth.signOut).toHaveBeenCalled();
       expect(toast).toHaveBeenCalledWith(
         expect.objectContaining({
           title: 'Password reset successful',
@@ -114,16 +131,20 @@ describe('PasswordResetForm Component', () => {
   test('handles error during password update', async () => {
     const onSuccess = vi.fn();
     
-    // Create a properly mocked error by using a class-like structure
+    // Mock setSession success
+    vi.mocked(supabase.auth.setSession).mockResolvedValue({ 
+      data: { session: null }, 
+      error: null 
+    });
+    
+    // Mock updateUser failure
     const mockError = {
       message: 'Something went wrong',
       name: 'AuthError',
       status: 400,
       code: 'invalid_argument',
-      // Remove the __isAuthError property as it's protected
-    } as AuthError; // Cast to AuthError type
+    } as AuthError;
     
-    // Mock the updateUser function with a proper return type
     vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
       data: { user: null }, 
       error: mockError 
@@ -144,6 +165,7 @@ describe('PasswordResetForm Component', () => {
     
     // Check error handling
     await waitFor(() => {
+      expect(supabase.auth.setSession).toHaveBeenCalled();
       expect(supabase.auth.updateUser).toHaveBeenCalled();
       expect(onSuccess).not.toHaveBeenCalled();
       expect(toast).toHaveBeenCalledWith(
