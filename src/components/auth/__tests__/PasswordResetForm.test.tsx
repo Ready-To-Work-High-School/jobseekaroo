@@ -85,7 +85,7 @@ describe('PasswordResetForm Component', () => {
     const onSuccess = vi.fn();
     // Mock the necessary functions
     vi.mocked(supabase.auth.setSession).mockResolvedValue({ 
-      data: { session: null }, 
+      data: { session: null, user: null }, 
       error: null 
     });
     vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
@@ -133,7 +133,7 @@ describe('PasswordResetForm Component', () => {
     
     // Mock setSession success
     vi.mocked(supabase.auth.setSession).mockResolvedValue({ 
-      data: { session: null }, 
+      data: { session: null, user: null }, 
       error: null 
     });
     
