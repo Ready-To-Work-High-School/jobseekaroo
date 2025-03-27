@@ -206,14 +206,15 @@ describe('Password Reset Flow', () => {
 
     test('handles error during password update', async () => {
       const onSuccess = vi.fn();
-      // Fix the AuthError type issue by providing all required properties
-      const mockError: AuthError = {
+      
+      // Create a properly mocked error by using a class-like structure
+      const mockError = {
         message: 'Something went wrong',
         name: 'AuthError',
         status: 400,
         code: 'invalid_argument',
-        __isAuthError: true
-      };
+        // Remove the __isAuthError property as it's protected
+      } as AuthError; // Cast to AuthError type
       
       // Mock the updateUser function with a proper return type
       vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
