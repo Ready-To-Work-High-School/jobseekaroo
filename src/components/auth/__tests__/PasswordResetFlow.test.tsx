@@ -8,6 +8,7 @@ import PasswordResetForm from '../PasswordResetForm';
 import PasswordResetSuccess from '../PasswordResetSuccess';
 import PasswordResetTokenValidator from '../PasswordResetTokenValidator';
 import ResetPassword from '@/pages/ResetPassword';
+import { AuthError, User } from '@supabase/supabase-js';
 
 // Mock dependencies
 vi.mock('@/lib/supabase', () => ({
@@ -170,7 +171,11 @@ describe('Password Reset Flow', () => {
 
     test('submits valid form successfully', async () => {
       const onSuccess = vi.fn();
-      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ data: {}, error: null });
+      // Fix the type issue - provide proper object with user property to match Supabase's expected return type
+      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
+        data: { user: null }, 
+        error: null 
+      });
       
       render(
         <BrowserRouter>
@@ -201,8 +206,20 @@ describe('Password Reset Flow', () => {
 
     test('handles error during password update', async () => {
       const onSuccess = vi.fn();
-      const mockError = { message: 'Something went wrong' };
-      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ data: null, error: mockError });
+      // Fix the AuthError type issue by providing all required properties
+      const mockError: AuthError = {
+        message: 'Something went wrong',
+        name: 'AuthError',
+        status: 400,
+        code: 'invalid_argument',
+        __isAuthError: true
+      };
+      
+      // Mock the updateUser function with a proper return type
+      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
+        data: { user: null }, 
+        error: mockError 
+      });
       
       render(
         <BrowserRouter>
@@ -254,7 +271,11 @@ describe('Password Reset Flow', () => {
     });
     
     test('displays success component after successful password reset', async () => {
-      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ data: {}, error: null });
+      // Fix the type issue - provide proper object with user property
+      vi.mocked(supabase.auth.updateUser).mockResolvedValue({ 
+        data: { user: null }, 
+        error: null 
+      });
       
       render(
         <MemoryRouter initialEntries={['/reset-password#access_token=valid_token']}>
