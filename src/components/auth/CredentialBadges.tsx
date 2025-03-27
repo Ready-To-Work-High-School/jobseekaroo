@@ -136,7 +136,7 @@ const CredentialBadges = () => {
           <p className="text-xs text-gray-600 text-center">
             All credential badges, designs, and associated materials are protected by copyright and intellectual property laws.
             Unauthorized reproduction, distribution, or use is strictly prohibited. These materials are the exclusive property
-            of Pamela Coleman and the Entrepreneurship Academy program.
+            of Pamela Coleman and are expressly leased to the Entrepreneurship Academy program for educational purposes.
           </p>
         </div>
       </CardContent>
