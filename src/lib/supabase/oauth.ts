@@ -32,6 +32,10 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       options.queryParams = {
         scope: 'name email'
       };
+      
+      // Log additional info for debugging Apple sign-in
+      console.log("Domain being used for Apple sign-in:", window.location.hostname);
+      console.log("Full redirect URL for Apple:", redirectUrl);
     }
     
     // Initiate OAuth sign-in
