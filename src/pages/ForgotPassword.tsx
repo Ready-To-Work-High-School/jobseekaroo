@@ -44,7 +44,6 @@ const ForgotPassword = () => {
     
     try {
       // Get the current origin for the redirect URL to work in any environment
-      // We'll use the full current URL to ensure it works in all environments
       const origin = window.location.origin;
       
       // Ensure the redirect URL is properly formed
