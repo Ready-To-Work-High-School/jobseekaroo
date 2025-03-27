@@ -5,6 +5,7 @@ import Index from './pages/Index';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import JobListings from './pages/JobListings';
 import JobDetails from './pages/JobDetails';
 import Applications from './pages/Applications';
@@ -105,6 +106,7 @@ function App() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/jobs" element={<JobListings />} />
               <Route path="/jobs/:id" element={<JobDetails />} />
               <Route path="/dashboard" element={<Dashboard />} />

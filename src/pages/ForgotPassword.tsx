@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { CheckCircle2, AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -23,6 +24,12 @@ const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const location = useLocation();
+
+  // Check URL for error parameters
+  const searchParams = new URLSearchParams(location.hash.substring(1));
+  const urlError = searchParams.get("error");
+  const urlErrorDescription = searchParams.get("error_description");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -39,9 +46,16 @@ const ForgotPassword = () => {
       // Get current origin without using localhost
       const currentOrigin = window.location.origin;
       
+      // Make sure the URL is valid - check protocol
+      const redirectUrl = currentOrigin.includes('localhost') 
+        ? `http://localhost:3000/reset-password` 
+        : `${currentOrigin}/reset-password`;
+      
+      console.log('Using redirect URL:', redirectUrl);
+      
       // Use Supabase's built-in password reset functionality with the correct origin
       const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
-        redirectTo: `${currentOrigin}/reset-password`,
+        redirectTo: redirectUrl,
       });
       
       if (error) throw error;
@@ -55,6 +69,19 @@ const ForgotPassword = () => {
       setIsSubmitting(false);
     }
   };
+
+  // If there's an error in the URL, display it
+  useState(() => {
+    if (urlError && urlErrorDescription) {
+      const readableError = urlErrorDescription.replace(/\+/g, ' ');
+      setError(readableError);
+      toast({
+        variant: "destructive",
+        title: "Reset link error",
+        description: readableError,
+      });
+    }
+  }, [urlError, urlErrorDescription]);
 
   return (
     <Layout>
