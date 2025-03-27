@@ -42,8 +42,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
     
-    // Default from address if not provided
-    const fromAddress = payload.from || "Career Platform <no-reply@yourcareerplatform.com>";
+    // Use the default Resend domain instead of a custom domain
+    const fromAddress = "Career Platform <onboarding@resend.dev>";
     
     const { data, error } = await resend.emails.send({
       from: fromAddress,

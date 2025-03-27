@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "react-router-dom";
 import { CheckCircle2, AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
-import { sendPasswordResetEmail } from "@/lib/supabase/email";
+import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -36,10 +36,18 @@ const ForgotPassword = () => {
     setError(null);
     
     try {
-      await sendPasswordResetEmail(values.email);
+      // Use Supabase's built-in password reset functionality directly
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      
+      if (error) throw error;
+      
       setIsSuccess(true);
+      console.log('Password reset email sent successfully via Supabase auth');
     } catch (err: any) {
       setError(err.message || "Failed to send reset email. Please try again later.");
+      console.error('Password reset error:', err);
     } finally {
       setIsSubmitting(false);
     }

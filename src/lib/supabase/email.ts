@@ -31,33 +31,10 @@ export async function sendPasswordResetEmail(email: string) {
 
     if (error) throw error;
 
-    // Also send a custom email notification via our function
-    await sendEmail({
-      to: email,
-      subject: 'Password Reset Requested',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Password Reset</h2>
-          <p>We've received a request to reset your password. If you didn't make this request, you can safely ignore this email.</p>
-          <p>A password reset link has been sent to you by our system. Please check your inbox for an email from Supabase.</p>
-          <p>The link will expire in 24 hours.</p>
-          <p>Thank you,<br/>The Career Platform Team</p>
-        </div>
-      `,
-      text: `
-        Password Reset
-        
-        We've received a request to reset your password. If you didn't make this request, you can safely ignore this email.
-        
-        A password reset link has been sent to you by our system. Please check your inbox for an email from Supabase.
-        
-        The link will expire in 24 hours.
-        
-        Thank you,
-        The Career Platform Team
-      `,
-    });
-
+    // The Supabase auth service will send the reset email automatically,
+    // so we don't need to send a custom email that might fail
+    
+    console.log('Password reset email requested successfully via Supabase auth');
     return { success: true };
   } catch (error) {
     console.error('Error in password reset:', error);
