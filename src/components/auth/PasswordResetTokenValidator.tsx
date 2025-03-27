@@ -25,33 +25,64 @@ const PasswordResetTokenValidator = ({ onError }: PasswordResetTokenValidatorPro
     if (urlError && urlErrorDescription) {
       const readableError = urlErrorDescription.replace(/\+/g, ' ');
       onError(readableError);
-      toast({
-        variant: "destructive",
-        title: "Reset link error",
-        description: readableError,
-      });
       
-      // If token expired, redirect to forgot password after a delay
-      if (urlError === "access_denied" && urlErrorDescription.includes("expired")) {
+      // Provide specific error messages based on error type
+      if (urlError === "access_denied") {
+        if (urlErrorDescription.includes("expired")) {
+          toast({
+            variant: "destructive",
+            title: "Reset link expired",
+            description: "Your password reset link has expired. We'll redirect you to request a new one.",
+          });
+          setTimeout(() => navigate("/forgot-password"), 5000);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Access denied",
+            description: readableError,
+          });
+        }
+      } else if (urlError === "invalid_request") {
         toast({
-          title: "Link expired",
-          description: "Your password reset link has expired. We'll redirect you to request a new one.",
+          variant: "destructive",
+          title: "Invalid request",
+          description: "There was a problem with your password reset request. Please try again with a new reset link.",
         });
-        setTimeout(() => navigate("/forgot-password"), 5000);
+        setTimeout(() => navigate("/forgot-password"), 4000);
+      } else if (urlError === "server_error") {
+        toast({
+          variant: "destructive",
+          title: "Server error",
+          description: "Our authentication server encountered an error. Please try again later.",
+        });
+        setTimeout(() => navigate("/forgot-password"), 4000);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Reset link error",
+          description: readableError,
+        });
       }
     }
     
-    // Also check for access_token to ensure we're on a valid reset page
+    // Check for access_token to ensure we're on a valid reset page
     const hasAccessToken = searchParams.has("access_token");
     console.log("Has access token:", hasAccessToken);
     
     if (!hasAccessToken && !urlError) {
+      // No token and no error means this is an invalid reset attempt
       toast({
         variant: "destructive",
         title: "Invalid reset link",
         description: "This password reset link appears to be invalid. Please request a new one.",
       });
       setTimeout(() => navigate("/forgot-password"), 3000);
+    } else if (hasAccessToken) {
+      // Valid token found, show confirmation to user
+      toast({
+        title: "Reset link valid",
+        description: "You can now set your new password below.",
+      });
     }
   }, [location, navigate, onError]);
 
