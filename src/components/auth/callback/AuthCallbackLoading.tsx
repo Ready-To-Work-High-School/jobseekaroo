@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 
 const AuthCallbackLoading = () => {
   const [provider, setProvider] = useState<string>('authentication');
+  const [isApple, setIsApple] = useState<boolean>(false);
   
   useEffect(() => {
     // Detect which provider is being used based on URL
@@ -12,8 +13,14 @@ const AuthCallbackLoading = () => {
       setProvider('Google');
     } else if (url.includes('apple')) {
       setProvider('Apple');
+      setIsApple(true);
     }
-  }, []);
+    
+    // Log additional information for debugging purposes
+    console.log("Auth callback loading for provider:", provider);
+    console.log("Current URL:", window.location.href);
+    console.log("Hostname:", window.location.hostname);
+  }, [provider]);
   
   return (
     <div className="bg-white border border-blue-200 rounded-lg shadow-md p-6 text-center">
@@ -32,6 +39,17 @@ const AuthCallbackLoading = () => {
         Please wait while we complete your sign-in process.
         <br />You will be redirected automatically.
       </p>
+      
+      {isApple && (
+        <div className="mt-4 p-3 bg-blue-50 rounded-md text-xs text-blue-700">
+          <p>Apple Sign-In in progress. If you encounter issues:</p>
+          <ul className="list-disc pl-5 mt-1 space-y-1">
+            <li>Make sure cookies are enabled in your browser</li>
+            <li>Try using Safari for best compatibility with Apple services</li>
+            <li>Ensure you're signed in to your Apple ID</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

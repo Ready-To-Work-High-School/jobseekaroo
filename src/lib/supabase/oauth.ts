@@ -27,15 +27,30 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       queryParams: {}
     };
     
-    // If provider is apple, add specific scopes
+    // If provider is apple, add enhanced logging and specific configuration
     if (provider === 'apple') {
       options.queryParams = {
         scope: 'name email'
       };
       
-      // Log additional info for debugging Apple sign-in
+      // Enhanced debugging information for Apple Sign-In
       console.log("Domain being used for Apple sign-in:", window.location.hostname);
       console.log("Full redirect URL for Apple:", redirectUrl);
+      console.log("Browser user agent:", navigator.userAgent);
+      console.log("Protocol:", window.location.protocol);
+      
+      // Log configured Apple domain in Supabase for comparison
+      // This can help debug domain mismatch issues
+      try {
+        const configData = await fetch('/api/get-supabase-config')
+          .catch(() => null);
+        if (configData) {
+          const config = await configData.json().catch(() => ({}));
+          console.log("Configured domains in Supabase:", config.domains || "Unknown");
+        }
+      } catch (e) {
+        console.log("Could not fetch Supabase config for comparison");
+      }
     }
     
     // Initiate OAuth sign-in

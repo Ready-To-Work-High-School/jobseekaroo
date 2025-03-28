@@ -46,6 +46,9 @@ const AuthCallbackError = ({ error, diagnosticInfo }: AuthCallbackErrorProps) =>
             <li>Try using Safari for the best compatibility</li>
             <li>Ensure pop-ups are allowed for this website</li>
             <li>Check if you have two-factor authentication enabled on your Apple ID</li>
+            <li>Verify domain configuration in your Apple Developer account matches <code>{window.location.hostname}</code></li>
+            <li>Ensure callback URL is correctly set in both Supabase and Apple Developer portal</li>
+            <li>Check if the private key (.p8 file) was properly uploaded to Supabase</li>
           </ul>
         </div>
       )}

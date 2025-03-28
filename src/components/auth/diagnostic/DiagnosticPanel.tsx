@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, ChevronDown, ChevronUp, Wifi, Globe, ShieldAlert } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp, Wifi, Globe, ShieldAlert, Apple } from "lucide-react";
 
 interface DiagnosticPanelProps {
   errorMessage: string;
@@ -41,6 +41,8 @@ const DiagnosticPanel = ({
             <li>Make sure you're signed in to your Apple ID on your device</li>
             <li>Check if your browser allows popups from this site</li>
             <li>Try using Safari for the most seamless Apple Sign-In experience</li>
+            <li>Verify the domain in your Apple Developer account matches <code>{window.location.hostname}</code></li>
+            <li>Ensure the callback URL is configured properly in both Supabase and Apple Developer portal</li>
           </ul>
         </div>
       );
@@ -96,6 +98,13 @@ const DiagnosticPanel = ({
                 <ShieldAlert className="h-3 w-3" />
                 <span>Cookies: {diagnosticInfo.cookiesEnabled ? 'Enabled' : 'Disabled'}</span>
               </div>
+              
+              {provider === 'apple' && (
+                <div className="flex items-center gap-1 text-red-700">
+                  <Apple className="h-3 w-3" />
+                  <span>Domain: {window.location.hostname}</span>
+                </div>
+              )}
               
               {truncatedDiagnostics.map(([key, value]) => (
                 <div key={key} className="text-xs text-red-700">
