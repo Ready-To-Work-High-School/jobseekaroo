@@ -22,7 +22,10 @@ export interface AuthContextType {
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
   getApplications: () => Promise<any[]>;
   deleteApplication: (applicationId: string) => Promise<void>;
-  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
+  updateProfile: (data: Partial<UserProfile>, sensitiveUpdates?: {
+    resumeData?: string;
+    contactDetails?: string;
+  }) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
   
   // MFA related methods
