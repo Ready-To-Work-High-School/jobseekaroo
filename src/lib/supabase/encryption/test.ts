@@ -7,6 +7,8 @@ import { supabase } from '../index';
  */
 export async function testEncryptionService(): Promise<{ success: boolean; message: string }> {
   try {
+    console.log('Testing encryption service...');
+    
     const { data, error } = await supabase.functions.invoke(
       'secure-encrypt/test',
       {
@@ -22,7 +24,8 @@ export async function testEncryptionService(): Promise<{ success: boolean; messa
       };
     }
     
-    return data;
+    console.log('Encryption service test result:', data);
+    return data || { success: false, message: 'No response from encryption service test' };
   } catch (err) {
     console.error('Unexpected error testing encryption service:', err);
     return { 

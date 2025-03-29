@@ -85,12 +85,16 @@ export async function decrypt(encryptedHex: string): Promise<string> {
 // Test if encryption key is properly configured
 export async function testEncryption(): Promise<{ success: boolean, message: string }> {
   try {
+    // Check if encryption key is set
     if (!ENCRYPTION_KEY) {
+      console.error("ENCRYPTION_KEY environment variable is not set");
       return { 
         success: false, 
         message: "ENCRYPTION_KEY environment variable is not set" 
       };
     }
+    
+    console.log("ENCRYPTION_KEY is set, testing encryption functionality");
     
     // Try to encrypt and decrypt a test value
     const testValue = "Test encryption functionality";
@@ -98,17 +102,20 @@ export async function testEncryption(): Promise<{ success: boolean, message: str
     const decrypted = await decrypt(encrypted);
     
     if (decrypted === testValue) {
+      console.log("Encryption test passed successfully");
       return { 
         success: true, 
         message: "Encryption key is properly configured and working correctly" 
       };
     } else {
+      console.error("Encryption/decryption test failed - decrypted value doesn't match original");
       return { 
         success: false, 
         message: "Encryption/decryption test failed - decrypted value doesn't match original" 
       };
     }
   } catch (error) {
+    console.error("Encryption test failed with error:", error.message);
     return { 
       success: false, 
       message: `Encryption test failed with error: ${error.message}` 
