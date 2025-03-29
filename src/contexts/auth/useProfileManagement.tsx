@@ -1,17 +1,23 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { UserProfile } from '@/types/user';
 import { getUserProfile, updateUserProfile } from './authUtils';
 import { storeEncryptedProfileData, getDecryptedProfileData } from '@/lib/supabase/encryption';
 
-export function useProfileManagement(user: User | null) {
+export function useProfileManagement(initialUser: User | null) {
+  const [user, setUser] = useState<User | null>(initialUser);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [sensitiveData, setSensitiveData] = useState<{
     resumeData: string | null;
     contactDetails: string | null;
   }>({ resumeData: null, contactDetails: null });
+
+  // Update internal user when the passed user changes
+  useEffect(() => {
+    setUser(initialUser);
+  }, [initialUser]);
 
   const fetchUserProfile = useCallback(async (userId: string) => {
     if (!userId) return;
