@@ -6,6 +6,11 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
   console.log(`Initiating ${provider} sign-in`);
   
   try {
+    // Ensure we're on HTTPS in production
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      throw new Error("Secure connection required. Please use HTTPS for authentication.");
+    }
+    
     // Check connectivity before attempting to sign in
     if (!navigator.onLine) {
       throw new Error("You appear to be offline. Please check your internet connection.");
@@ -53,10 +58,14 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       }
     }
     
-    // Initiate OAuth sign-in
+    // Initiate OAuth sign-in with PKCE for enhanced security
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
-      options
+      options: {
+        ...options,
+        skipBrowserRedirect: false, // Ensure browser redirection
+        flowType: 'pkce' // Use PKCE flow for enhanced security
+      }
     });
     
     console.log(`${provider} sign-in response:`, { data, error });
@@ -77,5 +86,86 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
   } catch (err) {
     console.error(`${provider} sign-in unexpected error:`, err);
     throw err;
+  }
+};
+
+// Helper function to check if MFA is enabled for a user
+export const checkMfaEnabled = async (): Promise<boolean> => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
+    
+    // Check if user has MFA factors enrolled
+    const { data, error } = await supabase.auth.mfa.listFactors();
+    
+    if (error) {
+      console.error('Error checking MFA status:', error);
+      return false;
+    }
+    
+    return data.factors.length > 0;
+  } catch (err) {
+    console.error('Error checking MFA status:', err);
+    return false;
+  }
+};
+
+// Function to enroll in MFA
+export const enrollMfa = async (): Promise<{ enrollUrl: string } | null> => {
+  try {
+    const { data, error } = await supabase.auth.mfa.enroll({
+      factorType: 'totp'
+    });
+    
+    if (error) {
+      console.error('MFA enrollment error:', error);
+      return null;
+    }
+    
+    return {
+      enrollUrl: data.totp.qr_code
+    };
+  } catch (err) {
+    console.error('MFA enrollment unexpected error:', err);
+    return null;
+  }
+};
+
+// Function to verify MFA challenge
+export const verifyMfa = async (code: string, factorId: string): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.auth.mfa.challengeAndVerify({
+      factorId,
+      code
+    });
+    
+    if (error) {
+      console.error('MFA verification error:', error);
+      return false;
+    }
+    
+    return data.verified;
+  } catch (err) {
+    console.error('MFA verification unexpected error:', err);
+    return false;
+  }
+};
+
+// Function to unenroll from MFA
+export const unenrollMfa = async (factorId: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase.auth.mfa.unenroll({
+      factorId
+    });
+    
+    if (error) {
+      console.error('MFA unenrollment error:', error);
+      return false;
+    }
+    
+    return true;
+  } catch (err) {
+    console.error('MFA unenrollment unexpected error:', err);
+    return false;
   }
 };

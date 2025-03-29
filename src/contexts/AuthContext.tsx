@@ -8,6 +8,12 @@ import { useAuthMethods } from './auth/useAuthMethods';
 import { useProfileManagement } from './auth/useProfileManagement';
 import { useJobManagement } from './auth/useJobManagement';
 import { useApplicationManagement } from './auth/useApplicationManagement';
+import { 
+  checkMfaEnabled, 
+  enrollMfa as enrollMfaService, 
+  verifyMfa as verifyMfaService,
+  unenrollMfa as unenrollMfaService 
+} from '@/lib/supabase/oauth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -16,6 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  
+  // MFA state
+  const [isMfaEnabled, setIsMfaEnabled] = useState(false);
+  const [isMfaLoading, setIsMfaLoading] = useState(false);
+  const [mfaFactors, setMfaFactors] = useState<Array<{id: string; type: string; friendly_name?: string}>>([]);
   
   const { 
     userProfile, 
@@ -47,6 +58,79 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     handleDeleteApplication
   } = useApplicationManagement(user);
 
+  // Check MFA status
+  const refreshMfaStatus = async () => {
+    if (!user) {
+      setIsMfaEnabled(false);
+      setMfaFactors([]);
+      return;
+    }
+    
+    setIsMfaLoading(true);
+    try {
+      const { data, error } = await supabase.auth.mfa.listFactors();
+      
+      if (error) {
+        console.error('Error fetching MFA factors:', error);
+        setIsMfaEnabled(false);
+        setMfaFactors([]);
+        return;
+      }
+      
+      const verifiedFactors = data.factors.filter(factor => factor.status === 'verified');
+      setIsMfaEnabled(verifiedFactors.length > 0);
+      setMfaFactors(data.factors);
+    } catch (err) {
+      console.error('Unexpected error fetching MFA status:', err);
+      setIsMfaEnabled(false);
+      setMfaFactors([]);
+    } finally {
+      setIsMfaLoading(false);
+    }
+  };
+
+  // MFA enrollment handler
+  const handleEnrollMfa = async () => {
+    try {
+      const result = await enrollMfaService();
+      if (!result) return null;
+      
+      await refreshMfaStatus();
+      return { qrCode: result.enrollUrl };
+    } catch (err) {
+      console.error('Error enrolling in MFA:', err);
+      return null;
+    }
+  };
+
+  // MFA verification handler
+  const handleVerifyMfa = async (code: string, factorId: string) => {
+    try {
+      const verified = await verifyMfaService(code, factorId);
+      if (verified) {
+        await refreshMfaStatus();
+      }
+      return verified;
+    } catch (err) {
+      console.error('Error verifying MFA:', err);
+      return false;
+    }
+  };
+
+  // MFA unenrollment handler
+  const handleUnenrollMfa = async (factorId: string) => {
+    try {
+      const success = await unenrollMfaService(factorId);
+      if (success) {
+        await refreshMfaStatus();
+      }
+      return success;
+    } catch (err) {
+      console.error('Error unenrolling from MFA:', err);
+      return false;
+    }
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       // Debug log
@@ -56,14 +140,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        fetchUserProfile(session.user.id);
+        // Use setTimeout to prevent blocking renderer
+        setTimeout(() => {
+          fetchUserProfile(session.user.id);
+          refreshMfaStatus();
+        }, 0);
       } else {
         // User has signed out or is not authenticated
+        setIsMfaEnabled(false);
+        setMfaFactors([]);
       }
       
       setIsLoading(false);
     });
 
+    // First check for an existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       // Debug log
       console.log("Initial session check:", session?.user?.id);
@@ -73,6 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (session?.user) {
         fetchUserProfile(session.user.id);
+        refreshMfaStatus();
       }
       
       setIsLoading(false);
@@ -85,6 +177,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     console.log("AuthContext - Current user profile:", userProfile);
   }, [userProfile]);
+
+  // Check for TLS/HTTPS in production
+  useEffect(() => {
+    // Only check in production environments
+    if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+      console.warn('WARNING: Secure connection (HTTPS) is recommended for authentication.');
+    }
+  }, []);
 
   const value: AuthContextType = {
     user,
@@ -107,6 +207,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     deleteApplication: handleDeleteApplication,
     updateProfile,
     refreshProfile,
+    // MFA related
+    isMfaEnabled,
+    isMfaLoading,
+    enrollMfa: handleEnrollMfa,
+    verifyMfa: handleVerifyMfa,
+    unenrollMfa: handleUnenrollMfa,
+    mfaFactors,
+    refreshMfaStatus
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

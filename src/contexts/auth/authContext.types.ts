@@ -1,7 +1,7 @@
 
 import { User, Session } from '@supabase/supabase-js';
-import { JobApplication, ApplicationStatus } from '@/types/application';
 import { UserProfile } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
 
 export interface AuthContextType {
   user: User | null;
@@ -13,15 +13,28 @@ export interface AuthContextType {
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithApple: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;  // Added Google sign-in
+  signInWithGoogle: () => Promise<void>;
   saveJob: (jobId: string) => Promise<void>;
   unsaveJob: (jobId: string) => Promise<void>;
   isSavedJob: (jobId: string) => Promise<boolean>;
   getSavedJobs: () => Promise<string[]>;
-  createApplication: (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<string>;
+  createApplication: (application: any) => Promise<string>;
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
-  getApplications: () => Promise<JobApplication[]>;
+  getApplications: () => Promise<any[]>;
   deleteApplication: (applicationId: string) => Promise<void>;
-  updateProfile: (profileData: Partial<UserProfile>) => Promise<void>;
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
   refreshProfile: () => Promise<void>;
+  
+  // MFA related methods
+  isMfaEnabled: boolean;
+  isMfaLoading: boolean;
+  enrollMfa: () => Promise<{ qrCode: string } | null>;
+  verifyMfa: (code: string, factorId: string) => Promise<boolean>;
+  unenrollMfa: (factorId: string) => Promise<boolean>;
+  mfaFactors: Array<{
+    id: string;
+    type: string;
+    friendly_name?: string;
+  }>;
+  refreshMfaStatus: () => Promise<void>;
 }
