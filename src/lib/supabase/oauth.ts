@@ -63,8 +63,7 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
       provider,
       options: {
         ...options,
-        skipBrowserRedirect: false, // Ensure browser redirection
-        flowType: 'pkce' // Use PKCE flow for enhanced security
+        skipBrowserRedirect: false // Ensure browser redirection
       }
     });
     
@@ -103,7 +102,8 @@ export const checkMfaEnabled = async (): Promise<boolean> => {
       return false;
     }
     
-    return data.factors.length > 0;
+    // Check if there are any verified factors in the 'totp' array
+    return data.totp.some(factor => factor.status === 'verified');
   } catch (err) {
     console.error('Error checking MFA status:', err);
     return false;
@@ -144,7 +144,8 @@ export const verifyMfa = async (code: string, factorId: string): Promise<boolean
       return false;
     }
     
-    return data.verified;
+    // The API returns a session object, so we consider this successful if there's no error
+    return !error && !!data;
   } catch (err) {
     console.error('MFA verification unexpected error:', err);
     return false;

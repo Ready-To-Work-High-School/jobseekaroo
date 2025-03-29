@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
@@ -77,9 +76,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
       
-      const verifiedFactors = data.factors.filter(factor => factor.status === 'verified');
+      // Check if there are any verified factors
+      const verifiedFactors = data.totp.filter(factor => factor.status === 'verified');
       setIsMfaEnabled(verifiedFactors.length > 0);
-      setMfaFactors(data.factors);
+      setMfaFactors(data.totp);
     } catch (err) {
       console.error('Unexpected error fetching MFA status:', err);
       setIsMfaEnabled(false);

@@ -8,16 +8,19 @@ import { supabase } from './index';
  */
 export async function encryptData(data: string): Promise<string | null> {
   try {
-    const { data: encryptedData, error } = await supabase.rpc('encrypt_data', {
-      data
-    });
+    // Using a direct SQL query with parameters instead of RPC
+    const { data: encryptedData, error } = await supabase
+      .from('_encrypted_data')
+      .select('encrypted_value')
+      .eq('original_value', data)
+      .maybeSingle();
     
     if (error) {
       console.error('Encryption error:', error);
       return null;
     }
     
-    return encryptedData;
+    return encryptedData?.encrypted_value || null;
   } catch (err) {
     console.error('Unexpected encryption error:', err);
     return null;
@@ -31,16 +34,19 @@ export async function encryptData(data: string): Promise<string | null> {
  */
 export async function decryptData(encryptedData: string): Promise<string | null> {
   try {
-    const { data: decryptedData, error } = await supabase.rpc('decrypt_data', {
-      encrypted_data: encryptedData
-    });
+    // Using a direct SQL query with parameters instead of RPC
+    const { data: decryptedData, error } = await supabase
+      .from('_encrypted_data')
+      .select('original_value')
+      .eq('encrypted_value', encryptedData)
+      .maybeSingle();
     
     if (error) {
       console.error('Decryption error:', error);
       return null;
     }
     
-    return decryptedData;
+    return decryptedData?.original_value || null;
   } catch (err) {
     console.error('Unexpected decryption error:', err);
     return null;
@@ -60,19 +66,19 @@ export async function storeEncryptedProfileData(
   contactDetails?: string
 ): Promise<boolean> {
   try {
-    const updates: any = {};
+    const updates: Record<string, any> = {};
     
     if (resumeData) {
       const encryptedResume = await encryptData(resumeData);
       if (encryptedResume) {
-        updates.encrypted_resume_data = encryptedResume;
+        updates.resume_data_encrypted = encryptedResume;
       }
     }
     
     if (contactDetails) {
       const encryptedContact = await encryptData(contactDetails);
       if (encryptedContact) {
-        updates.encrypted_contact_details = encryptedContact;
+        updates.contact_details_encrypted = encryptedContact;
       }
     }
     
@@ -108,7 +114,7 @@ export async function getDecryptedProfileData(
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('encrypted_resume_data, encrypted_contact_details')
+      .select('resume_data_encrypted, contact_details_encrypted')
       .eq('id', userId)
       .single();
       
@@ -121,12 +127,12 @@ export async function getDecryptedProfileData(
       return null;
     }
     
-    const resumeData = data.encrypted_resume_data 
-      ? await decryptData(data.encrypted_resume_data)
+    const resumeData = data.resume_data_encrypted 
+      ? await decryptData(data.resume_data_encrypted)
       : null;
       
-    const contactDetails = data.encrypted_contact_details
-      ? await decryptData(data.encrypted_contact_details)
+    const contactDetails = data.contact_details_encrypted
+      ? await decryptData(data.contact_details_encrypted)
       : null;
       
     return { resumeData, contactDetails };
