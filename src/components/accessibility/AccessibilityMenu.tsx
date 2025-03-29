@@ -22,7 +22,20 @@ export const AccessibilityMenu = () => {
     handleSettingChange,
     handleFontSizeChange,
     resetSettings 
-  } = useAccessibilitySettings({ toast, user, userProfile, updateProfile });
+  } = useAccessibilitySettings({ 
+    toast, 
+    user, 
+    userProfile, 
+    // Update the type to match the new signature
+    updateProfile: async (profile) => {
+      try {
+        await updateProfile(profile);
+        return;
+      } catch (error) {
+        console.error('Error updating accessibility settings:', error);
+      }
+    }
+  });
   
   return (
     <DropdownMenu>
