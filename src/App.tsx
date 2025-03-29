@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -39,6 +38,7 @@ import AdminPanel from './pages/AdminPanel';
 import NetworkOfflineState from './components/auth/diagnostic/NetworkOfflineState';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import MobileLayout from './components/MobileLayout';
+import EncryptionServiceTest from './components/EncryptionServiceTest';
 
 function App() {
   const [loading, setLoading] = useState(true);
