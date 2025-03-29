@@ -79,7 +79,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Check if there are any verified factors
       const verifiedFactors = data.totp.filter(factor => factor.status === 'verified');
       setIsMfaEnabled(verifiedFactors.length > 0);
-      setMfaFactors(data.totp);
+      
+      // Map the factor data to our expected format
+      const mappedFactors = data.totp.map(factor => ({
+        id: factor.id,
+        type: 'totp',
+        friendly_name: factor.friendly_name
+      }));
+      
+      setMfaFactors(mappedFactors);
     } catch (err) {
       console.error('Unexpected error fetching MFA status:', err);
       setIsMfaEnabled(false);
