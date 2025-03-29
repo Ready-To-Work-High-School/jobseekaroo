@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { AccessibilityMenuContent } from './AccessibilityMenuContent';
 import { useAccessibilitySettings } from './useAccessibilitySettings';
+import { AccessibilitySettings } from '@/types/user';
 
 export const AccessibilityMenu = () => {
   const { toast } = useToast();
@@ -37,6 +38,15 @@ export const AccessibilityMenu = () => {
     }
   });
   
+  // Wrapper functions to match the expected signatures
+  const handleSettingChangeWrapper = (key: keyof AccessibilitySettings, value: boolean) => {
+    handleSettingChange(key, value);
+  };
+
+  const handleFontSizeChangeWrapper = (increase: boolean) => {
+    handleFontSizeChange(increase);
+  };
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -56,8 +66,8 @@ export const AccessibilityMenu = () => {
         <AccessibilityMenuContent 
           settings={settings}
           fontSize={fontSize}
-          handleSettingChange={handleSettingChange}
-          handleFontSizeChange={handleFontSizeChange}
+          handleSettingChange={handleSettingChangeWrapper}
+          handleFontSizeChange={handleFontSizeChangeWrapper}
           resetSettings={resetSettings}
         />
       </DropdownMenuContent>
