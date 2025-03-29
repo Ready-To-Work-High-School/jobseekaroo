@@ -9,6 +9,27 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      _encrypted_data: {
+        Row: {
+          created_at: string | null
+          encrypted_value: string
+          id: string
+          original_value: string
+        }
+        Insert: {
+          created_at?: string | null
+          encrypted_value: string
+          id?: string
+          original_value: string
+        }
+        Update: {
+          created_at?: string | null
+          encrypted_value?: string
+          id?: string
+          original_value?: string
+        }
+        Relationships: []
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -396,6 +417,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          contact_details_encrypted: string | null
           created_at: string
           first_name: string | null
           id: string
@@ -404,6 +426,7 @@ export type Database = {
           preferences: Json | null
           redeemed_at: string | null
           redeemed_code: string | null
+          resume_data_encrypted: string | null
           resume_url: string | null
           skills: string[] | null
           updated_at: string
@@ -412,6 +435,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          contact_details_encrypted?: string | null
           created_at?: string
           first_name?: string | null
           id: string
@@ -420,6 +444,7 @@ export type Database = {
           preferences?: Json | null
           redeemed_at?: string | null
           redeemed_code?: string | null
+          resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string
@@ -428,6 +453,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          contact_details_encrypted?: string | null
           created_at?: string
           first_name?: string | null
           id?: string
@@ -436,6 +462,7 @@ export type Database = {
           preferences?: Json | null
           redeemed_at?: string | null
           redeemed_code?: string | null
+          resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string

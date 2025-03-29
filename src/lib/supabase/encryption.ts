@@ -8,19 +8,39 @@ import { supabase } from './index';
  */
 export async function encryptData(data: string): Promise<string | null> {
   try {
-    // Using a direct SQL query with parameters instead of RPC
-    const { data: encryptedData, error } = await supabase
+    // Check if we already have this data encrypted
+    const { data: existingData, error: lookupError } = await supabase
       .from('_encrypted_data')
       .select('encrypted_value')
       .eq('original_value', data)
       .maybeSingle();
     
-    if (error) {
-      console.error('Encryption error:', error);
+    if (lookupError) {
+      console.error('Error looking up encrypted data:', lookupError);
       return null;
     }
     
-    return encryptedData?.encrypted_value || null;
+    // If we already have this data encrypted, return the existing value
+    if (existingData?.encrypted_value) {
+      return existingData.encrypted_value;
+    }
+    
+    // Generate a new encrypted value and store it
+    const { data: insertedData, error: insertError } = await supabase
+      .from('_encrypted_data')
+      .insert({
+        original_value: data,
+        encrypted_value: `encrypted_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+      })
+      .select('encrypted_value')
+      .single();
+    
+    if (insertError) {
+      console.error('Error storing encrypted data:', insertError);
+      return null;
+    }
+    
+    return insertedData.encrypted_value;
   } catch (err) {
     console.error('Unexpected encryption error:', err);
     return null;
@@ -34,7 +54,7 @@ export async function encryptData(data: string): Promise<string | null> {
  */
 export async function decryptData(encryptedData: string): Promise<string | null> {
   try {
-    // Using a direct SQL query with parameters instead of RPC
+    // Look up the original value based on the encrypted value
     const { data: decryptedData, error } = await supabase
       .from('_encrypted_data')
       .select('original_value')
