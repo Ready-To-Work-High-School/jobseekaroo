@@ -15,6 +15,7 @@ import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import TestAdmin from '@/components/TestAdmin';
 import CompanyDirectory from '@/components/resources/CompanyDirectory';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import EncryptionServiceTest from '@/components/EncryptionServiceTest';
 
 const Index = () => {
   const { user } = useAuth();
@@ -99,6 +100,15 @@ const Index = () => {
             <p className="text-gray-600">Use this panel to test admin functionality</p>
           </div>
           <TestAdmin />
+        </div>
+        
+        {/* Add EncryptionServiceTest component section */}
+        <div className="mt-8 mb-12 w-full max-w-4xl mx-auto">
+          <div className="text-center mb-4">
+            <h2 className="text-2xl font-bold">Encryption Service Testing</h2>
+            <p className="text-gray-600">Test if your encryption service is correctly configured</p>
+          </div>
+          <EncryptionServiceTest />
         </div>
       </div>
     </Layout>
