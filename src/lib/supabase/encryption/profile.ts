@@ -1,6 +1,7 @@
 
 import { testEncryptionService } from './test';
 import { encryptData, decryptData } from './core';
+import { supabase } from '../index';
 
 /**
  * Securely store sensitive user profile data
