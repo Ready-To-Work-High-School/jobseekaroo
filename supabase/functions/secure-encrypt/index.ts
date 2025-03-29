@@ -12,7 +12,7 @@ const corsHeaders = {
 // Get the encryption key from environment variables
 const ENCRYPTION_KEY = Deno.env.get("ENCRYPTION_KEY");
 if (!ENCRYPTION_KEY) {
-  console.error("ENCRYPTION_KEY environment variable is not set");
+  console.error("ERROR: ENCRYPTION_KEY environment variable is not set. Encryption operations will fail!");
 }
 
 // Helper function to convert string to Uint8Array
@@ -42,7 +42,7 @@ function uint8ArrayToHex(bytes: Uint8Array): string {
 // Encrypt data
 async function encrypt(plaintext: string): Promise<string> {
   if (!ENCRYPTION_KEY) {
-    throw new Error("Encryption key is not set");
+    throw new Error("Encryption key is not set in environment variables");
   }
 
   // Generate a random IV (Initialization Vector)
@@ -81,7 +81,7 @@ async function encrypt(plaintext: string): Promise<string> {
 // Decrypt data
 async function decrypt(encryptedHex: string): Promise<string> {
   if (!ENCRYPTION_KEY) {
-    throw new Error("Encryption key is not set");
+    throw new Error("Encryption key is not set in environment variables");
   }
   
   // Convert hex string to Uint8Array
@@ -116,6 +116,40 @@ async function decrypt(encryptedHex: string): Promise<string> {
   return ab2str(new Uint8Array(decryptedData));
 }
 
+// Test if encryption key is properly configured
+async function testEncryption(): Promise<{ success: boolean, message: string }> {
+  try {
+    if (!ENCRYPTION_KEY) {
+      return { 
+        success: false, 
+        message: "ENCRYPTION_KEY environment variable is not set" 
+      };
+    }
+    
+    // Try to encrypt and decrypt a test value
+    const testValue = "Test encryption functionality";
+    const encrypted = await encrypt(testValue);
+    const decrypted = await decrypt(encrypted);
+    
+    if (decrypted === testValue) {
+      return { 
+        success: true, 
+        message: "Encryption key is properly configured and working correctly" 
+      };
+    } else {
+      return { 
+        success: false, 
+        message: "Encryption/decryption test failed - decrypted value doesn't match original" 
+      };
+    }
+  } catch (error) {
+    return { 
+      success: false, 
+      message: `Encryption test failed with error: ${error.message}` 
+    };
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -123,29 +157,76 @@ serve(async (req) => {
   }
 
   try {
+    const url = new URL(req.url);
+    
+    // Handle test endpoint
+    if (url.pathname.endsWith('/test')) {
+      const testResult = await testEncryption();
+      return new Response(
+        JSON.stringify(testResult),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: testResult.success ? 200 : 500,
+        }
+      );
+    }
+    
+    // Handle main encryption/decryption endpoints
     const { action, data } = await req.json();
 
+    if (!data) {
+      return new Response(
+        JSON.stringify({ error: "No data provided" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        }
+      );
+    }
+
     if (action === "encrypt") {
-      const encryptedData = await encrypt(data);
-      return new Response(
-        JSON.stringify({ encryptedData }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 200,
-        }
-      );
+      try {
+        const encryptedData = await encrypt(data);
+        return new Response(
+          JSON.stringify({ encryptedData }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      } catch (error) {
+        console.error("Encryption error:", error.message);
+        return new Response(
+          JSON.stringify({ error: `Encryption failed: ${error.message}` }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 500,
+          }
+        );
+      }
     } else if (action === "decrypt") {
-      const decryptedData = await decrypt(data);
-      return new Response(
-        JSON.stringify({ decryptedData }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 200,
-        }
-      );
+      try {
+        const decryptedData = await decrypt(data);
+        return new Response(
+          JSON.stringify({ decryptedData }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      } catch (error) {
+        console.error("Decryption error:", error.message);
+        return new Response(
+          JSON.stringify({ error: `Decryption failed: ${error.message}` }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 500,
+          }
+        );
+      }
     } else {
       return new Response(
-        JSON.stringify({ error: "Invalid action. Use 'encrypt' or 'decrypt'." }),
+        JSON.stringify({ error: "Invalid action. Use 'encrypt', 'decrypt', or access '/test' endpoint." }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 400,
@@ -155,7 +236,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error:", error.message);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: `Server error: ${error.message}` }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,

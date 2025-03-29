@@ -2,6 +2,37 @@
 import { supabase } from './index';
 
 /**
+ * Tests whether the encryption service is properly configured
+ * @returns Promise resolving to the test result with success status and message
+ */
+export async function testEncryptionService(): Promise<{ success: boolean; message: string }> {
+  try {
+    const { data, error } = await supabase.functions.invoke(
+      'secure-encrypt/test',
+      {
+        method: 'GET'
+      }
+    );
+    
+    if (error) {
+      console.error('Error testing encryption service:', error);
+      return { 
+        success: false, 
+        message: `Error testing encryption service: ${error.message}` 
+      };
+    }
+    
+    return data;
+  } catch (err) {
+    console.error('Unexpected error testing encryption service:', err);
+    return { 
+      success: false, 
+      message: `Unexpected error: ${err instanceof Error ? err.message : String(err)}` 
+    };
+  }
+}
+
+/**
  * Encrypts sensitive data using Supabase Edge Function
  * @param data The data to encrypt
  * @returns Promise resolving to the encrypted data or null if encryption failed
@@ -35,6 +66,11 @@ export async function encryptData(data: string): Promise<string | null> {
     
     if (functionError) {
       console.error('Error calling encryption function:', functionError);
+      return null;
+    }
+    
+    if (!functionData?.encryptedData) {
+      console.error('No encrypted data returned from function');
       return null;
     }
     
@@ -119,12 +155,22 @@ export async function storeEncryptedProfileData(
   contactDetails?: string
 ): Promise<boolean> {
   try {
+    // Test encryption service before attempting to encrypt data
+    const encryptionTest = await testEncryptionService();
+    if (!encryptionTest.success) {
+      console.error('Encryption service check failed:', encryptionTest.message);
+      return false;
+    }
+    
     const updates: Record<string, any> = {};
     
     if (resumeData) {
       const encryptedResume = await encryptData(resumeData);
       if (encryptedResume) {
         updates.resume_data_encrypted = encryptedResume;
+      } else {
+        console.error('Failed to encrypt resume data');
+        return false;
       }
     }
     
@@ -132,6 +178,9 @@ export async function storeEncryptedProfileData(
       const encryptedContact = await encryptData(contactDetails);
       if (encryptedContact) {
         updates.contact_details_encrypted = encryptedContact;
+      } else {
+        console.error('Failed to encrypt contact details');
+        return false;
       }
     }
     
