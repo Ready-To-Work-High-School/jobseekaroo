@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const { initializeDatabase } = require('./db');
@@ -10,6 +11,9 @@ const port = process.env.PORT || 5000;
 
 // Initialize database
 initializeDatabase();
+
+// App info
+app.locals.appName = "Job Seekers 4 High School";
 
 // Security middleware
 app.use(cors()); // Enable CORS for all routes
@@ -47,7 +51,11 @@ app.use((req, res, next) => {
 
 // Basic route
 app.get('/api/status', (req, res) => {
-  res.json({ status: 'Server is running', time: new Date() });
+  res.json({ 
+    status: 'Server is running', 
+    appName: app.locals.appName,
+    time: new Date() 
+  });
 });
 
 // API routes
@@ -86,7 +94,7 @@ app.use((err, req, res, next) => {
 // Start server
 if (require.main === module) {
   app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`${app.locals.appName} server running on port ${port}`);
     console.log(`API available at: http://localhost:${port}/api/status`);
     console.log(`Authentication endpoints at: http://localhost:${port}/api/users/login and /register`);
     console.log(`Posts API at: http://localhost:${port}/api/posts`);
