@@ -1,89 +1,199 @@
 
-import React, { useState } from 'react';
-import Layout from '@/components/Layout';
-import { useAuth } from '@/contexts/AuthContext';
-import { useFadeIn } from '@/utils/animations';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import NotSignedInAlert from '@/components/profile/NotSignedInAlert';
-import ProfileTabContent from '@/components/profile/ProfileTabContent';
-import BenefitsTabContent from '@/components/profile/BenefitsTabContent';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import ProtectedRoute from '../components/ProtectedRoute';
 
-const Profile: React.FC = () => {
-  const { user, userProfile, updateProfile, refreshProfile } = useAuth();
+type ProfileData = {
+  username: string;
+  email: string;
+  bio?: string;
+};
+
+const Profile = () => {
+  const { user, signOut } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [firstName, setFirstName] = useState(userProfile?.first_name || '');
-  const [lastName, setLastName] = useState(userProfile?.last_name || '');
-  const [bio, setBio] = useState(userProfile?.bio || '');
-  const [location, setLocation] = useState(userProfile?.location || '');
-  const fadeIn = useFadeIn(300);
-  const { toast } = useToast();
+  const [profileData, setProfileData] = useState<ProfileData>({
+    username: user?.username || '',
+    email: user?.email || '',
+    bio: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleUpdateProfile = async () => {
+  useEffect(() => {
+    if (user) {
+      // Initialize the form with user data
+      setProfileData({
+        username: user.username || '',
+        email: user.email,
+        bio: '' // You could fetch additional profile data here
+      });
+    }
+  }, [user]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setProfileData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setSuccessMessage('');
+
     try {
-      await updateProfile({
-        first_name: firstName,
-        last_name: lastName,
-        bio: bio,
-        location: location,
-      });
+      // In a real app, you would send an API request to update the profile
+      // For now we'll just simulate a success after a short delay
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      // This is just a simulation - in a real app you would call your API
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setSuccessMessage('Profile updated successfully');
       setIsEditing(false);
-      toast({
-        title: 'Success',
-        description: 'Profile updated successfully!',
-      });
-      await refreshProfile();
-    } catch (error: any) {
-      console.error('Profile update error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to update profile. Please try again.',
-        variant: 'destructive',
-      });
+    } catch (err: any) {
+      setError(err.message || 'Failed to update profile');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (!user) {
-    return (
-      <Layout>
-        <div className={`container mx-auto px-4 py-12 max-w-2xl ${fadeIn}`}>
-          <NotSignedInAlert />
-        </div>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout>
-      <div className={`container mx-auto px-4 py-12 max-w-4xl ${fadeIn}`}>
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="benefits">Benefits</TabsTrigger>
-          </TabsList>
-          <TabsContent value="profile" className="space-y-4">
-            <ProfileTabContent
-              user={user}
-              userProfile={userProfile}
-              isEditing={isEditing}
-              setIsEditing={setIsEditing}
-              firstName={firstName}
-              setFirstName={setFirstName}
-              lastName={lastName}
-              setLastName={setLastName}
-              bio={bio}
-              setBio={setBio}
-              location={location}
-              setLocation={setLocation}
-              handleUpdateProfile={handleUpdateProfile}
-            />
-          </TabsContent>
-          <TabsContent value="benefits" className="space-y-4">
-            <BenefitsTabContent userProfile={userProfile} />
-          </TabsContent>
-        </Tabs>
+    <ProtectedRoute>
+      <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
+            <div>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Profile Information</h3>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and preferences</p>
+            </div>
+            <div className="flex space-x-2">
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Edit Profile
+                </button>
+              )}
+              <button
+                onClick={signOut}
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mx-4 my-2 rounded relative" role="alert">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mx-4 my-2 rounded relative" role="alert">
+              <span className="block sm:inline">{successMessage}</span>
+            </div>
+          )}
+
+          {isEditing ? (
+            <form onSubmit={handleSubmit} className="border-t border-gray-200 px-4 py-5 sm:px-6">
+              <div className="grid grid-cols-1 gap-6">
+                <div>
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    value={profileData.username}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    disabled
+                    value={profileData.email}
+                    className="mt-1 block w-full border border-gray-300 bg-gray-100 rounded-md shadow-sm py-2 px-3 focus:outline-none sm:text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
+                </div>
+                <div>
+                  <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+                    Bio
+                  </label>
+                  <textarea
+                    name="bio"
+                    id="bio"
+                    rows={3}
+                    value={profileData.bio}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditing(false);
+                      setError('');
+                      setSuccessMessage('');
+                    }}
+                    className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                  >
+                    {isLoading ? 'Saving...' : 'Save'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <div className="border-t border-gray-200">
+              <dl>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Username</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{profileData.username}</dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Email address</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{profileData.email}</dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Bio</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {profileData.bio || 'No bio provided'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          )}
+        </div>
       </div>
-    </Layout>
+    </ProtectedRoute>
   );
 };
 

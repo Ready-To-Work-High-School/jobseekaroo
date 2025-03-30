@@ -1,208 +1,85 @@
 
 import { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
-import { useFadeIn } from '@/utils/animations';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import SkillsAnalytics from '@/components/dashboard/SkillsAnalytics';
-import SkillMatchJobCard from '@/components/dashboard/SkillMatchJobCard';
-import UserTypeAnalytics from '@/components/dashboard/UserTypeAnalytics';
-import { SkillsProvider } from '@/contexts/SkillsContext';
-import { getSkillBasedJobRecommendations } from '@/lib/supabase/skill-matching';
-import { Job } from '@/types/job';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart3, Briefcase, LineChart, ChevronRight, Sparkles } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '../contexts/AuthContext';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 const Dashboard = () => {
-  const fadeInAnimation = useFadeIn(200);
   const { user } = useAuth();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const isMobile = useIsMobile();
-  
-  const [skillBasedJobs, setSkillBasedJobs] = useState<Array<Job & { matchScore: number; matchedSkills: string[] }>>([]);
+  const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!user) {
-      navigate('/sign-in');
-      return;
-    }
-
-    const loadSkillBasedRecommendations = async () => {
+    const fetchPosts = async () => {
       try {
-        setIsLoading(true);
-        const recommendations = await getSkillBasedJobRecommendations(user.id);
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/posts', {
+          headers: {
+            'x-auth-token': token || ''
+          }
+        });
         
-        // Add validation to ensure we only set valid job recommendations
-        const validRecommendations = recommendations.filter(job => 
-          job && job.id && job.company && job.company.name
-        );
-        
-        if (validRecommendations.length !== recommendations.length) {
-          console.warn(`Filtered out ${recommendations.length - validRecommendations.length} invalid job recommendations`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
         }
         
-        setSkillBasedJobs(validRecommendations);
-      } catch (error) {
-        console.error('Error loading skill based recommendations:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to load job recommendations based on your skills',
-          variant: 'destructive',
-        });
-        // Set empty array on error to prevent rendering with invalid data
-        setSkillBasedJobs([]);
+        const data = await response.json();
+        setPosts(data.posts);
+      } catch (err: any) {
+        console.error('Error fetching posts:', err);
+        setError(err.message || 'An error occurred while fetching posts');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadSkillBasedRecommendations();
-  }, [user, navigate, toast]);
-
-  if (!user) return null;
+    fetchPosts();
+  }, []);
 
   return (
-    <Layout>
-      <div className={`container py-4 md:py-8 ${fadeInAnimation}`}>
-        <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Your Dashboard</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-          <Card className="md:col-span-1">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" />
-                Application Stats
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary/50 rounded-lg text-center">
-                  <h3 className="text-3xl font-bold">0</h3>
-                  <p className="text-sm text-muted-foreground">Applications</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg text-center">
-                  <h3 className="text-3xl font-bold">0</h3>
-                  <p className="text-sm text-muted-foreground">Interviews</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <SkillsProvider>
-            <Card className="md:col-span-2">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <LineChart className="h-5 w-5 text-primary" />
-                  Recent Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center py-6 text-muted-foreground">
-                  No recent activity to display
-                </p>
-              </CardContent>
-            </Card>
-          </SkillsProvider>
+    <ProtectedRoute>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Welcome back, {user?.username || 'User'}!
+          </p>
         </div>
-
-        {/* New User Type Analytics Section */}
-        <UserTypeAnalytics className="mb-6" />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="skill-match">
-              <div className="flex justify-between items-center mb-4">
-                <TabsList className={isMobile ? "w-full grid grid-cols-2" : ""}>
-                  <TabsTrigger value="skill-match" className="flex items-center gap-1">
-                    <Sparkles className="h-4 w-4" />
-                    Skill Match
-                  </TabsTrigger>
-                  <TabsTrigger value="saved" className="flex items-center gap-1">
-                    <Briefcase className="h-4 w-4" />
-                    Saved
-                  </TabsTrigger>
-                </TabsList>
-                <button 
-                  className="text-sm text-primary flex items-center hidden md:flex"
-                  onClick={() => navigate('/jobs')}
-                >
-                  View all jobs
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </button>
-              </div>
-              
-              <TabsContent value="skill-match">
-                {isLoading ? (
-                  <div className="flex justify-center py-12">
-                    <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-                  </div>
-                ) : skillBasedJobs.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {skillBasedJobs.map((job) => (
-                      <SkillMatchJobCard 
-                        key={job.id}
-                        job={job}
-                        matchScore={job.matchScore}
-                        matchedSkills={job.matchedSkills}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 bg-muted/40 rounded-lg">
-                    <p className="text-muted-foreground">No skill-matched jobs found</p>
-                    <p className="text-sm mt-2">
-                      Add more skills to your profile to get better job recommendations
-                    </p>
-                  </div>
-                )}
-                
-                {/* Mobile-only view all button */}
-                <div className="mt-4 md:hidden">
-                  <button 
-                    className="w-full py-2 text-sm text-primary border border-primary/30 rounded-md flex items-center justify-center"
-                    onClick={() => navigate('/jobs')}
-                  >
-                    View all jobs
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </button>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="saved">
-                <div className="text-center py-8 bg-muted/40 rounded-lg">
-                  <p className="text-muted-foreground">No saved jobs</p>
-                  <p className="text-sm mt-2">
-                    Browse jobs and save the ones you're interested in
-                  </p>
-                </div>
-                
-                {/* Mobile-only view all button */}
-                <div className="mt-4 md:hidden">
-                  <button 
-                    className="w-full py-2 text-sm text-primary border border-primary/30 rounded-md flex items-center justify-center"
-                    onClick={() => navigate('/saved-jobs')}
-                  >
-                    View saved jobs
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </button>
-                </div>
-              </TabsContent>
-            </Tabs>
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div className="px-4 py-5 sm:px-6">
+            <h2 className="text-lg leading-6 font-medium text-gray-900">Recent Posts</h2>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">Latest activity from the platform</p>
           </div>
           
-          <div className="lg:col-span-1">
-            <SkillsProvider>
-              <SkillsAnalytics />
-            </SkillsProvider>
+          <div className="border-t border-gray-200">
+            {isLoading ? (
+              <div className="px-4 py-5 text-center text-gray-500">Loading posts...</div>
+            ) : error ? (
+              <div className="px-4 py-5 text-center text-red-500">{error}</div>
+            ) : posts.length === 0 ? (
+              <div className="px-4 py-5 text-center text-gray-500">No posts found</div>
+            ) : (
+              <ul className="divide-y divide-gray-200">
+                {posts.map((post: any) => (
+                  <li key={post.id} className="px-4 py-4">
+                    <div className="flex space-x-3">
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-sm font-medium">{post.title}</h3>
+                          <p className="text-xs text-gray-500">Posted by {post.username}</p>
+                        </div>
+                        <p className="text-sm text-gray-500">{post.content}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
-    </Layout>
+    </ProtectedRoute>
   );
 };
 

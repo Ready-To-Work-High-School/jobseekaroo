@@ -1,104 +1,38 @@
 
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
-  requiredRoles?: string[];
-  adminOnly?: boolean;
+  children: ReactNode;
+  redirectTo?: string;
 }
 
 const ProtectedRoute = ({ 
-  children, 
-  requiredRoles = [],
-  adminOnly = false
+  children,
+  redirectTo = "/login"
 }: ProtectedRouteProps) => {
-  const { user, isLoading, userProfile } = useAuth();
-  const navigate = useNavigate();
+  const { user, isLoading } = useAuth();
   const location = useLocation();
-  const { toast } = useToast();
-  const [isAdminTest, setIsAdminTest] = useState(false);
-  
-  // Parse URL parameters once to avoid inconsistencies
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const adminTestParam = params.get('adminTest') === 'true';
-    setIsAdminTest(adminTestParam);
-    
-    console.log('ProtectedRoute - Admin access check:', { 
-      adminOnly, 
-      adminTestParam, 
-      userType: userProfile?.user_type,
-      searchParams: location.search
-    });
-  }, [location.search]);
-  
-  useEffect(() => {
-    // Only check auth after loading is complete and we've determined if it's an admin test
-    if (!isLoading) {
-      // If this is the admin test route, allow access regardless of auth status
-      if (adminOnly && isAdminTest) {
-        console.log('Admin test mode enabled - bypassing authentication checks');
-        return;
-      }
-      
-      if (!user) {
-        // Store the attempted URL to redirect back after login
-        sessionStorage.setItem('redirectAfterLogin', location.pathname + location.search);
-        
-        toast({
-          title: "Access Restricted",
-          description: "Please sign in or create an account to access this feature.",
-          variant: "destructive",
-        });
-        
-        navigate('/sign-in');
-        return;
-      }
-      
-      // Admin-only pages check
-      if (adminOnly && userProfile?.user_type !== 'admin' && !isAdminTest) {
-        toast({
-          title: "Admin Access Only",
-          description: "You don't have administrative privileges to access this page.",
-          variant: "destructive",
-        });
-        
-        navigate('/');
-        return;
-      }
-      
-      // Role-based authorization check
-      if (requiredRoles.length > 0 && userProfile) {
-        const hasRequiredRole = userProfile.user_type && requiredRoles.includes(userProfile.user_type);
-        
-        if (!hasRequiredRole && !isAdminTest) {
-          toast({
-            title: "Permission Denied",
-            description: "You don't have the required permissions to access this page.",
-            variant: "destructive",
-          });
-          
-          navigate('/');
-          return;
-        }
-      }
-    }
-  }, [user, isLoading, navigate, toast, location.pathname, requiredRoles, userProfile, adminOnly, isAdminTest]);
-  
-  // Show loading indicator while checking authentication
-  if (isLoading && !(adminOnly && isAdminTest)) {
+
+  // While checking auth status, show nothing or a loading spinner
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
+  // If not authenticated, redirect to login page with the return url
+  if (!user) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      </div>
+      <Navigate 
+        to={redirectTo} 
+        state={{ from: location }} 
+        replace
+      />
     );
   }
-  
-  // Return children if user is authenticated or if it's an admin test
-  return (user || (adminOnly && isAdminTest)) ? <>{children}</> : null;
+
+  // If authenticated, render children
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -1,120 +1,138 @@
 
-import { createContext, useContext, useEffect, ReactNode, useState } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContextType } from './auth/authContext.types';
-import { useAuthState } from './auth/useAuthState';
-import { useAuthMethods } from './auth/useAuthMethods';
-import { useProfileManagement } from './auth/useProfileManagement';
-import { useJobManagement } from './auth/useJobManagement';
-import { useApplicationManagement } from './auth/useApplicationManagement';
-import { useMfaManagement } from './auth/useMfaManagement';
 
-// Create the auth context with a default undefined value
+type User = {
+  id: string;
+  email: string;
+  username?: string;
+};
+
+type AuthContextType = {
+  user: User | null;
+  isLoading: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (username: string, email: string, password: string) => Promise<void>;
+  signOut: () => void;
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  
-  const { 
-    userProfile, 
-    profileLoading, 
-    fetchUserProfile, 
-    updateProfile, 
-    refreshProfile 
-  } = useProfileManagement(null);
-  
-  const { 
-    user: authUser,
-    session,
-    isLoading 
-  } = useAuthState(fetchUserProfile);
-  
-  // Update our own user state when authUser changes
-  useEffect(() => {
-    setUser(authUser);
-  }, [authUser]);
-  
-  const { 
-    signIn, 
-    signUp, 
-    signOut, 
-    signInWithApple, 
-    signInWithGoogle, 
-    checkEmployerApproval
-  } = useAuthMethods(setUser); 
-  
-  const {
-    handleSaveJob,
-    handleUnsaveJob,
-    handleIsSavedJob,
-    handleGetSavedJobs
-  } = useJobManagement(user);
-  
-  const {
-    handleCreateApplication,
-    handleUpdateApplicationStatus,
-    handleGetApplications,
-    handleDeleteApplication
-  } = useApplicationManagement(user);
-  
-  const {
-    isMfaEnabled,
-    isMfaLoading,
-    mfaFactors,
-    refreshMfaStatus,
-    enrollMfa,
-    verifyMfa,
-    unenrollMfa
-  } = useMfaManagement(user);
 
-  // Refresh MFA status when user changes
   useEffect(() => {
-    if (user) {
-      refreshMfaStatus();
+    // Check if user is logged in on page load
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch('/api/users/me', {
+            headers: {
+              'x-auth-token': token
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+          } else {
+            localStorage.removeItem('token');
+          }
+        } catch (error) {
+          console.error('Auth check error:', error);
+          localStorage.removeItem('token');
+        }
+      }
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Login failed');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        username: data.user.username
+      });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-  }, [user, refreshMfaStatus]);
+  };
 
-  // Add debug log to show profile when it changes
-  useEffect(() => {
-    console.log("AuthContext - Current user profile:", userProfile);
-  }, [userProfile]);
+  const signUp = async (username: string, email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, email, password })
+      });
 
-  const value: AuthContextType = {
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Registration failed');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        username: data.user.username
+      });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signOut = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/login');
+  };
+
+  const value = {
     user,
-    session,
-    userProfile,
     isLoading,
-    profileLoading,
     signIn,
     signUp,
-    signOut,
-    signInWithApple,
-    signInWithGoogle,
-    saveJob: handleSaveJob,
-    unsaveJob: handleUnsaveJob,
-    isSavedJob: handleIsSavedJob,
-    getSavedJobs: handleGetSavedJobs,
-    createApplication: handleCreateApplication,
-    updateApplicationStatus: handleUpdateApplicationStatus,
-    getApplications: handleGetApplications,
-    deleteApplication: handleDeleteApplication,
-    updateProfile,
-    refreshProfile,
-    // MFA related
-    isMfaEnabled,
-    isMfaLoading,
-    enrollMfa,
-    verifyMfa,
-    unenrollMfa,
-    mfaFactors,
-    refreshMfaStatus
+    signOut
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// Export the useAuth hook with proper error handling
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
