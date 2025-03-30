@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface StudentSignUpFormProps {
   onSuccess?: () => void;
+  isLoading?: boolean;
+  isAppleLoading?: boolean;
+  handleAppleSignIn?: () => Promise<void>;
 }
 
 type FormData = {
@@ -21,7 +24,12 @@ type FormData = {
   password: string;
 };
 
-const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({ onSuccess }) => {
+const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({ 
+  onSuccess,
+  isLoading: externalIsLoading,
+  isAppleLoading,
+  handleAppleSignIn 
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -38,8 +46,7 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({ onSuccess }) => {
     try {
       // Create the user account with student user type
       await signUp(
-        data.email, // username (using email)
-        data.email,
+        data.email, 
         data.password,
         data.firstName,
         data.lastName,
@@ -147,8 +154,8 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({ onSuccess }) => {
         )}
       </div>
       
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Creating Account...' : 'Sign Up as Student'}
+      <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading}>
+        {isLoading || externalIsLoading ? 'Creating Account...' : 'Sign Up as Student'}
       </Button>
     </form>
   );

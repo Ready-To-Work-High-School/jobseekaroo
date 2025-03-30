@@ -28,6 +28,7 @@ const SignUp = () => {
         description: error.message || "Could not sign in with Apple",
         variant: "destructive",
       });
+    } finally {
       setIsAppleLoading(false);
     }
   };

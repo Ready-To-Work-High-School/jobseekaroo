@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,6 +11,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface EmployerSignUpFormProps {
   onSuccess?: () => void;
+  isLoading?: boolean;
+  isAppleLoading?: boolean;
+  handleAppleSignIn?: () => Promise<void>;
 }
 
 type FormData = {
@@ -24,7 +26,12 @@ type FormData = {
   jobTitle: string;
 };
 
-const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ onSuccess }) => {
+const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ 
+  onSuccess,
+  isLoading: externalIsLoading,
+  isAppleLoading,
+  handleAppleSignIn 
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +48,6 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ onSuccess }) =>
     try {
       // Create the user account
       await signUp(
-        data.email, // username (using email)
         data.email,
         data.password,
         data.firstName,
@@ -50,8 +56,7 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ onSuccess }) =>
       );
       
       // If sign-up is successful, update the profile with employer-specific details
-      // This is now separate from testing the success of signUp
-      await updateProfile({
+      const result = await updateProfile({
         company_name: data.companyName,
         company_website: data.companyWebsite,
         job_title: data.jobTitle,
@@ -201,8 +206,8 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ onSuccess }) =>
         )}
       </div>
       
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Creating Account...' : 'Sign Up as Employer'}
+      <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading}>
+        {isLoading || externalIsLoading ? 'Creating Account...' : 'Sign Up as Employer'}
       </Button>
     </form>
   );

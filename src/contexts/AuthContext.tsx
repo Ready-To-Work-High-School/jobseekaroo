@@ -1,55 +1,24 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserProfile } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
 
 type User = {
   id: string;
   email: string;
   username?: string;
-  app_metadata?: any;
-  user_metadata?: any;
-  aud?: string;
-  created_at?: string;
+  app_metadata: any;
+  user_metadata: any;
+  aud: string;
+  created_at: string;
 };
-
-type UserProfile = {
-  id: string;
-  email: string;
-  username?: string;
-  first_name?: string;
-  last_name?: string;
-  user_type?: string;
-  bio?: string;
-  location?: string;
-  resume_url?: string;
-  skills?: string[];
-  preferences?: Record<string, any>;
-  accessibility_settings?: {
-    high_contrast: boolean;
-    increased_font_size: boolean;
-    reduce_motion: boolean;
-    screen_reader_optimized: boolean;
-  };
-  saved_searches?: any[];
-  redeemed_at?: string;
-  redeemed_code?: string;
-  avatar_url?: string;
-  created_at?: string;
-  updated_at?: string;
-  company_name?: string;
-  company_website?: string;
-  job_title?: string;
-  employer_verification_status?: 'pending' | 'approved' | 'rejected';
-  verification_notes?: string;
-};
-
-type ApplicationStatus = 'applied' | 'interviewing' | 'offered' | 'accepted' | 'rejected' | 'withdrawn';
 
 type AuthContextType = {
   user: User | null;
   userProfile: UserProfile | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (username: string, email: string, password: string, firstName?: string, lastName?: string, userType?: string) => Promise<void>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<void>;
   signOut: () => void;
   updateProfile: (data: Partial<UserProfile>) => Promise<UserProfile | null>;
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
@@ -85,12 +54,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           if (response.ok) {
             const data = await response.json();
-            setUser(data.user);
+            
+            setUser({
+              id: data.user.id,
+              email: data.user.email,
+              username: data.user.username,
+              app_metadata: data.user.app_metadata || {},
+              user_metadata: data.user.user_metadata || {},
+              aud: data.user.aud || 'authenticated',
+              created_at: data.user.created_at || new Date().toISOString()
+            });
+            
             setUserProfile({
-              ...data.user,
-              first_name: data.user.username?.split(' ')[0],
+              id: data.user.id,
+              first_name: data.user.username?.split(' ')[0] || '',
               last_name: data.user.username?.split(' ')[1] || '',
-              user_type: 'student'
+              bio: null,
+              location: null,
+              resume_url: null,
+              skills: null,
+              preferences: null,
+              user_type: 'student',
+              saved_searches: [],
+              accessibility_settings: {
+                high_contrast: false,
+                increased_font_size: false,
+                reduce_motion: false,
+                screen_reader_optimized: false
+              },
+              redeemed_at: null,
+              redeemed_code: null,
+              avatar_url: null,
+              created_at: data.user.created_at || new Date().toISOString(),
+              updated_at: data.user.created_at || new Date().toISOString(),
+              email: data.user.email
             });
           } else {
             localStorage.removeItem('token');
@@ -128,16 +125,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = {
         id: data.user.id,
         email: data.user.email,
-        username: data.user.username
+        username: data.user.username,
+        app_metadata: data.user.app_metadata || {},
+        user_metadata: data.user.user_metadata || {},
+        aud: data.user.aud || 'authenticated',
+        created_at: data.user.created_at || new Date().toISOString()
       };
       
       setUser(userData);
       
       setUserProfile({
-        ...userData,
-        first_name: data.user.username?.split(' ')[0],
+        id: data.user.id,
+        first_name: data.user.username?.split(' ')[0] || '',
         last_name: data.user.username?.split(' ')[1] || '',
-        user_type: 'student'
+        bio: null,
+        location: null,
+        resume_url: null,
+        skills: null,
+        preferences: null,
+        user_type: 'student',
+        saved_searches: [],
+        accessibility_settings: {
+          high_contrast: false,
+          increased_font_size: false,
+          reduce_motion: false,
+          screen_reader_optimized: false
+        },
+        redeemed_at: null,
+        redeemed_code: null,
+        avatar_url: null,
+        created_at: data.user.created_at || new Date().toISOString(),
+        updated_at: data.user.created_at || new Date().toISOString(),
+        email: data.user.email
       });
       
       navigate('/dashboard');
@@ -149,9 +168,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (username: string, email: string, password: string, firstName?: string, lastName?: string, userType?: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
     setIsLoading(true);
     try {
+      const username = `${firstName} ${lastName}`;
+      
       const response = await fetch('/api/users/register', {
         method: 'POST',
         headers: {
@@ -171,16 +192,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = {
         id: data.user.id,
         email: data.user.email,
-        username: data.user.username
+        username: data.user.username,
+        app_metadata: data.user.app_metadata || {},
+        user_metadata: data.user.user_metadata || {},
+        aud: data.user.aud || 'authenticated',
+        created_at: data.user.created_at || new Date().toISOString()
       };
       
       setUser(userData);
       
       setUserProfile({
-        ...userData,
-        first_name: firstName || data.user.username?.split(' ')[0],
-        last_name: lastName || data.user.username?.split(' ')[1] || '',
-        user_type: userType || 'student'
+        id: data.user.id,
+        first_name: firstName || '',
+        last_name: lastName || '',
+        bio: null,
+        location: null,
+        resume_url: null,
+        skills: null,
+        preferences: null,
+        user_type: userType || 'student',
+        saved_searches: [],
+        accessibility_settings: {
+          high_contrast: false,
+          increased_font_size: false,
+          reduce_motion: false,
+          screen_reader_optimized: false
+        },
+        redeemed_at: null,
+        redeemed_code: null,
+        avatar_url: null,
+        created_at: data.user.created_at || new Date().toISOString(),
+        updated_at: data.user.created_at || new Date().toISOString(),
+        email: data.user.email,
+        company_name: userType === 'employer' ? '' : undefined,
+        company_website: userType === 'employer' ? '' : undefined,
+        job_title: userType === 'employer' ? '' : undefined,
+        employer_verification_status: userType === 'employer' ? 'pending' : undefined
       });
       
       navigate('/dashboard');
