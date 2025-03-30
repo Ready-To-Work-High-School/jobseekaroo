@@ -217,7 +217,11 @@ const EmployerVerification: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-            <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full md:w-auto">
+            <Tabs 
+              value={selectedTab} 
+              onValueChange={(value) => setSelectedTab(value as 'pending' | 'approved' | 'rejected')} 
+              className="w-full md:w-auto"
+            >
               <TabsList>
                 <TabsTrigger value="pending" className="flex gap-2">
                   <Clock className="h-4 w-4" /> Pending

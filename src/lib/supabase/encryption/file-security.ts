@@ -150,8 +150,9 @@ export async function checkEmployerVerification(userId: string): Promise<{
       return { isVerified: false, message: 'User is not registered as an employer' };
     }
     
-    // Check verification status
-    if (!data.employer_verification_status) {
+    // Check verification status - need to handle as a string for type safety
+    const status = data.employer_verification_status as string | null;
+    if (!status) {
       return { 
         isVerified: false, 
         verificationStatus: 'pending',
@@ -159,12 +160,14 @@ export async function checkEmployerVerification(userId: string): Promise<{
       };
     }
     
+    // Safe type assertion after validation
+    const verificationStatus = status as 'pending' | 'approved' | 'rejected';
     return { 
-      isVerified: data.employer_verification_status === 'approved',
-      verificationStatus: data.employer_verification_status as 'pending' | 'approved' | 'rejected',
-      message: data.employer_verification_status === 'approved' 
+      isVerified: verificationStatus === 'approved',
+      verificationStatus,
+      message: verificationStatus === 'approved' 
         ? 'Employer account verified' 
-        : 'Employer account verification ' + data.employer_verification_status
+        : 'Employer account verification ' + verificationStatus
     };
   } catch (error) {
     console.error('Unexpected error checking employer verification:', error);

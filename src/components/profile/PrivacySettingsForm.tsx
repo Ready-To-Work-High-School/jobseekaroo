@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,22 +45,22 @@ const PrivacySettingsForm = () => {
     setIsLoading(true);
     
     try {
-      // Convert privacy settings to a format compatible with Json type
+      // Convert privacy settings to a format compatible with JSON type
       const privacyPreferences = {
-        privacy: {
-          profileVisibleToEmployers: data.profileVisibleToEmployers,
-          showEmail: data.showEmail,
-          showResume: data.showResume,
-          showSkills: data.showSkills,
-          allowMessaging: data.allowMessaging,
-          allowJobRecommendations: data.allowJobRecommendations
+        preferences: {
+          privacy: {
+            profileVisibleToEmployers: data.profileVisibleToEmployers,
+            showEmail: data.showEmail,
+            showResume: data.showResume,
+            showSkills: data.showSkills,
+            allowMessaging: data.allowMessaging,
+            allowJobRecommendations: data.allowJobRecommendations
+          }
         }
       };
       
       // Update user preferences in profile
-      await updateProfile({
-        preferences: privacyPreferences
-      });
+      await updateProfile(privacyPreferences);
       
       // Log this privacy change for audit purposes
       if (userProfile?.id) {

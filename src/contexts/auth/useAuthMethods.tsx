@@ -49,14 +49,17 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const { user } = await signUp(email, password, firstName, lastName, userType);
-      setUser(user);
-      
-      if (user) {
-        await fetchUserProfile(user.id);
+      const result = await signUp(email, password, firstName, lastName, userType);
+      if (result && result.user) {
+        setUser(result.user);
+        
+        if (result.user) {
+          await fetchUserProfile(result.user.id);
+        }
+        
+        return result.user;
       }
-      
-      return user;
+      return null;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -85,14 +88,17 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const { user } = await signInWithGoogle();
-      setUser(user);
-      
-      if (user) {
-        await fetchUserProfile(user.id);
+      const result = await signInWithGoogle();
+      if (result && result.user) {
+        setUser(result.user);
+        
+        if (result.user) {
+          await fetchUserProfile(result.user.id);
+        }
+        
+        return result.user;
       }
-      
-      return user;
+      return null;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -106,14 +112,17 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const { user } = await signInWithApple();
-      setUser(user);
-      
-      if (user) {
-        await fetchUserProfile(user.id);
+      const result = await signInWithApple();
+      if (result && result.user) {
+        setUser(result.user);
+        
+        if (result.user) {
+          await fetchUserProfile(result.user.id);
+        }
+        
+        return result.user;
       }
-      
-      return user;
+      return null;
     } catch (err: any) {
       setError(err.message);
       throw err;

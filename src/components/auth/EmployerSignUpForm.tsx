@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase"; // Import supabase client
 import { 
   Building, 
   Briefcase, 
@@ -23,6 +24,7 @@ import SignUpBenefitCard from "./SignUpBenefitCard";
 import SignUpFormFields from "./SignUpFormFields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import React from "react"; // Import React explicitly
 
 const employerSignUpSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -117,12 +119,14 @@ const EmployerSignUpForm = ({
       
       // Update additional employer fields
       try {
-        await supabase.from('profiles').update({
-          company_name: values.companyName,
-          job_title: values.jobTitle,
-          company_website: values.companyWebsite || null,
-          email: values.email
-        }).eq('email', values.email);
+        await supabase.from('profiles')
+          .update({
+            company_name: values.companyName,
+            job_title: values.jobTitle,
+            company_website: values.companyWebsite || null,
+            email: values.email
+          })
+          .eq('email', values.email);
       } catch (profileError) {
         console.error("Error updating employer profile:", profileError);
         // Non-blocking error
@@ -144,6 +148,19 @@ const EmployerSignUpForm = ({
       });
     }
   };
+
+  // Create custom Input component with proper types
+  const CustomInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+    ({ className, ...props }, ref) => (
+      <input
+        className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        ref={ref}
+        {...props}
+      />
+    )
+  );
+  
+  CustomInput.displayName = "CustomInput";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -185,34 +202,31 @@ const EmployerSignUpForm = ({
               isLoading={isLoading}
               buttonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
               isEmployer={true}
-              additionalFields={
-                <>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="companyWebsite">Company Website</Label>
-                      <Input
-                        id="companyWebsite"
-                        placeholder="https://yourcompany.com"
-                        {...form.register("companyWebsite")}
-                      />
-                      {form.formState.errors.companyWebsite && (
-                        <p className="text-sm text-destructive">
-                          {form.formState.errors.companyWebsite.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <Alert className="bg-muted/50">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Verification Required</AlertTitle>
-                    <AlertDescription>
-                      All employer accounts require verification before posting jobs. This helps maintain quality and security.
-                    </AlertDescription>
-                  </Alert>
-                </>
-              }
-            />
+            >
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="companyWebsite">Company Website</Label>
+                  <CustomInput
+                    id="companyWebsite"
+                    placeholder="https://yourcompany.com"
+                    {...form.register("companyWebsite")}
+                  />
+                  {form.formState.errors.companyWebsite && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.companyWebsite.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+              
+              <Alert className="bg-muted/50">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Verification Required</AlertTitle>
+                <AlertDescription>
+                  All employer accounts require verification before posting jobs. This helps maintain quality and security.
+                </AlertDescription>
+              </Alert>
+            </SignUpFormFields>
           </SignUpFormShared>
         )}
       </div>
@@ -231,21 +245,11 @@ const EmployerSignUpForm = ({
   );
 };
 
-// Add these missing components for the form
-const Label = ({ htmlFor, children }) => (
+// Add Label component for the form
+const Label = ({ htmlFor, children }: { htmlFor: string, children: React.ReactNode }) => (
   <label htmlFor={htmlFor} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
     {children}
   </label>
 );
-
-const Input = React.forwardRef(({ className, ...props }, ref) => (
-  <input
-    className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-    ref={ref}
-    {...props}
-  />
-));
-
-Input.displayName = "Input";
 
 export default EmployerSignUpForm;

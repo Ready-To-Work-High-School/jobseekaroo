@@ -29,25 +29,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useAuthState(fetchUserProfile);
   
   const { 
-    handleSignIn, 
-    handleSignUp, 
-    handleSignOut, 
-    handleSignInWithApple, 
-    handleSignInWithGoogle 
-  } = useAuthMethods(navigate, fetchUserProfile);
+    signIn, 
+    signUp, 
+    signOut, 
+    signInWithApple, 
+    signInWithGoogle, 
+    checkEmployerApproval
+  } = useAuthMethods(user => setUser(user)); 
   
   const {
-    handleSaveJob,
-    handleUnsaveJob,
-    handleIsSavedJob,
-    handleGetSavedJobs
+    saveJob: handleSaveJob,
+    unsaveJob: handleUnsaveJob,
+    isSavedJob: handleIsSavedJob,
+    getSavedJobs: handleGetSavedJobs
   } = useJobManagement(user);
   
   const {
-    handleCreateApplication,
-    handleUpdateApplicationStatus,
-    handleGetApplications,
-    handleDeleteApplication
+    createApplication: handleCreateApplication,
+    updateApplicationStatus: handleUpdateApplicationStatus,
+    getApplications: handleGetApplications,
+    deleteApplication: handleDeleteApplication
   } = useApplicationManagement(user);
   
   const {
@@ -78,11 +79,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     userProfile,
     isLoading,
     profileLoading,
-    signIn: handleSignIn,
-    signUp: handleSignUp,
-    signOut: handleSignOut,
-    signInWithApple: handleSignInWithApple,
-    signInWithGoogle: handleSignInWithGoogle,
+    signIn,
+    signUp,
+    signOut,
+    signInWithApple,
+    signInWithGoogle,
     saveJob: handleSaveJob,
     unsaveJob: handleUnsaveJob,
     isSavedJob: handleIsSavedJob,
