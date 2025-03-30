@@ -50,6 +50,7 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     
     try {
       const result = await signUp(email, password, firstName, lastName, userType);
+      
       if (result && result.user) {
         setUser(result.user);
         
@@ -89,6 +90,7 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     
     try {
       const result = await signInWithGoogle();
+      
       if (result && result.user) {
         setUser(result.user);
         
@@ -113,6 +115,7 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     
     try {
       const result = await signInWithApple();
+      
       if (result && result.user) {
         setUser(result.user);
         

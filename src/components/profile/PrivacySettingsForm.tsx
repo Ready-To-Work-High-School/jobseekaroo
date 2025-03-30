@@ -48,7 +48,8 @@ const PrivacySettingsForm = () => {
       // Convert privacy settings to a format compatible with JSON type
       const privacyPreferences = {
         preferences: {
-          privacy: {
+          ...userProfile?.preferences, // Keep existing preferences
+          privacy: { // Update only the privacy section
             profileVisibleToEmployers: data.profileVisibleToEmployers,
             showEmail: data.showEmail,
             showResume: data.showResume,

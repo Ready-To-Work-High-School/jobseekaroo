@@ -9,11 +9,11 @@ export interface AuthContextType {
   userProfile: UserProfile | null;
   isLoading: boolean;
   profileLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<User | null>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
   signOut: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<User | null>;
+  signInWithGoogle: () => Promise<User | null>;
   saveJob: (jobId: string) => Promise<void>;
   unsaveJob: (jobId: string) => Promise<void>;
   isSavedJob: (jobId: string) => Promise<boolean>;

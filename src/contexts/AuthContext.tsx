@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContextType } from './auth/authContext.types';
 import { useAuthState } from './auth/useAuthState';
@@ -13,6 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   
   const { 
     userProfile, 
@@ -23,10 +24,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useProfileManagement(null); // We'll update this after setting up auth state
   
   const { 
-    user,
+    user: authUser,
     session,
     isLoading 
   } = useAuthState(fetchUserProfile);
+  
+  // Update our own user state when authUser changes
+  useEffect(() => {
+    setUser(authUser);
+  }, [authUser]);
   
   const { 
     signIn, 
@@ -38,17 +44,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useAuthMethods(user => setUser(user)); 
   
   const {
-    saveJob: handleSaveJob,
-    unsaveJob: handleUnsaveJob,
-    isSavedJob: handleIsSavedJob,
-    getSavedJobs: handleGetSavedJobs
+    handleSaveJob,
+    handleUnsaveJob,
+    handleIsSavedJob,
+    handleGetSavedJobs
   } = useJobManagement(user);
   
   const {
-    createApplication: handleCreateApplication,
-    updateApplicationStatus: handleUpdateApplicationStatus,
-    getApplications: handleGetApplications,
-    deleteApplication: handleDeleteApplication
+    handleCreateApplication,
+    handleUpdateApplicationStatus,
+    handleGetApplications,
+    handleDeleteApplication
   } = useApplicationManagement(user);
   
   const {
@@ -66,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) {
       refreshMfaStatus();
     }
-  }, [user]);
+  }, [user, refreshMfaStatus]);
 
   // Add debug log to show profile when it changes
   useEffect(() => {

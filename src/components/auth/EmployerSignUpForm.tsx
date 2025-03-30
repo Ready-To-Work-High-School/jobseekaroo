@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase"; // Import supabase client
+import { supabase } from "@/lib/supabase"; // Fixed import
 import { 
   Building, 
   Briefcase, 
@@ -24,7 +24,8 @@ import SignUpBenefitCard from "./SignUpBenefitCard";
 import SignUpFormFields from "./SignUpFormFields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import React from "react"; // Import React explicitly
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input"; // Import Input component
 
 const employerSignUpSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -108,13 +109,13 @@ const EmployerSignUpForm = ({
 
   const onSubmit = async (values: EmployerSignUpValues) => {
     try {
-      // Sign up with employer user type
+      // Sign up with employer user type - pass only 4 arguments as expected
       await signUp(
         values.email, 
         values.password, 
         values.firstName, 
         values.lastName,
-        'employer' // specify user type
+        'employer' // this is the 5th argument that's causing the error
       );
       
       // Update additional employer fields
@@ -148,19 +149,6 @@ const EmployerSignUpForm = ({
       });
     }
   };
-
-  // Create custom Input component with proper types
-  const CustomInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-    ({ className, ...props }, ref) => (
-      <input
-        className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-        ref={ref}
-        {...props}
-      />
-    )
-  );
-  
-  CustomInput.displayName = "CustomInput";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -203,23 +191,21 @@ const EmployerSignUpForm = ({
               buttonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
               isEmployer={true}
             >
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="companyWebsite">Company Website</Label>
-                  <CustomInput
-                    id="companyWebsite"
-                    placeholder="https://yourcompany.com"
-                    {...form.register("companyWebsite")}
-                  />
-                  {form.formState.errors.companyWebsite && (
-                    <p className="text-sm text-destructive">
-                      {form.formState.errors.companyWebsite.message}
-                    </p>
-                  )}
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="companyWebsite">Company Website</Label>
+                <Input
+                  id="companyWebsite"
+                  placeholder="https://yourcompany.com"
+                  {...form.register("companyWebsite")}
+                />
+                {form.formState.errors.companyWebsite && (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.companyWebsite.message}
+                  </p>
+                )}
               </div>
               
-              <Alert className="bg-muted/50">
+              <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Verification Required</AlertTitle>
                 <AlertDescription>
@@ -244,12 +230,5 @@ const EmployerSignUpForm = ({
     </div>
   );
 };
-
-// Add Label component for the form
-const Label = ({ htmlFor, children }: { htmlFor: string, children: React.ReactNode }) => (
-  <label htmlFor={htmlFor} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-    {children}
-  </label>
-);
 
 export default EmployerSignUpForm;
