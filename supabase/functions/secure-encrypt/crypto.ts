@@ -12,7 +12,8 @@ export async function encrypt(plaintext: string): Promise<string> {
   }
 
   // Generate a random IV (Initialization Vector)
-  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const iv = new Uint8Array(16);
+  crypto.getRandomValues(iv);
   
   // Derive a key from the encryption key
   const keyData = await crypto.subtle.digest(
