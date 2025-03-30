@@ -14,14 +14,10 @@ export async function encrypt(plaintext: string): Promise<string> {
   // Generate a random IV (Initialization Vector)
   const iv = new Uint8Array(16);
   
-  // Use Deno's secure random generator
-  const randomValues = await crypto.subtle.digest(
-    "SHA-256",
-    crypto.getRandomValues(new Uint8Array(32))
-  );
-  
-  // Use the first 16 bytes of the generated hash as our IV
-  iv.set(new Uint8Array(randomValues).slice(0, 16));
+  // Use Deno's secure random number generation
+  const randomBytes = new Uint8Array(16);
+  crypto.getRandomValues(randomBytes);
+  iv.set(randomBytes);
   
   // Derive a key from the encryption key
   const keyData = await crypto.subtle.digest(
