@@ -13,7 +13,15 @@ export async function encrypt(plaintext: string): Promise<string> {
 
   // Generate a random IV (Initialization Vector)
   const iv = new Uint8Array(16);
-  crypto.getRandomValues(iv);
+  
+  // Use Deno's secure random generator
+  const randomValues = await crypto.subtle.digest(
+    "SHA-256",
+    crypto.getRandomValues(new Uint8Array(32))
+  );
+  
+  // Use the first 16 bytes of the generated hash as our IV
+  iv.set(new Uint8Array(randomValues).slice(0, 16));
   
   // Derive a key from the encryption key
   const keyData = await crypto.subtle.digest(
@@ -97,22 +105,30 @@ export async function testEncryption(): Promise<{ success: boolean, message: str
     
     console.log("ENCRYPTION_KEY is set, testing encryption functionality");
     
-    // Try to encrypt and decrypt a test value
-    const testValue = "Test encryption functionality";
-    const encrypted = await encrypt(testValue);
-    const decrypted = await decrypt(encrypted);
-    
-    if (decrypted === testValue) {
-      console.log("Encryption test passed successfully");
-      return { 
-        success: true, 
-        message: "Encryption key is properly configured and working correctly" 
-      };
-    } else {
-      console.error("Encryption/decryption test failed - decrypted value doesn't match original");
+    try {
+      // Try to encrypt and decrypt a test value
+      const testValue = "Test encryption functionality";
+      const encrypted = await encrypt(testValue);
+      const decrypted = await decrypt(encrypted);
+      
+      if (decrypted === testValue) {
+        console.log("Encryption test passed successfully");
+        return { 
+          success: true, 
+          message: "Encryption key is properly configured and working correctly" 
+        };
+      } else {
+        console.error("Encryption/decryption test failed - decrypted value doesn't match original");
+        return { 
+          success: false, 
+          message: "Encryption/decryption test failed - decrypted value doesn't match original" 
+        };
+      }
+    } catch (error) {
+      console.error("Encryption operation failed with error:", error.message);
       return { 
         success: false, 
-        message: "Encryption/decryption test failed - decrypted value doesn't match original" 
+        message: `Encryption operation failed with error: ${error.message}` 
       };
     }
   } catch (error) {
