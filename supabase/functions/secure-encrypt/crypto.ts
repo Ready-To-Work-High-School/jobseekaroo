@@ -5,11 +5,27 @@ import { str2ab, ab2str, hexToUint8Array, uint8ArrayToHex } from "./utils.ts";
 // Get the encryption key from environment variables
 const ENCRYPTION_KEY = Deno.env.get("ENCRYPTION_KEY");
 
-// Encrypt data
-export async function encrypt(plaintext: string): Promise<string> {
+/**
+ * Validates the environment and encryption keys
+ * @throws Error if encryption is not properly configured
+ */
+function validateEncryptionEnvironment() {
   if (!ENCRYPTION_KEY) {
     throw new Error("Encryption key is not set in environment variables");
   }
+  
+  if (ENCRYPTION_KEY.length < 32) {
+    throw new Error("Encryption key must be at least 32 characters long");
+  }
+}
+
+/**
+ * Encrypts data using AES-256-GCM with authentication tag
+ * @param plaintext The data to encrypt
+ * @returns Promise resolving to encrypted data in hex format
+ */
+export async function encrypt(plaintext: string): Promise<string> {
+  validateEncryptionEnvironment();
 
   // Input validation - ensure plaintext is defined
   if (plaintext === undefined || plaintext === null) {
@@ -21,52 +37,61 @@ export async function encrypt(plaintext: string): Promise<string> {
     const iv = new Uint8Array(16);
     
     // Use Deno's secure random number generation
-    const randomBytes = new Uint8Array(16);
-    crypto.getRandomValues(randomBytes);
-    iv.set(randomBytes);
+    crypto.getRandomValues(iv);
     
-    // Derive a key from the encryption key
-    const keyData = await crypto.subtle.digest(
-      "SHA-256",
-      str2ab(ENCRYPTION_KEY)
+    // Derive a key from the encryption key using PBKDF2
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw",
+      str2ab(ENCRYPTION_KEY),
+      { name: "PBKDF2" },
+      false,
+      ["deriveBits", "deriveKey"]
     );
     
-    // Import the key
-    const key = await crypto.subtle.importKey(
-      "raw",
-      keyData,
-      { name: "AES-CBC" },
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt,
+        iterations: 100000,
+        hash: "SHA-256"
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
       false,
       ["encrypt"]
     );
     
-    // Encrypt the data
+    // Encrypt the data with AES-GCM (authenticated encryption)
     const encryptedData = await crypto.subtle.encrypt(
-      { name: "AES-CBC", iv },
+      { name: "AES-GCM", iv },
       key,
       str2ab(plaintext)
     );
     
-    // Combine IV and encrypted data, and convert to hex
-    const encryptedArray = new Uint8Array(iv.length + new Uint8Array(encryptedData).length);
-    encryptedArray.set(iv);
-    encryptedArray.set(new Uint8Array(encryptedData), iv.length);
+    // Combine salt, IV and encrypted data, and convert to hex
+    const resultArray = new Uint8Array(salt.length + iv.length + new Uint8Array(encryptedData).length);
+    resultArray.set(salt, 0);
+    resultArray.set(iv, salt.length);
+    resultArray.set(new Uint8Array(encryptedData), salt.length + iv.length);
     
-    return uint8ArrayToHex(encryptedArray);
+    return uint8ArrayToHex(resultArray);
   } catch (error) {
     console.error("Encryption error:", error);
     throw new Error(`Failed to encrypt data: ${error.message}`);
   }
 }
 
-// Decrypt data
+/**
+ * Decrypts data using AES-256-GCM with authentication
+ * @param encryptedHex The encrypted data in hex format
+ * @returns Promise resolving to decrypted data
+ */
 export async function decrypt(encryptedHex: string): Promise<string> {
-  if (!ENCRYPTION_KEY) {
-    throw new Error("Encryption key is not set in environment variables");
-  }
+  validateEncryptionEnvironment();
   
   // Input validation - ensure encryptedHex is valid
-  if (!encryptedHex || typeof encryptedHex !== 'string' || encryptedHex.length < 32) {
+  if (!encryptedHex || typeof encryptedHex !== 'string' || encryptedHex.length < 64) {
     throw new Error("Invalid encrypted data format");
   }
   
@@ -74,28 +99,36 @@ export async function decrypt(encryptedHex: string): Promise<string> {
     // Convert hex string to Uint8Array
     const encryptedArray = hexToUint8Array(encryptedHex);
     
-    // Extract IV and encrypted data
-    const iv = encryptedArray.slice(0, 16);
-    const encryptedData = encryptedArray.slice(16);
+    // Extract salt, IV and encrypted data
+    const salt = encryptedArray.slice(0, 16);
+    const iv = encryptedArray.slice(16, 32);
+    const encryptedData = encryptedArray.slice(32);
     
-    // Derive a key from the encryption key
-    const keyData = await crypto.subtle.digest(
-      "SHA-256",
-      str2ab(ENCRYPTION_KEY)
+    // Derive the same key using PBKDF2
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw",
+      str2ab(ENCRYPTION_KEY),
+      { name: "PBKDF2" },
+      false,
+      ["deriveBits", "deriveKey"]
     );
     
-    // Import the key
-    const key = await crypto.subtle.importKey(
-      "raw",
-      keyData,
-      { name: "AES-CBC" },
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt,
+        iterations: 100000,
+        hash: "SHA-256"
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
       false,
       ["decrypt"]
     );
     
     // Decrypt the data
     const decryptedData = await crypto.subtle.decrypt(
-      { name: "AES-CBC", iv },
+      { name: "AES-GCM", iv },
       key,
       encryptedData
     );
@@ -103,11 +136,15 @@ export async function decrypt(encryptedHex: string): Promise<string> {
     return ab2str(new Uint8Array(decryptedData));
   } catch (error) {
     console.error("Decryption error:", error);
-    throw new Error(`Failed to decrypt data: ${error.message}`);
+    // Use a generic error message to prevent oracle attacks
+    throw new Error(`Failed to decrypt data: Invalid data or encryption key`);
   }
 }
 
-// Test if encryption key is properly configured
+/**
+ * Test if encryption key is properly configured
+ * @returns Promise resolving to test result with success status and message
+ */
 export async function testEncryption(): Promise<{ success: boolean, message: string }> {
   try {
     // Check if encryption key is set

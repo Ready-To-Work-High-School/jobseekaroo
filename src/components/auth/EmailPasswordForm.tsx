@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -32,17 +32,48 @@ interface EmailPasswordFormProps {
   isLoading: boolean;
 }
 
+// Generate a cryptographically secure random token
+function generateCSRFToken(): string {
+  const array = new Uint8Array(32);
+  window.crypto.getRandomValues(array);
+  return Array.from(array)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+// Sanitize email to prevent XSS
+function sanitizeEmail(email: string): string {
+  return email
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w@.-]/gi, '');
+}
+
 const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
   const [csrfToken, setCsrfToken] = useState<string>("");
   
   // Generate CSRF token when component mounts
-  useState(() => {
+  useEffect(() => {
     const newToken = generateCSRFToken();
     setCsrfToken(newToken);
     
-    // Store in localStorage for cross-check validation
+    // Store in localStorage and sessionStorage for cross-check validation
     localStorage.setItem('csrfToken', newToken);
-  });
+    sessionStorage.setItem('csrfState', newToken);
+    
+    // Set token expiration (10 minutes)
+    const expirationTime = Date.now() + (10 * 60 * 1000);
+    localStorage.setItem('csrfTokenExpires', expirationTime.toString());
+    
+    // Clean up expired token on unmount
+    return () => {
+      if (Date.now() > parseInt(localStorage.getItem('csrfTokenExpires') || '0')) {
+        localStorage.removeItem('csrfToken');
+        localStorage.removeItem('csrfTokenExpires');
+        sessionStorage.removeItem('csrfState');
+      }
+    };
+  }, []);
   
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -56,20 +87,38 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
     try {
       // Validate CSRF token before submission
       const storedToken = localStorage.getItem('csrfToken');
-      if (storedToken !== csrfToken) {
+      const sessionToken = sessionStorage.getItem('csrfState');
+      const tokenExpiration = parseInt(localStorage.getItem('csrfTokenExpires') || '0');
+      
+      // Check if token is valid and not expired
+      if (storedToken !== csrfToken || sessionToken !== csrfToken || Date.now() > tokenExpiration) {
         throw new Error("Security validation failed. Please refresh the page and try again.");
       }
       
-      // Regenerate token on each submission
+      // Regenerate token on each submission for extra security
       const newToken = generateCSRFToken();
       setCsrfToken(newToken);
       localStorage.setItem('csrfToken', newToken);
+      sessionStorage.setItem('csrfState', newToken);
+      const newExpiration = Date.now() + (10 * 60 * 1000);
+      localStorage.setItem('csrfTokenExpires', newExpiration.toString());
       
       // Sanitize email input
       const sanitizedValues = {
         ...values,
         email: sanitizeEmail(values.email),
       };
+      
+      // Pass client IP if available (for rate limiting)
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        if (ipData.ip) {
+          localStorage.setItem('lastClientIP', ipData.ip);
+        }
+      } catch (ipError) {
+        console.warn('Could not determine client IP for security monitoring:', ipError);
+      }
       
       await onSubmit(sanitizedValues);
     } catch (error) {
@@ -79,21 +128,6 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
       });
     }
   };
-  
-  // CSRF token generation function
-  function generateCSRFToken(): string {
-    return Array.from(crypto.getRandomValues(new Uint8Array(16)))
-      .map((byte) => byte.toString(16).padStart(2, '0'))
-      .join('');
-  }
-  
-  // Sanitize email to prevent XSS
-  function sanitizeEmail(email: string): string {
-    return email
-      .trim()
-      .toLowerCase()
-      .replace(/[^\w@.-]/gi, '');
-  }
 
   return (
     <Form {...form}>
