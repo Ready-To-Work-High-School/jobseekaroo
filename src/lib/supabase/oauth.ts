@@ -1,8 +1,7 @@
-
 import { supabase } from '@/lib/supabase';
 import { Provider } from '@supabase/supabase-js';
 
-export const signInWithOAuth = async (provider: Provider): Promise<void> => {
+export const signInWithOAuth = async (provider: Provider) => {
   console.log(`Initiating ${provider} sign-in`);
   
   try {
@@ -71,20 +70,21 @@ export const signInWithOAuth = async (provider: Provider): Promise<void> => {
     
     if (error) {
       console.error(`${provider} sign-in error:`, error);
-      throw error;
+      return { user: null, error };
     }
     
     // If we have a URL, redirect the user
     if (data?.url) {
       console.log(`Redirecting to ${provider} auth URL:`, data.url);
       window.location.href = data.url;
+      return { user: null, error: null }; // Return an object to maintain consistent return type
     } else {
       console.error(`No redirect URL returned from ${provider} sign-in`);
-      throw new Error(`Authentication failed: No redirect URL from ${provider}`);
+      return { user: null, error: new Error(`Authentication failed: No redirect URL from ${provider}`) };
     }
   } catch (err) {
     console.error(`${provider} sign-in unexpected error:`, err);
-    throw err;
+    return { user: null, error: err };
   }
 };
 

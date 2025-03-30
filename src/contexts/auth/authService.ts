@@ -273,7 +273,7 @@ export const verifyEmployerStatus = async (userId: string): Promise<{
 export const signInWithApple = async () => {
   try {
     const result = await authSignInWithApple();
-    return { user: result?.user || null, error: null };
+    return { user: result?.user || null, error: result?.error || null };
   } catch (error: any) {
     return { user: null, error };
   }
@@ -282,7 +282,7 @@ export const signInWithApple = async () => {
 export const signInWithGoogle = async () => {
   try {
     const result = await authSignInWithGoogle();
-    return { user: result?.user || null, error: null };
+    return { user: result?.user || null, error: result?.error || null };
   } catch (error: any) {
     return { user: null, error };
   }

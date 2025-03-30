@@ -2,12 +2,13 @@
 import { supabase } from '@/lib/supabase';
 import { sendEmail } from '@/lib/supabase/email';
 import { signInWithOAuth } from '@/lib/supabase/oauth';
+import { User } from '@supabase/supabase-js';
 
 // OAuth sign-in methods
 export const signInWithApple = async () => {
   try {
-    const { data, error } = await signInWithOAuth('apple');
-    return { user: data?.user || null, error };
+    const result = await signInWithOAuth('apple');
+    return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Apple:', error);
     return { user: null, error };
@@ -16,8 +17,8 @@ export const signInWithApple = async () => {
 
 export const signInWithGoogle = async () => {
   try {
-    const { data, error } = await signInWithOAuth('google');
-    return { user: data?.user || null, error };
+    const result = await signInWithOAuth('google');
+    return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Google:', error);
     return { user: null, error };
