@@ -10,9 +10,13 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    // Basic validation
+    // Enhanced validation
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'Please provide username, email and password' });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
     
     // Check if email already exists
