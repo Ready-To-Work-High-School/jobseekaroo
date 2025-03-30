@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
-  const { user, signOut } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
   
   return (
     <nav className="bg-indigo-600">
@@ -23,6 +23,18 @@ const Navbar = () => {
                 >
                   Home
                 </Link>
+                <Link
+                  to="/contact"
+                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Contact
+                </Link>
+                <Link
+                  to="/server-demo"
+                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  API Demo
+                </Link>
                 {user ? (
                   <>
                     <Link
@@ -37,6 +49,14 @@ const Navbar = () => {
                     >
                       Profile
                     </Link>
+                    {userProfile?.user_type === 'admin' && (
+                      <Link
+                        to="/admin"
+                        className="text-red-300 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Admin
+                      </Link>
+                    )}
                   </>
                 ) : (
                   <>
@@ -110,6 +130,18 @@ const Navbar = () => {
           >
             Home
           </Link>
+          <Link
+            to="/contact"
+            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+          >
+            Contact
+          </Link>
+          <Link
+            to="/server-demo"
+            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+          >
+            API Demo
+          </Link>
           {user ? (
             <>
               <Link
@@ -124,6 +156,14 @@ const Navbar = () => {
               >
                 Profile
               </Link>
+              {userProfile?.user_type === 'admin' && (
+                <Link
+                  to="/admin"
+                  className="text-red-300 hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Admin
+                </Link>
+              )}
               <button
                 onClick={signOut}
                 className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
