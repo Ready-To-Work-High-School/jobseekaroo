@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 interface ServerStatus {
   status: string;
@@ -51,7 +50,6 @@ const ServerDemo = () => {
   const [postForm, setPostForm] = useState<PostForm>({ title: '', content: '' });
   const [activeTab, setActiveTab] = useState('status');
 
-  // Check server status
   const checkServerStatus = async () => {
     setLoading(true);
     setError(null);
@@ -70,7 +68,6 @@ const ServerDemo = () => {
     }
   };
 
-  // Fetch posts
   const fetchPosts = async () => {
     setLoading(true);
     setError(null);
@@ -89,7 +86,6 @@ const ServerDemo = () => {
     }
   };
 
-  // Register user
   const registerUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -107,7 +103,6 @@ const ServerDemo = () => {
         throw new Error(data.error || 'Registration failed');
       }
       
-      // Save token and update state
       localStorage.setItem('auth_token', data.token);
       setToken(data.token);
       setUser(data.user);
@@ -122,7 +117,6 @@ const ServerDemo = () => {
     }
   };
 
-  // Login user
   const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -140,7 +134,6 @@ const ServerDemo = () => {
         throw new Error(data.error || 'Login failed');
       }
       
-      // Save token and update state
       localStorage.setItem('auth_token', data.token);
       setToken(data.token);
       setUser(data.user);
@@ -155,7 +148,6 @@ const ServerDemo = () => {
     }
   };
 
-  // Logout user
   const logoutUser = () => {
     localStorage.removeItem('auth_token');
     setToken(null);
@@ -163,7 +155,6 @@ const ServerDemo = () => {
     toast.success('Logged out successfully');
   };
 
-  // Create post
   const createPost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
@@ -191,7 +182,7 @@ const ServerDemo = () => {
       
       toast.success('Post created successfully');
       setPostForm({ title: '', content: '' });
-      fetchPosts(); // Refresh posts
+      fetchPosts();
     } catch (err: any) {
       setError(err.message || 'Failed to create post');
       toast.error(err.message || 'Failed to create post');
@@ -201,7 +192,6 @@ const ServerDemo = () => {
     }
   };
 
-  // Check user session on mount
   useEffect(() => {
     const checkUserSession = async () => {
       if (token) {
@@ -211,7 +201,6 @@ const ServerDemo = () => {
           });
           
           if (!response.ok) {
-            // Token invalid or expired
             localStorage.removeItem('auth_token');
             setToken(null);
             return;
@@ -228,14 +217,11 @@ const ServerDemo = () => {
     };
     
     checkUserSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Initial data loading
   useEffect(() => {
     checkServerStatus();
     fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -247,7 +233,19 @@ const ServerDemo = () => {
       <div className="max-w-4xl mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Server Integration Demo</h1>
         
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6">
+          <p className="text-amber-700">
+            <strong>Important:</strong> Make sure your server is running with:
+          </p>
+          <code className="block bg-gray-100 p-2 mt-2 rounded">
+            node src/server/start-server.js
+          </code>
+          <p className="mt-2 text-sm text-amber-600">
+            The server runs on port 5000 and provides API endpoints for this demo.
+          </p>
+        </div>
+        
+        <Tabs defaultValue="status" className="w-full">
           <TabsList className="grid grid-cols-4 mb-6">
             <TabsTrigger value="status">Server Status</TabsTrigger>
             <TabsTrigger value="auth">Authentication</TabsTrigger>
@@ -255,7 +253,6 @@ const ServerDemo = () => {
             <TabsTrigger value="create" disabled={!token}>Create Post</TabsTrigger>
           </TabsList>
           
-          {/* Server Status Tab */}
           <TabsContent value="status">
             <Card>
               <CardHeader>
@@ -273,7 +270,7 @@ const ServerDemo = () => {
                 ) : error ? (
                   <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded border border-red-200 dark:border-red-900">
                     <p className="text-red-600 dark:text-red-400">{error}</p>
-                    <p className="mt-2">Make sure the server is running with: <code>npm run server</code></p>
+                    <p className="mt-2">Make sure the server is running with: <code>node src/server/start-server.js</code></p>
                   </div>
                 ) : (
                   <p>Click the button below to check server status</p>
@@ -287,7 +284,6 @@ const ServerDemo = () => {
             </Card>
           </TabsContent>
           
-          {/* Authentication Tab */}
           <TabsContent value="auth">
             <Card>
               <CardHeader>
@@ -394,7 +390,6 @@ const ServerDemo = () => {
             </Card>
           </TabsContent>
           
-          {/* Posts Tab */}
           <TabsContent value="posts">
             <Card>
               <CardHeader>
@@ -434,7 +429,6 @@ const ServerDemo = () => {
             </Card>
           </TabsContent>
           
-          {/* Create Post Tab */}
           <TabsContent value="create">
             <Card>
               <CardHeader>
