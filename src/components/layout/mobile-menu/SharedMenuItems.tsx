@@ -1,57 +1,15 @@
 
-import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Home, Briefcase, Lightbulb, Server } from 'lucide-react';
 import MobileMenuItem from './MobileMenuItem';
-import { HomeIcon, Briefcase, GraduationCap, HelpCircle } from 'lucide-react';
 
-interface SharedMenuItemsProps {
-  user: any;
-  setIsOpen: (isOpen: boolean) => void;
-}
-
-const SharedMenuItems: React.FC<SharedMenuItemsProps> = ({ user, setIsOpen }) => {
+const SharedMenuItems = () => {
   return (
     <>
-      <MobileMenuItem 
-        to="/" 
-        icon={HomeIcon}
-        onClick={() => setIsOpen(false)}
-      >
-        Home
-      </MobileMenuItem>
-      
-      {user && (
-        <MobileMenuItem 
-          to="/dashboard" 
-          icon={HomeIcon}
-          onClick={() => setIsOpen(false)}
-        >
-          Dashboard
-        </MobileMenuItem>
-      )}
-      
-      <MobileMenuItem 
-        to="/jobs" 
-        icon={Briefcase}
-        onClick={() => setIsOpen(false)}
-      >
-        Find Jobs
-      </MobileMenuItem>
-      
-      <MobileMenuItem 
-        to="/entrepreneurship-academy" 
-        icon={GraduationCap}
-        onClick={() => setIsOpen(false)}
-      >
-        Academy
-      </MobileMenuItem>
-      
-      <MobileMenuItem 
-        to="/faq" 
-        icon={HelpCircle}
-        onClick={() => setIsOpen(false)}
-      >
-        FAQ
-      </MobileMenuItem>
+      <MobileMenuItem Icon={Home} text="Home" to="/" />
+      <MobileMenuItem Icon={Briefcase} text="Jobs" to="/jobs" />
+      <MobileMenuItem Icon={Server} text="Server Demo" to="/server-demo" />
+      <MobileMenuItem Icon={Lightbulb} text="Resources" to="/resources" />
     </>
   );
 };
