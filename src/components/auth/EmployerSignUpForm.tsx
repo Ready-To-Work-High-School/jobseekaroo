@@ -22,6 +22,7 @@ import SignUpFormShared from "./SignUpFormShared";
 import SignUpBenefitCard from "./SignUpBenefitCard";
 import SignUpFormFields from "./SignUpFormFields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const employerSignUpSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -114,6 +115,19 @@ const EmployerSignUpForm = ({
         'employer' // specify user type
       );
       
+      // Update additional employer fields
+      try {
+        await supabase.from('profiles').update({
+          company_name: values.companyName,
+          job_title: values.jobTitle,
+          company_website: values.companyWebsite || null,
+          email: values.email
+        }).eq('email', values.email);
+      } catch (profileError) {
+        console.error("Error updating employer profile:", profileError);
+        // Non-blocking error
+      }
+      
       toast({
         title: "Employer account created",
         description: "Your account is pending verification. You'll receive an email when approved.",
@@ -171,7 +185,6 @@ const EmployerSignUpForm = ({
               isLoading={isLoading}
               buttonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
               isEmployer={true}
-              requireTermsAcceptance={true}
               additionalFields={
                 <>
                   <div className="grid grid-cols-1 gap-4">
@@ -190,7 +203,7 @@ const EmployerSignUpForm = ({
                     </div>
                   </div>
                   
-                  <Alert variant="outline" className="bg-muted/50">
+                  <Alert className="bg-muted/50">
                     <AlertTriangle className="h-4 w-4" />
                     <AlertTitle>Verification Required</AlertTitle>
                     <AlertDescription>
@@ -227,19 +240,12 @@ const Label = ({ htmlFor, children }) => (
 
 const Input = React.forwardRef(({ className, ...props }, ref) => (
   <input
-    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     ref={ref}
     {...props}
   />
 ));
 
-const Button = ({ children, className, ...props }) => (
-  <button
-    className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ${className}`}
-    {...props}
-  >
-    {children}
-  </button>
-);
+Input.displayName = "Input";
 
 export default EmployerSignUpForm;

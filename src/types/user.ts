@@ -1,4 +1,3 @@
-
 export interface UserProfile {
   id: string;
   first_name: string | null;
@@ -16,6 +15,12 @@ export interface UserProfile {
   avatar_url?: string | null;
   created_at?: string;
   updated_at?: string;
+  email?: string;
+  company_name?: string;
+  company_website?: string;
+  job_title?: string;
+  employer_verification_status?: 'pending' | 'approved' | 'rejected';
+  verification_notes?: string;
 }
 
 export interface UserProfileUpdate {

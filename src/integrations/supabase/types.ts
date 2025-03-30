@@ -417,10 +417,15 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          company_name: string | null
+          company_website: string | null
           contact_details_encrypted: string | null
           created_at: string
+          email: string | null
+          employer_verification_status: string | null
           first_name: string | null
           id: string
+          job_title: string | null
           last_name: string | null
           location: string | null
           preferences: Json | null
@@ -431,14 +436,20 @@ export type Database = {
           skills: string[] | null
           updated_at: string
           user_type: string | null
+          verification_notes: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          company_name?: string | null
+          company_website?: string | null
           contact_details_encrypted?: string | null
           created_at?: string
+          email?: string | null
+          employer_verification_status?: string | null
           first_name?: string | null
           id: string
+          job_title?: string | null
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
@@ -449,14 +460,20 @@ export type Database = {
           skills?: string[] | null
           updated_at?: string
           user_type?: string | null
+          verification_notes?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          company_name?: string | null
+          company_website?: string | null
           contact_details_encrypted?: string | null
           created_at?: string
+          email?: string | null
+          employer_verification_status?: string | null
           first_name?: string | null
           id?: string
+          job_title?: string | null
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
@@ -467,6 +484,7 @@ export type Database = {
           skills?: string[] | null
           updated_at?: string
           user_type?: string | null
+          verification_notes?: string | null
         }
         Relationships: []
       }

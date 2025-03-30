@@ -31,7 +31,7 @@ interface EmployerProfile {
 }
 
 const EmployerVerification: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('pending');
+  const [selectedTab, setSelectedTab] = useState<'pending' | 'approved' | 'rejected'>('pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmployer, setSelectedEmployer] = useState<EmployerProfile | null>(null);
   const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
@@ -63,7 +63,13 @@ const EmployerVerification: React.FC = () => {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data as EmployerProfile[];
+      
+      // Ensure data is of the correct type
+      if (Array.isArray(data)) {
+        return data as EmployerProfile[];
+      }
+      
+      return [];
     }
   });
   
@@ -159,7 +165,7 @@ const EmployerVerification: React.FC = () => {
            email.includes(query);
   });
   
-  const handleVerifyEmployer = (employer: EmployerProfile, status: 'approved' | 'rejected') => {
+  const handleVerifyEmployer = (employer: EmployerProfile, status: 'approved' | 'rejected' | 'pending') => {
     setSelectedEmployer(employer);
     setVerificationNotes(employer.verification_notes || '');
     setSelectedTab(status);
@@ -171,7 +177,7 @@ const EmployerVerification: React.FC = () => {
     
     updateVerificationStatus.mutate({
       employerId: selectedEmployer.id,
-      status: selectedTab as 'approved' | 'rejected',
+      status: selectedTab,
       notes: verificationNotes
     });
   };

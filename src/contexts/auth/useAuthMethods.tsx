@@ -1,158 +1,146 @@
 
-import { useCallback } from 'react';
-import { NavigateFunction } from 'react-router-dom';
-import { signIn, signUp, signInWithApple, signInWithGoogle, signOut } from './authService';
-import { supabase } from '@/lib/supabase'; // Add missing import
-import { logAuthEvent } from './services/auditService';
+import { useState, useCallback } from 'react';
+import { User } from '@supabase/supabase-js';
+import { 
+  signIn, 
+  signUp, 
+  signOut as authSignOut,
+  signInWithGoogle,
+  signInWithApple,
+  verifyEmployerStatus
+} from './authService';
+import { useProfileManagement } from './useProfileManagement';
 
-/**
- * Generates a cryptographically secure CSRF token
- * @returns Secure random token string
- */
-function generateCSRFToken(): string {
-  // Generate a crypto-secure random value
-  const array = new Uint8Array(32);
-  window.crypto.getRandomValues(array);
-  return Array.from(array)
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-/**
- * Validates CSRF token to protect against CSRF attacks
- * @param token Token to validate
- * @returns Boolean indicating if token is valid
- */
-function validateCSRFToken(token: string): boolean {
-  const storedToken = localStorage.getItem('csrfToken');
-  const sessionToken = sessionStorage.getItem('csrfState');
-  const tokenExpiration = parseInt(localStorage.getItem('csrfTokenExpires') || '0');
+export function useAuthMethods(setUser: (user: User | null) => void) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAppleLoading, setIsAppleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { fetchUserProfile, updateProfile } = useProfileManagement(null);
   
-  // Check if token is valid and not expired
-  return (
-    token === storedToken && 
-    token === sessionToken && 
-    Date.now() < tokenExpiration
-  );
-}
-
-export function useAuthMethods(
-  navigate: NavigateFunction,
-  fetchUserProfile: (userId: string) => Promise<void>
-) {
   const handleSignIn = useCallback(async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
-      // Get client IP for security monitoring
-      const clientIP = localStorage.getItem('lastClientIP');
+      const { user } = await signIn(email, password);
+      setUser(user);
       
-      await signIn(email, password, clientIP);
-      
-      // Check if there's a saved redirect URL
-      const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
-        sessionStorage.removeItem('redirectAfterLogin');
-        navigate(redirectUrl);
-      } else {
-        navigate('/');
+      if (user) {
+        await fetchUserProfile(user.id);
       }
       
-      // Record successful login in audit log
-      try {
-        await supabase.functions.invoke('audit-log', {
-          body: { 
-            action: 'user_login',
-            metadata: { method: 'email', timestamp: new Date().toISOString() }
-          }
-        });
-      } catch (auditError) {
-        console.error('Error logging audit event:', auditError);
-        // Non-blocking error
-      }
-    } catch (error) {
-      throw error;
+      return user;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, [navigate]);
-
-  const handleSignUp = useCallback(async (email: string, password: string, firstName: string, lastName: string) => {
+  }, [setUser, fetchUserProfile]);
+  
+  const handleSignUp = useCallback(async (
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string,
+    userType: 'student' | 'employer' = 'student'
+  ) => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
-      // Get client IP for security monitoring
-      const clientIP = localStorage.getItem('lastClientIP');
+      const { user } = await signUp(email, password, firstName, lastName, userType);
+      setUser(user);
       
-      await signUp(email, password, firstName, lastName, clientIP);
-      
-      // Generate new CSRF token after signup
-      const newToken = generateCSRFToken();
-      localStorage.setItem('csrfToken', newToken);
-      sessionStorage.setItem('csrfState', newToken);
-      const newExpiration = Date.now() + (10 * 60 * 1000);
-      localStorage.setItem('csrfTokenExpires', newExpiration.toString());
-      
-      navigate('/');
-      
-      // Record successful signup in audit log
-      try {
-        await supabase.functions.invoke('audit-log', {
-          body: { 
-            action: 'user_signup',
-            metadata: { method: 'email', timestamp: new Date().toISOString() }
-          }
-        });
-      } catch (auditError) {
-        console.error('Error logging audit event:', auditError);
-        // Non-blocking error
+      if (user) {
+        await fetchUserProfile(user.id);
       }
-    } catch (error) {
-      throw error;
+      
+      return user;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, [navigate]);
-
+  }, [setUser, fetchUserProfile]);
+  
   const handleSignOut = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
-      await signOut();
-      
-      // Clear any CSRF tokens on logout
-      localStorage.removeItem('csrfToken');
-      localStorage.removeItem('csrfTokenExpires');
-      sessionStorage.removeItem('csrfState');
-      
-      navigate('/');
-    } catch (error) {
-      throw error;
+      await authSignOut();
+      setUser(null);
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, [navigate]);
-
-  const handleSignInWithApple = useCallback(async () => {
+  }, [setUser]);
+  
+  const handleGoogleSignIn = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
-      // Generate state parameter for OAuth to prevent CSRF
-      const stateParam = generateCSRFToken();
-      sessionStorage.setItem('oauthState', stateParam);
+      const { user } = await signInWithGoogle();
+      setUser(user);
       
-      await signInWithApple();
-      // Note: No need to navigate since OAuth redirects
-    } catch (error) {
-      throw error;
+      if (user) {
+        await fetchUserProfile(user.id);
+      }
+      
+      return user;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
-
-  const handleSignInWithGoogle = useCallback(async () => {
+  }, [setUser, fetchUserProfile]);
+  
+  const handleAppleSignIn = useCallback(async () => {
+    setIsAppleLoading(true);
+    setError(null);
+    
     try {
-      // Generate state parameter for OAuth to prevent CSRF
-      const stateParam = generateCSRFToken();
-      sessionStorage.setItem('oauthState', stateParam);
+      const { user } = await signInWithApple();
+      setUser(user);
       
-      await signInWithGoogle();
-      // Note: No need to navigate since OAuth redirects
-    } catch (error) {
-      throw error;
+      if (user) {
+        await fetchUserProfile(user.id);
+      }
+      
+      return user;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsAppleLoading(false);
+    }
+  }, [setUser, fetchUserProfile]);
+  
+  const checkEmployerApproval = useCallback(async (userId: string) => {
+    try {
+      return await verifyEmployerStatus(userId);
+    } catch (err: any) {
+      console.error('Error checking employer approval:', err);
+      return { canPostJobs: false, message: err.message || 'Failed to verify employer status' };
     }
   }, []);
 
   return {
-    handleSignIn,
-    handleSignUp,
-    handleSignOut,
-    handleSignInWithApple,
-    handleSignInWithGoogle,
-    validateCSRFToken
+    signIn: handleSignIn,
+    signUp: handleSignUp,
+    signOut: handleSignOut,
+    signInWithGoogle: handleGoogleSignIn,
+    signInWithApple: handleAppleSignIn,
+    checkEmployerApproval,
+    isLoading,
+    isAppleLoading,
+    error,
+    updateProfile
   };
 }

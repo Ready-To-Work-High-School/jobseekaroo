@@ -132,7 +132,7 @@ export async function checkEmployerVerification(userId: string): Promise<{
     // Get the user's profile
     const { data, error } = await supabase
       .from('profiles')
-      .select('user_type, employer_verification_status')
+      .select('user_type, employer_verification_status, email')
       .eq('id', userId)
       .single();
     
@@ -161,7 +161,7 @@ export async function checkEmployerVerification(userId: string): Promise<{
     
     return { 
       isVerified: data.employer_verification_status === 'approved',
-      verificationStatus: data.employer_verification_status,
+      verificationStatus: data.employer_verification_status as 'pending' | 'approved' | 'rejected',
       message: data.employer_verification_status === 'approved' 
         ? 'Employer account verified' 
         : 'Employer account verification ' + data.employer_verification_status
