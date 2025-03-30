@@ -1,18 +1,21 @@
 
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 
 // Create Express app
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Security middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.disable('x-powered-by'); // Remove Express fingerprinting
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  // Relaxed CSP for development - tighten for production
+  res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:*;");
   next();
 });
 
@@ -31,6 +34,18 @@ app.get('/api/secure-data', (req, res) => {
       { name: 'Django', description: 'High-level Python web framework with security features' },
       { name: 'Spring', description: 'Java framework with extensive security modules' }
     ]
+  });
+});
+
+// Example of a POST endpoint
+app.post('/api/contact', (req, res) => {
+  const { name, email, message } = req.body;
+  console.log('Contact form submission:', { name, email, message });
+  
+  // In a real app, you would process this data (store in DB, send email, etc.)
+  res.json({ 
+    success: true, 
+    message: 'Thank you for your message!'
   });
 });
 
