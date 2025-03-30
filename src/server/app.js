@@ -28,6 +28,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Ensure all responses are JSON, not HTML, for API routes
+app.use('/api', (req, res, next) => {
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
+
 // Rate limiting middleware (simple implementation)
 const rateLimit = {};
 app.use((req, res, next) => {
@@ -85,10 +91,22 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// Error handling
+// Catch-all for API 404 errors to return JSON instead of HTML
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found' });
+});
+
+// Error handling - Make sure API errors return JSON, not HTML
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  
+  if (req.path.startsWith('/api/')) {
+    // For API routes, return JSON error
+    res.status(500).json({ error: 'Something went wrong!' });
+  } else {
+    // For non-API routes, pass to next error handler
+    next(err);
+  }
 });
 
 // Start server

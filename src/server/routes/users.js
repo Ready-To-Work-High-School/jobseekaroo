@@ -10,9 +10,17 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    // Enhanced validation
-    if (!username || !email || !password) {
-      return res.status(400).json({ error: 'Please provide username, email and password' });
+    // Enhanced validation with better error messages
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
+    }
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+    
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required' });
     }
     
     if (password.length < 6) {
@@ -23,47 +31,52 @@ router.post('/register', async (req, res) => {
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
       if (err) {
         console.error('Database error:', err);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error while checking email' });
       }
       
       if (user) {
         return res.status(400).json({ error: 'Email already in use' });
       }
       
-      // Hash password
-      const hashedPassword = await hashPassword(password);
-      
-      // Insert user
-      db.run(
-        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-        [username, email, hashedPassword],
-        function(err) {
-          if (err) {
-            console.error('Error creating user:', err);
-            return res.status(500).json({ error: 'Failed to create user' });
-          }
-          
-          // Generate token
-          const token = generateToken(this.lastID);
-          
-          // Get the created user
-          db.get('SELECT id, username, email FROM users WHERE id = ?', [this.lastID], (err, user) => {
+      try {
+        // Hash password
+        const hashedPassword = await hashPassword(password);
+        
+        // Insert user
+        db.run(
+          'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+          [username, email, hashedPassword],
+          function(err) {
             if (err) {
-              console.error('Error fetching created user:', err);
-              return res.status(500).json({ error: 'Failed to fetch user details' });
+              console.error('Error creating user:', err);
+              return res.status(500).json({ error: 'Failed to create user in database' });
             }
             
-            res.status(201).json({
-              token,
-              user
+            // Generate token
+            const token = generateToken(this.lastID);
+            
+            // Get the created user
+            db.get('SELECT id, username, email FROM users WHERE id = ?', [this.lastID], (err, user) => {
+              if (err) {
+                console.error('Error fetching created user:', err);
+                return res.status(500).json({ error: 'Failed to fetch user details' });
+              }
+              
+              res.status(201).json({
+                token,
+                user
+              });
             });
-          });
-        }
-      );
+          }
+        );
+      } catch (hashError) {
+        console.error('Password hashing error:', hashError);
+        return res.status(500).json({ error: 'Error processing your password' });
+      }
     });
   } catch (err) {
     console.error('Registration error:', err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error during registration' });
   }
 });
 

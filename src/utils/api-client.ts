@@ -16,6 +16,15 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
     const response = await fetch(`/api/${endpoint}`);
     
     if (!response.ok) {
+      // Check content type to provide more helpful error messages
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/html')) {
+        console.error('Server returned HTML instead of JSON. Possible server error.');
+        return { 
+          error: `Server error: ${response.status} ${response.statusText}`
+        };
+      }
+      
       throw new Error(`API error: ${response.statusText}`);
     }
     
@@ -43,7 +52,29 @@ export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiRespo
     });
     
     if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
+      // Check content type to provide more helpful error messages
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/html')) {
+        console.error('Server returned HTML instead of JSON. Possible server error.');
+        return { 
+          error: `Server error: ${response.status} ${response.statusText}`
+        };
+      }
+      
+      // Try to get the error message from the response
+      const errorData = await response.text();
+      let errorMessage;
+      
+      try {
+        // Try to parse as JSON
+        const parsedError = JSON.parse(errorData);
+        errorMessage = parsedError.error || `API error: ${response.statusText}`;
+      } catch (e) {
+        // If it's not valid JSON, use the text
+        errorMessage = errorData || `API error: ${response.statusText}`;
+      }
+      
+      throw new Error(errorMessage);
     }
     
     const data = await response.json();
