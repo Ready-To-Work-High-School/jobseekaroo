@@ -4,12 +4,24 @@ import { sendEmail } from '@/lib/supabase/email';
 import { signInWithOAuth } from '@/lib/supabase/oauth';
 
 // OAuth sign-in methods
-export const signInWithApple = async (): Promise<void> => {
-  await signInWithOAuth('apple');
+export const signInWithApple = async () => {
+  try {
+    const { data, error } = await signInWithOAuth('apple');
+    return { user: data?.user || null, error };
+  } catch (error) {
+    console.error('Error signing in with Apple:', error);
+    return { user: null, error };
+  }
 };
 
-export const signInWithGoogle = async (): Promise<void> => {
-  await signInWithOAuth('google');
+export const signInWithGoogle = async () => {
+  try {
+    const { data, error } = await signInWithOAuth('google');
+    return { user: data?.user || null, error };
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
+    return { user: null, error };
+  }
 };
 
 export const signOut = async () => {

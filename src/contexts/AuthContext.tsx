@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signInWithApple, 
     signInWithGoogle, 
     checkEmployerApproval
-  } = useAuthMethods(user => setUser(user)); 
+  } = useAuthMethods(setUser); 
   
   const {
     handleSaveJob,

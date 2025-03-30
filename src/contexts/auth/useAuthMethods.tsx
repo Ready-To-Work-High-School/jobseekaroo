@@ -22,7 +22,12 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const { user } = await signIn(email, password);
+      const { user, error: signInError } = await signIn(email, password);
+      
+      if (signInError) {
+        throw signInError;
+      }
+      
       setUser(user);
       
       if (user) {
@@ -49,18 +54,18 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const result = await signUp(email, password, firstName, lastName, userType);
+      const { user, error: signUpError } = await signUp(email, password, firstName, lastName, userType);
       
-      if (result && result.user) {
-        setUser(result.user);
-        
-        if (result.user) {
-          await fetchUserProfile(result.user.id);
-        }
-        
-        return result.user;
+      if (signUpError) {
+        throw signUpError;
       }
-      return null;
+      
+      if (user) {
+        setUser(user);
+        await fetchUserProfile(user.id);
+      }
+      
+      return user;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -89,18 +94,18 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const result = await signInWithGoogle();
+      const { user, error: googleError } = await signInWithGoogle();
       
-      if (result && result.user) {
-        setUser(result.user);
-        
-        if (result.user) {
-          await fetchUserProfile(result.user.id);
-        }
-        
-        return result.user;
+      if (googleError) {
+        throw googleError;
       }
-      return null;
+      
+      if (user) {
+        setUser(user);
+        await fetchUserProfile(user.id);
+      }
+      
+      return user;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -114,18 +119,18 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const result = await signInWithApple();
+      const { user, error: appleError } = await signInWithApple();
       
-      if (result && result.user) {
-        setUser(result.user);
-        
-        if (result.user) {
-          await fetchUserProfile(result.user.id);
-        }
-        
-        return result.user;
+      if (appleError) {
+        throw appleError;
       }
-      return null;
+      
+      if (user) {
+        setUser(user);
+        await fetchUserProfile(user.id);
+      }
+      
+      return user;
     } catch (err: any) {
       setError(err.message);
       throw err;

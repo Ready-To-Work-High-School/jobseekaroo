@@ -11,7 +11,7 @@ interface SignUpFormFieldsProps {
   isLoading: boolean;
   buttonText: string;
   isEmployer?: boolean;
-  children?: React.ReactNode; // Add support for children
+  children?: React.ReactNode;
 }
 
 const SignUpFormFields = ({
@@ -20,7 +20,7 @@ const SignUpFormFields = ({
   isLoading,
   buttonText,
   isEmployer = false,
-  children, // Accept children prop
+  children,
 }: SignUpFormFieldsProps) => {
   return (
     <Form {...form}>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -6,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase"; // Fixed import
+import { supabase } from "@/lib/supabase"; 
 import { 
   Building, 
   Briefcase, 
@@ -25,7 +24,7 @@ import SignUpFormFields from "./SignUpFormFields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; // Import Input component
+import { Input } from "@/components/ui/input";
 
 const employerSignUpSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -109,25 +108,27 @@ const EmployerSignUpForm = ({
 
   const onSubmit = async (values: EmployerSignUpValues) => {
     try {
-      // Sign up with employer user type - pass only 4 arguments as expected
-      await signUp(
+      // Sign up with employer user type
+      const user = await signUp(
         values.email, 
         values.password, 
         values.firstName, 
         values.lastName,
-        'employer' // this is the 5th argument that's causing the error
+        'employer'
       );
       
       // Update additional employer fields
       try {
-        await supabase.from('profiles')
-          .update({
-            company_name: values.companyName,
-            job_title: values.jobTitle,
-            company_website: values.companyWebsite || null,
-            email: values.email
-          })
-          .eq('email', values.email);
+        if (user) {
+          await supabase.from('profiles')
+            .update({
+              company_name: values.companyName,
+              job_title: values.jobTitle,
+              company_website: values.companyWebsite || null,
+              email: values.email
+            })
+            .eq('id', user.id);
+        }
       } catch (profileError) {
         console.error("Error updating employer profile:", profileError);
         // Non-blocking error
