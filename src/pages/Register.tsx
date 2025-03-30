@@ -31,7 +31,13 @@ const Register = () => {
     setIsLoading(true);
     
     try {
-      await signUp(username, email, password);
+      // Extract first and last name from username
+      const nameParts = username.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+      // Call signUp with the required arguments: email, password, firstName, lastName, userType (optional)
+      await signUp(email, password, firstName, lastName);
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to create an account');
