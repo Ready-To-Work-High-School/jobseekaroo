@@ -6,9 +6,14 @@ import { useAuth } from "../contexts/AuthContext";
 interface ProtectedRouteProps {
   children: ReactNode;
   adminOnly?: boolean;
+  requiredRoles?: string[];
 }
 
-const ProtectedRoute = ({ children, adminOnly = false }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ 
+  children, 
+  adminOnly = false,
+  requiredRoles = [] 
+}: ProtectedRouteProps) => {
   const { user, userProfile, isLoading } = useAuth();
   const location = useLocation();
 
@@ -29,6 +34,14 @@ const ProtectedRoute = ({ children, adminOnly = false }: ProtectedRouteProps) =>
   // If adminOnly and user is not an admin, redirect to dashboard
   if (adminOnly && userProfile?.user_type !== 'admin') {
     return <Navigate to="/dashboard" replace />;
+  }
+
+  // Check for required roles if specified
+  if (requiredRoles.length > 0 && userProfile) {
+    const hasRequiredRole = requiredRoles.includes(userProfile.user_type);
+    if (!hasRequiredRole) {
+      return <Navigate to="/dashboard" replace />;
+    }
   }
 
   // User is authenticated and authorized, render the protected content
