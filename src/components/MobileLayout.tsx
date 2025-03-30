@@ -1,23 +1,28 @@
 
 import React, { ReactNode } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useLocation } from 'react-router-dom';
 import MobileNavbar from './mobile/MobileNavbar';
-import { useAuth } from '@/contexts/AuthContext';
 
 interface MobileLayoutProps {
   children: ReactNode;
 }
 
-const MobileLayout: React.FC<MobileLayoutProps> = ({ children }) => {
-  const isMobile = useIsMobile();
-  const { user } = useAuth();
+const MobileLayout = ({ children }: MobileLayoutProps) => {
+  const location = useLocation();
   
-  if (!isMobile) return <>{children}</>;
-  
+  // Only render the mobile navigation on certain paths
+  const showNavigation = ![
+    '/sign-in',
+    '/sign-up',
+    '/forgot-password',
+    '/reset-password',
+    '/auth/callback'
+  ].includes(location.pathname);
+
   return (
-    <div className="pb-16 mobile-optimized"> {/* Add padding to the bottom to account for the fixed navbar */}
+    <div className="flex flex-col min-h-screen">
       {children}
-      {user && <MobileNavbar />}
+      {showNavigation && <MobileNavbar />}
     </div>
   );
 };

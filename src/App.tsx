@@ -100,44 +100,42 @@ function App() {
     <ErrorBoundary>
       <Router>
         <AuthProvider>
-          <MobileLayout>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/sign-in" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/jobs" element={<JobListings />} />
-              <Route path="/jobs/:id" element={<JobDetails />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/applications" element={<Applications />} />
-              <Route path="/skills" element={<Skills />} />
-              <Route path="/resume" element={<ResumeAssistant />} />
-              <Route path="/resume/builder" element={<ResumeBuilder />} />
-              <Route path="/interview-prep" element={<InterviewPrep />} />
-              <Route path="/saved-jobs" element={<SavedJobs />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/enhanced-job-listings" element={<EnhancedJobListings />} />
-              <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-              <Route path="/account-benefits" element={<AccountBenefits />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/redeem-code" element={<RedemptionCode />} />
-              <Route path="/admin" element={<AdminPanel />} />
-              <Route path="/admin/redemption-codes" element={<AdminRedemptionCodes />} />
-              <Route path="/admin/user-management" element={<AdminUserManagement />} />
-              <Route path="/admin/message-moderation" element={<AdminMessageModeration />} />
-              <Route path="/license" element={<License />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/messages" element={<Messages />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </MobileLayout>
+          <Routes>
+            <Route path="/" element={<MobileLayout><Index /></MobileLayout>} />
+            <Route path="/sign-in" element={<MobileLayout><SignIn /></MobileLayout>} />
+            <Route path="/sign-up" element={<MobileLayout><SignUp /></MobileLayout>} />
+            <Route path="/forgot-password" element={<MobileLayout><ForgotPassword /></MobileLayout>} />
+            <Route path="/reset-password" element={<MobileLayout><ResetPassword /></MobileLayout>} />
+            <Route path="/jobs" element={<MobileLayout><JobListings /></MobileLayout>} />
+            <Route path="/jobs/:id" element={<MobileLayout><JobDetails /></MobileLayout>} />
+            <Route path="/dashboard" element={<MobileLayout><Dashboard /></MobileLayout>} />
+            <Route path="/applications" element={<MobileLayout><Applications /></MobileLayout>} />
+            <Route path="/skills" element={<MobileLayout><Skills /></MobileLayout>} />
+            <Route path="/resume" element={<MobileLayout><ResumeAssistant /></MobileLayout>} />
+            <Route path="/resume/builder" element={<MobileLayout><ResumeBuilder /></MobileLayout>} />
+            <Route path="/interview-prep" element={<MobileLayout><InterviewPrep /></MobileLayout>} />
+            <Route path="/saved-jobs" element={<MobileLayout><SavedJobs /></MobileLayout>} />
+            <Route path="/analytics" element={<MobileLayout><Analytics /></MobileLayout>} />
+            <Route path="/resources" element={<MobileLayout><Resources /></MobileLayout>} />
+            <Route path="/entrepreneurship-academy" element={<MobileLayout><EntrepreneurshipAcademy /></MobileLayout>} />
+            <Route path="/notifications" element={<MobileLayout><Notifications /></MobileLayout>} />
+            <Route path="/for-employers" element={<MobileLayout><ForEmployers /></MobileLayout>} />
+            <Route path="/enhanced-job-listings" element={<MobileLayout><EnhancedJobListings /></MobileLayout>} />
+            <Route path="/success-stories" element={<MobileLayout><SuccessStories /></MobileLayout>} />
+            <Route path="/profile" element={<MobileLayout><Profile /></MobileLayout>} />
+            <Route path="/employer-dashboard" element={<MobileLayout><EmployerDashboard /></MobileLayout>} />
+            <Route path="/account-benefits" element={<MobileLayout><AccountBenefits /></MobileLayout>} />
+            <Route path="/faq" element={<MobileLayout><FAQ /></MobileLayout>} />
+            <Route path="/redeem-code" element={<MobileLayout><RedemptionCode /></MobileLayout>} />
+            <Route path="/admin" element={<MobileLayout><AdminPanel /></MobileLayout>} />
+            <Route path="/admin/redemption-codes" element={<MobileLayout><AdminRedemptionCodes /></MobileLayout>} />
+            <Route path="/admin/user-management" element={<MobileLayout><AdminUserManagement /></MobileLayout>} />
+            <Route path="/admin/message-moderation" element={<MobileLayout><AdminMessageModeration /></MobileLayout>} />
+            <Route path="/license" element={<MobileLayout><License /></MobileLayout>} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/messages" element={<MobileLayout><Messages /></MobileLayout>} />
+            <Route path="*" element={<MobileLayout><NotFound /></MobileLayout>} />
+          </Routes>
         </AuthProvider>
       </Router>
     </ErrorBoundary>

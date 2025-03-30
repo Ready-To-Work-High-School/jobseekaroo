@@ -9,6 +9,7 @@ import { useJobManagement } from './auth/useJobManagement';
 import { useApplicationManagement } from './auth/useApplicationManagement';
 import { useMfaManagement } from './auth/useMfaManagement';
 
+// Create the auth context with a default undefined value
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -21,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUserProfile, 
     updateProfile, 
     refreshProfile 
-  } = useProfileManagement(null); // We'll update this after setting up auth state
+  } = useProfileManagement(null);
   
   const { 
     user: authUser,
@@ -113,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// Export the useAuth hook with proper error handling
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
