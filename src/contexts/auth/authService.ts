@@ -1,47 +1,22 @@
 
 import { supabase } from '@/lib/supabase';
 import { sendEmail } from '@/lib/supabase/email';
-import { signInWithOAuth } from '@/lib/supabase/oauth';
-import { encryptData } from '@/lib/supabase/encryption';
-
-// Maximum failed login attempts before temporary lockout
-const MAX_FAILED_ATTEMPTS = 5;
-// Lockout duration in milliseconds (15 minutes)
-const LOCKOUT_DURATION = 15 * 60 * 1000;
-
-// Track failed login attempts
-const failedAttempts: Record<string, { count: number; lastAttempt: number; ipAddress?: string }> = {};
-
-// Rate limiting - track request counts per IP
-const rateLimiter: Record<string, { count: number; resetTime: number }> = {};
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute window
-const RATE_LIMIT_MAX = 20; // Max 20 requests per minute
-
-/**
- * Apply rate limiting based on IP address
- * @param ipAddress User's IP address
- * @returns Boolean indicating if request should be allowed
- */
-const checkRateLimit = (ipAddress: string): boolean => {
-  const now = Date.now();
-  
-  if (!rateLimiter[ipAddress]) {
-    rateLimiter[ipAddress] = { count: 1, resetTime: now + RATE_LIMIT_WINDOW };
-    return true;
-  }
-  
-  if (now > rateLimiter[ipAddress].resetTime) {
-    // Reset window
-    rateLimiter[ipAddress] = { count: 1, resetTime: now + RATE_LIMIT_WINDOW };
-    return true;
-  }
-  
-  // Increment count
-  rateLimiter[ipAddress].count += 1;
-  
-  // Check if over limit
-  return rateLimiter[ipAddress].count <= RATE_LIMIT_MAX;
-};
+import { 
+  checkRateLimit 
+} from './services/rateLimit';
+import {
+  checkAccountLockout,
+  trackFailedLoginAttempt,
+  resetFailedLoginAttempts,
+  validatePasswordStrength,
+  storeEncryptedUserMetadata
+} from './services/security';
+import {
+  signInWithApple,
+  signInWithGoogle,
+  signOut
+} from './services/authCore';
+import { logAuthEvent } from './services/auditService';
 
 export const signIn = async (email: string, password: string, ipAddress?: string) => {
   // Apply rate limiting if IP is provided
@@ -58,18 +33,9 @@ export const signIn = async (email: string, password: string, ipAddress?: string
   email = email.trim().toLowerCase();
   
   // Check for account lockout
-  const userAttempts = failedAttempts[email] || { count: 0, lastAttempt: 0 };
-  const currentTime = Date.now();
-  
-  if (userAttempts.count >= MAX_FAILED_ATTEMPTS) {
-    const timeSinceLast = currentTime - userAttempts.lastAttempt;
-    if (timeSinceLast < LOCKOUT_DURATION) {
-      const minutesLeft = Math.ceil((LOCKOUT_DURATION - timeSinceLast) / 60000);
-      throw new Error(`Too many failed login attempts. Please try again in ${minutesLeft} minutes.`);
-    } else {
-      // Reset counter if lockout period has passed
-      userAttempts.count = 0;
-    }
+  const { isLocked, minutesLeft } = checkAccountLockout(email);
+  if (isLocked && minutesLeft) {
+    throw new Error(`Too many failed login attempts. Please try again in ${minutesLeft} minutes.`);
   }
   
   try {
@@ -80,18 +46,12 @@ export const signIn = async (email: string, password: string, ipAddress?: string
     
     if (error) {
       // Track failed attempt with IP if available
-      userAttempts.count += 1;
-      userAttempts.lastAttempt = currentTime;
-      if (ipAddress) {
-        userAttempts.ipAddress = ipAddress;
-      }
-      failedAttempts[email] = userAttempts;
-      
+      trackFailedLoginAttempt(email, ipAddress);
       throw error;
     }
     
     // Reset failed attempts on successful login
-    delete failedAttempts[email];
+    resetFailedLoginAttempts(email);
   } catch (error) {
     // Log the attempt for audit purposes, but don't expose specifics to client
     console.error(`Failed login attempt for ${email} from IP ${ipAddress || 'unknown'}`);
@@ -126,19 +86,10 @@ export const signUp = async (
   firstName = firstName.trim();
   lastName = lastName.trim();
   
-  // Validate password strength (additional check beyond form validation)
-  if (password.length < 8) {
-    throw new Error("Password must be at least 8 characters");
-  }
-  
-  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    throw new Error("Password must contain at least one uppercase letter, one lowercase letter, and one number");
-  }
-  
-  // Additional security check - prevent common passwords
-  const commonPasswords = ['password', 'password123', '123456', 'qwerty', 'letmein'];
-  if (commonPasswords.includes(password.toLowerCase())) {
-    throw new Error("Password is too common. Please choose a stronger password");
+  // Validate password strength
+  const { isValid, errorMessage } = validatePasswordStrength(password);
+  if (!isValid && errorMessage) {
+    throw new Error(errorMessage);
   }
   
   const { error, data } = await supabase.auth.signUp({
@@ -157,25 +108,13 @@ export const signUp = async (
   // If email confirmation is required, send a welcome email
   if (data?.user && !data.user.confirmed_at) {
     try {
-      // Use encryption for sensitive data being stored
-      const sensitiveUserData = JSON.stringify({
-        name: `${firstName} ${lastName}`,
-        signup_date: new Date().toISOString(),
-        source: 'web_signup'
-      });
-      
       // Store encrypted signup metadata for audit purposes
       if (data.user.id) {
-        try {
-          const encryptedData = await encryptData(sensitiveUserData);
-          // Fix: Use an existing column from the profiles table instead of 'signup_metadata_encrypted'
-          await supabase.from('profiles').update({
-            resume_data_encrypted: encryptedData
-          }).eq('id', data.user.id);
-        } catch (encryptError) {
-          console.error('Failed to encrypt signup metadata:', encryptError);
-          // Non-blocking error, continue with signup
-        }
+        await storeEncryptedUserMetadata(data.user.id, {
+          name: `${firstName} ${lastName}`,
+          signup_date: new Date().toISOString(),
+          source: 'web_signup'
+        });
       }
       
       await sendEmail({
@@ -198,46 +137,5 @@ export const signUp = async (
   }
 };
 
-// OAuth sign-in methods
-export const signInWithApple = async (): Promise<void> => {
-  await signInWithOAuth('apple');
-};
-
-export const signInWithGoogle = async (): Promise<void> => {
-  await signInWithOAuth('google');
-};
-
-export const signOut = async () => {
-  // Clear any local auth state before signing out
-  try {
-    // First try to invalidate the session
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    // Clear any stored auth data from localStorage and sessionStorage
-    localStorage.removeItem('csrfToken');
-    localStorage.removeItem('redirectAfterLogin');
-    sessionStorage.removeItem('csrfState');
-    sessionStorage.removeItem('authSession');
-    
-    // Clear any session cookies by overwriting them with expired ones
-    document.cookie = 'sb-access-token=; Max-Age=0; path=/; domain=' + window.location.hostname;
-    document.cookie = 'sb-refresh-token=; Max-Age=0; path=/; domain=' + window.location.hostname;
-    
-    // Perform a security audit log
-    try {
-      await supabase.functions.invoke('audit-log', {
-        body: { 
-          action: 'user_logout',
-          metadata: { timestamp: new Date().toISOString() }
-        }
-      });
-    } catch (auditError) {
-      console.error('Error logging audit event:', auditError);
-      // Non-blocking error
-    }
-  } catch (error) {
-    console.error('Error during sign out:', error);
-    throw error;
-  }
-};
+// Export the OAuth methods
+export { signInWithApple, signInWithGoogle, signOut };
