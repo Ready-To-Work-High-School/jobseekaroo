@@ -1,6 +1,5 @@
 
 import { supabase } from '@/lib/supabase';
-import { sendEmail } from '@/lib/supabase/email';
 import { 
   checkRateLimit 
 } from './services/rateLimit';
@@ -16,11 +15,22 @@ import {
   signInWithGoogle,
   signOut
 } from './services/authCore';
-import { logAuthEvent } from './services/auditService';
+import { 
+  logAuthEvent,
+  logSecurityEvent
+} from './services/auditService';
+import { checkEmployerVerification } from '@/lib/supabase/encryption/file-security';
 
 export const signIn = async (email: string, password: string, ipAddress?: string) => {
   // Apply rate limiting if IP is provided
   if (ipAddress && !checkRateLimit(ipAddress)) {
+    // Log this security event
+    await logSecurityEvent('rate_limit_exceeded', undefined, {
+      ip_address: ipAddress,
+      action: 'signin',
+      email: email // We can include this as it's a security event
+    });
+    
     throw new Error("Too many requests. Please try again later.");
   }
   
@@ -35,11 +45,17 @@ export const signIn = async (email: string, password: string, ipAddress?: string
   // Check for account lockout
   const { isLocked, minutesLeft } = checkAccountLockout(email);
   if (isLocked && minutesLeft) {
+    // Log this security event
+    await logSecurityEvent('account_lockout', undefined, {
+      email: email,
+      minutes_left: minutesLeft
+    });
+    
     throw new Error(`Too many failed login attempts. Please try again in ${minutesLeft} minutes.`);
   }
   
   try {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -47,11 +63,28 @@ export const signIn = async (email: string, password: string, ipAddress?: string
     if (error) {
       // Track failed attempt with IP if available
       trackFailedLoginAttempt(email, ipAddress);
+      
+      // Log the failed attempt for security purposes
+      await logSecurityEvent('login_failure', undefined, {
+        reason: error.message,
+        email: email,
+        ip_address: ipAddress
+      });
+      
       throw error;
     }
     
     // Reset failed attempts on successful login
     resetFailedLoginAttempts(email);
+    
+    // Log successful login
+    await logAuthEvent('user_login', {
+      user_id: data.user?.id,
+      auth_provider: 'email',
+      ip_address: ipAddress
+    });
+    
+    return data;
   } catch (error) {
     // Log the attempt for audit purposes, but don't expose specifics to client
     console.error(`Failed login attempt for ${email} from IP ${ipAddress || 'unknown'}`);
@@ -69,10 +102,17 @@ export const signUp = async (
   password: string,
   firstName: string,
   lastName: string,
+  userType: 'student' | 'employer' = 'student',
   ipAddress?: string
 ) => {
   // Apply rate limiting if IP is provided
   if (ipAddress && !checkRateLimit(ipAddress)) {
+    // Log this security event
+    await logSecurityEvent('rate_limit_exceeded', undefined, {
+      ip_address: ipAddress,
+      action: 'signup'
+    });
+    
     throw new Error("Too many requests. Please try again later.");
   }
 
@@ -92,6 +132,9 @@ export const signUp = async (
     throw new Error(errorMessage);
   }
   
+  // Special handling for employer accounts
+  const requiresVerification = userType === 'employer';
+  
   const { error, data } = await supabase.auth.signUp({
     email,
     password,
@@ -99,11 +142,24 @@ export const signUp = async (
       data: {
         first_name: firstName,
         last_name: lastName,
+        user_type: userType,
+        // For employers, set initial verification status
+        employer_verification_status: requiresVerification ? 'pending' : null
       },
     },
   });
   
-  if (error) throw error;
+  if (error) {
+    // Log the failure
+    await logSecurityEvent('signup_failure', undefined, {
+      reason: error.message,
+      email: email,
+      user_type: userType,
+      ip_address: ipAddress
+    });
+    
+    throw error;
+  }
   
   // If email confirmation is required, send a welcome email
   if (data?.user && !data.user.confirmed_at) {
@@ -112,28 +168,98 @@ export const signUp = async (
       if (data.user.id) {
         await storeEncryptedUserMetadata(data.user.id, {
           name: `${firstName} ${lastName}`,
+          user_type: userType,
           signup_date: new Date().toISOString(),
-          source: 'web_signup'
+          source: 'web_signup',
+          ip_address: ipAddress
         });
       }
       
-      await sendEmail({
-        to: email,
-        subject: 'Welcome to Career Platform - Please Confirm Your Email',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Welcome to Career Platform, ${firstName}!</h2>
-            <p>Thank you for signing up. To complete your registration, please confirm your email address.</p>
-            <p>A confirmation email has been sent to you by our system. Please click the link in that email to verify your account.</p>
-            <p>If you don't see the email, please check your spam folder.</p>
-            <p>Thank you,<br/>The Career Platform Team</p>
-          </div>
-        `,
+      // Log successful signup
+      await logAuthEvent('user_signup', {
+        user_id: data.user.id,
+        user_type: userType,
+        requires_verification: requiresVerification,
+        ip_address: ipAddress
+      });
+      
+      // For employers, send admin notification about new account needing verification
+      if (requiresVerification) {
+        try {
+          await supabase.functions.invoke('send-email', {
+            body: { 
+              to: 'admin@yourplatform.com', // Replace with your admin email
+              subject: 'New Employer Account Requires Verification',
+              html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h2>New Employer Account Pending Verification</h2>
+                  <p>A new employer account has been created and requires verification:</p>
+                  <ul>
+                    <li><strong>Name:</strong> ${firstName} ${lastName}</li>
+                    <li><strong>Email:</strong> ${email}</li>
+                    <li><strong>Date:</strong> ${new Date().toISOString()}</li>
+                  </ul>
+                  <p>Please review this account in the admin panel.</p>
+                </div>
+              `,
+            }
+          });
+        } catch (notifyError) {
+          console.error('Failed to send admin notification:', notifyError);
+          // Non-blocking error
+        }
+      }
+      
+      await supabase.functions.invoke('send-email', {
+        body: {
+          to: email,
+          subject: `Welcome to Career Platform - ${requiresVerification ? 'Employer Account Pending' : 'Please Confirm Your Email'}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2>Welcome to Career Platform, ${firstName}!</h2>
+              <p>Thank you for signing up as a ${userType}.</p>
+              ${requiresVerification 
+                ? `<p><strong>Important:</strong> Your employer account requires verification before you can post jobs. Our team will review your account within 1-2 business days.</p>` 
+                : `<p>To complete your registration, please confirm your email address.</p>
+                   <p>A confirmation email has been sent to you by our system. Please click the link in that email to verify your account.</p>`
+              }
+              <p>If you don't see the email, please check your spam folder.</p>
+              <p>Thank you,<br/>The Career Platform Team</p>
+            </div>
+          `,
+        },
       });
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError);
       // We don't throw here as the signup was successful
     }
+  }
+  
+  return data;
+};
+
+/**
+ * Verify if an employer account is approved to post jobs
+ * @param userId Employer user ID
+ * @returns Promise resolving to verification status
+ */
+export const verifyEmployerStatus = async (userId: string): Promise<{
+  canPostJobs: boolean;
+  message: string;
+}> => {
+  try {
+    const verificationStatus = await checkEmployerVerification(userId);
+    
+    return {
+      canPostJobs: verificationStatus.isVerified,
+      message: verificationStatus.message || 'Unknown verification status'
+    };
+  } catch (error) {
+    console.error('Error verifying employer status:', error);
+    return {
+      canPostJobs: false,
+      message: 'Error checking verification status'
+    };
   }
 };
 

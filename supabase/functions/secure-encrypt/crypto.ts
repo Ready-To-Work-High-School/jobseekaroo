@@ -142,6 +142,64 @@ export async function decrypt(encryptedHex: string): Promise<string> {
 }
 
 /**
+ * Generate a temporary secure signed URL for file access
+ * @param filePath Path to the file in storage
+ * @param expiryMinutes Minutes until the URL expires
+ * @returns Promise resolving to signed URL
+ */
+export async function generateSignedUrl(filePath: string, expiryMinutes: number = 15): Promise<string> {
+  try {
+    // Get access key from environment variable
+    validateEncryptionEnvironment();
+    
+    // Create token with expiration
+    const now = Math.floor(Date.now() / 1000);
+    const expiry = now + (expiryMinutes * 60);
+    
+    const tokenData = {
+      path: filePath,
+      exp: expiry,
+      iat: now
+    };
+    
+    // Encrypt the token data
+    const encryptedToken = await encrypt(JSON.stringify(tokenData));
+    
+    // Return the signed URL with the token
+    return `${Deno.env.get('SUPABASE_URL')}/secured-file?token=${encodeURIComponent(encryptedToken)}`;
+  } catch (error) {
+    console.error("Error generating signed URL:", error);
+    throw new Error("Failed to generate secure file access URL");
+  }
+}
+
+/**
+ * Validate a signed URL token
+ * @param encryptedToken The encrypted token from the URL
+ * @returns Promise resolving to the validated file path or null if invalid
+ */
+export async function validateSignedUrl(encryptedToken: string): Promise<string | null> {
+  try {
+    // Decrypt the token
+    const decryptedToken = await decrypt(encryptedToken);
+    const tokenData = JSON.parse(decryptedToken);
+    
+    // Check if token is expired
+    const now = Math.floor(Date.now() / 1000);
+    if (tokenData.exp < now) {
+      console.log("Token expired:", tokenData.exp, now);
+      return null;
+    }
+    
+    // Return the file path if valid
+    return tokenData.path;
+  } catch (error) {
+    console.error("Error validating signed URL:", error);
+    return null;
+  }
+}
+
+/**
  * Test if encryption key is properly configured
  * @returns Promise resolving to test result with success status and message
  */
