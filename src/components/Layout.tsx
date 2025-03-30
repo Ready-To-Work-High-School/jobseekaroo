@@ -7,7 +7,11 @@ import PlatformDisclaimer from './PlatformDisclaimer';
 import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import SidePanel from './layout/SidePanel';
 
-const Layout = () => {
+interface LayoutProps {
+  children?: ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps = {}) => {
   const location = useLocation();
   const [showDisclaimer, setShowDisclaimer] = useState(false);
 
@@ -26,7 +30,7 @@ const Layout = () => {
         <Header />
         <main className="flex-1">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Outlet />
+            {children || <Outlet />}
           </div>
           {showDisclaimer && <PlatformDisclaimer />}
           <SidePanel />
