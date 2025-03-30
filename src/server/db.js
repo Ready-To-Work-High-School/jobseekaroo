@@ -1,81 +1,106 @@
 
+// Database setup and operations
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-const fs = require('fs');
+const { hashPassword } = require('./auth');
 
-// Ensure data directory exists
-const dataDir = path.join(__dirname, '..', '..', 'data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+// In-memory database for development
+const db = new sqlite3.Database(':memory:');
 
-const dbPath = path.join(dataDir, 'database.sqlite');
-const db = new sqlite3.Database(dbPath);
-
-// Initialize database with required tables
+// Initialize database with tables and sample data
 const initializeDatabase = () => {
+  console.log('Initializing database...');
+  
+  // Create users table
   db.serialize(() => {
     // Users table
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
+        username TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
-
-    // Posts table (example data)
+    
+    // Posts table
     db.run(`
       CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        user_id INTEGER NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id)
       )
     `);
-
-    console.log('Database initialized with required tables');
-  });
-};
-
-// Helper for running queries with promises
-const runQuery = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function(err) {
-      if (err) return reject(err);
-      resolve({ lastID: this.lastID, changes: this.changes });
+    
+    // Add some sample users if none exist
+    db.get('SELECT COUNT(*) as count FROM users', async (err, row) => {
+      if (err) {
+        console.error('Error checking users table:', err);
+        return;
+      }
+      
+      if (row.count === 0) {
+        // Sample users with hashed passwords
+        const sampleUsers = [
+          { username: 'testuser', email: 'test@example.com', password: await hashPassword('password123') },
+          { username: 'johndoe', email: 'john@example.com', password: await hashPassword('securepass') }
+        ];
+        
+        // Insert sample users
+        const insertUserStmt = db.prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
+        sampleUsers.forEach(user => {
+          insertUserStmt.run(user.username, user.email, user.password);
+        });
+        insertUserStmt.finalize();
+        
+        console.log('Added sample users to database');
+      }
     });
-  });
-};
-
-// Helper for getting a single row
-const getOne = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.get(query, params, (err, row) => {
-      if (err) return reject(err);
-      resolve(row);
-    });
-  });
-};
-
-// Helper for getting all rows
-const getAll = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(query, params, (err, rows) => {
-      if (err) return reject(err);
-      resolve(rows);
+    
+    // Add some sample posts if none exist
+    db.get('SELECT COUNT(*) as count FROM posts', (err, row) => {
+      if (err) {
+        console.error('Error checking posts table:', err);
+        return;
+      }
+      
+      if (row.count === 0) {
+        // Wait for users to be inserted
+        setTimeout(() => {
+          // Get user IDs
+          db.all('SELECT id FROM users', (err, users) => {
+            if (err || !users.length) {
+              console.error('Error getting users for sample posts:', err);
+              return;
+            }
+            
+            // Sample posts
+            const samplePosts = [
+              { title: 'Getting Started with Express', content: 'Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.', user_id: users[0].id },
+              { title: 'Building Secure APIs', content: 'Security is important when building APIs. Always validate input, use HTTPS, and implement proper authentication.', user_id: users[0].id },
+              { title: 'MongoDB vs SQLite', content: 'Both MongoDB and SQLite have their use cases. MongoDB is great for complex, unstructured data while SQLite is perfect for simple, local applications.', user_id: users[1].id }
+            ];
+            
+            // Insert sample posts
+            const insertPostStmt = db.prepare('INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)');
+            samplePosts.forEach(post => {
+              insertPostStmt.run(post.title, post.content, post.user_id);
+            });
+            insertPostStmt.finalize();
+            
+            console.log('Added sample posts to database');
+          });
+        }, 1000); // Give time for users to be inserted
+      }
     });
   });
 };
 
 module.exports = {
   db,
-  initializeDatabase,
-  runQuery,
-  getOne,
-  getAll
+  initializeDatabase
 };

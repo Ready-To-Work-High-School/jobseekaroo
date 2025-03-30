@@ -1,52 +1,65 @@
 
 const express = require('express');
-const router = express.Router();
-const { getOne, getAll, runQuery } = require('../db');
+const { db } = require('../db');
 const { hashPassword, comparePassword, generateToken, authenticate } = require('../auth');
+
+const router = express.Router();
 
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
+    // Basic validation
     if (!username || !email || !password) {
-      return res.status(400).json({ error: 'Please provide all required fields' });
+      return res.status(400).json({ error: 'Please provide username, email and password' });
     }
     
-    // Check if user already exists
-    const existingUser = await getOne(
-      'SELECT * FROM users WHERE email = ? OR username = ?', 
-      [email, username]
-    );
-    
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists with that email or username' });
-    }
-    
-    // Hash password
-    const hashedPassword = await hashPassword(password);
-    
-    // Create user
-    const result = await runQuery(
-      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-      [username, email, hashedPassword]
-    );
-    
-    // Generate token
-    const token = generateToken(result.lastID);
-    
-    res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: result.lastID,
-        username,
-        email
+    // Check if email already exists
+    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Server error' });
       }
+      
+      if (user) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
+      
+      // Hash password
+      const hashedPassword = await hashPassword(password);
+      
+      // Insert user
+      db.run(
+        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+        [username, email, hashedPassword],
+        function(err) {
+          if (err) {
+            console.error('Error creating user:', err);
+            return res.status(500).json({ error: 'Failed to create user' });
+          }
+          
+          // Generate token
+          const token = generateToken(this.lastID);
+          
+          // Get the created user
+          db.get('SELECT id, username, email FROM users WHERE id = ?', [this.lastID], (err, user) => {
+            if (err) {
+              console.error('Error fetching created user:', err);
+              return res.status(500).json({ error: 'Failed to fetch user details' });
+            }
+            
+            res.status(201).json({
+              token,
+              user
+            });
+          });
+        }
+      );
     });
   } catch (err) {
     console.error('Registration error:', err);
-    res.status(500).json({ error: 'Server error during registration' });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -55,68 +68,60 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
+    // Basic validation
     if (!email || !password) {
       return res.status(400).json({ error: 'Please provide email and password' });
     }
     
-    // Find user
-    const user = await getOne('SELECT * FROM users WHERE email = ?', [email]);
-    
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-    
-    // Check password
-    const isMatch = await comparePassword(password, user.password);
-    
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-    
-    // Generate token
-    const token = generateToken(user.id);
-    
-    res.json({
-      message: 'Login successful',
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email
+    // Check user
+    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Server error' });
       }
+      
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid credentials' });
+      }
+      
+      // Verify password
+      const isMatch = await comparePassword(password, user.password);
+      
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Invalid credentials' });
+      }
+      
+      // Generate token
+      const token = generateToken(user.id);
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      res.json({
+        token,
+        user: userWithoutPassword
+      });
     });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ error: 'Server error during login' });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Get current user (protected route)
-router.get('/me', authenticate, async (req, res) => {
-  try {
-    const user = await getOne('SELECT id, username, email, created_at FROM users WHERE id = ?', [req.user.id]);
+// Get current user
+router.get('/me', authenticate, (req, res) => {
+  db.get('SELECT id, username, email FROM users WHERE id = ?', [req.user.id], (err, user) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Server error' });
+    }
     
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     
     res.json({ user });
-  } catch (err) {
-    console.error('Get user error:', err);
-    res.status(500).json({ error: 'Server error retrieving user data' });
-  }
-});
-
-// Get all users (admin route example)
-router.get('/', authenticate, async (req, res) => {
-  try {
-    // In a real app, you'd check if the current user is an admin
-    const users = await getAll('SELECT id, username, email, created_at FROM users');
-    res.json({ users });
-  } catch (err) {
-    console.error('Get all users error:', err);
-    res.status(500).json({ error: 'Server error retrieving users' });
-  }
+  });
 });
 
 module.exports = router;

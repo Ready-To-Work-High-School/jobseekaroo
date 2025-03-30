@@ -1,155 +1,173 @@
 
 const express = require('express');
-const router = express.Router();
-const { getOne, getAll, runQuery } = require('../db');
+const { db } = require('../db');
 const { authenticate } = require('../auth');
 
-// Create a new post (protected)
-router.post('/', authenticate, async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    
-    if (!title || !content) {
-      return res.status(400).json({ error: 'Please provide title and content' });
-    }
-    
-    const result = await runQuery(
-      'INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)',
-      [req.user.id, title, content]
-    );
-    
-    const post = await getOne('SELECT * FROM posts WHERE id = ?', [result.lastID]);
-    
-    res.status(201).json({ 
-      message: 'Post created successfully', 
-      post 
-    });
-  } catch (err) {
-    console.error('Create post error:', err);
-    res.status(500).json({ error: 'Server error creating post' });
-  }
-});
+const router = express.Router();
 
 // Get all posts
-router.get('/', async (req, res) => {
-  try {
-    const posts = await getAll(`
-      SELECT p.*, u.username 
-      FROM posts p
-      JOIN users u ON p.user_id = u.id
-      ORDER BY p.created_at DESC
-    `);
+router.get('/', (req, res) => {
+  db.all(`
+    SELECT p.id, p.title, p.content, p.created_at, u.username
+    FROM posts p
+    JOIN users u ON p.user_id = u.id
+    ORDER BY p.created_at DESC
+  `, (err, posts) => {
+    if (err) {
+      console.error('Error fetching posts:', err);
+      return res.status(500).json({ error: 'Failed to fetch posts' });
+    }
     
     res.json({ posts });
-  } catch (err) {
-    console.error('Get posts error:', err);
-    res.status(500).json({ error: 'Server error retrieving posts' });
-  }
+  });
 });
 
-// Get post by id
-router.get('/:id', async (req, res) => {
-  try {
-    const post = await getOne(`
-      SELECT p.*, u.username 
-      FROM posts p
-      JOIN users u ON p.user_id = u.id
-      WHERE p.id = ?
-    `, [req.params.id]);
+// Get a single post
+router.get('/:id', (req, res) => {
+  const postId = req.params.id;
+  
+  db.get(`
+    SELECT p.id, p.title, p.content, p.created_at, u.username
+    FROM posts p
+    JOIN users u ON p.user_id = u.id
+    WHERE p.id = ?
+  `, [postId], (err, post) => {
+    if (err) {
+      console.error('Error fetching post:', err);
+      return res.status(500).json({ error: 'Failed to fetch post' });
+    }
     
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
     
     res.json({ post });
-  } catch (err) {
-    console.error('Get post error:', err);
-    res.status(500).json({ error: 'Server error retrieving post' });
-  }
+  });
 });
 
-// Update post (protected)
-router.put('/:id', authenticate, async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    
-    if (!title && !content) {
-      return res.status(400).json({ error: 'Please provide title or content to update' });
+// Create a post (requires authentication)
+router.post('/', authenticate, (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.user.id;
+  
+  // Basic validation
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content are required' });
+  }
+  
+  // Insert post
+  db.run(
+    'INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)',
+    [title, content, userId],
+    function(err) {
+      if (err) {
+        console.error('Error creating post:', err);
+        return res.status(500).json({ error: 'Failed to create post' });
+      }
+      
+      // Get the created post with username
+      db.get(`
+        SELECT p.id, p.title, p.content, p.created_at, u.username
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        WHERE p.id = ?
+      `, [this.lastID], (err, post) => {
+        if (err) {
+          console.error('Error fetching created post:', err);
+          return res.status(500).json({ error: 'Failed to fetch post details' });
+        }
+        
+        res.status(201).json({ post });
+      });
     }
-    
-    // Check if post exists and belongs to user
-    const post = await getOne(
-      'SELECT * FROM posts WHERE id = ?', 
-      [req.params.id]
-    );
+  );
+});
+
+// Update a post (requires authentication and ownership)
+router.put('/:id', authenticate, (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  const { title, content } = req.body;
+  
+  // Basic validation
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content are required' });
+  }
+  
+  // Check if post exists and belongs to user
+  db.get('SELECT * FROM posts WHERE id = ?', [postId], (err, post) => {
+    if (err) {
+      console.error('Error fetching post:', err);
+      return res.status(500).json({ error: 'Failed to fetch post' });
+    }
     
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
     
-    if (post.user_id !== req.user.id) {
-      return res.status(403).json({ error: 'Not authorized to update this post' });
+    if (post.user_id !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to update this post' });
     }
     
     // Update post
-    const updates = [];
-    const values = [];
-    
-    if (title) {
-      updates.push('title = ?');
-      values.push(title);
-    }
-    
-    if (content) {
-      updates.push('content = ?');
-      values.push(content);
-    }
-    
-    // Add id at the end for the WHERE clause
-    values.push(req.params.id);
-    
-    await runQuery(
-      `UPDATE posts SET ${updates.join(', ')} WHERE id = ?`,
-      values
+    db.run(
+      'UPDATE posts SET title = ?, content = ? WHERE id = ?',
+      [title, content, postId],
+      function(err) {
+        if (err) {
+          console.error('Error updating post:', err);
+          return res.status(500).json({ error: 'Failed to update post' });
+        }
+        
+        // Get the updated post with username
+        db.get(`
+          SELECT p.id, p.title, p.content, p.created_at, u.username
+          FROM posts p
+          JOIN users u ON p.user_id = u.id
+          WHERE p.id = ?
+        `, [postId], (err, post) => {
+          if (err) {
+            console.error('Error fetching updated post:', err);
+            return res.status(500).json({ error: 'Failed to fetch post details' });
+          }
+          
+          res.json({ post });
+        });
+      }
     );
-    
-    const updatedPost = await getOne('SELECT * FROM posts WHERE id = ?', [req.params.id]);
-    
-    res.json({ 
-      message: 'Post updated successfully', 
-      post: updatedPost 
-    });
-  } catch (err) {
-    console.error('Update post error:', err);
-    res.status(500).json({ error: 'Server error updating post' });
-  }
+  });
 });
 
-// Delete post (protected)
-router.delete('/:id', authenticate, async (req, res) => {
-  try {
-    // Check if post exists and belongs to user
-    const post = await getOne(
-      'SELECT * FROM posts WHERE id = ?', 
-      [req.params.id]
-    );
+// Delete a post (requires authentication and ownership)
+router.delete('/:id', authenticate, (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  
+  // Check if post exists and belongs to user
+  db.get('SELECT * FROM posts WHERE id = ?', [postId], (err, post) => {
+    if (err) {
+      console.error('Error fetching post:', err);
+      return res.status(500).json({ error: 'Failed to fetch post' });
+    }
     
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
     
-    if (post.user_id !== req.user.id) {
-      return res.status(403).json({ error: 'Not authorized to delete this post' });
+    if (post.user_id !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to delete this post' });
     }
     
     // Delete post
-    await runQuery('DELETE FROM posts WHERE id = ?', [req.params.id]);
-    
-    res.json({ message: 'Post deleted successfully' });
-  } catch (err) {
-    console.error('Delete post error:', err);
-    res.status(500).json({ error: 'Server error deleting post' });
-  }
+    db.run('DELETE FROM posts WHERE id = ?', [postId], function(err) {
+      if (err) {
+        console.error('Error deleting post:', err);
+        return res.status(500).json({ error: 'Failed to delete post' });
+      }
+      
+      res.json({ message: 'Post deleted successfully' });
+    });
+  });
 });
 
 module.exports = router;
