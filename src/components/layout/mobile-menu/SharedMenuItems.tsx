@@ -1,15 +1,32 @@
 
-import { NavLink } from 'react-router-dom';
 import { Home, Briefcase, Lightbulb, Server } from 'lucide-react';
 import MobileMenuItem from './MobileMenuItem';
 
-const SharedMenuItems = () => {
+interface SharedMenuItemsProps {
+  setIsOpen?: (open: boolean) => void;
+}
+
+const SharedMenuItems = ({ setIsOpen }: SharedMenuItemsProps) => {
+  const handleClick = () => {
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
-      <MobileMenuItem Icon={Home} text="Home" to="/" />
-      <MobileMenuItem Icon={Briefcase} text="Jobs" to="/jobs" />
-      <MobileMenuItem Icon={Server} text="Server Demo" to="/server-demo" />
-      <MobileMenuItem Icon={Lightbulb} text="Resources" to="/resources" />
+      <MobileMenuItem icon={Home} to="/" onClick={handleClick}>
+        Home
+      </MobileMenuItem>
+      <MobileMenuItem icon={Briefcase} to="/jobs" onClick={handleClick}>
+        Jobs
+      </MobileMenuItem>
+      <MobileMenuItem icon={Server} to="/server-demo" onClick={handleClick}>
+        Server Demo
+      </MobileMenuItem>
+      <MobileMenuItem icon={Lightbulb} to="/resources" onClick={handleClick}>
+        Resources
+      </MobileMenuItem>
     </>
   );
 };

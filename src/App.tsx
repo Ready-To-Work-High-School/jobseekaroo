@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Toaster } from 'sonner';
@@ -18,9 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Index />} />
-          {/* Add your server demo route */}
           <Route path="/server-demo" element={<ServerDemo />} />
-          
         </Route>
       </Routes>
     </Router>

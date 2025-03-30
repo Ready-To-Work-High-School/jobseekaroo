@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -26,7 +27,7 @@ import { ModeToggle } from '../ModeToggle';
 import { useToast } from "@/components/ui/use-toast"
 import { useNavigate } from 'react-router-dom';
 
-const MainNavigation = () => {
+const MainNavigation = ({ className }: { className?: string }) => {
   const location = useLocation();
   const { userProfile } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -35,7 +36,7 @@ const MainNavigation = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userProfile && userProfile.role === 'admin') {
+    if (userProfile && userProfile.user_type === 'admin') {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
@@ -60,7 +61,7 @@ const MainNavigation = () => {
   };
   
   return (
-    <nav className="hidden lg:flex items-center space-x-6">
+    <nav className={cn("hidden lg:flex items-center space-x-6", className)}>
       <Link to="/" className={cn("text-sm font-medium transition-colors", 
         location.pathname === "/" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
         Home
@@ -97,7 +98,7 @@ const MainNavigation = () => {
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{userProfile?.full_name || user?.email}</p>
+                <p className="text-sm font-medium leading-none">{userProfile?.first_name ? `${userProfile.first_name} ${userProfile.last_name}` : user?.email}</p>
                 <p className="text-xs leading-none text-muted-foreground">
                   {user?.email}
                 </p>

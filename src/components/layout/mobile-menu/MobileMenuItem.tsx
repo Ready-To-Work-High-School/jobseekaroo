@@ -13,14 +13,14 @@ interface MobileMenuItemProps {
   activeCheck?: (pathname: string) => boolean;
 }
 
-const MobileMenuItem: React.FC<MobileMenuItemProps> = ({
+const MobileMenuItem = ({
   to,
   icon: Icon,
   children,
   onClick,
   className,
   activeCheck
-}) => {
+}: MobileMenuItemProps) => {
   const location = useLocation();
   
   // Determine if the current route is active

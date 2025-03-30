@@ -8,7 +8,11 @@ import AuthLinks from './AuthLinks';
 import UserMenu from './UserMenu';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 
-const Header = () => {
+interface HeaderProps {
+  className?: string;
+}
+
+const Header = ({ className }: HeaderProps = {}) => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,12 +28,12 @@ const Header = () => {
         )}
         
         <div className="flex items-center space-x-4">
-          <MainNavigation className="hidden md:flex" />
+          <MainNavigation />
         </div>
 
         <div className="flex items-center space-x-2">
           {user && <NotificationCenter />}
-          {user ? <UserMenu /> : <AuthLinks className="hidden md:flex" />}
+          {user ? <UserMenu /> : <AuthLinks />}
         </div>
       </div>
     </header>

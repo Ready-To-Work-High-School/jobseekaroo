@@ -34,7 +34,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
             <DialogTitle>Menu</DialogTitle>
           </DialogHeader>
           <nav className="flex flex-col space-y-1 py-4">
-            <SharedMenuItems user={user} setIsOpen={setIsOpen} />
+            <SharedMenuItems setIsOpen={setIsOpen} />
             
             {user ? (
               <>
