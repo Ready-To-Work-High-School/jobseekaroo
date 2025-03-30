@@ -1,19 +1,13 @@
 
 import { ReactNode, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import PlatformDisclaimer from './PlatformDisclaimer';
 import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import SidePanel from './layout/SidePanel';
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout = ({
-  children
-}: LayoutProps) => {
+const Layout = () => {
   const location = useLocation();
   const [showDisclaimer, setShowDisclaimer] = useState(false);
 
@@ -32,7 +26,7 @@ const Layout = ({
         <Header />
         <main className="flex-1">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            {children}
+            <Outlet />
           </div>
           {showDisclaimer && <PlatformDisclaimer />}
           <SidePanel />
