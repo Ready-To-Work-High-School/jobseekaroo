@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { signIn, signUp, signInWithApple, signInWithGoogle, signOut } from './authService';
+import { supabase } from '@/lib/supabase'; // Import supabase client
 
 /**
  * Generates a cryptographically secure CSRF token

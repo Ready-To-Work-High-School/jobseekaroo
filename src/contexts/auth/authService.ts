@@ -168,8 +168,9 @@ export const signUp = async (
       if (data.user.id) {
         try {
           const encryptedData = await encryptData(sensitiveUserData);
+          // Fix: Use an existing column from the profiles table instead of 'signup_metadata_encrypted'
           await supabase.from('profiles').update({
-            signup_metadata_encrypted: encryptedData
+            resume_data_encrypted: encryptedData
           }).eq('id', data.user.id);
         } catch (encryptError) {
           console.error('Failed to encrypt signup metadata:', encryptError);
