@@ -1,17 +1,10 @@
 
 services:
   - type: web
-    name: jobseekaroo
+    name: express-server
     env: node
-    plan: free
-    branch: main
-    rootDir: ""  # Repo root, where index.html lives
-    buildCommand: bun install && bun run build
-    startCommand: node src/server/start-server.cjs
+    buildCommand: yarn install
+    startCommand: node src/server/start-server.js
     envVars:
       - key: PORT
-        value: 8080  # Render default, optional
-      - key: SUPABASE_URL
-        sync: false  # Add in dashboard
-      - key: SUPABASE_KEY
-        sync: false  # Add in dashboard
+        value: 5000

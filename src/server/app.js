@@ -1,7 +1,6 @@
 
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const { initializeDatabase } = require('./db');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
@@ -18,7 +17,7 @@ const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler');
 
 // Create Express app
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Initialize database
 initializeDatabase();
@@ -50,5 +49,14 @@ app.use('/api/*', api404Handler);
 // Error handling middleware
 app.use(apiErrorHandler);
 
-// Export app for use in start-server.cjs
-module.exports = app;
+// Start server
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`${app.locals.appName} server running on port ${port}`);
+    console.log(`API available at: http://localhost:${port}/api/status`);
+    console.log(`Authentication endpoints at: http://localhost:${port}/api/users/login and /register`);
+    console.log(`Posts API at: http://localhost:${port}/api/posts`);
+  });
+}
+
+module.exports = app; // For testing

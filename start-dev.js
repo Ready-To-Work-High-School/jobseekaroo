@@ -1,8 +1,4 @@
 
-/**
- * Development server starter script
- * This script starts both the Express server and Vite development server
- */
 const { spawn } = require('child_process');
 const path = require('path');
 
@@ -13,7 +9,7 @@ const backend = spawn('node', ['src/server/start-server.js'], {
 });
 
 // Start the frontend development server
-const frontend = spawn('yarn', ['run', 'dev'], {
+const frontend = spawn('npm', ['run', 'dev'], {
   stdio: 'inherit',
   shell: true
 });
