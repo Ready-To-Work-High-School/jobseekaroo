@@ -6,7 +6,7 @@ services:
     plan: free
     branch: main
     rootDir: ""  # Repo root, where index.html lives
-    buildCommand: bun install && bun run build
+    buildCommand: npm install && npm run build
     startCommand: node src/server/start-server.cjs
     envVars:
       - key: PORT

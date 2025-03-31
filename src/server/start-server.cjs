@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     if (req.path.startsWith('/api/')) {
       return next();
     }
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 }
 
