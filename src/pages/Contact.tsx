@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { postApi } from '@/utils/api-client';
-import { sanitizeHtml, containsXssVector, sanitizeObject } from '@/utils/sanitization';
+import { sanitizeHtml, containsXssVector } from '@/utils/sanitization';
+import { supabase } from '@/integrations/supabase/client';
 import validator from 'validator';
 
 const Contact = () => {
@@ -66,15 +66,17 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Use sanitized data for API call
-      const response = await postApi('contact', { 
-        name: currentSafeName, 
-        email: currentSafeEmail, 
-        message: currentSafeMessage 
+      // Use the Edge Function instead of the previous postApi method
+      const { error } = await supabase.functions.invoke('contact-form', {
+        body: { 
+          name: currentSafeName, 
+          email: currentSafeEmail, 
+          message: currentSafeMessage 
+        }
       });
       
-      if (response.error) {
-        throw new Error(response.error);
+      if (error) {
+        throw new Error(error.message);
       }
       
       // Clear form
