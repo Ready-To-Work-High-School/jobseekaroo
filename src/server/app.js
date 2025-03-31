@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const { initializeDatabase } = require('./db');
@@ -37,7 +36,7 @@ app.use((req, res, next) => {
   // Enhanced CSP with nonce
   res.setHeader('Content-Security-Policy', 
     `default-src 'self'; ` +
-    `connect-src 'self' http://localhost:*; ` + 
+    `connect-src 'self' http://localhost:* https://*.supabase.co; ` + 
     `script-src 'self' 'nonce-${nonce}'; ` + 
     `style-src 'self' 'unsafe-inline'; ` + 
     `img-src 'self' data:; ` + 
@@ -158,55 +157,8 @@ app.get('/api/secure-data', (req, res) => {
   });
 });
 
-// Enhanced contact endpoint with more robust sanitization
-app.post('/api/contact', (req, res) => {
-  try {
-    // More comprehensive sanitization function
-    const sanitizeInput = (input) => {
-      if (typeof input === 'string') {
-        return input
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;')
-          .replace(/\(/g, '&#40;')
-          .replace(/\)/g, '&#41;')
-          .replace(/=/g, '&#61;');
-      } else if (Array.isArray(input)) {
-        return input.map(item => sanitizeInput(item));
-      } else if (input !== null && typeof input === 'object') {
-        const sanitized = {};
-        for (const key in input) {
-          if (Object.prototype.hasOwnProperty.call(input, key)) {
-            sanitized[key] = sanitizeInput(input[key]);
-          }
-        }
-        return sanitized;
-      }
-      return input;
-    };
-    
-    // Sanitize all inputs
-    const sanitizedBody = sanitizeInput(req.body);
-    const name = sanitizedBody.name || '';
-    const email = sanitizedBody.email || '';
-    const message = sanitizedBody.message || '';
-    
-    console.log('Contact form submission:', { name, email, message });
-    
-    res.json({ 
-      success: true, 
-      message: 'Thank you for your message!'
-    });
-  } catch (error) {
-    // Generic error message - don't expose internals
-    console.error('Contact form error:', error);
-    res.status(400).json({
-      success: false,
-      message: 'Invalid request format'
-    });
-  }
-});
+// Contact endpoint retired - now handled by Supabase Edge Function
+// Keeping this comment as documentation of the architecture change
 
 // Catch-all for API 404 errors to return JSON instead of HTML
 app.use('/api/*', (req, res) => {

@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.29.0";
+import { sanitizeInput, containsXssVector, isValidEmail } from "../_shared/sanitization.ts";
 
 // Enhanced CORS headers
 const corsHeaders = {
@@ -19,48 +20,6 @@ const handleCors = (req: Request) => {
     });
   }
   return null;
-};
-
-// Improved server-side sanitization utility
-const sanitizeInput = (input: string | null | undefined): string => {
-  if (input == null) return '';
-  
-  const str = String(input);
-  
-  // Enhanced sanitization to strip HTML tags and suspicious patterns
-  return str
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/javascript:/gi, '') // Remove javascript: URLs
-    .replace(/on\w+=/gi, '') // Remove event handlers
-    .replace(/data:/gi, '') // Remove data: URLs
-    .replace(/&#/gi, '') // Remove HTML entities
-    .replace(/\\x[0-9A-Fa-f]{2}/gi, '') // Remove hex escapes
-    .replace(/\\u[0-9A-Fa-f]{4}/gi, ''); // Remove unicode escapes
-};
-
-// Check for potentially malicious patterns
-const containsXssVector = (input: string): boolean => {
-  if (!input) return false;
-  
-  const dangerPatterns = [
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    /javascript:/gi,
-    /\bon\w+\s*=/gi,
-    /<i?frame/gi,
-    /<(?:embed|object|svg)\b/gi,
-    /expression\s*\(/gi,
-    /data:\s*(?:text\/html|application\/x)/gi,
-    /vbscript:/gi,
-    /<img[^>]*\s+on\w+\s*=/gi,
-  ];
-  
-  return dangerPatterns.some(pattern => pattern.test(input));
-};
-
-// Email validation function
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
 };
 
 serve(async (req: Request) => {
