@@ -9,6 +9,30 @@ interface ApiResponse<T> {
 }
 
 /**
+ * Sanitize input to prevent XSS attacks
+ */
+function sanitizeInput(input: any): any {
+  if (typeof input === 'string') {
+    // Basic sanitization for strings
+    return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  } else if (Array.isArray(input)) {
+    // Sanitize each item in array
+    return input.map(item => sanitizeInput(item));
+  } else if (input !== null && typeof input === 'object') {
+    // Sanitize each property in object
+    const sanitized: Record<string, any> = {};
+    for (const key in input) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        sanitized[key] = sanitizeInput(input[key]);
+      }
+    }
+    return sanitized;
+  }
+  // Return primitives and null/undefined as is
+  return input;
+}
+
+/**
  * Make a GET request to the API
  */
 export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
@@ -43,12 +67,15 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
  */
 export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiResponse<T>> {
   try {
+    // Sanitize the request body to prevent XSS attacks
+    const sanitizedBody = sanitizeInput(body);
+    
     const response = await fetch(`/api/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(sanitizedBody),
     });
     
     if (!response.ok) {

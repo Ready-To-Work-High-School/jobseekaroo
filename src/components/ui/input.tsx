@@ -7,11 +7,19 @@ export interface InputProps
   showAutocomplete?: boolean;
   autocompleteItems?: string[];
   onAutocompleteSelect?: (value: string) => void;
+  sanitizeInput?: boolean; // New prop to control sanitization
 }
 
+// Helper function to sanitize text input
+const sanitizeText = (text: string): string => {
+  if (typeof text !== 'string') return '';
+  return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, showAutocomplete, autocompleteItems, onAutocompleteSelect, ...props }, ref) => {
+  ({ className, type, showAutocomplete, autocompleteItems, onAutocompleteSelect, sanitizeInput = true, ...props }, ref) => {
     const [showDropdown, setShowDropdown] = React.useState(false);
+    const [sanitizedValue, setSanitizedValue] = React.useState('');
 
     React.useEffect(() => {
       // Close dropdown when user clicks outside
@@ -19,6 +27,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }, []);
+
+    // If there's a value and sanitizeInput is true, sanitize it
+    React.useEffect(() => {
+      if (props.value && typeof props.value === 'string' && sanitizeInput) {
+        setSanitizedValue(sanitizeText(props.value));
+      } else if (props.value) {
+        setSanitizedValue(String(props.value));
+      } else {
+        setSanitizedValue('');
+      }
+    }, [props.value, sanitizeInput]);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       if (props.onFocus) props.onFocus(e);
@@ -29,9 +48,24 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const handleItemClick = (item: string) => {
       if (onAutocompleteSelect) {
-        onAutocompleteSelect(item);
+        // Sanitize before passing to select handler
+        onAutocompleteSelect(sanitizeInput ? sanitizeText(item) : item);
       }
       setShowDropdown(false);
+    };
+
+    // Handle onChange to sanitize input as user types
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (props.onChange) {
+        if (sanitizeInput) {
+          // Create a new synthetic event with sanitized value
+          const newEvent = Object.create(e);
+          newEvent.target = { ...e.target, value: sanitizeText(e.target.value) };
+          props.onChange(newEvent as React.ChangeEvent<HTMLInputElement>);
+        } else {
+          props.onChange(e);
+        }
+      }
     };
 
     return (
@@ -45,6 +79,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           onFocus={handleFocus}
           onClick={(e) => e.stopPropagation()}
+          onChange={handleChange}
           {...props}
         />
         
@@ -59,9 +94,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     e.stopPropagation();
                     handleItemClick(item);
                   }}
-                >
-                  {item}
-                </li>
+                  // Using dangerouslySetInnerHTML with sanitized content
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeInput ? sanitizeText(item) : item
+                  }}
+                />
               ))}
             </ul>
           </div>

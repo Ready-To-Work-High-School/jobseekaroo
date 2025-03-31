@@ -23,8 +23,8 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  // Relaxed CSP for development - tighten for production
-  res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:*;");
+  // Add Content Security Policy to prevent XSS attacks
+  res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline';");
   next();
 });
 
@@ -82,7 +82,18 @@ app.get('/api/secure-data', (req, res) => {
 
 // Keep the existing contact endpoint
 app.post('/api/contact', (req, res) => {
-  const { name, email, message } = req.body;
+  // Sanitize inputs to prevent XSS
+  const sanitizeInput = (input) => {
+    if (typeof input === 'string') {
+      return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    return input;
+  };
+  
+  const name = sanitizeInput(req.body.name || '');
+  const email = sanitizeInput(req.body.email || '');
+  const message = sanitizeInput(req.body.message || '');
+  
   console.log('Contact form submission:', { name, email, message });
   
   res.json({ 

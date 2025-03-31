@@ -14,6 +14,13 @@ const Contact = () => {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Sanitize text inputs to display on screen - this is an extra layer of protection
+  const sanitizeDisplayText = (text: string) => {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -41,7 +48,11 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await postApi('contact', { name, email, message });
+      const response = await postApi('contact', { 
+        name, 
+        email, 
+        message 
+      });
       
       if (response.error) {
         throw new Error(response.error);
@@ -67,6 +78,11 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
+  
+  // Use the sanitized values only for display, not for state
+  const displayName = sanitizeDisplayText(name);
+  const displayEmail = sanitizeDisplayText(email);
+  const displayMessage = sanitizeDisplayText(message);
   
   return (
     <div className="container mx-auto py-10 px-4">

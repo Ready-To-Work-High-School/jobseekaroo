@@ -5,10 +5,21 @@ const { hashPassword, comparePassword, generateToken, authenticate } = require('
 
 const router = express.Router();
 
+// Sanitize inputs to prevent XSS
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  return input;
+};
+
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    // Sanitize inputs
+    const username = sanitizeInput(req.body.username);
+    const email = sanitizeInput(req.body.email);
+    const password = req.body.password; // Don't sanitize password, just hash it
     
     // Enhanced validation with better error messages
     if (!username) {
@@ -27,7 +38,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
     
-    // Check if email already exists
+    // Check if email already exists - using parameterized query
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
       if (err) {
         console.error('Database error:', err);
@@ -42,7 +53,7 @@ router.post('/register', async (req, res) => {
         // Hash password
         const hashedPassword = await hashPassword(password);
         
-        // Insert user
+        // Insert user - using parameterized query
         db.run(
           'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
           [username, email, hashedPassword],
@@ -55,7 +66,7 @@ router.post('/register', async (req, res) => {
             // Generate token
             const token = generateToken(this.lastID);
             
-            // Get the created user
+            // Get the created user - using parameterized query
             db.get('SELECT id, username, email FROM users WHERE id = ?', [this.lastID], (err, user) => {
               if (err) {
                 console.error('Error fetching created user:', err);
@@ -83,14 +94,15 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = sanitizeInput(req.body.email);
+    const password = req.body.password; // Don't sanitize password
     
     // Basic validation
     if (!email || !password) {
       return res.status(400).json({ error: 'Please provide email and password' });
     }
     
-    // Check user
+    // Check user - using parameterized query
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
       if (err) {
         console.error('Database error:', err);
@@ -127,6 +139,7 @@ router.post('/login', async (req, res) => {
 
 // Get current user
 router.get('/me', authenticate, (req, res) => {
+  // Using parameterized query
   db.get('SELECT id, username, email FROM users WHERE id = ?', [req.user.id], (err, user) => {
     if (err) {
       console.error('Database error:', err);
