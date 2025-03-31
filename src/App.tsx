@@ -4,7 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { Toaster } from "@/components/ui/toaster";
 import ErrorBoundary from './utils/ErrorBoundary';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
+import Index from './pages/Index';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -32,7 +32,7 @@ function App() {
             </div>
           </header>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/contact" element={<Contact />} />
