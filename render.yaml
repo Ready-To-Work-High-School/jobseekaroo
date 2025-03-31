@@ -3,7 +3,7 @@ services:
   - type: web
     name: express-server
     env: node
-    buildCommand: npm install
+    buildCommand: yarn install
     startCommand: node src/server/start-server.js
     envVars:
       - key: PORT
