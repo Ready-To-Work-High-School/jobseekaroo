@@ -15,7 +15,9 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  root: process.cwd(), // Explicitly set the root directory
+  build: {
+    outDir: 'dist', // Ensure output goes to dist directory
+  },
   server: {
     host: "::",
     port: 8080,
