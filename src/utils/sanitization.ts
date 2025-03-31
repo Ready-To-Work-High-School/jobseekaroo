@@ -48,32 +48,34 @@ export const escapeHtml = (input: string | null | undefined): string => {
 
 /**
  * Sanitizes an object's string properties recursively
+ * Fixed to properly handle TypeScript generics
  */
 export const sanitizeObject = <T extends Record<string, any>>(obj: T): T => {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
 
-  const result = {} as T;
+  // Create a new object of the same type to hold sanitized values
+  const result = {} as Record<string, any>;
 
   Object.keys(obj).forEach(key => {
     const value = obj[key];
     
     if (typeof value === 'string') {
-      result[key] = sanitizeHtml(value) as any;
+      result[key] = sanitizeHtml(value);
     } else if (Array.isArray(value)) {
       result[key] = value.map(item => 
-        typeof item === 'object' ? sanitizeObject(item) : 
+        typeof item === 'object' && item !== null ? sanitizeObject(item) : 
         typeof item === 'string' ? sanitizeHtml(item) : item
-      ) as any;
+      );
     } else if (typeof value === 'object' && value !== null) {
-      result[key] = sanitizeObject(value) as any;
+      result[key] = sanitizeObject(value);
     } else {
       result[key] = value;
     }
   });
 
-  return result;
+  return result as T;
 };
 
 /**
