@@ -41,7 +41,7 @@ const Contact = () => {
     
     // Sanitize for backend first
     const safeName = sanitizeHtml(name);
-    const safeEmail = sanitizeHtml(email); // Or stricter validation for email
+    const safeEmail = sanitizeHtml(email, true); // Use email-specific sanitization
     const safeMessage = sanitizeHtml(message);
 
     // Check for XSS vectors in raw input
@@ -91,7 +91,7 @@ const Contact = () => {
   
   // Sanitize again for display (if needed)
   const displayName = sanitizeHtml(name);
-  const displayEmail = sanitizeHtml(email);
+  const displayEmail = sanitizeHtml(email, true);
   const displayMessage = sanitizeHtml(message);
   
   return (

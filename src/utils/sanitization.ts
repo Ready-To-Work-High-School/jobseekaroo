@@ -1,4 +1,3 @@
-
 /**
  * Comprehensive sanitization utilities to prevent XSS attacks
  */
@@ -11,8 +10,11 @@ import DOMPurify from 'dompurify';
  * - Event handlers (onerror, onload, etc.)
  * - JavaScript URIs
  * - Other potentially dangerous HTML
+ * 
+ * @param input The string to sanitize
+ * @param isEmail Optional flag to indicate email-specific sanitization
  */
-export const sanitizeHtml = (input: string | null | undefined): string => {
+export const sanitizeHtml = (input: string | null | undefined, isEmail = false): string => {
   if (input == null) return '';
   
   // Use DOMPurify for client-side sanitization
@@ -24,9 +26,14 @@ export const sanitizeHtml = (input: string | null | undefined): string => {
     });
   }
   
-  // Fallback to basic sanitization for SSR contexts
+  // Special handling for emails
   const str = String(input);
+  if (isEmail) {
+    // For emails, strip all HTML and validate later
+    return str.replace(/<[^>]*>/g, ''); // Remove tags entirely
+  }
   
+  // Fallback to basic sanitization for SSR contexts
   return str
     // Replace < and > with HTML entities
     .replace(/</g, '&lt;')
@@ -149,4 +156,3 @@ export const sanitizeSqlValue = (value: string): string => {
     .replace(/\0/g, "") // Remove null bytes
     .replace(/\x1a/g, ""); // Remove ASCII 26 (Substitute) character
 };
-
