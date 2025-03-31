@@ -1,7 +1,7 @@
 
 const express = require('express');
 const path = require('path');
-const app = require('./app'); // Your Express app setup
+const app = require('./app.cjs'); // Update the import to use .cjs extension
 
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, '../../dist')));

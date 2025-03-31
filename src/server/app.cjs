@@ -1,19 +1,19 @@
 
 const express = require('express');
 const cors = require('cors');
-const { initializeDatabase } = require('./db');
-const userRoutes = require('./routes/users');
-const postRoutes = require('./routes/posts');
-const statusRoutes = require('./routes/status');
+const { initializeDatabase } = require('./db.cjs');
+const userRoutes = require('./routes/users.cjs');
+const postRoutes = require('./routes/posts.cjs');
+const statusRoutes = require('./routes/status.cjs');
 const { 
   generateNonce, 
   setupSecurityHeaders, 
   injectNonceIntoHtml, 
   enforceJsonResponse 
-} = require('./middleware/security');
-const { rateLimiter } = require('./middleware/rateLimit');
-const { sqlInjectionProtection } = require('./middleware/sqlInjectionProtection');
-const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler');
+} = require('./middleware/security.cjs');
+const { rateLimiter } = require('./middleware/rateLimit.cjs');
+const { sqlInjectionProtection } = require('./middleware/sqlInjectionProtection.cjs');
+const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler.cjs');
 
 // Create Express app
 const app = express();
