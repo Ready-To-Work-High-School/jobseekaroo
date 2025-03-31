@@ -29,29 +29,28 @@ const Contact = () => {
       return;
     }
     
-    // Email validation using validator.isEmail
-    if (!validator.isEmail(email)) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid email address",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // Sanitize for backend first
+    // Sanitize inputs
     const safeName = sanitizeHtml(name);
-    const safeEmail = sanitizeHtml(email, true); // Use email-specific sanitization
+    const safeEmail = sanitizeHtml(email, true); // Email-specific
     const safeMessage = sanitizeHtml(message);
-
+    
     // Check for XSS vectors in raw input
     if (containsXssVector(name) || containsXssVector(email) || containsXssVector(message)) {
       toast({
         title: "Security Warning",
-        description: "Your input contained potentially malicious content and has been sanitized. Please review before submitting.",
+        description: "Potentially malicious content detected and sanitized.",
         variant: "destructive"
       });
-      // Optionally halt submission: return;
+    }
+    
+    // Email validation using validator.isEmail on sanitized email
+    if (!validator.isEmail(safeEmail)) {
+      toast({ 
+        title: "Invalid Email", 
+        description: "Please enter a valid email address",
+        variant: "destructive"
+      });
+      return;
     }
     
     setIsSubmitting(true);
@@ -89,10 +88,10 @@ const Contact = () => {
     }
   };
   
-  // Sanitize again for display (if needed)
-  const displayName = sanitizeHtml(name);
-  const displayEmail = sanitizeHtml(email, true);
-  const displayMessage = sanitizeHtml(message);
+  // No need to re-sanitize for display as it's idempotent
+  const displayName = safeName !== undefined ? safeName : sanitizeHtml(name);
+  const displayEmail = safeEmail !== undefined ? safeEmail : sanitizeHtml(email, true);
+  const displayMessage = safeMessage !== undefined ? safeMessage : sanitizeHtml(message);
   
   return (
     <div className="container mx-auto py-10 px-4">
