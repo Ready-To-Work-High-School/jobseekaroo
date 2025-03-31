@@ -11,7 +11,11 @@
     {
       "src": "/api/(.*)",
       "dest": "src/server/start-server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "src/server/start-server.js"
     }
   ],
-  "installCommand": "yarn install"
+  "installCommand": "bun install"
 }
