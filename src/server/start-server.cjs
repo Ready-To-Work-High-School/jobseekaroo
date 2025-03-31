@@ -12,6 +12,7 @@ if (!process.env.NODE_ENV) {
 
 // Serve static files from the Vite build output (dist folder) if in production mode
 if (process.env.NODE_ENV === 'production') {
+  // The path needs to be relative to where this file is located
   app.use(express.static(path.join(__dirname, '../../dist')));
   
   // Handle client-side routing - return index.html for all non-API routes

@@ -3,7 +3,7 @@ services:
   - type: web
     name: express-server
     env: node
-    buildCommand: bun install && bun run build
+    buildCommand: cd /opt/render/project && bun install && bun run build
     startCommand: node src/server/start-server.cjs
     envVars:
       - key: PORT
