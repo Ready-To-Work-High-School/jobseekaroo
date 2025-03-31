@@ -1,12 +1,17 @@
 
 import { Link } from 'react-router-dom';
-import { Home } from 'lucide-react';
 
 export const NavbarBrand = () => {
   return (
     <Link to="/" className="flex flex-col items-start">
       <div className="flex items-center gap-2 relative">
-        <Home className="h-6 w-6 text-primary z-10" aria-hidden="true" />
+        <div className="h-9 w-9 relative">
+          <img 
+            src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+            alt="JS4HS Logo" 
+            className="h-full w-full object-contain"
+          />
+        </div>
         <div className="relative">
           {/* Accent glow behind the text */}
           <div className="absolute -inset-1 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-sm -z-10"></div>

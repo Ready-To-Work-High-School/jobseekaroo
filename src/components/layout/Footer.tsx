@@ -43,7 +43,14 @@ const Footer = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-bold text-lg mb-3">Job Seekers 4 High Schools</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <img 
+                  src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+                  alt="JS4HS Logo" 
+                  className="h-10 w-10"
+                />
+                <h3 className="font-bold text-lg">Job Seekers 4 High Schools</h3>
+              </div>
               <p className="text-sm text-muted-foreground">
                 Connecting students with credential-ready opportunities.
               </p>

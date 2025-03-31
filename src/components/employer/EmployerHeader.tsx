@@ -11,6 +11,13 @@ const EmployerHeader = () => {
   return (
     <div className={headerAnimation}>
       <div className="text-center mb-12">
+        <div className="flex justify-center mb-4">
+          <img 
+            src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+            alt="JS4HS Logo" 
+            className="h-16 w-16"
+          />
+        </div>
         <Badge variant="outline" className="border-amber-500 text-amber-700 mb-4">
           For Businesses & Organizations
         </Badge>

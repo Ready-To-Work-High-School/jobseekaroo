@@ -18,6 +18,15 @@ const EnhancedHero = () => {
       
       <div className="w-full max-w-6xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
+          {/* Logo above title */}
+          <div className="flex justify-center mb-6">
+            <img 
+              src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+              alt="JS4HS Logo" 
+              className="h-24 w-24 md:h-32 md:w-32"
+            />
+          </div>
+          
           {/* Title with accent border and background - expanded width */}
           <div className="relative mb-3 w-full">
             {/* Decorative accent elements */}
