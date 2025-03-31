@@ -2,6 +2,7 @@
 /**
  * Comprehensive sanitization utilities to prevent XSS attacks
  */
+import DOMPurify from 'dompurify';
 
 /**
  * Sanitizes text input to prevent XSS attacks
@@ -14,7 +15,16 @@
 export const sanitizeHtml = (input: string | null | undefined): string => {
   if (input == null) return '';
   
-  // Convert the input to a string if it's not already
+  // Use DOMPurify for client-side sanitization
+  if (typeof window !== 'undefined') {
+    return DOMPurify.sanitize(String(input), {
+      USE_PROFILES: { html: true },
+      FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href']
+    });
+  }
+  
+  // Fallback to basic sanitization for SSR contexts
   const str = String(input);
   
   return str
@@ -106,3 +116,37 @@ export const containsXssVector = (input: string): boolean => {
   
   return dangerousPatterns.some(pattern => pattern.test(input));
 };
+
+/**
+ * Generates a random CSP nonce
+ */
+export const generateCspNonce = (): string => {
+  // Create a random nonce using crypto API if available
+  if (typeof window !== 'undefined' && window.crypto) {
+    const array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    return Array.from(array)
+      .map(byte => byte.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  
+  // Fallback for non-browser environments
+  return Math.random().toString(36).substring(2, 15) + 
+         Math.random().toString(36).substring(2, 15);
+};
+
+/**
+ * Secure SQL sanitization for values to be used in queries
+ * This is a last-resort function - always use parameterized queries instead
+ */
+export const sanitizeSqlValue = (value: string): string => {
+  if (typeof value !== 'string') return '';
+  
+  // Replace quotes and other SQL injection vectors
+  return value
+    .replace(/'/g, "''") // Escape single quotes
+    .replace(/\\/g, "\\\\") // Escape backslashes
+    .replace(/\0/g, "") // Remove null bytes
+    .replace(/\x1a/g, ""); // Remove ASCII 26 (Substitute) character
+};
+
