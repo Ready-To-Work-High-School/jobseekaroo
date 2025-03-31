@@ -17,5 +17,6 @@
       "dest": "src/server/start-server.cjs"
     }
   ],
-  "installCommand": "bun install && bun run build"
+  "installCommand": "bun install",
+  "buildCommand": "bun run build"
 }
