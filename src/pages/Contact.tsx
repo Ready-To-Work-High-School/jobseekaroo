@@ -7,18 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { postApi } from '@/utils/api-client';
-import { sanitizeHtml, containsXssVector } from '@/utils/sanitization';
+import { sanitizeHtml, containsXssVector, sanitizeObject } from '@/utils/sanitization';
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // Enhanced sanitization using our new utility
-  const displayName = sanitizeHtml(name);
-  const displayEmail = sanitizeHtml(email);
-  const displayMessage = sanitizeHtml(message);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,23 +39,29 @@ const Contact = () => {
       return;
     }
     
-    // Check for potential XSS vectors in input
+    // Sanitize for backend first
+    const safeName = sanitizeHtml(name);
+    const safeEmail = sanitizeHtml(email); // Or stricter validation for email
+    const safeMessage = sanitizeHtml(message);
+
+    // Check for XSS vectors in raw input
     if (containsXssVector(name) || containsXssVector(email) || containsXssVector(message)) {
       toast({
         title: "Security Warning",
-        description: "Your input contains potentially malicious content that has been sanitized.",
+        description: "Your input contained potentially malicious content and has been sanitized. Please review before submitting.",
         variant: "destructive"
       });
-      // Continue with submission but alert the user
+      // Optionally halt submission: return;
     }
     
     setIsSubmitting(true);
     
     try {
+      // Use sanitized data for API call
       const response = await postApi('contact', { 
-        name, 
-        email, 
-        message 
+        name: safeName, 
+        email: safeEmail, 
+        message: safeMessage 
       });
       
       if (response.error) {
@@ -87,6 +88,11 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
+  
+  // Sanitize again for display (if needed)
+  const displayName = sanitizeHtml(name);
+  const displayEmail = sanitizeHtml(email);
+  const displayMessage = sanitizeHtml(message);
   
   return (
     <div className="container mx-auto py-10 px-4">
