@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label';
 import { postApi } from '@/utils/api-client';
 import { sanitizeHtml, containsXssVector, sanitizeObject } from '@/utils/sanitization';
+import validator from 'validator';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -28,9 +29,8 @@ const Contact = () => {
       return;
     }
     
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Email validation using validator.isEmail
+    if (!validator.isEmail(email)) {
       toast({
         title: "Error",
         description: "Please enter a valid email address",
