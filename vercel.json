@@ -18,7 +18,7 @@
       "dest": "src/server/start-server.js"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(js|css|png|jpg|gif|svg|ico|ttf|woff|woff2))",
       "dest": "/dist/$1"
     },
     {

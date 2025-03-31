@@ -4,9 +4,12 @@ const path = require('path');
 const app = require('./app');
 const port = process.env.PORT || 5000;
 
+console.log('Starting server with NODE_ENV:', process.env.NODE_ENV);
+
 // Serve static files from the React app build directory
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '../../dist');
+  console.log('Serving static files from:', distPath);
   app.use(express.static(distPath));
   
   // Handle client-side routing
