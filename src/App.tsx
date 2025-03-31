@@ -25,11 +25,15 @@ function App() {
             <Navbar />
             <header className="bg-blue-600 dark:bg-blue-800 py-2 hidden sm:flex justify-center">
               <div className="container flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
-                  alt="JS4HS Logo" 
-                  className="h-12 w-12 mr-3"
-                />
+                {/* Added blue-gold gradient glow around logo in header */}
+                <div className="relative">
+                  <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+                  <img 
+                    src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+                    alt="JS4HS Logo" 
+                    className="h-12 w-12 mr-3 relative z-10"
+                  />
+                </div>
                 <h1 className="text-white text-xl font-bold">Job Seekers 4 High Schools</h1>
               </div>
             </header>

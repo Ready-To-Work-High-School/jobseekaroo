@@ -30,11 +30,15 @@ const Header = ({ className }: HeaderProps = {}) => {
         
         <div className="flex items-center space-x-4">
           <Link to="/" className="mr-4 hidden sm:block">
-            <img 
-              src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
-              alt="JS4HS Logo" 
-              className="h-10 w-10"
-            />
+            {/* Added blue-gold gradient glow around logo */}
+            <div className="relative">
+              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+              <img 
+                src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+                alt="JS4HS Logo" 
+                className="h-10 w-10 relative z-10"
+              />
+            </div>
           </Link>
           <MainNavigation />
         </div>

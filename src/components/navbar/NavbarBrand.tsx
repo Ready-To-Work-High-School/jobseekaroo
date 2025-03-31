@@ -6,10 +6,12 @@ export const NavbarBrand = () => {
     <Link to="/" className="flex flex-col items-start">
       <div className="flex items-center gap-2 relative">
         <div className="h-9 w-9 relative">
+          {/* Added blue-gold gradient glow around logo */}
+          <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
           <img 
             src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
             alt="JS4HS Logo" 
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain relative z-10"
           />
         </div>
         <div className="relative">

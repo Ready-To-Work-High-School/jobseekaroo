@@ -7,12 +7,16 @@ const ResourceHeader = () => {
   return (
     <div className={headerAnimation}>
       <div className="text-center mb-12">
-        <div className="flex justify-center mb-4">
-          <img 
-            src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
-            alt="JS4HS Logo" 
-            className="h-16 w-16"
-          />
+        {/* Added blue-gold gradient glow around logo */}
+        <div className="flex justify-center mb-4 relative">
+          <div className="relative">
+            <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+            <img 
+              src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+              alt="JS4HS Logo" 
+              className="h-16 w-16 relative z-10"
+            />
+          </div>
         </div>
         <h1 className="text-4xl font-bold mb-6">
           Student Resources
