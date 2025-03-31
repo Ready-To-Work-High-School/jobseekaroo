@@ -24,7 +24,7 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
+    // Basic client-side validation
     if (!name || !email || !message) {
       toast({
         title: "Error",
@@ -76,17 +76,20 @@ const Contact = () => {
       });
       
       if (error) {
-        throw new Error(error.message);
+        throw new Error(error.message || 'Failed to submit contact form');
       }
       
-      // Clear form
+      // Clear form on success
       setName('');
       setEmail('');
       setMessage('');
+      setSafeName('');
+      setSafeEmail('');
+      setSafeMessage('');
       
       toast({
         title: "Success",
-        description: "Your message has been sent. We'll get back to you soon!",
+        description: data?.message || "Your message has been sent. We'll get back to you soon!",
       });
     } catch (error) {
       console.error('Contact form submission error:', error);
