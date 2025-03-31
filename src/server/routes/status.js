@@ -5,7 +5,7 @@ const router = express.Router();
 // Basic status route
 router.get('/status', (req, res) => {
   res.json({ 
-    status: 'Server is running', 
+    status: 'OK', 
     appName: req.app.locals.appName,
     time: new Date() 
   });

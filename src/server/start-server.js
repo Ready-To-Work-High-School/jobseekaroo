@@ -8,7 +8,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'production';
 }
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`${app.locals.appName} server running on port ${port} in ${process.env.NODE_ENV} mode`);
   console.log(`API available at: http://localhost:${port}/api/status`);
   
