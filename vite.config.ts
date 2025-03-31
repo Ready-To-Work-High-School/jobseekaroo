@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  root: process.cwd(), // Explicitly set the root directory
   server: {
     host: "::",
     port: 8080,
