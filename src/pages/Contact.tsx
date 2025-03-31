@@ -66,8 +66,8 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Use the Edge Function instead of the previous postApi method
-      const { error } = await supabase.functions.invoke('contact-form', {
+      // Call the edge function using supabase client
+      const { data, error } = await supabase.functions.invoke('contact-form', {
         body: { 
           name: currentSafeName, 
           email: currentSafeEmail, 
