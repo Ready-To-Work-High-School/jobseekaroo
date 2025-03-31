@@ -45,7 +45,7 @@ const Footer = () => {
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <img 
-                  src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+                  src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                   alt="JS4HS Logo" 
                   className="h-10 w-10"
                 />

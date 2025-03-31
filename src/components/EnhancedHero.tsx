@@ -24,7 +24,7 @@ const EnhancedHero = () => {
               <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-md animate-pulse"></div>
               <div className="absolute -inset-5 rounded-full bg-gradient-to-r from-amber-500 to-blue-700 opacity-40 blur-lg glow-pulse"></div>
               <img 
-                src="/lovable-uploads/6a344606-c844-465c-b643-7ff460697a49.png" 
+                src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                 alt="JS4HS Logo" 
                 className="h-24 w-24 md:h-32 md:w-32 relative z-10"
               />
