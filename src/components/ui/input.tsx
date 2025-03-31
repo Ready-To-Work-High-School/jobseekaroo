@@ -1,6 +1,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { sanitizeHtml, escapeHtml } from "@/utils/sanitization"
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -9,12 +10,6 @@ export interface InputProps
   onAutocompleteSelect?: (value: string) => void;
   sanitizeInput?: boolean; // New prop to control sanitization
 }
-
-// Helper function to sanitize text input
-const sanitizeText = (text: string): string => {
-  if (typeof text !== 'string') return '';
-  return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-};
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, showAutocomplete, autocompleteItems, onAutocompleteSelect, sanitizeInput = true, ...props }, ref) => {
@@ -28,10 +23,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    // If there's a value and sanitizeInput is true, sanitize it
+    // If there's a value and sanitizeInput is true, sanitize it using enhanced function
     React.useEffect(() => {
       if (props.value && typeof props.value === 'string' && sanitizeInput) {
-        setSanitizedValue(sanitizeText(props.value));
+        setSanitizedValue(sanitizeHtml(props.value));
       } else if (props.value) {
         setSanitizedValue(String(props.value));
       } else {
@@ -49,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const handleItemClick = (item: string) => {
       if (onAutocompleteSelect) {
         // Sanitize before passing to select handler
-        onAutocompleteSelect(sanitizeInput ? sanitizeText(item) : item);
+        onAutocompleteSelect(sanitizeInput ? sanitizeHtml(item) : item);
       }
       setShowDropdown(false);
     };
@@ -60,7 +55,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         if (sanitizeInput) {
           // Create a new synthetic event with sanitized value
           const newEvent = Object.create(e);
-          newEvent.target = { ...e.target, value: sanitizeText(e.target.value) };
+          newEvent.target = { ...e.target, value: sanitizeHtml(e.target.value) };
           props.onChange(newEvent as React.ChangeEvent<HTMLInputElement>);
         } else {
           props.onChange(e);
@@ -86,20 +81,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {showAutocomplete && showDropdown && autocompleteItems && autocompleteItems.length > 0 && (
           <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
             <ul className="py-1">
-              {autocompleteItems.map((item, index) => (
-                <li 
-                  key={index}
-                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleItemClick(item);
-                  }}
-                  // Using dangerouslySetInnerHTML with sanitized content
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeInput ? sanitizeText(item) : item
-                  }}
-                />
-              ))}
+              {autocompleteItems.map((item, index) => {
+                // Make sure item is sanitized
+                const sanitizedItem = sanitizeInput ? escapeHtml(item) : item;
+                return (
+                  <li 
+                    key={index}
+                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleItemClick(item);
+                    }}
+                  >
+                    {sanitizedItem}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}

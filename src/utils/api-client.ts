@@ -3,33 +3,11 @@
  * Simple API client for making requests to the server
  */
 
+import { sanitizeObject } from './sanitization';
+
 interface ApiResponse<T> {
   data?: T;
   error?: string;
-}
-
-/**
- * Sanitize input to prevent XSS attacks
- */
-function sanitizeInput(input: any): any {
-  if (typeof input === 'string') {
-    // Basic sanitization for strings
-    return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  } else if (Array.isArray(input)) {
-    // Sanitize each item in array
-    return input.map(item => sanitizeInput(item));
-  } else if (input !== null && typeof input === 'object') {
-    // Sanitize each property in object
-    const sanitized: Record<string, any> = {};
-    for (const key in input) {
-      if (Object.prototype.hasOwnProperty.call(input, key)) {
-        sanitized[key] = sanitizeInput(input[key]);
-      }
-    }
-    return sanitized;
-  }
-  // Return primitives and null/undefined as is
-  return input;
 }
 
 /**
@@ -67,8 +45,8 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
  */
 export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiResponse<T>> {
   try {
-    // Sanitize the request body to prevent XSS attacks
-    const sanitizedBody = sanitizeInput(body);
+    // Enhanced sanitization using the comprehensive sanitizer
+    const sanitizedBody = sanitizeObject(body);
     
     const response = await fetch(`/api/${endpoint}`, {
       method: 'POST',

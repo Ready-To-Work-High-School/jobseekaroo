@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { postApi } from '@/utils/api-client';
+import { sanitizeHtml, containsXssVector } from '@/utils/sanitization';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -14,12 +15,10 @@ const Contact = () => {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Sanitize text inputs to display on screen - this is an extra layer of protection
-  const sanitizeDisplayText = (text: string) => {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  };
+  // Enhanced sanitization using our new utility
+  const displayName = sanitizeHtml(name);
+  const displayEmail = sanitizeHtml(email);
+  const displayMessage = sanitizeHtml(message);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +42,16 @@ const Contact = () => {
         variant: "destructive"
       });
       return;
+    }
+    
+    // Check for potential XSS vectors in input
+    if (containsXssVector(name) || containsXssVector(email) || containsXssVector(message)) {
+      toast({
+        title: "Security Warning",
+        description: "Your input contains potentially malicious content that has been sanitized.",
+        variant: "destructive"
+      });
+      // Continue with submission but alert the user
     }
     
     setIsSubmitting(true);
@@ -78,11 +87,6 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
-  
-  // Use the sanitized values only for display, not for state
-  const displayName = sanitizeDisplayText(name);
-  const displayEmail = sanitizeDisplayText(email);
-  const displayMessage = sanitizeDisplayText(message);
   
   return (
     <div className="container mx-auto py-10 px-4">

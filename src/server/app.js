@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const { initializeDatabase } = require('./db');
@@ -23,8 +22,8 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  // Add Content Security Policy to prevent XSS attacks
-  res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline';");
+  // Enhanced CSP to block inline event handlers and dangerous sources
+  res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';");
   next();
 });
 
@@ -80,19 +79,38 @@ app.get('/api/secure-data', (req, res) => {
   });
 });
 
-// Keep the existing contact endpoint
+// Enhanced contact endpoint with more robust sanitization
 app.post('/api/contact', (req, res) => {
-  // Sanitize inputs to prevent XSS
+  // More comprehensive sanitization function
   const sanitizeInput = (input) => {
     if (typeof input === 'string') {
-      return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return input
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/\(/g, '&#40;')
+        .replace(/\)/g, '&#41;')
+        .replace(/=/g, '&#61;');
+    } else if (Array.isArray(input)) {
+      return input.map(item => sanitizeInput(item));
+    } else if (input !== null && typeof input === 'object') {
+      const sanitized = {};
+      for (const key in input) {
+        if (Object.prototype.hasOwnProperty.call(input, key)) {
+          sanitized[key] = sanitizeInput(input[key]);
+        }
+      }
+      return sanitized;
     }
     return input;
   };
   
-  const name = sanitizeInput(req.body.name || '');
-  const email = sanitizeInput(req.body.email || '');
-  const message = sanitizeInput(req.body.message || '');
+  // Sanitize all inputs
+  const sanitizedBody = sanitizeInput(req.body);
+  const name = sanitizedBody.name || '';
+  const email = sanitizedBody.email || '';
+  const message = sanitizedBody.message || '';
   
   console.log('Contact form submission:', { name, email, message });
   
