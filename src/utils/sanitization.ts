@@ -112,12 +112,10 @@ export const containsXssVector = (input: string): boolean => {
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, // script tags
     /javascript:/gi, // javascript: URLs
     /\bon\w+\s*=/gi, // event handlers
-    /<iframe/gi, // iframes
-    /<embed/gi, // embed tags
-    /<object/gi, // object tags
+    /<i?frame/gi, // Catches iframe and frame
+    /<(?:embed|object|svg)\b/gi, // Object, embed and svg tags
     /expression\s*\(/gi, // CSS expressions
-    /url\s*\(/gi, // CSS url function
-    /data:/gi, // data: URLs
+    /data:\s*(?:text\/html|application\/x)/gi, // Refined data: URLs
     /vbscript:/gi, // vbscript: URLs
   ];
   
