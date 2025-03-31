@@ -1,13 +1,17 @@
 
 services:
   - type: web
-    name: express-server
+    name: jobseekaroo  # Changed from express-server to match your app
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    branch: main
+    rootDir: ""  # Repo root, where index.html lives
+    buildCommand: bun install && bun run build
     startCommand: node src/server/start-server.cjs
     envVars:
       - key: PORT
-        value: 3000
-      - key: NODE_ENV
-        value: production
+        value: 8080  # Render default, optional
+      - key: SUPABASE_URL
+        sync: false  # Add in dashboard
+      - key: SUPABASE_KEY
+        sync: false  # Add in dashboard

@@ -3,7 +3,7 @@
 const express = require('express');
 const path = require('path');
 const app = require('./app');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 // Set NODE_ENV to production if not set
 if (!process.env.NODE_ENV) {
