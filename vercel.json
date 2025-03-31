@@ -3,19 +3,19 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/server/start-server.js",
+      "src": "src/server/start-server.cjs",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "src/server/start-server.js"
+      "dest": "src/server/start-server.cjs"
     },
     {
       "src": "/(.*)",
-      "dest": "src/server/start-server.js"
+      "dest": "src/server/start-server.cjs"
     }
   ],
-  "installCommand": "bun install"
+  "installCommand": "bun install && bun run build"
 }

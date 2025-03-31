@@ -1,11 +1,26 @@
 
 // Simple script to start the Express server
+const express = require('express');
+const path = require('path');
 const app = require('./app');
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 // Set NODE_ENV to production if not set
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'production';
+}
+
+// Serve static files from the Vite build output (dist folder) if in production mode
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../../dist')));
+  
+  // Handle client-side routing - return index.html for all non-API routes
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  });
 }
 
 app.listen(port, '0.0.0.0', () => {

@@ -18,7 +18,7 @@ const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler');
 
 // Create Express app
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 // Initialize database
 initializeDatabase();
@@ -44,25 +44,11 @@ app.use('/api', statusRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
-// Serve static files from Vite build in production mode
-if (process.env.NODE_ENV === 'production') {
-  // Serve static files from the Vite build output (dist folder)
-  app.use(express.static(path.join(__dirname, '../../dist')));
-  
-  // Handle client-side routing - return index.html for all non-API routes
-  app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api/')) {
-      return next();
-    }
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
-  });
-}
-
 // Catch-all for API 404 errors to return JSON instead of HTML
 app.use('/api/*', api404Handler);
 
 // Error handling middleware
 app.use(apiErrorHandler);
 
-// Export app for use in start-server.js
+// Export app for use in start-server.cjs
 module.exports = app;
