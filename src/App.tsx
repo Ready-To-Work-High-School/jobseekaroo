@@ -25,9 +25,10 @@ function App() {
             <Navbar />
             <header className="bg-blue-600 dark:bg-blue-800 py-2 hidden sm:flex justify-center">
               <div className="container flex items-center justify-center">
-                {/* Added blue-gold gradient glow around logo in header */}
+                {/* Enhanced gradient to match ESB badge style */}
                 <div className="relative">
                   <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+                  <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
                   <img 
                     src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                     alt="JS4HS Logo" 
