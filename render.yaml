@@ -4,7 +4,7 @@ services:
     name: express-server
     env: node
     plan: free
-    buildCommand: bun install && bun run build
+    buildCommand: npm install && npm run build
     startCommand: node src/server/start-server.cjs
     envVars:
       - key: PORT
