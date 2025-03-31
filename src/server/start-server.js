@@ -5,7 +5,6 @@ const app = require('./app');
 const port = process.env.PORT || 5000;
 
 console.log('Starting server with NODE_ENV:', process.env.NODE_ENV);
-console.log('Current directory:', __dirname);
 
 // Serve static files from the React app build directory
 if (process.env.NODE_ENV === 'production') {
