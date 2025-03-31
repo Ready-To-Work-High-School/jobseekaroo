@@ -16,6 +16,11 @@ const Contact = () => {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Initialize sanitized values
+  const [safeName, setSafeName] = useState('');
+  const [safeEmail, setSafeEmail] = useState('');
+  const [safeMessage, setSafeMessage] = useState('');
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -30,9 +35,14 @@ const Contact = () => {
     }
     
     // Sanitize inputs
-    const safeName = sanitizeHtml(name);
-    const safeEmail = sanitizeHtml(email, true); // Email-specific
-    const safeMessage = sanitizeHtml(message);
+    const currentSafeName = sanitizeHtml(name);
+    const currentSafeEmail = sanitizeHtml(email, true); // Email-specific
+    const currentSafeMessage = sanitizeHtml(message);
+    
+    // Update state with sanitized values
+    setSafeName(currentSafeName);
+    setSafeEmail(currentSafeEmail);
+    setSafeMessage(currentSafeMessage);
     
     // Check for XSS vectors in raw input
     if (containsXssVector(name) || containsXssVector(email) || containsXssVector(message)) {
@@ -44,7 +54,7 @@ const Contact = () => {
     }
     
     // Email validation using validator.isEmail on sanitized email
-    if (!validator.isEmail(safeEmail)) {
+    if (!validator.isEmail(currentSafeEmail)) {
       toast({ 
         title: "Invalid Email", 
         description: "Please enter a valid email address",
@@ -58,9 +68,9 @@ const Contact = () => {
     try {
       // Use sanitized data for API call
       const response = await postApi('contact', { 
-        name: safeName, 
-        email: safeEmail, 
-        message: safeMessage 
+        name: currentSafeName, 
+        email: currentSafeEmail, 
+        message: currentSafeMessage 
       });
       
       if (response.error) {
@@ -88,10 +98,10 @@ const Contact = () => {
     }
   };
   
-  // No need to re-sanitize for display as it's idempotent
-  const displayName = safeName !== undefined ? safeName : sanitizeHtml(name);
-  const displayEmail = safeEmail !== undefined ? safeEmail : sanitizeHtml(email, true);
-  const displayMessage = safeMessage !== undefined ? safeMessage : sanitizeHtml(message);
+  // Display sanitized values or sanitize on demand
+  const displayName = safeName || sanitizeHtml(name);
+  const displayEmail = safeEmail || sanitizeHtml(email, true);
+  const displayMessage = safeMessage || sanitizeHtml(message);
   
   return (
     <div className="container mx-auto py-10 px-4">

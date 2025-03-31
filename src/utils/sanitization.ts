@@ -1,3 +1,4 @@
+
 /**
  * Comprehensive sanitization utilities to prevent XSS attacks
  */
@@ -19,10 +20,18 @@ export const sanitizeHtml = (input: string | null | undefined, isEmail = false):
   
   // Use DOMPurify for client-side sanitization
   if (typeof window !== 'undefined') {
+    // For emails, we need special handling
+    if (isEmail) {
+      const str = String(input);
+      // Extract email more carefully - remove all HTML and script content
+      // This is a more aggressive approach specifically for emails
+      return str.replace(/<[^>]*>|javascript:|on\w+=|data:/gi, '');
+    }
+    
     return DOMPurify.sanitize(String(input), {
       USE_PROFILES: { html: true },
-      FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href']
+      FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link', 'svg'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href', 'src', 'formaction', 'on*']
     });
   }
   
@@ -30,7 +39,7 @@ export const sanitizeHtml = (input: string | null | undefined, isEmail = false):
   const str = String(input);
   if (isEmail) {
     // For emails, strip all HTML and validate later
-    return str.replace(/<[^>]*>/g, ''); // Remove tags entirely
+    return str.replace(/<[^>]*>|javascript:|on\w+=|data:/gi, ''); // Remove tags entirely
   }
   
   // Fallback to basic sanitization for SSR contexts
@@ -111,12 +120,14 @@ export const containsXssVector = (input: string): boolean => {
   const dangerousPatterns = [
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, // script tags
     /javascript:/gi, // javascript: URLs
-    /\bon\w+\s*=/gi, // event handlers
+    /\bon\w+\s*=/gi, // event handlers (captures onload, onerror, etc)
     /<i?frame/gi, // Catches iframe and frame
     /<(?:embed|object|svg)\b/gi, // Object, embed and svg tags
     /expression\s*\(/gi, // CSS expressions
     /data:\s*(?:text\/html|application\/x)/gi, // Refined data: URLs
     /vbscript:/gi, // vbscript: URLs
+    /<img[^>]*\s+on\w+\s*=/gi, // Image with event handlers
+    /<[^>]*\s+src\s*=\s*['"]?(?:javascript:|data:image\/[^;]*;base64)/gi, // Dangerous src attributes
   ];
   
   return dangerousPatterns.some(pattern => pattern.test(input));
