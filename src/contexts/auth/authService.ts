@@ -118,34 +118,53 @@ export const signUp = async (
   if (window.location.hostname === 'localhost' || window.location.hostname.includes('lovableproject.com')) {
     console.log('Using Express server for registration');
     
-    const response = await fetch('/api/users/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: `${firstName} ${lastName}`,
-        email,
-        password,
-      }),
-    });
-    
-    if (!response.ok) {
-      if (response.headers.get('content-type') && response.headers.get('content-type').includes('text/html')) {
-        console.error('Server returned HTML instead of JSON');
-        throw new Error('Server error occurred. Please try again later.');
+    try {
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: `${firstName} ${lastName}`,
+          email,
+          password,
+        }),
+      });
+      
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('text/html')) {
+          console.error('Server returned HTML instead of JSON');
+          throw new Error('Server error occurred. Please try again later.');
+        }
+        
+        const text = await response.text();
+        
+        let errorData;
+        try {
+          if (text) {
+            errorData = JSON.parse(text);
+          } else {
+            errorData = { error: 'Unknown error occurred' };
+          }
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          errorData = { error: 'Server error occurred' };
+        }
+        
+        throw new Error(errorData.error || 'Failed to register');
       }
       
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to register');
+      const data = await response.json();
+      
+      return { 
+        user: data.user, 
+        error: null
+      };
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      throw error;
     }
-    
-    const data = await response.json();
-    
-    return { 
-      user: data.user, 
-      error: null
-    };
   } else {
     const { error, data } = await supabase.auth.signUp({
       email,

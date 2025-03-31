@@ -62,19 +62,26 @@ export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiRespo
       }
       
       // Try to get the error message from the response
-      const errorData = await response.text();
-      let errorMessage;
-      
+      let errorData;
       try {
-        // Try to parse as JSON
-        const parsedError = JSON.parse(errorData);
-        errorMessage = parsedError.error || `API error: ${response.statusText}`;
+        // Check if there's a response body
+        const text = await response.text();
+        if (text) {
+          try {
+            // Try to parse as JSON
+            errorData = JSON.parse(text);
+          } catch (e) {
+            // If it's not valid JSON, use the text
+            errorData = { error: text || `API error: ${response.statusText}` };
+          }
+        } else {
+          errorData = { error: `API error: ${response.statusText}` };
+        }
       } catch (e) {
-        // If it's not valid JSON, use the text
-        errorMessage = errorData || `API error: ${response.statusText}`;
+        errorData = { error: `API error: ${response.statusText}` };
       }
       
-      throw new Error(errorMessage);
+      return { error: errorData.error || `API error: ${response.statusText}` };
     }
     
     const data = await response.json();
