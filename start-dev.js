@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Start the backend server
-const backend = spawn('node', ['src/server/start-server.js'], {
+const backend = spawn('node', ['src/server/app.js'], {
   stdio: 'inherit',
   shell: true,
   env: {

@@ -4,7 +4,7 @@ services:
     name: express-server
     env: node
     buildCommand: yarn install && yarn build
-    startCommand: node src/server/start-server.js
+    startCommand: node src/server/app.js
     envVars:
       - key: PORT
         value: 5000
