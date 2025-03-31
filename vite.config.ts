@@ -24,5 +24,8 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
       }
     }
+  },
+  build: {
+    outDir: 'dist'
   }
 }));

@@ -5,7 +5,11 @@ const path = require('path');
 // Start the backend server
 const backend = spawn('node', ['src/server/start-server.js'], {
   stdio: 'inherit',
-  shell: true
+  shell: true,
+  env: {
+    ...process.env,
+    NODE_ENV: 'development'
+  }
 });
 
 // Start the frontend development server
