@@ -12,7 +12,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link to="/" className="text-white font-bold text-xl">
-                AppName
+                Job Seekers 4 High School
               </Link>
             </div>
             <div className="hidden md:block">
