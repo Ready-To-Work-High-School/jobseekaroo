@@ -1,325 +1,223 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, Legend
-} from 'recharts';
-import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { InfoIcon, BarChart, PieChart, LineChart, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useFadeIn } from '@/utils/animations';
 
 const Analytics = () => {
-  const { user } = useAuth();
-  const isMobile = useIsMobile();
-  const [activeTab, setActiveTab] = useState("applications");
+  const { userProfile } = useAuth();
+  const [activeTab, setActiveTab] = useState('overview');
+  const fadeInAnimation = useFadeIn(300);
   
-  // Sample data for charts
-  const applicationData = [
-    { month: 'Jan', count: 2 },
-    { month: 'Feb', count: 4 },
-    { month: 'Mar', count: 6 },
-    { month: 'Apr', count: 5 },
-    { month: 'May', count: 8 },
-    { month: 'Jun', count: 10 },
-  ];
+  // Determine what features the user has access to based on their role
+  const getUserAccess = () => {
+    const userType = userProfile?.user_type || 'student';
+    
+    switch(userType) {
+      case 'admin':
+        return {
+          overview: true,
+          skills: true,
+          jobMarket: true,
+          performance: true,
+          advanced: true
+        };
+      case 'employer':
+        return {
+          overview: true,
+          skills: true,
+          jobMarket: true,
+          performance: true,
+          advanced: false
+        };
+      case 'student':
+      default:
+        return {
+          overview: true,
+          skills: true,
+          jobMarket: false,
+          performance: false,
+          advanced: false
+        };
+    }
+  };
   
-  const statusData = [
-    { name: 'Applied', value: 14 },
-    { name: 'Interview', value: 7 },
-    { name: 'Rejected', value: 4 },
-    { name: 'Offer', value: 3 },
-  ];
+  const access = getUserAccess();
   
-  const skillsData = [
-    { name: 'Customer Service', level: 8 },
-    { name: 'Communication', level: 7 },
-    { name: 'MS Office', level: 9 },
-    { name: 'Problem Solving', level: 6 },
-    { name: 'Time Management', level: 7 },
-  ];
-  
-  const interviewData = [
-    { month: 'Jan', score: 65 },
-    { month: 'Feb', score: 70 },
-    { month: 'Mar', score: 75 },
-    { month: 'Apr', score: 78 },
-    { month: 'May', score: 82 },
-    { month: 'Jun', score: 88 },
-  ];
-  
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold tracking-tight">Your Career Analytics</h1>
+      <div className={`container max-w-6xl mx-auto py-8 ${fadeInAnimation}`}>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Analytics Dashboard</h1>
           <p className="text-muted-foreground">
-            Track your progress and identify areas for improvement
+            Gain insights into your job search, skill development, and market trends
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Applications</CardTitle>
-              <CardDescription>Total job applications</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">28</div>
-              <p className="text-sm text-muted-foreground">Last 6 months</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Interviews</CardTitle>
-              <CardDescription>Interview invitations</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">10</div>
-              <p className="text-sm text-muted-foreground">35% success rate</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Skills</CardTitle>
-              <CardDescription>Skills in progress</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">5</div>
-              <p className="text-sm text-muted-foreground">3 at advanced level</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Alert className="mb-6 bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-900 dark:text-blue-300">
+          <InfoIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" />
+          <AlertTitle>Access Information</AlertTitle>
+          <AlertDescription>
+            Your account type ({userProfile?.user_type || 'student'}) gives you access to specific analytics features.
+            Some features may be restricted based on your account type.
+          </AlertDescription>
+        </Alert>
         
-        <Tabs defaultValue="applications" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3">
-            <TabsTrigger value="applications">Applications</TabsTrigger>
-            <TabsTrigger value="skills">Skills</TabsTrigger>
-            <TabsTrigger value="interviews">Interviews</TabsTrigger>
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-5 mb-8">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="skills">Skills Analytics</TabsTrigger>
+            <TabsTrigger value="jobMarket" disabled={!access.jobMarket}>
+              Job Market
+              {!access.jobMarket && <Lock className="h-3 w-3 ml-1" />}
+            </TabsTrigger>
+            <TabsTrigger value="performance" disabled={!access.performance}>
+              Performance
+              {!access.performance && <Lock className="h-3 w-3 ml-1" />}
+            </TabsTrigger>
+            <TabsTrigger value="advanced" disabled={!access.advanced}>
+              Advanced
+              {!access.advanced && <Lock className="h-3 w-3 ml-1" />}
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="applications" className="space-y-6 mt-6">
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart className="h-5 w-5 text-primary" />
+                    What You Have Access To
+                  </CardTitle>
+                  <CardDescription>
+                    Based on your account type
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <span>Personal skills tracking</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <span>Career path analysis</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <span>Basic job market insights</span>
+                    </li>
+                    {access.jobMarket && (
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span>Industry trend analysis</span>
+                      </li>
+                    )}
+                    {access.performance && (
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span>Performance metrics</span>
+                      </li>
+                    )}
+                    {access.advanced && (
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span>Advanced data analysis</span>
+                      </li>
+                    )}
+                    <li className="flex items-center gap-2 text-muted-foreground">
+                      <div className="h-2 w-2 rounded-full bg-gray-300"></div>
+                      <span>Premium features (upgrade required)</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <PieChart className="h-5 w-5 text-primary" />
+                    Skills Overview
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="h-48 flex items-center justify-center">
+                  <div className="text-center text-muted-foreground">
+                    Skills visualization coming soon
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <LineChart className="h-5 w-5 text-primary" />
+                    Your Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="h-48 flex items-center justify-center">
+                  <div className="text-center text-muted-foreground">
+                    Progress tracking coming soon
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="skills">
             <Card>
               <CardHeader>
-                <CardTitle>Application Activity</CardTitle>
-                <CardDescription>
-                  Track your job application submission trends
-                </CardDescription>
+                <CardTitle>Skills Analytics</CardTitle>
+                <CardDescription>Track your skill development progress</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={applicationData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Application Status Breakdown</CardTitle>
-                <CardDescription>
-                  Current status of all your job applications
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-6`}>
-                  <div className="flex flex-col justify-center">
-                    {statusData.map((entry, index) => (
-                      <div key={index} className="flex items-center mb-2">
-                        <div 
-                          className="w-3 h-3 rounded-full mr-2"
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                        ></div>
-                        <span className="text-sm font-medium">{entry.name}: </span>
-                        <span className="text-sm ml-1">{entry.value}</span>
-                      </div>
-                    ))}
-                    <div className="mt-4">
-                      <p className="text-sm text-muted-foreground">
-                        Your interview rate is higher than average among your peers.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={statusData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {statusData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  Detailed skills analytics coming soon
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
           
-          <TabsContent value="skills" className="space-y-6 mt-6">
+          <TabsContent value="jobMarket">
             <Card>
               <CardHeader>
-                <CardTitle>Skill Proficiency</CardTitle>
-                <CardDescription>
-                  Your current skill levels and development progress
-                </CardDescription>
+                <CardTitle>Job Market Insights</CardTitle>
+                <CardDescription>Analyze industry trends and demands</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {skillsData.map((skill, index) => (
-                    <div key={index} className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm font-medium">{skill.name}</span>
-                        <span className="text-sm">{skill.level}/10</span>
-                      </div>
-                      <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-blue-500 rounded-full" 
-                          style={{ width: `${skill.level * 10}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-6 p-4 bg-blue-50 rounded-md">
-                  <h4 className="text-sm font-medium text-blue-800">Skill Gap Analysis</h4>
-                  <p className="text-sm text-blue-600 mt-1">
-                    Based on your target jobs, focus on improving your Problem Solving skills.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Most In-Demand Skills</CardTitle>
-                <CardDescription>
-                  Popular skills requested in your job search area
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Customer Service</Badge>
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Communication</Badge>
-                  <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Microsoft Office</Badge>
-                  <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200">Time Management</Badge>
-                  <Badge className="bg-pink-100 text-pink-800 hover:bg-pink-200">Data Entry</Badge>
-                  <Badge className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200">Social Media</Badge>
-                  <Badge className="bg-teal-100 text-teal-800 hover:bg-teal-200">Team Collaboration</Badge>
-                  <Badge className="bg-red-100 text-red-800 hover:bg-red-200">Sales</Badge>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  Job market insights coming soon
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
           
-          <TabsContent value="interviews" className="space-y-6 mt-6">
+          <TabsContent value="performance">
             <Card>
               <CardHeader>
-                <CardTitle>Interview Performance</CardTitle>
-                <CardDescription>
-                  Track your improvement in mock interviews
-                </CardDescription>
+                <CardTitle>Performance Metrics</CardTitle>
+                <CardDescription>Track application success rates and interview performance</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={interviewData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[0, 100]} />
-                      <Tooltip />
-                      <Line 
-                        type="monotone" 
-                        dataKey="score" 
-                        stroke="#3b82f6" 
-                        strokeWidth={2}
-                        activeDot={{ r: 8 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium">Performance Insights</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Your interview performance has improved by 23 points over the last 6 months.
-                    Continue practicing common behavioral questions.
-                  </p>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  Performance metrics coming soon
                 </div>
               </CardContent>
             </Card>
-            
+          </TabsContent>
+          
+          <TabsContent value="advanced">
             <Card>
               <CardHeader>
-                <CardTitle>Interview Question Practice</CardTitle>
-                <CardDescription>
-                  Questions you've practiced and areas for improvement
-                </CardDescription>
+                <CardTitle>Advanced Analytics</CardTitle>
+                <CardDescription>Access premium analytics features</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-3 border rounded-lg">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">Behavioral Questions</span>
-                      <Badge>16 Practiced</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Strong in discussing teamwork and problem-solving examples.
-                    </p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">Technical Questions</span>
-                      <Badge>8 Practiced</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Focus more on MS Excel and data entry scenarios.
-                    </p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">Situational Questions</span>
-                      <Badge>12 Practiced</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Good at customer service scenarios, improve on conflict resolution.
-                    </p>
-                  </div>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  Advanced analytics features coming soon
                 </div>
               </CardContent>
             </Card>

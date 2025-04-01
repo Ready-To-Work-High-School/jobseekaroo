@@ -62,7 +62,7 @@ const Footer = () => {
             <div>
               <h4 className="font-medium mb-3">For Job Seekers</h4>
               <ul className="space-y-2">
-                <li><Link to={getPath("/jobs")} className="text-sm text-muted-foreground hover:text-foreground">Browse Jobs</Link></li>
+                <li><Link to="/jobs" className="text-sm text-muted-foreground hover:text-foreground">Browse Jobs</Link></li>
                 <li><Link to={getPath("/skills")} className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
                 <li><Link to={getPath("/resume-assistant")} className="text-sm text-muted-foreground hover:text-foreground">Resume Help</Link></li>
                 <li><Link to={getPath("/interview-prep")} className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link></li>
@@ -78,7 +78,7 @@ const Footer = () => {
             <div>
               <h4 className="font-medium mb-3">Resources</h4>
               <ul className="space-y-2">
-                <li><Link to={getPath("/resources")} className="text-sm text-muted-foreground hover:text-foreground">Career Resources</Link></li>
+                <li><Link to="/resources" className="text-sm text-muted-foreground hover:text-foreground">Career Resources</Link></li>
                 <li><Link to={getPath("/analytics")} className="text-sm text-muted-foreground hover:text-foreground">Analytics Dashboard</Link></li>
               </ul>
             </div>

@@ -23,6 +23,11 @@ import {
   User,
   LogOut,
   Shield,
+  GraduationCap,
+  Briefcase,
+  PenLine,
+  Headphones,
+  BarChart,
 } from 'lucide-react';
 
 export const MobileMenu = () => {
@@ -30,6 +35,7 @@ export const MobileMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = userProfile?.user_type === 'admin';
+  const isEmployer = userProfile?.user_type === 'employer';
   
   // Debug logs
   console.log("MobileMenu (navbar) - User profile:", userProfile);
@@ -57,38 +63,76 @@ export const MobileMenu = () => {
             <Home className="h-5 w-5" />
             Home
           </MobileNavLink>
+          
+          {/* Job Seeker Section */}
+          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
+            For Job Seekers
+          </div>
+          
           <MobileNavLink to="/jobs">
-            <Search className="h-5 w-5" />
-            Find Jobs
+            <Briefcase className="h-5 w-5" />
+            Browse Jobs
           </MobileNavLink>
-          <MobileNavLink to="/resources">
-            <BookOpen className="h-5 w-5" />
-            Resources
+          
+          <MobileNavLink to={getPath("/skills")}>
+            <GraduationCap className="h-5 w-5" />
+            Skills Development
           </MobileNavLink>
+          
+          <MobileNavLink to={getPath("/resume-assistant")}>
+            <PenLine className="h-5 w-5" />
+            Resume Help
+          </MobileNavLink>
+          
+          <MobileNavLink to={getPath("/interview-prep")}>
+            <Headphones className="h-5 w-5" />
+            Interview Prep
+          </MobileNavLink>
+          
+          {/* Employer Section */}
+          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
+            For Employers
+          </div>
+          
           <MobileNavLink to="/for-employers">
             <Building2 className="h-5 w-5" />
-            For Employers
+            Employer Overview
           </MobileNavLink>
-          <MobileNavLink to={getPath("/resume-assistant")}>
-            <FileText className="h-5 w-5" />
-            Resume Assistant
+          
+          <MobileNavLink to={getPath("/employer-dashboard")}>
+            <Briefcase className="h-5 w-5" />
+            Employer Dashboard
+          </MobileNavLink>
+          
+          {/* Resources Section */}
+          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
+            Resources
+          </div>
+          
+          <MobileNavLink to="/resources">
+            <BookOpen className="h-5 w-5" />
+            Career Resources
+          </MobileNavLink>
+          
+          <MobileNavLink to={getPath("/analytics")}>
+            <BarChart className="h-5 w-5" />
+            Analytics Dashboard
           </MobileNavLink>
           
           {user ? (
             <>
               <div className="border-t border-border/60 my-2"></div>
-              <MobileNavLink to="/skills">
-                <TrendingUp className="h-5 w-5" />
-                Skills
-              </MobileNavLink>
+              
               <MobileNavLink to="/saved-jobs">
                 <BookMarked className="h-5 w-5" />
                 Saved Jobs
               </MobileNavLink>
+              
               <MobileNavLink to="/applications">
                 <CheckSquare className="h-5 w-5" />
                 Applications
               </MobileNavLink>
+              
               <MobileNavLink to="/profile">
                 <User className="h-5 w-5" />
                 Profile

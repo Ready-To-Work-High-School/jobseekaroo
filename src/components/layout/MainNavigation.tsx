@@ -4,7 +4,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Server } from 'lucide-react';
+import { 
+  Server, 
+  Briefcase, 
+  BookOpen, 
+  GraduationCap, 
+  PenLine, 
+  Headphones, 
+  BarChart
+} from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -67,10 +75,97 @@ const MainNavigation = ({ className }: { className?: string }) => {
         Home
       </Link>
       
-      <Link to="/jobs" className={cn("text-sm font-medium transition-colors", 
-        location.pathname === "/jobs" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-        Jobs
-      </Link>
+      {/* Job Seeker Links */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="p-0 h-auto">
+            <span className={cn("text-sm font-medium transition-colors", 
+            location.pathname.includes("/jobs") ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+              For Job Seekers
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem asChild>
+            <Link to="/jobs" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4" />
+              Browse Jobs
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/skills" className="flex items-center gap-2">
+              <GraduationCap className="h-4 w-4" />
+              Skills Development
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/resume-assistant" className="flex items-center gap-2">
+              <PenLine className="h-4 w-4" />
+              Resume Help
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/interview-prep" className="flex items-center gap-2">
+              <Headphones className="h-4 w-4" />
+              Interview Prep
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      
+      {/* Employer Links */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="p-0 h-auto">
+            <span className={cn("text-sm font-medium transition-colors", 
+            location.pathname.includes("/for-employers") || location.pathname.includes("/employer-dashboard") ? 
+            "text-primary" : "text-muted-foreground hover:text-primary")}>
+              For Employers
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem asChild>
+            <Link to="/for-employers" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4" />
+              Employer Overview
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/employer-dashboard" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4" />
+              Employer Dashboard
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      
+      {/* Resources Links */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="p-0 h-auto">
+            <span className={cn("text-sm font-medium transition-colors", 
+            location.pathname.includes("/resources") || location.pathname.includes("/analytics") ? 
+            "text-primary" : "text-muted-foreground hover:text-primary")}>
+              Resources
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem asChild>
+            <Link to="/resources" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Career Resources
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/analytics" className="flex items-center gap-2">
+              <BarChart className="h-4 w-4" />
+              Analytics Dashboard
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       
       <Link to="/server-demo" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
         location.pathname === "/server-demo" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
@@ -85,6 +180,7 @@ const MainNavigation = ({ className }: { className?: string }) => {
         </Link>
       )}
 
+      {/* User Menu */}
       {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

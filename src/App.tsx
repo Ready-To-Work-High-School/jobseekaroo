@@ -25,6 +25,12 @@ import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './pages/NotFound';
 import EmployerDashboard from './pages/EmployerDashboard';
+import JobListings from './pages/JobListings';
+import ResumeAssistant from './pages/ResumeAssistant';
+import InterviewPrep from './pages/InterviewPrep';
+import ForEmployers from './pages/ForEmployers';
+import EnhancedJobListings from './pages/EnhancedJobListings';
+import Analytics from './pages/Analytics';
 
 function App() {
   return <ErrorBoundary>
@@ -42,6 +48,20 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/redeem-code" element={<RedemptionCode />} />
 
+              {/* Job seeker routes */}
+              <Route path="/jobs" element={<JobListings />} />
+              <Route path="/jobs/search" element={<EnhancedJobListings />} />
+              <Route path="/resume-assistant" element={
+                <ProtectedRoute>
+                  <ResumeAssistant />
+                </ProtectedRoute>
+              } />
+              <Route path="/interview-prep" element={
+                <ProtectedRoute>
+                  <InterviewPrep />
+                </ProtectedRoute>
+              } />
+
               {/* Content pages */}
               <Route path="/contact" element={<Contact />} />
               <Route path="/server-demo" element={<ServerDemo />} />
@@ -51,18 +71,19 @@ function App() {
                   <Skills />
                 </ProtectedRoute>
               } />
-              <Route path="/for-employers" element={<Layout />} />
+              <Route path="/for-employers" element={<ForEmployers />} />
               <Route path="/entrepreneurship-academy" element={<Layout />} />
-              <Route path="/jobs" element={<Layout />} />
               <Route path="/faq" element={<NotFound />} /> {/* Temporary solution until FAQ page is created */}
               <Route path="/saved-jobs" element={<Layout />} />
               <Route path="/account-benefits" element={<Layout />} />
-              <Route path="/resume-assistant" element={<Layout />} />
               <Route path="/applications" element={<Layout />} />
               <Route path="/success-stories" element={<Layout />} />
               <Route path="/license" element={<Layout />} />
-              <Route path="/analytics" element={<Layout />} />
-              <Route path="/interview-prep" element={<Layout />} />
+              <Route path="/analytics" element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              } />
               <Route path="/resume" element={<Layout />} />
               <Route path="/saved" element={<Layout />} />
               <Route path="/notifications" element={<Layout />} />
