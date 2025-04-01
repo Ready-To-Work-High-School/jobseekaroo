@@ -28,6 +28,7 @@ import {
   PenLine,
   Headphones,
   BarChart,
+  Award,
 } from 'lucide-react';
 
 export const MobileMenu = () => {
@@ -69,6 +70,11 @@ export const MobileMenu = () => {
             <MobileNavLink to="/entrepreneurship-academy">
               <GraduationCap className="h-5 w-5" />
               <span className="font-semibold">Entrepreneurship Academy</span>
+            </MobileNavLink>
+            
+            <MobileNavLink to="/student-success">
+              <Award className="h-5 w-5" />
+              <span className="font-semibold">Student Success</span>
             </MobileNavLink>
             
             <MobileNavLink to="/jobs">

@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -40,6 +39,7 @@ import SavedJobs from './pages/SavedJobs';
 import Messages from './pages/Messages';
 import AuthCallback from './pages/AuthCallback';
 import AdminToggle from './components/admin/AdminToggle';
+import StudentSuccess from './pages/StudentSuccess';
 
 function App() {
   return <ErrorBoundary>
@@ -58,6 +58,7 @@ function App() {
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/license" element={<License />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/student-success" element={<StudentSuccess />} />
 
               {/* Authentication routes */}
               <Route path="/login" element={<Login />} />

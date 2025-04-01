@@ -3,7 +3,7 @@ import React from 'react';
 import NavLink from './NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Ticket, GraduationCap, Briefcase, Building2, BookOpen, User } from 'lucide-react';
+import { Ticket, GraduationCap, Briefcase, Building2, BookOpen, User, Award } from 'lucide-react';
 
 interface DesktopNavProps {
   className?: string;
@@ -24,6 +24,10 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
         <NavLink to="/entrepreneurship-academy" className="flex items-center gap-1">
           <GraduationCap className="h-4 w-4" />
           <span>Entrepreneurship</span>
+        </NavLink>
+        <NavLink to="/student-success" className="flex items-center gap-1">
+          <Award className="h-4 w-4" />
+          <span>Student Success</span>
         </NavLink>
         <NavLink to="/for-employers" className="flex items-center gap-1">
           <Building2 className="h-4 w-4" />
