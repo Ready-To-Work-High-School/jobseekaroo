@@ -5,7 +5,7 @@ export const NavbarBrand = () => {
   return (
     <Link to="/" className="flex flex-col items-start">
       <div className="flex items-center gap-2 relative">
-        <div className="h-8 w-8 relative">
+        <div className="h-6 w-6 relative">
           {/* Enhanced gradient to match ESB badge style with stronger accent */}
           <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
           <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
