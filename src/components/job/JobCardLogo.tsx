@@ -20,7 +20,7 @@ const JobCardLogo = ({ logoUrl, companyName, useAmberStyling }: JobCardLogoProps
         <LazyImage
           src={logoUrl}
           alt={`${companyName} logo`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain relative z-10 rounded-md"
           onLoad={() => setImageLoaded(true)}
           width="48"
           height="48"

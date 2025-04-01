@@ -13,7 +13,7 @@ export const NavbarBrand = () => {
           <img 
             src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
             alt="JS4HS Logo" 
-            className="h-full w-full object-contain relative z-10"
+            className="w-full h-full object-contain relative z-10 rounded-md"
           />
         </div>
         <div className="relative">

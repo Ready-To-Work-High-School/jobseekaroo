@@ -34,7 +34,7 @@ function App() {
                   <img 
                     src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                     alt="JS4HS Logo" 
-                    className="h-12 w-12 mr-3 relative z-10"
+                    className="h-12 w-12 mr-3 relative z-10 w-full h-full object-contain rounded-md"
                   />
                 </div>
                 <h1 className="text-white text-xl font-bold">Job Seekers 4 High Schools</h1>

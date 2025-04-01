@@ -28,7 +28,7 @@ const EnhancedHero = () => {
               <img 
                 src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                 alt="JS4HS Logo" 
-                className="h-24 w-24 md:h-32 md:w-32 relative z-10"
+                className="h-24 w-24 md:h-32 md:w-32 relative z-10 w-full h-full object-contain rounded-md"
               />
             </div>
           </div>
