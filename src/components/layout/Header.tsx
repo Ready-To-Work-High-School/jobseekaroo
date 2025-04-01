@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MainNavigation from './MainNavigation';
 import MobileMenu from './MobileMenu';
@@ -8,9 +7,11 @@ import AuthLinks from './AuthLinks';
 import UserMenu from './UserMenu';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { Link } from 'react-router-dom';
+
 interface HeaderProps {
   className?: string;
 }
+
 const Header = ({
   className
 }: HeaderProps = {}) => {
@@ -34,4 +35,5 @@ const Header = ({
       </div>
     </header>;
 };
+
 export default Header;

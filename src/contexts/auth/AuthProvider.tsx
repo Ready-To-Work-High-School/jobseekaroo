@@ -1,33 +1,11 @@
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/lib/supabase';
+import { ReactNode, useState, useEffect, useCallback } from 'react';
 import { User } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
 import { ApplicationStatus } from '@/types/application';
-
-interface AuthContextType {
-  user: User | null;
-  userProfile: UserProfile | null;
-  isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
-  signOut: () => Promise<void>;
-  signInWithApple: () => Promise<User | null>;
-  signInWithGoogle: () => Promise<User | null>;
-  saveJob: (jobId: string) => Promise<void>;
-  unsaveJob: (jobId: string) => Promise<void>;
-  isSavedJob: (jobId: string) => Promise<boolean>;
-  getSavedJobs: () => Promise<string[]>;
-  createApplication: (application: any) => Promise<string>;
-  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
-  getApplications: () => Promise<any[]>;
-  deleteApplication: (applicationId: string) => Promise<void>;
-  updateProfile: (data: UserProfileUpdate) => Promise<UserProfile | null>;
-  refreshProfile: () => Promise<void>;
-  error: string | null;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext, initialAuthState } from './AuthContext';
+import { formatUserProfile } from './utils';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -35,6 +13,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
+  // Profile fetching
+  const fetchUserProfile = useCallback(async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        return;
+      }
+      
+      console.log('Fetched user profile:', data);
+      const formattedProfile = formatUserProfile(data);
+      setUserProfile(formattedProfile);
+      
+    } catch (error) {
+      console.error('Unexpected error fetching profile:', error);
+    }
+  }, []);
+  
+  // Auth initialization
   useEffect(() => {
     const fetchUserAndSession = async () => {
       setIsLoading(true);
@@ -80,164 +82,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [fetchUserProfile]);
   
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return;
-      }
-      
-      console.log('Fetched user profile:', data);
-      
-      // Format the preferences to ensure they're an object
-      let formattedPreferences: Record<string, any> | null = null;
-      
-      if (data.preferences) {
-        try {
-          if (typeof data.preferences === 'string') {
-            formattedPreferences = JSON.parse(data.preferences);
-          } else if (typeof data.preferences === 'object' && data.preferences !== null) {
-            formattedPreferences = data.preferences as Record<string, any>;
-          } else {
-            // Handle other types by creating an empty object
-            formattedPreferences = {};
-            console.warn('Unexpected preferences format:', data.preferences);
-          }
-        } catch (parseError) {
-          console.error('Error parsing preferences:', parseError);
-          formattedPreferences = {};
-        }
-      }
-      
-      // Format and validate user_type
-      const validUserTypes: Array<'student' | 'employer' | 'admin' | 'teacher'> = ['student', 'employer', 'admin', 'teacher'];
-      let formattedUserType: 'student' | 'employer' | 'admin' | 'teacher' | null = null;
-      
-      if (data.user_type && validUserTypes.includes(data.user_type as any)) {
-        formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
-      }
-      
-      // Format and validate employer_verification_status
-      const validVerificationStatuses: Array<'pending' | 'approved' | 'rejected'> = ['pending', 'approved', 'rejected'];
-      let formattedVerificationStatus: 'pending' | 'approved' | 'rejected' | null = null;
-      
-      if (data.employer_verification_status && validVerificationStatuses.includes(data.employer_verification_status as any)) {
-        formattedVerificationStatus = data.employer_verification_status as 'pending' | 'approved' | 'rejected';
-      }
-      
-      const formattedData: UserProfile = {
-        ...data,
-        preferences: formattedPreferences,
-        user_type: formattedUserType,
-        employer_verification_status: formattedVerificationStatus
-      };
-      
-      setUserProfile(formattedData);
-    } catch (error) {
-      console.error('Unexpected error fetching profile:', error);
-    }
-  };
-  
-  const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      console.log('Updating profile with data:', profileData);
-      
-      // Ensure we have a valid object to update
-      let dataToUpdate: any = { ...profileData };
-      
-      // If user_type is present, ensure it's one of the valid types
-      if (dataToUpdate.user_type && !['student', 'employer', 'admin', 'teacher'].includes(dataToUpdate.user_type)) {
-        throw new Error(`Invalid user_type: ${dataToUpdate.user_type}`);
-      }
-      
-      // If employer_verification_status is present, ensure it's one of the valid statuses
-      if (dataToUpdate.employer_verification_status && 
-          !['pending', 'approved', 'rejected'].includes(dataToUpdate.employer_verification_status)) {
-        throw new Error(`Invalid employer_verification_status: ${dataToUpdate.employer_verification_status}`);
-      }
-      
-      const { data, error } = await supabase
-        .from('profiles')
-        .update(dataToUpdate)
-        .eq('id', user.id)
-        .select()
-        .single();
-      
-      if (error) {
-        console.error('Error updating profile:', error);
-        throw error;
-      }
-      
-      console.log('Profile updated successfully:', data);
-      
-      // Format the preferences to ensure they're an object
-      let formattedPreferences: Record<string, any> | null = null;
-      
-      if (data.preferences) {
-        try {
-          if (typeof data.preferences === 'string') {
-            formattedPreferences = JSON.parse(data.preferences);
-          } else if (typeof data.preferences === 'object' && data.preferences !== null) {
-            formattedPreferences = data.preferences as Record<string, any>;
-          } else {
-            // Handle other types by creating an empty object
-            formattedPreferences = {};
-            console.warn('Unexpected preferences format:', data.preferences);
-          }
-        } catch (parseError) {
-          console.error('Error parsing preferences in response:', parseError);
-          formattedPreferences = {};
-        }
-      }
-      
-      // Format and validate user_type
-      const validUserTypes: Array<'student' | 'employer' | 'admin' | 'teacher'> = ['student', 'employer', 'admin', 'teacher'];
-      let formattedUserType: 'student' | 'employer' | 'admin' | 'teacher' | null = null;
-      
-      if (data.user_type && validUserTypes.includes(data.user_type as any)) {
-        formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
-      }
-      
-      // Format and validate employer_verification_status
-      const validVerificationStatuses: Array<'pending' | 'approved' | 'rejected'> = ['pending', 'approved', 'rejected'];
-      let formattedVerificationStatus: 'pending' | 'approved' | 'rejected' | null = null;
-      
-      if (data.employer_verification_status && validVerificationStatuses.includes(data.employer_verification_status as any)) {
-        formattedVerificationStatus = data.employer_verification_status as 'pending' | 'approved' | 'rejected';
-      }
-      
-      const formattedData: UserProfile = {
-        ...data,
-        preferences: formattedPreferences,
-        user_type: formattedUserType,
-        employer_verification_status: formattedVerificationStatus
-      };
-      
-      setUserProfile(prev => prev ? { ...prev, ...formattedData } : null);
-      
-      return formattedData;
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-      throw error;
-    }
-  };
-  
-  const refreshProfile = async () => {
-    if (user) {
-      await fetchUserProfile(user.id);
-    }
-  };
-  
+  // Authentication methods
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -324,6 +171,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
+  // Profile management
+  const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      console.log('Updating profile with data:', profileData);
+      
+      // Ensure we have a valid object to update
+      let dataToUpdate: any = { ...profileData };
+      
+      // If user_type is present, ensure it's one of the valid types
+      if (dataToUpdate.user_type && !['student', 'employer', 'admin', 'teacher'].includes(dataToUpdate.user_type)) {
+        throw new Error(`Invalid user_type: ${dataToUpdate.user_type}`);
+      }
+      
+      // If employer_verification_status is present, ensure it's one of the valid statuses
+      if (dataToUpdate.employer_verification_status && 
+          !['pending', 'approved', 'rejected'].includes(dataToUpdate.employer_verification_status)) {
+        throw new Error(`Invalid employer_verification_status: ${dataToUpdate.employer_verification_status}`);
+      }
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(dataToUpdate)
+        .eq('id', user.id)
+        .select()
+        .single();
+      
+      if (error) {
+        console.error('Error updating profile:', error);
+        throw error;
+      }
+      
+      console.log('Profile updated successfully:', data);
+      
+      const formattedProfile = formatUserProfile(data);
+      setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : null);
+      
+      return formattedProfile;
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      throw error;
+    }
+  };
+  
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchUserProfile(user.id);
+    }
+  };
+  
+  // Job management
   const saveJob = async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to save jobs');
     
@@ -394,6 +293,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
+  // Application management
   const createApplication = async (application: any) => {
     if (!user) throw new Error('User must be logged in to create an application');
     
@@ -493,14 +393,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  
-  return context;
 };
