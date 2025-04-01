@@ -21,7 +21,7 @@ const EnhancedHero = () => {
       
       <div className="w-full max-w-6xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
-          {/* Logo with enhanced gradient glow to match ESB badge style with stronger accent */}
+          {/* Logo with enhanced gradient glow to match ESB badge style with stronger accent - SMALLER SIZE */}
           <div className="flex justify-center mb-6">
             <div className="relative">
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-md animate-pulse"></div>
@@ -31,7 +31,7 @@ const EnhancedHero = () => {
               <img 
                 src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                 alt="JS4HS Logo" 
-                className="h-6 w-6 relative z-10 w-full h-full object-contain rounded-md"
+                className="h-5 w-5 relative z-10 w-full h-full object-contain rounded-md"
               />
             </div>
           </div>

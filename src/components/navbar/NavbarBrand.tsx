@@ -5,7 +5,7 @@ export const NavbarBrand = () => {
   return (
     <div className="flex flex-col items-start">
       <div className="flex items-center gap-2 relative">
-        <Link to="/admin?adminTest=true" className="h-4 w-4 relative" aria-label="Admin Access" title="Admin Access">
+        <Link to="/admin?adminTest=true" className="h-3 w-3 relative" aria-label="Admin Access" title="Admin Access">
           {/* Enhanced gradient to match ESB badge style with stronger accent */}
           <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
           <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
@@ -19,7 +19,7 @@ export const NavbarBrand = () => {
         <div className="relative">
           {/* Accent glow behind the text */}
           <div className="absolute -inset-1 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-sm -z-10"></div>
-          <Link to="/" className="relative text-xl font-bold bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-2 py-1">
+          <Link to="/" className="relative text-lg font-bold bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-2 py-1">
             Job Seekers 4 High Schools
           </Link>
         </div>

@@ -64,15 +64,28 @@ export const MobileMenu = () => {
             Home
           </MobileNavLink>
           
+          {/* Primary Navigation Links - Highlighted at top */}
+          <div className="px-4 py-2 my-1 bg-blue-50">
+            <MobileNavLink to="/entrepreneurship-academy">
+              <GraduationCap className="h-5 w-5" />
+              <span className="font-semibold">Entrepreneurship Academy</span>
+            </MobileNavLink>
+            
+            <MobileNavLink to="/jobs">
+              <Briefcase className="h-5 w-5" />
+              <span className="font-semibold">Browse Jobs</span>
+            </MobileNavLink>
+            
+            <MobileNavLink to="/for-employers">
+              <Building2 className="h-5 w-5" />
+              <span className="font-semibold">For Employers</span>
+            </MobileNavLink>
+          </div>
+          
           {/* Job Seeker Section */}
           <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
             For Job Seekers
           </div>
-          
-          <MobileNavLink to="/jobs">
-            <Briefcase className="h-5 w-5" />
-            Browse Jobs
-          </MobileNavLink>
           
           <MobileNavLink to={getPath("/skills")}>
             <GraduationCap className="h-5 w-5" />
@@ -87,26 +100,6 @@ export const MobileMenu = () => {
           <MobileNavLink to={getPath("/interview-prep")}>
             <Headphones className="h-5 w-5" />
             Interview Prep
-          </MobileNavLink>
-          
-          <MobileNavLink to="/entrepreneurship-academy">
-            <GraduationCap className="h-5 w-5" />
-            Entrepreneurship Academy
-          </MobileNavLink>
-          
-          {/* Employer Section */}
-          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
-            For Employers
-          </div>
-          
-          <MobileNavLink to="/for-employers">
-            <Building2 className="h-5 w-5" />
-            Employer Overview
-          </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/employer-dashboard")}>
-            <Briefcase className="h-5 w-5" />
-            Employer Dashboard
           </MobileNavLink>
           
           {/* Resources Section */}
