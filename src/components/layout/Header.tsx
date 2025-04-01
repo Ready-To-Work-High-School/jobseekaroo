@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -8,25 +7,20 @@ import AuthLinks from './AuthLinks';
 import UserMenu from './UserMenu';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { Link } from 'react-router-dom';
-
 interface HeaderProps {
   className?: string;
 }
-
-const Header = ({ className }: HeaderProps = {}) => {
-  const { user } = useAuth();
+const Header = ({
+  className
+}: HeaderProps = {}) => {
+  const {
+    user
+  } = useAuth();
   const isMobile = useIsMobile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  return (
-    <header className="bg-secondary border-b sticky top-0 z-10">
+  return <header className="bg-secondary border-b sticky top-0 z-10">
       <div className="container mx-auto flex items-center h-16 space-x-4 sm:justify-between sm:space-x-0">
-        {isMobile && (
-          <MobileMenu 
-            isOpen={isMobileMenuOpen} 
-            setIsOpen={setIsMobileMenuOpen} 
-          />
-        )}
+        {isMobile && <MobileMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />}
         
         <div className="flex items-center space-x-4">
           <Link to="/" className="mr-4 hidden sm:block">
@@ -35,11 +29,7 @@ const Header = ({ className }: HeaderProps = {}) => {
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
               <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
               <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
-              <img 
-                src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
-                alt="JS4HS Logo" 
-                className="h-8 w-8 relative z-10 w-full h-full object-contain rounded-md"
-              />
+              <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-4w-4 relative z-10 w-full h-full object-contain rounded-md" />
             </div>
           </Link>
           <MainNavigation />
@@ -50,8 +40,6 @@ const Header = ({ className }: HeaderProps = {}) => {
           {user ? <UserMenu /> : <AuthLinks />}
         </div>
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Header;
