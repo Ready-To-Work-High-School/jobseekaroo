@@ -24,6 +24,7 @@ import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './pages/NotFound';
+import EmployerDashboard from './pages/EmployerDashboard';
 
 function App() {
   return <ErrorBoundary>
@@ -53,6 +54,18 @@ function App() {
               <Route path="/for-employers" element={<Layout />} />
               <Route path="/entrepreneurship-academy" element={<Layout />} />
               <Route path="/jobs" element={<Layout />} />
+              <Route path="/faq" element={<NotFound />} /> {/* Temporary solution until FAQ page is created */}
+              <Route path="/saved-jobs" element={<Layout />} />
+              <Route path="/account-benefits" element={<Layout />} />
+              <Route path="/resume-assistant" element={<Layout />} />
+              <Route path="/applications" element={<Layout />} />
+              <Route path="/success-stories" element={<Layout />} />
+              <Route path="/license" element={<Layout />} />
+              <Route path="/analytics" element={<Layout />} />
+              <Route path="/interview-prep" element={<Layout />} />
+              <Route path="/resume" element={<Layout />} />
+              <Route path="/saved" element={<Layout />} />
+              <Route path="/notifications" element={<Layout />} />
 
               {/* Protected routes */}
               <Route path="/dashboard" element={
@@ -65,9 +78,11 @@ function App() {
                   <Profile />
                 </ProtectedRoute>
               } />
-              <Route path="/applications" element={
-                <ProtectedRoute>
-                  <Layout />
+              
+              {/* Employer routes */}
+              <Route path="/employer-dashboard" element={
+                <ProtectedRoute requiredRoles={['employer']}>
+                  <EmployerDashboard />
                 </ProtectedRoute>
               } />
 

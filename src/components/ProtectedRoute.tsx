@@ -1,47 +1,47 @@
 
-import { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
-  children: ReactNode;
+  children: React.ReactNode;
   adminOnly?: boolean;
   requiredRoles?: string[];
 }
 
-const ProtectedRoute = ({ 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  adminOnly = false, 
-  requiredRoles = [] 
-}: ProtectedRouteProps) => {
-  const { user, userProfile, isLoading } = useAuth();
-  const location = useLocation();
+  adminOnly = false,
+  requiredRoles = []
+}) => {
+  const { user, userProfile, loading } = useAuth();
 
-  // If still loading auth state, show nothing (avoid flashes)
-  if (isLoading) {
-    return null;
+  // If auth is still loading, you might want to show a loading spinner
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    </div>;
   }
-  
-  // Not logged in - redirect to login page
+
+  // Not authenticated at all, redirect to sign in
   if (!user) {
-    return <Navigate to="/sign-in" state={{ from: location.pathname }} replace />;
+    return <Navigate to="/sign-in" replace />;
   }
-  
-  // If admin route but user is not admin, redirect to dashboard
-  if (adminOnly && userProfile?.user_type !== "admin") {
-    return <Navigate to="/dashboard" replace />;
+
+  // Check for admin-only routes
+  if (adminOnly && userProfile?.user_type !== 'admin') {
+    return <Navigate to="/" replace />;
   }
-  
-  // Check for required roles if specified
-  if (requiredRoles.length > 0) {
-    const userType = userProfile?.user_type;
-    // If user doesn't have any of the required roles, redirect to dashboard
-    if (!userType || !requiredRoles.includes(userType)) {
-      return <Navigate to="/dashboard" replace />;
+
+  // Check for role-based restrictions
+  if (requiredRoles.length > 0 && userProfile) {
+    const hasRequiredRole = requiredRoles.includes(userProfile.user_type);
+    if (!hasRequiredRole) {
+      return <Navigate to="/" replace />;
     }
   }
-  
-  // User is authenticated and has required role (if specified) - render children
+
+  // User is authenticated and has proper permissions
   return <>{children}</>;
 };
 
