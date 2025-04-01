@@ -42,6 +42,7 @@ import AuthCallback from './pages/AuthCallback';
 import AdminToggle from './components/admin/AdminToggle';
 import StudentSuccess from './pages/StudentSuccess';
 import AdminPanel from './pages/AdminPanel';
+import SpinnerExamples from './pages/SpinnerExamples';
 
 function App() {
   console.log('App component rendered');
@@ -63,6 +64,7 @@ function App() {
               <Route path="/license" element={<License />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/student-success" element={<StudentSuccess />} />
+              <Route path="/spinners" element={<SpinnerExamples />} />
 
               {/* Authentication routes */}
               <Route path="/login" element={<Login />} />
