@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import HeroSection from '@/components/home/HeroSection';
-import FeaturesSection from '@/components/home/FeaturesSection';
-import TestimonialsSection from '@/components/home/TestimonialsSection';
-import PartnerLogosSection from '@/components/home/PartnerLogosSection';
-import FAQSection from '@/components/home/FAQSection';
-import CallToActionSection from '@/components/home/CallToActionSection';
+import EnhancedHero from '@/components/EnhancedHero';
 import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,12 +15,7 @@ const Index = () => {
   return (
     <Layout>
       <div className={`w-full ${fadeIn}`}>
-        <HeroSection />
-        <FeaturesSection />
-        <TestimonialsSection />
-        <PartnerLogosSection />
-        <FAQSection />
-        <CallToActionSection />
+        <EnhancedHero />
         
         {/* Admin toggle card for easy access */}
         {user && (
