@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -107,7 +107,7 @@ const UserMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        {!userProfile?.redeemed_at && (
+        {!userProfile?.redeemed_at && !isAdmin && (
           <DropdownMenuItem asChild>
             <Link to="/redeem-code" className="cursor-pointer">
               <Award className="mr-2 h-4 w-4" />

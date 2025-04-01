@@ -28,9 +28,10 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ userProfile, classN
         };
       case 'admin':
         return {
-          text: 'Admin',
+          text: 'Chief Executive Officer',
           icon: <ShieldCheck className="h-3 w-3 mr-1" />,
-          variant: 'default'
+          variant: 'outline',
+          className: 'bg-black text-white hover:bg-black'
         };
       case 'teacher':
         return {
@@ -50,7 +51,10 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ userProfile, classN
   const badge = getBadgeContent();
 
   return (
-    <Badge variant={badge.variant as any} className={`flex items-center text-xs ${className}`}>
+    <Badge 
+      variant={badge.variant as any} 
+      className={`flex items-center text-xs ${badge.className || ''} ${className}`}
+    >
       {badge.icon}
       {badge.text}
     </Badge>
