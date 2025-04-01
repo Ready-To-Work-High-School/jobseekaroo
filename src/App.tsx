@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -40,6 +41,7 @@ import Messages from './pages/Messages';
 import AuthCallback from './pages/AuthCallback';
 import AdminToggle from './components/admin/AdminToggle';
 import StudentSuccess from './pages/StudentSuccess';
+import AdminPanel from './pages/AdminPanel';  // Added import
 
 function App() {
   return <ErrorBoundary>
@@ -141,6 +143,11 @@ function App() {
               
               {/* Admin routes */}
               <Route path="/admin" element={
+                <ProtectedRoute adminOnly>
+                  <AdminPanel />  {/* Changed from AdminDashboard to AdminPanel */}
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/dashboard" element={
                 <ProtectedRoute adminOnly>
                   <AdminDashboard />
                 </ProtectedRoute>

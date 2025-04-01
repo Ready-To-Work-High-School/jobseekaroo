@@ -1,7 +1,7 @@
 
 import { ReactNode, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProtectedRouteProps {
@@ -21,6 +21,16 @@ const ProtectedRoute = ({
   const location = useLocation();
   const { toast } = useToast();
   
+  // Add detailed debug logging to help diagnose issues
+  console.log('ProtectedRoute:', { 
+    path: location.pathname,
+    isLoading, 
+    authenticated: !!user,
+    userType: userProfile?.user_type,
+    adminOnly,
+    adminAccess: userProfile?.user_type === 'admin'
+  });
+  
   useEffect(() => {
     if (!user && !isLoading) {
       toast({
@@ -30,15 +40,6 @@ const ProtectedRoute = ({
       });
     }
   }, [user, isLoading, toast]);
-
-  // Debug log to help diagnose admin access issues
-  console.log('ProtectedRoute Check:', { 
-    user: !!user, 
-    userType: userProfile?.user_type,
-    adminOnly,
-    requiredRoles,
-    isAdmin: userProfile?.user_type === 'admin'
-  });
 
   // While checking auth status, show nothing or a loading spinner
   if (isLoading) {
@@ -51,6 +52,7 @@ const ProtectedRoute = ({
 
   // If not authenticated, redirect to login page with the return url
   if (!user) {
+    console.log('Not authenticated, redirecting to', redirectTo);
     // Save the current location they were trying to go to
     return (
       <Navigate 

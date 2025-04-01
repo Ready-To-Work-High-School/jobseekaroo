@@ -22,6 +22,9 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState("encryption");
   const navigate = useNavigate();
 
+  // Add debug log to trace page rendering
+  console.log('AdminPanel page rendered');
+
   return (
     <Layout>
       <div className="container py-8">
@@ -51,7 +54,7 @@ export default function AdminPanel() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
-                onClick={() => navigate("/admin/messages")}
+                onClick={() => navigate("/admin/message-moderation")}
                 variant="outline"
                 className="w-full flex items-center gap-2"
               >

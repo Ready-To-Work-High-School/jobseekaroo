@@ -13,6 +13,9 @@ const AdminToggle = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Debug log to trace admin status and navigation
+  console.log('AdminToggle - userProfile:', userProfile);
+
   const makeAdmin = async () => {
     if (!user) {
       toast({
@@ -46,7 +49,7 @@ const AdminToggle = () => {
   };
 
   const goToAdminPage = () => {
-    // Direct to the admin dashboard
+    console.log('Navigating to admin panel');
     navigate('/admin');
   };
 
