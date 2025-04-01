@@ -1,6 +1,5 @@
 
-
-export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected' | 'accepted' | 'withdrawn';
+export type ApplicationStatus = 'applied' | 'screening' | 'interview' | 'offer' | 'rejected' | 'accepted' | 'withdrawn';
 
 export interface JobApplication {
   id: string;
