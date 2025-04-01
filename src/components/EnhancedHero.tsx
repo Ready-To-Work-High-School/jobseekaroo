@@ -3,6 +3,9 @@ import { useSlideIn, useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import FeatureCard from './FeatureCard';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Briefcase, GraduationCap, Building2 } from 'lucide-react';
 
 const EnhancedHero = () => {
   const isMobile = useIsMobile();
@@ -50,6 +53,28 @@ const EnhancedHero = () => {
             </h1>
           </div>
           <p className="text-xl font-medium mt-6 text-black"><em>Exclusively for students at Westside High School</em></p>
+        </div>
+        
+        {/* Main Navigation Links - Adding prominent navigation here */}
+        <div className="flex flex-col md:flex-row justify-center gap-4 mb-10">
+          <Link to="/entrepreneurship-academy">
+            <Button size="lg" variant="default" className="flex items-center gap-2 px-6 py-6 text-lg">
+              <GraduationCap className="h-5 w-5" />
+              Entrepreneurship Academy
+            </Button>
+          </Link>
+          <Link to="/jobs">
+            <Button size="lg" variant="outline" className="flex items-center gap-2 px-6 py-6 text-lg">
+              <Briefcase className="h-5 w-5" />
+              Browse Jobs
+            </Button>
+          </Link>
+          <Link to="/for-employers">
+            <Button size="lg" variant="secondary" className="flex items-center gap-2 px-6 py-6 text-lg">
+              <Building2 className="h-5 w-5" />
+              For Employers
+            </Button>
+          </Link>
         </div>
         
         <div className={cn("grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-8", infoAnimation)}>

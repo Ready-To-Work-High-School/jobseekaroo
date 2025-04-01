@@ -89,6 +89,11 @@ export const MobileMenu = () => {
             Interview Prep
           </MobileNavLink>
           
+          <MobileNavLink to="/entrepreneurship-academy">
+            <GraduationCap className="h-5 w-5" />
+            Entrepreneurship Academy
+          </MobileNavLink>
+          
           {/* Employer Section */}
           <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
             For Employers
