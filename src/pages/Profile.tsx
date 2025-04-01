@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 type ProfileData = {
   username: string;
@@ -23,7 +22,6 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      // Initialize the form with user data
       setProfileData({
         username: user.username || '',
         email: user.email,
@@ -47,15 +45,12 @@ const Profile = () => {
     setSuccessMessage('');
 
     try {
-      // In a real app, you would send an API request to update the profile
-      // For now we'll just simulate a success after a short delay
       const token = localStorage.getItem('token');
       
       if (!token) {
         throw new Error('Authentication required');
       }
 
-      // This is just a simulation - in a real app you would call your API
       await new Promise(resolve => setTimeout(resolve, 500));
       
       setSuccessMessage('Profile updated successfully');

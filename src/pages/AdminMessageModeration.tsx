@@ -7,7 +7,7 @@ import { ModerationEmptyState } from '@/components/admin/ModerationEmptyState';
 import { ModerationLoadingState } from '@/components/admin/ModerationLoadingState';
 import { ModerationInstructions } from '@/components/admin/ModerationInstructions';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import CopyProtection from '@/components/CopyProtection';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, RefreshCw, ShieldAlert } from 'lucide-react';

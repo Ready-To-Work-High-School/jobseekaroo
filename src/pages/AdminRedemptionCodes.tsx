@@ -1,9 +1,8 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import RedemptionCodeManager from '@/components/admin/RedemptionCodeManager';
 import { useFadeIn } from '@/utils/animations';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 const AdminRedemptionCodes: React.FC = () => {
   const fadeIn = useFadeIn(300);

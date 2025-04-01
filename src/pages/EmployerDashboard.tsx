@@ -1,7 +1,7 @@
 
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
 import { useState } from 'react';

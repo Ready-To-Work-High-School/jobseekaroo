@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 const Dashboard = () => {
   const { user } = useAuth();

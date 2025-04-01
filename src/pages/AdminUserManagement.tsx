@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import UserManagementContainer from '@/components/admin/users/UserManagementContainer';
 import { Separator } from '@/components/ui/separator';
 import { Shield } from 'lucide-react';
