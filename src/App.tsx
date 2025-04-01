@@ -41,9 +41,11 @@ import Messages from './pages/Messages';
 import AuthCallback from './pages/AuthCallback';
 import AdminToggle from './components/admin/AdminToggle';
 import StudentSuccess from './pages/StudentSuccess';
-import AdminPanel from './pages/AdminPanel';  // Added import
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
+  console.log('App component rendered');
+
   return <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
@@ -143,29 +145,39 @@ function App() {
               
               {/* Admin routes */}
               <Route path="/admin" element={
-                <ProtectedRoute adminOnly>
-                  <AdminPanel />  {/* Changed from AdminDashboard to AdminPanel */}
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute adminOnly>
+                    <AdminPanel />
+                  </ProtectedRoute>
+                </Layout>
               } />
               <Route path="/admin/dashboard" element={
-                <ProtectedRoute adminOnly>
-                  <AdminDashboard />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute adminOnly>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                </Layout>
               } />
               <Route path="/admin/users" element={
-                <ProtectedRoute adminOnly>
-                  <AdminUserManagement />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute adminOnly>
+                    <AdminUserManagement />
+                  </ProtectedRoute>
+                </Layout>
               } />
               <Route path="/admin/redemption-codes" element={
-                <ProtectedRoute adminOnly>
-                  <AdminRedemptionCodes />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute adminOnly>
+                    <AdminRedemptionCodes />
+                  </ProtectedRoute>
+                </Layout>
               } />
               <Route path="/admin/message-moderation" element={
-                <ProtectedRoute adminOnly>
-                  <AdminMessageModeration />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute adminOnly>
+                    <AdminMessageModeration />
+                  </ProtectedRoute>
+                </Layout>
               } />
               
               {/* Catch all route */}

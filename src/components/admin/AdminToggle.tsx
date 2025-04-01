@@ -36,7 +36,7 @@ const AdminToggle = () => {
       
       // Force refresh to show the updated profile
       setTimeout(() => window.location.reload(), 1500);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error making admin:', error);
       toast({
         title: "Error",

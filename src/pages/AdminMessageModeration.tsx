@@ -22,10 +22,12 @@ const AdminMessageModeration = () => {
     refreshMessages,
     error
   } = useModerationMessages();
+  
+  console.log('AdminMessageModeration page rendered');
 
   return (
-    <ProtectedRoute adminOnly>
-      <Layout>
+    <Layout>
+      <ProtectedRoute adminOnly>
         <TooltipProvider>
           <div className="container max-w-4xl py-8">
             <div className="flex items-center gap-2 mb-2">
@@ -114,8 +116,8 @@ const AdminMessageModeration = () => {
             <CopyProtection showNotice={false} />
           </div>
         </TooltipProvider>
-      </Layout>
-    </ProtectedRoute>
+      </ProtectedRoute>
+    </Layout>
   );
 };
 

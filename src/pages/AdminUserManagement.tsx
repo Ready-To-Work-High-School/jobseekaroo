@@ -9,10 +9,12 @@ import { Shield } from 'lucide-react';
 
 const AdminUserManagement: React.FC = () => {
   const fadeIn = useFadeIn(300);
+  
+  console.log('AdminUserManagement page rendered');
 
   return (
-    <ProtectedRoute adminOnly>
-      <Layout>
+    <Layout>
+      <ProtectedRoute adminOnly>
         <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
           <div className="flex items-center mb-2">
             <Shield className="h-5 w-5 text-primary mr-2" />
@@ -25,8 +27,8 @@ const AdminUserManagement: React.FC = () => {
           
           <UserManagementContainer />
         </div>
-      </Layout>
-    </ProtectedRoute>
+      </ProtectedRoute>
+    </Layout>
   );
 };
 
