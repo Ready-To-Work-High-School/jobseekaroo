@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 import UserManagementFilters from './UserManagementFilters';
-import UserManagementTable from './UserManagementTable';
+import UserManagementTable from '@/components/admin/UserManagementTable';
 import UserTypeStatistics from './UserTypeStatistics';
 import UserDetailDialog from './UserDetailDialog';
 import { UserProfile } from '@/types/user';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, Download, Loader2 } from 'lucide-react';
+import { RefreshCw, Download, Loader2, Trash2 } from 'lucide-react';
 
 const UserManagementContainer: React.FC = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -122,6 +122,42 @@ const UserManagementContainer: React.FC = () => {
     }
   };
 
+  // Delete user
+  const deleteUser = async (userId: string) => {
+    try {
+      // Note: In Supabase, deleting a user requires admin privileges
+      // This is a simulated deletion that would need to be implemented
+      // with a proper admin API or function
+      const { error } = await supabase.auth.admin.deleteUser(userId);
+
+      if (error) {
+        throw error;
+      }
+
+      // Remove user from local state
+      setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+      setFilteredUsers(prevFilteredUsers => prevFilteredUsers.filter(user => user.id !== userId));
+      
+      // Update stats
+      calculateUserStats(users.filter(user => user.id !== userId));
+
+      toast({
+        title: 'User deleted',
+        description: 'User has been permanently deleted',
+      });
+      
+      return true;
+    } catch (error: any) {
+      console.error('Error deleting user:', error.message);
+      toast({
+        title: 'Error deleting user',
+        description: 'Only Supabase administrators can delete users. This feature requires additional setup.',
+        variant: 'destructive',
+      });
+      return false;
+    }
+  };
+
   // Handle filter changes
   const handleFilterChange = (filters: any) => {
     let filtered = [...users];
@@ -135,7 +171,8 @@ const UserManagementContainer: React.FC = () => {
       filtered = filtered.filter(user => 
         (user.first_name?.toLowerCase().includes(searchLower) || 
         user.last_name?.toLowerCase().includes(searchLower) ||
-        `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase().includes(searchLower))
+        `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase().includes(searchLower) ||
+        user.email?.toLowerCase().includes(searchLower))
       );
     }
 
@@ -155,9 +192,9 @@ const UserManagementContainer: React.FC = () => {
 
   const exportUsers = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
-      "ID,First Name,Last Name,User Type,Redeemed,Created At\n" +
+      "ID,First Name,Last Name,Email,User Type,Verified,Created At\n" +
       filteredUsers.map(user => {
-        return `"${user.id}","${user.first_name || ''}","${user.last_name || ''}","${user.user_type || ''}","${user.redeemed_at ? 'Yes' : 'No'}","${user.redeemed_at || ''}"`;
+        return `"${user.id}","${user.first_name || ''}","${user.last_name || ''}","${user.email || ''}","${user.user_type || ''}","${user.redeemed_at ? 'Yes' : 'No'}","${user.created_at || ''}"`;
       }).join("\n");
     
     const encodedUri = encodeURI(csvContent);
@@ -215,6 +252,7 @@ const UserManagementContainer: React.FC = () => {
           isLoading={isLoading}
           onViewDetails={handleViewUserDetails}
           onUpdateUserType={updateUserType}
+          onDeleteUser={deleteUser}
         />
       </Card>
 
@@ -224,6 +262,7 @@ const UserManagementContainer: React.FC = () => {
           isOpen={showUserDialog}
           onClose={() => setShowUserDialog(false)}
           onUpdateUserType={updateUserType}
+          onDeleteUser={deleteUser}
         />
       )}
     </div>
