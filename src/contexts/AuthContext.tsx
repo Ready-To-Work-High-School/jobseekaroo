@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
@@ -35,12 +34,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Check active session and fetch user profile
   useEffect(() => {
     const fetchUserAndSession = async () => {
       setIsLoading(true);
       
-      // Get current session
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
@@ -63,7 +60,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     fetchUserAndSession();
     
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
@@ -85,7 +81,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
   
-  // Fetch user profile from profiles table
   const fetchUserProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -100,14 +95,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       
       console.log('Fetched user profile:', data);
-      setUserProfile(data);
+      
+      const formattedData = {
+        ...data,
+        preferences: data.preferences ? (typeof data.preferences === 'string' 
+          ? JSON.parse(data.preferences) 
+          : data.preferences)
+          : null
+      } as UserProfile;
+      
+      setUserProfile(formattedData);
     } catch (error) {
       console.error('Unexpected error fetching profile:', error);
     }
   };
   
-  // Update user profile
-  const updateProfile = async (profileData: UserProfileUpdate) => {
+  const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
     try {
@@ -126,23 +129,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       
       console.log('Profile updated successfully:', data);
+      
+      const formattedData = {
+        ...data,
+        preferences: data.preferences ? (typeof data.preferences === 'string' 
+          ? JSON.parse(data.preferences) 
+          : data.preferences)
+          : null
+      } as UserProfile;
+      
       setUserProfile(prev => prev ? { ...prev, ...profileData } : null);
       
-      return data;
+      return formattedData;
     } catch (error) {
       console.error('Failed to update profile:', error);
       throw error;
     }
   };
   
-  // Refresh user profile
   const refreshProfile = async () => {
     if (user) {
       await fetchUserProfile(user.id);
     }
   };
   
-  // Sign in user
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -161,7 +171,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Sign up user
   const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -187,7 +196,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Sign out user
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -199,7 +207,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Social auth methods
   const signInWithGoogle = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -208,7 +215,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) throw error;
       
-      return null; // OAuth flow redirects, no user returned immediately
+      return null;
     } catch (error: any) {
       console.error('Error signing in with Google:', error.message);
       setError(error.message);
@@ -224,7 +231,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) throw error;
       
-      return null; // OAuth flow redirects, no user returned immediately
+      return null;
     } catch (error: any) {
       console.error('Error signing in with Apple:', error.message);
       setError(error.message);
@@ -232,7 +239,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Job management methods
   const saveJob = async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to save jobs');
     
@@ -303,7 +309,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Application management methods
   const createApplication = async (application: any) => {
     if (!user) throw new Error('User must be logged in to create an application');
     
