@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import EmailPasswordForm, { SignInValues } from "./EmailPasswordForm";
 import SocialAuthButtons from "./SocialAuthButtons";
@@ -20,13 +20,16 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
+  // Get redirectUrl from location state
+  const from = location.state?.from?.pathname || '/dashboard';
+  
   // Store the current location on component mount
   useEffect(() => {
     // Store current path to redirect back after login
     if (location.state?.from) {
       sessionStorage.setItem('redirectAfterLogin', location.state.from.pathname);
     } else {
-      sessionStorage.setItem('redirectAfterLogin', '/');
+      sessionStorage.setItem('redirectAfterLogin', '/dashboard');
     }
   }, [location]);
   
@@ -40,7 +43,6 @@ const SignInForm = () => {
       });
       
       // Check if there's a redirect in the state from protected routes
-      const from = location.state?.from?.pathname || '/';
       navigate(from);
     } catch (error: any) {
       console.error("Sign in error:", error);

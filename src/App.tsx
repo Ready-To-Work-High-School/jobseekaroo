@@ -22,7 +22,7 @@ import Resources from './pages/Resources';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import NotFound from './pages/NotFound';
 import EmployerDashboard from './pages/EmployerDashboard';
 import JobListings from './pages/JobListings';
@@ -35,6 +35,9 @@ import FAQ from './pages/FAQ';
 import SuccessStories from './pages/SuccessStories';
 import License from './pages/License';
 import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
+import SavedJobs from './pages/SavedJobs';
+import Messages from './pages/Messages';
+import AuthCallback from './pages/AuthCallback';
 
 function App() {
   return <ErrorBoundary>
@@ -42,7 +45,17 @@ function App() {
         <AuthProvider>
           <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <Routes>
+              {/* Public routes - accessible to everyone */}
               <Route path="/" element={<Index />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/server-demo" element={<ServerDemo />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/for-employers" element={<ForEmployers />} />
+              <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
+              <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/license" element={<License />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
 
               {/* Authentication routes */}
               <Route path="/login" element={<Login />} />
@@ -51,10 +64,18 @@ function App() {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/redeem-code" element={<RedemptionCode />} />
-
-              {/* Job seeker routes */}
-              <Route path="/jobs" element={<JobListings />} />
-              <Route path="/jobs/search" element={<EnhancedJobListings />} />
+              
+              {/* Protected job seeker routes */}
+              <Route path="/jobs" element={
+                <ProtectedRoute>
+                  <JobListings />
+                </ProtectedRoute>
+              } />
+              <Route path="/jobs/search" element={
+                <ProtectedRoute>
+                  <EnhancedJobListings />
+                </ProtectedRoute>
+              } />
               <Route path="/resume-assistant" element={
                 <ProtectedRoute>
                   <ResumeAssistant />
@@ -65,34 +86,28 @@ function App() {
                   <InterviewPrep />
                 </ProtectedRoute>
               } />
-
-              {/* Content pages */}
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/server-demo" element={<ServerDemo />} />
-              <Route path="/resources" element={<Resources />} />
               <Route path="/skills" element={
                 <ProtectedRoute>
                   <Skills />
                 </ProtectedRoute>
               } />
-              <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/saved-jobs" element={<Layout />} />
-              <Route path="/account-benefits" element={<Layout />} />
-              <Route path="/applications" element={<Layout />} />
-              <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/license" element={<License />} />
               <Route path="/analytics" element={
                 <ProtectedRoute>
                   <Analytics />
                 </ProtectedRoute>
               } />
-              <Route path="/resume" element={<Layout />} />
-              <Route path="/saved" element={<Layout />} />
-              <Route path="/notifications" element={<Layout />} />
-
-              {/* Protected routes */}
+              <Route path="/saved-jobs" element={
+                <ProtectedRoute>
+                  <SavedJobs />
+                </ProtectedRoute>
+              } />
+              <Route path="/messages" element={
+                <ProtectedRoute>
+                  <Messages />
+                </ProtectedRoute>
+              } />
+              
+              {/* Protected account routes */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <Dashboard />
@@ -101,6 +116,31 @@ function App() {
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/account-benefits" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              } />
+              <Route path="/applications" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              } />
+              <Route path="/resume" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              } />
+              <Route path="/saved" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              } />
+              <Route path="/notifications" element={
+                <ProtectedRoute>
+                  <Layout />
                 </ProtectedRoute>
               } />
               
