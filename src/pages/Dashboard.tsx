@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -35,13 +35,18 @@ const Dashboard = () => {
     fetchPosts();
   }, []);
 
+  // Replace any references to user.username with user.email or userProfile name
+  const userDisplayName = userProfile ? 
+    `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : 
+    (user?.email || 'User');
+
   return (
     <ProtectedRoute>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Welcome back, {user?.username || 'User'}!
+            Welcome back, {userDisplayName}!
           </p>
         </div>
         

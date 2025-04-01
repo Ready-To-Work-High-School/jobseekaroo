@@ -1,7 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import EnhancedHero from '@/components/EnhancedHero';

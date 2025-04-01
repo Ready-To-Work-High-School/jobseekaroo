@@ -2,35 +2,27 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
-
-interface UserProfile {
-  id: string;
-  first_name?: string;
-  last_name?: string;
-  user_type?: string;
-  email?: string;
-  avatar_url?: string;
-  bio?: string;
-}
-
-interface ProfileUpdateData {
-  first_name?: string;
-  last_name?: string;
-  user_type?: string;
-  email?: string;
-  avatar_url?: string;
-  bio?: string;
-  // Add other profile fields as needed
-}
+import { UserProfile, UserProfileUpdate } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
 
 interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<User | null>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
   signOut: () => Promise<void>;
-  updateProfile: (data: ProfileUpdateData) => Promise<void>;
+  signInWithApple: () => Promise<User | null>;
+  signInWithGoogle: () => Promise<User | null>;
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
+  getSavedJobs: () => Promise<string[]>;
+  createApplication: (application: any) => Promise<string>;
+  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
+  getApplications: () => Promise<any[]>;
+  deleteApplication: (applicationId: string) => Promise<void>;
+  updateProfile: (data: UserProfileUpdate) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
   error: string | null;
 }
@@ -115,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   
   // Update user profile
-  const updateProfile = async (profileData: ProfileUpdateData) => {
+  const updateProfile = async (profileData: UserProfileUpdate) => {
     if (!user) throw new Error('User not authenticated');
     
     try {
@@ -170,7 +162,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   
   // Sign up user
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -178,7 +170,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         options: {
           data: {
             first_name: firstName,
-            last_name: lastName
+            last_name: lastName,
+            user_type: userType
           }
         }
       });
@@ -205,6 +198,183 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(error.message);
     }
   };
+
+  // Social auth methods
+  const signInWithGoogle = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google'
+      });
+      
+      if (error) throw error;
+      
+      return null; // OAuth flow redirects, no user returned immediately
+    } catch (error: any) {
+      console.error('Error signing in with Google:', error.message);
+      setError(error.message);
+      return null;
+    }
+  };
+  
+  const signInWithApple = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple'
+      });
+      
+      if (error) throw error;
+      
+      return null; // OAuth flow redirects, no user returned immediately
+    } catch (error: any) {
+      console.error('Error signing in with Apple:', error.message);
+      setError(error.message);
+      return null;
+    }
+  };
+  
+  // Job management methods
+  const saveJob = async (jobId: string) => {
+    if (!user) throw new Error('User must be logged in to save jobs');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .insert({ user_id: user.id, job_id: jobId });
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving job:', error);
+      throw error;
+    }
+  };
+  
+  const unsaveJob = async (jobId: string) => {
+    if (!user) throw new Error('User must be logged in to unsave jobs');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('job_id', jobId);
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error unsaving job:', error);
+      throw error;
+    }
+  };
+  
+  const isSavedJob = async (jobId: string) => {
+    if (!user) return false;
+    
+    try {
+      const { data, error } = await supabase
+        .from('saved_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('job_id', jobId)
+        .single();
+        
+      if (error && error.code !== 'PGRST116') throw error;
+      
+      return !!data;
+    } catch (error) {
+      console.error('Error checking if job is saved:', error);
+      return false;
+    }
+  };
+  
+  const getSavedJobs = async () => {
+    if (!user) return [];
+    
+    try {
+      const { data, error } = await supabase
+        .from('saved_jobs')
+        .select('job_id')
+        .eq('user_id', user.id);
+        
+      if (error) throw error;
+      
+      return data.map(item => item.job_id);
+    } catch (error) {
+      console.error('Error getting saved jobs:', error);
+      return [];
+    }
+  };
+  
+  // Application management methods
+  const createApplication = async (application: any) => {
+    if (!user) throw new Error('User must be logged in to create an application');
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .insert({ ...application, user_id: user.id })
+        .select()
+        .single();
+        
+      if (error) throw error;
+      
+      return data.id;
+    } catch (error) {
+      console.error('Error creating application:', error);
+      throw error;
+    }
+  };
+  
+  const updateApplicationStatus = async (applicationId: string, status: ApplicationStatus) => {
+    if (!user) throw new Error('User must be logged in to update an application');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .update({ status })
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      throw error;
+    }
+  };
+  
+  const getApplications = async () => {
+    if (!user) return [];
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('applied_date', { ascending: false });
+        
+      if (error) throw error;
+      
+      return data;
+    } catch (error) {
+      console.error('Error getting applications:', error);
+      return [];
+    }
+  };
+  
+  const deleteApplication = async (applicationId: string) => {
+    if (!user) throw new Error('User must be logged in to delete an application');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .delete()
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      throw error;
+    }
+  };
   
   return (
     <AuthContext.Provider
@@ -215,6 +385,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signIn,
         signUp,
         signOut,
+        signInWithApple,
+        signInWithGoogle,
+        saveJob,
+        unsaveJob,
+        isSavedJob,
+        getSavedJobs,
+        createApplication,
+        updateApplicationStatus,
+        getApplications,
+        deleteApplication,
         updateProfile,
         refreshProfile,
         error

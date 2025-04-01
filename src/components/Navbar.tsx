@@ -1,10 +1,13 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const { user, userProfile, signOut } = useAuth();
   
+  const userDisplayName = userProfile ? 
+    `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : 
+    (user?.email || 'User');
+
   return (
     <nav className="bg-indigo-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,7 +86,7 @@ const Navbar = () => {
                 <div className="relative">
                   <div className="flex items-center">
                     <span className="text-white mr-4">
-                      Hello, {user.username || user.email.split('@')[0]}
+                      Hello, {userDisplayName}
                     </span>
                     <button
                       onClick={signOut}

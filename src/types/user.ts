@@ -1,3 +1,4 @@
+
 export interface UserProfile {
   id: string;
   first_name: string | null;
@@ -34,6 +35,13 @@ export interface UserProfileUpdate {
   user_type?: 'student' | 'employer' | 'admin' | 'teacher';
   redeemed_at?: string;
   redeemed_code?: string;
+  avatar_url?: string;
+  company_name?: string;
+  company_website?: string;
+  job_title?: string;
+  employer_verification_status?: 'pending' | 'approved' | 'rejected';
+  verification_notes?: string;
+  accessibility_settings?: AccessibilitySettings;
 }
 
 export interface SavedSearch {

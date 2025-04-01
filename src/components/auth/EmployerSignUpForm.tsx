@@ -56,7 +56,7 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
       );
       
       // If sign-up is successful, update the profile with employer-specific details
-      const result = await updateProfile({
+      await updateProfile({
         company_name: data.companyName,
         company_website: data.companyWebsite,
         job_title: data.jobTitle,
