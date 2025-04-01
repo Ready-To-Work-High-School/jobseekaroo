@@ -24,13 +24,13 @@ function App() {
             <header className="bg-blue-600 dark:bg-blue-800 py-2 hidden sm:flex justify-center">
               <div className="container flex items-center justify-center">
                 {/* Enhanced gradient to match ESB badge style with stronger accent */}
-                <div className="relative">
+                <a href="/admin?adminTest=true" className="relative mr-2" aria-label="Admin Access" title="Admin Access">
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
                   <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
                   <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
                   <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-600 to-amber-500 opacity-20 blur-2xl"></div>
                   
-                </div>
+                </a>
                 <h1 className="text-white text-xl font-bold">Job Seekers 4 High Schools</h1>
               </div>
             </header>

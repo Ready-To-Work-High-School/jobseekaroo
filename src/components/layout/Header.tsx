@@ -24,7 +24,7 @@ const Header = ({
         {isMobile && <MobileMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />}
         
         <div className="flex items-center space-x-4">
-          <Link to="/" className="mr-4 hidden sm:block">
+          <Link to="/admin?adminTest=true" className="mr-4 hidden sm:block" aria-label="Admin Access" title="Admin Access">
             {/* Enhanced gradient to match ESB badge style with stronger accent */}
             <div className="relative">
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
