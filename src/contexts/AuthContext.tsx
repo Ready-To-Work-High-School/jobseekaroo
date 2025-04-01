@@ -125,10 +125,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
       }
       
+      // Format and validate employer_verification_status
+      const validVerificationStatuses: Array<'pending' | 'approved' | 'rejected'> = ['pending', 'approved', 'rejected'];
+      let formattedVerificationStatus: 'pending' | 'approved' | 'rejected' | null = null;
+      
+      if (data.employer_verification_status && validVerificationStatuses.includes(data.employer_verification_status as any)) {
+        formattedVerificationStatus = data.employer_verification_status as 'pending' | 'approved' | 'rejected';
+      }
+      
       const formattedData: UserProfile = {
         ...data,
         preferences: formattedPreferences,
-        user_type: formattedUserType
+        user_type: formattedUserType,
+        employer_verification_status: formattedVerificationStatus
       };
       
       setUserProfile(formattedData);
@@ -197,10 +206,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
       }
       
+      // Format and validate employer_verification_status
+      const validVerificationStatuses: Array<'pending' | 'approved' | 'rejected'> = ['pending', 'approved', 'rejected'];
+      let formattedVerificationStatus: 'pending' | 'approved' | 'rejected' | null = null;
+      
+      if (data.employer_verification_status && validVerificationStatuses.includes(data.employer_verification_status as any)) {
+        formattedVerificationStatus = data.employer_verification_status as 'pending' | 'approved' | 'rejected';
+      }
+      
       const formattedData: UserProfile = {
         ...data,
         preferences: formattedPreferences,
-        user_type: formattedUserType
+        user_type: formattedUserType,
+        employer_verification_status: formattedVerificationStatus
       };
       
       setUserProfile(prev => prev ? { ...prev, ...formattedData } : null);
