@@ -87,12 +87,14 @@ const UserMenu = () => {
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/account-benefits" className="cursor-pointer">
-              <Award className="mr-2 h-4 w-4" />
-              <span>Account Benefits</span>
-            </Link>
-          </DropdownMenuItem>
+          {!isAdmin && (
+            <DropdownMenuItem asChild>
+              <Link to="/account-benefits" className="cursor-pointer">
+                <Award className="mr-2 h-4 w-4" />
+                <span>Account Benefits</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link to="/analytics" className="cursor-pointer">
               <BarChart2 className="mr-2 h-4 w-4" />
