@@ -1,4 +1,5 @@
 
+
 export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected' | 'accepted' | 'withdrawn';
 
 export interface JobApplication {
@@ -22,3 +23,4 @@ export interface StatusCount {
   status: ApplicationStatus;
   count: number;
 }
+

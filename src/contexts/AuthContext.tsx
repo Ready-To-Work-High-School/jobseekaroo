@@ -96,14 +96,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Fetched user profile:', data);
       
+      let formattedPreferences: Record<string, any> | null = null;
+      
+      if (data.preferences) {
+        try {
+          if (typeof data.preferences === 'string') {
+            formattedPreferences = JSON.parse(data.preferences);
+          } else {
+            formattedPreferences = data.preferences;
+          }
+        } catch (parseError) {
+          console.error('Error parsing preferences:', parseError);
+          formattedPreferences = null;
+        }
+      }
+      
       const formattedData: UserProfile = {
         ...data,
-        preferences: data.preferences 
-          ? (typeof data.preferences === 'string' 
-              ? JSON.parse(data.preferences) 
-              : data.preferences)
-          : null
-      } as UserProfile;
+        preferences: formattedPreferences
+      };
       
       setUserProfile(formattedData);
     } catch (error) {
@@ -117,9 +128,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log('Updating profile with data:', profileData);
       
+      let dataToUpdate = { ...profileData };
+      
+      if (profileData.preferences && typeof profileData.preferences !== 'string') {
+        try {
+          if (typeof profileData.preferences === 'object') {
+          }
+        } catch (e) {
+          console.error('Error formatting preferences:', e);
+        }
+      }
+      
       const { data, error } = await supabase
         .from('profiles')
-        .update(profileData)
+        .update(dataToUpdate)
         .eq('id', user.id)
         .select()
         .single();
@@ -131,16 +153,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Profile updated successfully:', data);
       
+      let formattedPreferences: Record<string, any> | null = null;
+      
+      if (data.preferences) {
+        try {
+          if (typeof data.preferences === 'string') {
+            formattedPreferences = JSON.parse(data.preferences);
+          } else {
+            formattedPreferences = data.preferences;
+          }
+        } catch (parseError) {
+          console.error('Error parsing preferences in response:', parseError);
+          formattedPreferences = null;
+        }
+      }
+      
       const formattedData: UserProfile = {
         ...data,
-        preferences: data.preferences 
-          ? (typeof data.preferences === 'string' 
-              ? JSON.parse(data.preferences) 
-              : data.preferences)
-          : null
-      } as UserProfile;
+        preferences: formattedPreferences
+      };
       
-      setUserProfile(prev => prev ? { ...prev, ...profileData } : null);
+      setUserProfile(prev => prev ? { ...prev, ...formattedData } : null);
       
       return formattedData;
     } catch (error) {
