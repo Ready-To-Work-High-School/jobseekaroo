@@ -6,10 +6,14 @@ export const NavbarBrand = () => {
     <div className="flex flex-col items-start">
       <div className="flex items-center gap-2 relative">
         <div className="relative">
-          {/* Enhanced accent glow behind the text for the larger logo */}
+          {/* Enhanced accent glow behind the logo */}
           <div className="absolute -inset-3 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-lg -z-10"></div>
-          <Link to="/" className="relative text-3xl font-bold bg-gradient-to-r from-blue-900 via-blue-600 to-amber-500 bg-clip-text text-transparent px-4 py-3">
-            Job Seekers 4 High Schools
+          <Link to="/" className="relative flex items-center px-4 py-3">
+            <img 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              alt="Job Seekers 4 High Schools"
+              className="h-16 w-auto" 
+            />
           </Link>
         </div>
       </div>

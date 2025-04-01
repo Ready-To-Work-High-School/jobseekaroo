@@ -21,16 +21,16 @@ const EnhancedHero = () => {
       
       <div className="w-full max-w-6xl mx-auto py-8 mt-10">
         <div className={cn("mb-8", titleAnimation)}>
-          {/* Logo with enhanced gradient glow to match ESB badge style with stronger accent - SMALLER SIZE */}
+          {/* Logo with enhanced gradient glow */}
           <div className="flex justify-center mb-6">
-            <div className="relative h-4 w-4"> {/* Reduced size here */}
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-md animate-pulse"></div>
-              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-40 blur-lg glow-pulse"></div>
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-amber-500 via-blue-500 to-blue-700 opacity-20 blur-xl"></div>
+            <div className="relative"> 
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-md animate-pulse"></div>
+              <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-40 blur-lg glow-pulse"></div>
+              <div className="absolute -inset-8 rounded-full bg-gradient-to-r from-amber-500 via-blue-500 to-blue-700 opacity-20 blur-xl"></div>
               <img 
-                src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
+                src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
                 alt="JS4HS Logo" 
-                className="relative z-10 w-full h-full object-contain rounded-md"
+                className="relative z-10 w-40 h-auto object-contain" 
               />
             </div>
           </div>

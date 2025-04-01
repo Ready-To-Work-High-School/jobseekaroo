@@ -8,16 +8,16 @@ const ResourceHeader = () => {
   return (
     <div className={headerAnimation}>
       <div className="text-center mb-12">
-        {/* Enhanced gradient to match ESB badge style with stronger accent */}
+        {/* Enhanced gradient to match the shield logo */}
         <div className="flex justify-center mb-4 relative">
           <Link to="/admin?adminTest=true" className="relative" aria-label="Admin Access" title="Admin Access">
             <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
             <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
             <div className="absolute -inset-3.5 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
             <img 
-              src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
               alt="Admin Access" 
-              className="h-4 w-4 relative z-10 w-full h-full object-contain rounded-md"
+              className="h-12 w-auto relative z-10 object-contain" 
             />
           </Link>
         </div>
