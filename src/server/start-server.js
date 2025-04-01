@@ -30,6 +30,7 @@ app.use('/api/users', usersRoutes);
 
 // Serve static files from the React app in production
 if (process.env.NODE_ENV === 'production') {
+  console.log('Serving static files from', path.join(__dirname, '../../dist'));
   app.use(express.static(path.join(__dirname, '../../dist')));
   
   // Handle React routing, return all requests to React app
@@ -45,8 +46,11 @@ app.use(apiErrorHandler);
 app.use('*', api404Handler);
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`API available at: http://localhost:${PORT}/api/status`);
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`Static files being served from: ${path.join(__dirname, '../../dist')}`);
+  }
 });
 
 module.exports = app;
