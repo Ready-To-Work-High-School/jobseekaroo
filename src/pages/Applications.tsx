@@ -51,7 +51,7 @@ const formSchema = z.object({
   job_title: z.string().min(2, "Job title is required"),
   company: z.string().min(2, "Company name is required"),
   applied_date: z.string().min(2, "Application date is required"),
-  status: z.enum(['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn']),
+  status: z.enum(['applied', 'interview', 'offer', 'accepted', 'rejected', 'withdrawn']),
   notes: z.string().optional(),
   contact_name: z.string().optional(),
   contact_email: z.string().email().optional().or(z.literal('')),
@@ -146,7 +146,7 @@ const Applications = () => {
   const updateStatusCounts = (apps: JobApplication[]) => {
     const counts: { [key in ApplicationStatus]?: number } = {};
     
-    const statuses: ApplicationStatus[] = ['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'];
+    const statuses: ApplicationStatus[] = ['applied', 'interview', 'offer', 'accepted', 'rejected', 'withdrawn'];
     statuses.forEach(status => {
       counts[status] = 0;
     });
@@ -287,8 +287,8 @@ const Applications = () => {
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="applied">Applied</TabsTrigger>
-                <TabsTrigger value="interviewing">Interviewing</TabsTrigger>
-                <TabsTrigger value="offered">Offered</TabsTrigger>
+                <TabsTrigger value="interview">Interviewing</TabsTrigger>
+                <TabsTrigger value="offer">Offered</TabsTrigger>
                 <TabsTrigger value="accepted">Accepted</TabsTrigger>
               </TabsList>
             </Tabs>
@@ -455,14 +455,14 @@ const Applications = () => {
                                   <ApplicationStatusBadge status="applied" />
                                 </div>
                               </SelectItem>
-                              <SelectItem value="interviewing">
+                              <SelectItem value="interview">
                                 <div className="flex items-center gap-2">
-                                  <ApplicationStatusBadge status="interviewing" />
+                                  <ApplicationStatusBadge status="interview" />
                                 </div>
                               </SelectItem>
-                              <SelectItem value="offered">
+                              <SelectItem value="offer">
                                 <div className="flex items-center gap-2">
-                                  <ApplicationStatusBadge status="offered" />
+                                  <ApplicationStatusBadge status="offer" />
                                 </div>
                               </SelectItem>
                               <SelectItem value="accepted">

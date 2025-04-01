@@ -1,9 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 type ProfileData = {
-  username: string;
   email: string;
   bio?: string;
 };
@@ -12,7 +12,6 @@ const Profile = () => {
   const { user, signOut } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData>({
-    username: user?.username || '',
     email: user?.email || '',
     bio: ''
   });
@@ -23,8 +22,7 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       setProfileData({
-        username: user.username || '',
-        email: user.email,
+        email: user.email || '',
         bio: '' // You could fetch additional profile data here
       });
     }
@@ -105,19 +103,6 @@ const Profile = () => {
             <form onSubmit={handleSubmit} className="border-t border-gray-200 px-4 py-5 sm:px-6">
               <div className="grid grid-cols-1 gap-6">
                 <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    value={profileData.username}
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-                <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email
                   </label>
@@ -169,10 +154,6 @@ const Profile = () => {
           ) : (
             <div className="border-t border-gray-200">
               <dl>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Username</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{profileData.username}</dd>
-                </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Email address</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{profileData.email}</dd>

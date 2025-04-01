@@ -4,7 +4,7 @@ import { supabase } from './index';
 
 // Helper function to validate application status
 export function validateApplicationStatus(status: string): ApplicationStatus {
-  const validStatuses: ApplicationStatus[] = ['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'];
+  const validStatuses: ApplicationStatus[] = ['applied', 'interview', 'offer', 'accepted', 'rejected', 'withdrawn'];
   
   if (validStatuses.includes(status as ApplicationStatus)) {
     return status as ApplicationStatus;

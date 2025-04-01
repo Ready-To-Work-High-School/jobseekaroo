@@ -6,8 +6,8 @@ import { ApplicationStatus } from '@/types/application';
 export const validateApplicationStatus = (status: string): ApplicationStatus => {
   const validStatuses: ApplicationStatus[] = [
     'applied',
-    'interviewing', 
-    'offered',
+    'interview', 
+    'offer',
     'accepted',
     'rejected',
     'withdrawn'

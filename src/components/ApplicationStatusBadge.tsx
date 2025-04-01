@@ -1,3 +1,4 @@
+
 import { ApplicationStatus } from '@/types/application';
 import { cn } from '@/lib/utils';
 import { 
@@ -9,7 +10,7 @@ import {
   XOctagon 
 } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { validateApplicationStatus } from '@/lib/supabase';
+import { validateApplicationStatus } from '@/lib/supabase/utils';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
@@ -29,13 +30,13 @@ export const ApplicationStatusBadge = ({ status, className, large = false }: App
           label: 'Applied',
           variant: 'secondary' as const,
         };
-      case 'interviewing':
+      case 'interview':
         return {
           icon: CalendarRange,
           label: 'Interviewing',
           variant: 'default' as const,
         };
-      case 'offered':
+      case 'offer':
         return {
           icon: ThumbsUp,
           label: 'Offered',
@@ -76,8 +77,8 @@ export const ApplicationStatusBadge = ({ status, className, large = false }: App
       className={cn(
         "gap-1 font-medium flex items-center",
         status === 'applied' && "bg-secondary text-secondary-foreground",
-        status === 'interviewing' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
-        status === 'offered' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
+        status === 'interview' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
+        status === 'offer' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
         status === 'accepted' && "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
         status === 'rejected' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
         status === 'withdrawn' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
