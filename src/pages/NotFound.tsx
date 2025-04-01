@@ -1,14 +1,16 @@
 
+import React from 'react';
 import { Link } from 'react-router-dom';
+import Layout from '@/components/Layout';
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-6">404</h2>
-          <p className="text-lg text-gray-500 mb-6">Page not found</p>
-          <p className="text-sm text-gray-500 mb-6">
+    <Layout>
+      <div className="min-h-[50vh] flex flex-col justify-center items-center py-12">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">404</h2>
+          <p className="text-lg text-gray-500 dark:text-gray-400 mb-6">Page not found</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
             The page you are looking for doesn't exist or has been moved.
           </p>
           <Link
@@ -19,7 +21,7 @@ const NotFound = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

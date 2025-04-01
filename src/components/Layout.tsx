@@ -2,10 +2,12 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 import Header from './layout/Header';
+import Navbar from './Navbar';
 import Footer from './layout/Footer';
 import PlatformDisclaimer from './PlatformDisclaimer';
 import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import SidePanel from './layout/SidePanel';
+import MobileNavbar from './mobile/MobileNavbar';
 
 interface LayoutProps {
   children?: ReactNode;
@@ -28,6 +30,7 @@ const Layout = ({ children }: LayoutProps = {}) => {
     <NotificationsProvider>
       <div className="flex flex-col min-h-screen bg-background">
         <Header />
+        <Navbar />
         <main className="flex-1">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {children || <Outlet />}
@@ -36,6 +39,7 @@ const Layout = ({ children }: LayoutProps = {}) => {
           <SidePanel />
         </main>
         <Footer />
+        <MobileNavbar />
       </div>
     </NotificationsProvider>
   );
