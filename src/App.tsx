@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -15,10 +14,8 @@ import ServerDemo from './pages/ServerDemo';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './pages/NotFound';
-
 function App() {
-  return (
-    <ErrorBoundary>
+  return <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
           <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -31,11 +28,7 @@ function App() {
                   <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
                   <div className="absolute -inset-5 rounded-full bg-gradient-to-r from-blue-600 to-amber-500 opacity-20 blur-2xl"></div>
-                  <img 
-                    src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
-                    alt="JS4HS Logo" 
-                    className="h-12 w-12 mr-3 relative z-10 w-full h-full object-contain rounded-md"
-                  />
+                  <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-10w-10mr-3 relative z-10 w-full h-full object-contain rounded-md" />
                 </div>
                 <h1 className="text-white text-xl font-bold">Job Seekers 4 High Schools</h1>
               </div>
@@ -46,38 +39,21 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/server-demo" element={<ServerDemo />} />
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
+              <Route path="/dashboard" element={<ProtectedRoute>
                     <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/profile" 
-                element={
-                  <ProtectedRoute>
+                  </ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute>
                     <Profile />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/admin" 
-                element={
-                  <ProtectedRoute adminOnly={true}>
+                  </ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute adminOnly={true}>
                     <AdminDashboard />
-                  </ProtectedRoute>
-                } 
-              />
+                  </ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
           </div>
         </AuthProvider>
       </ThemeProvider>
-    </ErrorBoundary>
-  );
+    </ErrorBoundary>;
 }
-
 export default App;
