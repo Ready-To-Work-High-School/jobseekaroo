@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from "@/components/ui/button";
@@ -101,7 +102,7 @@ const EmployerDashboard = () => {
   };
 
   return (
-    <ProtectedRoute requiredRoles={['employer']}>
+    <ProtectedRoute adminOnly={false} requiredRoles={['employer']}>
       <Layout>
         <div className="container max-w-6xl mx-auto px-4 py-6">
           <div className="flex flex-col items-start justify-between space-y-2 mb-6 md:flex-row md:items-center md:space-y-0">
