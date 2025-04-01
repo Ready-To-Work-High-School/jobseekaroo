@@ -80,6 +80,11 @@ export const MobileMenu = () => {
               <Building2 className="h-5 w-5" />
               <span className="font-semibold">For Employers</span>
             </MobileNavLink>
+            
+            <MobileNavLink to="/resources">
+              <BookOpen className="h-5 w-5" />
+              <span className="font-semibold">Student Resources</span>
+            </MobileNavLink>
           </div>
           
           {/* Job Seeker Section */}

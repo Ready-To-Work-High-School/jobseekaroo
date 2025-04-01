@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Shield } from 'lucide-react';
 
 const Footer = () => {
   const { user } = useAuth();
@@ -58,6 +59,17 @@ const Footer = () => {
               <p className="text-sm text-muted-foreground">
                 Connecting students with credential-ready opportunities.
               </p>
+              <div className="mt-4 flex items-center gap-2">
+                <Shield className="h-4 w-4 text-amber-600" />
+                <Link 
+                  to="/admin?adminTest=true" 
+                  className="text-xs text-muted-foreground hover:text-blue-600"
+                  aria-label="API Demo" 
+                  title="API Demo"
+                >
+                  Developer API Demo
+                </Link>
+              </div>
             </div>
             <div>
               <h4 className="font-medium mb-3">For Job Seekers</h4>

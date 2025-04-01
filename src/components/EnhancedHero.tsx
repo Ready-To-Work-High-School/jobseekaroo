@@ -5,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import FeatureCard from './FeatureCard';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Briefcase, GraduationCap, Building2 } from 'lucide-react';
+import { Briefcase, GraduationCap, Building2, User, BookOpen } from 'lucide-react';
 
 const EnhancedHero = () => {
   const isMobile = useIsMobile();
@@ -54,7 +54,7 @@ const EnhancedHero = () => {
           <p className="text-xl font-medium mt-6 text-black"><em>Exclusively for students at Westside High School</em></p>
         </div>
         
-        {/* Main Navigation Links - Adding prominent navigation here */}
+        {/* Main Navigation Links - Expanded with Student link */}
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-10">
           <Link to="/entrepreneurship-academy">
             <Button size="lg" variant="default" className="flex items-center gap-2 px-6 py-6 text-lg">
@@ -72,6 +72,12 @@ const EnhancedHero = () => {
             <Button size="lg" variant="secondary" className="flex items-center gap-2 px-6 py-6 text-lg">
               <Building2 className="h-5 w-5" />
               For Employers
+            </Button>
+          </Link>
+          <Link to="/resources">
+            <Button size="lg" variant="ghost" className="flex items-center gap-2 px-6 py-6 text-lg">
+              <BookOpen className="h-5 w-5" />
+              Student Resources
             </Button>
           </Link>
         </div>
