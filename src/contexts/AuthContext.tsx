@@ -96,11 +96,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Fetched user profile:', data);
       
-      const formattedData = {
+      const formattedData: UserProfile = {
         ...data,
-        preferences: data.preferences ? (typeof data.preferences === 'string' 
-          ? JSON.parse(data.preferences) 
-          : data.preferences)
+        preferences: data.preferences 
+          ? (typeof data.preferences === 'string' 
+              ? JSON.parse(data.preferences) 
+              : data.preferences)
           : null
       } as UserProfile;
       
@@ -130,11 +131,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Profile updated successfully:', data);
       
-      const formattedData = {
+      const formattedData: UserProfile = {
         ...data,
-        preferences: data.preferences ? (typeof data.preferences === 'string' 
-          ? JSON.parse(data.preferences) 
-          : data.preferences)
+        preferences: data.preferences 
+          ? (typeof data.preferences === 'string' 
+              ? JSON.parse(data.preferences) 
+              : data.preferences)
           : null
       } as UserProfile;
       
