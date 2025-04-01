@@ -74,7 +74,8 @@ const ProtectedRoute = ({
 
   // Check for role-based restrictions
   if (requiredRoles.length > 0 && userProfile) {
-    const hasRequiredRole = requiredRoles.includes(userProfile.user_type);
+    // Check if userProfile.user_type is defined and is one of the required roles
+    const hasRequiredRole = userProfile.user_type && requiredRoles.includes(userProfile.user_type);
     if (!hasRequiredRole) {
       console.log('Access denied: Required roles not met', { 
         required: requiredRoles, 

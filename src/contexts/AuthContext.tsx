@@ -152,16 +152,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log('Updating profile with data:', profileData);
       
-      let dataToUpdate = { ...profileData };
+      // Ensure we have a valid object to update
+      let dataToUpdate: any = { ...profileData };
       
-      if (profileData.preferences && typeof profileData.preferences !== 'string') {
-        try {
-          if (typeof profileData.preferences === 'object') {
-            // Already an object, no need to modify
-          }
-        } catch (e) {
-          console.error('Error formatting preferences:', e);
-        }
+      // If user_type is present, ensure it's one of the valid types
+      if (dataToUpdate.user_type && !['student', 'employer', 'admin', 'teacher'].includes(dataToUpdate.user_type)) {
+        throw new Error(`Invalid user_type: ${dataToUpdate.user_type}`);
+      }
+      
+      // If employer_verification_status is present, ensure it's one of the valid statuses
+      if (dataToUpdate.employer_verification_status && 
+          !['pending', 'approved', 'rejected'].includes(dataToUpdate.employer_verification_status)) {
+        throw new Error(`Invalid employer_verification_status: ${dataToUpdate.employer_verification_status}`);
       }
       
       const { data, error } = await supabase

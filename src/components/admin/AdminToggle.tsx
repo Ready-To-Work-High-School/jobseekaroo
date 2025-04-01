@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 const AdminToggle = () => {
   const { user, userProfile, updateProfile } = useAuth();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const makeAdmin = async () => {
     if (!user) {
@@ -21,20 +22,24 @@ const AdminToggle = () => {
     }
 
     try {
+      setIsLoading(true);
       await updateProfile({ user_type: 'admin' });
       toast({
         title: "Success",
-        description: "You are now an admin user",
+        description: "You are now an admin user. Refresh the page to see the changes.",
       });
+      
       // Force refresh to show the updated profile
-      setTimeout(() => window.location.reload(), 1000);
-    } catch (error) {
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (error: any) {
       console.error('Error making admin:', error);
       toast({
         title: "Error",
-        description: "Failed to update profile to admin",
+        description: error.message || "Failed to update profile to admin",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -46,15 +51,15 @@ const AdminToggle = () => {
       </h2>
       
       {userProfile?.user_type === 'admin' ? (
-        <div className="bg-green-50 p-3 rounded-md border border-green-200 mb-4">
-          <p className="text-green-800 font-medium flex items-center gap-2">
+        <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-md border border-green-200 dark:border-green-800 mb-4">
+          <p className="text-green-800 dark:text-green-300 font-medium flex items-center gap-2">
             <Shield className="h-4 w-4" />
             You have admin privileges
           </p>
         </div>
       ) : (
-        <div className="bg-amber-50 p-3 rounded-md border border-amber-200 mb-4">
-          <p className="text-amber-800 font-medium flex items-center gap-2">
+        <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-md border border-amber-200 dark:border-amber-800 mb-4">
+          <p className="text-amber-800 dark:text-amber-300 font-medium flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
             You don't have admin privileges
           </p>
@@ -65,14 +70,25 @@ const AdminToggle = () => {
         <Button 
           onClick={makeAdmin} 
           variant={userProfile?.user_type === 'admin' ? "outline" : "default"}
-          disabled={userProfile?.user_type === 'admin'}
+          disabled={userProfile?.user_type === 'admin' || isLoading}
+          className="relative"
         >
-          {userProfile?.user_type === 'admin' ? "Already an admin" : "Make me an admin"}
+          {isLoading ? (
+            <>
+              <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
+              Processing...
+            </>
+          ) : userProfile?.user_type === 'admin' ? (
+            "Already an admin"
+          ) : (
+            "Make me an admin"
+          )}
         </Button>
         
         <Button 
           variant="outline" 
           onClick={() => window.location.href = '/admin/redemption-codes'}
+          disabled={isLoading}
         >
           Go to Redemption Codes
         </Button>
