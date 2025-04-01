@@ -1,10 +1,10 @@
-
 import { ReactNode, useState, useEffect, useCallback } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
 import { ApplicationStatus } from '@/types/application';
 import { AuthContext, initialAuthState } from './AuthContext';
+import { getUserProfile as fetchUserProfile } from './authUtils';
 import { formatUserProfile } from './utils';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -13,65 +13,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   
-  // Profile fetching
-  const fetchUserProfile = useCallback(async (userId: string) => {
+  // Profile fetching with improved error handling
+  const getUserProfile = useCallback(async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      console.log('Fetching user profile for ID:', userId);
+      const profileData = await fetchUserProfile(userId);
       
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return;
+      if (profileData) {
+        console.log('User profile fetched successfully:', profileData);
+        setUserProfile(profileData);
+      } else {
+        console.error('Failed to fetch user profile - no data returned');
+        // Don't set error state here to avoid blocking the UI
       }
-      
-      console.log('Fetched user profile:', data);
-      const formattedProfile = formatUserProfile(data);
-      setUserProfile(formattedProfile);
-      
     } catch (error) {
-      console.error('Unexpected error fetching profile:', error);
+      console.error('Error fetching user profile:', error);
+      // Don't set error state here to avoid blocking the UI
     }
   }, []);
   
-  // Auth initialization
+  // Auth initialization with improved session handling
   useEffect(() => {
-    const fetchUserAndSession = async () => {
-      setIsLoading(true);
-      
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error('Error getting session:', sessionError);
-        setError(new Error(sessionError.message));
-        setIsLoading(false);
-        return;
-      }
-      
-      if (session?.user) {
-        setUser(session.user);
-        await fetchUserProfile(session.user.id);
-      } else {
-        setUser(null);
-        setUserProfile(null);
-      }
-      
-      setIsLoading(false);
-    };
+    console.log('Setting up auth state listener');
     
-    fetchUserAndSession();
-    
+    // Step 1: Set up auth state listener FIRST (to avoid missing events)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
         
+        setUser(session?.user ?? null);
+        
         if (session?.user) {
-          setUser(session.user);
-          await fetchUserProfile(session.user.id);
+          // Use setTimeout to prevent blocking renderer and avoid deadlocks
+          setTimeout(() => {
+            getUserProfile(session.user.id);
+          }, 0);
         } else {
-          setUser(null);
           setUserProfile(null);
         }
         
@@ -79,10 +56,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
     
+    // Step 2: THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.id);
+      
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        getUserProfile(session.user.id);
+      }
+      
+      setIsLoading(false);
+    });
+    
     return () => {
+      console.log('Cleaning up auth listener');
       subscription.unsubscribe();
     };
-  }, [fetchUserProfile]);
+  }, [getUserProfile]);
   
   // Authentication methods
   const signIn = async (email: string, password: string) => {
@@ -171,7 +162,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Profile management
+  // Profile management with proper error handling
   const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
@@ -207,7 +198,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log('Profile updated successfully:', data);
       
       const formattedProfile = formatUserProfile(data);
-      setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : null);
+      setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
       
       return formattedProfile;
     } catch (error) {
@@ -218,7 +209,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
   const refreshProfile = async () => {
     if (user) {
-      await fetchUserProfile(user.id);
+      await getUserProfile(user.id);
     }
   };
   

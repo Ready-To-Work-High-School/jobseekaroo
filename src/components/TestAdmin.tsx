@@ -7,7 +7,7 @@ import { Shield, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const TestAdmin = () => {
-  const { user, userProfile, updateProfile } = useAuth();
+  const { user, userProfile, updateProfile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -19,9 +19,17 @@ const TestAdmin = () => {
         await updateProfile({ user_type: 'admin' });
         toast({
           title: "Success",
-          description: "You are now an admin. Refresh the page to see changes.",
+          description: "You are now an admin. Please wait while we refresh your profile...",
         });
         console.log('Profile updated to admin');
+        
+        // Refresh profile to ensure we have the updated user type
+        await refreshProfile();
+        
+        toast({
+          title: "Profile Updated",
+          description: "Your admin privileges are now active. You can access the admin panel.",
+        });
       } catch (error) {
         console.error('Error making admin:', error);
         toast({

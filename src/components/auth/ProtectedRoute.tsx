@@ -19,7 +19,7 @@ const ProtectedRoute = ({
   adminOnly = false,
   requiredRoles = []
 }: ProtectedRouteProps) => {
-  const { user, userProfile, isLoading } = useAuth();
+  const { user, userProfile, isLoading, refreshProfile } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
   const testMode = isTestMode();
@@ -35,6 +35,14 @@ const ProtectedRoute = ({
     testMode,
     adminAccess: isAdmin(userProfile) || testMode
   });
+  
+  // Attempt to refresh the profile if we have a user but no profile
+  useEffect(() => {
+    if (user && !userProfile && !isLoading) {
+      console.log('User exists but no profile, refreshing profile data');
+      refreshProfile();
+    }
+  }, [user, userProfile, isLoading, refreshProfile]);
   
   useEffect(() => {
     if (!user && !isLoading && !testMode) {
