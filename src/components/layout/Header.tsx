@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -28,7 +29,7 @@ const Header = ({
             <div className="relative">
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
               <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-              <div className="h-12 w-12 md:h-16 md:w-16 relative z-10 w-full h-full object-contain rounded-md"></div>
+              <div className="h-8 w-8 md:h-10 md:w-10 relative z-10 w-full h-full object-contain rounded-md"></div>
               
             </div>
           </Link>
