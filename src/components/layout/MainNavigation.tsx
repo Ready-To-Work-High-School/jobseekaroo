@@ -11,7 +11,8 @@ import {
   GraduationCap, 
   PenLine, 
   Headphones, 
-  BarChart
+  BarChart,
+  Shield
 } from 'lucide-react';
 import {
   Sheet,
@@ -42,6 +43,9 @@ const MainNavigation = ({ className }: { className?: string }) => {
   const { user, signOut } = useAuth();
   const { toast } = useToast()
   const navigate = useNavigate();
+
+  // Debug log for admin status
+  console.log('MainNavigation - user type:', userProfile?.user_type);
 
   useEffect(() => {
     if (userProfile && userProfile.user_type === 'admin') {
@@ -174,8 +178,9 @@ const MainNavigation = ({ className }: { className?: string }) => {
       </Link>
       
       {isAdmin && (
-        <Link to="/admin" className={cn("text-sm font-medium transition-colors", 
-          location.pathname === "/admin" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Link to="/admin" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+          location.pathname.startsWith("/admin") ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+          <Shield className="w-4 h-4" />
           Admin
         </Link>
       )}

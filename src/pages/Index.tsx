@@ -13,6 +13,9 @@ const Index = () => {
   const fadeIn = useFadeIn(300);
   const { user } = useAuth();
 
+  // Add debug log to track user status
+  console.log('Index page loaded, user authenticated:', !!user);
+
   return (
     <Layout>
       <div className={`w-full ${fadeIn}`}>

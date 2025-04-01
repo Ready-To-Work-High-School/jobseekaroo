@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, 
+  BookmarkCheck, Award, Shield
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
@@ -22,6 +22,9 @@ import AccountTypeBadge from './AccountTypeBadge';
 const UserMenu = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
+
+  // Debug log to check admin status
+  console.log('UserMenu - userProfile:', userProfile);
 
   const handleSignOut = async () => {
     try {
@@ -125,6 +128,12 @@ const UserMenu = () => {
         )}
         {isAdmin && (
           <>
+            <DropdownMenuItem asChild>
+              <Link to="/admin" className="cursor-pointer">
+                <Shield className="mr-2 h-4 w-4" />
+                <span>Admin Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/admin/redemption-codes" className="cursor-pointer">
                 <Award className="mr-2 h-4 w-4" />

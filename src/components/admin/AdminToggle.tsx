@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Shield, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AdminToggle = () => {
   const { user, userProfile, updateProfile } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const makeAdmin = async () => {
     if (!user) {
@@ -41,6 +43,11 @@ const AdminToggle = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const goToAdminPage = () => {
+    // Direct to the admin dashboard
+    navigate('/admin');
   };
 
   return (
@@ -85,9 +92,19 @@ const AdminToggle = () => {
           )}
         </Button>
         
+        {userProfile?.user_type === 'admin' && (
+          <Button 
+            variant="default" 
+            onClick={goToAdminPage}
+            disabled={isLoading}
+          >
+            Go to Admin Dashboard
+          </Button>
+        )}
+        
         <Button 
           variant="outline" 
-          onClick={() => window.location.href = '/admin/redemption-codes'}
+          onClick={() => navigate('/admin/redemption-codes')}
           disabled={isLoading}
         >
           Go to Redemption Codes
