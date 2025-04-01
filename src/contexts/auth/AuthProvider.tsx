@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
   
   // Profile fetching
   const fetchUserProfile = useCallback(async (userId: string) => {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (sessionError) {
         console.error('Error getting session:', sessionError);
-        setError(sessionError.message);
+        setError(new Error(sessionError.message));
         setIsLoading(false);
         return;
       }
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return data.user;
     } catch (error: any) {
       console.error('Error signing in:', error.message);
-      setError(error.message);
+      setError(new Error(error.message));
       return null;
     }
   };
@@ -123,7 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return data.user;
     } catch (error: any) {
       console.error('Error signing up:', error.message);
-      setError(error.message);
+      setError(new Error(error.message));
       return null;
     }
   };
@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUserProfile(null);
     } catch (error: any) {
       console.error('Error signing out:', error.message);
-      setError(error.message);
+      setError(new Error(error.message));
     }
   };
 
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return null;
     } catch (error: any) {
       console.error('Error signing in with Google:', error.message);
-      setError(error.message);
+      setError(new Error(error.message));
       return null;
     }
   };
@@ -166,7 +166,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return null;
     } catch (error: any) {
       console.error('Error signing in with Apple:', error.message);
-      setError(error.message);
+      setError(new Error(error.message));
       return null;
     }
   };
@@ -365,6 +365,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw error;
     }
   };
+
+  // Placeholder methods for admin and redemption functionality
+  const makeAdmin = async () => {
+    console.log('makeAdmin method called but not implemented');
+  };
+
+  const verifyEmployer = async (employerId: string) => {
+    console.log('verifyEmployer method called but not implemented');
+  };
+
+  const redeemCode = async (code: string) => {
+    console.log('redeemCode method called but not implemented');
+  };
+
+  const submitApplication = async (jobId: string, data: any) => {
+    console.log('submitApplication method called but not implemented');
+    await createApplication({
+      job_id: jobId,
+      ...data
+    });
+  };
   
   return (
     <AuthContext.Provider
@@ -372,6 +393,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         userProfile,
         isLoading,
+        error,
         signIn,
         signUp,
         signOut,
@@ -387,7 +409,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         deleteApplication,
         updateProfile,
         refreshProfile,
-        error
+        makeAdmin,
+        verifyEmployer,
+        redeemCode,
+        submitApplication
       }}
     >
       {children}

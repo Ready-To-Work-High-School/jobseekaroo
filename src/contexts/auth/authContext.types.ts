@@ -10,23 +10,28 @@ export interface AuthContextType {
   error: Error | null; // Add this property that was missing
   
   // Auth methods
-  signIn: (email: string, password: string, ipAddress?: string) => Promise<void>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<void>;
+  signIn: (email: string, password: string, ipAddress?: string) => Promise<User | null>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
   
   // Profile methods
-  updateProfile: (data: UserProfileUpdate) => Promise<void>;
+  updateProfile: (data: UserProfileUpdate) => Promise<UserProfile | null>;
+  refreshProfile: () => Promise<void>;
   
   // Job methods
   saveJob: (jobId: string) => Promise<void>;
   unsaveJob: (jobId: string) => Promise<void>;
   isSavedJob: (jobId: string) => Promise<boolean>;
+  getSavedJobs: () => Promise<string[]>;
   
   // Application methods
   submitApplication: (jobId: string, data: any) => Promise<void>;
+  createApplication: (application: any) => Promise<string>;
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
+  getApplications: () => Promise<any[]>;
+  deleteApplication: (applicationId: string) => Promise<void>;
   
   // Admin methods
   makeAdmin: () => Promise<void>;
