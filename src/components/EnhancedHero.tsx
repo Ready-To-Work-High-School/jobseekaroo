@@ -23,15 +23,14 @@ const EnhancedHero = () => {
         <div className={cn("mb-8", titleAnimation)}>
           {/* Logo with enhanced gradient glow to match ESB badge style with stronger accent - SMALLER SIZE */}
           <div className="flex justify-center mb-6">
-            <div className="relative">
+            <div className="relative h-4 w-4"> {/* Reduced size here */}
               <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-md animate-pulse"></div>
               <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-40 blur-lg glow-pulse"></div>
               <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-amber-500 via-blue-500 to-blue-700 opacity-20 blur-xl"></div>
-              <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-600 to-amber-500 opacity-15 blur-2xl"></div>
               <img 
                 src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
                 alt="JS4HS Logo" 
-                className="h-5 w-5 relative z-10 w-full h-full object-contain rounded-md"
+                className="relative z-10 w-full h-full object-contain rounded-md"
               />
             </div>
           </div>
