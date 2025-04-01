@@ -35,7 +35,8 @@ const TestAdmin = () => {
         toast({
           title: "Profile Updated",
           description: "Your admin privileges are now active. You can access the admin panel.",
-          variant: "success",
+          // Changed from "success" to "default" since "success" is not a valid variant
+          variant: "default",
         });
       } catch (error) {
         console.error('Error making admin:', error);
