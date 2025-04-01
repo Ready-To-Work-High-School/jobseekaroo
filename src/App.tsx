@@ -16,6 +16,7 @@ import ServerDemo from './pages/ServerDemo';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminUserManagement from './pages/AdminUserManagement';
 import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
+import AdminMessageModeration from './pages/AdminMessageModeration';
 import Skills from './pages/Skills';
 import RedemptionCode from './pages/RedemptionCode';
 import Resources from './pages/Resources';
@@ -38,6 +39,7 @@ import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
 import SavedJobs from './pages/SavedJobs';
 import Messages from './pages/Messages';
 import AuthCallback from './pages/AuthCallback';
+import AdminToggle from './components/admin/AdminToggle';
 
 function App() {
   return <ErrorBoundary>
@@ -64,6 +66,18 @@ function App() {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/redeem-code" element={<RedemptionCode />} />
+              
+              {/* Admin toggle for testing */}
+              <Route path="/admin-toggle" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="container mx-auto px-4 py-8">
+                      <h1 className="text-2xl font-bold mb-6">Admin Access</h1>
+                      <AdminToggle />
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
               
               {/* Protected job seeker routes */}
               <Route path="/jobs" element={
@@ -106,8 +120,6 @@ function App() {
                   <Messages />
                 </ProtectedRoute>
               } />
-              
-              {/* Protected account routes */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <Dashboard />
@@ -118,31 +130,6 @@ function App() {
                   <Profile />
                 </ProtectedRoute>
               } />
-              <Route path="/account-benefits" element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              } />
-              <Route path="/applications" element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              } />
-              <Route path="/resume" element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              } />
-              <Route path="/saved" element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              } />
-              <Route path="/notifications" element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              } />
               
               {/* Employer routes */}
               <Route path="/employer-dashboard" element={
@@ -150,25 +137,30 @@ function App() {
                   <EmployerDashboard />
                 </ProtectedRoute>
               } />
-
+              
               {/* Admin routes */}
               <Route path="/admin" element={
-                <ProtectedRoute adminOnly={true}>
+                <ProtectedRoute adminOnly>
                   <AdminDashboard />
                 </ProtectedRoute>
               } />
               <Route path="/admin/users" element={
-                <ProtectedRoute adminOnly={true}>
+                <ProtectedRoute adminOnly>
                   <AdminUserManagement />
                 </ProtectedRoute>
               } />
               <Route path="/admin/redemption-codes" element={
-                <ProtectedRoute adminOnly={true}>
+                <ProtectedRoute adminOnly>
                   <AdminRedemptionCodes />
                 </ProtectedRoute>
               } />
-
-              {/* 404 page */}
+              <Route path="/admin/message-moderation" element={
+                <ProtectedRoute adminOnly>
+                  <AdminMessageModeration />
+                </ProtectedRoute>
+              } />
+              
+              {/* Catch all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
@@ -177,4 +169,5 @@ function App() {
       </ThemeProvider>
     </ErrorBoundary>;
 }
+
 export default App;

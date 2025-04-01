@@ -31,6 +31,15 @@ const ProtectedRoute = ({
     }
   }, [user, isLoading, toast]);
 
+  // Debug log to help diagnose admin access issues
+  console.log('ProtectedRoute Check:', { 
+    user: !!user, 
+    userType: userProfile?.user_type,
+    adminOnly,
+    requiredRoles,
+    isAdmin: userProfile?.user_type === 'admin'
+  });
+
   // While checking auth status, show nothing or a loading spinner
   if (isLoading) {
     return (
@@ -54,9 +63,10 @@ const ProtectedRoute = ({
 
   // Check for admin-only routes
   if (adminOnly && userProfile?.user_type !== 'admin') {
+    console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
     toast({
       title: "Access Denied",
-      description: "You don't have permission to access this page",
+      description: "You need admin privileges to access this page",
       variant: "destructive",
     });
     return <Navigate to="/" replace />;
@@ -66,6 +76,10 @@ const ProtectedRoute = ({
   if (requiredRoles.length > 0 && userProfile) {
     const hasRequiredRole = requiredRoles.includes(userProfile.user_type);
     if (!hasRequiredRole) {
+      console.log('Access denied: Required roles not met', { 
+        required: requiredRoles, 
+        current: userProfile.user_type 
+      });
       toast({
         title: "Access Denied",
         description: "You don't have the required role to access this page",
