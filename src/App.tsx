@@ -28,7 +28,7 @@ function App() {
                   <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
                   <div className="absolute -inset-5 rounded-full bg-gradient-to-r from-blue-600 to-amber-500 opacity-20 blur-2xl"></div>
-                  <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-10w-10mr-3 relative z-10 w-full h-full object-contain rounded-md" />
+                  <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-5w-10mr-3 relative z-10 w-full h-full object-contain rounded-md" />
                 </div>
                 <h1 className="text-white text-xl font-bold">Job Seekers 4 High Schools</h1>
               </div>
