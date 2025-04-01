@@ -14,10 +14,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   adminOnly = false,
   requiredRoles = []
 }) => {
-  const { user, userProfile, loading } = useAuth();
+  const { user, userProfile, isLoading } = useAuth();
 
   // If auth is still loading, you might want to show a loading spinner
-  if (loading) {
+  if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>;
