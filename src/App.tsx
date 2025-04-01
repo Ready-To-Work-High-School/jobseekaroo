@@ -31,6 +31,10 @@ import InterviewPrep from './pages/InterviewPrep';
 import ForEmployers from './pages/ForEmployers';
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import Analytics from './pages/Analytics';
+import FAQ from './pages/FAQ';
+import SuccessStories from './pages/SuccessStories';
+import License from './pages/License';
+import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
 
 function App() {
   return <ErrorBoundary>
@@ -72,13 +76,13 @@ function App() {
                 </ProtectedRoute>
               } />
               <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/entrepreneurship-academy" element={<Layout />} />
-              <Route path="/faq" element={<NotFound />} /> {/* Temporary solution until FAQ page is created */}
+              <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
+              <Route path="/faq" element={<FAQ />} />
               <Route path="/saved-jobs" element={<Layout />} />
               <Route path="/account-benefits" element={<Layout />} />
               <Route path="/applications" element={<Layout />} />
-              <Route path="/success-stories" element={<Layout />} />
-              <Route path="/license" element={<Layout />} />
+              <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/license" element={<License />} />
               <Route path="/analytics" element={
                 <ProtectedRoute>
                   <Analytics />
