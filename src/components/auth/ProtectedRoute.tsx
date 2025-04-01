@@ -1,8 +1,10 @@
 
 import { ReactNode, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { isAdmin, isTestMode } from "@/utils/adminUtils";
+import AdvancedSpinner from "@/components/ui/advanced-spinner";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -20,6 +22,7 @@ const ProtectedRoute = ({
   const { user, userProfile, isLoading } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
+  const testMode = isTestMode();
   
   // Add detailed debug logging to help diagnose issues
   console.log('ProtectedRoute:', { 
@@ -27,31 +30,39 @@ const ProtectedRoute = ({
     isLoading, 
     authenticated: !!user,
     userType: userProfile?.user_type,
+    userProfile,
     adminOnly,
-    adminAccess: userProfile?.user_type === 'admin'
+    testMode,
+    adminAccess: isAdmin(userProfile) || testMode
   });
   
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!user && !isLoading && !testMode) {
       toast({
         title: "Authentication Required",
         description: "Please sign in to access this page",
         variant: "destructive",
       });
     }
-  }, [user, isLoading, toast]);
+  }, [user, isLoading, toast, testMode]);
 
-  // While checking auth status, show nothing or a loading spinner
+  // While checking auth status, show a loading spinner
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <AdvancedSpinner variant="circle" size="lg" text="Loading..." centered />
       </div>
     );
   }
 
-  // If not authenticated, redirect to login page with the return url
-  if (!user) {
+  // If in test mode and trying to access admin routes, bypass auth checks
+  if (testMode && adminOnly) {
+    console.log('Admin test mode active - bypassing auth checks');
+    return <>{children}</>;
+  }
+
+  // If not authenticated and not in test mode, redirect to login page with the return url
+  if (!user && !testMode) {
     console.log('Not authenticated, redirecting to', redirectTo);
     // Save the current location they were trying to go to
     return (
@@ -64,7 +75,7 @@ const ProtectedRoute = ({
   }
 
   // Check for admin-only routes
-  if (adminOnly && userProfile?.user_type !== 'admin') {
+  if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
     toast({
       title: "Access Denied",
@@ -75,7 +86,7 @@ const ProtectedRoute = ({
   }
 
   // Check for role-based restrictions
-  if (requiredRoles.length > 0 && userProfile) {
+  if (requiredRoles.length > 0 && userProfile && !testMode) {
     // Check if userProfile.user_type is defined and is one of the required roles
     const hasRequiredRole = userProfile.user_type && requiredRoles.includes(userProfile.user_type);
     if (!hasRequiredRole) {

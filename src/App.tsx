@@ -147,39 +147,37 @@ function App() {
               
               {/* Admin routes */}
               <Route path="/admin" element={
-                <Layout>
-                  <ProtectedRoute adminOnly>
-                    <AdminPanel />
-                  </ProtectedRoute>
-                </Layout>
+                <ProtectedRoute adminOnly>
+                  <AdminPanel />
+                </ProtectedRoute>
               } />
               <Route path="/admin/dashboard" element={
-                <Layout>
-                  <ProtectedRoute adminOnly>
+                <ProtectedRoute adminOnly>
+                  <Layout>
                     <AdminDashboard />
-                  </ProtectedRoute>
-                </Layout>
+                  </Layout>
+                </ProtectedRoute>
               } />
               <Route path="/admin/users" element={
-                <Layout>
-                  <ProtectedRoute adminOnly>
+                <ProtectedRoute adminOnly>
+                  <Layout>
                     <AdminUserManagement />
-                  </ProtectedRoute>
-                </Layout>
+                  </Layout>
+                </ProtectedRoute>
               } />
               <Route path="/admin/redemption-codes" element={
-                <Layout>
-                  <ProtectedRoute adminOnly>
+                <ProtectedRoute adminOnly>
+                  <Layout>
                     <AdminRedemptionCodes />
-                  </ProtectedRoute>
-                </Layout>
+                  </Layout>
+                </ProtectedRoute>
               } />
               <Route path="/admin/message-moderation" element={
-                <Layout>
-                  <ProtectedRoute adminOnly>
+                <ProtectedRoute adminOnly>
+                  <Layout>
                     <AdminMessageModeration />
-                  </ProtectedRoute>
-                </Layout>
+                  </Layout>
+                </ProtectedRoute>
               } />
               
               {/* Catch all route */}
