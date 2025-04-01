@@ -78,7 +78,12 @@ const StudentSuccess = () => {
                 The Entrepreneurship Academy prepares students for success in the business world through 
                 specialized courses, industry certifications, and real-world experiences.
               </p>
-              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden mb-6">
+              <div className="text-center mt-6">
+                <Button asChild>
+                  <a href="/entrepreneurship-academy">Explore Entrepreneurship Academy</a>
+                </Button>
+              </div>
+              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden mt-6">
                 <iframe 
                   src="https://www.youtube.com/embed/bjjLKdTgl6g" 
                   title="Entrepreneurship Program Overview" 
@@ -87,11 +92,6 @@ const StudentSuccess = () => {
                   allowFullScreen
                   className="w-full h-full"
                 ></iframe>
-              </div>
-              <div className="text-center mt-6">
-                <Button asChild>
-                  <a href="/entrepreneurship-academy">Explore Entrepreneurship Academy</a>
-                </Button>
               </div>
             </div>
           </TabsContent>
