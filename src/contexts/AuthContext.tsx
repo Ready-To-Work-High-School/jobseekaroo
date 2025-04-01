@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
@@ -96,24 +97,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Fetched user profile:', data);
       
+      // Format the preferences to ensure they're an object
       let formattedPreferences: Record<string, any> | null = null;
       
       if (data.preferences) {
         try {
           if (typeof data.preferences === 'string') {
             formattedPreferences = JSON.parse(data.preferences);
+          } else if (typeof data.preferences === 'object' && data.preferences !== null) {
+            formattedPreferences = data.preferences as Record<string, any>;
           } else {
-            formattedPreferences = data.preferences;
+            // Handle other types by creating an empty object
+            formattedPreferences = {};
+            console.warn('Unexpected preferences format:', data.preferences);
           }
         } catch (parseError) {
           console.error('Error parsing preferences:', parseError);
-          formattedPreferences = null;
+          formattedPreferences = {};
         }
+      }
+      
+      // Format and validate user_type
+      const validUserTypes: Array<'student' | 'employer' | 'admin' | 'teacher'> = ['student', 'employer', 'admin', 'teacher'];
+      let formattedUserType: 'student' | 'employer' | 'admin' | 'teacher' | null = null;
+      
+      if (data.user_type && validUserTypes.includes(data.user_type as any)) {
+        formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
       }
       
       const formattedData: UserProfile = {
         ...data,
-        preferences: formattedPreferences
+        preferences: formattedPreferences,
+        user_type: formattedUserType
       };
       
       setUserProfile(formattedData);
@@ -133,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (profileData.preferences && typeof profileData.preferences !== 'string') {
         try {
           if (typeof profileData.preferences === 'object') {
+            // Already an object, no need to modify
           }
         } catch (e) {
           console.error('Error formatting preferences:', e);
@@ -153,24 +169,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Profile updated successfully:', data);
       
+      // Format the preferences to ensure they're an object
       let formattedPreferences: Record<string, any> | null = null;
       
       if (data.preferences) {
         try {
           if (typeof data.preferences === 'string') {
             formattedPreferences = JSON.parse(data.preferences);
+          } else if (typeof data.preferences === 'object' && data.preferences !== null) {
+            formattedPreferences = data.preferences as Record<string, any>;
           } else {
-            formattedPreferences = data.preferences;
+            // Handle other types by creating an empty object
+            formattedPreferences = {};
+            console.warn('Unexpected preferences format:', data.preferences);
           }
         } catch (parseError) {
           console.error('Error parsing preferences in response:', parseError);
-          formattedPreferences = null;
+          formattedPreferences = {};
         }
+      }
+      
+      // Format and validate user_type
+      const validUserTypes: Array<'student' | 'employer' | 'admin' | 'teacher'> = ['student', 'employer', 'admin', 'teacher'];
+      let formattedUserType: 'student' | 'employer' | 'admin' | 'teacher' | null = null;
+      
+      if (data.user_type && validUserTypes.includes(data.user_type as any)) {
+        formattedUserType = data.user_type as 'student' | 'employer' | 'admin' | 'teacher';
       }
       
       const formattedData: UserProfile = {
         ...data,
-        preferences: formattedPreferences
+        preferences: formattedPreferences,
+        user_type: formattedUserType
       };
       
       setUserProfile(prev => prev ? { ...prev, ...formattedData } : null);
