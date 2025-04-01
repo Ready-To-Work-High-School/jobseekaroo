@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Award, BadgeCheck, Shield } from 'lucide-react';
@@ -37,6 +38,7 @@ const CredentialsBadgesSection = () => {
   ];
   
   const esbBadge = "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png";
+  const nursingBadge = "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png";
   
   return (
     <Card className="border-blue-200 shadow-md">
@@ -76,21 +78,42 @@ const CredentialsBadgesSection = () => {
           ))}
         </div>
         
-        <div className="flex flex-col items-center mb-6">
-          <Badge variant="new" className="text-sm py-1 mb-3">
-            <Shield className="h-4 w-4 mr-1" />
-            ESB Industry Certification
-          </Badge>
-          
-          <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
-            <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <img 
-              src={esbBadge} 
-              alt="ESB Certification" 
-              className="w-full h-full object-contain relative z-10 rounded-md" 
-            />
+        <div className="flex flex-row justify-center gap-6 mb-6">
+          {/* ESB Badge */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3">
+              <Shield className="h-4 w-4 mr-1" />
+              ESB Industry Certification
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img 
+                src={esbBadge} 
+                alt="ESB Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+              />
+            </div>
+            <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
           </div>
-          <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
+          
+          {/* Nursing Badge - with matching effects */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3">
+              <Shield className="h-4 w-4 mr-1" />
+              CNA Certification
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <img 
+                src={nursingBadge} 
+                alt="Nursing Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+              />
+            </div>
+            <p className="text-xs text-center mt-2 text-red-800">Certified Nursing Assistant</p>
+          </div>
         </div>
         
         <p className="text-xs text-center text-muted-foreground">

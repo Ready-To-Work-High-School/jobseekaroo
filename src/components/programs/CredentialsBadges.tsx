@@ -83,7 +83,7 @@ const CredentialsBadges = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
         {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
         
-        {/* ESB Badge */}
+        {/* ESB Badge - Entrepreneurship */}
         <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
@@ -93,6 +93,19 @@ const CredentialsBadges = () => {
           <p className="text-center text-sm font-semibold mt-2">Entrepreneurship &amp; Small Business</p>
           <span className="text-xs text-blue-800 text-center mt-1 font-medium">
             Industry-recognized credential
+          </span>
+        </div>
+        
+        {/* Nursing Academy Badge - With matching effects */}
+        <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
+          <div className="relative">
+            <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+            <img src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" alt="Nursing Academy Certification" className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" />
+            <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
+          </div>
+          <p className="text-center text-sm font-semibold mt-2">Nursing Assistant</p>
+          <span className="text-xs text-blue-800 text-center mt-1 font-medium">
+            CNA certification pathway
           </span>
         </div>
       </div>
