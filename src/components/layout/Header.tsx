@@ -24,15 +24,6 @@ const Header = ({
         {isMobile && <MobileMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />}
         
         <div className="flex items-center space-x-4">
-          <Link to="/admin?adminTest=true" className="mr-4 hidden sm:block" aria-label="Admin Access" title="Admin Access">
-            {/* Enhanced gradient to match ESB badge style with stronger accent */}
-            <div className="relative">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-              <div className="h-8 w-8 md:h-10 md:w-10 relative z-10 w-full h-full object-contain rounded-md"></div>
-              
-            </div>
-          </Link>
           <MainNavigation />
         </div>
 
