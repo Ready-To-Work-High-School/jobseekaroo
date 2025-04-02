@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { CircleOff, Clock, CreditCard, Users, UserCheck, ShieldCheck } from 'lucide-react';
+import { CircleOff, Clock, CreditCard, Users, UserCheck, ShieldCheck, GraduationCap, Briefcase } from 'lucide-react';
 
 interface RedemptionCodeStatsProps {
   stats: {
@@ -46,7 +46,7 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
       <Card>
         <CardContent className="p-4 flex items-center space-x-4">
           <div className="bg-blue-100 p-3 rounded-full dark:bg-blue-900/20">
-            <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">Student Codes</p>
@@ -60,8 +60,8 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
       
       <Card>
         <CardContent className="p-4 flex items-center space-x-4">
-          <div className="bg-purple-100 p-3 rounded-full dark:bg-purple-900/20">
-            <ShieldCheck className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <div className="bg-red-100 p-3 rounded-full dark:bg-red-900/20">
+            <ShieldCheck className="h-5 w-5 text-red-600 dark:text-red-400" />
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">CEO Codes</p>

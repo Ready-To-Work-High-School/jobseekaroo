@@ -105,7 +105,7 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
       }
       return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Verified</Badge>;
     }
-    return <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">Basic</Badge>;
+    return <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">Unverified</Badge>;
   };
 
   return (

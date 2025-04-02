@@ -68,6 +68,28 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
     }
   };
 
+  const getStatusBadge = (user: UserProfile) => {
+    if (user.redeemed_at) {
+      if (user.user_type === 'admin') {
+        return (
+          <Badge variant="premium" className="font-semibold">
+            CEO
+          </Badge>
+        );
+      }
+      return (
+        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+          Verified
+        </Badge>
+      );
+    }
+    return (
+      <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+        Unverified
+      </Badge>
+    );
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -95,21 +117,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                 </div>
               </TableCell>
               <TableCell>
-                {user.redeemed_at ? (
-                  user.user_type === 'admin' ? (
-                    <Badge variant="premium" className="font-semibold">
-                      CEO
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      Verified
-                    </Badge>
-                  )
-                ) : (
-                  <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-                    Basic
-                  </Badge>
-                )}
+                {getStatusBadge(user)}
               </TableCell>
               <TableCell>{formatDate(user.created_at)}</TableCell>
               <TableCell className="text-right">
