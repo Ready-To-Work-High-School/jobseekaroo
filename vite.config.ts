@@ -23,7 +23,8 @@ export default defineConfig(({ mode }) => ({
         target: 'http://localhost:5000',
         changeOrigin: true,
       }
-    }
+    },
+    allowedHosts: ['0772863e-2eac-4b3c-b10a-aec607ec1185.lovableproject.com']
   },
   build: {
     outDir: 'dist',
