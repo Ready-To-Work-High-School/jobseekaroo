@@ -38,8 +38,12 @@ const jobPostings = [
   }
 ];
 
-const DashboardTabs = () => {
-  const [activeTab, setActiveTab] = useState("postings");
+interface DashboardTabsProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   const isMobile = useIsMobile();
   
   return (
