@@ -1,16 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { validateRedemptionCode } from '@/lib/supabase/redemption';
+import { validateRedemptionCode } from '@/lib/supabase/redemption/validate';
+import { redeemCode } from '@/lib/supabase/redemption/redeem';
 import { RedemptionCode } from '@/types/redemption';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Lock, Check, AlertTriangle } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Lock, Check, AlertTriangle, Shield } from 'lucide-react';
 
 interface RedemptionCodeFormProps {
   redirectTo?: string;
@@ -19,6 +19,7 @@ interface RedemptionCodeFormProps {
 const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/dashboard' }) => {
   const [code, setCode] = useState('');
   const [isValidating, setIsValidating] = useState(false);
+  const [isRedeeming, setIsRedeeming] = useState(false);
   const [validationResult, setValidationResult] = useState<{
     isValid: boolean;
     message: string;
@@ -28,7 +29,7 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   
   // Check for code in query parameters when component mounts
   useEffect(() => {
@@ -77,7 +78,7 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
       } else {
         toast({
           title: 'Valid Code',
-          description: 'This redemption code is valid!',
+          description: result.message,
         });
       }
     } catch (error) {
@@ -102,31 +103,67 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
       return;
     }
     
-    // Redeem code logic would go here
-    // This would call an API to mark the code as used and attach it to the user
+    setIsRedeeming(true);
     
-    toast({
-      title: 'Success',
-      description: 'Code redeemed successfully!',
-    });
-    
-    // Redirect to appropriate page based on code type or the redirectTo prop
-    if (validationResult.code.type === 'student') {
-      navigate(redirectTo || '/dashboard');
-    } else {
-      navigate('/employer-dashboard');
+    try {
+      const result = await redeemCode(validationResult.code, user);
+      
+      if (result.success) {
+        // Refresh user profile to get updated user type
+        await refreshProfile();
+        
+        toast({
+          title: 'Success',
+          description: result.message,
+        });
+        
+        // For admin codes, always redirect to the admin dashboard
+        if (validationResult.code.type === 'admin') {
+          navigate('/admin');
+        } else {
+          // Otherwise redirect based on code type or the redirectTo prop
+          if (validationResult.code.type === 'student') {
+            navigate(redirectTo || '/dashboard');
+          } else {
+            navigate('/employer-dashboard');
+          }
+        }
+      } else {
+        toast({
+          title: 'Error',
+          description: result.message,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error redeeming code:', error);
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsRedeeming(false);
     }
   };
+  
+  const isAdminCode = validationResult?.code?.type === 'admin';
   
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Lock className="h-5 w-5" />
-          Redemption Code
+          {isAdminCode ? (
+            <Shield className="h-5 w-5 text-red-500" />
+          ) : (
+            <Lock className="h-5 w-5" />
+          )}
+          {isAdminCode ? 'Admin Redemption Code' : 'Redemption Code'}
         </CardTitle>
         <CardDescription>
-          Enter your redemption code to access premium features
+          {isAdminCode 
+            ? 'Enter your admin redemption code to gain administrator privileges'
+            : 'Enter your redemption code to access premium features'}
         </CardDescription>
       </CardHeader>
       
@@ -137,15 +174,16 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
               <Label htmlFor="code">Redemption Code</Label>
               <Input
                 id="code"
-                placeholder="Enter your code"
+                placeholder={isAdminCode ? "Enter admin code" : "Enter your code"}
                 value={code}
                 onChange={handleCodeChange}
+                className={isAdminCode ? "border-red-300 focus:border-red-500" : ""}
               />
             </div>
             
             <Button 
               type="submit"
-              className="w-full"
+              className={isAdminCode ? "w-full bg-red-600 hover:bg-red-700" : "w-full"}
               disabled={isValidating}
             >
               {isValidating ? 'Validating...' : 'Validate Code'}
@@ -156,11 +194,22 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
         {validationResult && (
           <div className="mt-4">
             {validationResult.isValid ? (
-              <Alert variant="default" className="bg-green-50 border-green-200">
-                <Check className="h-4 w-4 text-green-500" />
-                <AlertTitle>Valid Code</AlertTitle>
+              <Alert 
+                variant="default" 
+                className={isAdminCode 
+                  ? "bg-red-50 border-red-200" 
+                  : "bg-green-50 border-green-200"
+                }
+              >
+                <Check className={`h-4 w-4 ${isAdminCode ? "text-red-500" : "text-green-500"}`} />
+                <AlertTitle>
+                  {isAdminCode ? 'Valid Admin Code' : 'Valid Code'}
+                </AlertTitle>
                 <AlertDescription>
-                  This is a valid redemption code for {validationResult.code?.type}.
+                  {isAdminCode 
+                    ? 'This code will grant administrator privileges to your account.' 
+                    : `This is a valid redemption code for ${validationResult.code?.type}.`
+                  }
                   {validationResult.code?.expiresAt && (
                     <div className="text-sm mt-1">
                       Expires: {new Date(validationResult.code.expiresAt).toLocaleDateString()}
@@ -182,11 +231,14 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
       {validationResult?.isValid && validationResult.code && (
         <CardFooter>
           <Button 
-            className="w-full" 
+            className={isAdminCode 
+              ? "w-full bg-red-600 hover:bg-red-700" 
+              : "w-full"
+            }
             onClick={handleRedeem}
-            disabled={!user}
+            disabled={!user || isRedeeming}
           >
-            Redeem Code
+            {isRedeeming ? 'Processing...' : isAdminCode ? 'Activate Admin Privileges' : 'Redeem Code'}
           </Button>
         </CardFooter>
       )}
