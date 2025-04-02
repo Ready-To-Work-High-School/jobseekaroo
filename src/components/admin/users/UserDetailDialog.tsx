@@ -101,7 +101,7 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
   const getStatusBadge = () => {
     if (user.redeemed_at) {
       if (user.user_type === 'admin') {
-        return <Badge variant="premium" className="font-semibold">CEO</Badge>;
+        return <Badge variant="outline" className="bg-black text-white border-black font-semibold">CEO</Badge>;
       }
       return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Verified</Badge>;
     }

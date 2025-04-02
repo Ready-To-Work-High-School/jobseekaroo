@@ -72,7 +72,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
     if (user.redeemed_at) {
       if (user.user_type === 'admin') {
         return (
-          <Badge variant="premium" className="font-semibold">
+          <Badge variant="outline" className="bg-black text-white border-black font-semibold">
             CEO
           </Badge>
         );
