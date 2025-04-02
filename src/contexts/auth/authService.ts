@@ -77,7 +77,7 @@ export const signIn = async (email: string, password: string, ipAddress?: string
   } catch (error: any) {
     console.error(`Failed login attempt for ${email} from IP ${ipAddress || 'unknown'}`);
     
-    if (error.message.includes("Invalid login credentials")) {
+    if (error.message?.includes("Invalid login credentials")) {
       return { user: null, error: new Error("Invalid email or password") };
     }
     return { user: null, error };
@@ -115,58 +115,9 @@ export const signUp = async (
   }
   
   const requiresVerification = userType === 'employer';
-  
-  if (window.location.hostname === 'localhost' || window.location.hostname.includes('lovableproject.com')) {
-    console.log('Using Express server for registration');
-    
-    try {
-      const response = await fetch('/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: `${firstName} ${lastName}`,
-          email,
-          password,
-        }),
-      });
-      
-      if (!response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('text/html')) {
-          console.error('Server returned HTML instead of JSON');
-          throw new Error('Server error occurred. Please try again later.');
-        }
-        
-        const text = await response.text();
-        
-        let errorData;
-        try {
-          if (text) {
-            errorData = JSON.parse(text);
-          } else {
-            errorData = { error: 'Unknown error occurred' };
-          }
-        } catch (e) {
-          console.error('Error parsing JSON:', e);
-          errorData = { error: 'Server error occurred' };
-        }
-        
-        throw new Error(errorData.error || 'Failed to register');
-      }
-      
-      const data = await response.json();
-      
-      return { 
-        user: data.user, 
-        error: null
-      };
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      throw error;
-    }
-  } else {
+
+  // Use Supabase authentication directly instead of the Express server
+  try {
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
@@ -191,7 +142,7 @@ export const signUp = async (
       return { user: null, error };
     }
     
-    if (data?.user && !data.user.confirmed_at) {
+    if (data?.user) {
       try {
         if (data.user.id) {
           await storeEncryptedUserMetadata(data.user.id, {
@@ -209,57 +160,15 @@ export const signUp = async (
           requires_verification: requiresVerification,
           ip_address: ipAddress
         });
-        
-        if (requiresVerification) {
-          try {
-            await supabase.functions.invoke('send-email', {
-              body: { 
-                to: 'admin@yourplatform.com',
-                subject: 'New Employer Account Requires Verification',
-                html: `
-                  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2>New Employer Account Pending Verification</h2>
-                    <p>A new employer account has been created and requires verification:</p>
-                    <ul>
-                      <li><strong>Name:</strong> ${firstName} ${lastName}</li>
-                      <li><strong>Email:</strong> ${email}</li>
-                      <li><strong>Date:</strong> ${new Date().toISOString()}</li>
-                    </ul>
-                    <p>Please review this account in the admin panel.</p>
-                  </div>
-                `,
-              }
-            });
-          } catch (notifyError) {
-            console.error('Failed to send admin notification:', notifyError);
-          }
-        }
-        
-        await supabase.functions.invoke('send-email', {
-          body: {
-            to: email,
-            subject: `Welcome to Career Platform - ${requiresVerification ? 'Employer Account Pending' : 'Please Confirm Your Email'}`,
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2>Welcome to Career Platform, ${firstName}!</h2>
-                <p>Thank you for signing up as a ${userType}.</p>
-                ${requiresVerification 
-                  ? `<p><strong>Important:</strong> Your employer account requires verification before you can post jobs. Our team will review your account within 1-2 business days.</p>` 
-                  : `<p>To complete your registration, please confirm your email address.</p>
-                     <p>A confirmation email has been sent to you by our system. Please click the link in that email to verify your account.</p>`
-                }
-                <p>If you don't see the email, please check your spam folder.</p>
-                <p>Thank you,<br/>The Career Platform Team</p>
-              </div>
-            `,
-          },
-        });
-      } catch (emailError) {
-        console.error('Failed to send welcome email:', emailError);
+      } catch (metadataError) {
+        console.error('Failed to store user metadata:', metadataError);
       }
     }
     
     return { user: data.user, error: null };
+  } catch (error: any) {
+    console.error('Registration error:', error);
+    return { user: null, error };
   }
 };
 

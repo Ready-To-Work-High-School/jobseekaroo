@@ -1,5 +1,5 @@
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +23,7 @@ const ProtectedRoute = ({
   const location = useLocation();
   const { toast } = useToast();
   const testMode = isTestMode();
+  const [hasShownToast, setHasShownToast] = useState(false);
   
   // Add detailed debug logging to help diagnose issues
   console.log('ProtectedRoute:', { 
@@ -44,15 +45,17 @@ const ProtectedRoute = ({
     }
   }, [user, userProfile, isLoading, refreshProfile]);
   
+  // Show auth toast only once, not on every render
   useEffect(() => {
-    if (!user && !isLoading && !testMode) {
+    if (!user && !isLoading && !testMode && !hasShownToast) {
       toast({
         title: "Authentication Required",
         description: "Please sign in to access this page",
         variant: "destructive",
       });
+      setHasShownToast(true);
     }
-  }, [user, isLoading, toast, testMode]);
+  }, [user, isLoading, toast, testMode, hasShownToast]);
 
   // While checking auth status, show a loading spinner
   if (isLoading) {
@@ -85,11 +88,14 @@ const ProtectedRoute = ({
   // Check for admin-only routes
   if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
-    toast({
-      title: "Access Denied",
-      description: "You need admin privileges to access this page",
-      variant: "destructive",
-    });
+    if (!hasShownToast) {
+      toast({
+        title: "Access Denied",
+        description: "You need admin privileges to access this page",
+        variant: "destructive",
+      });
+      setHasShownToast(true);
+    }
     return <Navigate to="/" replace />;
   }
 
@@ -102,11 +108,14 @@ const ProtectedRoute = ({
         required: requiredRoles, 
         current: userProfile.user_type 
       });
-      toast({
-        title: "Access Denied",
-        description: "You don't have the required role to access this page",
-        variant: "destructive",
-      });
+      if (!hasShownToast) {
+        toast({
+          title: "Access Denied",
+          description: "You don't have the required role to access this page",
+          variant: "destructive",
+        });
+        setHasShownToast(true);
+      }
       return <Navigate to="/" replace />;
     }
   }

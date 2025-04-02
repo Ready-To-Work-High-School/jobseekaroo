@@ -7,11 +7,12 @@ const app = require('./app.cjs'); // Update the import to use .cjs extension
 app.use(express.static(path.join(__dirname, '../../dist')));
 
 // For any other request, send the index.html file
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
   // Skip for API routes which are already handled by the app
-  if (!req.path.startsWith('/api/')) {
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  if (req.path.startsWith('/api/')) {
+    return next();
   }
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
