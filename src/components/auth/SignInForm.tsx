@@ -15,6 +15,7 @@ const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppleLoading, setIsAppleLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const { signIn, signInWithApple, signInWithGoogle } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ const SignInForm = () => {
   
   const handleEmailPasswordSubmit = async (values: SignInValues) => {
     setIsLoading(true);
+    setAuthError(null);
+    
     try {
       await signIn(values.email, values.password);
       toast({
@@ -46,9 +49,32 @@ const SignInForm = () => {
       navigate(from);
     } catch (error: any) {
       console.error("Sign in error:", error);
+      
+      // Provide more helpful error messages based on the error
+      let errorMessage = "An unexpected error occurred during sign in";
+      
+      if (error.message?.includes("auth/invalid-login-credentials") || 
+          error.message?.includes("Invalid login credentials")) {
+        errorMessage = "Invalid email or password. Please check your credentials and try again.";
+      } else if (error.message?.includes("auth/user-not-found")) {
+        errorMessage = "No account found with this email. Please check your email or create a new account.";
+      } else if (error.message?.includes("auth/wrong-password")) {
+        errorMessage = "Incorrect password. Please try again or reset your password.";
+      } else if (error.message?.includes("auth/too-many-requests")) {
+        errorMessage = "Too many failed login attempts. Please try again later or reset your password.";
+      } else if (error.message?.includes("auth/user-disabled")) {
+        errorMessage = "This account has been disabled. Please contact support.";
+      } else if (error.message?.includes("auth/network-request-failed")) {
+        errorMessage = "Network error. Please check your internet connection and try again.";
+      } else if (error.message?.includes("throttled") || error.message?.includes("rate limit")) {
+        errorMessage = "Too many sign-in attempts. Please wait a few minutes and try again.";
+      }
+      
+      setAuthError(errorMessage);
+      
       toast({
         title: "Error",
-        description: error.message || "Invalid email or password",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -97,6 +123,13 @@ const SignInForm = () => {
 
   return (
     <div className="bg-card border rounded-lg shadow-sm p-6 transition-all hover:shadow-md">
+      {authError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{authError}</AlertDescription>
+        </Alert>
+      )}
+      
       <EmailPasswordForm 
         onSubmit={handleEmailPasswordSubmit} 
         isLoading={isLoading} 

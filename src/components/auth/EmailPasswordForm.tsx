@@ -51,6 +51,7 @@ function sanitizeEmail(email: string): string {
 
 const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
   const [csrfToken, setCsrfToken] = useState<string>("");
+  const [authError, setAuthError] = useState<string | null>(null);
   
   // Generate CSRF token when component mounts
   useEffect(() => {
@@ -85,6 +86,9 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
 
   const handleSubmit = async (values: SignInValues) => {
     try {
+      // Clear any previous error
+      setAuthError(null);
+      
       // Validate CSRF token before submission
       const storedToken = localStorage.getItem('csrfToken');
       const sessionToken = sessionStorage.getItem('csrfState');
@@ -123,6 +127,7 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
       await onSubmit(sanitizedValues);
     } catch (error) {
       console.error("Form submission error:", error);
+      setAuthError(error instanceof Error ? error.message : "An unexpected error occurred");
       form.setError("root", { 
         message: error instanceof Error ? error.message : "An unexpected error occurred" 
       });
@@ -136,9 +141,9 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
         <input type="hidden" name="csrfToken" value={csrfToken} />
         
         {/* Display root error */}
-        {form.formState.errors.root && (
+        {(form.formState.errors.root || authError) && (
           <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded">
-            {form.formState.errors.root.message}
+            {form.formState.errors.root?.message || authError}
           </div>
         )}
         

@@ -62,7 +62,26 @@ export const signIn = async (email: string, password: string, ipAddress?: string
         ip_address: ipAddress
       });
       
-      return { user: null, error };
+      // Enhanced error messages for better user experience
+      let enhancedErrorMessage = error.message;
+      
+      if (error.message.includes("Invalid login credentials")) {
+        enhancedErrorMessage = "Incorrect email or password. Please try again or reset your password.";
+      } else if (error.message.includes("Email not confirmed")) {
+        enhancedErrorMessage = "Please check your email to confirm your account before signing in.";
+      } else if (error.message.includes("User not found")) {
+        enhancedErrorMessage = "No account found with this email. Please check your email or sign up.";
+      } else if (error.message.includes("rate limit")) {
+        enhancedErrorMessage = "Too many sign-in attempts. Please wait a few minutes and try again.";
+      }
+      
+      return { 
+        user: null, 
+        error: {
+          ...error,
+          message: enhancedErrorMessage
+        } 
+      };
     }
     
     resetFailedLoginAttempts(email);
@@ -78,7 +97,10 @@ export const signIn = async (email: string, password: string, ipAddress?: string
     console.error(`Failed login attempt for ${email} from IP ${ipAddress || 'unknown'}`);
     
     if (error.message?.includes("Invalid login credentials")) {
-      return { user: null, error: new Error("Invalid email or password") };
+      return { 
+        user: null, 
+        error: new Error("Incorrect email or password. Please check your credentials and try again.")
+      };
     }
     return { user: null, error };
   }

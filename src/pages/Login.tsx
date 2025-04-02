@@ -1,6 +1,9 @@
+
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth';
+import { Alert } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,11 +23,35 @@ const Login = () => {
     setIsLoading(true);
     
     try {
+      if (!email.trim()) {
+        throw new Error('Email is required');
+      }
+      
+      if (!password) {
+        throw new Error('Password is required');
+      }
+      
       await signIn(email, password);
       // navigate to the page they tried to visit or dashboard
       navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in');
+      // Provide more descriptive error messages
+      let errorMessage = err.message || 'Failed to sign in';
+      
+      if (errorMessage.includes("Invalid login credentials") || 
+          errorMessage.includes("auth/invalid-credential")) {
+        errorMessage = "Incorrect email or password. Please check your credentials and try again.";
+      } else if (errorMessage.includes("auth/user-not-found")) {
+        errorMessage = "No account found with this email. Please sign up first.";
+      } else if (errorMessage.includes("auth/wrong-password")) {
+        errorMessage = "Incorrect password. Please try again or reset your password.";
+      } else if (errorMessage.includes("auth/too-many-requests")) {
+        errorMessage = "Access temporarily disabled due to many failed login attempts. You can reset your password or try again later.";
+      } else if (errorMessage.includes("network")) {
+        errorMessage = "Network error. Please check your internet connection and try again.";
+      }
+      
+      setError(errorMessage);
       setIsLoading(false);
     }
   };
@@ -40,7 +67,8 @@ const Login = () => {
         </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex items-center gap-2" role="alert">
+            <AlertCircle className="h-4 w-4" />
             <span className="block sm:inline">{error}</span>
           </div>
         )}
