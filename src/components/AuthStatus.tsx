@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
@@ -41,6 +41,8 @@ const AuthStatus = () => {
       });
     }
   };
+
+  const isAdmin = userProfile?.user_type === 'admin';
 
   return (
     <div className="flex items-center gap-2">
@@ -112,7 +114,7 @@ const AuthStatus = () => {
                 <span>Resume Assistant</span>
               </Link>
             </DropdownMenuItem>
-            {userProfile?.user_type === 'admin' && (
+            {isAdmin && (
               <DropdownMenuItem asChild>
                 <Link to="/admin" className="flex items-center cursor-pointer text-red-500">
                   <Shield className="mr-2 h-4 w-4" />
