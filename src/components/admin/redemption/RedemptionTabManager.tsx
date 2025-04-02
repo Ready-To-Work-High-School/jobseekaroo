@@ -6,8 +6,10 @@ import AnalyticsTab from './tabs/AnalyticsTab';
 import ReportsTab from './tabs/ReportsTab';
 import WizardTab from './tabs/WizardTab';
 import SchedulerTab from './tabs/SchedulerTab';
+import RequestsTab from './tabs/RequestsTab';
 import { RedemptionCode } from '@/types/redemption';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
+import { useAuth } from '@/hooks/useAuth';
 
 interface RedemptionTabManagerProps {
   activeTab: string;
@@ -86,14 +88,25 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   generationOverTime,
   handlers
 }) => {
+  const { userProfile } = useAuth();
+  
+  // Check if user is CEO - in a real app, you'd check a specific role
+  // For this example, we'll use a simple check based on email domain
+  const isCeo = userProfile?.email?.endsWith('@ceo.westsidehigh.edu') || 
+               userProfile?.email?.endsWith('@executive.westsidehigh.edu') ||
+               userProfile?.company_name?.includes('CEO') ||
+               userProfile?.job_title?.includes('CEO') ||
+               userProfile?.job_title?.includes('Chief Executive');
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="mb-6">
         <TabsTrigger value="codes">Redemption Codes</TabsTrigger>
+        <TabsTrigger value="requests">Requests</TabsTrigger>
         <TabsTrigger value="analytics">Analytics</TabsTrigger>
         <TabsTrigger value="reports">Reports</TabsTrigger>
-        <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>
-        <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>
+        {isCeo && <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>}
+        {isCeo && <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>}
       </TabsList>
       
       <TabsContent value="codes">
@@ -122,9 +135,10 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
           onEmailCode={handlers.onEmailCode}
           onViewDetails={handlers.onViewDetails}
           onViewQRCode={handlers.onViewQRCode}
-          onCodeGeneration={handlers.onCodeGeneration}
-          onBulkGeneration={handlers.onBulkGeneration}
-          onAutomatedGeneration={handlers.onAutomatedGeneration}
+          // Only CEOs can generate codes directly
+          onCodeGeneration={isCeo ? handlers.onCodeGeneration : undefined}
+          onBulkGeneration={isCeo ? handlers.onBulkGeneration : undefined}
+          onAutomatedGeneration={isCeo ? handlers.onAutomatedGeneration : undefined}
           onRefresh={handlers.onRefresh}
           onExport={handlers.onExport}
           onPrint={handlers.onPrint}
@@ -132,7 +146,12 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
           onDeleteSelected={handlers.onDeleteSelected}
           onPageChange={handlers.onPageChange}
           onPageSizeChange={handlers.onPageSizeChange}
+          isCeo={isCeo}
         />
+      </TabsContent>
+      
+      <TabsContent value="requests">
+        <RequestsTab isCeo={isCeo} />
       </TabsContent>
       
       <TabsContent value="analytics">
@@ -148,19 +167,23 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
         <ReportsTab codes={filteredCodes} formatDate={formatDate} />
       </TabsContent>
       
-      <TabsContent value="wizard">
-        <WizardTab 
-          onGenerate={handlers.onWizardGeneration}
-          isGenerating={isGenerating}
-        />
-      </TabsContent>
+      {isCeo && (
+        <TabsContent value="wizard">
+          <WizardTab 
+            onGenerate={handlers.onWizardGeneration}
+            isGenerating={isGenerating}
+          />
+        </TabsContent>
+      )}
       
-      <TabsContent value="scheduler">
-        <SchedulerTab 
-          onSchedule={handlers.onScheduleEmail}
-          isScheduling={isScheduling}
-        />
-      </TabsContent>
+      {isCeo && (
+        <TabsContent value="scheduler">
+          <SchedulerTab 
+            onSchedule={handlers.onScheduleEmail}
+            isScheduling={isScheduling}
+          />
+        </TabsContent>
+      )}
     </Tabs>
   );
 };

@@ -52,7 +52,8 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
     if (!response.ok) {
       // Check content type to provide more helpful error messages
       if (!isJsonResponse(response)) {
-        console.error('Server returned non-JSON response. Status:', response.status);
+        const text = await response.text();
+        console.error('Server returned non-JSON response:', text.substring(0, 100) + '...');
         return { 
           error: `Server error: ${response.status} ${response.statusText}`
         };
@@ -62,7 +63,9 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
     }
     
     if (!isJsonResponse(response)) {
+      const text = await response.text();
       console.error('Unexpected content type:', response.headers.get('content-type'));
+      console.error('Response text:', text.substring(0, 100) + '...');
       return {
         error: 'Server returned invalid response format'
       };
@@ -101,7 +104,7 @@ export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiRespo
     });
     
     if (!response.ok) {
-      // Check content type to provide more helpful error messages
+      // Check content type for more helpful error messages
       if (!isJsonResponse(response)) {
         const responseText = await response.text();
         console.error('Server returned non-JSON response:', responseText.substring(0, 100) + '...');
@@ -116,14 +119,23 @@ export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiRespo
     }
     
     if (!isJsonResponse(response)) {
+      const text = await response.text();
       console.error('Unexpected content type:', response.headers.get('content-type'));
+      console.error('Response text:', text.substring(0, 100) + '...');
       return {
         error: 'Server returned invalid response format'
       };
     }
     
-    const data = await response.json();
-    return { data };
+    try {
+      const data = await response.json();
+      return { data };
+    } catch (jsonError) {
+      console.error('JSON parsing error:', jsonError);
+      return {
+        error: 'The server response could not be parsed. Please try again later.'
+      };
+    }
   } catch (error) {
     console.error('API post error:', error);
     
