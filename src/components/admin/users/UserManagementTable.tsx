@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Eye, MoreHorizontal, ShieldCheck, GraduationCap, Briefcase, BookOpen } from 'lucide-react';
 import { UserTableEmptyState, UserTableLoadingState } from './UserTableEmptyState';
+import AccountTypeBadge from '@/components/layout/AccountTypeBadge';
 
 interface UserManagementTableProps {
   users: UserProfile[];
@@ -41,30 +42,15 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
   const getUserTypeIcon = (userType?: string) => {
     switch (userType) {
       case 'admin':
-        return <ShieldCheck className="h-4 w-4 text-red-500" />;
+        return <ShieldCheck className="h-4 w-4 text-white" />;
       case 'student':
-        return <GraduationCap className="h-4 w-4 text-blue-500" />;
+        return <GraduationCap className="h-4 w-4 text-white" />;
       case 'employer':
-        return <Briefcase className="h-4 w-4 text-green-500" />;
+        return <Briefcase className="h-4 w-4 text-white" />;
       case 'teacher':
-        return <BookOpen className="h-4 w-4 text-amber-500" />;
+        return <BookOpen className="h-4 w-4 text-white" />;
       default:
         return null;
-    }
-  };
-
-  const getUserTypeBadge = (userType?: string) => {
-    switch (userType) {
-      case 'admin':
-        return <Badge variant="destructive">Admin</Badge>;
-      case 'student':
-        return <Badge variant="default">Student</Badge>;
-      case 'employer':
-        return <Badge variant="success">Employer</Badge>;
-      case 'teacher':
-        return <Badge variant="warning">Teacher</Badge>;
-      default:
-        return <Badge variant="outline">Basic</Badge>;
     }
   };
 
@@ -78,13 +64,13 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
         );
       }
       return (
-        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+        <Badge variant="outline" className="bg-green-700 text-white border-green-700">
           Verified
         </Badge>
       );
     }
     return (
-      <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+      <Badge variant="outline" className="bg-gray-600 text-white border-gray-600">
         Unverified
       </Badge>
     );
@@ -112,8 +98,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
               </TableCell>
               <TableCell>
                 <div className="flex items-center space-x-2">
-                  {getUserTypeIcon(user.user_type)}
-                  <span>{getUserTypeBadge(user.user_type)}</span>
+                  <AccountTypeBadge userProfile={user} />
                 </div>
               </TableCell>
               <TableCell>

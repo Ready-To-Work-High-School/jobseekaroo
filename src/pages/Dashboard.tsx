@@ -5,6 +5,7 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import AccountTypeBadge from '@/components/layout/AccountTypeBadge';
 
 const Dashboard = () => {
   const { user, userProfile } = useAuth();
@@ -53,17 +54,7 @@ const Dashboard = () => {
           <p className="mt-1 text-sm text-gray-500">
             Welcome back, {userDisplayName}!
           </p>
-          {userProfile?.user_type && (
-            <Badge className="mt-2" variant={
-              userProfile.user_type === 'admin' 
-                ? 'destructive' 
-                : userProfile.user_type === 'employer' 
-                  ? 'success' 
-                  : 'default'
-            }>
-              {userProfile.user_type.charAt(0).toUpperCase() + userProfile.user_type.slice(1)} Account
-            </Badge>
-          )}
+          {userProfile && <AccountTypeBadge userProfile={userProfile} className="mt-2" />}
         </div>
         
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
