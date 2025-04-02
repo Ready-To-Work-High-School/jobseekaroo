@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { ReloadIcon, SendIcon } from '@radix-ui/react-icons';
+import { ReloadIcon, PaperPlaneIcon } from '@radix-ui/react-icons';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -151,7 +150,7 @@ const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({
               </>
             ) : (
               <>
-                <SendIcon className="mr-2 h-4 w-4" />
+                <PaperPlaneIcon className="mr-2 h-4 w-4" />
                 Submit Request
               </>
             )}
