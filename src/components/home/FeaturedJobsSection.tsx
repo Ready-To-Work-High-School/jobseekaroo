@@ -8,6 +8,7 @@ import JobCard from '@/components/JobCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Briefcase } from 'lucide-react';
 
 const FeaturedJobsSection = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
@@ -67,15 +68,23 @@ const FeaturedJobsSection = () => {
   };
 
   return (
-    <section className={`py-12 ${user ? 'bg-slate-50' : 'bg-white'} ${fadeInFast}`} aria-labelledby="featured-jobs-heading">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="mb-6 md:mb-8 flex flex-col items-center">
-          <h2 id="featured-jobs-heading" className="text-3xl font-bold mb-2 bg-gradient-to-r from-black via-blue-600 to-amber-500 bg-clip-text text-transparent sm:text-7xl">
-            Featured Jobs
-          </h2>
+    <section className={`py-16 ${user ? 'bg-slate-50' : 'bg-gradient-to-b from-blue-50 to-white'} ${fadeInFast} relative overflow-hidden`} aria-labelledby="featured-jobs-heading">
+      {/* Background decorative elements */}
+      <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-blue-100/30 blur-3xl"></div>
+      <div className="absolute -left-24 -bottom-24 w-96 h-96 rounded-full bg-amber-100/30 blur-3xl"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="mb-10 md:mb-12 flex flex-col items-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Briefcase className="h-8 w-8 text-amber-500" />
+            <h2 id="featured-jobs-heading" className="text-3xl font-bold bg-gradient-to-r from-black via-blue-600 to-amber-500 bg-clip-text text-transparent sm:text-4xl">
+              Featured Opportunities
+            </h2>
+          </div>
           <p className="text-lg text-muted-foreground max-w-md mx-auto">
             Hand-picked opportunities from top employers
           </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-amber-500 rounded-full mt-4"></div>
         </div>
         
         {isLoading ? (
@@ -103,10 +112,10 @@ const FeaturedJobsSection = () => {
               <div 
                 key={job.id} 
                 className={cn(
-                  "relative p-[2px] rounded-lg overflow-hidden hover:shadow-xl transition-shadow h-full",
+                  "relative group p-[2px] rounded-lg overflow-hidden hover:shadow-xl transition-all h-full transform hover:-translate-y-1",
                   "before:absolute before:inset-0 before:rounded-lg",
                   `before:bg-gradient-to-br ${getAccentGradient(index)}`,
-                  "before:content-[''] before:z-0"
+                  "before:content-[''] before:z-0 before:opacity-70 hover:before:opacity-100 before:transition-opacity"
                 )}
               >
                 <div className="relative bg-white rounded-lg h-full z-10">
