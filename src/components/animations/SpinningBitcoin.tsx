@@ -26,6 +26,7 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
   // Handle the animation completion
   useEffect(() => {
     if (unlocked && onAnimationComplete) {
+      console.log('Bitcoin animation completed, calling onAnimationComplete callback');
       const timer = setTimeout(() => {
         onAnimationComplete();
       }, 500);
@@ -49,7 +50,10 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
           times: [0, 0.5, 1],
           repeat: 2,
         }}
-        onAnimationComplete={() => setUnlocked(true)}
+        onAnimationComplete={() => {
+          console.log('Bitcoin spin animation completed');
+          setUnlocked(true);
+        }}
         className={cn("relative z-10", color)}
       >
         <Bitcoin size={size} strokeWidth={1.5} className="drop-shadow-lg" />

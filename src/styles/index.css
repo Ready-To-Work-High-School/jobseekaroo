@@ -1,13 +1,13 @@
 
 @import 'base.css';
-@import 'typography.css';
 @import 'components.css';
-@import 'utilities.css';
-@import 'animations.css';
-@import 'accessibility.css';
+@import 'typography.css';
 @import 'layout.css';
-@import 'print.css';
+@import 'utilities.css';
+@import 'accessibility.css';
 @import 'mobile.css';
+@import 'print.css';
+@import 'animations.css';
 
 @tailwind base;
 @tailwind components;

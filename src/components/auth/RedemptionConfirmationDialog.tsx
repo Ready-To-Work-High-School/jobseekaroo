@@ -33,9 +33,11 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   const [showConfetti, setShowConfetti] = useState(false);
   const [showMainContent, setShowMainContent] = useState(false);
   
+  // Reset states when dialog opens/closes
   useEffect(() => {
     if (isOpen) {
       setShowConfetti(true);
+      setShowMainContent(false);
       const timer = setTimeout(() => setShowConfetti(false), 3000);
       return () => clearTimeout(timer);
     }
@@ -88,6 +90,7 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   };
 
   const handleAnimationComplete = () => {
+    console.log('Animation completed, showing main content');
     setShowMainContent(true);
   };
 

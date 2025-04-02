@@ -32,6 +32,14 @@ export function resetCspNonce(): string {
 }
 
 /**
+ * Check if the response is JSON
+ */
+function isJsonResponse(response: Response): boolean {
+  const contentType = response.headers.get('content-type');
+  return contentType !== null && contentType.includes('application/json');
+}
+
+/**
  * Make a GET request to the API
  */
 export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
@@ -43,15 +51,21 @@ export async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
     
     if (!response.ok) {
       // Check content type to provide more helpful error messages
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('text/html')) {
-        console.error('Server returned HTML instead of JSON. Possible server error.');
+      if (!isJsonResponse(response)) {
+        console.error('Server returned non-JSON response. Status:', response.status);
         return { 
           error: `Server error: ${response.status} ${response.statusText}`
         };
       }
       
       throw new Error(`API error: ${response.statusText}`);
+    }
+    
+    if (!isJsonResponse(response)) {
+      console.error('Unexpected content type:', response.headers.get('content-type'));
+      return {
+        error: 'Server returned invalid response format'
+      };
     }
     
     const data = await response.json();
@@ -88,41 +102,38 @@ export async function postApi<T, D>(endpoint: string, body: D): Promise<ApiRespo
     
     if (!response.ok) {
       // Check content type to provide more helpful error messages
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('text/html')) {
-        console.error('Server returned HTML instead of JSON. Possible server error.');
+      if (!isJsonResponse(response)) {
+        const responseText = await response.text();
+        console.error('Server returned non-JSON response:', responseText.substring(0, 100) + '...');
         return { 
-          error: `Request failed. Please try again.`
+          error: `Request failed with status ${response.status}. Please try again.`
         };
       }
       
       // Try to get the error message from the response
-      let errorData;
-      try {
-        // Check if there's a response body
-        const text = await response.text();
-        if (text) {
-          try {
-            // Try to parse as JSON
-            errorData = JSON.parse(text);
-          } catch (e) {
-            // Don't expose raw error messages to client
-            errorData = { error: 'Invalid input format' };
-          }
-        } else {
-          errorData = { error: 'Request failed' };
-        }
-      } catch (e) {
-        errorData = { error: 'Request failed' };
-      }
-      
-      return { error: 'Invalid request. Please check your input and try again.' };
+      const errorData = await response.json();
+      return { error: errorData.error || 'Request failed' };
+    }
+    
+    if (!isJsonResponse(response)) {
+      console.error('Unexpected content type:', response.headers.get('content-type'));
+      return {
+        error: 'Server returned invalid response format'
+      };
     }
     
     const data = await response.json();
     return { data };
   } catch (error) {
     console.error('API post error:', error);
+    
+    // Check if this is a JSON parsing error
+    if (error instanceof SyntaxError && error.message.includes('JSON')) {
+      return {
+        error: 'The server response could not be parsed. Please try again later.'
+      };
+    }
+    
     return { 
       error: 'An error occurred while communicating with the server. Please try again.'
     };

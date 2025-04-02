@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Lock, Check, AlertTriangle, Shield } from 'lucide-react';
+import RedemptionConfirmationDialog from './RedemptionConfirmationDialog';
 
 interface RedemptionCodeFormProps {
   redirectTo?: string;
@@ -25,11 +26,13 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
     message: string;
     code?: RedemptionCode;
   } | null>(null);
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+  const [redeemedCode, setRedeemedCode] = useState<RedemptionCode | null>(null);
   
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, refreshProfile } = useAuth();
+  const { user, refreshProfile, userProfile } = useAuth();
   
   // Check for code in query parameters when component mounts
   useEffect(() => {
@@ -106,6 +109,9 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
     setIsRedeeming(true);
     
     try {
+      // Save the code for confirmation dialog
+      setRedeemedCode(validationResult.code);
+      
       const result = await redeemCode(validationResult.code, user);
       
       if (result.success) {
@@ -117,17 +123,8 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
           description: result.message,
         });
         
-        // For admin codes, always redirect to the admin dashboard
-        if (validationResult.code.type === 'admin') {
-          navigate('/admin');
-        } else {
-          // Otherwise redirect based on code type or the redirectTo prop
-          if (validationResult.code.type === 'student') {
-            navigate(redirectTo || '/dashboard');
-          } else {
-            navigate('/employer-dashboard');
-          }
-        }
+        // Show confirmation dialog
+        setShowConfirmationDialog(true);
       } else {
         toast({
           title: 'Error',
@@ -147,102 +144,138 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
     }
   };
   
+  const handleDialogClose = () => {
+    setShowConfirmationDialog(false);
+    
+    // For admin codes, always redirect to the admin dashboard
+    if (redeemedCode?.type === 'admin') {
+      navigate('/admin');
+    } else {
+      // Otherwise redirect based on code type or the redirectTo prop
+      if (redeemedCode?.type === 'student') {
+        navigate(redirectTo || '/dashboard');
+      } else {
+        navigate('/employer-dashboard');
+      }
+    }
+  };
+  
   const isAdminCode = validationResult?.code?.type === 'admin';
   
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          {isAdminCode ? (
-            <Shield className="h-5 w-5 text-red-500" />
-          ) : (
-            <Lock className="h-5 w-5" />
-          )}
-          {isAdminCode ? 'Admin Redemption Code' : 'Redemption Code'}
-        </CardTitle>
-        <CardDescription>
-          {isAdminCode 
-            ? 'Enter your admin redemption code to gain administrator privileges'
-            : 'Enter your redemption code to access premium features'}
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="code">Redemption Code</Label>
-              <Input
-                id="code"
-                placeholder={isAdminCode ? "Enter admin code" : "Enter your code"}
-                value={code}
-                onChange={handleCodeChange}
-                className={isAdminCode ? "border-red-300 focus:border-red-500" : ""}
-              />
-            </div>
-            
-            <Button 
-              type="submit"
-              className={isAdminCode ? "w-full bg-red-600 hover:bg-red-700" : "w-full"}
-              disabled={isValidating}
-            >
-              {isValidating ? 'Validating...' : 'Validate Code'}
-            </Button>
-          </div>
-        </form>
-        
-        {validationResult && (
-          <div className="mt-4">
-            {validationResult.isValid ? (
-              <Alert 
-                variant="default" 
-                className={isAdminCode 
-                  ? "bg-red-50 border-red-200" 
-                  : "bg-green-50 border-green-200"
-                }
-              >
-                <Check className={`h-4 w-4 ${isAdminCode ? "text-red-500" : "text-green-500"}`} />
-                <AlertTitle>
-                  {isAdminCode ? 'Valid Admin Code' : 'Valid Code'}
-                </AlertTitle>
-                <AlertDescription>
-                  {isAdminCode 
-                    ? 'This code will grant administrator privileges to your account.' 
-                    : `This is a valid redemption code for ${validationResult.code?.type}.`
-                  }
-                  {validationResult.code?.expiresAt && (
-                    <div className="text-sm mt-1">
-                      Expires: {new Date(validationResult.code.expiresAt).toLocaleDateString()}
-                    </div>
-                  )}
-                </AlertDescription>
-              </Alert>
+    <>
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {isAdminCode ? (
+              <Shield className="h-5 w-5 text-red-500" />
             ) : (
-              <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Invalid Code</AlertTitle>
-                <AlertDescription>{validationResult.message}</AlertDescription>
-              </Alert>
+              <Lock className="h-5 w-5" />
             )}
-          </div>
+            {isAdminCode ? 'Admin Redemption Code' : 'Redemption Code'}
+          </CardTitle>
+          <CardDescription>
+            {isAdminCode 
+              ? 'Enter your admin redemption code to gain administrator privileges'
+              : 'Enter your redemption code to access premium features'}
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="code">Redemption Code</Label>
+                <Input
+                  id="code"
+                  placeholder={isAdminCode ? "Enter admin code" : "Enter your code"}
+                  value={code}
+                  onChange={handleCodeChange}
+                  className={isAdminCode ? "border-red-300 focus:border-red-500" : ""}
+                />
+              </div>
+              
+              <Button 
+                type="submit"
+                className={isAdminCode ? "w-full bg-red-600 hover:bg-red-700" : "w-full"}
+                disabled={isValidating}
+              >
+                {isValidating ? 'Validating...' : 'Validate Code'}
+              </Button>
+            </div>
+          </form>
+          
+          {validationResult && (
+            <div className="mt-4">
+              {validationResult.isValid ? (
+                <Alert 
+                  variant="default" 
+                  className={isAdminCode 
+                    ? "bg-red-50 border-red-200" 
+                    : "bg-green-50 border-green-200"
+                  }
+                >
+                  <Check className={`h-4 w-4 ${isAdminCode ? "text-red-500" : "text-green-500"}`} />
+                  <AlertTitle>
+                    {isAdminCode ? 'Valid Admin Code' : 'Valid Code'}
+                  </AlertTitle>
+                  <AlertDescription>
+                    {isAdminCode 
+                      ? 'This code will grant administrator privileges to your account.' 
+                      : `This is a valid redemption code for ${validationResult.code?.type}.`
+                    }
+                    {validationResult.code?.expiresAt && (
+                      <div className="text-sm mt-1">
+                        Expires: {new Date(validationResult.code.expiresAt).toLocaleDateString()}
+                      </div>
+                    )}
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <Alert variant="destructive">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>Invalid Code</AlertTitle>
+                  <AlertDescription>{validationResult.message}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </CardContent>
+        
+        {validationResult?.isValid && validationResult.code && (
+          <CardFooter>
+            <Button 
+              className={isAdminCode 
+                ? "w-full bg-red-600 hover:bg-red-700" 
+                : "w-full"
+              }
+              onClick={handleRedeem}
+              disabled={!user || isRedeeming}
+            >
+              {isRedeeming ? 'Processing...' : isAdminCode ? 'Activate Admin Privileges' : 'Redeem Code'}
+            </Button>
+          </CardFooter>
         )}
-      </CardContent>
+      </Card>
       
-      {validationResult?.isValid && validationResult.code && (
-        <CardFooter>
-          <Button 
-            className={isAdminCode 
-              ? "w-full bg-red-600 hover:bg-red-700" 
-              : "w-full"
+      {redeemedCode && (
+        <RedemptionConfirmationDialog
+          isOpen={showConfirmationDialog}
+          onClose={handleDialogClose}
+          redemptionCode={redeemedCode}
+          userProfile={userProfile}
+          onDashboardClick={() => {
+            if (redeemedCode.type === 'admin') {
+              navigate('/admin');
+            } else if (redeemedCode.type === 'student') {
+              navigate('/dashboard');
+            } else {
+              navigate('/employer-dashboard');
             }
-            onClick={handleRedeem}
-            disabled={!user || isRedeeming}
-          >
-            {isRedeeming ? 'Processing...' : isAdminCode ? 'Activate Admin Privileges' : 'Redeem Code'}
-          </Button>
-        </CardFooter>
+          }}
+        />
       )}
-    </Card>
+    </>
   );
 };
 
