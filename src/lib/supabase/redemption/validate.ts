@@ -55,10 +55,13 @@ export async function validateRedemptionCode(
     }
     
     // Convert database record to our interface format
+    // Fix: Explicitly cast the type to the allowed union type
+    const codeType = isAdminCode ? 'admin' : (data.type as 'student' | 'employer' | 'admin');
+    
     const redemptionCode = {
       id: data.id,
       code: data.code,
-      type: isAdminCode ? 'admin' : data.type,
+      type: codeType,
       used: data.used,
       usedBy: data.used_by,
       usedAt: data.used_at ? new Date(data.used_at) : undefined,
