@@ -1,6 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Dashboard = () => {
   const { user, userProfile } = useAuth();
@@ -27,6 +31,7 @@ const Dashboard = () => {
       } catch (err: any) {
         console.error('Error fetching posts:', err);
         setError(err.message || 'An error occurred while fetching posts');
+        setPosts([]); // Set posts to empty array in case of error
       } finally {
         setIsLoading(false);
       }
@@ -48,21 +53,66 @@ const Dashboard = () => {
           <p className="mt-1 text-sm text-gray-500">
             Welcome back, {userDisplayName}!
           </p>
+          {userProfile?.user_type && (
+            <Badge className="mt-2" variant={
+              userProfile.user_type === 'admin' 
+                ? 'destructive' 
+                : userProfile.user_type === 'employer' 
+                  ? 'success' 
+                  : 'default'
+            }>
+              {userProfile.user_type.charAt(0).toUpperCase() + userProfile.user_type.slice(1)} Account
+            </Badge>
+          )}
         </div>
         
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg leading-6 font-medium text-gray-900">Recent Posts</h2>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">Latest activity from the platform</p>
+            <h2 className="text-lg leading-6 font-medium text-gray-900">Recent Activity</h2>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">Latest updates from your account</p>
           </div>
           
           <div className="border-t border-gray-200">
             {isLoading ? (
-              <div className="px-4 py-5 text-center text-gray-500">Loading posts...</div>
+              <div className="px-4 py-5">
+                <Skeleton className="h-4 w-3/4 rounded mb-4" />
+                <Skeleton className="h-4 w-1/2 rounded mb-4" />
+                <Skeleton className="h-4 w-5/6 rounded" />
+              </div>
             ) : error ? (
-              <div className="px-4 py-5 text-center text-red-500">{error}</div>
+              <Card className="m-4 border-none shadow-none">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Your Dashboard</CardTitle>
+                  <CardDescription>Activity and account information</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium">Account Status</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm">Your account is active and in good standing.</p>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium">Recommended Actions</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li className="text-sm">Complete your profile information</li>
+                          <li className="text-sm">Add your skills and preferences</li>
+                          <li className="text-sm">Browse available opportunities</li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
             ) : posts.length === 0 ? (
-              <div className="px-4 py-5 text-center text-gray-500">No posts found</div>
+              <div className="px-4 py-5 text-center text-gray-500">No recent activity found</div>
             ) : (
               <ul className="divide-y divide-gray-200">
                 {posts.map((post: any) => (

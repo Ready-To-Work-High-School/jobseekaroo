@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -150,13 +151,15 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
     // For admin codes, always redirect to the admin dashboard
     if (redeemedCode?.type === 'admin') {
       navigate('/admin');
+    } else if (redeemedCode?.type === 'student') {
+      // For student codes, redirect to the student dashboard
+      navigate('/dashboard');
+    } else if (redeemedCode?.type === 'employer') {
+      // For employer codes, redirect to the employer dashboard
+      navigate('/employer-dashboard');
     } else {
-      // Otherwise redirect based on code type or the redirectTo prop
-      if (redeemedCode?.type === 'student') {
-        navigate(redirectTo || '/dashboard');
-      } else {
-        navigate('/employer-dashboard');
-      }
+      // Default fallback
+      navigate(redirectTo);
     }
   };
   

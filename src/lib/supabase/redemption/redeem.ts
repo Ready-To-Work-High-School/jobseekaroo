@@ -24,6 +24,59 @@ export async function redeemCode(
       };
     }
     
+    // Double-check that the code is not already used - additional safety check
+    const { data: codeData, error: codeError } = await supabase
+      .from('redemption_codes')
+      .select('*')
+      .eq('id', code.id)
+      .single();
+      
+    if (codeError || !codeData) {
+      console.error('Error fetching redemption code:', codeError);
+      return { 
+        success: false, 
+        message: 'Invalid redemption code' 
+      };
+    }
+    
+    if (codeData.used) {
+      return { 
+        success: false, 
+        message: 'This redemption code has already been used' 
+      };
+    }
+    
+    // Check for expiration
+    if (codeData.expires_at && new Date(codeData.expires_at) < new Date()) {
+      return { 
+        success: false, 
+        message: 'This redemption code has expired' 
+      };
+    }
+    
+    // Check if user already has a profile
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('user_type, redeemed_code')
+      .eq('id', user.id)
+      .single();
+      
+    if (profileError) {
+      console.error('Error fetching user profile:', profileError);
+      return { 
+        success: false, 
+        message: 'Failed to retrieve user profile' 
+      };
+    }
+    
+    // If user has already redeemed a code of the same type, prevent duplicate redemption
+    if (profileData.redeemed_code) {
+      return { 
+        success: false, 
+        message: 'You have already redeemed a code' 
+      };
+    }
+    
     // Mark the code as used
     const { error: updateError } = await supabase
       .from('redemption_codes')
@@ -47,7 +100,7 @@ export async function redeemCode(
     const userType = code.type === 'admin' ? 'admin' : code.type;
     
     // Update the user's profile with the redeemed information
-    const { error: profileError } = await supabase
+    const { error: profileError2 } = await supabase
       .from('profiles')
       .update({
         user_type: userType,
@@ -56,8 +109,8 @@ export async function redeemCode(
       })
       .eq('id', user.id);
     
-    if (profileError) {
-      console.error('Error updating user profile:', profileError);
+    if (profileError2) {
+      console.error('Error updating user profile:', profileError2);
       return { 
         success: false, 
         message: 'Failed to update user profile' 

@@ -62,6 +62,8 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
         return 'Student Account';
       case 'employer':
         return 'Employer Account';
+      case 'admin':
+        return 'Administrator Account';
       default:
         return 'Premium Account';
     }
@@ -84,8 +86,29 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
           'Analytics and reporting tools',
           'Featured company profile'
         ];
+      case 'admin':
+        return [
+          'Full platform administration',
+          'User management capabilities',
+          'Content moderation tools',
+          'Analytics and reporting access'
+        ];
       default:
         return ['Premium account benefits'];
+    }
+  };
+
+  // Get button text based on user type
+  const getDashboardButtonText = () => {
+    switch (redemptionCode.type) {
+      case 'student':
+        return 'Go to Student Dashboard';
+      case 'employer':
+        return 'Go to Employer Dashboard';
+      case 'admin':
+        return 'Go to Admin Dashboard';
+      default:
+        return 'View Dashboard';
     }
   };
 
@@ -163,10 +186,9 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
               </Button>
               <Button 
                 variant="brand" 
-                className="animate-pulse" 
-                onClick={onDashboardClick || (() => window.location.href = '/account-benefits')}
+                onClick={onDashboardClick || onClose}
               >
-                View All Benefits
+                {getDashboardButtonText()}
               </Button>
             </DialogFooter>
           </>
