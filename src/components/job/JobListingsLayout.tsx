@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import Layout from '@/components/Layout';
 import { MapPin } from 'lucide-react';
 import { useFadeIn } from '@/utils/animations';
+import BackButton from '@/components/navigation/BackButton';
 
 interface JobListingsLayoutProps {
   children: ReactNode;
