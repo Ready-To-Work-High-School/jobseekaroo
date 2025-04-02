@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { UserCircle, Briefcase, ShieldCheck, Sparkles } from 'lucide-react';
 import { RedemptionCode } from '@/types/redemption';
 import { UserProfile } from '@/types/user';
 import {
@@ -11,9 +10,11 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import SpinningBitcoin from '@/components/animations/SpinningBitcoin';
+import ConfettiAnimation from './redemption/ConfettiAnimation';
+import RedemptionLoadingAnimation from './redemption/RedemptionLoadingAnimation';
+import RedemptionSuccessHeader from './redemption/RedemptionSuccessHeader';
+import RedemptionBenefitsList from './redemption/RedemptionBenefitsList';
+import RedemptionActionButtons from './redemption/RedemptionActionButtons';
 
 interface RedemptionConfirmationDialogProps {
   isOpen: boolean;
@@ -43,75 +44,6 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
     }
   }, [isOpen]);
   
-  // Get icon based on the redemption code type
-  const getIcon = () => {
-    switch (redemptionCode.type) {
-      case 'student':
-        return <UserCircle className="h-16 w-16 text-primary animate-pulse" />;
-      case 'employer':
-        return <Briefcase className="h-16 w-16 text-primary animate-pulse" />;
-      default:
-        return <ShieldCheck className="h-16 w-16 text-primary animate-pulse" />;
-    }
-  };
-
-  // Get formatted account type
-  const getAccountTypeText = () => {
-    switch (redemptionCode.type) {
-      case 'student':
-        return 'Student Account';
-      case 'employer':
-        return 'Employer Account';
-      case 'admin':
-        return 'Administrator Account';
-      default:
-        return 'Premium Account';
-    }
-  };
-
-  // Benefits based on account type
-  const getBenefits = () => {
-    switch (redemptionCode.type) {
-      case 'student':
-        return [
-          'Access to premium job listings',
-          'Resume builder tools',
-          'Interview preparation resources',
-          'Skill assessment tools'
-        ];
-      case 'employer':
-        return [
-          'Post unlimited job listings',
-          'Advanced candidate search',
-          'Analytics and reporting tools',
-          'Featured company profile'
-        ];
-      case 'admin':
-        return [
-          'Full platform administration',
-          'User management capabilities',
-          'Content moderation tools',
-          'Analytics and reporting access'
-        ];
-      default:
-        return ['Premium account benefits'];
-    }
-  };
-
-  // Get button text based on user type
-  const getDashboardButtonText = () => {
-    switch (redemptionCode.type) {
-      case 'student':
-        return 'Go to Student Dashboard';
-      case 'employer':
-        return 'Go to Employer Dashboard';
-      case 'admin':
-        return 'Go to Admin Dashboard';
-      default:
-        return 'View Dashboard';
-    }
-  };
-
   const handleAnimationComplete = () => {
     console.log('Animation completed, showing main content');
     setShowMainContent(true);
@@ -120,76 +52,32 @@ const RedemptionConfirmationDialog: React.FC<RedemptionConfirmationDialogProps> 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
-        {showConfetti && (
-          <div className="confetti-container">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="confetti"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                  backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
-                }}
-              />
-            ))}
-          </div>
-        )}
+        {showConfetti && <ConfettiAnimation />}
         
         <DialogHeader>
           {!showMainContent ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <SpinningBitcoin 
-                size={80} 
-                onAnimationComplete={handleAnimationComplete}
-                className="mb-4"
-              />
-              <p className="text-lg text-center text-muted-foreground animate-pulse">
-                Redeeming your code...
-              </p>
-            </div>
+            <RedemptionLoadingAnimation onAnimationComplete={handleAnimationComplete} />
           ) : (
-            <>
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
-                {getIcon()}
-                <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', right: '150px' }} />
-                <Sparkles className="absolute h-6 w-6 text-yellow-400 animate-bounce" style={{ top: '90px', left: '150px', animationDelay: '0.5s' }} />
-              </div>
-              <DialogTitle className="text-xl text-center">Redemption Successful!</DialogTitle>
-              <DialogDescription className="text-center">
-                Your account has been upgraded to <Badge variant="outline" className="ml-1 font-semibold">{getAccountTypeText()}</Badge>
-              </DialogDescription>
-            </>
+            <RedemptionSuccessHeader redemptionType={redemptionCode.type} />
           )}
         </DialogHeader>
         
         {showMainContent && (
           <>
             <div className="space-y-4">
-              <div className="rounded-md bg-muted p-4">
-                <h4 className="font-medium mb-2">Your new benefits include:</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  {getBenefits().map((benefit, index) => (
-                    <li key={index} className="text-sm">{benefit}</li>
-                  ))}
-                </ul>
-              </div>
+              <RedemptionBenefitsList type={redemptionCode.type} />
               
               <div className="text-sm text-muted-foreground">
                 <p>Your redemption code <span className="font-mono font-medium">{redemptionCode.code}</span> has been applied to {userProfile?.first_name ? `${userProfile.first_name}'s` : 'your'} account.</p>
               </div>
             </div>
 
-            <DialogFooter className="sm:justify-center gap-2 pt-2">
-              <Button variant="outline" onClick={onClose}>
-                Close
-              </Button>
-              <Button 
-                variant="brand" 
-                onClick={onDashboardClick || onClose}
-              >
-                {getDashboardButtonText()}
-              </Button>
+            <DialogFooter>
+              <RedemptionActionButtons 
+                onClose={onClose} 
+                onDashboardClick={onDashboardClick} 
+                redemptionType={redemptionCode.type} 
+              />
             </DialogFooter>
           </>
         )}
