@@ -9,11 +9,15 @@ const HeroSection = () => {
     <section className="bg-gradient-to-b from-blue-50 to-white py-12">
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-6">
-          <img 
-            src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-            alt="Job Seekers 4 High Schools Logo"
-            className="h-24 w-auto" 
-          />
+          {/* Enhanced logo display with subtle glow effect */}
+          <div className="relative">
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg"></div>
+            <img 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              alt="Job Seekers 4 High Schools Logo"
+              className="h-24 w-auto relative z-10" 
+            />
+          </div>
         </div>
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
