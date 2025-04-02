@@ -48,8 +48,7 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           { name: 'User management access', active: true },
           { name: 'Content moderation tools', active: true },
           { name: 'Analytics dashboard', active: true },
-          { name: 'System configuration', active: true },
-          { name: 'Executive decision making', active: true }
+          { name: 'System configuration', active: true }
         ];
       case 'teacher':
         return [
@@ -76,7 +75,7 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       case 'employer':
         return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>;
       case 'admin':
-        return <Badge className="bg-black text-white hover:bg-black">Chief Executive Officer</Badge>;
+        return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">Administrator</Badge>;
       case 'teacher':
         return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">Teacher</Badge>;
       default:

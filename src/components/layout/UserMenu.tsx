@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -87,14 +87,12 @@ const UserMenu = () => {
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
-          {!isAdmin && (
-            <DropdownMenuItem asChild>
-              <Link to="/account-benefits" className="cursor-pointer">
-                <Award className="mr-2 h-4 w-4" />
-                <span>Account Benefits</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem asChild>
+            <Link to="/account-benefits" className="cursor-pointer">
+              <Award className="mr-2 h-4 w-4" />
+              <span>Account Benefits</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/analytics" className="cursor-pointer">
               <BarChart2 className="mr-2 h-4 w-4" />
@@ -109,7 +107,7 @@ const UserMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        {!userProfile?.redeemed_at && !isAdmin && (
+        {!userProfile?.redeemed_at && (
           <DropdownMenuItem asChild>
             <Link to="/redeem-code" className="cursor-pointer">
               <Award className="mr-2 h-4 w-4" />
