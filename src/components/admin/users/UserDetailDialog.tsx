@@ -13,7 +13,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Shield, Briefcase, GraduationCap, BookOpen, Trash2 } from 'lucide-react';
-import AccountTypeBadge from '@/components/layout/AccountTypeBadge';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 
 interface UserDetailDialogProps {
@@ -83,6 +83,31 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
     }
   };
 
+  const getUserTypeBadge = () => {
+    switch (user.user_type) {
+      case 'admin':
+        return <Badge variant="destructive" className="ml-2">Admin</Badge>;
+      case 'student':
+        return <Badge variant="default" className="ml-2">Student</Badge>;
+      case 'employer':
+        return <Badge variant="success" className="ml-2">Employer</Badge>;
+      case 'teacher':
+        return <Badge variant="warning" className="ml-2">Teacher</Badge>;
+      default:
+        return <Badge variant="outline" className="ml-2">Basic</Badge>;
+    }
+  };
+
+  const getStatusBadge = () => {
+    if (user.redeemed_at) {
+      if (user.user_type === 'admin') {
+        return <Badge variant="premium" className="font-semibold">CEO</Badge>;
+      }
+      return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Verified</Badge>;
+    }
+    return <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">Basic</Badge>;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[525px]">
@@ -110,8 +135,9 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
                 {user.first_name} {user.last_name}
               </h3>
               <p className="text-sm text-muted-foreground">{user.email}</p>
-              <div className="mt-1">
-                <AccountTypeBadge userProfile={user} />
+              <div className="mt-1 flex items-center">
+                {getUserTypeBadge()}
+                <div className="ml-2">{getStatusBadge()}</div>
               </div>
             </div>
           </div>
@@ -142,7 +168,7 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
               <div>
                 <Label>Current Role</Label>
                 <p className="text-sm">
-                  {user.user_type || 'Standard User'}
+                  {user.user_type === 'admin' && user.redeemed_at ? 'CEO' : user.user_type || 'Standard User'}
                 </p>
               </div>
             </div>

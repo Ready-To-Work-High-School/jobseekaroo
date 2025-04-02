@@ -96,9 +96,15 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
               </TableCell>
               <TableCell>
                 {user.redeemed_at ? (
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Redeemed
-                  </Badge>
+                  user.user_type === 'admin' ? (
+                    <Badge variant="premium" className="font-semibold">
+                      CEO
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      Verified
+                    </Badge>
+                  )
                 ) : (
                   <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                     Basic

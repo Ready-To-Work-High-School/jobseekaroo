@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { CircleOff, Clock, CreditCard, Users, UserCheck } from 'lucide-react';
+import { CircleOff, Clock, CreditCard, Users, UserCheck, ShieldCheck } from 'lucide-react';
 
 interface RedemptionCodeStatsProps {
   stats: {
@@ -36,6 +36,9 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
           <div>
             <p className="text-sm font-medium text-muted-foreground">Used Codes</p>
             <h3 className="text-2xl font-bold">{stats.usedCodes}</h3>
+            <p className="text-xs text-muted-foreground">
+              {stats.totalCodes > 0 ? Math.round((stats.usedCodes / stats.totalCodes) * 100) : 0}% of total
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -48,6 +51,9 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
           <div>
             <p className="text-sm font-medium text-muted-foreground">Student Codes</p>
             <h3 className="text-2xl font-bold">{stats.studentCodes}</h3>
+            <p className="text-xs text-muted-foreground">
+              {stats.totalCodes > 0 ? Math.round((stats.studentCodes / stats.totalCodes) * 100) : 0}% of total
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -55,11 +61,14 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
       <Card>
         <CardContent className="p-4 flex items-center space-x-4">
           <div className="bg-purple-100 p-3 rounded-full dark:bg-purple-900/20">
-            <CircleOff className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <ShieldCheck className="h-5 w-5 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Employer Codes</p>
+            <p className="text-sm font-medium text-muted-foreground">CEO Codes</p>
             <h3 className="text-2xl font-bold">{stats.employerCodes}</h3>
+            <p className="text-xs text-muted-foreground">
+              {stats.totalCodes > 0 ? Math.round((stats.employerCodes / stats.totalCodes) * 100) : 0}% of total
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -72,6 +81,9 @@ const RedemptionCodeStats: React.FC<RedemptionCodeStatsProps> = ({ stats }) => {
           <div>
             <p className="text-sm font-medium text-muted-foreground">Expiring Soon</p>
             <h3 className="text-2xl font-bold">{stats.expiringThisMonth}</h3>
+            <p className="text-xs text-muted-foreground">
+              {stats.totalCodes > 0 ? Math.round((stats.expiringThisMonth / stats.totalCodes) * 100) : 0}% of total
+            </p>
           </div>
         </CardContent>
       </Card>
