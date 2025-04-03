@@ -44,7 +44,7 @@ interface RedemptionTabManagerProps {
     onViewQRCode: (code: RedemptionCode) => void;
     onCodeGeneration: () => Promise<void>;
     onBulkGeneration: (amount: number) => Promise<void>;
-    onAutomatedCodeGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
+    onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
     onWizardGeneration: (params: any) => Promise<void>;
     onScheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
     onRefresh: () => Promise<void>;
