@@ -31,7 +31,6 @@ export interface RedemptionTabManagerProps {
   formatDate: (date?: Date | string) => string;
   usageOverTime?: { date: string; count: number; }[];
   generationOverTime?: { date: string; count: number; }[];
-  isCeo?: boolean;
   handlers: {
     onApplyFilters: (filters: any) => void;
     onSelectCode: (code: RedemptionCode, isSelected: boolean) => void;
@@ -53,4 +52,5 @@ export interface RedemptionTabManagerProps {
     onPageChange: (page: number) => void;
     onPageSizeChange: (size: number) => void;
   };
+  isCeo?: boolean;
 }

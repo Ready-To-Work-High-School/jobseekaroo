@@ -1,16 +1,12 @@
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 
-export function useCeoStatus() {
+export const useCeoStatus = () => {
   const { userProfile } = useAuth();
   
-  const isCeo = !!userProfile && (
-    userProfile.email?.endsWith('@ceo.westsidehigh.edu') || 
-    userProfile.email?.endsWith('@executive.westsidehigh.edu') ||
-    userProfile.company_name?.includes('CEO') ||
-    userProfile.job_title?.toLowerCase().includes('ceo') ||
-    userProfile.job_title?.toLowerCase().includes('chief executive')
-  );
-
+  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
+                userProfile?.job_title?.toLowerCase().includes('chief executive') ||
+                userProfile?.company_name?.toLowerCase().includes('ceo');
+  
   return { isCeo };
-}
+};
