@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   useRedemptionCodeData,
@@ -120,7 +121,27 @@ const RedemptionCodeContainer: React.FC = () => {
         formatDate={formatDate}
         usageOverTime={usageOverTime}
         generationOverTime={generationOverTime}
-        handlers={handlers}
+        handlers={{
+          onApplyFilters: handlers.onApplyFilters,
+          onSelectCode: handlers.onSelectCode,
+          onSelectAll: handlers.onSelectAll,
+          onCopyCode: handlers.onCopyCode,
+          onEmailCode: handlers.onEmailCode,
+          onViewDetails: handlers.onViewDetails,
+          onViewQRCode: handlers.onViewQRCode,
+          onCodeGeneration: handlers.onCodeGeneration,
+          onBulkGeneration: handlers.onBulkGeneration,
+          onAutomatedCodeGeneration: handlers.onAutomatedCodeGeneration,
+          onWizardGeneration: handlers.onWizardGeneration,
+          onScheduleEmail: handlers.onScheduleEmail,
+          onRefresh: handlers.onRefresh,
+          onExport: handlers.onExport,
+          onPrint: handlers.onPrint,
+          onEmailSelected: handlers.onEmailSelected,
+          onDeleteSelected: handlers.onDeleteSelected,
+          onPageChange: handlers.onPageChange,
+          onPageSizeChange: handlers.onPageSizeChange
+        }}
       />
 
       {detailsView}
