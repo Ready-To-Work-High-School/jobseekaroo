@@ -93,15 +93,12 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   const { userProfile } = useAuth();
   const navigate = useNavigate();
   
-  // Check if user is CEO - in a real app, you'd check a specific role
-  // For this example, we'll use a simple check based on email domain
   const isCeo = userProfile?.email?.endsWith('@ceo.westsidehigh.edu') || 
                userProfile?.email?.endsWith('@executive.westsidehigh.edu') ||
                userProfile?.company_name?.includes('CEO') ||
-               userProfile?.job_title?.includes('CEO') ||
-               userProfile?.job_title?.includes('Chief Executive');
+               userProfile?.job_title?.toLowerCase().includes('ceo') ||
+               userProfile?.job_title?.toLowerCase().includes('chief executive');
 
-  // Navigate to employer dashboard to manage jobs
   const handleManageJobs = () => {
     navigate('/employer-dashboard');
   };

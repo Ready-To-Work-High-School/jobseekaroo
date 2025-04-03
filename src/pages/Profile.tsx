@@ -6,10 +6,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
+import { Briefcase } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
+  
+  // Check if user is CEO based on job title or company name
+  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
+               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase().includes('ceo');
   
   return (
     <Layout>
@@ -28,10 +35,20 @@ const Profile = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-2xl">
-                      {userProfile?.first_name} {userProfile?.last_name}
-                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-2xl">
+                        {userProfile?.first_name} {userProfile?.last_name}
+                      </CardTitle>
+                      {isCeo && (
+                        <Badge variant="outline" className="bg-black text-white">
+                          Chief Executive Officer
+                        </Badge>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
+                    {userProfile?.job_title && !isCeo && (
+                      <p className="text-sm font-medium">{userProfile.job_title}</p>
+                    )}
                   </div>
                 </div>
               </CardHeader>
@@ -71,6 +88,7 @@ const Profile = () => {
                           <div>
                             <h3 className="font-medium">Job Title</h3>
                             <p>{userProfile.job_title}</p>
+                            {isCeo && <p className="text-xs text-blue-600 font-semibold mt-1">Chief Executive Officer Access</p>}
                           </div>
                         )}
                         

@@ -14,6 +14,11 @@ const EmployerDashboard = () => {
   const [activeTab, setActiveTab] = useState("postings");
   const navigate = useNavigate();
   
+  // Check if user is CEO based on job title or company name
+  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
+               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase().includes('ceo');
+  
   const handlePostNewJob = () => {
     setActiveTab("create");
   };
@@ -24,7 +29,9 @@ const EmployerDashboard = () => {
         <div className="container max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Employer Dashboard</h1>
+              <h1 className="text-3xl font-bold">
+                {isCeo ? "CEO Job Management Dashboard" : "Employer Dashboard"}
+              </h1>
               <p className="text-muted-foreground">
                 Welcome{userProfile?.first_name ? `, ${userProfile.first_name}` : ''}! Manage your job postings and applicants.
               </p>

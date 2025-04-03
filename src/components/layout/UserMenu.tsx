@@ -47,9 +47,9 @@ const UserMenu = () => {
   const isAdmin = userProfile?.user_type === 'admin';
   
   // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.includes('CEO') || 
-               userProfile?.job_title?.includes('Chief Executive') ||
-               userProfile?.company_name?.includes('CEO');
+  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
+               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase().includes('ceo');
 
   if (!user) return null;
 
