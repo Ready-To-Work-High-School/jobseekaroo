@@ -12,10 +12,10 @@ const EmployerHeader = () => {
     <div className={headerAnimation}>
       <div className="text-center mb-12">
         <div className="flex justify-center mb-4 relative">
-          {/* Reduced glow effect */}
+          {/* Further reduced glow effect */}
           <div className="relative">
-            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-30 blur-sm"></div>
-            <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-20 blur-lg"></div>
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-20 blur-sm"></div>
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-10 blur-lg"></div>
             <img 
               src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
               alt="JS4HS Logo" 

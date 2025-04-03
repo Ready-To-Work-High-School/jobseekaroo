@@ -9,7 +9,7 @@ import { useFadeIn } from '@/utils/animations';
 import { Briefcase, FileText, GraduationCap, Settings, User } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const fadeIn = useFadeIn(300);
   
   const dashboardCards = [
@@ -49,7 +49,7 @@ const Dashboard = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
           <p className="text-muted-foreground">
-            Welcome{user?.display_name ? `, ${user.display_name}` : ''}! Manage your job search journey from here.
+            Welcome{userProfile?.first_name ? `, ${userProfile.first_name}` : ''}! Manage your job search journey from here.
           </p>
         </div>
         
