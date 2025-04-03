@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Server, Lock, Code, RefreshCw } from "lucide-react";
+import { Shield, Server, Database, Cloud, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { fetchApi } from "@/utils/api-client";
 
@@ -18,8 +18,8 @@ interface SecureData {
 const SecureFrameworksCard = () => {
   const [frameworkDetails, setFrameworkDetails] = useState({
     express: false,
-    django: false,
-    spring: false
+    supabase: false,
+    render: false
   });
   
   const [apiData, setApiData] = useState<SecureData | null>(null);
@@ -57,10 +57,10 @@ const SecureFrameworksCard = () => {
     switch (name.toLowerCase()) {
       case 'express.js':
         return <Server className="h-8 w-8 text-green-600 mb-2" />;
-      case 'django':
-        return <Code className="h-8 w-8 text-green-600 mb-2" />;
-      case 'spring':
-        return <Lock className="h-8 w-8 text-green-600 mb-2" />;
+      case 'supabase':
+        return <Database className="h-8 w-8 text-green-600 mb-2" />;
+      case 'render':
+        return <Cloud className="h-8 w-8 text-green-600 mb-2" />;
       default:
         return <Shield className="h-8 w-8 text-green-600 mb-2" />;
     }
@@ -92,7 +92,7 @@ const SecureFrameworksCard = () => {
       <CardContent>
         <p className="mb-4">
           Our platform is built using industry-standard secure frameworks and best practices. 
-          We implement Express.js, Django, or Spring with security defaults baked in to ensure the protection 
+          We implement Express.js, Supabase, or Render with security defaults baked in to ensure the protection 
           of both employer and student data throughout the application process.
         </p>
         
@@ -136,49 +136,49 @@ const SecureFrameworksCard = () => {
               </div>
               
               <div className="flex flex-col items-center p-4 bg-white rounded-lg border border-green-100">
-                <Code className="h-8 w-8 text-green-600 mb-2" />
-                <h3 className="font-medium text-center">Django</h3>
+                <Database className="h-8 w-8 text-green-600 mb-2" />
+                <h3 className="font-medium text-center">Supabase</h3>
                 <p className="text-sm text-center text-muted-foreground">
-                  Python-based framework with robust security features and built-in protection
+                  Serverless database with built-in authentication, storage, and edge functions
                 </p>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="mt-2" 
-                  onClick={() => toggleDetails('django')}
+                  onClick={() => toggleDetails('supabase')}
                 >
-                  {frameworkDetails.django ? 'Hide Details' : 'View Details'}
+                  {frameworkDetails.supabase ? 'Hide Details' : 'View Details'}
                 </Button>
-                {frameworkDetails.django && (
+                {frameworkDetails.supabase && (
                   <div className="mt-2 p-2 bg-green-50 rounded-md text-xs w-full">
-                    <p>- CSRF protection</p>
-                    <p>- SQL injection prevention</p>
-                    <p>- Clickjacking protection</p>
-                    <p>- Authentication system</p>
+                    <p>- Row Level Security</p>
+                    <p>- JWT authentication</p>
+                    <p>- Edge functions</p>
+                    <p>- Real-time subscriptions</p>
                   </div>
                 )}
               </div>
               
               <div className="flex flex-col items-center p-4 bg-white rounded-lg border border-green-100">
-                <Lock className="h-8 w-8 text-green-600 mb-2" />
-                <h3 className="font-medium text-center">Spring</h3>
+                <Cloud className="h-8 w-8 text-green-600 mb-2" />
+                <h3 className="font-medium text-center">Render</h3>
                 <p className="text-sm text-center text-muted-foreground">
-                  Java framework with comprehensive security modules for enterprise applications
+                  Cloud platform with automatic SSL, global CDN, and continuous deployment
                 </p>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="mt-2" 
-                  onClick={() => toggleDetails('spring')}
+                  onClick={() => toggleDetails('render')}
                 >
-                  {frameworkDetails.spring ? 'Hide Details' : 'View Details'}
+                  {frameworkDetails.render ? 'Hide Details' : 'View Details'}
                 </Button>
-                {frameworkDetails.spring && (
+                {frameworkDetails.render && (
                   <div className="mt-2 p-2 bg-green-50 rounded-md text-xs w-full">
-                    <p>- OAuth2 integration</p>
-                    <p>- JWT authentication</p>
-                    <p>- Method-level security</p>
-                    <p>- HTTPS enforcement</p>
+                    <p>- Automatic HTTPS/SSL</p>
+                    <p>- DDoS protection</p>
+                    <p>- Environment variables</p>
+                    <p>- Secure CI/CD pipelines</p>
                   </div>
                 )}
               </div>

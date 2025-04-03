@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -13,6 +12,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Lock, Check, AlertTriangle, Shield } from 'lucide-react';
 import RedemptionConfirmationDialog from './RedemptionConfirmationDialog';
+import RedemptionCodeInput from './RedemptionCodeInput';
 
 interface RedemptionCodeFormProps {
   redirectTo?: string;
@@ -50,10 +50,14 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
     }
   }, [location.search]);
   
-  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCode(e.target.value);
+  const handleCodeChange = (value: string) => {
+    setCode(value);
     // Reset validation when code changes
     setValidationResult(null);
+  };
+  
+  const handleCodeComplete = (completedCode: string) => {
+    handleValidate(completedCode, false);
   };
   
   const handleValidate = async (codeToValidate: string, isSecurePayload: boolean = false) => {
@@ -189,58 +193,60 @@ const RedemptionCodeForm: React.FC<RedemptionCodeFormProps> = ({ redirectTo = '/
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="code">Redemption Code</Label>
-                <Input
-                  id="code"
-                  placeholder={isAdminCode ? "Enter admin code" : "Enter your code"}
+                <RedemptionCodeInput
                   value={code}
                   onChange={handleCodeChange}
-                  className={isAdminCode ? "border-red-300 focus:border-red-500" : ""}
+                  onComplete={handleCodeComplete}
+                  disabled={isValidating}
+                  isValid={validationResult?.isValid || false}
                 />
               </div>
               
               <Button 
                 type="submit"
                 className={isAdminCode ? "w-full bg-red-600 hover:bg-red-700" : "w-full"}
-                disabled={isValidating}
+                disabled={isValidating || code.length < 6}
               >
                 {isValidating ? 'Validating...' : 'Validate Code'}
               </Button>
             </div>
           </form>
           
-          {validationResult && (
+          {validationResult && !validationResult.isValid && (
             <div className="mt-4">
-              {validationResult.isValid ? (
-                <Alert 
-                  variant="default" 
-                  className={isAdminCode 
-                    ? "bg-red-50 border-red-200" 
-                    : "bg-green-50 border-green-200"
+              <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Invalid Code</AlertTitle>
+                <AlertDescription>{validationResult.message}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+          
+          {validationResult?.isValid && validationResult.code && (
+            <div className="mt-4">
+              <Alert 
+                variant="default" 
+                className={isAdminCode 
+                  ? "bg-red-50 border-red-200" 
+                  : "bg-green-50 border-green-200"
+                }
+              >
+                <Check className={`h-4 w-4 ${isAdminCode ? "text-red-500" : "text-green-500"}`} />
+                <AlertTitle>
+                  {isAdminCode ? 'Valid Admin Code' : 'Valid Code'}
+                </AlertTitle>
+                <AlertDescription>
+                  {isAdminCode 
+                    ? 'This code will grant administrator privileges to your account.' 
+                    : `This is a valid redemption code for ${validationResult.code?.type}.`
                   }
-                >
-                  <Check className={`h-4 w-4 ${isAdminCode ? "text-red-500" : "text-green-500"}`} />
-                  <AlertTitle>
-                    {isAdminCode ? 'Valid Admin Code' : 'Valid Code'}
-                  </AlertTitle>
-                  <AlertDescription>
-                    {isAdminCode 
-                      ? 'This code will grant administrator privileges to your account.' 
-                      : `This is a valid redemption code for ${validationResult.code?.type}.`
-                    }
-                    {validationResult.code?.expiresAt && (
-                      <div className="text-sm mt-1">
-                        Expires: {new Date(validationResult.code.expiresAt).toLocaleDateString()}
-                      </div>
-                    )}
-                  </AlertDescription>
-                </Alert>
-              ) : (
-                <Alert variant="destructive">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertTitle>Invalid Code</AlertTitle>
-                  <AlertDescription>{validationResult.message}</AlertDescription>
-                </Alert>
-              )}
+                  {validationResult.code?.expiresAt && (
+                    <div className="text-sm mt-1">
+                      Expires: {new Date(validationResult.code.expiresAt).toLocaleDateString()}
+                    </div>
+                  )}
+                </AlertDescription>
+              </Alert>
             </div>
           )}
         </CardContent>

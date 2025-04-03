@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   useRedemptionCodeData,
@@ -11,7 +10,7 @@ import { useAdvancedCodeFiltering } from '@/hooks/redemption/useAdvancedCodeFilt
 import { useBulkExport } from '@/hooks/redemption/useBulkExport';
 import { useScheduledEmails } from '@/hooks/redemption/useScheduledEmails';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
-import RedemptionTabManager from './RedemptionTabManager';
+import RedemptionTabManager from './tab-manager/RedemptionTabManager';
 import { useRedemptionContainerHandlers } from './hooks/useRedemptionContainerHandlers';
 import { prepareDefaultUsageData, prepareDefaultGenerationData } from './analytics/utils/chartData';
 
@@ -131,7 +130,7 @@ const RedemptionCodeContainer: React.FC = () => {
           onViewQRCode: handlers.onViewQRCode,
           onCodeGeneration: handlers.onCodeGeneration,
           onBulkGeneration: handlers.onBulkGeneration,
-          onAutomatedCodeGeneration: handlers.onAutomatedGeneration,
+          onAutomatedGeneration: handlers.onAutomatedGeneration,
           onWizardGeneration: handlers.onWizardGeneration,
           onScheduleEmail: handlers.onScheduleEmail,
           onRefresh: handlers.onRefresh,
