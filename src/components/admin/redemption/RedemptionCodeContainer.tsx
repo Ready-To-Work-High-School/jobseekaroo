@@ -131,7 +131,7 @@ const RedemptionCodeContainer: React.FC = () => {
           onViewQRCode: handlers.onViewQRCode,
           onCodeGeneration: handlers.onCodeGeneration,
           onBulkGeneration: handlers.onBulkGeneration,
-          onAutomatedGeneration: handlers.onAutomatedGeneration,
+          onAutomatedCodeGeneration: handlers.onAutomatedGeneration,
           onWizardGeneration: handlers.onWizardGeneration,
           onScheduleEmail: handlers.onScheduleEmail,
           onRefresh: handlers.onRefresh,

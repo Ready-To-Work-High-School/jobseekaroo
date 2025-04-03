@@ -1,4 +1,3 @@
-
 import React from 'react';
 import CodeGenerationPanel from '../code-generation/CodeGenerationPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
