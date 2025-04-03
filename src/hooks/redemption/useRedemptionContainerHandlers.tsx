@@ -1,12 +1,13 @@
+
 import { useState } from 'react';
 import { RedemptionCode } from '@/types/redemption';
 import { useToast } from '@/hooks/use-toast';
 import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
 import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
-import { useCodeDetailView } from './useCodeDetailView';
-import { useBasicHandlers } from './useBasicHandlers';
-import { useEmailHandlers } from './useEmailHandlers';
-import { useDeleteHandlers } from './useDeleteHandlers';
+import { useCodeDetailView } from '@/hooks/redemption/useCodeDetailView';
+import { useBasicHandlers } from '@/hooks/redemption/useBasicHandlers';
+import { useEmailHandlers } from '@/hooks/redemption/useEmailHandlers';
+import { useDeleteHandlers } from '@/hooks/redemption/useDeleteHandlers';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionContainerHandlersProps {
