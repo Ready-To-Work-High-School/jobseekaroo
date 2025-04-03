@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CodesTab from './tabs/CodesTab';
@@ -10,6 +9,9 @@ import RequestsTab from './tabs/RequestsTab';
 import { RedemptionCode } from '@/types/redemption';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Briefcase, Plus, Trash } from 'lucide-react';
 
 interface RedemptionTabManagerProps {
   activeTab: string;
@@ -89,6 +91,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   handlers
 }) => {
   const { userProfile } = useAuth();
+  const navigate = useNavigate();
   
   // Check if user is CEO - in a real app, you'd check a specific role
   // For this example, we'll use a simple check based on email domain
@@ -98,93 +101,116 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
                userProfile?.job_title?.includes('CEO') ||
                userProfile?.job_title?.includes('Chief Executive');
 
+  // Navigate to employer dashboard to manage jobs
+  const handleManageJobs = () => {
+    navigate('/employer-dashboard');
+  };
+
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="mb-6">
-        <TabsTrigger value="codes">Redemption Codes</TabsTrigger>
-        <TabsTrigger value="requests">Requests</TabsTrigger>
-        <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        <TabsTrigger value="reports">Reports</TabsTrigger>
-        {isCeo && <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>}
-        {isCeo && <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>}
-      </TabsList>
-      
-      <TabsContent value="codes">
-        <CodesTab
-          stats={stats}
-          filteredCodes={filteredCodes}
-          selectedCodes={selectedCodes}
-          allSelected={allSelected}
-          isLoading={isLoading}
-          isGenerating={isGenerating}
-          isDeleting={isDeleting}
-          activeTab={codesTab}
-          setActiveTab={setCodesTab}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalCodes={totalCodes}
-          codeType={codeType}
-          setCodeType={setCodeType}
-          expireDays={expireDays}
-          setExpireDays={setExpireDays}
-          formatDate={formatDate}
-          onApplyFilters={handlers.onApplyFilters}
-          onSelectCode={handlers.onSelectCode}
-          onSelectAll={handlers.onSelectAll}
-          onCopyCode={handlers.onCopyCode}
-          onEmailCode={handlers.onEmailCode}
-          onViewDetails={handlers.onViewDetails}
-          onViewQRCode={handlers.onViewQRCode}
-          // Only CEOs can generate codes directly
-          onCodeGeneration={isCeo ? handlers.onCodeGeneration : undefined}
-          onBulkGeneration={isCeo ? handlers.onBulkGeneration : undefined}
-          onAutomatedGeneration={isCeo ? handlers.onAutomatedGeneration : undefined}
-          onRefresh={handlers.onRefresh}
-          onExport={handlers.onExport}
-          onPrint={handlers.onPrint}
-          onEmailSelected={() => handlers.onEmailSelected(selectedCodes)}
-          onDeleteSelected={handlers.onDeleteSelected}
-          onPageChange={handlers.onPageChange}
-          onPageSizeChange={handlers.onPageSizeChange}
-          isCeo={isCeo}
-        />
-      </TabsContent>
-      
-      <TabsContent value="requests">
-        <RequestsTab isCeo={isCeo} />
-      </TabsContent>
-      
-      <TabsContent value="analytics">
-        <AnalyticsTab 
-          stats={stats} 
-          usageOverTime={usageOverTime}
-          generationOverTime={generationOverTime}
-          codes={filteredCodes}
-        />
-      </TabsContent>
-      
-      <TabsContent value="reports">
-        <ReportsTab codes={filteredCodes} formatDate={formatDate} />
-      </TabsContent>
-      
+    <>
       {isCeo && (
-        <TabsContent value="wizard">
-          <WizardTab 
-            onGenerate={handlers.onWizardGeneration}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-xl font-semibold">CEO Dashboard</h2>
+            <p className="text-sm text-muted-foreground">Manage codes and job postings</p>
+          </div>
+          <Button 
+            onClick={handleManageJobs} 
+            variant="outline" 
+            className="flex items-center gap-2"
+          >
+            <Briefcase className="h-4 w-4" />
+            Manage Job Postings
+          </Button>
+        </div>
+      )}
+      
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="mb-6">
+          <TabsTrigger value="codes">Redemption Codes</TabsTrigger>
+          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          {isCeo && <TabsTrigger value="wizard">Generation Wizard</TabsTrigger>}
+          {isCeo && <TabsTrigger value="scheduler">Email Scheduler</TabsTrigger>}
+        </TabsList>
+        
+        <TabsContent value="codes">
+          <CodesTab
+            stats={stats}
+            filteredCodes={filteredCodes}
+            selectedCodes={selectedCodes}
+            allSelected={allSelected}
+            isLoading={isLoading}
             isGenerating={isGenerating}
+            isDeleting={isDeleting}
+            activeTab={codesTab}
+            setActiveTab={setCodesTab}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalCodes={totalCodes}
+            codeType={codeType}
+            setCodeType={setCodeType}
+            expireDays={expireDays}
+            setExpireDays={setExpireDays}
+            formatDate={formatDate}
+            onApplyFilters={handlers.onApplyFilters}
+            onSelectCode={handlers.onSelectCode}
+            onSelectAll={handlers.onSelectAll}
+            onCopyCode={handlers.onCopyCode}
+            onEmailCode={handlers.onEmailCode}
+            onViewDetails={handlers.onViewDetails}
+            onViewQRCode={handlers.onViewQRCode}
+            onCodeGeneration={isCeo ? handlers.onCodeGeneration : undefined}
+            onBulkGeneration={isCeo ? handlers.onBulkGeneration : undefined}
+            onAutomatedGeneration={isCeo ? handlers.onAutomatedGeneration : undefined}
+            onRefresh={handlers.onRefresh}
+            onExport={handlers.onExport}
+            onPrint={handlers.onPrint}
+            onEmailSelected={() => handlers.onEmailSelected(selectedCodes)}
+            onDeleteSelected={handlers.onDeleteSelected}
+            onPageChange={handlers.onPageChange}
+            onPageSizeChange={handlers.onPageSizeChange}
+            isCeo={isCeo}
           />
         </TabsContent>
-      )}
-      
-      {isCeo && (
-        <TabsContent value="scheduler">
-          <SchedulerTab 
-            onSchedule={handlers.onScheduleEmail}
-            isScheduling={isScheduling}
+        
+        <TabsContent value="requests">
+          <RequestsTab isCeo={isCeo} />
+        </TabsContent>
+        
+        <TabsContent value="analytics">
+          <AnalyticsTab 
+            stats={stats} 
+            usageOverTime={usageOverTime}
+            generationOverTime={generationOverTime}
+            codes={filteredCodes}
           />
         </TabsContent>
-      )}
-    </Tabs>
+        
+        <TabsContent value="reports">
+          <ReportsTab codes={filteredCodes} formatDate={formatDate} />
+        </TabsContent>
+        
+        {isCeo && (
+          <TabsContent value="wizard">
+            <WizardTab 
+              onGenerate={handlers.onWizardGeneration}
+              isGenerating={isGenerating}
+            />
+          </TabsContent>
+        )}
+        
+        {isCeo && (
+          <TabsContent value="scheduler">
+            <SchedulerTab 
+              onSchedule={handlers.onScheduleEmail}
+              isScheduling={isScheduling}
+            />
+          </TabsContent>
+        )}
+      </Tabs>
+    </>
   );
 };
 

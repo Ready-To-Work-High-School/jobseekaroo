@@ -45,6 +45,11 @@ const UserMenu = () => {
 
   const isEmployer = userProfile?.user_type === 'employer';
   const isAdmin = userProfile?.user_type === 'admin';
+  
+  // Check if user is CEO based on job title or company name
+  const isCeo = userProfile?.job_title?.includes('CEO') || 
+               userProfile?.job_title?.includes('Chief Executive') ||
+               userProfile?.company_name?.includes('CEO');
 
   if (!user) return null;
 
@@ -74,6 +79,7 @@ const UserMenu = () => {
                 )}
               </div>
               <span className="text-xs text-muted-foreground">{user.email}</span>
+              {isCeo && <span className="text-xs font-semibold text-blue-600">CEO Access</span>}
             </div>
           ) : (
             <span>My Account</span>
@@ -117,7 +123,7 @@ const UserMenu = () => {
             </Link>
           </DropdownMenuItem>
         )}
-        {isEmployer && (
+        {(isEmployer || isCeo) && (
           <>
             <DropdownMenuItem asChild>
               <Link to="/employer-dashboard" className="cursor-pointer">
