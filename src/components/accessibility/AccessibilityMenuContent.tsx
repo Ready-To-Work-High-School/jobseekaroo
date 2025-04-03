@@ -8,8 +8,8 @@ import { AccessibilitySettings } from '@/types/user';
 interface AccessibilityMenuContentProps {
   settings: AccessibilitySettings;
   fontSize: number;
-  handleSettingChange: (key: keyof AccessibilitySettings, value: boolean) => void;
-  handleFontSizeChange: (increase: boolean) => void;
+  handleSettingChange: (key: keyof AccessibilitySettings) => void;
+  handleFontSizeChange: (value: number[]) => void;
   resetSettings: () => void;
 }
 
@@ -27,21 +27,21 @@ export const AccessibilityMenuContent = ({
         label="High Contrast"
         description="Increase color contrast for better readability"
         checked={settings.high_contrast}
-        onChange={() => handleSettingChange('high_contrast', !settings.high_contrast)}
+        onChange={() => handleSettingChange('high_contrast')}
       />
       
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="font-size" className="font-medium">Text Size</Label>
-          <span className="text-sm">{Math.round(fontSize * 100)}%</span>
+          <span className="text-sm">{fontSize}%</span>
         </div>
         <Slider
           id="font-size"
           min={75}
           max={150}
           step={5}
-          value={[fontSize * 100]}
-          onValueChange={(value) => handleFontSizeChange(value[0] > 100)}
+          value={[fontSize]}
+          onValueChange={handleFontSizeChange}
           aria-label="Adjust font size"
         />
         <p className="text-xs text-muted-foreground">Adjust the size of text throughout the site</p>
@@ -52,7 +52,7 @@ export const AccessibilityMenuContent = ({
         label="Reduce Motion"
         description="Minimize animations and transitions"
         checked={settings.reduce_motion}
-        onChange={() => handleSettingChange('reduce_motion', !settings.reduce_motion)}
+        onChange={() => handleSettingChange('reduce_motion')}
       />
       
       <AccessibilityToggle
@@ -60,7 +60,7 @@ export const AccessibilityMenuContent = ({
         label="Screen Reader Mode"
         description="Optimize layout for screen readers"
         checked={settings.screen_reader_optimized}
-        onChange={() => handleSettingChange('screen_reader_optimized', !settings.screen_reader_optimized)}
+        onChange={() => handleSettingChange('screen_reader_optimized')}
       />
       
       <Button 

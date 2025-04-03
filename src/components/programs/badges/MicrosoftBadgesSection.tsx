@@ -32,7 +32,7 @@ const MicrosoftBadgesSection = () => {
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="max-w-[220px] relative">
-              <Badge className="absolute -top-2 right-0 z-20 bg-red-700" size="sm">Microsoft</Badge>
+              <Badge className="absolute -top-2 right-0 z-20 bg-red-700">Microsoft</Badge>
               <img 
                 src={microsoftBadges[0].image} 
                 alt={microsoftBadges[0].name} 
@@ -44,7 +44,7 @@ const MicrosoftBadgesSection = () => {
               <p className="text-gray-700">
                 Students can earn Microsoft Fundamentals certifications, validating their knowledge of cloud concepts, core Microsoft 365 services, and security, compliance, and privacy in Microsoft 365. These certifications provide a foundation for future technology education and career paths.
               </p>
-              <Badge className="mt-3 bg-red-800 text-white" size="sm">Industry-recognized credential</Badge>
+              <Badge className="mt-3 bg-red-800 text-white">Industry-recognized credential</Badge>
             </div>
           </div>
         </CardContent>

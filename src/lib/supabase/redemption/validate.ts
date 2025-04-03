@@ -1,86 +1,77 @@
 
 import { supabase } from '../index';
-import { RedemptionCodeValidation } from '@/types/redemption';
+import { RedemptionCode, RedemptionCodeValidation } from '@/types/redemption';
 
+/**
+ * Validate a redemption code
+ */
 export async function validateRedemptionCode(
-  code: string,
-  isSecurePayload: boolean = false
+  code: string
 ): Promise<RedemptionCodeValidation> {
   try {
-    let codeToCheck = code;
-    
-    // If using a secure payload (e.g. QR code with encrypted data)
-    if (isSecurePayload) {
-      try {
-        // In a real implementation, we would decrypt the secure payload
-        // For now, we'll just assume the whole string is the code
-        codeToCheck = code;
-      } catch (error) {
-        return {
-          isValid: false,
-          message: 'Invalid secure code format'
-        };
-      }
-    }
-    
-    // Special handling for admin codes (they start with "ADMIN-")
-    const isAdminCode = codeToCheck.startsWith('ADMIN-');
-    
-    if (isAdminCode) {
-      // Trim the "ADMIN-" prefix for the database lookup
-      codeToCheck = codeToCheck.substring(6);
-    }
-    
-    // Check if the code exists and is not used
+    // Use explicit casting with any to work around TypeScript limitations
     const { data, error } = await supabase
-      .from('redemption_codes')
+      .from('redemption_codes' as any)
       .select('*')
-      .eq('code', codeToCheck)
-      .eq('used', false)
+      .eq('code', code)
       .single();
-    
-    if (error || !data) {
+
+    if (error) {
       return {
         isValid: false,
-        message: 'Invalid or already used redemption code'
+        message: 'Invalid redemption code',
       };
     }
-    
-    // Check if the code is expired
-    if (data.expires_at && new Date(data.expires_at) < new Date()) {
+
+    if (!data) {
       return {
         isValid: false,
-        message: 'This redemption code has expired'
+        message: 'Code not found',
       };
     }
-    
-    // Convert database record to our interface format
-    // Fix: Explicitly cast the type to the allowed union type
-    const codeType = isAdminCode ? 'admin' : (data.type as 'student' | 'employer' | 'admin');
-    
-    const redemptionCode = {
-      id: data.id,
-      code: data.code,
-      type: codeType,
-      used: data.used,
-      usedBy: data.used_by,
-      usedAt: data.used_at ? new Date(data.used_at) : undefined,
-      createdAt: new Date(data.created_at),
-      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+
+    // Since the data may be coming from Supabase, we need to handle it safely
+    // We know the shape should be correct, but TypeScript doesn't
+    const dataAny = data as any;
+
+    // Transform the database record to match our interface
+    const redemptionCode: RedemptionCode = {
+      id: dataAny.id,
+      code: dataAny.code,
+      type: dataAny.type,
+      used: dataAny.used,
+      usedBy: dataAny.used_by,
+      usedAt: dataAny.used_at ? new Date(dataAny.used_at) : undefined,
+      createdAt: new Date(dataAny.created_at),
+      expiresAt: dataAny.expires_at ? new Date(dataAny.expires_at) : undefined
     };
-    
+
+    // Check if code is already used
+    if (redemptionCode.used) {
+      return {
+        isValid: false,
+        message: 'This code has already been used',
+      };
+    }
+
+    // Check if code is expired
+    if (redemptionCode.expiresAt && new Date(redemptionCode.expiresAt) < new Date()) {
+      return {
+        isValid: false,
+        message: 'This code has expired',
+      };
+    }
+
     return {
       isValid: true,
-      message: isAdminCode 
-        ? 'Valid admin privileges redemption code' 
-        : `Valid ${redemptionCode.type} redemption code`,
-      code: redemptionCode
+      message: 'Valid code',
+      code: redemptionCode,
     };
   } catch (error) {
     console.error('Error validating redemption code:', error);
     return {
       isValid: false,
-      message: 'An error occurred while validating the code'
+      message: 'Error validating code',
     };
   }
 }

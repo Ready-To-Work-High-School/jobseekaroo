@@ -1,15 +1,10 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useFadeIn } from '@/utils/animations';
-import { ExternalLink } from 'lucide-react';
-
 const ResourcesSection = () => {
   const navigate = useNavigate();
   const fadeInSlow = useFadeIn(600);
-  
-  return (
-    <section className="py-12 bg-white" aria-labelledby="resources-heading">
+  return <section className="py-12 bg-white" aria-labelledby="resources-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-8">
           <h2 id="resources-heading" className="text-2xl font-bold sm:text-3xl mb-3">
@@ -32,34 +27,26 @@ const ResourcesSection = () => {
           </div>
           
           <div className="p-6 rounded-lg bg-amber-100">
-            <h3 className="text-lg font-semibold mb-2">Florida Ready to Work</h3>
+            <h3 className="text-lg font-semibold mb-2">Career Resources</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Learn essential employability skills to enhance your career readiness and job prospects.
+              Explore articles, guides, and tips to help you navigate your career path.
             </p>
-            <Button variant="outline" className="flex items-center gap-2" asChild>
-              <a href="https://www.floridareadytowork.com/employability-skills" target="_blank" rel="noopener noreferrer">
-                Employability Skills
-                <ExternalLink className="h-4 w-4" />
-              </a>
+            <Button variant="outline" onClick={() => navigate('/resources')}>
+              Browse Resources
             </Button>
           </div>
           
           <div className="p-6 rounded-lg bg-amber-100">
-            <h3 className="text-lg font-semibold mb-2">Interview Warmup</h3>
+            <h3 className="text-lg font-semibold mb-2">Success Stories</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Practice interviewing with Google's interactive tool to prepare for your next job interview.
+              Read about people who have found their dream jobs through our platform.
             </p>
-            <Button variant="outline" className="flex items-center gap-2" asChild>
-              <a href="https://grow.google/certificates/interview-warmup/" target="_blank" rel="noopener noreferrer">
-                Try Interview Warmup
-                <ExternalLink className="h-4 w-4" />
-              </a>
+            <Button variant="outline" onClick={() => navigate('/success-stories')}>
+              Read Stories
             </Button>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ResourcesSection;

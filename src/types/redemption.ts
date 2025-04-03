@@ -2,7 +2,7 @@
 export interface RedemptionCode {
   id: string;
   code: string;
-  type: 'student' | 'employer' | 'admin';
+  type: 'student' | 'employer';
   used: boolean;
   usedBy?: string;
   usedAt?: Date;

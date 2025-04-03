@@ -5,16 +5,14 @@ import SignInForm from "@/components/auth/SignInForm";
 import SignInBenefitsCard from "@/components/auth/SignInBenefitsCard";
 import CredentialsBadgesSection from "@/components/auth/CredentialsBadgesSection";
 import CredentialEducationSection from "@/components/auth/CredentialEducationSection";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useFadeIn } from "@/utils/animations";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const state = location.state as { redirectFrom?: string };
-  const redirectFrom = state?.redirectFrom || searchParams.get("redirectFrom");
+  const redirectFrom = searchParams.get("redirectFrom");
   const [showRedirectAlert, setShowRedirectAlert] = useState(!!redirectFrom);
   const contentAnimation = useFadeIn(300);
 

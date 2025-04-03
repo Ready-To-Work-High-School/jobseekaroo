@@ -1,215 +1,153 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { Alert } from '@/components/ui/alert';
-import { Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+
+import { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { 
+  Building, 
+  Briefcase, 
+  FileText, 
+  Users, 
+  Calendar, 
+  MessageCircle,
+  Award,
+  LineChart,
+  Share2 
+} from "lucide-react";
+import SignUpFormShared from "./SignUpFormShared";
+import SignUpBenefitCard from "./SignUpBenefitCard";
+import SignUpFormFields from "./SignUpFormFields";
+
+const employerSignUpSchema = z.object({
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  jobTitle: z.string().min(2, "Job title must be at least 2 characters"),
+});
+
+type EmployerSignUpValues = z.infer<typeof employerSignUpSchema>;
 
 interface EmployerSignUpFormProps {
-  onSuccess?: () => void;
-  isLoading?: boolean;
-  isAppleLoading?: boolean;
-  handleAppleSignIn?: () => Promise<void>;
+  isLoading: boolean;
+  isAppleLoading: boolean;
+  handleAppleSignIn: () => Promise<void>;
 }
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  companyName: string;
-  companyWebsite: string;
-  jobTitle: string;
-};
+const employerBenefits = [
+  {
+    icon: Building,
+    text: <span><strong>Create Company Profile</strong> to showcase your brand and culture to students</span>
+  },
+  {
+    icon: FileText,
+    text: <span><strong>Post Unlimited Job Listings</strong> with detailed descriptions and requirements</span>
+  },
+  {
+    icon: Users,
+    text: <span><strong>Review Applicants</strong> through our streamlined candidate management system</span>
+  },
+  {
+    icon: Calendar,
+    text: <span><strong>Schedule Interviews</strong> directly through our integrated calendar</span>
+  },
+  {
+    icon: MessageCircle,
+    text: <span><strong>Message Candidates</strong> to coordinate hiring details</span>
+  },
+  {
+    icon: Award,
+    text: <span><strong>Offer Apprenticeships</strong> and training programs to develop student talents</span>
+  },
+  {
+    icon: LineChart,
+    text: <span><strong>Access Analytics</strong> on job posting performance and candidate engagement</span>
+  },
+  {
+    icon: Share2,
+    text: <span><strong>Participate in Career Events</strong> and connect with promising students</span>
+  }
+];
 
-const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ 
-  onSuccess,
-  isLoading: externalIsLoading,
+const EmployerSignUpForm = ({
+  isLoading,
   isAppleLoading,
-  handleAppleSignIn 
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const { signUp, updateProfile } = useAuth();
+  handleAppleSignIn,
+}: EmployerSignUpFormProps) => {
+  const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-  
-  const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
-    setError(null);
-    
+
+  const form = useForm<EmployerSignUpValues>({
+    resolver: zodResolver(employerSignUpSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      companyName: "",
+      jobTitle: "",
+    },
+  });
+
+  const onSubmit = async (values: EmployerSignUpValues) => {
     try {
-      // Create the user account
+      // Additional employer-specific logic could go here
       await signUp(
-        data.email,
-        data.password,
-        data.firstName,
-        data.lastName,
-        'employer'
+        values.email, 
+        values.password, 
+        values.firstName, 
+        values.lastName
       );
-      
-      // If sign-up is successful, update the profile with employer-specific details
-      await updateProfile({
-        company_name: data.companyName,
-        company_website: data.companyWebsite,
-        job_title: data.jobTitle,
-        employer_verification_status: 'pending'
-      });
-      
-      // Display success message
       toast({
-        title: "Account created",
-        description: "Your employer account has been created. Your account will be reviewed by our team.",
+        title: "Employer account created",
+        description: "You have successfully created an employer account",
       });
-      
-      // Redirect or callback
-      onSuccess?.();
-      navigate('/dashboard');
+      navigate('/');
     } catch (error: any) {
-      console.error('Signup error:', error);
-      setError(error.message || 'Failed to create account. Please try again.');
-    } finally {
-      setIsLoading(false);
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create employer account. Please try again.",
+        variant: "destructive",
+      });
     }
   };
-  
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {error && (
-        <Alert variant="destructive">
-          {error}
-        </Alert>
-      )}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            placeholder="John"
-            {...register('firstName', { required: 'First name is required' })}
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+      <div className="md:col-span-3">
+        <SignUpFormShared 
+          isLoading={isLoading}
+          isAppleLoading={isAppleLoading}
+          handleAppleSignIn={handleAppleSignIn}
+          submitButtonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
+        >
+          <SignUpFormFields
+            form={form}
+            onSubmit={onSubmit}
+            isLoading={isLoading}
+            buttonText={isLoading ? "Creating account..." : "Sign Up as Employer"}
+            isEmployer={true}
           />
-          {errors.firstName && (
-            <p className="text-sm text-red-500">{errors.firstName.message}</p>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            placeholder="Doe"
-            {...register('lastName', { required: 'Last name is required' })}
-          />
-          {errors.lastName && (
-            <p className="text-sm text-red-500">{errors.lastName.message}</p>
-          )}
-        </div>
+        </SignUpFormShared>
       </div>
       
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="john.doe@company.com"
-          {...register('email', {
-            required: 'Email is required',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
-            },
-          })}
+      <div className="md:col-span-2">
+        <SignUpBenefitCard 
+          title="Employer Portal Access"
+          subtitle="Partner with Westside High School"
+          titleIcon={Briefcase}
+          benefits={employerBenefits}
+          ctaText="Partner with us today! Create an employer account to gain access to our talent pipeline of motivated high school students ready to contribute to your workforce."
+          ctaColor="green"
         />
-        {errors.email && (
-          <p className="text-sm text-red-500">{errors.email.message}</p>
-        )}
       </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
-            {...register('password', {
-              required: 'Password is required',
-              minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters',
-              },
-            })}
-          />
-          <button
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5 text-gray-400" />
-            ) : (
-              <Eye className="h-5 w-5 text-gray-400" />
-            )}
-          </button>
-        </div>
-        {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
-        )}
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="companyName">Company Name</Label>
-        <Input
-          id="companyName"
-          placeholder="Acme Inc."
-          {...register('companyName', { required: 'Company name is required' })}
-        />
-        {errors.companyName && (
-          <p className="text-sm text-red-500">{errors.companyName.message}</p>
-        )}
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="companyWebsite">Company Website</Label>
-        <Input
-          id="companyWebsite"
-          placeholder="https://www.acme.com"
-          {...register('companyWebsite', {
-            required: 'Company website is required',
-            pattern: {
-              value: /^(http|https):\/\/[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,}(\/\S*)?$/,
-              message: 'Enter a valid URL',
-            },
-          })}
-        />
-        {errors.companyWebsite && (
-          <p className="text-sm text-red-500">{errors.companyWebsite.message}</p>
-        )}
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="jobTitle">Your Job Title</Label>
-        <Input
-          id="jobTitle"
-          placeholder="Hiring Manager"
-          {...register('jobTitle', { required: 'Job title is required' })}
-        />
-        {errors.jobTitle && (
-          <p className="text-sm text-red-500">{errors.jobTitle.message}</p>
-        )}
-      </div>
-      
-      <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading}>
-        {isLoading || externalIsLoading ? 'Creating Account...' : 'Sign Up as Employer'}
-      </Button>
-    </form>
+    </div>
   );
 };
 

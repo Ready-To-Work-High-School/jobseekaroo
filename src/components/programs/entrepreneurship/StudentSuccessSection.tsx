@@ -52,21 +52,21 @@ const StudentSuccessSection = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-amber-200 flex flex-col">
-              <div className="h-56 w-full overflow-hidden">
+            <Card key={testimonial.id} className="overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-amber-200">
+              <div className="relative h-80 overflow-hidden">
                 <img 
                   src={testimonial.imageUrl} 
                   alt={testimonial.name} 
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
-              <CardContent className="p-5 bg-gradient-to-b from-gray-50 to-gray-200 relative flex-grow">
+              <CardContent className="p-5 bg-gradient-to-b from-gray-50 to-gray-200 relative">
                 <div className="absolute -top-6 right-4 bg-red-900/10 p-2 rounded-full shadow-md">
                   <Quote className="h-5 w-5 text-red-900" />
                 </div>
                 <h3 className="font-bold text-lg text-red-900 mb-2">{testimonial.name}</h3>
                 <p className="text-sm text-amber-700 mb-3">{testimonial.year}</p>
-                <p className="text-gray-700 italic text-sm">{testimonial.content}</p>
+                <p className="text-gray-700 italic">"{testimonial.content}"</p>
               </CardContent>
             </Card>
           ))}

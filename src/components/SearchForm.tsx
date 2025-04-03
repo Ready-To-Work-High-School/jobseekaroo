@@ -52,7 +52,7 @@ const SearchForm = ({
     >
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-primary">
+          <div className="absolute left-3 text-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
@@ -65,7 +65,7 @@ const SearchForm = ({
             onChange={(e) => setZipCode(e.target.value)}
             placeholder="Enter ZIP code"
             className={cn(
-              "w-full pl-10 pr-4 py-3 rounded-full border focus-ring",
+              "w-full pl-10 pr-20 py-3 rounded-full border focus-ring",
               "bg-white text-foreground placeholder:text-muted-foreground/60",
               "transition-all duration-200",
               "focus:border-primary focus:ring-2 focus:ring-primary/20",

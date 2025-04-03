@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Mail, Search, Shield, Lock, Database } from 'lucide-react';
+import { Mail, Search } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 
 const FAQ = () => {
@@ -55,22 +55,6 @@ const FAQ = () => {
     {
       question: "Are there any costs associated with posting jobs?",
       answer: "No, there are no costs for posting job opportunities. We offer this as a free service to connect our students with quality employment opportunities."
-    },
-    {
-      question: "How is my data protected on this platform?",
-      answer: "All employer data is protected using industry-standard encryption and security protocols. We implement strict access controls, regular security audits, and maintain compliance with educational privacy regulations to ensure your information remains secure."
-    },
-    {
-      question: "Who can access the job information I post?",
-      answer: "Only verified students and authorized staff within the Entrepreneurship Academy can access job postings. Our platform implements role-based access controls to ensure information is only visible to appropriate users."
-    },
-    {
-      question: "Is my company's information shared with third parties?",
-      answer: "No, we do not share your company information with third parties. Any data you provide is used exclusively for connecting with qualified students through our platform and for educational purposes within our program."
-    },
-    {
-      question: "What security measures are in place to protect employer accounts?",
-      answer: "We implement multiple security layers including secure password requirements, two-factor authentication options, session timeouts, and regular security monitoring to protect employer accounts from unauthorized access."
     }
   ];
 
@@ -151,20 +135,9 @@ const FAQ = () => {
         <div className="max-w-3xl mx-auto mb-16">
           <div className="bg-secondary/30 rounded-lg p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">Still Have Questions?</h2>
-            <div className="flex justify-center gap-4 mb-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
-                <Shield className="h-6 w-6" />
-              </div>
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
-                <Lock className="h-6 w-6" />
-              </div>
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
-                <Database className="h-6 w-6" />
-              </div>
-            </div>
             <p className="mb-6 max-w-xl mx-auto">
               If you couldn't find the answer to your question, feel free to reach out directly
-              to our Department Chair. We take data security and privacy very seriously.
+              to our Department Chair.
             </p>
             <div className="inline-flex gap-4">
               <Button size="lg" asChild>

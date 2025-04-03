@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Notification, NotificationFilterOptions } from '@/types/notification';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '../AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 import { useToast } from '@/hooks/use-toast';
 import { isAfter, isBefore, parseISO } from 'date-fns';

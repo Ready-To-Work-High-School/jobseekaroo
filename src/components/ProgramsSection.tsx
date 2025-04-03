@@ -14,10 +14,11 @@ import { protectElement } from '@/utils/textProtection';
 import { Card, CardContent } from './ui/card';
 import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from './ui/badge';
-
 const ProgramsSection = () => {
   const animation = useFadeIn(300);
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
 
   // Function to get the redirect path based on auth status
@@ -31,9 +32,7 @@ const ProgramsSection = () => {
       protectElement(sectionRef.current);
     }
   }, []);
-  
-  return (
-    <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
+  return <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
       <div className="container-custom">
         {/* For Employers Only heading placed at the top of the section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
@@ -54,8 +53,8 @@ const ProgramsSection = () => {
                   </h3>
                 </div>
                 
-                <p className="font-medium text-lg mb-6 text-zinc-800">
-                  Connect with our Entrepreneurship and Nursing Academies to find pre-trained students with industry-recognized credentials ready for your workforce.
+                <p className="font-medium text-lg mb-6">
+                  Connect with our academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
                 <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-colors">
@@ -69,8 +68,6 @@ const ProgramsSection = () => {
         {/* Display our updated CredentialBadges component here */}
         <CredentialBadges />
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ProgramsSection;

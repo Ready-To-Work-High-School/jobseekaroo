@@ -1,7 +1,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { JobApplication, ApplicationStatus } from '@/types/application';
-import { validateApplicationStatus } from '@/lib/supabase/utils';
+import { validateApplicationStatus } from './authUtils';
 
 export const createApplication = async (
   userId: string,

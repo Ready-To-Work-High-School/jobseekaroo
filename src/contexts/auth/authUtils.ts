@@ -1,52 +1,63 @@
 
 import { supabase } from '@/lib/supabase';
-import { formatUserProfile } from './utils';
+import { UserProfile } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
 
-export const getUserProfile = async (userId: string) => {
-  try {
-    console.log('Fetching user profile for ID:', userId);
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    
-    if (error) {
-      console.error('Error fetching user profile:', error);
-      return null;
-    }
-    
-    console.log('Raw profile data:', data);
-    return formatUserProfile(data);
-  } catch (err) {
-    console.error('Unexpected error in getUserProfile:', err);
-    return null;
+export const validateApplicationStatus = (status: string): ApplicationStatus => {
+  const validStatuses: ApplicationStatus[] = [
+    'applied',
+    'interviewing', 
+    'offered',
+    'accepted',
+    'rejected',
+    'withdrawn'
+  ];
+  
+  if (validStatuses.includes(status as ApplicationStatus)) {
+    return status as ApplicationStatus;
   }
+  
+  return 'applied'; // Default status
 };
 
-export const updateUserProfile = async (userId: string, profileData: any) => {
-  try {
-    console.log('Updating profile for user ID:', userId, 'with data:', profileData);
-    
-    const { data, error } = await supabase
-      .from('profiles')
-      .update({
-        ...profileData,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', userId)
-      .select()
-      .single();
-    
-    if (error) {
-      console.error('Error updating user profile:', error);
-      throw error;
-    }
-    
-    console.log('Profile update result:', data);
-    return formatUserProfile(data);
-  } catch (err) {
-    console.error('Error in updateUserProfile:', err);
-    throw err;
+export const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  
+  if (error) {
+    console.error('Error fetching user profile:', error);
+    return null;
   }
+  
+  return data as UserProfile;
+};
+
+export const updateUserProfile = async (
+  userId: string,
+  profileData: Partial<UserProfile>
+): Promise<UserProfile | null> => {
+  // Convert Date objects to ISO strings if needed
+  const formattedData: Record<string, any> = { ...profileData };
+  
+  // Check if redeemed_at exists and is a Date object
+  if (profileData.redeemed_at && typeof profileData.redeemed_at === 'object') {
+    formattedData.redeemed_at = (profileData.redeemed_at as Date).toISOString();
+  }
+  
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(formattedData)
+    .eq('id', userId)
+    .select()
+    .single();
+  
+  if (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
+  
+  return data as UserProfile;
 };

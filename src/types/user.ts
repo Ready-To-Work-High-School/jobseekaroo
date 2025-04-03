@@ -10,19 +10,8 @@ export interface UserProfile {
   user_type?: 'student' | 'employer' | 'admin' | 'teacher' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
-  redeemed_at?: string | null;
-  redeemed_code?: string | null;
-  avatar_url?: string | null;
-  created_at?: string;
-  updated_at?: string;
-  email?: string;
-  company_name?: string | null;
-  company_website?: string | null;
-  job_title?: string | null;
-  employer_verification_status?: 'pending' | 'approved' | 'rejected' | null;
-  verification_notes?: string | null;
-  resume_data_encrypted?: string | null;
-  contact_details_encrypted?: string | null;
+  redeemed_at?: string;
+  redeemed_code?: string;
 }
 
 export interface UserProfileUpdate {
@@ -36,13 +25,6 @@ export interface UserProfileUpdate {
   user_type?: 'student' | 'employer' | 'admin' | 'teacher';
   redeemed_at?: string;
   redeemed_code?: string;
-  avatar_url?: string;
-  company_name?: string;
-  company_website?: string;
-  job_title?: string;
-  employer_verification_status?: 'pending' | 'approved' | 'rejected';
-  verification_notes?: string;
-  accessibility_settings?: AccessibilitySettings;
 }
 
 export interface SavedSearch {

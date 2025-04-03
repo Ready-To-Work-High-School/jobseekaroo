@@ -6,8 +6,7 @@ import {
   PaginationItem, 
   PaginationLink, 
   PaginationNext, 
-  PaginationPrevious, 
-  PaginationEllipsis
+  PaginationPrevious 
 } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -30,7 +29,7 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
   
   // Generate page numbers to display
   const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
+    const pages: number[] = [];
     
     // Always show first and last page
     // For small number of pages, show all
@@ -43,7 +42,7 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
       pages.push(1);
       
       if (currentPage > 3) {
-        pages.push('ellipsis-start');
+        pages.push(-1); // Represents ellipsis
       }
       
       // Show current page and neighbors
@@ -55,7 +54,7 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
       }
       
       if (currentPage < totalPages - 2) {
-        pages.push('ellipsis-end');
+        pages.push(-2); // Represents ellipsis
       }
       
       pages.push(totalPages);
@@ -68,18 +67,15 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
     return null;
   }
 
-  const startItem = (currentPage - 1) * pageSize + 1;
-  const endItem = Math.min(currentPage * pageSize, totalItems);
-
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4">
-      <div className="flex items-center space-x-2 order-2 sm:order-1">
-        <span className="text-sm text-muted-foreground whitespace-nowrap">Rows per page:</span>
+    <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center space-x-2">
+        <span className="text-sm text-muted-foreground">Rows per page:</span>
         <Select
           value={pageSize.toString()}
           onValueChange={(value) => onPageSizeChange(parseInt(value))}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-16">
             <SelectValue placeholder={pageSize.toString()} />
           </SelectTrigger>
           <SelectContent>
@@ -87,29 +83,27 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
             <SelectItem value="10">10</SelectItem>
             <SelectItem value="20">20</SelectItem>
             <SelectItem value="50">50</SelectItem>
-            <SelectItem value="100">100</SelectItem>
           </SelectContent>
         </Select>
       </div>
       
-      <Pagination className="order-1 sm:order-2">
+      <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
+              className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
             />
           </PaginationItem>
           
           {getPageNumbers().map((page, index) => (
-            <PaginationItem key={index} className="hidden sm:inline-block">
-              {page === 'ellipsis-start' || page === 'ellipsis-end' ? (
-                <PaginationEllipsis />
+            <PaginationItem key={index}>
+              {page < 0 ? (
+                <span className="flex h-9 w-9 items-center justify-center">...</span>
               ) : (
                 <PaginationLink
                   isActive={page === currentPage}
-                  onClick={() => typeof page === 'number' && onPageChange(page)}
-                  className="cursor-pointer"
+                  onClick={() => onPageChange(page)}
                 >
                   {page}
                 </PaginationLink>
@@ -120,14 +114,14 @@ const RedemptionCodesPagination: React.FC<RedemptionCodesPaginationProps> = ({
           <PaginationItem>
             <PaginationNext 
               onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-              className={`cursor-pointer ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
+              className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
       
-      <div className="text-sm text-muted-foreground order-3 whitespace-nowrap">
-        Showing {startItem} to {endItem} of {totalItems} codes
+      <div className="text-sm text-muted-foreground">
+        Showing {Math.min((currentPage - 1) * pageSize + 1, totalItems)} to {Math.min(currentPage * pageSize, totalItems)} of {totalItems} codes
       </div>
     </div>
   );

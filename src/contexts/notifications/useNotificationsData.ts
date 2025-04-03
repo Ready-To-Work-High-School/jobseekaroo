@@ -1,5 +1,6 @@
+
 import { useEffect } from 'react';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '../AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Notification } from '@/types/notification';
 import { 

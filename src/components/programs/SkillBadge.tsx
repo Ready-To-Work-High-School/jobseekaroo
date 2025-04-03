@@ -17,7 +17,7 @@ const SkillBadge = ({ image, name }: SkillBadgeProps) => {
           alt={`${name} Badge`} 
           className="rounded-lg shadow-md h-32 md:h-40 w-auto mx-auto" 
         />
-        <Badge className="absolute -top-2 -right-2 bg-primary text-white text-xs" size="sm">Certified</Badge>
+        <Badge className="absolute -top-2 -right-2 bg-primary text-white">Certified</Badge>
       </div>
       <p className="text-center text-sm font-medium mt-2">{name}</p>
       <span className="text-xs text-muted-foreground text-center mt-1">

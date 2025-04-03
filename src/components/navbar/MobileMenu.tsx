@@ -1,6 +1,6 @@
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MobileNavLink } from './MobileNavLink';
 import {
@@ -21,27 +21,12 @@ import {
   BookMarked,
   CheckSquare,
   User,
-  LogOut,
-  Shield,
-  GraduationCap,
-  Briefcase,
-  PenLine,
-  Headphones,
-  BarChart,
-  Award,
+  LogOut
 } from 'lucide-react';
 
 export const MobileMenu = () => {
-  const { user, signOut, userProfile } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const isAdmin = userProfile?.user_type === 'admin';
-  const isEmployer = userProfile?.user_type === 'employer';
-  
-  // Debug logs
-  console.log("MobileMenu (navbar) - User profile:", userProfile);
-  console.log("MobileMenu (navbar) - Is admin:", isAdmin);
-  console.log("MobileMenu (navbar) - Current path:", location.pathname);
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
@@ -64,96 +49,42 @@ export const MobileMenu = () => {
             <Home className="h-5 w-5" />
             Home
           </MobileNavLink>
-          
-          {/* Primary Navigation Links - Highlighted at top */}
-          <div className="px-4 py-2 my-1 bg-blue-50">
-            <MobileNavLink to="/entrepreneurship-academy">
-              <GraduationCap className="h-5 w-5" />
-              <span className="font-semibold">Entrepreneurship Academy</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/student-success">
-              <Award className="h-5 w-5" />
-              <span className="font-semibold">Student Success</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/jobs">
-              <Briefcase className="h-5 w-5" />
-              <span className="font-semibold">Browse Jobs</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/for-employers">
-              <Building2 className="h-5 w-5" />
-              <span className="font-semibold">For Employers</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/resources">
-              <BookOpen className="h-5 w-5" />
-              <span className="font-semibold">Student Resources</span>
-            </MobileNavLink>
-          </div>
-          
-          {/* Job Seeker Section */}
-          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
-            For Job Seekers
-          </div>
-          
-          <MobileNavLink to={getPath("/skills")}>
-            <GraduationCap className="h-5 w-5" />
-            Skills Development
+          <MobileNavLink to="/jobs">
+            <Search className="h-5 w-5" />
+            Find Jobs
           </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/resume-assistant")}>
-            <PenLine className="h-5 w-5" />
-            Resume Help
-          </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/interview-prep")}>
-            <Headphones className="h-5 w-5" />
-            Interview Prep
-          </MobileNavLink>
-          
-          {/* Resources Section */}
-          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
-            Resources
-          </div>
-          
           <MobileNavLink to="/resources">
             <BookOpen className="h-5 w-5" />
-            Career Resources
+            Resources
           </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/analytics")}>
-            <BarChart className="h-5 w-5" />
-            Analytics Dashboard
+          <MobileNavLink to="/for-employers">
+            <Building2 className="h-5 w-5" />
+            For Employers
+          </MobileNavLink>
+          <MobileNavLink to={getPath("/resume-assistant")}>
+            <FileText className="h-5 w-5" />
+            Resume Assistant
           </MobileNavLink>
           
           {user ? (
             <>
               <div className="border-t border-border/60 my-2"></div>
-              
+              <MobileNavLink to="/skills">
+                <TrendingUp className="h-5 w-5" />
+                Skills
+              </MobileNavLink>
               <MobileNavLink to="/saved-jobs">
                 <BookMarked className="h-5 w-5" />
                 Saved Jobs
               </MobileNavLink>
-              
               <MobileNavLink to="/applications">
                 <CheckSquare className="h-5 w-5" />
                 Applications
               </MobileNavLink>
-              
               <MobileNavLink to="/profile">
                 <User className="h-5 w-5" />
                 Profile
               </MobileNavLink>
-              
-              {isAdmin && (
-                <MobileNavLink to="/admin">
-                  <Shield className="h-5 w-5" />
-                  Admin Panel
-                </MobileNavLink>
-              )}
-              
               <div 
                 className="flex items-center gap-3 px-4 py-3 text-base cursor-pointer hover:bg-muted"
                 onClick={() => {

@@ -8,8 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { RedemptionCode } from '@/types/redemption';
 import { sendRedemptionCodeEmail } from '@/lib/supabase/redemption';
-import { Loader2, Mail, AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Loader2, Mail } from 'lucide-react';
 
 interface EmailRedemptionCodeDialogProps {
   isOpen: boolean;
@@ -32,7 +31,6 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
     `Here is your redemption code: ${code?.code || selectedCodes.map(c => c.code).join(', ')}\n\nPlease visit our platform and enter this code to unlock your account features.`
   );
   const [isSending, setIsSending] = useState(false);
-  const [sendError, setSendError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSend = async () => {
@@ -45,21 +43,16 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
       return;
     }
 
-    setSendError(null);
     setIsSending(true);
     try {
       const codesToSend = code ? [code] : selectedCodes;
       
-      const success = await sendRedemptionCodeEmail({
+      await sendRedemptionCodeEmail({
         to: email,
         subject,
         message,
         codes: codesToSend,
       });
-      
-      if (!success) {
-        throw new Error('Failed to send email. Please check the logs for more details.');
-      }
       
       toast({
         title: 'Email sent',
@@ -67,9 +60,8 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
       });
       
       onClose();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error sending redemption code email:', error);
-      setSendError(error.message || 'Failed to send email. Please try again.');
       toast({
         title: 'Error',
         description: 'Failed to send email. Please try again.',
@@ -82,7 +74,6 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
 
   React.useEffect(() => {
     if (isOpen) {
-      setSendError(null);
       // Update message when code changes
       if (code) {
         setSubject(`Your ${code.type} redemption code for Westside High School Career Platform`);
@@ -106,13 +97,6 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
           <DialogTitle>Email Redemption Code</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
-          {sendError && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{sendError}</AlertDescription>
-            </Alert>
-          )}
-          
           <div className="space-y-2">
             <Label htmlFor="email">Recipient Email</Label>
             <Input
@@ -141,10 +125,6 @@ const EmailRedemptionCodeDialog: React.FC<EmailRedemptionCodeDialogProps> = ({
               onChange={(e) => setMessage(e.target.value)}
               rows={6}
             />
-          </div>
-          
-          <div className="text-sm text-muted-foreground">
-            <p>Note: Email delivery may take a few minutes. Check your spam folder if you don't see it in your inbox.</p>
           </div>
         </div>
         <DialogFooter>

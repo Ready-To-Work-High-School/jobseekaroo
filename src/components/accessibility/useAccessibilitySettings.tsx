@@ -1,167 +1,137 @@
-
 import { useState, useEffect } from 'react';
-import { User } from '@supabase/supabase-js';
-import { UserProfile, AccessibilitySettings } from '@/types/user';
+import { AccessibilitySettings } from '@/types/user';
+import { toast as toastType } from '@/hooks/use-toast';
 
-type UseAccessibilitySettingsProps = {
-  toast: any;
-  user: User | null;
-  userProfile: UserProfile | null;
+interface UseAccessibilitySettingsProps {
+  toast: typeof toastType;
+  user: any;
+  userProfile: any;
   updateProfile: (profile: any) => Promise<void>;
-};
+}
 
-export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfile }: UseAccessibilitySettingsProps) => {
+export const useAccessibilitySettings = ({ 
+  toast, 
+  user, 
+  userProfile, 
+  updateProfile 
+}: UseAccessibilitySettingsProps) => {
+  // Default settings
   const defaultSettings: AccessibilitySettings = {
     high_contrast: false,
     increased_font_size: false,
     reduce_motion: false,
-    screen_reader_optimized: false,
+    screen_reader_optimized: false
   };
-
-  const [settings, setSettings] = useState<AccessibilitySettings>(
-    userProfile?.accessibility_settings || defaultSettings
-  );
   
-  const [fontSize, setFontSize] = useState<number>(
-    userProfile?.accessibility_settings?.increased_font_size ? 1.2 : 1
-  );
-
-  // Update settings when userProfile changes
-  useEffect(() => {
-    if (userProfile?.accessibility_settings) {
-      setSettings(userProfile.accessibility_settings);
-      setFontSize(userProfile.accessibility_settings.increased_font_size ? 1.2 : 1);
+  // Initialize settings from user profile or localStorage
+  const [settings, setSettings] = useState<AccessibilitySettings>(() => {
+    // First try to load from localStorage
+    const savedSettings = localStorage.getItem('accessibility_settings');
+    if (savedSettings) {
+      return JSON.parse(savedSettings);
     }
-  }, [userProfile]);
-
-  // Update document CSS when settings change
+    
+    // If user has profile settings, use those
+    if (userProfile?.accessibility_settings) {
+      return userProfile.accessibility_settings;
+    }
+    
+    // Otherwise use defaults
+    return defaultSettings;
+  });
+  
+  const [fontSize, setFontSize] = useState<number>(() => {
+    const savedSize = localStorage.getItem('font_size_scale');
+    return savedSize ? parseInt(savedSize) : 100; // Default 100%
+  });
+  
+  // Apply settings to the DOM
   useEffect(() => {
-    const html = document.documentElement;
+    // Apply font size
+    document.documentElement.style.fontSize = `${fontSize}%`;
     
     // Apply high contrast
     if (settings.high_contrast) {
-      html.classList.add('high-contrast');
+      document.documentElement.classList.add('high-contrast');
     } else {
-      html.classList.remove('high-contrast');
+      document.documentElement.classList.remove('high-contrast');
     }
     
     // Apply reduced motion
     if (settings.reduce_motion) {
-      html.classList.add('reduce-motion');
+      document.documentElement.classList.add('reduce-motion');
     } else {
-      html.classList.remove('reduce-motion');
+      document.documentElement.classList.remove('reduce-motion');
     }
     
-    // Apply screen reader optimizations
+    // Apply screen reader optimization
     if (settings.screen_reader_optimized) {
-      html.classList.add('screen-reader');
+      document.documentElement.setAttribute('role', 'application');
+      document.documentElement.classList.add('sr-optimized');
     } else {
-      html.classList.remove('screen-reader');
+      document.documentElement.removeAttribute('role');
+      document.documentElement.classList.remove('sr-optimized');
     }
     
-    // Apply font size
-    html.style.setProperty('--accessibility-font-scale', fontSize.toString());
+    // Save to localStorage
+    localStorage.setItem('accessibility_settings', JSON.stringify(settings));
+    localStorage.setItem('font_size_scale', fontSize.toString());
     
   }, [settings, fontSize]);
-
-  const handleSettingChange = async (key: keyof AccessibilitySettings, value: boolean) => {
-    const newSettings = { ...settings, [key]: value };
-    setSettings(newSettings);
-    
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: newSettings
+  
+  // Save settings to user profile when logged in
+  useEffect(() => {
+    if (user && userProfile) {
+      // Only save when changed from profile settings
+      const profileSettings = userProfile.accessibility_settings || defaultSettings;
+      const hasChanges = JSON.stringify(profileSettings) !== JSON.stringify(settings);
+      
+      if (hasChanges) {
+        // Don't await this - let it update in the background
+        updateProfile({
+          ...userProfile,
+          accessibility_settings: settings
         });
-        
-        toast({
-          title: "Settings updated",
-          description: "Your accessibility preferences have been saved.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to save your preferences. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if saving failed
-        setSettings(settings);
       }
     }
+  }, [settings, user, userProfile]);
+  
+  const handleSettingChange = (key: keyof AccessibilitySettings) => {
+    setSettings(prev => {
+      const newSettings = { 
+        ...prev, 
+        [key]: !prev[key] 
+      };
+      return newSettings;
+    });
+    
+    // Show toast
+    toast({
+      title: `${key.toString().replace(/_/g, ' ')} ${!settings[key] ? 'enabled' : 'disabled'}`,
+      description: `This setting has been ${!settings[key] ? 'enabled' : 'disabled'} and will be saved for your next visit.`
+    });
   };
-
-  const handleFontSizeChange = async (increase: boolean) => {
-    const newSize = increase ? 1.2 : 1;
+  
+  const handleFontSizeChange = (value: number[]) => {
+    const newSize = value[0];
     setFontSize(newSize);
-    
-    const newSettings = { 
-      ...settings, 
-      increased_font_size: increase 
-    };
-    
-    setSettings(newSettings);
-    
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: newSettings
-        });
-        
-        toast({
-          title: "Font size updated",
-          description: "Your font size preference has been saved.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to save your font size preference. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if saving failed
-        setFontSize(increase ? 1 : 1.2);
-        setSettings({
-          ...settings,
-          increased_font_size: !increase
-        });
-      }
-    }
   };
-
-  const resetSettings = async () => {
+  
+  const resetSettings = () => {
     setSettings(defaultSettings);
-    setFontSize(1);
-    
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: defaultSettings
-        });
-        
-        toast({
-          title: "Settings reset",
-          description: "Your accessibility preferences have been reset to defaults.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to reset your preferences. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if resetting failed
-        if (userProfile?.accessibility_settings) {
-          setSettings(userProfile.accessibility_settings);
-          setFontSize(userProfile.accessibility_settings.increased_font_size ? 1.2 : 1);
-        }
-      }
-    }
+    setFontSize(100);
+    toast({
+      title: "Settings reset",
+      description: "All accessibility settings have been reset to default values."
+    });
   };
 
   return {
     settings,
+    setSettings,
     fontSize,
+    setFontSize,
+    defaultSettings,
     handleSettingChange,
     handleFontSizeChange,
     resetSettings

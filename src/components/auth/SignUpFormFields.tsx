@@ -11,7 +11,6 @@ interface SignUpFormFieldsProps {
   isLoading: boolean;
   buttonText: string;
   isEmployer?: boolean;
-  children?: React.ReactNode;
 }
 
 const SignUpFormFields = ({
@@ -20,7 +19,6 @@ const SignUpFormFields = ({
   isLoading,
   buttonText,
   isEmployer = false,
-  children,
 }: SignUpFormFieldsProps) => {
   return (
     <Form {...form}>
@@ -137,10 +135,6 @@ const SignUpFormFields = ({
             </FormItem>
           )}
         />
-        
-        {/* Render additional fields if provided */}
-        {children}
-        
         <Button 
           type="submit" 
           className="w-full" 

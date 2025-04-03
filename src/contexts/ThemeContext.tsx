@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -10,14 +10,10 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Read from localStorage only on client-side
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme') as Theme;
-      return savedTheme || 'system';
-    }
-    return 'system';
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    return savedTheme || 'system';
   });
 
   useEffect(() => {
@@ -59,7 +55,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       {children}
     </ThemeContext.Provider>
   );
-}
+};
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);

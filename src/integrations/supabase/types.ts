@@ -9,51 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      _encrypted_data: {
-        Row: {
-          created_at: string | null
-          encrypted_value: string
-          id: string
-          original_value: string
-        }
-        Insert: {
-          created_at?: string | null
-          encrypted_value: string
-          id?: string
-          original_value: string
-        }
-        Update: {
-          created_at?: string | null
-          encrypted_value?: string
-          id?: string
-          original_value?: string
-        }
-        Relationships: []
-      }
-      contacts: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          message: string
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          message: string
-          name: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string
-          name?: string
-        }
-        Relationships: []
-      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -441,74 +396,50 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
-          company_name: string | null
-          company_website: string | null
-          contact_details_encrypted: string | null
           created_at: string
-          email: string | null
-          employer_verification_status: string | null
           first_name: string | null
           id: string
-          job_title: string | null
           last_name: string | null
           location: string | null
           preferences: Json | null
           redeemed_at: string | null
           redeemed_code: string | null
-          resume_data_encrypted: string | null
           resume_url: string | null
           skills: string[] | null
           updated_at: string
           user_type: string | null
-          verification_notes: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
-          company_name?: string | null
-          company_website?: string | null
-          contact_details_encrypted?: string | null
           created_at?: string
-          email?: string | null
-          employer_verification_status?: string | null
           first_name?: string | null
           id: string
-          job_title?: string | null
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
           redeemed_at?: string | null
           redeemed_code?: string | null
-          resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string
           user_type?: string | null
-          verification_notes?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
-          company_name?: string | null
-          company_website?: string | null
-          contact_details_encrypted?: string | null
           created_at?: string
-          email?: string | null
-          employer_verification_status?: string | null
           first_name?: string | null
           id?: string
-          job_title?: string | null
           last_name?: string | null
           location?: string | null
           preferences?: Json | null
           redeemed_at?: string | null
           redeemed_code?: string | null
-          resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
           updated_at?: string
           user_type?: string | null
-          verification_notes?: string | null
         }
         Relationships: []
       }
@@ -563,45 +494,6 @@ export type Database = {
           id?: string
           job_id?: string
           user_id?: string
-        }
-        Relationships: []
-      }
-      scheduled_emails: {
-        Row: {
-          amount: number
-          code_type: string
-          created_at: string
-          expires_in_days: number
-          id: string
-          message: string
-          recipients: string[]
-          schedule_date: string
-          status: string
-          subject: string
-        }
-        Insert: {
-          amount: number
-          code_type: string
-          created_at?: string
-          expires_in_days: number
-          id?: string
-          message: string
-          recipients: string[]
-          schedule_date: string
-          status?: string
-          subject: string
-        }
-        Update: {
-          amount?: number
-          code_type?: string
-          created_at?: string
-          expires_in_days?: number
-          id?: string
-          message?: string
-          recipients?: string[]
-          schedule_date?: string
-          status?: string
-          subject?: string
         }
         Relationships: []
       }

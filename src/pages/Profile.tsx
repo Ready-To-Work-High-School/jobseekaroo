@@ -1,121 +1,215 @@
-
-import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Briefcase } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { useFadeIn } from '@/utils/animations';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { InfoIcon, Edit, X, Check, ArrowRight, User, MapPin, Award } from 'lucide-react';
+import UserBenefitsCard from '@/components/user/UserBenefitsCard';
 
-const Profile = () => {
-  const { user, userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState('profile');
-  
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
-               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase().includes('ceo');
-  
+const Profile: React.FC = () => {
+  const { user, userProfile, updateProfile, refreshProfile } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState(userProfile?.first_name || '');
+  const [lastName, setLastName] = useState(userProfile?.last_name || '');
+  const [bio, setBio] = useState(userProfile?.bio || '');
+  const [location, setLocation] = useState(userProfile?.location || '');
+  const fadeIn = useFadeIn(300);
+  const { toast } = useToast();
+
+  const handleUpdateProfile = async () => {
+    try {
+      await updateProfile({
+        first_name: firstName,
+        last_name: lastName,
+        bio: bio,
+        location: location,
+      });
+      setIsEditing(false);
+      toast({
+        title: 'Success',
+        description: 'Profile updated successfully!',
+      });
+      await refreshProfile();
+    } catch (error: any) {
+      console.error('Profile update error:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update profile. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  if (!user) {
+    return (
+      <Layout>
+        <div className={`container mx-auto px-4 py-12 max-w-2xl ${fadeIn}`}>
+          <Alert>
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle>You are not signed in.</AlertTitle>
+            <AlertDescription>
+              Please <Link to="/sign-in" className="underline">sign in</Link> to view your profile.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">My Profile</h1>
-        
-        {user && (
-          <>
-            <Card className="mb-6">
+      <div className={`container mx-auto px-4 py-12 max-w-4xl ${fadeIn}`}>
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="benefits">Benefits</TabsTrigger>
+          </TabsList>
+          <TabsContent value="profile" className="space-y-4">
+            <Card>
               <CardHeader>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={userProfile?.avatar_url || ''} alt="Profile" />
-                    <AvatarFallback>
-                      {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <CardTitle className="text-2xl">
-                        {userProfile?.first_name} {userProfile?.last_name}
-                      </CardTitle>
-                      {isCeo && (
-                        <Badge variant="outline" className="bg-black text-white">
-                          Chief Executive Officer
-                        </Badge>
-                      )}
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
+                  {isEditing ? (
+                    <div className="space-x-2">
+                      <Button variant="ghost" onClick={() => setIsEditing(false)}>
+                        <X className="h-4 w-4 mr-2" />
+                        Cancel
+                      </Button>
+                      <Button onClick={handleUpdateProfile}>
+                        <Check className="h-4 w-4 mr-2" />
+                        Save
+                      </Button>
                     </div>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                    {userProfile?.job_title && !isCeo && (
-                      <p className="text-sm font-medium">{userProfile.job_title}</p>
-                    )}
-                  </div>
+                  ) : (
+                    <Button variant="outline" onClick={() => setIsEditing(true)}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                  )}
                 </div>
+                <CardDescription>
+                  Manage your profile information and settings
+                </CardDescription>
               </CardHeader>
-            </Card>
-            
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="profile">Profile Information</TabsTrigger>
-                <TabsTrigger value="security">Account & Security</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="profile">
-                <Card>
-                  <CardContent className="space-y-4 pt-6">
-                    <div>
-                      <h3 className="font-medium">Email</h3>
-                      <p>{user.email}</p>
+              <CardContent className="space-y-4">
+                {userProfile ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input
+                          type="text"
+                          id="firstName"
+                          placeholder="First Name"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          disabled={!isEditing}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input
+                          type="text"
+                          id="lastName"
+                          placeholder="Last Name"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          disabled={!isEditing}
+                        />
+                      </div>
                     </div>
-                    
-                    {userProfile && (
-                      <>
-                        {userProfile.bio && (
-                          <div>
-                            <h3 className="font-medium">Bio</h3>
-                            <p>{userProfile.bio}</p>
-                          </div>
-                        )}
-                        
-                        {userProfile.location && (
-                          <div>
-                            <h3 className="font-medium">Location</h3>
-                            <p>{userProfile.location}</p>
-                          </div>
-                        )}
-                        
-                        {userProfile.job_title && (
-                          <div>
-                            <h3 className="font-medium">Job Title</h3>
-                            <p>{userProfile.job_title}</p>
-                            {isCeo && <p className="text-xs text-blue-600 font-semibold mt-1">Chief Executive Officer Access</p>}
-                          </div>
-                        )}
-                        
-                        {userProfile.skills && userProfile.skills.length > 0 && (
-                          <div>
-                            <h3 className="font-medium">Skills</h3>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {userProfile.skills.map(skill => (
-                                <span key={skill} className="px-2 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                                  {skill}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="security">
-                <AccountSecurityForm />
-              </TabsContent>
-            </Tabs>
-          </>
-        )}
+                    <div>
+                      <Label htmlFor="bio">Bio</Label>
+                      <Textarea
+                        id="bio"
+                        placeholder="Tell us a little about yourself"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        disabled={!isEditing}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="location">Location</Label>
+                      <Input
+                        type="text"
+                        id="location"
+                        placeholder="Your Location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        disabled={!isEditing}
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Email</p>
+                        <p>{user.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">User ID</p>
+                        <p className="truncate">{user.id}</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Alert>
+                    <InfoIcon className="h-4 w-4" />
+                    <AlertTitle>Loading...</AlertTitle>
+                    <AlertDescription>
+                      Fetching your profile information. Please wait.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="benefits" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-2xl font-bold">Account Benefits</CardTitle>
+                  <Button asChild>
+                    <Link to="/account-benefits">
+                      View All Benefits
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                <CardDescription>
+                  View the features and benefits of your current account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <UserBenefitsCard userProfile={userProfile} />
+              </CardContent>
+            </Card>
+            {!userProfile?.redeemed_at && (
+              <Card className="mt-8 bg-muted/50">
+                <CardHeader>
+                  <CardTitle>Unlock Premium Features</CardTitle>
+                  <CardDescription>
+                    Enter a redemption code to upgrade your account and access premium features
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild>
+                    <Link to="/redeem-code">
+                      Redeem Code Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );

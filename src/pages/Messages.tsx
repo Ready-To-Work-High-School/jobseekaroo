@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { ConversationList } from '@/components/messaging/ConversationList';
@@ -8,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Loader2, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const Messages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);

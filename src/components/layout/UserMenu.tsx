@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, Shield
+  BookmarkCheck, Award, 
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
@@ -22,9 +22,6 @@ import AccountTypeBadge from './AccountTypeBadge';
 const UserMenu = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
-
-  // Debug log to check admin status
-  console.log('UserMenu - userProfile:', userProfile);
 
   const handleSignOut = async () => {
     try {
@@ -45,11 +42,6 @@ const UserMenu = () => {
 
   const isEmployer = userProfile?.user_type === 'employer';
   const isAdmin = userProfile?.user_type === 'admin';
-  
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
-               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase().includes('ceo');
 
   if (!user) return null;
 
@@ -79,7 +71,6 @@ const UserMenu = () => {
                 )}
               </div>
               <span className="text-xs text-muted-foreground">{user.email}</span>
-              {isCeo && <span className="text-xs font-semibold text-blue-600">CEO Access</span>}
             </div>
           ) : (
             <span>My Account</span>
@@ -93,14 +84,12 @@ const UserMenu = () => {
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
-          {!isAdmin && (
-            <DropdownMenuItem asChild>
-              <Link to="/account-benefits" className="cursor-pointer">
-                <Award className="mr-2 h-4 w-4" />
-                <span>Account Benefits</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem asChild>
+            <Link to="/account-benefits" className="cursor-pointer">
+              <Award className="mr-2 h-4 w-4" />
+              <span>Account Benefits</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/analytics" className="cursor-pointer">
               <BarChart2 className="mr-2 h-4 w-4" />
@@ -115,7 +104,7 @@ const UserMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        {!userProfile?.redeemed_at && !isAdmin && (
+        {!userProfile?.redeemed_at && (
           <DropdownMenuItem asChild>
             <Link to="/redeem-code" className="cursor-pointer">
               <Award className="mr-2 h-4 w-4" />
@@ -123,7 +112,7 @@ const UserMenu = () => {
             </Link>
           </DropdownMenuItem>
         )}
-        {(isEmployer || isCeo) && (
+        {isEmployer && (
           <>
             <DropdownMenuItem asChild>
               <Link to="/employer-dashboard" className="cursor-pointer">
@@ -136,12 +125,6 @@ const UserMenu = () => {
         )}
         {isAdmin && (
           <>
-            <DropdownMenuItem asChild>
-              <Link to="/admin" className="cursor-pointer">
-                <Shield className="mr-2 h-4 w-4" />
-                <span>Admin Dashboard</span>
-              </Link>
-            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/admin/redemption-codes" className="cursor-pointer">
                 <Award className="mr-2 h-4 w-4" />

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MapPin, Loader2 } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { getCurrentLocation, getZipFromCoordinates, commonZipCodes } from '@/lib/mock-data/search';
 import { cn } from '@/lib/utils';
 
@@ -64,7 +64,7 @@ const LocationSelector = ({ value, onChange, className }: LocationSelectorProps)
           onChange={handleInputChange}
           placeholder="Enter ZIP code"
           className="pl-10"
-          showAutocomplete={true}
+          showAutocomplete
           autocompleteItems={filteredZipCodes}
           onAutocompleteSelect={onChange}
         />

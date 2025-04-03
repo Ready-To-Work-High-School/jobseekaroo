@@ -18,36 +18,31 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ userProfile, classN
         return {
           text: 'Student',
           icon: <GraduationCap className="h-3 w-3 mr-1" />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-blue-700 text-white'
+          variant: userProfile.redeemed_at ? 'default' : 'outline'
         };
       case 'employer':
         return {
           text: 'Employer',
           icon: <Briefcase className="h-3 w-3 mr-1" />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-green-700 text-white'
+          variant: userProfile.redeemed_at ? 'default' : 'outline'
         };
       case 'admin':
         return {
-          text: 'Chief Executive Officer',
+          text: 'Admin',
           icon: <ShieldCheck className="h-3 w-3 mr-1" />,
-          variant: 'outline',
-          className: 'bg-black text-white hover:bg-black/90'
+          variant: 'default'
         };
       case 'teacher':
         return {
           text: 'Teacher',
           icon: <BookOpen className="h-3 w-3 mr-1" />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-amber-700 text-white'
+          variant: userProfile.redeemed_at ? 'default' : 'outline'
         };
       default:
         return {
           text: 'Basic',
           icon: <User className="h-3 w-3 mr-1" />,
-          variant: 'outline',
-          className: 'bg-gray-600 text-white'
+          variant: 'outline'
         };
     }
   };
@@ -55,10 +50,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ userProfile, classN
   const badge = getBadgeContent();
 
   return (
-    <Badge 
-      variant={badge.variant as any} 
-      className={`flex items-center text-xs ${badge.className || ''} ${className}`}
-    >
+    <Badge variant={badge.variant as any} className={`flex items-center text-xs ${className}`}>
       {badge.icon}
       {badge.text}
     </Badge>

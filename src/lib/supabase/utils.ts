@@ -1,24 +1,22 @@
 
 import { ApplicationStatus } from '@/types/application';
+import { supabase } from './index';
 
-// Validate application status to ensure it's a valid enum value
-export const validateApplicationStatus = (status: string): ApplicationStatus => {
-  const validStatuses: ApplicationStatus[] = [
-    'applied',
-    'screening',
-    'interview',
-    'offer',
-    'rejected',
-    'accepted',
-    'withdrawn'
-  ];
+// Helper function to validate application status
+export function validateApplicationStatus(status: string): ApplicationStatus {
+  const validStatuses: ApplicationStatus[] = ['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'];
   
   if (validStatuses.includes(status as ApplicationStatus)) {
     return status as ApplicationStatus;
   }
   
-  console.warn(`Invalid application status: ${status}, defaulting to 'applied'`);
+  // Default to 'applied' if an invalid status is provided
   return 'applied';
-};
+}
 
-// Additional Supabase utilities can be added here
+// Get the base URL for authentication redirects
+export function getRedirectUrl(): string {
+  // In production, use the actual deployed URL
+  // For local development, use localhost
+  return `${window.location.origin}/`;
+}

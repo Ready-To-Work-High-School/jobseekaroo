@@ -6,12 +6,12 @@ const StudentBenefits = () => {
   const benefits = [
     {
       title: "Pre-trained Workforce",
-      description: "Access students with verified skills and industry-recognized credentials from both our Entrepreneurship and Nursing programs.",
+      description: "Access students with verified skills and industry-recognized credentials.",
       icon: Medal
     },
     {
       title: "Specialized Training",
-      description: "Students have received education in business fundamentals, entrepreneurship, healthcare, and professional skills.",
+      description: "Students have received education in business fundamentals, entrepreneurship, and professional skills.",
       icon: FileCheck
     },
     {
@@ -21,7 +21,7 @@ const StudentBenefits = () => {
     },
     {
       title: "Direct Connection",
-      description: "Work directly with the academies to find the best candidates for your positions.",
+      description: "Work directly with the academy to find the best candidates for your positions.",
       icon: Phone
     }
   ];

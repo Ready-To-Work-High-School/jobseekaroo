@@ -1,4 +1,3 @@
-
 import { ApplicationStatus } from '@/types/application';
 import { cn } from '@/lib/utils';
 import { 
@@ -7,11 +6,10 @@ import {
   CheckCircle, 
   ThumbsUp, 
   XCircle, 
-  XOctagon,
-  Search
+  XOctagon 
 } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { validateApplicationStatus } from '@/lib/supabase/utils';
+import { validateApplicationStatus } from '@/lib/supabase';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
@@ -31,19 +29,13 @@ export const ApplicationStatusBadge = ({ status, className, large = false }: App
           label: 'Applied',
           variant: 'secondary' as const,
         };
-      case 'screening':
-        return {
-          icon: Search,
-          label: 'Screening',
-          variant: 'default' as const,
-        };
-      case 'interview':
+      case 'interviewing':
         return {
           icon: CalendarRange,
           label: 'Interviewing',
           variant: 'default' as const,
         };
-      case 'offer':
+      case 'offered':
         return {
           icon: ThumbsUp,
           label: 'Offered',
@@ -84,9 +76,8 @@ export const ApplicationStatusBadge = ({ status, className, large = false }: App
       className={cn(
         "gap-1 font-medium flex items-center",
         status === 'applied' && "bg-secondary text-secondary-foreground",
-        status === 'screening' && "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-100",
-        status === 'interview' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
-        status === 'offer' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
+        status === 'interviewing' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
+        status === 'offered' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
         status === 'accepted' && "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
         status === 'rejected' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
         status === 'withdrawn' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",

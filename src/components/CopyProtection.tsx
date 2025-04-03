@@ -2,18 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { enableTextProtection } from '@/utils/textProtection';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle, Shield } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface CopyProtectionProps {
   showNotice?: boolean;
-  enhancedProtection?: boolean;
 }
 
-const CopyProtection: React.FC<CopyProtectionProps> = ({ 
-  showNotice = true, 
-  enhancedProtection = true 
-}) => {
+const CopyProtection: React.FC<CopyProtectionProps> = ({ showNotice = true }) => {
   const [showAlert, setShowAlert] = useState(false);
   
   // Function to handle copy attempts
@@ -37,40 +33,10 @@ const CopyProtection: React.FC<CopyProtectionProps> = ({
     // Enable protection when component mounts
     enableTextProtection(handleCopyAttempt);
     
-    // Enhanced security measures
-    if (enhancedProtection) {
-      // Monitor for suspicious iframe injection attempts
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.addedNodes.length) {
-            mutation.addedNodes.forEach((node) => {
-              // Check for suspicious iframes or script injections
-              if (node.nodeName === 'IFRAME' || node.nodeName === 'SCRIPT') {
-                const element = node as HTMLElement;
-                if (!element.getAttribute('src')?.includes('lovable.dev') && 
-                    !element.getAttribute('src')?.includes('gpteng.co')) {
-                  console.warn('Suspicious element detected and blocked:', node);
-                  element.remove();
-                  
-                  toast({
-                    title: "Security Alert",
-                    description: "Suspicious content was blocked for your protection.",
-                    variant: "destructive",
-                  });
-                }
-              }
-            });
-          }
-        });
-      });
-      
-      observer.observe(document.body, { childList: true, subtree: true });
-      
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [enhancedProtection]);
+    return () => {
+      // Nothing to clean up for now - usually we would disable, but we want protection to remain
+    };
+  }, []);
 
   if (!showNotice || !showAlert) return null;
 
