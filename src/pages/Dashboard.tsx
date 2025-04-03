@@ -1,130 +1,102 @@
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import AccountTypeBadge from '@/components/layout/AccountTypeBadge';
+import React from 'react';
+import Layout from '@/components/Layout';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { useFadeIn } from '@/utils/animations';
+import { Briefcase, FileText, GraduationCap, Settings, User } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, userProfile } = useAuth();
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('/api/posts', {
-          headers: {
-            'x-auth-token': token || ''
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch posts');
-        }
-        
-        const data = await response.json();
-        setPosts(data.posts);
-      } catch (err: any) {
-        console.error('Error fetching posts:', err);
-        setError(err.message || 'An error occurred while fetching posts');
-        setPosts([]); // Set posts to empty array in case of error
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, []);
-
-  // Replace any references to user.username with user.email or userProfile name
-  const userDisplayName = userProfile ? 
-    `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : 
-    (user?.email || 'User');
-
+  const { user } = useAuth();
+  const fadeIn = useFadeIn(300);
+  
+  const dashboardCards = [
+    {
+      title: 'Job Listings',
+      description: 'Browse available job opportunities',
+      icon: <Briefcase className="h-5 w-5" />,
+      link: '/jobs',
+      color: 'bg-blue-50 text-blue-700'
+    },
+    {
+      title: 'Resume Assistant',
+      description: 'Build and improve your resume',
+      icon: <FileText className="h-5 w-5" />,
+      link: '/resume-assistant',
+      color: 'bg-amber-50 text-amber-700'
+    },
+    {
+      title: 'Skills',
+      description: 'View and update your skills profile',
+      icon: <GraduationCap className="h-5 w-5" />,
+      link: '/skills',
+      color: 'bg-green-50 text-green-700'
+    },
+    {
+      title: 'Profile',
+      description: 'Manage your personal information',
+      icon: <User className="h-5 w-5" />,
+      link: '/profile',
+      color: 'bg-purple-50 text-purple-700'
+    }
+  ];
+  
   return (
-    <ProtectedRoute>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
+      <div className={`container mx-auto px-4 py-6 ${fadeIn}`}>
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Welcome back, {userDisplayName}!
+          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome{user?.display_name ? `, ${user.display_name}` : ''}! Manage your job search journey from here.
           </p>
-          {userProfile && <AccountTypeBadge userProfile={userProfile} className="mt-2" />}
         </div>
         
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg leading-6 font-medium text-gray-900">Recent Activity</h2>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">Latest updates from your account</p>
-          </div>
-          
-          <div className="border-t border-gray-200">
-            {isLoading ? (
-              <div className="px-4 py-5">
-                <Skeleton className="h-4 w-3/4 rounded mb-4" />
-                <Skeleton className="h-4 w-1/2 rounded mb-4" />
-                <Skeleton className="h-4 w-5/6 rounded" />
-              </div>
-            ) : error ? (
-              <Card className="m-4 border-none shadow-none">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Your Dashboard</CardTitle>
-                  <CardDescription>Activity and account information</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4">
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Account Status</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm">Your account is active and in good standing.</p>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Recommended Actions</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="list-disc list-inside space-y-1">
-                          <li className="text-sm">Complete your profile information</li>
-                          <li className="text-sm">Add your skills and preferences</li>
-                          <li className="text-sm">Browse available opportunities</li>
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : posts.length === 0 ? (
-              <div className="px-4 py-5 text-center text-gray-500">No recent activity found</div>
-            ) : (
-              <ul className="divide-y divide-gray-200">
-                {posts.map((post: any) => (
-                  <li key={post.id} className="px-4 py-4">
-                    <div className="flex space-x-3">
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-medium">{post.title}</h3>
-                          <p className="text-xs text-gray-500">Posted by {post.username}</p>
-                        </div>
-                        <p className="text-sm text-gray-500">{post.content}</p>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {dashboardCards.map((card, index) => (
+            <Card key={index} className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${card.color}`}>
+                  {card.icon}
+                </div>
+                <CardTitle>{card.title}</CardTitle>
+                <CardDescription>{card.description}</CardDescription>
+              </CardHeader>
+              <CardFooter>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to={card.link}>Access</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+        
+        <div className="mt-8 pt-6 border-t">
+          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <div className="flex flex-wrap gap-4">
+            <Button asChild variant="outline" size="sm" className="gap-2">
+              <Link to="/applications">
+                <Briefcase className="h-4 w-4" />
+                View Applications
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="gap-2">
+              <Link to="/saved-jobs">
+                <Briefcase className="h-4 w-4" />
+                Saved Jobs
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="gap-2">
+              <Link to="/settings">
+                <Settings className="h-4 w-4" />
+                Account Settings
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    </Layout>
   );
 };
 
