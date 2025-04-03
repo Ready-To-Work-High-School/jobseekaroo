@@ -120,7 +120,7 @@ export function useRedemptionContainerHandlers({
     onViewQRCode: handleViewQRCode,
     onCodeGeneration: handleCodeGeneration,
     onBulkGeneration: handleBulkGeneration,
-    onAutomatedGeneration: handleAutomatedGeneration,
+    onAutomatedGeneration: handleAutomatedGeneration, // This name must match with types
     onWizardGeneration: handleWizardGeneration,
     onScheduleEmail: scheduleEmail,
     onRefresh: handleRefresh,
