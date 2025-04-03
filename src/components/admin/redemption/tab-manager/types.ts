@@ -1,11 +1,8 @@
 
-import React from 'react';
-import RedemptionTabManager from './tab-manager';
-import { useCeoStatus } from './tab-manager/useCeoStatus';
 import { RedemptionCode } from '@/types/redemption';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
-interface RedemptionTabManagerProps {
+export interface RedemptionTabManagerProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   stats: {
@@ -34,6 +31,7 @@ interface RedemptionTabManagerProps {
   formatDate: (date?: Date | string) => string;
   usageOverTime?: { date: string; count: number; }[];
   generationOverTime?: { date: string; count: number; }[];
+  isCeo?: boolean;
   handlers: {
     onApplyFilters: (filters: any) => void;
     onSelectCode: (code: RedemptionCode, isSelected: boolean) => void;
@@ -56,11 +54,3 @@ interface RedemptionTabManagerProps {
     onPageSizeChange: (size: number) => void;
   };
 }
-
-const RedemptionTabManagerWrapper: React.FC<RedemptionTabManagerProps> = (props) => {
-  const { isCeo } = useCeoStatus();
-  
-  return <RedemptionTabManager {...props} isCeo={isCeo} />;
-};
-
-export default RedemptionTabManagerWrapper;
