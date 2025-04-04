@@ -45,7 +45,7 @@ const PartnerLogosSection = () => {
                 
                 {/* Ribbon-style badge for all credentials */}
                 <div className="absolute -top-3 -right-3 z-20">
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold rounded-sm shadow-md flex items-center gap-1 px-[25px] py-[4px]">
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold rounded-sm shadow-md flex items-center gap-1 px-[25px] py-[4px] bg-amber-400">
                     <Ribbon className="h-3 w-3" />
                     {badge.isESB ? 'Industry Certified' : 'Certified'}
                   </div>
