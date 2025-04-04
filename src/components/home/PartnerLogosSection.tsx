@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Shield, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+
 const PartnerLogosSection = () => {
   // Credential badge data
   const industryBadges = [{
@@ -25,6 +27,7 @@ const PartnerLogosSection = () => {
     name: "Florida Ready to Work",
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
+
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto bg-yellow-50">
         <div className="text-center mb-8">
@@ -37,26 +40,37 @@ const PartnerLogosSection = () => {
           </p>
         </div>
         
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {industryBadges.map(badge => <div key={badge.id} className="flex flex-col items-center group">
-              <p className="text-sm font-medium text-center max-w-[120px] mb-2">{badge.name}</p>
-              <div className="relative">
-                <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-                <img src={badge.logo} alt={`${badge.name} credential`} className="h-20 w-auto object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" />
-                <Badge className={`absolute -top-2 -right-2 text-xs py-[2px] px-[22px] ${badge.isESB ? 'bg-amber-500 text-white' : 'bg-red-600 text-white'}`}>
-                  {badge.isESB ? 'Industry Certified' : 'Certified'}
-                </Badge>
-              </div>
-            </div>)}
-        </div>
-        
-        <div className="mt-8 text-center">
-          <Badge variant="outline" className="inline-flex items-center gap-1 border-blue-300 text-blue-700">
-            <Award className="h-3.5 w-3.5" />
+        <div className="mb-6 flex justify-center">
+          <Badge className="inline-flex items-center gap-1 border-blue-300 text-blue-700 font-medium px-4 py-1.5">
+            <Award className="h-4 w-4" />
             <span>Preparing students for high-demand careers</span>
           </Badge>
+        </div>
+        
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          {industryBadges.map(badge => (
+            <div key={badge.id} className="flex flex-col items-center group">
+              <div className="relative mb-3">
+                <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                <img 
+                  src={badge.logo} 
+                  alt={`${badge.name} credential`} 
+                  className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${
+                    badge.id === 5 ? 'h-24 w-auto' : 'h-20 w-auto'
+                  }`} 
+                />
+                {badge.isESB && (
+                  <Badge className="absolute -top-2 -right-2 text-xs py-[2px] px-[12px] bg-amber-500 text-white">
+                    Industry Certified
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm font-medium text-center max-w-[120px]">{badge.name}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>;
 };
+
 export default PartnerLogosSection;
