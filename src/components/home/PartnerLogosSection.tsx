@@ -43,7 +43,11 @@ const PartnerLogosSection = () => {
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
           {industryBadges.map(badge => <div key={badge.id} className="flex flex-col items-center group">
               <div className="relative mb-3">
-                <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                {/* Enhanced glow effect with multiple layers */}
+                <div className="absolute -inset-3 bg-gradient-to-r from-blue-400 to-blue-300 rounded-lg opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-xl"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-amber-300 to-amber-200 rounded-lg opacity-0 group-hover:opacity-40 transition-opacity duration-500 blur-md"></div>
+                <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-30 group-hover:opacity-100 transition-all duration-300 blur-sm glow-pulse"></div>
+                
                 <img 
                   src={badge.logo} 
                   alt={`${badge.name} credential`} 
