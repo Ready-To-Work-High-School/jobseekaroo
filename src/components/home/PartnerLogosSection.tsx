@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Shield, Award, BadgeCheck, Ribbon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+
 const PartnerLogosSection = () => {
   // Credential badge data
   const industryBadges = [{
@@ -25,6 +27,7 @@ const PartnerLogosSection = () => {
     name: "Florida Ready to Work",
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
+
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto bg-yellow-50">
         <div className="text-center mb-8">
@@ -41,7 +44,13 @@ const PartnerLogosSection = () => {
           {industryBadges.map(badge => <div key={badge.id} className="flex flex-col items-center group">
               <div className="relative mb-3">
                 <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-                <img src={badge.logo} alt={`${badge.name} credential`} className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-24 w-auto' : 'h-20 w-auto'}`} />
+                <img 
+                  src={badge.logo} 
+                  alt={`${badge.name} credential`} 
+                  className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${
+                    badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'
+                  }`} 
+                />
                 
                 {/* Ribbon-style badge for all credentials */}
                 <div className="absolute -top-3 -right-3 z-20">
@@ -51,10 +60,11 @@ const PartnerLogosSection = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-sm font-medium text-center max-w-[120px]">{badge.name}</p>
+              <p className="text-sm font-medium text-center max-w-[140px]">{badge.name}</p>
             </div>)}
         </div>
       </div>
     </section>;
 };
+
 export default PartnerLogosSection;
