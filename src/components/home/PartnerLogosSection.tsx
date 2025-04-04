@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { Shield, Award, BadgeCheck, Ribbon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
 const PartnerLogosSection = () => {
   // Credential badge data
   const industryBadges = [{
@@ -27,7 +25,6 @@ const PartnerLogosSection = () => {
     name: "Florida Ready to Work",
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
-
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto bg-yellow-50">
         <div className="text-center mb-8">
@@ -48,17 +45,11 @@ const PartnerLogosSection = () => {
                 <div className="absolute -inset-2 bg-gradient-to-r from-amber-300 to-amber-200 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity duration-700 blur-md animate-pulse-very-slow"></div>
                 <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-80 transition-all duration-500 blur-sm animate-glow-pulse"></div>
                 
-                <img 
-                  src={badge.logo} 
-                  alt={`${badge.name} credential`} 
-                  className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${
-                    badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'
-                  }`} 
-                />
+                <img src={badge.logo} alt={`${badge.name} credential`} className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} />
                 
                 {/* Ribbon-style badge for all credentials */}
                 <div className="absolute -top-3 -right-3 z-20">
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold rounded-sm shadow-md flex items-center gap-1 px-[25px] py-[4px] bg-amber-400">
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold shadow-md flex items-center gap-1 bg-amber-300 px-[20px] mx-0 py-0 rounded-sm">
                     <Ribbon className="h-3 w-3" />
                     {badge.isESB ? 'Industry Certified' : 'Certified'}
                   </div>
@@ -70,5 +61,4 @@ const PartnerLogosSection = () => {
       </div>
     </section>;
 };
-
 export default PartnerLogosSection;
