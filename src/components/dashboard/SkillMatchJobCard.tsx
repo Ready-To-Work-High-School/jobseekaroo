@@ -14,6 +14,12 @@ interface SkillMatchJobCardProps {
 }
 
 export default function SkillMatchJobCard({ job, matchScore, matchedSkills }: SkillMatchJobCardProps) {
+  // Safely access properties with null checks
+  const jobTitle = job?.title || "Untitled Position";
+  const companyName = job?.company?.name || "Unknown Company";
+  const jobDescription = job?.description || "No description available";
+  const jobId = job?.id || "";
+  
   // Determine color based on match percentage
   const getScoreColor = (score: number) => {
     if (score >= 80) return "bg-green-500";
@@ -28,8 +34,8 @@ export default function SkillMatchJobCard({ job, matchScore, matchedSkills }: Sk
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-base font-medium">{job.title}</CardTitle>
-            <p className="text-sm text-muted-foreground">{job.company.name}</p>
+            <CardTitle className="text-base font-medium">{jobTitle}</CardTitle>
+            <p className="text-sm text-muted-foreground">{companyName}</p>
           </div>
           <div className="flex items-center gap-1.5">
             <Badge variant="outline" className="font-mono">
@@ -63,11 +69,11 @@ export default function SkillMatchJobCard({ job, matchScore, matchedSkills }: Sk
         )}
 
         <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-          {job.description}
+          {jobDescription}
         </p>
       </CardContent>
       <CardFooter className="pt-1">
-        <Link to={`/jobs/${job.id}`} className="w-full">
+        <Link to={`/jobs/${jobId}`} className="w-full">
           <Button variant="outline" size="sm" className="w-full">
             <ExternalLink className="h-3.5 w-3.5 mr-2" />
             View Job

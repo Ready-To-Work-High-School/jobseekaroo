@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
 import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
+import AdminCodeGenerator from './AdminCodeGenerator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface RedemptionCodeGeneratorsProps {
   onGenerateCode: () => Promise<void>;
@@ -24,22 +26,40 @@ const RedemptionCodeGenerators: React.FC<RedemptionCodeGeneratorsProps> = ({
   expireDays,
   setExpireDays
 }) => {
+  const [activeTab, setActiveTab] = useState('single');
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <RedemptionCodeGenerator
-        onGenerateCode={onGenerateCode}
-        onBulkGenerate={onBulkGenerate}
-        isGenerating={isGenerating}
-        codeType={codeType}
-        setCodeType={setCodeType}
-        expireDays={expireDays}
-        setExpireDays={setExpireDays}
-      />
-      
-      <AutomatedCodeGenerator
-        onGenerateCodes={onAutomatedGeneration}
-        isGenerating={isGenerating}
-      />
+    <div className="space-y-4 mb-6">
+      <Tabs defaultValue="single" value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="mb-4">
+          <TabsTrigger value="single">Single Code</TabsTrigger>
+          <TabsTrigger value="automatic">Automated Distribution</TabsTrigger>
+          <TabsTrigger value="admin">Admin Codes</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="single">
+          <RedemptionCodeGenerator
+            onGenerateCode={onGenerateCode}
+            onBulkGenerate={onBulkGenerate}
+            isGenerating={isGenerating}
+            codeType={codeType}
+            setCodeType={setCodeType}
+            expireDays={expireDays}
+            setExpireDays={setExpireDays}
+          />
+        </TabsContent>
+        
+        <TabsContent value="automatic">
+          <AutomatedCodeGenerator
+            onGenerateCodes={onAutomatedGeneration}
+            isGenerating={isGenerating}
+          />
+        </TabsContent>
+        
+        <TabsContent value="admin">
+          <AdminCodeGenerator />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

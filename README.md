@@ -1,3 +1,5 @@
+
+
 # Welcome to your Lovable project
 
 ## Project info
@@ -52,17 +54,20 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with modern web technologies:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Express (for backend API)
 
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/0772863e-2eac-4b3c-b10a-aec607ec1185) and click on Share -> Publish.
+
+For custom deployments, this project includes configuration for Render hosting in the `render.yaml` file.
 
 ## I want to use a custom domain - is that possible?
 

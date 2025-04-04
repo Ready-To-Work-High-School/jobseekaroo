@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
 import { 
   useRedemptionCodeData,
   useRedemptionCodeOperations,
@@ -8,21 +7,23 @@ import {
   useRedemptionCodeUtils,
   useRedemptionCodeDialog
 } from '@/hooks/redemption';
-import { useRedemptionCodeDetailView } from './RedemptionCodeDetailView';
-import RedemptionCodeStats from '../RedemptionCodeStats';
+import { useAdvancedCodeFiltering } from '@/hooks/redemption/useAdvancedCodeFiltering';
+import { useBulkExport } from '@/hooks/redemption/useBulkExport';
+import { useScheduledEmails } from '@/hooks/redemption/useScheduledEmails';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
-import RedemptionCodeGenerators from './RedemptionCodeGenerators';
-import RedemptionCodeTable from './RedemptionCodeTable';
-import RedemptionCodeOptions from './RedemptionCodeOptions';
+import RedemptionTabManager from './tab-manager/RedemptionTabManager';
+import { useRedemptionContainerHandlers } from './hooks/useRedemptionContainerHandlers';
+import { prepareDefaultUsageData, prepareDefaultGenerationData } from './analytics/utils/chartData';
 
 const RedemptionCodeContainer: React.FC = () => {
-  // Use individual hooks instead of the facade hook for more direct access
+  const [activeTab, setActiveTab] = useState('codes');
+  
   const {
     codes,
     stats,
     isLoading,
-    activeTab,
-    setActiveTab,
+    activeTab: codesTab,
+    setActiveTab: setCodesTab,
     currentPage,
     pageSize,
     totalCodes,
@@ -31,6 +32,12 @@ const RedemptionCodeContainer: React.FC = () => {
     handlePageSizeChange,
     updateCodes
   } = useRedemptionCodeData();
+
+  const { filters, applyFilters, filteredCodes } = useAdvancedCodeFiltering(codes);
+
+  const { exportCodes, isExporting } = useBulkExport();
+
+  const { scheduleEmail, isScheduling } = useScheduledEmails();
 
   const {
     isGenerating,
@@ -47,11 +54,10 @@ const RedemptionCodeContainer: React.FC = () => {
     handleSelectCode,
     handleSelectAll,
     clearSelection
-  } = useRedemptionCodeSelection(codes);
+  } = useRedemptionCodeSelection(filteredCodes);
 
-  const { formatDate, exportCodes } = useRedemptionCodeUtils();
+  const { formatDate } = useRedemptionCodeUtils();
 
-  // Use dialog management hook
   const { 
     showDeleteDialog, 
     selectedForDelete, 
@@ -59,110 +65,64 @@ const RedemptionCodeContainer: React.FC = () => {
     closeDeleteDialog 
   } = useRedemptionCodeDialog();
 
-  // Local state for code generation options
   const [codeType, setCodeType] = React.useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = React.useState<number>(30);
 
-  // Detail view for individual codes
-  const { view: detailsView, handlers } = useRedemptionCodeDetailView({ formatDate });
-  const { handleCopyCode, handleViewDetails, handleEmailCode, handleBulkEmail } = handlers;
+  const usageOverTime = prepareDefaultUsageData();
+  const generationOverTime = prepareDefaultGenerationData();
 
-  // Handlers for operations that combine multiple hooks
-  const handleCodeGeneration = async () => {
-    const newCode = await handleGenerateCode(codeType, expireDays);
-    if (newCode) {
-      updateCodes([newCode]);
-      await fetchCodes();
-    }
-  };
-
-  const handleBulkGeneration = async (amount: number) => {
-    const newCodes = await handleBulkGenerate(amount, codeType, expireDays);
-    if (newCodes.length > 0) {
-      updateCodes(newCodes);
-      await fetchCodes();
-    }
-  };
-
-  const handleAutomatedGeneration = async (
-    userType: string, 
-    amount: number, 
-    expiresInDays: number,
-    emailDomain: string
-  ) => {
-    const newCodes = await handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain);
-    if (newCodes.length > 0) {
-      updateCodes(newCodes);
-      await fetchCodes();
-    }
-  };
-
-  const handleShowDeleteDialog = () => {
-    if (selectedCodes.length > 0) {
-      openDeleteDialog(selectedCodes);
-    }
-  };
-
-  const handleConfirmDelete = async () => {
-    await handleDeleteSelectedCodes(selectedForDelete.map(code => code.id));
-    clearSelection();
-    closeDeleteDialog();
-    await fetchCodes();
-  };
+  const {
+    handlers,
+    detailsView,
+    handleConfirmDelete
+  } = useRedemptionContainerHandlers({
+    handleGenerateCode,
+    handleBulkGenerate,
+    handleAutomatedCodeGeneration,
+    handleDeleteSelectedCodes,
+    codeType,
+    expireDays,
+    selectedCodes,
+    selectedForDelete,
+    filteredCodes,
+    updateCodes,
+    fetchCodes,
+    clearSelection,
+    openDeleteDialog,
+    closeDeleteDialog,
+    formatDate,
+    exportCodes,
+    scheduleEmail,
+    isScheduling
+  });
 
   return (
     <div className="space-y-6">
-      <RedemptionCodeStats stats={stats} />
-
-      <RedemptionCodeOptions
-        codeType={codeType}
-        setCodeType={setCodeType}
-        expireDays={expireDays}
-        setExpireDays={setExpireDays}
-      />
-
-      <RedemptionCodeGenerators
-        onGenerateCode={handleCodeGeneration}
-        onBulkGenerate={handleBulkGeneration}
-        onAutomatedGeneration={handleAutomatedGeneration}
+      <RedemptionTabManager
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        stats={stats}
+        filteredCodes={filteredCodes}
+        selectedCodes={selectedCodes}
+        allSelected={allSelected}
+        isLoading={isLoading}
         isGenerating={isGenerating}
+        isDeleting={isDeleting}
+        isScheduling={isScheduling}
+        codesTab={codesTab}
+        setCodesTab={setCodesTab}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        totalCodes={totalCodes}
         codeType={codeType}
         setCodeType={setCodeType}
         expireDays={expireDays}
         setExpireDays={setExpireDays}
+        formatDate={formatDate}
+        usageOverTime={usageOverTime}
+        generationOverTime={generationOverTime}
+        handlers={handlers}
       />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Redemption Codes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RedemptionCodeTable
-            codes={codes}
-            selectedCodes={selectedCodes}
-            allSelected={allSelected}
-            isLoading={isLoading}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCodes={totalCodes}
-            formatDate={formatDate}
-            onSelectCode={handleSelectCode}
-            onSelectAll={handleSelectAll}
-            onCopyCode={handleCopyCode}
-            onEmailCode={handleEmailCode}
-            onViewDetails={handleViewDetails}
-            onRefresh={fetchCodes}
-            onExport={() => exportCodes(codes)}
-            onPrint={() => window.print()}
-            onEmailSelected={() => handleBulkEmail(selectedCodes)}
-            onDeleteSelected={handleShowDeleteDialog}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-          />
-        </CardContent>
-      </Card>
 
       {detailsView}
 

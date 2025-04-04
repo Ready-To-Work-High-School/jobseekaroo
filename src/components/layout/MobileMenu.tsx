@@ -1,29 +1,17 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import {
-  HomeIcon,
-  Briefcase,
-  BookOpen,
-  LayoutDashboard,
-  ListChecks,
-  FileText,
-  Lightbulb,
-  GraduationCap,
-  ExternalLink,
-  Bell,
-  Building2,
-  HelpCircle,
-  LucideIcon
-} from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import { MobileNavLink } from '../navbar/MobileNavLink';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -31,145 +19,64 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userProfile } = useAuth();
+  const isAdmin = userProfile?.user_type === 'admin';
+  
+  // Debug logs
+  console.log("MobileMenu - User profile:", userProfile);
+  console.log("MobileMenu - Is admin:", isAdmin);
 
   return (
     <div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-sm rounded-lg">
-          <DialogHeader>
-            <DialogTitle>Menu</DialogTitle>
-          </DialogHeader>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="sm:max-w-sm rounded-lg">
+          <SheetHeader>
+            <SheetTitle>Menu</SheetTitle>
+          </SheetHeader>
           <nav className="flex flex-col space-y-1 py-4">
-            <Link 
-              to="/" 
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-              onClick={() => setIsOpen(false)}
-            >
-              <HomeIcon className="h-5 w-5 mr-3" />
-              Home
-            </Link>
-            
-            {user && (
-              <Link 
-                to="/dashboard" 
-                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                onClick={() => setIsOpen(false)}
-              >
-                <LayoutDashboard className="h-5 w-5 mr-3" />
-                Dashboard
-              </Link>
-            )}
-
-            <Link 
-              to="/jobs" 
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-              onClick={() => setIsOpen(false)}
-            >
-              <Briefcase className="h-5 w-5 mr-3" />
-              Find Jobs
-            </Link>
+            {/* Shared Items */}
+            <MobileNavLink to="/">Home</MobileNavLink>
+            <MobileNavLink to="/for-employers">For Employers</MobileNavLink>
+            <MobileNavLink to="/resources">Resources</MobileNavLink>
+            <MobileNavLink to="/entrepreneurship-academy">Entrepreneurship</MobileNavLink>
             
             {user ? (
               <>
-                <Link
-                  to="/skills"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <BookOpen className="h-5 w-5 mr-3" />
-                  Skills
-                </Link>
-                <Link
-                  to="/applications"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <ListChecks className="h-5 w-5 mr-3" />
-                  Applications
-                </Link>
-                <Link
-                  to="/resume"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <FileText className="h-5 w-5 mr-3" />
-                  Resume
-                </Link>
-                <Link
-                  to="/saved-jobs"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Lightbulb className="h-5 w-5 mr-3" />
-                  Saved Jobs
-                </Link>
-                <Link
-                  to="/notifications"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Bell className="h-5 w-5 mr-3" />
-                  Notifications
-                </Link>
-              </>
-            ) : (
-              <Link
-                to="/resources"
-                className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                onClick={() => setIsOpen(false)}
-              >
-                <BookOpen className="h-5 w-5 mr-3" />
-                Resources
-              </Link>
-            )}
-            <Link
-              to="/entrepreneurship-academy"
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-              onClick={() => setIsOpen(false)}
-            >
-              <GraduationCap className="h-5 w-5 mr-3" />
-              Academy
-            </Link>
-            {user ? (
-              <Button variant="ghost" className="justify-start px-4 py-2 hover:bg-accent rounded-md flex items-center" onClick={() => {
-                signOut();
-                setIsOpen(false);
-              }}>
-                <ExternalLink className="h-5 w-5 mr-3" />
-                Sign Out
-              </Button>
-            ) : (
-              <>
-                <Link
-                  to="/sign-in"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
+                {/* Authenticated Items */}
+                <MobileNavLink to="/dashboard">Dashboard</MobileNavLink>
+                <MobileNavLink to="/jobs">Jobs</MobileNavLink>
+                <MobileNavLink to="/skills">Skills</MobileNavLink>
+                <MobileNavLink to="/applications">Applications</MobileNavLink>
+                <MobileNavLink to="/profile">Profile</MobileNavLink>
+                
+                {/* Admin Items */}
+                {isAdmin && (
+                  <MobileNavLink to="/admin">Admin</MobileNavLink>
+                )}
+                
+                <Button 
+                  variant="ghost" 
+                  className="justify-start px-4 py-2 hover:bg-accent rounded-md flex items-center" 
+                  onClick={() => {
+                    signOut();
+                    setIsOpen(false);
+                  }}
                 >
                   <ExternalLink className="h-5 w-5 mr-3" />
-                  Sign In
-                </Link>
-                <Link
-                  to="/sign-up"
-                  className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Building2 className="h-5 w-5 mr-3" />
-                  Sign Up
-                </Link>
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                {/* Unauthenticated Items */}
+                <MobileNavLink to="/sign-in">Sign In</MobileNavLink>
+                <MobileNavLink to="/sign-up">Sign Up</MobileNavLink>
+                <MobileNavLink to="/redeem-code">Redeem Code</MobileNavLink>
               </>
             )}
-            <Link
-              to="/faq"
-              className="px-4 py-2 hover:bg-accent rounded-md flex items-center"
-              onClick={() => setIsOpen(false)}
-            >
-              <HelpCircle className="h-5 w-5 mr-3" />
-              FAQ
-            </Link>
           </nav>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

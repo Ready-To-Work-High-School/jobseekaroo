@@ -7,7 +7,7 @@ import { ModerationEmptyState } from '@/components/admin/ModerationEmptyState';
 import { ModerationLoadingState } from '@/components/admin/ModerationLoadingState';
 import { ModerationInstructions } from '@/components/admin/ModerationInstructions';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import CopyProtection from '@/components/CopyProtection';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, RefreshCw, ShieldAlert } from 'lucide-react';
@@ -22,10 +22,12 @@ const AdminMessageModeration = () => {
     refreshMessages,
     error
   } = useModerationMessages();
+  
+  console.log('AdminMessageModeration page rendered');
 
   return (
-    <ProtectedRoute adminOnly>
-      <Layout>
+    <Layout>
+      <ProtectedRoute adminOnly>
         <TooltipProvider>
           <div className="container max-w-4xl py-8">
             <div className="flex items-center gap-2 mb-2">
@@ -114,8 +116,8 @@ const AdminMessageModeration = () => {
             <CopyProtection showNotice={false} />
           </div>
         </TooltipProvider>
-      </Layout>
-    </ProtectedRoute>
+      </ProtectedRoute>
+    </Layout>
   );
 };
 

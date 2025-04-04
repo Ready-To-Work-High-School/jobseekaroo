@@ -182,11 +182,11 @@ export const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps)
               <DropdownMenuItem onClick={() => handleStatusChange('applied')}>
                 <ApplicationStatusBadge status="applied" className="w-full justify-start" />
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('interviewing')}>
-                <ApplicationStatusBadge status="interviewing" className="w-full justify-start" />
+              <DropdownMenuItem onClick={() => handleStatusChange('interview')}>
+                <ApplicationStatusBadge status="interview" className="w-full justify-start" />
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('offered')}>
-                <ApplicationStatusBadge status="offered" className="w-full justify-start" />
+              <DropdownMenuItem onClick={() => handleStatusChange('offer')}>
+                <ApplicationStatusBadge status="offer" className="w-full justify-start" />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleStatusChange('accepted')}>
                 <ApplicationStatusBadge status="accepted" className="w-full justify-start" />

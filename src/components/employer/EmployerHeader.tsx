@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Shield } from 'lucide-react';
 import { useSlideIn } from '@/utils/animations';
 
 const EmployerHeader = () => {
@@ -11,6 +11,18 @@ const EmployerHeader = () => {
   return (
     <div className={headerAnimation}>
       <div className="text-center mb-12">
+        <div className="flex justify-center mb-4 relative">
+          {/* Further reduced glow effect */}
+          <div className="relative">
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-20 blur-sm"></div>
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-10 blur-lg"></div>
+            <img 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              alt="JS4HS Logo" 
+              className="h-14 w-auto relative z-10 object-contain"
+            />
+          </div>
+        </div>
         <Badge variant="outline" className="border-amber-500 text-amber-700 mb-4">
           For Businesses & Organizations
         </Badge>
@@ -18,7 +30,7 @@ const EmployerHeader = () => {
           Hire Trained Students with Verified Skills
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Connect with Westside High School's Entrepreneurship Academy to find pre-trained students
+          Connect with Westside High School's Entrepreneurship and Nursing Academies to find pre-trained students
           with industry-recognized credentials who are ready to join your workforce.
         </p>
         
@@ -32,6 +44,11 @@ const EmployerHeader = () => {
           <p className="text-sm text-muted-foreground mt-2">
             Post jobs and manage applications in one place
           </p>
+        </div>
+        
+        <div className="mt-6 flex items-center justify-center text-sm text-muted-foreground">
+          <Shield className="h-4 w-4 mr-1 text-green-600" />
+          <span>Secure employer area - All links and content verified for your protection</span>
         </div>
       </div>
     </div>

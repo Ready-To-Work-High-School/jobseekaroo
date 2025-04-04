@@ -48,7 +48,7 @@ img {
 
 /* Background gradients */
 .bg-gradient-brand {
-  @apply bg-gradient-to-r from-brand-600 to-brand-800;
+  @apply bg-gradient-to-r from-blue-600 to-blue-800;
 }
 
 .bg-gradient-amber {
@@ -57,7 +57,7 @@ img {
 
 /* Text gradients */
 .text-gradient-primary {
-  @apply bg-gradient-to-r from-primary to-brand-700 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-primary to-blue-700 bg-clip-text text-transparent;
 }
 
 .text-gradient-amber {
@@ -73,22 +73,27 @@ img {
   @apply shadow-[0_0_20px_rgba(14,165,233,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(14,165,233,0.6)];
 }
 
+/* Enhanced blue-gold gradient matching ESB badge style with stronger accent */
 .glow-blue-gold {
   @apply shadow-[0_0_25px_rgba(14,165,233,0.5),_0_0_15px_rgba(245,158,11,0.5)] transition-all duration-500 hover:shadow-[0_0_35px_rgba(14,165,233,0.7),_0_0_25px_rgba(245,158,11,0.7)];
 }
 
 .glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite alternate;
+  animation: glow-pulse 3s ease-in-out infinite alternate;
 }
 
 @keyframes glow-pulse {
-  from {
-    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4), 0 0 10px rgba(245, 158, 11, 0.4);
-    text-shadow: 0 0 5px rgba(14, 165, 233, 0.4), 0 0 10px rgba(245, 158, 11, 0.4);
+  0% {
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.3), 0 0 5px rgba(245, 158, 11, 0.3);
+    opacity: 0.7;
   }
-  to {
-    box-shadow: 0 0 30px rgba(14, 165, 233, 0.7), 0 0 20px rgba(245, 158, 11, 0.7);
-    text-shadow: 0 0 10px rgba(14, 165, 233, 0.7), 0 0 15px rgba(245, 158, 11, 0.7);
+  50% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.6), 0 0 15px rgba(245, 158, 11, 0.6);
+    opacity: 0.9;
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.5), 0 0 20px rgba(245, 158, 11, 0.5);
+    opacity: 0.7;
   }
 }
 
@@ -97,6 +102,79 @@ img {
   background: linear-gradient(-45deg, #1e40af, #fbbf24, #3b82f6, #f59e0b);
   background-size: 400% 400%;
   animation: gradient 6s ease infinite;
+}
+
+/* New logo glow effect specifically for the JS4HS logo */
+.logo-glow {
+  position: relative;
+}
+
+.logo-glow::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #3b82f6, #fbbf24);
+  opacity: 0.7;
+  filter: blur(8px);
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+/* New intensified logo accent */
+.logo-accent {
+  position: relative;
+}
+
+.logo-accent::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #fbbf24, #3b82f6);
+  opacity: 0.8;
+  filter: blur(10px);
+  animation: rotate-gradient 6s linear infinite, pulse-opacity 3s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+.logo-accent::after {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: linear-gradient(225deg, #fbbf24, #3b82f6, #fbbf24);
+  opacity: 0.5;
+  filter: blur(15px);
+  animation: rotate-gradient-reverse 8s linear infinite, pulse-opacity 4s ease-in-out infinite alternate;
+  z-index: -2;
+}
+
+@keyframes rotate-gradient {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-gradient-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes pulse-opacity {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.8;
+  }
 }
 
 @keyframes gradient {

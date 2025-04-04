@@ -43,8 +43,19 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
         // Get the job details for each recommendation
         const recommendationsWithJobs = await Promise.all(
           recommendationsData.slice(0, limit).map(async (rec) => {
-            const job = await getJobById(rec.job_id);
-            return { ...rec, job };
+            try {
+              const job = await getJobById(rec.job_id);
+              // Validate that the job object has the required properties
+              if (job && job.company && job.company.name) {
+                return { ...rec, job };
+              } else {
+                console.warn(`Skipping incomplete job data for job_id: ${rec.job_id}`);
+                return { ...rec, job: undefined };
+              }
+            } catch (err) {
+              console.error(`Error fetching job ${rec.job_id}:`, err);
+              return { ...rec, job: undefined };
+            }
           })
         );
         

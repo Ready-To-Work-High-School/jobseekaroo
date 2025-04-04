@@ -1,7 +1,6 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import UserBenefitsCard from '@/components/user/UserBenefitsCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -39,10 +38,10 @@ const AccountBenefits: React.FC = () => {
         };
       case 'admin':
         return {
-          title: 'Administrator Account',
-          icon: <Crown className="h-8 w-8 text-purple-500" />,
+          title: 'Chief Executive Officer',
+          icon: <Crown className="h-8 w-8 text-black" />,
           description: 'Full platform administration and management capabilities',
-          color: 'bg-purple-50 border-purple-200'
+          color: 'bg-gray-100 border-gray-400'
         };
       default:
         return {

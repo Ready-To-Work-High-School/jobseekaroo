@@ -1,6 +1,6 @@
 
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
@@ -13,11 +13,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp, Award } from 'lucide-react';
+import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp, Award, Shield } from 'lucide-react';
 
 const AuthStatus = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
+  const location = useLocation();
+
+  // Debug logs
+  console.log("AuthStatus - User profile:", userProfile);
+  console.log("AuthStatus - Is admin:", userProfile?.user_type === 'admin');
+  console.log("AuthStatus - Current path:", location.pathname);
 
   const handleSignOut = async () => {
     try {
@@ -35,6 +41,8 @@ const AuthStatus = () => {
       });
     }
   };
+
+  const isAdmin = userProfile?.user_type === 'admin';
 
   return (
     <div className="flex items-center gap-2">
@@ -106,6 +114,14 @@ const AuthStatus = () => {
                 <span>Resume Assistant</span>
               </Link>
             </DropdownMenuItem>
+            {isAdmin && (
+              <DropdownMenuItem asChild>
+                <Link to="/admin" className="flex items-center cursor-pointer text-red-500">
+                  <Shield className="mr-2 h-4 w-4" />
+                  <span>Admin Panel</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               onClick={handleSignOut} 

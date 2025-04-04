@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { AccessibilityMenuContent } from './AccessibilityMenuContent';
 import { useAccessibilitySettings } from './useAccessibilitySettings';
+import { AccessibilitySettings } from '@/types/user';
 
 export const AccessibilityMenu = () => {
   const { toast } = useToast();
@@ -22,7 +23,29 @@ export const AccessibilityMenu = () => {
     handleSettingChange,
     handleFontSizeChange,
     resetSettings 
-  } = useAccessibilitySettings({ toast, user, userProfile, updateProfile });
+  } = useAccessibilitySettings({ 
+    toast, 
+    user, 
+    userProfile, 
+    // Update the type to match the new signature
+    updateProfile: async (profile) => {
+      try {
+        await updateProfile(profile);
+        return;
+      } catch (error) {
+        console.error('Error updating accessibility settings:', error);
+      }
+    }
+  });
+  
+  // Wrapper functions to match the expected signatures
+  const handleSettingChangeWrapper = (key: keyof AccessibilitySettings, value: boolean) => {
+    handleSettingChange(key, value);
+  };
+
+  const handleFontSizeChangeWrapper = (increase: boolean) => {
+    handleFontSizeChange(increase);
+  };
   
   return (
     <DropdownMenu>
@@ -43,8 +66,8 @@ export const AccessibilityMenu = () => {
         <AccessibilityMenuContent 
           settings={settings}
           fontSize={fontSize}
-          handleSettingChange={handleSettingChange}
-          handleFontSizeChange={handleFontSizeChange}
+          handleSettingChange={handleSettingChangeWrapper}
+          handleFontSizeChange={handleFontSizeChangeWrapper}
           resetSettings={resetSettings}
         />
       </DropdownMenuContent>

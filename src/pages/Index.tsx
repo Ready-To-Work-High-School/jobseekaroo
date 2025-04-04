@@ -1,77 +1,42 @@
 
-import { useEffect } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
-import EnhancedHero from '@/components/EnhancedHero';
-import ProgramsSection from '@/components/ProgramsSection';
 import { useFadeIn } from '@/utils/animations';
+import EnhancedHero from '@/components/EnhancedHero';
+import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import ResourcesSection from '@/components/home/ResourcesSection';
-import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
-import SearchSection from '@/components/home/SearchSection';
-import SectionSeparator from '@/components/home/SectionSeparator';
-import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
-import TestimonialsSection from '@/components/home/TestimonialsSection';
-import JobPlacementsSection from '@/components/home/JobPlacementsSection';
+import { Button } from '@/components/ui/button';
+import { Award } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
+  const fadeIn = useFadeIn(300);
   const { user } = useAuth();
-  const fadeInSlow = useFadeIn(600);
-  
+
+  // Add debug log to track user status
+  console.log('Index page loaded, user authenticated:', !!user);
+
   return (
     <Layout>
-      {/* Skip to content link for keyboard users */}
-      <a href="#main-content" className="skip-link">
-        Skip to content
-      </a>
-      
-      <div id="main-content">
+      <div className={`w-full ${fadeIn}`}>
         <EnhancedHero />
         
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* Featured Jobs Section */}
-        <FeaturedJobsSection />
-        
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* Job Placements Section */}
-        <JobPlacementsSection />
-        
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* Student Success Stories - MOVED ABOVE Search Section */}
-        <TestimonialsSection />
-        
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* Search Section */}
-        <SearchSection />
-        
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* For Employers Only Section */}
-        <div className={fadeInSlow}>
-          <ProgramsSection />
+        {/* Quick access to Student Success page */}
+        <div className="container mx-auto px-4 py-8 flex justify-center">
+          <Button className="bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
+            <Link to="/student-success">
+              <Award className="h-5 w-5" />
+              Explore Student Success Stories & Pathways
+            </Link>
+          </Button>
         </div>
         
-        {/* Separator */}
-        <SectionSeparator />
-        
-        {/* User-specific recommendation section */}
+        {/* Admin toggle card for easy access */}
         {user && (
-          <>
-            <UserRecommendationsSection />
-            <SectionSeparator />
-          </>
+          <div className="container mx-auto px-4 py-8">
+            <AdminToggle />
+          </div>
         )}
-        
-        {/* Resources Section */}
-        <ResourcesSection />
       </div>
     </Layout>
   );
