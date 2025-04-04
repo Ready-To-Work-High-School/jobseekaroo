@@ -1,6 +1,8 @@
+
 import React from 'react';
-import { Shield, Award, BadgeCheck, Ribbon } from 'lucide-react';
+import { Shield, Award, BadgeCheck, Ribbon, Square } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+
 const PartnerLogosSection = () => {
   // Credential badge data
   const industryBadges = [{
@@ -25,6 +27,7 @@ const PartnerLogosSection = () => {
     name: "Florida Ready to Work",
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
+  
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto bg-yellow-50">
         <div className="text-center mb-8">
@@ -45,6 +48,23 @@ const PartnerLogosSection = () => {
                 <div className="absolute -inset-2 bg-gradient-to-r from-amber-300 to-amber-200 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity duration-700 blur-md animate-pulse-very-slow"></div>
                 <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-80 transition-all duration-500 blur-sm animate-glow-pulse"></div>
                 
+                {/* Square glow accent that floats around the badge */}
+                <div className="absolute -inset-3 z-0 opacity-0 group-hover:opacity-70 transition-opacity duration-700">
+                  <Square 
+                    className="absolute top-0 right-0 text-blue-400 opacity-60 animate-float-around" 
+                    size={16} 
+                    strokeWidth={1.5}
+                    fill="rgba(96, 165, 250, 0.2)"
+                  />
+                  <Square 
+                    className="absolute bottom-0 left-0 text-amber-400 opacity-60 animate-float-around" 
+                    size={12} 
+                    strokeWidth={1.5}
+                    fill="rgba(251, 191, 36, 0.2)"
+                    style={{animationDelay: '1s'}}
+                  />
+                </div>
+                
                 <img src={badge.logo} alt={`${badge.name} credential`} className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} />
                 
                 {/* Ribbon-style badge for all credentials */}
@@ -61,4 +81,5 @@ const PartnerLogosSection = () => {
       </div>
     </section>;
 };
+
 export default PartnerLogosSection;
