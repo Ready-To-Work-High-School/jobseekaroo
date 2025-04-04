@@ -25,7 +25,7 @@ const PartnerLogosSection = () => {
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100 bg-amber-300">
-      <div className="container mx-auto px-4 bg-amber-100">
+      <div className="container px-4 bg-amber-100 my-px mx-0">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <BadgeCheck className="h-5 w-5 text-blue-600" />
@@ -41,7 +41,7 @@ const PartnerLogosSection = () => {
               <div className="relative mb-2">
                 <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
                 <img src={badge.logo} alt={`${badge.name} credential`} className="h-20 w-auto object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" />
-                <Badge className="absolute -top-2 -right-2 bg-red-600 text-white text-xs">Certified</Badge>
+                <Badge className="absolute -top-2 -right-2 bg-red-600 text-white text-xs py-[2px] px-[22px]">Certified</Badge>
               </div>
               <p className="text-sm font-medium text-center max-w-[120px]">{badge.name}</p>
             </div>)}

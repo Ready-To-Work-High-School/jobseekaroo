@@ -1,50 +1,36 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
-
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
   const titleAnimation = useSlideIn(300, 'right');
   const subtitleAnimation = useFadeIn(500);
   const buttonAnimation = useFadeIn(700);
-
-  return (
-    <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
+  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       {/* Flying particles effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div 
-            key={i}
-            className="absolute rounded-full bg-blue-400/20"
-            style={{
-              width: `${Math.random() * 10 + 5}px`,
-              height: `${Math.random() * 10 + 5}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDuration: `${Math.random() * 20 + 10}s`,
-              animationDelay: `${Math.random() * 5}s`,
-              animation: 'float-around infinite linear'
-            }}
-          />
-        ))}
+        {[...Array(20)].map((_, i) => <div key={i} className="absolute rounded-full bg-blue-400/20" style={{
+        width: `${Math.random() * 10 + 5}px`,
+        height: `${Math.random() * 10 + 5}px`,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDuration: `${Math.random() * 20 + 10}s`,
+        animationDelay: `${Math.random() * 5}s`,
+        animation: 'float-around infinite linear'
+      }} />)}
       </div>
       
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 bg-violet-200">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
           {/* Enhanced logo display with dynamic glow effect */}
           <div className="relative">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
-            <img 
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-              alt="Job Seekers 4 High Schools Logo"
-              className="h-28 w-auto relative z-10 drop-shadow-lg" 
-            />
+            <img src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" alt="Job Seekers 4 High Schools Logo" className="h-28 w-auto relative z-10 drop-shadow-lg" />
           </div>
         </div>
         
@@ -76,8 +62,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
