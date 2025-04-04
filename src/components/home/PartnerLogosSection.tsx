@@ -1,20 +1,30 @@
-
 import React from 'react';
 import { Shield, Award, BadgeCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
 const PartnerLogosSection = () => {
   // Credential badge data
-  const industryBadges = [
-    { id: 1, name: "Entrepreneurship & Small Business", logo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" },
-    { id: 2, name: "Certified Nursing Assistant", logo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" },
-    { id: 3, name: "Microsoft Fundamentals", logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png" },
-    { id: 4, name: "IBM SkillsBuild", logo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png" },
-    { id: 5, name: "Florida Ready to Work", logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png" },
-  ];
-
-  return (
-    <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
+  const industryBadges = [{
+    id: 1,
+    name: "Entrepreneurship & Small Business",
+    logo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png"
+  }, {
+    id: 2,
+    name: "Certified Nursing Assistant",
+    logo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png"
+  }, {
+    id: 3,
+    name: "Microsoft Fundamentals",
+    logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png"
+  }, {
+    id: 4,
+    name: "IBM SkillsBuild",
+    logo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png"
+  }, {
+    id: 5,
+    name: "Florida Ready to Work",
+    logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
+  }];
+  return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100 bg-amber-300">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
@@ -27,20 +37,14 @@ const PartnerLogosSection = () => {
         </div>
         
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {industryBadges.map(badge => (
-            <div key={badge.id} className="flex flex-col items-center group">
+          {industryBadges.map(badge => <div key={badge.id} className="flex flex-col items-center group">
               <div className="relative mb-2">
                 <div className="absolute -inset-1 bg-blue-300 rounded-lg opacity-20 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-                <img 
-                  src={badge.logo} 
-                  alt={`${badge.name} credential`} 
-                  className="h-20 w-auto object-contain relative z-10 transition-transform duration-300 group-hover:scale-110"
-                />
+                <img src={badge.logo} alt={`${badge.name} credential`} className="h-20 w-auto object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" />
                 <Badge className="absolute -top-2 -right-2 bg-red-600 text-white text-xs">Certified</Badge>
               </div>
               <p className="text-sm font-medium text-center max-w-[120px]">{badge.name}</p>
-            </div>
-          ))}
+            </div>)}
         </div>
         
         <div className="mt-8 text-center">
@@ -50,8 +54,6 @@ const PartnerLogosSection = () => {
           </Badge>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default PartnerLogosSection;
