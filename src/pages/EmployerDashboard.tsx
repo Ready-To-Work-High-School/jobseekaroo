@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
+import PartnerLogosSection from '@/components/home/PartnerLogosSection';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -25,6 +26,11 @@ const EmployerDashboard = () => {
           <DashboardHeader />
           
           <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          
+          {/* Industry Recognized Credentials Section */}
+          <div className="mt-12">
+            <PartnerLogosSection />
+          </div>
         </div>
       </Layout>
     </ProtectedRoute>
