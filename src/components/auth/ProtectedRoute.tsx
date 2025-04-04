@@ -73,6 +73,7 @@ const ProtectedRoute = ({
   }
 
   // If not authenticated and not in test mode, redirect to login page with the return url
+  // Remove the toast here since we're already showing it in the useEffect above
   if (!user && !testMode) {
     console.log('Not authenticated, redirecting to', redirectTo);
     // Save the current location they were trying to go to
