@@ -25,7 +25,7 @@ const PartnerLogosSection = () => {
     logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
   }];
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100 bg-amber-300">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 bg-amber-100">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <BadgeCheck className="h-5 w-5 text-blue-600" />
