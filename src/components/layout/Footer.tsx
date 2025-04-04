@@ -1,41 +1,47 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
-
 const Footer = () => {
-  const { user } = useAuth();
-  
+  const {
+    user
+  } = useAuth();
+
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
-
-  const bottomNavLinks = [
-    { href: "/", label: "Home" },
-    { href: "/jobs", label: "Jobs" },
-    { href: "/resources", label: "Resources" },
-    { href: getPath("/skills"), label: "Skills" },
-    { href: "/for-employers", label: "For Employers" },
-    { href: "/faq", label: "FAQ" },
-    { href: "/success-stories", label: "Success Stories" },
-    { href: "/license", label: "License" },
-  ];
-
-  return (
-    <>
+  const bottomNavLinks = [{
+    href: "/",
+    label: "Home"
+  }, {
+    href: "/jobs",
+    label: "Jobs"
+  }, {
+    href: "/resources",
+    label: "Resources"
+  }, {
+    href: getPath("/skills"),
+    label: "Skills"
+  }, {
+    href: "/for-employers",
+    label: "For Employers"
+  }, {
+    href: "/faq",
+    label: "FAQ"
+  }, {
+    href: "/success-stories",
+    label: "Success Stories"
+  }, {
+    href: "/license",
+    label: "License"
+  }];
+  return <>
       <div className="bg-muted py-4 border-t">
         <div className="container mx-auto px-4">
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {bottomNavLinks.map((link) => (
-              <Link 
-                key={link.href} 
-                to={link.href}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
+            {bottomNavLinks.map(link => <Link key={link.href} to={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 {link.label}
-              </Link>
-            ))}
+              </Link>)}
           </nav>
         </div>
       </div>
@@ -48,11 +54,7 @@ const Footer = () => {
                 <div className="relative">
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
                   <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-                  <img 
-                    src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" 
-                    alt="JS4HS Logo" 
-                    className="h-10 w-10 relative z-10 w-full h-full object-contain rounded-md"
-                  />
+                  <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-6 w-6 relative z-10 w-full h-full object-contain rounded-md" />
                 </div>
                 <h3 className="font-bold text-lg">Job Seekers 4 High Schools</h3>
               </div>
@@ -61,12 +63,7 @@ const Footer = () => {
               </p>
               <div className="mt-4 flex items-center gap-2">
                 <Shield className="h-4 w-4 text-amber-600" />
-                <Link 
-                  to="/admin?adminTest=true" 
-                  className="text-xs text-muted-foreground hover:text-blue-600"
-                  aria-label="API Demo" 
-                  title="API Demo"
-                >
+                <Link to="/admin?adminTest=true" className="text-xs text-muted-foreground hover:text-blue-600" aria-label="API Demo" title="API Demo">
                   Developer API Demo
                 </Link>
               </div>
@@ -105,8 +102,6 @@ const Footer = () => {
           </div>
         </div>
       </footer>
-    </>
-  );
+    </>;
 };
-
 export default Footer;
