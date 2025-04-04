@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Shield, Award, BadgeCheck } from 'lucide-react';
+import { Shield, Award, BadgeCheck, Ribbon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const PartnerLogosSection = () => {
@@ -40,13 +40,6 @@ const PartnerLogosSection = () => {
           </p>
         </div>
         
-        <div className="mb-6 flex justify-center">
-          <Badge className="inline-flex items-center gap-1 border-blue-300 text-blue-700 font-medium px-4 py-1.5">
-            <Award className="h-4 w-4" />
-            <span>Preparing students for high-demand careers</span>
-          </Badge>
-        </div>
-        
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
           {industryBadges.map(badge => (
             <div key={badge.id} className="flex flex-col items-center group">
@@ -59,11 +52,14 @@ const PartnerLogosSection = () => {
                     badge.id === 5 ? 'h-24 w-auto' : 'h-20 w-auto'
                   }`} 
                 />
-                {badge.isESB && (
-                  <Badge className="absolute -top-2 -right-2 text-xs py-[2px] px-[12px] bg-amber-500 text-white">
-                    Industry Certified
-                  </Badge>
-                )}
+                
+                {/* Ribbon-style badge for all credentials */}
+                <div className="absolute -top-3 -right-3 z-20">
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold py-1 px-2 rounded-sm shadow-md flex items-center gap-1">
+                    <Ribbon className="h-3 w-3" />
+                    {badge.isESB ? 'Industry Certified' : 'Certified'}
+                  </div>
+                </div>
               </div>
               <p className="text-sm font-medium text-center max-w-[120px]">{badge.name}</p>
             </div>
