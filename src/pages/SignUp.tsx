@@ -38,7 +38,7 @@ const SignUp = () => {
       <div className="w-full max-w-4xl mx-auto py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold">Create Your Account</h1>
-          <p className="text-muted-foreground mt-2">Sign up to start exploring jobs</p>
+          <p className="text-muted-foreground mt-2">Join to start exploring jobs</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">

@@ -38,7 +38,7 @@ const ProgramsSection = () => {
         {/* For Employers Only heading placed at the top of the section */}
         <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
           <span className="bg-gradient-to-r from-red-800 via-amber-600 to-red-900 py-3 font-bold text-gray-100 text-center text-3xl w-full block md:text-5xl">
-            For Employers Only
+            Employer Resources
           </span>
         </h2>
         
