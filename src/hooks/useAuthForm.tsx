@@ -75,7 +75,7 @@ export const useAuthForm = () => {
         data.firstName,
         data.lastName,
         data.userType,
-        { age: data.age }
+        { age: data.age }  // Pass age as part of additionalData object
       );
       
       if (!user) {
