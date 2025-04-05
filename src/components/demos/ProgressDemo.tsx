@@ -19,10 +19,12 @@ const ProgressDemo = () => {
             <span className="text-purple-700">{progress < 100 ? "In progress" : "Complete"}</span>
           </div>
           
-          <Progress 
-            value={progress} 
-            className="h-3 w-full bg-purple-100"
-          />
+          <div className="relative h-3 w-full overflow-hidden rounded-full bg-purple-100">
+            <div 
+              className="h-full progress-lavender-gold-purple transition-all" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
       </div>
     </div>

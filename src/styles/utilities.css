@@ -55,6 +55,25 @@ img {
   @apply bg-gradient-to-r from-amber-500 to-amber-600;
 }
 
+/* Progress bar gradients */
+.progress-lavender-gold-purple {
+  background: linear-gradient(90deg, #d8b4fe, #fcd34d, #8b5cf6);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Text gradients */
 .text-gradient-primary {
   @apply bg-gradient-to-r from-primary to-blue-700 bg-clip-text text-transparent;
