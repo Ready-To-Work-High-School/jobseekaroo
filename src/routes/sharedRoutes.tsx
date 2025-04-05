@@ -5,7 +5,7 @@ import NotFound from '@/pages/NotFound';
 const SharedRoutes = (
   <>
     {/* Shared routes that can be accessed by all user types */}
-    <Route path="*" element={<NotFound />} />
+    {/* If you need more shared routes, add them here above the catch-all */}
   </>
 );
 

@@ -1,21 +1,38 @@
 
 import { Route } from 'react-router-dom';
+import HomeRoutes from './homeRoutes';
 import { PublicRoutes } from './publicRoutes';
 import { AuthRoutes } from './authRoutes';
 import { JobSeekerRoutes } from './jobSeekerRoutes';
 import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
+import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
 
 export const AppRoutes = (
   <>
+    {/* Home routes */}
+    {HomeRoutes}
+    
+    {/* Public routes */}
     {PublicRoutes}
+    
+    {/* Auth routes */}
     {AuthRoutes}
+    
+    {/* Job Seeker routes */}
     {JobSeekerRoutes}
+    
+    {/* Employer routes */}
     {EmployerRoutes}
+    
+    {/* Admin routes */}
     {AdminRoutes}
     
-    {/* Catch all route */}
+    {/* Shared routes */}
+    {SharedRoutes}
+    
+    {/* Catch all route - must be last */}
     <Route path="*" element={<NotFound />} />
   </>
 );
