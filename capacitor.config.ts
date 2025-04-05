@@ -13,6 +13,15 @@ const config: CapacitorConfig = {
   // which might be needed for development
   android: {
     allowMixedContent: true
+  },
+  // Add haptic feedback and native transitions
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: "#FFFFFF",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP"
+    }
   }
 };
 

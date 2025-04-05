@@ -48,6 +48,8 @@ import EmployerAnalytics from './pages/EmployerAnalytics';
 import MobileBottomNav from './components/mobile/MobileBottomNav';
 import FirstJobToolkit from './pages/FirstJobToolkit';
 
+import MobileJobSwipe from './components/mobile/MobileJobSwipe';
+
 function App() {
   console.log('App component rendered');
 
@@ -142,6 +144,13 @@ function App() {
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } />
+              
+              {/* New mobile-optimized routes */}
+              <Route path="/mobile/jobs" element={
+                <ProtectedRoute>
+                  <MobileJobSwipe />
                 </ProtectedRoute>
               } />
               

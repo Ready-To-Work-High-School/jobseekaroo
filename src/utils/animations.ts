@@ -17,7 +17,9 @@ export const useSlideIn = (delay = 0, direction = 'up') => {
   } else if (direction === 'down') {
     return isVisible ? 'animate-slide-down opacity-100' : 'opacity-0 -translate-y-4';
   } else if (direction === 'right') {
-    return isVisible ? 'animate-slide-in-right opacity-100' : 'opacity-0 translate-x-4';
+    return isVisible ? 'animate-slide-in-right opacity-100' : 'opacity-0 -translate-x-4';
+  } else if (direction === 'left') {
+    return isVisible ? 'animate-slide-in-left opacity-100' : 'opacity-0 translate-x-4';
   }
   
   return isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4';
@@ -49,6 +51,42 @@ export const useZoomIn = (delay = 0) => {
   }, [delay]);
 
   return isVisible ? 'animate-zoom-in opacity-100' : 'opacity-0 scale-95';
+};
+
+export const useSwiping = (onSwipeLeft?: () => void, onSwipeRight?: () => void) => {
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    
+    const currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    
+    if (diff > 100) {
+      onSwipeLeft?.();
+      setIsDragging(false);
+    } else if (diff < -100) {
+      onSwipeRight?.();
+      setIsDragging(false);
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+  
+  return {
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    isDragging
+  };
 };
 
 export const useStaggeredChildren = (childCount: number, baseDelay = 100, increment = 50) => {
@@ -93,4 +131,55 @@ export const createAnimationSequence = (animations: { el: HTMLElement; animation
       )
     )
   );
+};
+
+// Mobile gesture detection hooks
+export const useSwipeGesture = (
+  threshold = 50,
+  onSwipeLeft?: () => void,
+  onSwipeRight?: () => void,
+  onSwipeUp?: () => void,
+  onSwipeDown?: () => void
+) => {
+  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    
+    const deltaX = touchStart.x - endX;
+    const deltaY = touchStart.y - endY;
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (Math.abs(deltaX) > threshold) {
+        if (deltaX > 0) {
+          onSwipeLeft?.();
+        } else {
+          onSwipeRight?.();
+        }
+      }
+    } else {
+      // Vertical swipe
+      if (Math.abs(deltaY) > threshold) {
+        if (deltaY > 0) {
+          onSwipeUp?.();
+        } else {
+          onSwipeDown?.();
+        }
+      }
+    }
+  };
+  
+  return {
+    handleTouchStart,
+    handleTouchEnd
+  };
 };
