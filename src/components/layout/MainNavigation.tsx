@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { 
-  Server, 
   Briefcase, 
   BookOpen, 
   GraduationCap, 
@@ -170,12 +169,6 @@ const MainNavigation = ({ className }: { className?: string }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      
-      <Link to="/server-demo" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
-        location.pathname === "/server-demo" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-        <Server className="w-4 h-4" /> 
-        Server Demo
-      </Link>
       
       {isAdmin && (
         <Link to="/admin" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 

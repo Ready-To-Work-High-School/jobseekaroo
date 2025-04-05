@@ -12,7 +12,6 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
-import ServerDemo from './pages/ServerDemo';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminUserManagement from './pages/AdminUserManagement';
 import AdminRedemptionCodes from './pages/AdminRedemptionCodes';
@@ -56,7 +55,6 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/faq" element={<FAQ />} />
-              <Route path="/server-demo" element={<ServerDemo />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/for-employers" element={<ForEmployers />} />
               <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />

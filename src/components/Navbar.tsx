@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -31,12 +32,6 @@ const Navbar = () => {
                   className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Contact
-                </Link>
-                <Link
-                  to="/server-demo"
-                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  API Demo
                 </Link>
                 {user ? (
                   <>
@@ -138,12 +133,6 @@ const Navbar = () => {
             className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
           >
             Contact
-          </Link>
-          <Link
-            to="/server-demo"
-            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            API Demo
           </Link>
           {user ? (
             <>
