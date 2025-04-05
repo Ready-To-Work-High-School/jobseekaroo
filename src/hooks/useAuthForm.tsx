@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from './use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Define form validation schema
+// Define form validation schema for sign up
 export const signUpSchema = z.object({
   firstName: z.string().min(2, { message: 'First name is required' }),
   lastName: z.string().min(2, { message: 'Last name is required' }),
@@ -20,7 +20,15 @@ export const signUpSchema = z.object({
   age: z.number().optional().transform(val => val ? Number(val) : undefined),
 });
 
+// Define form validation schema for sign in
+export const signInSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(1, { message: 'Password is required' }),
+  rememberMe: z.boolean().optional().default(false),
+});
+
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignInFormValues = z.infer<typeof signInSchema>;
 
 export const useAuthForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +36,7 @@ export const useAuthForm = () => {
   const navigate = useNavigate();
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   
-  // Initialize react-hook-form with zod validation
+  // Initialize react-hook-form with zod validation for sign up
   const signUpForm = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -38,6 +46,16 @@ export const useAuthForm = () => {
       password: '',
       agreeToTerms: false,
       userType: 'student',
+    },
+  });
+
+  // Initialize react-hook-form with zod validation for sign in
+  const signInForm = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
     },
   });
 
@@ -88,11 +106,11 @@ export const useAuthForm = () => {
   };
   
   // Sign in handler
-  const handleSignIn = async (email: string, password: string) => {
+  const handleSignIn = async (data: SignInFormValues) => {
     setIsSubmitting(true);
     
     try {
-      const user = await signIn(email, password);
+      const user = await signIn(data.email, data.password);
       
       if (!user) {
         throw new Error('Invalid email or password');
@@ -140,6 +158,7 @@ export const useAuthForm = () => {
   
   return {
     signUpForm,
+    signInForm,
     handleSignUp,
     handleSignIn,
     handleSocialSignIn,
