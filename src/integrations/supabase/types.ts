@@ -727,6 +727,54 @@ export type Database = {
         }
         Relationships: []
       }
+      schools: {
+        Row: {
+          address: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          featured_jobs: string[] | null
+          id: string
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          featured_jobs?: string[] | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          featured_jobs?: string[] | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       skill_resources: {
         Row: {
           created_at: string
