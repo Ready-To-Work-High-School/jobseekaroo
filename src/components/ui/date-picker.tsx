@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { DateRange } from "react-day-picker"
 
 interface DatePickerProps {
   selected?: Date
@@ -40,6 +41,13 @@ export function DatePicker({
     return selected ? format(selected, "PPP") : placeholder
   }, [selected, selectsRange, startDate, endDate, placeholder])
 
+  // Handler for date range selection
+  const handleRangeSelect = (range: DateRange | undefined) => {
+    if (onSelect) {
+      onSelect(range as any);
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -63,7 +71,7 @@ export function DatePicker({
               from: startDate,
               to: endDate
             }}
-            onSelect={onSelect}
+            onSelect={handleRangeSelect}
             defaultMonth={startDate || new Date()}
             numberOfMonths={2}
             disabled={(date) => date < new Date("1900-01-01")}

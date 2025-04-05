@@ -49,10 +49,11 @@ export async function getApplicationStatusCounts(
     // Manual grouping of the results
     if (data) {
       data.forEach(item => {
-        if (!statusCounts[item.status]) {
-          statusCounts[item.status] = 0;
+        const status = item.status || 'unknown';
+        if (!statusCounts[status]) {
+          statusCounts[status] = 0;
         }
-        statusCounts[item.status] += 1;
+        statusCounts[status] += 1;
       });
     }
     
@@ -122,6 +123,8 @@ function processTimelineData(applications: any[]): any[] {
   
   // Group applications by month
   applications.forEach(app => {
+    if (!app.applied_date) return;
+    
     const date = new Date(app.applied_date);
     const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
     const monthName = date.toLocaleString('default', { month: 'short' });

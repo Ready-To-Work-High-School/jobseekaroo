@@ -23,6 +23,7 @@ import {
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { CalendarRange, Filter, RefreshCw } from 'lucide-react';
+import { DateRange } from 'react-day-picker';
 
 // Define the schema for our filter form
 const analyticsFilterSchema = z.object({
@@ -103,19 +104,14 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                       selectsRange={true}
                       startDate={field.value?.from}
                       endDate={field.value?.to}
-                      onSelect={(date) => {
+                      onSelect={(dateRange) => {
                         // Handle the date selection for range
-                        if (date instanceof Date) {
-                          // Single date selected in range mode
+                        if (dateRange && typeof dateRange === 'object') {
+                          // Range object received from Calendar component
+                          const range = dateRange as DateRange;
                           field.onChange({
-                            from: date,
-                            to: field.value?.to,
-                          });
-                        } else {
-                          // Range object selected
-                          field.onChange({
-                            from: date?.from,
-                            to: date?.to,
+                            from: range.from,
+                            to: range.to
                           });
                         }
                       }}
