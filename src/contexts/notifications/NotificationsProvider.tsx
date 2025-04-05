@@ -13,6 +13,21 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
+  // Helper function to transform database response to Notification type
+  const transformNotification = (dbNotification: any): Notification => {
+    return {
+      id: dbNotification.id,
+      user_id: dbNotification.user_id,
+      title: dbNotification.title,
+      message: dbNotification.message,
+      type: dbNotification.type,
+      link: dbNotification.link,
+      read: dbNotification.read,
+      createdAt: dbNotification.created_at,
+      metadata: dbNotification.metadata
+    };
+  };
+  
   useEffect(() => {
     if (!user) return;
 
@@ -29,7 +44,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
         },
         (payload) => {
           // Show toast for new notifications
-          const newNotification = payload.new as Notification;
+          const newNotification = transformNotification(payload.new);
           toast({
             title: newNotification.title,
             description: newNotification.message,
@@ -54,7 +69,9 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
 
         if (error) throw error;
         
-        setNotifications(data as Notification[]);
+        // Transform the data to match our Notification type
+        const transformedData = data.map(transformNotification);
+        setNotifications(transformedData);
       } catch (error) {
         console.error('Error fetching notifications:', error);
         setErrorMessage('Failed to load notifications');
