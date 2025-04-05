@@ -17,7 +17,7 @@ export async function getApplicationStatusCounts(
     // Create the initial query
     let query = supabase
       .from('job_applications')
-      .select('status, count(*)');
+      .select('*');
     
     // Add filters
     if (filters.jobId) {
@@ -36,8 +36,6 @@ export async function getApplicationStatusCounts(
       query = query.lte('applied_date', filters.endDate.toISOString());
     }
     
-    // Using Supabase's Group aggregation feature
-    // Note: We use a different approach since groupBy isn't available
     const { data, error } = await query;
     
     if (error) {

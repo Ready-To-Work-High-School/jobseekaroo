@@ -100,16 +100,25 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                   <FormItem className="flex flex-col">
                     <FormLabel>Date Range</FormLabel>
                     <DatePicker
-                      selected={field.value?.from}
-                      onSelect={(date) => {
-                        field.onChange({
-                          from: date,
-                          to: field.value?.to,
-                        });
-                      }}
-                      selectsRange
+                      selectsRange={true}
                       startDate={field.value?.from}
                       endDate={field.value?.to}
+                      onSelect={(date) => {
+                        // Handle the date selection for range
+                        if (date instanceof Date) {
+                          // Single date selected in range mode
+                          field.onChange({
+                            from: date,
+                            to: field.value?.to,
+                          });
+                        } else {
+                          // Range object selected
+                          field.onChange({
+                            from: date?.from,
+                            to: date?.to,
+                          });
+                        }
+                      }}
                       placeholder="Select date range"
                       className="w-full"
                     />
