@@ -83,8 +83,6 @@ const FirstJobToolkitContent = () => {
         </p>
       </div>
       
-      <StepProgress currentStep={currentStep} totalSteps={totalSteps} stepTitles={stepTitles} />
-      
       <Card className="shadow-md border-t-4 border-t-primary">
         <CardHeader>
           <CardTitle>Step {currentStep}: {stepTitles[currentStep - 1]}</CardTitle>
@@ -102,24 +100,28 @@ const FirstJobToolkitContent = () => {
         </CardContent>
       </Card>
       
-      <div className="flex justify-between mt-6">
-        <Button 
-          variant="outline" 
-          onClick={handlePrevious} 
-          disabled={currentStep === 1}
-          className="flex items-center gap-2"
-        >
-          <ChevronLeft className="h-4 w-4" /> Previous
-        </Button>
+      <div className="flex flex-col space-y-4">
+        <StepProgress currentStep={currentStep} totalSteps={totalSteps} stepTitles={stepTitles} />
         
-        <Button 
-          variant="default" 
-          onClick={handleNext} 
-          disabled={currentStep === totalSteps}
-          className="flex items-center gap-2"
-        >
-          Next <ChevronRight className="h-4 w-4" />
-        </Button>
+        <div className="flex justify-between">
+          <Button 
+            variant="outline" 
+            onClick={handlePrevious} 
+            disabled={currentStep === 1}
+            className="flex items-center gap-2"
+          >
+            <ChevronLeft className="h-4 w-4" /> Previous
+          </Button>
+          
+          <Button 
+            variant="default" 
+            onClick={handleNext} 
+            disabled={currentStep === totalSteps}
+            className="flex items-center gap-2"
+          >
+            Next <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

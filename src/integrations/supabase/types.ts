@@ -30,6 +30,33 @@ export type Database = {
         }
         Relationships: []
       }
+      badge_definitions: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          name: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          icon: string
+          id?: string
+          name: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          type?: string
+        }
+        Relationships: []
+      }
       contacts: {
         Row: {
           created_at: string
@@ -116,6 +143,62 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      employer_endorsements: {
+        Row: {
+          badge_ids: string[]
+          created_at: string
+          employer_id: string
+          endorsement_text: string
+          id: string
+          student_id: string
+        }
+        Insert: {
+          badge_ids: string[]
+          created_at?: string
+          employer_id: string
+          endorsement_text: string
+          id?: string
+          student_id: string
+        }
+        Update: {
+          badge_ids?: string[]
+          created_at?: string
+          employer_id?: string
+          endorsement_text?: string
+          id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employer_endorsements_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "conversations_with_participants_view"
+            referencedColumns: ["participant_id"]
+          },
+          {
+            foreignKeyName: "employer_endorsements_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employer_endorsements_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "conversations_with_participants_view"
+            referencedColumns: ["participant_id"]
+          },
+          {
+            foreignKeyName: "employer_endorsements_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       job_applications: {
         Row: {
@@ -458,6 +541,7 @@ export type Database = {
           resume_data_encrypted: string | null
           resume_url: string | null
           skills: string[] | null
+          student_badges: Json
           updated_at: string
           user_type: string | null
           verification_notes: string | null
@@ -482,6 +566,7 @@ export type Database = {
           resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
+          student_badges?: Json
           updated_at?: string
           user_type?: string | null
           verification_notes?: string | null
@@ -506,6 +591,7 @@ export type Database = {
           resume_data_encrypted?: string | null
           resume_url?: string | null
           skills?: string[] | null
+          student_badges?: Json
           updated_at?: string
           user_type?: string | null
           verification_notes?: string | null

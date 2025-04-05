@@ -13,7 +13,7 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
   const progressPercentage = (currentStep / totalSteps) * 100;
   
   return (
-    <div className="space-y-4 mb-6">
+    <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-center">
         <span className="text-sm font-medium text-muted-foreground mb-2 sm:mb-0">
           Step {currentStep} of {totalSteps}
@@ -23,9 +23,12 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
         </span>
       </div>
       
-      <Progress value={progressPercentage} className="h-2" />
+      <Progress 
+        value={progressPercentage} 
+        className="h-3 progress-lavender-gold-purple" 
+      />
       
-      <div className="grid grid-cols-5 gap-1 mt-2">
+      <div className="grid grid-cols-6 gap-1 mt-2">
         {stepTitles.map((title, index) => (
           <div 
             key={index} 
