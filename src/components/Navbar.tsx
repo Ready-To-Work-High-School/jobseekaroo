@@ -1,176 +1,155 @@
+
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Menu, X, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/auth';
+import { NavbarNotifications } from '@/components/notifications/NavbarNotifications';
 
 const Navbar = () => {
-  const { user, userProfile, signOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth();
   
-  const userDisplayName = userProfile ? 
-    `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : 
-    (user?.email || 'User');
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <nav className="bg-indigo-600">
+    <nav className="bg-white shadow-sm dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Link to="/" className="text-white font-bold text-xl">
-                Job Seekers 4 High Schools
-              </Link>
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  to="/"
-                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
+            <Link to="/" className="flex-shrink-0 text-xl font-bold text-gray-900 dark:text-white">
+              JobHub
+            </Link>
+            
+            <div className="hidden md:block ml-10">
+              <div className="flex space-x-4">
+                <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
                   Home
                 </Link>
-                <Link
-                  to="/entrepreneurship-academy"
-                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Our Program
+                <Link to="/jobs" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  Jobs
                 </Link>
-                <Link
-                  to="/for-employers"
-                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Employers
-                </Link>
-                <Link
-                  to="/about"
-                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  About
-                </Link>
-                {user ? (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      to="/profile"
-                      className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Profile
-                    </Link>
-                    {userProfile?.user_type === 'admin' && (
-                      <Link
-                        to="/admin"
-                        className="text-red-300 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                      >
-                        Admin
-                      </Link>
-                    )}
-                  </>
-                ) : null}
+                {user && (
+                  <Link to="/dashboard" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                    Dashboard
+                  </Link>
+                )}
               </div>
             </div>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              {user && (
-                <div className="relative">
-                  <div className="flex items-center">
-                    <span className="text-white mr-4">
-                      Hello, {userDisplayName}
-                    </span>
-                    <button
-                      onClick={signOut}
-                      className="text-indigo-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+          
+          <div className="hidden md:flex items-center space-x-2">
+            {/* Notifications icon for job seekers */}
+            <NavbarNotifications />
+            
+            {user ? (
+              <div className="flex items-center">
+                <Button variant="ghost" onClick={() => signOut()} className="ml-2">
+                  Sign Out
+                </Button>
+                <Link to="/profile">
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link to="/signin">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link to="/signup">
+                  <Button variant="default" className="ml-2">Sign Up</Button>
+                </Link>
+              </div>
+            )}
           </div>
-          <div className="-mr-2 flex md:hidden">
-            <button
-              type="button"
-              className="bg-indigo-700 inline-flex items-center justify-center p-2 rounded-md text-indigo-200 hover:text-white hover:bg-indigo-800 focus:outline-none"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="block h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+          
+          <div className="md:hidden flex items-center">
+            {/* Mobile Notifications icon */}
+            <NavbarNotifications />
+            
+            <Button variant="ghost" onClick={toggleMenu} className="ml-2">
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
           </div>
         </div>
       </div>
 
-      <div className="md:hidden hidden" id="mobile-menu">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link
-            to="/"
-            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Home
-          </Link>
-          <Link
-            to="/entrepreneurship-academy"
-            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Our Program
-          </Link>
-          <Link
-            to="/for-employers"
-            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Employers
-          </Link>
-          <Link
-            to="/about"
-            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            About
-          </Link>
-          {user ? (
-            <>
-              <Link
-                to="/dashboard"
-                className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <Link 
+              to="/" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/jobs" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              Jobs
+            </Link>
+            {user && (
+              <Link 
+                to="/dashboard" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                onClick={() => setIsOpen(false)}
               >
                 Dashboard
               </Link>
-              <Link
-                to="/profile"
-                className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Profile
-              </Link>
-              {userProfile?.user_type === 'admin' && (
-                <Link
-                  to="/admin"
-                  className="text-red-300 hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+            )}
+            {user ? (
+              <>
+                <Link 
+                  to="/profile" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Admin
+                  Profile
                 </Link>
-              )}
-              <button
-                onClick={signOut}
-                className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : null}
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    signOut();
+                    setIsOpen(false);
+                  }} 
+                  className="w-full text-left px-3 py-2"
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  to="/signin" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
