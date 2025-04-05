@@ -11,6 +11,7 @@ import Applications from '../pages/Applications';
 import Settings from '../pages/Settings';
 import ResumeAssistant from '../pages/ResumeAssistant';
 import Skills from '../pages/Skills';
+import Resources from '../pages/Resources';
 
 // Routes that require authentication to access
 export const ProtectedRoutes = (
@@ -83,6 +84,14 @@ export const ProtectedRoutes = (
       <ProtectedRoute>
         <Layout>
           <Skills />
+        </Layout>
+      </ProtectedRoute>
+    } />
+    
+    <Route path="/resources" element={
+      <ProtectedRoute>
+        <Layout>
+          <Resources />
         </Layout>
       </ProtectedRoute>
     } />

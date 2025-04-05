@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 import Contact from '../pages/Contact';
 import About from '../pages/About';
 import FAQ from '../pages/FAQ';
-import Resources from '../pages/Resources';
 import ForEmployers from '../pages/ForEmployers';
 import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
 import License from '../pages/License';
@@ -23,7 +22,6 @@ export const PublicRoutes = (
     <Route path="/contact" element={<Contact />} />
     <Route path="/about" element={<About />} />
     <Route path="/faq" element={<FAQ />} />
-    <Route path="/resources" element={<Resources />} />
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/license" element={<License />} />
