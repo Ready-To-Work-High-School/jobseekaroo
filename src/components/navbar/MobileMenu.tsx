@@ -1,8 +1,6 @@
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { MobileNavLink } from './MobileNavLink';
 import {
   Sheet,
   SheetContent,
@@ -10,44 +8,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { MobileNavLink } from './MobileNavLink';
+import { useMobileMenu } from './useMobileMenu';
 import {
-  Menu as MenuIcon,
-  Home,
-  Search,
-  BookOpen,
-  Building2,
-  FileText,
-  TrendingUp,
-  BookMarked,
-  CheckSquare,
-  User,
-  LogOut,
-  Shield,
-  GraduationCap,
-  Briefcase,
-  PenLine,
-  Headphones,
-  BarChart,
-  Award,
-  Compass,
-} from 'lucide-react';
+  PrimaryNavigationLinks,
+  JobSeekersSection,
+  ResourcesSection,
+  AuthenticatedUserLinks,
+  AdminLink,
+  SignOutButton,
+  UnauthenticatedUserLinks
+} from './MobileMenuSections';
+import { MenuIcon } from 'lucide-react';
 
 export const MobileMenu = () => {
-  const { user, signOut, userProfile } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isAdmin = userProfile?.user_type === 'admin';
-  const isEmployer = userProfile?.user_type === 'employer';
-  
-  // Debug logs
-  console.log("MobileMenu (navbar) - User profile:", userProfile);
-  console.log("MobileMenu (navbar) - Is admin:", isAdmin);
-  console.log("MobileMenu (navbar) - Current path:", location.pathname);
-
-  // Function to get the redirect path based on auth status
-  const getPath = (authenticatedPath: string) => {
-    return user ? authenticatedPath : "/sign-in";
-  };
+  const {
+    user,
+    isAdmin,
+    getPath,
+    handleSignOut
+  } = useMobileMenu();
 
   return (
     <Sheet>
@@ -67,123 +47,32 @@ export const MobileMenu = () => {
           </MobileNavLink>
           
           {/* Primary Navigation Links - Highlighted at top */}
-          <div className="px-4 py-2 my-1 bg-blue-50">
-            <MobileNavLink to="/entrepreneurship-academy">
-              <GraduationCap className="h-5 w-5" />
-              <span className="font-semibold">Our Program</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/first-job-toolkit">
-              <Compass className="h-5 w-5" />
-              <span className="font-semibold">First Job Toolkit</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/student-success">
-              <Award className="h-5 w-5" />
-              <span className="font-semibold">Student Success</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/jobs">
-              <Briefcase className="h-5 w-5" />
-              <span className="font-semibold">Browse Jobs</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/for-employers">
-              <Building2 className="h-5 w-5" />
-              <span className="font-semibold">For Employers</span>
-            </MobileNavLink>
-            
-            <MobileNavLink to="/resources">
-              <BookOpen className="h-5 w-5" />
-              <span className="font-semibold">Student Resources</span>
-            </MobileNavLink>
-          </div>
+          <PrimaryNavigationLinks />
           
           {/* Job Seeker Section */}
-          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
-            For Job Seekers
-          </div>
-          
-          <MobileNavLink to={getPath("/skills")}>
-            <GraduationCap className="h-5 w-5" />
-            Skills Development
-          </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/resume-assistant")}>
-            <PenLine className="h-5 w-5" />
-            Resume Help
-          </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/interview-prep")}>
-            <Headphones className="h-5 w-5" />
-            Interview Prep
-          </MobileNavLink>
+          <JobSeekersSection getPath={getPath} />
           
           {/* Resources Section */}
-          <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
-            Resources
-          </div>
-          
-          <MobileNavLink to="/resources">
-            <BookOpen className="h-5 w-5" />
-            Career Resources
-          </MobileNavLink>
-          
-          <MobileNavLink to={getPath("/analytics")}>
-            <BarChart className="h-5 w-5" />
-            Analytics Dashboard
-          </MobileNavLink>
+          <ResourcesSection getPath={getPath} />
           
           {user ? (
             <>
-              <div className="border-t border-border/60 my-2"></div>
+              {/* Authenticated User Links */}
+              <AuthenticatedUserLinks onSignOut={handleSignOut} />
               
-              <MobileNavLink to="/saved-jobs">
-                <BookMarked className="h-5 w-5" />
-                Saved Jobs
-              </MobileNavLink>
+              {/* Admin Section - Only for admin users */}
+              {isAdmin && <AdminLink />}
               
-              <MobileNavLink to="/applications">
-                <CheckSquare className="h-5 w-5" />
-                Applications
-              </MobileNavLink>
-              
-              <MobileNavLink to="/profile">
-                <User className="h-5 w-5" />
-                Profile
-              </MobileNavLink>
-              
-              {isAdmin && (
-                <MobileNavLink to="/admin">
-                  <Shield className="h-5 w-5" />
-                  Admin Panel
-                </MobileNavLink>
-              )}
-              
-              <div 
-                className="flex items-center gap-3 px-4 py-3 text-base cursor-pointer hover:bg-muted"
-                onClick={() => {
-                  signOut();
-                  navigate('/');
-                }}
-              >
-                <LogOut className="h-5 w-5" />
-                Sign Out
-              </div>
+              {/* Sign Out Button */}
+              <SignOutButton onSignOut={handleSignOut} />
             </>
           ) : (
-            <>
-              <div className="border-t border-border/60 my-2"></div>
-              <MobileNavLink to="/sign-in">
-                Sign In
-              </MobileNavLink>
-              <MobileNavLink to="/sign-up">
-                Sign Up
-              </MobileNavLink>
-            </>
+            <UnauthenticatedUserLinks />
           )}
         </nav>
       </SheetContent>
     </Sheet>
   );
 };
+
+export default MobileMenu;
