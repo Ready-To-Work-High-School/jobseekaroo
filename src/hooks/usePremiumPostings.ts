@@ -4,6 +4,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
+// Define premium posting types
+interface PremiumPosting {
+  id: string;
+  user_id: string;
+  job_id: string;
+  is_featured: boolean;
+  is_trial: boolean;
+  trial_expires_at?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
 export function usePremiumPostings() {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
@@ -23,7 +35,7 @@ export function usePremiumPostings() {
         .from('premium_postings')
         .select('*')
         .eq('user_id', user.id)
-        .eq('is_trial', true);
+        .eq('is_trial', true) as { data: PremiumPosting[] | null, error: any };
         
       if (checkError) throw checkError;
       
@@ -47,7 +59,7 @@ export function usePremiumPostings() {
           trial_expires_at: expiryDate.toISOString()
         })
         .select()
-        .single();
+        .single() as { data: PremiumPosting | null, error: any };
         
       if (error) throw error;
       
@@ -89,7 +101,7 @@ export function usePremiumPostings() {
         .from('premium_postings')
         .select('*')
         .eq('user_id', user.id)
-        .eq('is_trial', true);
+        .eq('is_trial', true) as { data: PremiumPosting[] | null, error: any };
         
       if (error) throw error;
       
@@ -109,7 +121,7 @@ export function usePremiumPostings() {
       const { data, error } = await supabase
         .from('premium_postings')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id) as { data: PremiumPosting[] | null, error: any };
         
       if (error) throw error;
       

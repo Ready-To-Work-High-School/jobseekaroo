@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import Layout from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { useFadeIn } from '@/utils/animations';
-import { School } from '@/types/school';
+import { School, SchoolData } from '@/types/school';
 
 const SchoolLanding = () => {
   const [schoolData, setSchoolData] = useState<School | null>(null);
@@ -31,11 +31,13 @@ const SchoolLanding = () => {
             .from('schools')
             .select('*')
             .eq('slug', schoolName)
-            .single();
+            .single() as { data: SchoolData | null, error: any };
             
           if (error) throw error;
           
-          setSchoolData(data);
+          if (data) {
+            setSchoolData(data as School);
+          }
         } else {
           // Redirect to main page if not on a school subdomain
           navigate('/');

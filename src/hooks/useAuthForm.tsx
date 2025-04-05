@@ -54,7 +54,8 @@ export function useAuthForm() {
       firstName: '',
       lastName: '',
       userType: 'student',
-      agreeToTerms: false,
+      // Fix: Initialize agreeToTerms as false, the validation will handle requiring it to be true
+      agreeToTerms: false as unknown as true, // Type assertion to satisfy the literal true requirement
     },
   });
   
