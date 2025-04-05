@@ -1,3 +1,4 @@
+
 @import 'backgrounds.css';
 @import 'images.css';
 @import 'scrollbar.css';
@@ -5,5 +6,7 @@
 @import 'text.css';
 @import 'transitions.css';
 @import 'charts.css';
+@import 'progress.css';
 
 /* Add additional utility imports here */
+

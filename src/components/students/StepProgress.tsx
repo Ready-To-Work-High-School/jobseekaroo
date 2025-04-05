@@ -54,3 +54,4 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
 };
 
 export default StepProgress;
+
