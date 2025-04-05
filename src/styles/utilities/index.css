@@ -1,12 +1,9 @@
+@import 'backgrounds.css';
+@import 'images.css';
+@import 'scrollbar.css';
+@import 'selection.css';
+@import 'text.css';
+@import 'transitions.css';
+@import 'charts.css';
 
-/* Import all utility files */
-@import './scrollbar.css';
-@import './selection.css';
-@import './images.css';
-@import './transitions.css';
-@import './backgrounds.css';
-@import './progress.css';
-@import './text.css';
-@import './glow.css';
-@import './gradients.css';
-@import './logo.css';
+/* Add additional utility imports here */
