@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,33 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield, CheckCircle, AlertCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { 
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+// Validation schema for parent information
+const parentSchema = z.object({
+  parentName: z.string().min(2, "Parent name must be at least 2 characters"),
+  parentEmail: z.string().email("Please enter a valid email address"),
+  consentGiven: z.boolean().refine(val => val === true, {
+    message: "You must agree to receive the verification email"
+  })
+});
+
+// Validation schema for verification code
+const verificationSchema = z.object({
+  code: z.string().min(4, "Verification code must be at least 4 characters")
+});
 
 const ParentalConsentFlow = () => {
   const [step, setStep] = useState<'introduction' | 'parentEmail' | 'verification' | 'complete'>('introduction');
@@ -15,28 +43,42 @@ const ParentalConsentFlow = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isConsentGiven, setIsConsentGiven] = useState(false);
   const [parentName, setParentName] = useState('');
+  const [showHelp, setShowHelp] = useState(false);
   const { toast } = useToast();
   const { user, userProfile, updateProfile } = useAuth();
   const isMobile = useIsMobile();
   
-  const handleSendVerification = async () => {
-    if (!parentEmail) {
-      toast({
-        title: "Email Required",
-        description: "Please enter a parent or guardian email address",
-        variant: "destructive"
-      });
-      return;
+  // Parent information form
+  const parentForm = useForm<z.infer<typeof parentSchema>>({
+    resolver: zodResolver(parentSchema),
+    defaultValues: {
+      parentName: "",
+      parentEmail: "",
+      consentGiven: false
     }
-    
+  });
+
+  // Verification code form
+  const verificationForm = useForm<z.infer<typeof verificationSchema>>({
+    resolver: zodResolver(verificationSchema),
+    defaultValues: {
+      code: ""
+    }
+  });
+  
+  const handleSendVerification = async (values: z.infer<typeof parentSchema>) => {
     setIsLoading(true);
     try {
+      // Store values for later use
+      setParentName(values.parentName);
+      setParentEmail(values.parentEmail);
+      
       // Here we would integrate with the backend to send a verification email
       // For now, we'll simulate a successful send
       
       toast({
         title: "Verification Email Sent",
-        description: "A verification code has been sent to the parent/guardian email"
+        description: `A verification code has been sent to ${values.parentEmail}`
       });
       setStep('verification');
     } catch (error) {
@@ -50,20 +92,12 @@ const ParentalConsentFlow = () => {
     }
   };
   
-  const handleVerify = async () => {
-    if (!verificationCode) {
-      toast({
-        title: "Code Required",
-        description: "Please enter the verification code sent to the parent/guardian",
-        variant: "destructive"
-      });
-      return;
-    }
-    
+  const handleVerify = async (values: z.infer<typeof verificationSchema>) => {
     setIsLoading(true);
     try {
       // Here we would integrate with the backend to verify the code
       // For now, we'll simulate success with any code entry
+      setVerificationCode(values.code);
       
       toast({
         title: "Verification Successful",
@@ -77,7 +111,8 @@ const ParentalConsentFlow = () => {
           ...(userProfile?.preferences || {}),
           parentalConsentVerified: true,
           parentalConsentDate: new Date().toISOString(),
-          parentEmail
+          parentEmail,
+          parentName
         };
         
         // Update the user profile with the new preferences
@@ -117,70 +152,109 @@ const ParentalConsentFlow = () => {
               you with job opportunities. Your parent/guardian must consent to this data collection.
             </p>
           </div>
-          <Button 
-            className="w-full" 
-            onClick={() => setStep('parentEmail')}
-          >
-            Continue
-          </Button>
+          <div className="flex flex-col space-y-2 mt-2">
+            <Button 
+              className="w-full" 
+              onClick={() => setStep('parentEmail')}
+            >
+              Continue
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full text-blue-600" 
+              onClick={() => setShowHelp(true)}
+            >
+              Learn More About COPPA
+            </Button>
+          </div>
         </div>
       )}
       
       {step === 'parentEmail' && (
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-center">Parent/Guardian Information</h2>
-          <div className="space-y-3">
-            <div className="space-y-2">
-              <Label htmlFor="parentName">Parent/Guardian Name</Label>
-              <Input
-                id="parentName"
-                type="text"
-                value={parentName}
-                onChange={(e) => setParentName(e.target.value)}
-                placeholder="Full name"
+          
+          <Form {...parentForm}>
+            <form onSubmit={parentForm.handleSubmit(handleSendVerification)} className="space-y-4">
+              <FormField
+                control={parentForm.control}
+                name="parentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Parent/Guardian Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Full name" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="parentEmail">Parent/Guardian Email</Label>
-              <Input
-                id="parentEmail"
-                type="email"
-                value={parentEmail}
-                onChange={(e) => setParentEmail(e.target.value)}
-                placeholder="email@example.com"
+              
+              <FormField
+                control={parentForm.control}
+                name="parentEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Parent/Guardian Email</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="email@example.com" 
+                        type="email"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      We'll send a verification code to this email address
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <p className="text-xs text-gray-500">
-                We'll send a verification code to this email address
-              </p>
-            </div>
-            <div className="flex items-start space-x-2 pt-2">
-              <Checkbox 
-                id="consent" 
-                checked={isConsentGiven}
-                onCheckedChange={(checked) => setIsConsentGiven(checked as boolean)}
+              
+              <FormField
+                control={parentForm.control}
+                name="consentGiven"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-2">
+                    <FormControl>
+                      <Checkbox 
+                        checked={field.value}
+                        onCheckedChange={field.onChange} 
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        I confirm that I am providing the correct parent/guardian email and they have agreed to
+                        receive a verification message.
+                      </FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Label htmlFor="consent" className="text-sm">
-                I confirm that I am providing the correct parent/guardian email and they have agreed to
-                receive a verification message.
-              </Label>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={() => setStep('introduction')}
-              className="flex-1"
-            >
-              Back
-            </Button>
-            <Button 
-              className="flex-1" 
-              onClick={handleSendVerification}
-              disabled={!parentEmail || !isConsentGiven || isLoading}
-            >
-              {isLoading ? "Sending..." : "Send Verification"}
-            </Button>
-          </div>
+              
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  onClick={() => setStep('introduction')}
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button 
+                  type="submit"
+                  className="flex-1" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Sending..." : "Send Verification"}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </div>
       )}
       
@@ -191,38 +265,60 @@ const ParentalConsentFlow = () => {
             A verification code has been sent to {parentEmail}. Please ask your parent/guardian
             to check their email and enter the code below.
           </p>
-          <div className="space-y-2">
-            <Label htmlFor="verificationCode">Verification Code</Label>
-            <Input
-              id="verificationCode"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder="Enter the 6-digit code"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={() => setStep('parentEmail')}
-              className="flex-1"
-            >
-              Back
-            </Button>
-            <Button 
-              className="flex-1" 
-              onClick={handleVerify}
-              disabled={!verificationCode || isLoading}
-            >
-              {isLoading ? "Verifying..." : "Verify"}
-            </Button>
-          </div>
-          <button 
-            type="button" 
-            className="text-sm text-blue-600 hover:underline mx-auto block"
-            onClick={handleSendVerification}
-          >
-            Resend code
-          </button>
+          
+          <Form {...verificationForm}>
+            <form onSubmit={verificationForm.handleSubmit(handleVerify)} className="space-y-4">
+              <FormField
+                control={verificationForm.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verification Code</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter the verification code"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  type="button" 
+                  onClick={() => setStep('parentEmail')}
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button 
+                  type="submit"
+                  className="flex-1" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Verifying..." : "Verify"}
+                </Button>
+              </div>
+              
+              <button 
+                type="button" 
+                className="text-sm text-blue-600 hover:underline mx-auto block"
+                onClick={() => {
+                  parentForm.getValues().parentEmail && 
+                  handleSendVerification({
+                    parentName: parentForm.getValues().parentName,
+                    parentEmail: parentForm.getValues().parentEmail,
+                    consentGiven: true
+                  })
+                }}
+              >
+                Resend code
+              </button>
+            </form>
+          </Form>
         </div>
       )}
       
@@ -235,7 +331,7 @@ const ParentalConsentFlow = () => {
           </div>
           <h2 className="text-2xl font-bold text-center">Consent Verified</h2>
           <p className="text-gray-600">
-            Thank you! Parental consent has been verified. You can now use all features of
+            Thank you! Parental consent has been verified for {user?.email}. You can now use all features of
             the application.
           </p>
           <Button className="w-full" asChild>
@@ -249,6 +345,50 @@ const ParentalConsentFlow = () => {
           For assistance, please contact support at <a href="mailto:support@js4hs.com" className="text-blue-600 hover:underline">support@js4hs.com</a>
         </p>
       </div>
+      
+      {/* COPPA Information Dialog */}
+      <Dialog open={showHelp} onOpenChange={setShowHelp}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>About COPPA Compliance</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 text-sm">
+            <p>
+              <strong>The Children's Online Privacy Protection Act (COPPA)</strong> is a law that protects the privacy of children under 13. 
+              Although our service primarily targets high school students (ages 14-18), we take all privacy protections seriously.
+            </p>
+            
+            <h3 className="font-bold">What information do we collect?</h3>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Basic profile information (name, age, school)</li>
+              <li>Contact details (email address)</li>
+              <li>Employment interests and skills</li>
+              <li>Job application history</li>
+            </ul>
+            
+            <h3 className="font-bold">How do we use this information?</h3>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>To match students with appropriate job opportunities</li>
+              <li>To help employers contact students about positions</li>
+              <li>To improve our service and job recommendations</li>
+            </ul>
+            
+            <h3 className="font-bold">Parent/Guardian Rights:</h3>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>View your child's personal information</li>
+              <li>Request deletion of your child's data</li>
+              <li>Revoke consent at any time</li>
+            </ul>
+            
+            <p className="text-xs italic">
+              For more information, please review our <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a> or contact us at <a href="mailto:privacy@js4hs.com" className="text-blue-600 hover:underline">privacy@js4hs.com</a>
+            </p>
+          </div>
+          
+          <Button onClick={() => setShowHelp(false)}>Close</Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
