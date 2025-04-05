@@ -40,7 +40,7 @@ const ForEmployers = () => {
             </div>
             <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
               <Link to="/employer-premium">
-                Explore Premium Features
+                Explore Premium Features - Plans from $49.99/mo
               </Link>
             </Button>
           </div>

@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 text-xl font-bold text-gray-900 dark:text-white">
-              JobHub
+              Job Seekers 4 HS
             </Link>
             
             <div className="hidden md:block ml-10">

@@ -17,6 +17,7 @@ const PremiumFeaturesCard: React.FC = () => {
         <li>Custom report generation</li>
         <li>Interactive data visualization tools</li>
       </ul>
+      <p className="text-sm font-medium mb-3">Plans starting from $49.99/month</p>
       <Button asChild>
         <Link to="/employer-premium">Upgrade to Premium</Link>
       </Button>
