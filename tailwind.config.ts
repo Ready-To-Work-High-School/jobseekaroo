@@ -65,6 +65,13 @@ const config = {
           800: "#1e40af", // blue-800 equivalent
           900: "#1e3a8a", // blue-900 equivalent
         },
+        lavender: {
+          300: "#d8b4fe", // Light lavender
+          400: "#c084fc", // Medium-light lavender
+          500: "#a855f7", // Medium lavender
+          600: "#9333ea", // Medium-dark lavender
+          700: "#7e22ce", // Dark lavender
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
