@@ -7,6 +7,7 @@ import StepTwo from '@/components/students/toolkit-steps/StepTwo';
 import StepThree from '@/components/students/toolkit-steps/StepThree';
 import StepFour from '@/components/students/toolkit-steps/StepFour';
 import StepFive from '@/components/students/toolkit-steps/StepFive';
+import BadgesStep from '@/components/students/toolkit-steps/BadgesStep';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ConfettiAnimation from '@/components/auth/redemption/ConfettiAnimation';
@@ -15,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 const FirstJobToolkitContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
-  const totalSteps = 5;
+  const totalSteps = 6; // Added one more step for badges
   const { toast } = useToast();
   
   const stepComponents = [
@@ -23,7 +24,8 @@ const FirstJobToolkitContent = () => {
     <StepTwo key="step-2" />,
     <StepThree key="step-3" />,
     <StepFour key="step-4" />,
-    <StepFive key="step-5" />
+    <StepFive key="step-5" />,
+    <BadgesStep key="step-6" /> // New badges step
   ];
   
   const stepTitles = [
@@ -31,7 +33,8 @@ const FirstJobToolkitContent = () => {
     "Resume Builder",
     "Job Search Strategy",
     "Interview Preparation",
-    "First Job Success"
+    "First Job Success",
+    "Career Badges" // New step title
   ];
   
   const handlePrevious = () => {
@@ -74,7 +77,7 @@ const FirstJobToolkitContent = () => {
       {showConfetti && <ConfettiAnimation />}
       
       <div className="flex flex-col items-center text-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Your First Job in 5 Steps</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Your First Job in {totalSteps} Steps</h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
           Our guided toolkit to help you land and succeed in your first job. Complete each step to build your job readiness!
         </p>
@@ -91,6 +94,7 @@ const FirstJobToolkitContent = () => {
             {currentStep === 3 && "Learn effective job search strategies for entry-level positions."}
             {currentStep === 4 && "Practice and prepare for your upcoming interviews."}
             {currentStep === 5 && "Tips and resources for success in your first job."}
+            {currentStep === 6 && "Earn badges through quizzes and employer endorsements to showcase your skills and character."}
           </CardDescription>
         </CardHeader>
         <CardContent>
