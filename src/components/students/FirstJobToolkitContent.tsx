@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import StepProgress from '@/components/students/StepProgress';
 import StepOne from '@/components/students/toolkit-steps/StepOne';
@@ -9,10 +9,14 @@ import StepFour from '@/components/students/toolkit-steps/StepFour';
 import StepFive from '@/components/students/toolkit-steps/StepFive';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ConfettiAnimation from '@/components/auth/redemption/ConfettiAnimation';
+import { useToast } from '@/hooks/use-toast';
 
 const FirstJobToolkitContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showConfetti, setShowConfetti] = useState(false);
   const totalSteps = 5;
+  const { toast } = useToast();
   
   const stepComponents = [
     <StepOne key="step-1" />,
@@ -39,11 +43,34 @@ const FirstJobToolkitContent = () => {
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
+      
+      // If advancing to the final step, show confetti and toast
+      if (currentStep === totalSteps - 1) {
+        setShowConfetti(true);
+        toast({
+          title: "Congratulations! 🎉",
+          description: "You've completed the First Job Toolkit!",
+        });
+        
+        // Hide confetti after 5 seconds
+        setTimeout(() => {
+          setShowConfetti(false);
+        }, 5000);
+      }
     }
   };
   
+  // Clean up any timers when component unmounts
+  useEffect(() => {
+    return () => {
+      clearTimeout();
+    };
+  }, []);
+  
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {showConfetti && <ConfettiAnimation />}
+      
       <div className="flex flex-col items-center text-center mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Your First Job in 5 Steps</h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
