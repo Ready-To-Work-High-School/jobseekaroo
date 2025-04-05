@@ -16,17 +16,17 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
     <nav className={className}>
       <div className="hidden md:flex items-center space-x-1">
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/jobs" className="flex items-center gap-1">
-          <Briefcase className="h-4 w-4" />
-          <span>Jobs</span>
-        </NavLink>
         <NavLink to="/student-success" className="flex items-center gap-1">
-          <Award className="h-4 w-4" />
+          <GraduationCap className="h-4 w-4" />
           <span>Students</span>
         </NavLink>
         <NavLink to="/for-employers" className="flex items-center gap-1">
           <Building2 className="h-4 w-4" />
           <span>Employers</span>
+        </NavLink>
+        <NavLink to="/jobs" className="flex items-center gap-1">
+          <Briefcase className="h-4 w-4" />
+          <span>Jobs</span>
         </NavLink>
         <NavLink to="/about" className="flex items-center gap-1">
           <Info className="h-4 w-4" />

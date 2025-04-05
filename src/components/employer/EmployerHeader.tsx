@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Shield } from 'lucide-react';
+import { ExternalLink, Shield, TrendingUp, Users, Clock } from 'lucide-react';
 import { useSlideIn } from '@/utils/animations';
 
 const EmployerHeader = () => {
@@ -29,10 +29,36 @@ const EmployerHeader = () => {
         <h1 className="text-4xl font-bold mb-6">
           Hire Trained Students with Verified Skills
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
           Connect with Westside High School's Entrepreneurship and Nursing Academies to find pre-trained students
           with industry-recognized credentials who are ready to join your workforce.
         </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+            <Users className="h-8 w-8 text-blue-600 mb-2" />
+            <h3 className="font-medium mb-1">Untapped Talent Pool</h3>
+            <p className="text-sm text-gray-600 text-center">
+              Access motivated young workers for flexible roles overlooked by mainstream platforms
+            </p>
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+            <TrendingUp className="h-8 w-8 text-green-600 mb-2" />
+            <h3 className="font-medium mb-1">Growing Demand</h3>
+            <p className="text-sm text-gray-600 text-center">
+              Join the trend of businesses hiring high schoolers for entry-level and part-time positions
+            </p>
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+            <Clock className="h-8 w-8 text-amber-600 mb-2" />
+            <h3 className="font-medium mb-1">Streamlined Hiring</h3>
+            <p className="text-sm text-gray-600 text-center">
+              Save time with our pre-vetted candidates ready to start in retail, hospitality, and more
+            </p>
+          </div>
+        </div>
         
         <div className="mt-8">
           <Button asChild size="lg" className="gap-2">

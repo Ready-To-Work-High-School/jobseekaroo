@@ -2,6 +2,7 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
+import { BookOpen, Briefcase, GraduationCap, TrendingUp, UserCheck } from 'lucide-react';
 
 const About = () => {
   return (
@@ -27,26 +28,55 @@ const About = () => {
             </p>
           </div>
           
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">What We Do</h2>
-            <ul className="list-disc pl-6 space-y-2 text-lg">
-              <li>Connect students with credential-ready employment opportunities</li>
-              <li>Provide skills development resources tailored to in-demand careers</li>
-              <li>Offer resume and interview preparation assistance</li>
-              <li>Facilitate relationships between schools, students, and employers</li>
-              <li>Support entrepreneurship and innovation among young people</li>
-            </ul>
+          <div className="mb-12 bg-blue-50 p-6 rounded-lg border border-blue-100">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <UserCheck className="mr-2 text-blue-600" />
+              Serving an Untapped Niche
+            </h2>
+            <p className="text-lg mb-4">
+              While platforms like LinkedIn target professionals and Indeed takes a broad approach, we focus exclusively 
+              on high school students aged 16-18 who are often overlooked by mainstream job platforms.
+            </p>
+            <div className="bg-white p-4 rounded border border-blue-200 mb-4">
+              <p className="font-medium text-blue-800">
+                According to a 2023 U.S. Bureau of Labor Statistics report, approximately 34% of 16-19-year-olds 
+                were in the labor force, yet many struggle to find age-appropriate jobs.
+              </p>
+            </div>
+            <p className="text-lg">
+              We've built the platform these students need: specialized for entry-level, part-time, or internship 
+              roles that don't require prior experience.
+            </p>
           </div>
           
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Our Partners</h2>
+          <div className="mb-12 bg-amber-50 p-6 rounded-lg border border-amber-100">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <Briefcase className="mr-2 text-amber-600" />
+              Meeting Employer Demand
+            </h2>
             <p className="text-lg mb-4">
-              We work with leading companies, educational institutions, and community organizations to create 
-              a comprehensive support network for students transitioning from school to career.
+              Businesses in retail, hospitality, startups, and other sectors actively seek young, eager workers 
+              for flexible roles. Our platform streamlines their hiring process by offering access to a pool of 
+              pre-vetted, motivated high school students.
             </p>
             <p className="text-lg">
-              Our partnerships span across industries, ensuring diverse opportunities for students with varied 
-              interests and career goals.
+              With the growing gig economy, we help connect employers with local talent for more stable, 
+              sustainable employment opportunities.
+            </p>
+          </div>
+          
+          <div className="mb-12 bg-green-50 p-6 rounded-lg border border-green-100">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <GraduationCap className="mr-2 text-green-600" />
+              Educational Value
+            </h2>
+            <p className="text-lg mb-4">
+              High school students need early career exposure. Our platform doubles as a tool for resume-building, 
+              developing job skills like interviewing, and networking—perfectly aligned with schools' career-readiness goals.
+            </p>
+            <p className="text-lg">
+              We support programs like Career Technical Education (CTE) that emphasize the importance of work 
+              experience for students, giving them a competitive edge in their future careers.
             </p>
           </div>
           
