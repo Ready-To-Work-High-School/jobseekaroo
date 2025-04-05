@@ -28,10 +28,22 @@ const Navbar = () => {
                   Home
                 </Link>
                 <Link
-                  to="/contact"
+                  to="/student-success"
                   className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Contact
+                  Students
+                </Link>
+                <Link
+                  to="/for-employers"
+                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Employers
+                </Link>
+                <Link
+                  to="/about"
+                  className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  About
                 </Link>
                 {user ? (
                   <>
@@ -56,22 +68,7 @@ const Navbar = () => {
                       </Link>
                     )}
                   </>
-                ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      to="/register"
-                      className="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Register
-                    </Link>
-                  </>
-                )}
+                ) : null}
               </div>
             </div>
           </div>
@@ -129,10 +126,22 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            to="/contact"
+            to="/student-success"
             className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
           >
-            Contact
+            Students
+          </Link>
+          <Link
+            to="/for-employers"
+            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+          >
+            Employers
+          </Link>
+          <Link
+            to="/about"
+            className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
+          >
+            About
           </Link>
           {user ? (
             <>
@@ -163,22 +172,7 @@ const Navbar = () => {
                 Sign Out
               </button>
             </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Register
-              </Link>
-            </>
-          )}
+          ) : null}
         </div>
       </div>
     </nav>

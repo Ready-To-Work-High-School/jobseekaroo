@@ -42,6 +42,7 @@ import AdminToggle from './components/admin/AdminToggle';
 import StudentSuccess from './pages/StudentSuccess';
 import AdminPanel from './pages/AdminPanel';
 import SpinnerExamples from './pages/SpinnerExamples';
+import About from './pages/About';
 
 function App() {
   console.log('App component rendered');
@@ -54,6 +55,7 @@ function App() {
               {/* Public routes - accessible to everyone */}
               <Route path="/" element={<Index />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<About />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/for-employers" element={<ForEmployers />} />

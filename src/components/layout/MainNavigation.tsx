@@ -11,7 +11,10 @@ import {
   PenLine, 
   Headphones, 
   BarChart,
-  Shield
+  Shield,
+  Award,
+  Info,
+  Building2
 } from 'lucide-react';
 import {
   Sheet,
@@ -76,6 +79,25 @@ const MainNavigation = ({ className }: { className?: string }) => {
       <Link to="/" className={cn("text-sm font-medium transition-colors", 
         location.pathname === "/" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
         Home
+      </Link>
+      
+      {/* Primary Navigation Links */}
+      <Link to="/student-success" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+        location.pathname === "/student-success" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Award className="w-4 h-4" />
+        Students
+      </Link>
+
+      <Link to="/for-employers" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+        location.pathname === "/for-employers" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Building2 className="w-4 h-4" />
+        Employers
+      </Link>
+
+      <Link to="/about" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+        location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Info className="w-4 h-4" />
+        About
       </Link>
       
       {/* Job Seeker Links */}
@@ -222,16 +244,8 @@ const MainNavigation = ({ className }: { className?: string }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <>
-          <Link to="/sign-in" className={cn("text-sm font-medium transition-colors", "text-muted-foreground hover:text-primary")}>
-            Sign In
-          </Link>
-          <Link to="/sign-up" className={cn("text-sm font-medium transition-colors", "text-muted-foreground hover:text-primary")}>
-            Sign Up
-          </Link>
-        </>
+        <ModeToggle />
       )}
-      <ModeToggle />
     </nav>
   );
 };
