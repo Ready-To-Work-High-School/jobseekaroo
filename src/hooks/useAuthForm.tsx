@@ -1,139 +1,122 @@
+
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from './useAuth';
-import { useToast } from './use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from './use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
-// Define validation schemas
-const signInSchema = z.object({
-  email: z.string().email('Valid email is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  rememberMe: z.boolean().optional(),
-});
-
-const signUpSchema = z.object({
-  email: z.string().email('Valid email is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  firstName: z.string().min(2, 'First name is required'),
-  lastName: z.string().min(2, 'Last name is required'),
-  userType: z.enum(['student', 'employer']),
+// Define form validation schema
+export const signUpSchema = z.object({
+  firstName: z.string().min(2, { message: 'First name is required' }),
+  lastName: z.string().min(2, { message: 'Last name is required' }),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   agreeToTerms: z.literal(true, {
     errorMap: () => ({ message: 'You must agree to the terms and conditions' }),
   }),
+  userType: z.enum(['student', 'employer']),
+  age: z.number().optional().transform(val => val ? Number(val) : undefined),
 });
 
-// Define form types
-export type SignInFormValues = z.infer<typeof signInSchema>;
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-export function useAuthForm() {
-  const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
+export const useAuthForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   
-  // Sign In Form
-  const signInForm = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      rememberMe: false,
-    },
-  });
-  
-  // Sign Up Form
+  // Initialize react-hook-form with zod validation
   const signUpForm = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      email: '',
-      password: '',
       firstName: '',
       lastName: '',
+      email: '',
+      password: '',
+      agreeToTerms: false,
       userType: 'student',
-      agreeToTerms: false as unknown as true,
     },
   });
-  
-  // Handle sign in submission
-  const handleSignIn: SubmitHandler<SignInFormValues> = async (values) => {
+
+  // Sign up handler
+  const handleSignUp = async (data: SignUpFormValues) => {
     setIsSubmitting(true);
     
     try {
-      const user = await signIn(values.email, values.password);
+      // Determine if parental consent is needed
+      const requiresParentalConsent = data.userType === 'student' && 
+        data.age && data.age < 18;
+        
+      const user = await signUp(
+        data.email,
+        data.password,
+        data.firstName,
+        data.lastName,
+        data.userType,
+        // Send age with the sign-up data
+        { age: data.age }
+      );
       
-      if (user) {
-        const redirectPath = sessionStorage.getItem('redirectAfterLogin');
-        
-        toast({
-          title: 'Welcome back!',
-          description: 'You have successfully signed in.',
-        });
-        
-        if (redirectPath) {
-          sessionStorage.removeItem('redirectAfterLogin');
-          navigate(redirectPath);
-        } else {
-          navigate('/dashboard');
-        }
+      if (!user) {
+        throw new Error('Failed to create account');
+      }
+
+      toast({
+        title: 'Account created',
+        description: 'Your account has been created successfully',
+      });
+      
+      // If student is under 18, redirect to parental consent page
+      if (requiresParentalConsent) {
+        navigate('/parental-consent');
+      } else {
+        navigate('/dashboard');
       }
     } catch (error: any) {
-      console.error('Sign in error:', error);
+      console.error('Sign up error:', error);
       toast({
         variant: 'destructive',
-        title: 'Sign in failed',
-        description: error.message || 'There was a problem signing in.',
+        title: 'Error',
+        description: error.message || 'Failed to create account. Please try again.',
       });
     } finally {
       setIsSubmitting(false);
     }
   };
   
-  // Handle sign up submission
-  const handleSignUp: SubmitHandler<SignUpFormValues> = async (values) => {
+  // Sign in handler
+  const handleSignIn = async (email: string, password: string) => {
     setIsSubmitting(true);
     
     try {
-      const user = await signUp(
-        values.email,
-        values.password,
-        values.firstName,
-        values.lastName,
-        values.userType
-      );
+      const user = await signIn(email, password);
       
-      if (user) {
-        toast({
-          title: 'Account created!',
-          description: 'Your account has been successfully created.',
-        });
-        
-        navigate('/dashboard');
+      if (!user) {
+        throw new Error('Invalid email or password');
       }
+      
+      toast({
+        title: 'Welcome back!',
+        description: 'You have been signed in successfully',
+      });
+      
+      navigate('/dashboard');
     } catch (error: any) {
-      console.error('Sign up error:', error);
-      
-      if (error.message?.includes('already registered')) {
-        toast({
-          variant: 'destructive',
-          title: 'Email already in use',
-          description: 'This email is already registered. Try signing in instead.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Sign up failed',
-          description: error.message || 'There was a problem creating your account.',
-        });
-      }
+      console.error('Sign in error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message || 'Failed to sign in. Please check your credentials.',
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
   
-  // Handle social sign in
+  // Social sign-in handler
   const handleSocialSignIn = async (provider: 'google' | 'apple') => {
     setIsSubmitting(true);
     
@@ -143,24 +126,23 @@ export function useAuthForm() {
       } else {
         await signInWithApple();
       }
+      // The redirect is handled by the auth provider
     } catch (error: any) {
       console.error(`${provider} sign in error:`, error);
       toast({
         variant: 'destructive',
-        title: 'Sign in failed',
-        description: error.message || `There was a problem signing in with ${provider}.`,
+        title: 'Error',
+        description: error.message || `Failed to sign in with ${provider}. Please try again.`,
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
   
   return {
-    signInForm,
     signUpForm,
-    handleSignIn,
     handleSignUp,
+    handleSignIn,
     handleSocialSignIn,
     isSubmitting,
   };
-}
+};

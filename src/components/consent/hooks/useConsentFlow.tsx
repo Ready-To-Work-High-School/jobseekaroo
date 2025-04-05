@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentFormValues, VerificationFormValues } from '../schemas';
@@ -15,6 +15,13 @@ export const useConsentFlow = () => {
   const [showHelp, setShowHelp] = useState(false);
   const { toast } = useToast();
   const { user, userProfile, updateProfile } = useAuth();
+
+  // Check if consent is already verified when component mounts
+  useEffect(() => {
+    if (userProfile?.preferences?.parentalConsentVerified) {
+      setStep('complete');
+    }
+  }, [userProfile]);
   
   const handleSendVerification = useCallback(async (values: ParentFormValues) => {
     setIsLoading(true);

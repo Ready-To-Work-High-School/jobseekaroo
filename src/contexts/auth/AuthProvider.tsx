@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   
-  // Profile fetching with improved error handling
   const getUserProfile = useCallback(async (userId: string) => {
     try {
       console.log('Fetching user profile for ID:', userId);
@@ -24,19 +23,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserProfile(profileData);
       } else {
         console.error('Failed to fetch user profile - no data returned');
-        // Don't set error state here to avoid blocking the UI
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      // Don't set error state here to avoid blocking the UI
     }
   }, []);
   
-  // Auth initialization with improved session handling
   useEffect(() => {
     console.log('Setting up auth state listener');
     
-    // Step 1: Set up auth state listener FIRST (to avoid missing events)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
@@ -44,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Use setTimeout to prevent blocking renderer and avoid deadlocks
           setTimeout(() => {
             getUserProfile(session.user.id);
           }, 0);
@@ -56,7 +50,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
     
-    // Step 2: THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session check:', session?.user?.id);
       
@@ -75,7 +68,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [getUserProfile]);
   
-  // Authentication methods
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -94,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student', additionalData: Record<string, any> = {}) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -103,7 +95,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           data: {
             first_name: firstName,
             last_name: lastName,
-            user_type: userType
+            user_type: userType,
+            age: additionalData.age,
+            employer_verification_status: userType === 'employer' ? 'pending' : null
           }
         }
       });
@@ -162,22 +156,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Profile management with proper error handling
   const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
     try {
       console.log('Updating profile with data:', profileData);
       
-      // Ensure we have a valid object to update
       let dataToUpdate: any = { ...profileData };
       
-      // If user_type is present, ensure it's one of the valid types
       if (dataToUpdate.user_type && !['student', 'employer', 'admin', 'teacher'].includes(dataToUpdate.user_type)) {
         throw new Error(`Invalid user_type: ${dataToUpdate.user_type}`);
       }
       
-      // If employer_verification_status is present, ensure it's one of the valid statuses
       if (dataToUpdate.employer_verification_status && 
           !['pending', 'approved', 'rejected'].includes(dataToUpdate.employer_verification_status)) {
         throw new Error(`Invalid employer_verification_status: ${dataToUpdate.employer_verification_status}`);
@@ -213,7 +203,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Job management
   const saveJob = async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to save jobs');
     
@@ -284,7 +273,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  // Application management
   const createApplication = async (application: any) => {
     if (!user) throw new Error('User must be logged in to create an application');
     
@@ -357,7 +345,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Placeholder methods for admin and redemption functionality
   const makeAdmin = async () => {
     console.log('makeAdmin method called but not implemented');
   };

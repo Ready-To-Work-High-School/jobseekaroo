@@ -158,6 +158,29 @@ const SignUp = () => {
                 </div>
               </div>
               
+              {/* New Age field - only shown for student user type */}
+              {userType === 'student' && (
+                <div className="space-y-2">
+                  <Label htmlFor="age">Age</Label>
+                  <Input 
+                    id="age" 
+                    type="number"
+                    min="13"
+                    max="100"
+                    placeholder="Your age" 
+                    {...register('age', { valueAsNumber: true })}
+                    className={errors.age ? 'border-red-500' : ''}
+                    disabled={isSubmitting}
+                  />
+                  {errors.age && (
+                    <p className="text-xs text-red-500">{errors.age.message}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    If under 18, parental consent will be required
+                  </p>
+                </div>
+              )}
+              
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input 
