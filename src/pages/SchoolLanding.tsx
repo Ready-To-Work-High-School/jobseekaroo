@@ -26,8 +26,8 @@ const SchoolLanding = () => {
         const schoolName = hostname.split('.')[0];
         
         if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo') {
-          // Fetch school data from Supabase using a raw query to avoid TypeScript issues
-          const { data, error } = await supabase
+          // Use a raw query approach to avoid TypeScript issues
+          const { data: schoolData, error } = await supabase
             .from('schools')
             .select('*')
             .eq('slug', schoolName)
@@ -35,8 +35,9 @@ const SchoolLanding = () => {
             
           if (error) throw error;
           
-          if (data) {
-            setSchoolData(data as unknown as School);
+          if (schoolData) {
+            // Use type assertion to handle the type safely
+            setSchoolData(schoolData as unknown as School);
           }
         } else {
           // Redirect to main page if not on a school subdomain
