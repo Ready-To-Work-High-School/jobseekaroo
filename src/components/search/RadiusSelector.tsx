@@ -29,6 +29,11 @@ const RadiusSelector = ({
     }
   }, [radius, showRadius]);
   
+  // Calculate progress percentage based on radius value (1-50 range)
+  const getProgressPercentage = () => {
+    return ((radius - 1) / 49) * 100;
+  };
+  
   // Calculate progress colors based on radius value
   const getProgressColor = () => {
     if (radius < 10) return 'bg-green-500';
@@ -91,8 +96,8 @@ const RadiusSelector = ({
           <div className="flex items-center gap-2 px-1">
             <span className="text-[10px] text-gray-500">Local</span>
             <Progress 
-              value={(radius / 50) * 100} 
-              className={cn("h-1.5 flex-1", getProgressColor())} 
+              value={getProgressPercentage()} 
+              className={cn("h-1.5 flex-1 progress-lavender-gold-purple")} 
             />
             <span className="text-[10px] text-gray-500">Regional</span>
           </div>
