@@ -11,16 +11,20 @@ const ProgressDemo = () => {
   }, []);
 
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto">
-      <div className="flex justify-between text-sm">
-        <span>Progress: {progress}%</span>
-        <span>{progress < 100 ? "In progress" : "Complete"}</span>
+    <div className="w-full max-w-2xl mx-auto">
+      <div className="border-2 border-purple-500 rounded-lg bg-purple-50 p-6 shadow-md">
+        <div className="space-y-4">
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-purple-700">Progress: {progress}%</span>
+            <span className="text-purple-700">{progress < 100 ? "In progress" : "Complete"}</span>
+          </div>
+          
+          <Progress 
+            value={progress} 
+            className="h-3 w-full bg-purple-100"
+          />
+        </div>
       </div>
-      
-      <Progress 
-        value={progress} 
-        className="h-2 w-full"
-      />
     </div>
   );
 };
