@@ -14,6 +14,7 @@ export async function getApplicationStatusCounts(
   filters: AnalyticsFilters = {}
 ): Promise<any[]> {
   try {
+    // Create the initial query
     let query = supabase
       .from('job_applications')
       .select('status, count(*)');
@@ -35,9 +36,8 @@ export async function getApplicationStatusCounts(
       query = query.lte('applied_date', filters.endDate.toISOString());
     }
     
-    // Group by status
-    query = query.groupBy('status');
-    
+    // Using Supabase's Group aggregation feature
+    // Note: We use a different approach since groupBy isn't available
     const { data, error } = await query;
     
     if (error) {
@@ -45,7 +45,26 @@ export async function getApplicationStatusCounts(
       return [];
     }
     
-    return data || [];
+    // Process the data to group by status
+    const statusCounts: Record<string, number> = {};
+    
+    // Manual grouping of the results
+    if (data) {
+      data.forEach(item => {
+        if (!statusCounts[item.status]) {
+          statusCounts[item.status] = 0;
+        }
+        statusCounts[item.status] += 1;
+      });
+    }
+    
+    // Convert the object to an array format
+    const result = Object.entries(statusCounts).map(([status, count]) => ({
+      status,
+      count
+    }));
+    
+    return result;
   } catch (error) {
     console.error('Exception fetching application status counts:', error);
     return [];

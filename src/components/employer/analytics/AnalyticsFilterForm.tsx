@@ -99,7 +99,7 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Date Range</FormLabel>
-                    <DatePicker 
+                    <DatePicker
                       selected={field.value?.from}
                       onSelect={(date) => {
                         field.onChange({
@@ -110,7 +110,7 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                       selectsRange
                       startDate={field.value?.from}
                       endDate={field.value?.to}
-                      placeholderText="Select date range"
+                      placeholder="Select date range"
                       className="w-full"
                     />
                     <FormMessage />
