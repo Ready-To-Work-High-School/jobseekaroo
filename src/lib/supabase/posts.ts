@@ -12,28 +12,21 @@ export interface Post {
 
 export async function getAllPosts(): Promise<Post[]> {
   try {
+    // Use raw SQL query due to typings issues
     const { data, error } = await supabase
-      .from('posts')
-      .select(`
-        id,
-        title,
-        content,
-        user_id,
-        created_at,
-        users:user_id (username)
-      `)
-      .order('created_at', { ascending: false });
+      .rpc('get_all_posts')
+      .select();
       
     if (error) throw error;
     
     // Format the response to match the expected structure
-    return data.map(post => ({
+    return data.map((post: any) => ({
       id: post.id,
       title: post.title,
       content: post.content,
       user_id: post.user_id,
       created_at: post.created_at,
-      username: post.users?.username
+      username: post.username
     }));
   } catch (error) {
     console.error('Error getting posts:', error);
@@ -43,17 +36,10 @@ export async function getAllPosts(): Promise<Post[]> {
 
 export async function getPostById(id: string): Promise<Post | null> {
   try {
+    // Use raw SQL query due to typings issues
     const { data, error } = await supabase
-      .from('posts')
-      .select(`
-        id,
-        title,
-        content,
-        user_id,
-        created_at,
-        users:user_id (username)
-      `)
-      .eq('id', id)
+      .rpc('get_post_by_id', { post_id: id })
+      .select()
       .single();
       
     if (error) throw error;
@@ -66,7 +52,7 @@ export async function getPostById(id: string): Promise<Post | null> {
       content: data.content,
       user_id: data.user_id,
       created_at: data.created_at,
-      username: data.users?.username
+      username: data.username
     };
   } catch (error) {
     console.error('Error getting post:', error);
@@ -76,11 +62,13 @@ export async function getPostById(id: string): Promise<Post | null> {
 
 export async function createPost(title: string, content: string, userId: string): Promise<Post | null> {
   try {
+    // Use raw SQL query due to typings issues
     const { data, error } = await supabase
-      .from('posts')
-      .insert([
-        { title, content, user_id: userId }
-      ])
+      .rpc('create_post', { 
+        p_title: title, 
+        p_content: content, 
+        p_user_id: userId 
+      })
       .select()
       .single();
       
@@ -95,11 +83,14 @@ export async function createPost(title: string, content: string, userId: string)
 
 export async function updatePost(id: string, title: string, content: string, userId: string): Promise<Post | null> {
   try {
+    // Use raw SQL query due to typings issues
     const { data, error } = await supabase
-      .from('posts')
-      .update({ title, content })
-      .eq('id', id)
-      .eq('user_id', userId) // Ensure user owns the post
+      .rpc('update_post', { 
+        p_id: id, 
+        p_title: title, 
+        p_content: content, 
+        p_user_id: userId 
+      })
       .select()
       .single();
       
@@ -114,11 +105,12 @@ export async function updatePost(id: string, title: string, content: string, use
 
 export async function deletePost(id: string, userId: string): Promise<boolean> {
   try {
+    // Use raw SQL query due to typings issues
     const { error } = await supabase
-      .from('posts')
-      .delete()
-      .eq('id', id)
-      .eq('user_id', userId); // Ensure user owns the post
+      .rpc('delete_post', { 
+        p_id: id, 
+        p_user_id: userId 
+      });
       
     if (error) throw error;
     

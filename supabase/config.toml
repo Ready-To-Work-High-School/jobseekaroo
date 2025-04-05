@@ -64,3 +64,7 @@ enable_confirmations = false
 [functions]
 [functions.send-notification]
 verify_jwt = true
+[functions.secure-encrypt]
+verify_jwt = true
+[functions.secure-file-access]
+verify_jwt = true
