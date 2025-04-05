@@ -287,6 +287,7 @@ export type Database = {
           id: string
           is_featured: boolean | null
           is_flexible: boolean | null
+          is_premium: boolean | null
           is_remote: boolean | null
           job_type: string
           location_city: string
@@ -309,6 +310,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           is_flexible?: boolean | null
+          is_premium?: boolean | null
           is_remote?: boolean | null
           job_type: string
           location_city: string
@@ -331,6 +333,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           is_flexible?: boolean | null
+          is_premium?: boolean | null
           is_remote?: boolean | null
           job_type?: string
           location_city?: string
@@ -519,6 +522,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      premium_postings: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_featured: boolean | null
+          is_trial: boolean | null
+          job_id: string
+          trial_expires_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_trial?: boolean | null
+          job_id: string
+          trial_expires_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_trial?: boolean | null
+          job_id?: string
+          trial_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

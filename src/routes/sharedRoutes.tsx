@@ -1,11 +1,12 @@
 
 import { Route } from 'react-router-dom';
-import NotFound from '@/pages/NotFound';
+import SchoolLanding from '../pages/SchoolLanding';
+import EmployerPremiumServices from '../pages/EmployerPremiumServices';
 
 const SharedRoutes = (
   <>
-    {/* Shared routes that can be accessed by all user types */}
-    {/* If you need more shared routes, add them here above the catch-all */}
+    <Route path="/employer-premium" element={<EmployerPremiumServices />} />
+    <Route path="/school" element={<SchoolLanding />} />
   </>
 );
 
