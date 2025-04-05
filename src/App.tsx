@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -46,6 +47,7 @@ import FirstJobBootcamp from './pages/FirstJobBootcamp';
 import ParentalConsent from './pages/ParentalConsent';
 import EmployerAnalytics from './pages/EmployerAnalytics';
 import MobileBottomNav from './components/mobile/MobileBottomNav';
+import FirstJobToolkit from './pages/FirstJobToolkit';
 
 function App() {
   console.log('App component rendered');
@@ -69,6 +71,7 @@ function App() {
               <Route path="/student-success" element={<StudentSuccess />} />
               <Route path="/spinners" element={<SpinnerExamples />} />
               <Route path="/first-job-bootcamp" element={<FirstJobBootcamp />} />
+              <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
               <Route path="/parental-consent" element={<ParentalConsent />} />
 
               {/* Authentication routes */}
