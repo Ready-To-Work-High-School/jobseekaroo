@@ -15,6 +15,7 @@ import FirstJobBootcamp from '../pages/FirstJobBootcamp';
 import FirstJobToolkit from '../pages/FirstJobToolkit';
 import ParentalConsent from '../pages/ParentalConsent';
 import Index from '../pages/Index';
+import EnhancedJobListings from '../pages/EnhancedJobListings';
 
 export const PublicRoutes = (
   <>
@@ -34,5 +35,6 @@ export const PublicRoutes = (
     <Route path="/first-job-bootcamp" element={<FirstJobBootcamp />} />
     <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
     <Route path="/parental-consent" element={<ParentalConsent />} />
+    <Route path="/jobs" element={<EnhancedJobListings />} />
   </>
 );

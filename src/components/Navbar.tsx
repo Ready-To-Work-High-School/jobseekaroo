@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, Home, Briefcase, Building2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/auth';
 import { NavbarNotifications } from '@/components/notifications/NavbarNotifications';
@@ -25,11 +25,21 @@ const Navbar = () => {
             
             <div className="hidden md:block ml-10">
               <div className="flex space-x-4">
-                <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                <Link to="/" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  <Home className="h-4 w-4 mr-1" />
                   Home
                 </Link>
-                <Link to="/jobs" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                <Link to="/jobs" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  <Briefcase className="h-4 w-4 mr-1" />
                   Jobs
+                </Link>
+                <Link to="/for-employers" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  <Building2 className="h-4 w-4 mr-1" />
+                  Employers
+                </Link>
+                <Link to="/about" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  <Info className="h-4 w-4 mr-1" />
+                  About
                 </Link>
                 {user && (
                   <Link to="/dashboard" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
@@ -88,17 +98,35 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
               onClick={() => setIsOpen(false)}
             >
+              <Home className="h-4 w-4 mr-1" />
               Home
             </Link>
             <Link 
               to="/jobs" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
               onClick={() => setIsOpen(false)}
             >
+              <Briefcase className="h-4 w-4 mr-1" />
               Jobs
+            </Link>
+            <Link 
+              to="/for-employers" 
+              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              <Building2 className="h-4 w-4 mr-1" />
+              Employers
+            </Link>
+            <Link 
+              to="/about" 
+              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              <Info className="h-4 w-4 mr-1" />
+              About
             </Link>
             {user && (
               <Link 
