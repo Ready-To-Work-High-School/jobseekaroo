@@ -104,9 +104,8 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                       selectsRange={true}
                       startDate={field.value?.from}
                       endDate={field.value?.to}
-                      onSelect={(dateRange) => {
-                        // Properly handle the DateRange type
-                        // The dateRange parameter is already a DateRange object from the DatePicker component
+                      onSelect={(dateRange: DateRange | undefined) => {
+                        // Only update when we have a proper DateRange object
                         field.onChange(dateRange);
                       }}
                       placeholder="Select date range"
