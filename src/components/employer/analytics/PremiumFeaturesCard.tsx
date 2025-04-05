@@ -1,10 +1,11 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const PremiumFeaturesCard: React.FC = () => {
   return (
-    <div className="mt-8 p-4 bg-blue-50 border border-blue-100 rounded-md">
+    <div className="mt-8 p-4 bg-blue-50 border border-blue-100 rounded-md dark:bg-blue-950/20 dark:border-blue-900">
       <h3 className="font-medium text-lg mb-2">Premium Analytics Features</h3>
       <p className="text-muted-foreground mb-4">
         Unlock additional insights with our premium analytics package:
@@ -16,7 +17,9 @@ const PremiumFeaturesCard: React.FC = () => {
         <li>Custom report generation</li>
         <li>Interactive data visualization tools</li>
       </ul>
-      <Button>Upgrade to Premium</Button>
+      <Button asChild>
+        <Link to="/employer-premium">Upgrade to Premium</Link>
+      </Button>
     </div>
   );
 };

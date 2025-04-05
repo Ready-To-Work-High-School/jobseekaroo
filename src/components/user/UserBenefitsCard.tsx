@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, Sparkles } from 'lucide-react';
 import { UserProfile } from '@/types/user';
 
 interface UserBenefitsCardProps {
@@ -12,6 +12,9 @@ interface UserBenefitsCardProps {
 const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
   // Determine the account type for displaying benefits
   const accountType = userProfile?.user_type || 'basic';
+  
+  // Check if user has premium subscription
+  const hasPremium = userProfile?.preferences?.hasPremium === true;
   
   // Format date to readable string
   const formatDate = (dateString: string | undefined) => {
@@ -35,13 +38,28 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           { name: 'Career coaching sessions', active: false, comingSoon: true }
         ];
       case 'employer':
-        return [
-          { name: 'Post unlimited job listings', active: true },
-          { name: 'Advanced candidate search', active: true },
-          { name: 'Analytics and reporting tools', active: true },
-          { name: 'Featured company profile', active: true },
-          { name: 'AI-powered candidate matching', active: false, comingSoon: true }
-        ];
+        if (hasPremium) {
+          return [
+            { name: 'Post unlimited job listings', active: true },
+            { name: 'Advanced candidate search', active: true },
+            { name: 'Premium analytics and reporting tools', active: true, premium: true },
+            { name: 'Featured company profile', active: true, premium: true },
+            { name: 'AI-powered candidate matching', active: true, premium: true },
+            { name: 'Competitor benchmarking', active: true, premium: true },
+            { name: 'Custom report generation', active: true, premium: true },
+            { name: 'Priority support', active: true, premium: true }
+          ];
+        } else {
+          return [
+            { name: 'Post unlimited job listings', active: true },
+            { name: 'Basic candidate search', active: true },
+            { name: 'Basic analytics and reporting tools', active: true },
+            { name: 'Standard company profile', active: true },
+            { name: 'Premium analytics and reporting', active: false, locked: true },
+            { name: 'Featured company profile', active: false, locked: true },
+            { name: 'AI-powered candidate matching', active: false, locked: true }
+          ];
+        }
       case 'admin':
         return [
           { name: 'Full platform administration', active: true },
@@ -74,7 +92,16 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       case 'student':
         return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">Student</Badge>;
       case 'employer':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>;
+        return hasPremium ? (
+          <div className="flex gap-2">
+            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>
+            <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100 flex items-center gap-1">
+              <Sparkles className="h-3 w-3" /> Premium
+            </Badge>
+          </div>
+        ) : (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>
+        );
       case 'admin':
         return <Badge className="bg-black text-white hover:bg-black">Chief Executive Officer</Badge>;
       case 'teacher':
@@ -101,7 +128,11 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
             {getBenefits().map((benefit, index) => (
               <li key={index} className="flex items-start gap-2">
                 {benefit.active ? (
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  benefit.premium ? (
+                    <Sparkles className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  )
                 ) : benefit.comingSoon ? (
                   <Clock className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
                 ) : (
@@ -115,6 +146,9 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
                   {benefit.locked && (
                     <Badge variant="outline" className="ml-2 text-xs">Premium</Badge>
                   )}
+                  {benefit.premium && (
+                    <Badge variant="outline" className="ml-2 text-xs bg-amber-50 text-amber-700 border-amber-200">Premium</Badge>
+                  )}
                 </span>
               </li>
             ))}
@@ -123,6 +157,15 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           {accountType !== 'basic' && userProfile?.redeemed_at && (
             <div className="text-sm text-muted-foreground pt-2 border-t">
               <p>Account upgraded on {formatDate(userProfile.redeemed_at)}</p>
+            </div>
+          )}
+          
+          {hasPremium && (
+            <div className="text-sm text-muted-foreground pt-2 border-t">
+              <p className="flex items-center gap-1">
+                <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                Premium subscription active
+              </p>
             </div>
           )}
         </div>

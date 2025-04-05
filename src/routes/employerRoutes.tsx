@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import EmployerDashboard from '../pages/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
+import EmployerPremiumServices from '../pages/EmployerPremiumServices';
 
 export const EmployerRoutes = (
   <>
@@ -15,6 +16,11 @@ export const EmployerRoutes = (
     <Route path="/employer-analytics" element={
       <ProtectedRoute requiredRoles={['employer']}>
         <EmployerAnalytics />
+      </ProtectedRoute>
+    } />
+    <Route path="/employer-premium" element={
+      <ProtectedRoute requiredRoles={['employer']}>
+        <EmployerPremiumServices />
       </ProtectedRoute>
     } />
   </>

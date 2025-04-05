@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, Shield
+  BookmarkCheck, Award, Shield, Sparkles
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
@@ -51,6 +51,9 @@ const UserMenu = () => {
                userProfile?.job_title?.toLowerCase().includes('chief executive') ||
                userProfile?.company_name?.toLowerCase().includes('ceo');
 
+  // Check if user has premium subscription
+  const hasPremium = userProfile?.preferences?.hasPremium === true;
+
   if (!user) return null;
 
   return (
@@ -80,6 +83,7 @@ const UserMenu = () => {
               </div>
               <span className="text-xs text-muted-foreground">{user.email}</span>
               {isCeo && <span className="text-xs font-semibold text-blue-600">CEO Access</span>}
+              {hasPremium && <span className="text-xs font-semibold text-amber-600">Premium</span>}
             </div>
           ) : (
             <span>My Account</span>
@@ -129,6 +133,12 @@ const UserMenu = () => {
               <Link to="/employer-dashboard" className="cursor-pointer">
                 <Briefcase className="mr-2 h-4 w-4" />
                 <span>Employer Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/employer-premium" className="cursor-pointer">
+                <Sparkles className="mr-2 h-4 w-4" />
+                <span>Premium Services</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
