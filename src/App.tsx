@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -43,6 +42,10 @@ import StudentSuccess from './pages/StudentSuccess';
 import AdminPanel from './pages/AdminPanel';
 import SpinnerExamples from './pages/SpinnerExamples';
 import About from './pages/About';
+import FirstJobBootcamp from './pages/FirstJobBootcamp';
+import ParentalConsent from './pages/ParentalConsent';
+import EmployerAnalytics from './pages/EmployerAnalytics';
+import MobileBottomNav from './components/mobile/MobileBottomNav';
 
 function App() {
   console.log('App component rendered');
@@ -65,6 +68,8 @@ function App() {
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/student-success" element={<StudentSuccess />} />
               <Route path="/spinners" element={<SpinnerExamples />} />
+              <Route path="/first-job-bootcamp" element={<FirstJobBootcamp />} />
+              <Route path="/parental-consent" element={<ParentalConsent />} />
 
               {/* Authentication routes */}
               <Route path="/login" element={<Login />} />
@@ -144,6 +149,11 @@ function App() {
                   <EmployerDashboard />
                 </ProtectedRoute>
               } />
+              <Route path="/employer-analytics" element={
+                <ProtectedRoute requiredRoles={['employer']}>
+                  <EmployerAnalytics />
+                </ProtectedRoute>
+              } />
               
               {/* Admin routes */}
               <Route path="/admin" element={
@@ -183,6 +193,7 @@ function App() {
               {/* Catch all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <MobileBottomNav />
             <Toaster />
           </div>
         </AuthProvider>
