@@ -17,3 +17,27 @@
     background-position: 0% 50%;
   }
 }
+
+/* Animation for progress bar filling */
+.progress-animate-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-animate-fill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  animation: progress-fill 1.5s ease forwards;
+  transform: translateX(-100%);
+}
+
+@keyframes progress-fill {
+  to {
+    transform: translateX(0);
+  }
+}

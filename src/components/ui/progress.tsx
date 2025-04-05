@@ -19,7 +19,7 @@ const Progress = React.forwardRef<
     <ProgressPrimitive.Indicator
       className={cn(
         "h-full w-full flex-1 bg-primary transition-all",
-        className?.includes('progress-lavender-gold-purple') ? 'bg-none' : '' // No background color when using gradient
+        className?.includes('progress-lavender-gold-purple') ? 'bg-none progress-animate-fill' : '' // Add animation class when using gradient
       )}
       style={{ 
         transform: `translateX(-${100 - (value || 0)}%)`,
