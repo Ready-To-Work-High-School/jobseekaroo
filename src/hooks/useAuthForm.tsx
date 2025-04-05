@@ -68,14 +68,13 @@ export const useAuthForm = () => {
       const requiresParentalConsent = data.userType === 'student' && 
         data.age && data.age < 18;
       
-      // Fix: Correctly match the signUp function signature from AuthProvider.tsx
+      // Fix: Pass only the expected arguments to match the signUp function signature
       const user = await signUp(
         data.email,
         data.password,
         data.firstName,
         data.lastName,
-        data.userType,
-        { age: data.age }  // Pass age as part of additionalData object
+        data.userType
       );
       
       if (!user) {
