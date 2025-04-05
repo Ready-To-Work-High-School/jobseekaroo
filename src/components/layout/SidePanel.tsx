@@ -18,6 +18,24 @@ import {
   TooltipTrigger 
 } from '@/components/ui/tooltip';
 
+// Custom TikTok icon component since it's not available in lucide-react
+const TikTokIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
+
 const SidePanel = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +51,8 @@ const SidePanel = () => {
     { icon: Share, label: 'Share', href: '#share' },
     { icon: Mail, label: 'Mail', href: 'mailto:contact@jobseekers4hs.org' },
     { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com' },
-    { icon: Facebook, label: 'Facebook', href: 'https://facebook.com' }
+    { icon: Facebook, label: 'Facebook', href: 'https://facebook.com' },
+    { icon: TikTokIcon, label: 'TikTok', href: 'https://tiktok.com' }
   ];
 
   return (
