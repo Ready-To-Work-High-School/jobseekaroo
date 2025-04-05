@@ -3,7 +3,7 @@
 @import 'components.css';
 @import 'typography.css';
 @import 'layout.css';
-@import 'utilities.css';
+@import 'utilities/index.css';
 @import 'accessibility.css';
 @import 'mobile.css';
 @import 'print.css';

@@ -1,0 +1,19 @@
+
+/* New enhanced blue-gold gradient for Entrepreneurship Academy */
+.blue-gold-gradient {
+  background: linear-gradient(-45deg, #1e40af, #fbbf24, #3b82f6, #f59e0b);
+  background-size: 400% 400%;
+  animation: gradient 6s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

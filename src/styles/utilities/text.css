@@ -1,0 +1,9 @@
+
+/* Text gradients */
+.text-gradient-primary {
+  @apply bg-gradient-to-r from-primary to-blue-700 bg-clip-text text-transparent;
+}
+
+.text-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-700 bg-clip-text text-transparent;
+}

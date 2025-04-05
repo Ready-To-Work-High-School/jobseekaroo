@@ -1,0 +1,9 @@
+
+/* Background gradients */
+.bg-gradient-brand {
+  @apply bg-gradient-to-r from-blue-600 to-blue-800;
+}
+
+.bg-gradient-amber {
+  @apply bg-gradient-to-r from-amber-500 to-amber-600;
+}

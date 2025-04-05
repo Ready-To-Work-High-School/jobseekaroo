@@ -1,0 +1,5 @@
+
+/* Custom selection */
+::selection {
+  @apply bg-primary/20;
+}
