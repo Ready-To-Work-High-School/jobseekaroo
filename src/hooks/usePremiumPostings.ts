@@ -35,7 +35,7 @@ export function usePremiumPostings() {
         .from('premium_postings')
         .select('*')
         .eq('user_id', user.id)
-        .eq('is_trial', true) as { data: PremiumPosting[] | null, error: any };
+        .eq('is_trial', true);
         
       if (checkError) throw checkError;
       
@@ -59,7 +59,7 @@ export function usePremiumPostings() {
           trial_expires_at: expiryDate.toISOString()
         })
         .select()
-        .single() as { data: PremiumPosting | null, error: any };
+        .single();
         
       if (error) throw error;
       
@@ -101,7 +101,7 @@ export function usePremiumPostings() {
         .from('premium_postings')
         .select('*')
         .eq('user_id', user.id)
-        .eq('is_trial', true) as { data: PremiumPosting[] | null, error: any };
+        .eq('is_trial', true);
         
       if (error) throw error;
       
@@ -121,7 +121,7 @@ export function usePremiumPostings() {
       const { data, error } = await supabase
         .from('premium_postings')
         .select('*')
-        .eq('user_id', user.id) as { data: PremiumPosting[] | null, error: any };
+        .eq('user_id', user.id);
         
       if (error) throw error;
       

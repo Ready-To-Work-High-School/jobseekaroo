@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -54,8 +53,7 @@ export function useAuthForm() {
       firstName: '',
       lastName: '',
       userType: 'student',
-      // Fix: Initialize agreeToTerms as false, the validation will handle requiring it to be true
-      agreeToTerms: false as unknown as true, // Type assertion to satisfy the literal true requirement
+      agreeToTerms: false as unknown as true,
     },
   });
   
@@ -67,7 +65,6 @@ export function useAuthForm() {
       const user = await signIn(values.email, values.password);
       
       if (user) {
-        // Check if there's a redirect path stored
         const redirectPath = sessionStorage.getItem('redirectAfterLogin');
         
         toast({
@@ -75,7 +72,6 @@ export function useAuthForm() {
           description: 'You have successfully signed in.',
         });
         
-        // Redirect to stored path or dashboard
         if (redirectPath) {
           sessionStorage.removeItem('redirectAfterLogin');
           navigate(redirectPath);
@@ -119,7 +115,6 @@ export function useAuthForm() {
     } catch (error: any) {
       console.error('Sign up error:', error);
       
-      // Handle specific error cases
       if (error.message?.includes('already registered')) {
         toast({
           variant: 'destructive',

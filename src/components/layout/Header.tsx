@@ -2,7 +2,7 @@
 import React from 'react';
 import MainNavigation from './MainNavigation';
 import AuthLinks from './AuthLinks';
-import { MobileMenu } from './MobileMenu';
+import MobileMenu from './MobileMenu'; // Changed from named import to default import
 import { useAuth } from '@/hooks/useAuth';
 
 interface HeaderProps {

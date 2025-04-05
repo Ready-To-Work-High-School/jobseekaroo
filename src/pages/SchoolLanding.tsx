@@ -26,12 +26,12 @@ const SchoolLanding = () => {
         const schoolName = hostname.split('.')[0];
         
         if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo') {
-          // Fetch school data from Supabase
+          // Fetch school data from Supabase with proper type assertion
           const { data, error } = await supabase
             .from('schools')
             .select('*')
             .eq('slug', schoolName)
-            .single() as { data: SchoolData | null, error: any };
+            .single();
             
           if (error) throw error;
           
@@ -84,10 +84,10 @@ const SchoolLanding = () => {
   return (
     <Layout>
       <Helmet>
-        <title>{schoolData.name} Job Portal | Jobseekaroo</title>
-        <meta name="description" content={`Find student jobs through ${schoolData.name}'s partnership with Jobseekaroo`} />
-        <meta property="og:title" content={`${schoolData.name} Job Portal`} />
-        <meta property="og:image" content={schoolData.logo_url} />
+        <title>{schoolData?.name} Job Portal | Jobseekaroo</title>
+        <meta name="description" content={`Find student jobs through ${schoolData?.name}'s partnership with Jobseekaroo`} />
+        <meta property="og:title" content={`${schoolData?.name} Job Portal`} />
+        <meta property="og:image" content={schoolData?.logo_url || ''} />
       </Helmet>
       
       <div className={`container mx-auto py-8 ${fadeIn}`}>
