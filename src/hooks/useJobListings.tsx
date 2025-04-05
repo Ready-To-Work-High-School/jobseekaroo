@@ -49,6 +49,8 @@ export function useJobListings(filters: JobFilterOptions = {}) {
   return useQuery({
     queryKey: ['jobs', filters],
     queryFn: () => fetchJobs(filters),
+    // Apply suspense option individually in each query
+    suspense: true,
   });
 }
 
@@ -56,5 +58,7 @@ export function usePaginatedJobListings(filters: JobFilterOptions = {}, page = 1
   return useQuery({
     queryKey: ['jobs', { ...filters, page, limit }],
     queryFn: () => fetchJobs({ ...filters, page, limit }),
+    // Apply suspense option individually in each query
+    suspense: true,
   });
 }

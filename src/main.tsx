@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      suspense: true,
+      // Remove the 'suspense: true' option that's causing the error
       staleTime: 60000, // 1 minute
       refetchOnWindowFocus: false,
     },
