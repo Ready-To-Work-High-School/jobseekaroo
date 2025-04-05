@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +16,7 @@ const ParentalConsentFlow = () => {
   const [isConsentGiven, setIsConsentGiven] = useState(false);
   const [parentName, setParentName] = useState('');
   const { toast } = useToast();
-  const { user, updateProfile } = useAuth();
+  const { user, userProfile, updateProfile } = useAuth();
   const isMobile = useIsMobile();
   
   const handleSendVerification = async () => {
@@ -72,15 +71,18 @@ const ParentalConsentFlow = () => {
       });
       setStep('complete');
       
-      if (user) {
-        // Store the consent status in the user profile
+      if (user && updateProfile) {
+        // Store the consent status in the user profile preferences object
+        const updatedPreferences = {
+          ...(userProfile?.preferences || {}),
+          parentalConsentVerified: true,
+          parentalConsentDate: new Date().toISOString(),
+          parentEmail
+        };
+        
+        // Update the user profile with the new preferences
         await updateProfile({
-          preferences: {
-            ...user.preferences,
-            parentalConsentVerified: true,
-            parentalConsentDate: new Date().toISOString(),
-            parentEmail
-          }
+          preferences: updatedPreferences
         });
       }
     } catch (error) {
