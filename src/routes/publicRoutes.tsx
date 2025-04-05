@@ -6,7 +6,6 @@ import FAQ from '../pages/FAQ';
 import Resources from '../pages/Resources';
 import ForEmployers from '../pages/ForEmployers';
 import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
-import SuccessStories from '../pages/SuccessStories';
 import License from '../pages/License';
 import AuthCallback from '../pages/AuthCallback';
 import StudentSuccess from '../pages/StudentSuccess';
@@ -27,7 +26,6 @@ export const PublicRoutes = (
     <Route path="/resources" element={<Resources />} />
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
-    <Route path="/success-stories" element={<SuccessStories />} />
     <Route path="/license" element={<License />} />
     <Route path="/auth/callback" element={<AuthCallback />} />
     <Route path="/student-success" element={<StudentSuccess />} />

@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
@@ -28,9 +29,6 @@ const Footer = () => {
   }, {
     href: "/faq",
     label: "FAQ"
-  }, {
-    href: "/success-stories",
-    label: "Success Stories"
   }, {
     href: "/license",
     label: "License"
