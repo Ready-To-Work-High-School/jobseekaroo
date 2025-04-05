@@ -1,10 +1,7 @@
-
 import React from 'react';
-
 const ContactEnrollmentSection = () => {
-  return (
-    <section>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 mb-12 border border-amber-800/30">
+  return <section>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 mb-12 border border-amber-800/30 bg-yellow-100">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-amber-400 mb-4">Join Our Academy</h2>
           <p className="text-lg text-gray-300 mb-6">
@@ -12,17 +9,12 @@ const ContactEnrollmentSection = () => {
             Contact us today to schedule a visit or speak with our program coordinator.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="mailto:ColemanP3@duvalschools.org" 
-              className="inline-flex items-center justify-center px-6 py-3 border border-amber-600 text-base font-medium rounded-md text-amber-200 hover:text-white bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700"
-            >
+            <a href="mailto:ColemanP3@duvalschools.org" className="inline-flex items-center justify-center px-6 py-3 border border-amber-600 text-base font-medium rounded-md text-amber-200 hover:text-white bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700">
               Contact Program Coordinator
             </a>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactEnrollmentSection;
