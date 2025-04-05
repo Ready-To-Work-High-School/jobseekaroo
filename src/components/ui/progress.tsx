@@ -23,7 +23,7 @@ const Progress = React.forwardRef<
       )}
       style={{ 
         transform: `translateX(-${100 - (value || 0)}%)`,
-        backgroundSize: className?.includes('progress-lavender-gold-purple') ? '200% 100%' : undefined,
+        backgroundSize: className?.includes('progress-lavender-gold-purple') ? '300% 100%' : undefined,
       }}
     />
   </ProgressPrimitive.Root>
@@ -31,4 +31,3 @@ const Progress = React.forwardRef<
 Progress.displayName = ProgressPrimitive.Root.displayName
 
 export { Progress }
-

@@ -1,9 +1,9 @@
 
 /* Progress bar gradients */
 .progress-lavender-gold-purple {
-  background: linear-gradient(90deg, #d8b4fe, #fcd34d, #8b5cf6);
-  background-size: 200% 100%;
-  animation: gradient-shift 3s ease infinite;
+  background: linear-gradient(90deg, #d8b4fe, #fcd34d, #8b5cf6, #d946ef);
+  background-size: 300% 100%;
+  animation: gradient-shift 6s ease infinite;
 }
 
 @keyframes gradient-shift {
@@ -17,4 +17,3 @@
     background-position: 0% 50%;
   }
 }
-

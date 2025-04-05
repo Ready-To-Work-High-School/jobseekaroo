@@ -25,7 +25,7 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
       
       <Progress 
         value={progressPercentage} 
-        className="h-3 progress-lavender-gold-purple" 
+        className="h-4 progress-lavender-gold-purple" 
       />
       
       <div className="grid grid-cols-6 gap-1 mt-2">
@@ -54,4 +54,3 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
 };
 
 export default StepProgress;
-
