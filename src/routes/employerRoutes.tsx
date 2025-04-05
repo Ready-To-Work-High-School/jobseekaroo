@@ -4,6 +4,7 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import EmployerDashboard from '../pages/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
 import EmployerPremiumServices from '../pages/EmployerPremiumServices';
+import JobAlerts from '../pages/JobAlerts';
 
 export const EmployerRoutes = (
   <>
@@ -21,6 +22,11 @@ export const EmployerRoutes = (
     <Route path="/employer-premium" element={
       <ProtectedRoute requiredRoles={['employer']}>
         <EmployerPremiumServices />
+      </ProtectedRoute>
+    } />
+    <Route path="/job-alerts" element={
+      <ProtectedRoute requiredRoles={['employer']}>
+        <JobAlerts />
       </ProtectedRoute>
     } />
   </>

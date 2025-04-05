@@ -1,29 +1,35 @@
 
-import { Routes } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { Toaster } from "@/components/ui/toaster";
-import ErrorBoundary from './utils/ErrorBoundary';
-import MobileBottomNav from './components/mobile/MobileBottomNav';
-import { AppRoutes } from './routes';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/auth';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { NotificationsProvider } from '@/contexts/notifications/NotificationsProvider';
+import { Toaster } from '@/components/ui/toaster';
+import HomeRoutes from './routes/homeRoutes';
+import AuthRoutes from './routes/authRoutes';
+import AdminRoutes from './routes/adminRoutes';
+import { JobSeekerRoutes } from './routes/jobSeekerRoutes';
+import { EmployerRoutes } from './routes/employerRoutes';
+import SharedRoutes from './routes/sharedRoutes';
 
 function App() {
-  console.log('App component rendered');
-
   return (
-    <ErrorBoundary>
+    <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+          <NotificationsProvider>
             <Routes>
-              {AppRoutes}
+              {HomeRoutes}
+              {AuthRoutes}
+              {AdminRoutes}
+              {JobSeekerRoutes}
+              {EmployerRoutes}
+              {SharedRoutes}
             </Routes>
-            <MobileBottomNav />
             <Toaster />
-          </div>
+          </NotificationsProvider>
         </AuthProvider>
       </ThemeProvider>
-    </ErrorBoundary>
+    </BrowserRouter>
   );
 }
 
