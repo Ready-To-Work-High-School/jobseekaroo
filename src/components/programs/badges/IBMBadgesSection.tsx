@@ -51,7 +51,7 @@ const IBMBadgesSection = () => {
                   <img 
                     src={badge.image} 
                     alt={badge.name} 
-                    className="w-full h-auto rounded-full shadow-sm" 
+                    className="w-full h-auto rounded-md shadow-sm" 
                   />
                 </div>
                 <div className="flex-1">
