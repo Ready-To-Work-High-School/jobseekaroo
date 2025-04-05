@@ -1,79 +1,41 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ExternalLink } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { useAuth } from '@/contexts/AuthContext';
+import React from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { MobileNavLink } from '../navbar/MobileNavLink';
+import { Menu } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
-  const { user, signOut, userProfile } = useAuth();
-  const isAdmin = userProfile?.user_type === 'admin';
-  
-  // Debug logs
-  console.log("MobileMenu - User profile:", userProfile);
-  console.log("MobileMenu - Is admin:", isAdmin);
-
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
   return (
-    <div>
+    <div className="md:hidden">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent className="sm:max-w-sm rounded-lg">
-          <SheetHeader>
-            <SheetTitle>Menu</SheetTitle>
-          </SheetHeader>
-          <nav className="flex flex-col space-y-1 py-4">
-            {/* Shared Items */}
-            <MobileNavLink to="/">Home</MobileNavLink>
-            <MobileNavLink to="/for-employers">For Employers</MobileNavLink>
-            <MobileNavLink to="/resources">Resources</MobileNavLink>
-            <MobileNavLink to="/entrepreneurship-academy">Entrepreneurship</MobileNavLink>
-            
-            {user ? (
-              <>
-                {/* Authenticated Items */}
-                <MobileNavLink to="/dashboard">Dashboard</MobileNavLink>
-                <MobileNavLink to="/jobs">Jobs</MobileNavLink>
-                <MobileNavLink to="/skills">Skills</MobileNavLink>
-                <MobileNavLink to="/applications">Applications</MobileNavLink>
-                <MobileNavLink to="/profile">Profile</MobileNavLink>
-                
-                {/* Admin Items */}
-                {isAdmin && (
-                  <MobileNavLink to="/admin">Admin</MobileNavLink>
-                )}
-                
-                <Button 
-                  variant="ghost" 
-                  className="justify-start px-4 py-2 hover:bg-accent rounded-md flex items-center" 
-                  onClick={() => {
-                    signOut();
-                    setIsOpen(false);
-                  }}
-                >
-                  <ExternalLink className="h-5 w-5 mr-3" />
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                {/* Unauthenticated Items */}
-                <MobileNavLink to="/sign-in">Sign In</MobileNavLink>
-                <MobileNavLink to="/sign-up">Sign Up</MobileNavLink>
-                <MobileNavLink to="/redeem-code">Redeem Code</MobileNavLink>
-              </>
-            )}
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="sm" className="md:hidden">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-full sm:w-80">
+          <nav className="flex flex-col gap-4 mt-8">
+            <a href="/" className="block px-2 py-1 hover:text-primary">
+              Home
+            </a>
+            <a href="/jobs" className="block px-2 py-1 hover:text-primary">
+              Jobs
+            </a>
+            <a href="/resources" className="block px-2 py-1 hover:text-primary">
+              Resources
+            </a>
+            <a href="/about" className="block px-2 py-1 hover:text-primary">
+              About
+            </a>
+            <a href="/contact" className="block px-2 py-1 hover:text-primary">
+              Contact
+            </a>
           </nav>
         </SheetContent>
       </Sheet>

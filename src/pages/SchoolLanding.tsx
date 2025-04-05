@@ -26,17 +26,17 @@ const SchoolLanding = () => {
         const schoolName = hostname.split('.')[0];
         
         if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo') {
-          // Fetch school data from Supabase with proper type handling
+          // Fetch school data from Supabase using a raw query to avoid TypeScript issues
           const { data, error } = await supabase
             .from('schools')
-            .select()
+            .select('*')
             .eq('slug', schoolName)
             .maybeSingle();
             
           if (error) throw error;
           
           if (data) {
-            setSchoolData(data as School);
+            setSchoolData(data as unknown as School);
           }
         } else {
           // Redirect to main page if not on a school subdomain

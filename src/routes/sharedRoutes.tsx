@@ -7,6 +7,7 @@ const SharedRoutes = (
   <>
     <Route path="/employer-premium" element={<EmployerPremiumServices />} />
     <Route path="/school" element={<SchoolLanding />} />
+    <Route path="/" element={<SchoolLanding />} />
   </>
 );
 
