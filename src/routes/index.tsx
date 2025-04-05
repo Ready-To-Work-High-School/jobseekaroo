@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import HomeRoutes from './homeRoutes';
 import { PublicRoutes } from './publicRoutes';
 import { AuthRoutes } from './authRoutes';
+import { ProtectedRoutes } from './protectedRoutes';
 import { JobSeekerRoutes } from './jobSeekerRoutes';
 import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
@@ -19,6 +20,9 @@ export const AppRoutes = (
     
     {/* Auth routes */}
     {AuthRoutes}
+    
+    {/* Protected routes - requires authentication */}
+    {ProtectedRoutes}
     
     {/* Job Seeker routes */}
     {JobSeekerRoutes}

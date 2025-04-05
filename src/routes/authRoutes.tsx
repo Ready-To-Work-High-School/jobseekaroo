@@ -16,9 +16,9 @@ export const AuthRoutes = (
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/sign-in" element={<SignIn />} />
-    <Route path="/signin" element={<SignIn />} /> {/* Add alias route for /signin without hyphen */}
+    <Route path="/signin" element={<SignIn />} /> {/* Alias route for /signin without hyphen */}
     <Route path="/sign-up" element={<SignUp />} />
-    <Route path="/signup" element={<SignUp />} /> {/* Add alias route for /signup without hyphen */}
+    <Route path="/signup" element={<SignUp />} /> {/* Alias route for /signup without hyphen */}
     <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="/redeem-code" element={<RedemptionCode />} />
     
