@@ -44,7 +44,7 @@ export const useAuthForm = () => {
       lastName: '',
       email: '',
       password: '',
-      agreeToTerms: false as any, // Type assertion to bypass the TypeScript check
+      agreeToTerms: false as true, // Type assertion to bypass the TypeScript check
       userType: 'student',
     },
   });
@@ -75,7 +75,7 @@ export const useAuthForm = () => {
         data.firstName,
         data.lastName,
         data.userType,
-        { age: data.age }
+        { age: data.age } // This is the additional data parameter
       );
       
       if (!user) {
