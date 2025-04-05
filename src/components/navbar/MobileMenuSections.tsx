@@ -15,7 +15,8 @@ import {
   CheckSquare,
   User,
   Shield,
-  LogOut
+  LogOut,
+  Info
 } from 'lucide-react';
 import { MobileNavLink } from './MobileNavLink';
 
@@ -32,11 +33,6 @@ export const PrimaryNavigationLinks = () => (
       <span className="font-semibold">First Job Toolkit</span>
     </MobileNavLink>
     
-    <MobileNavLink to="/student-success">
-      <Award className="h-5 w-5" />
-      <span className="font-semibold">Student Success</span>
-    </MobileNavLink>
-    
     <MobileNavLink to="/jobs">
       <Briefcase className="h-5 w-5" />
       <span className="font-semibold">Browse Jobs</span>
@@ -46,10 +42,15 @@ export const PrimaryNavigationLinks = () => (
       <Building2 className="h-5 w-5" />
       <span className="font-semibold">For Employers</span>
     </MobileNavLink>
+
+    <MobileNavLink to="/about">
+      <Info className="h-5 w-5" />
+      <span className="font-semibold">About</span>
+    </MobileNavLink>
     
     <MobileNavLink to="/resources">
       <BookOpen className="h-5 w-5" />
-      <span className="font-semibold">Student Resources</span>
+      <span className="font-semibold">Resources</span>
     </MobileNavLink>
   </div>
 );

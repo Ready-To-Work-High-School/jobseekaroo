@@ -1,45 +1,63 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
+
 const Footer = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
 
   // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
-  const bottomNavLinks = [{
-    href: "/",
-    label: "Home"
-  }, {
-    href: "/jobs",
-    label: "Jobs"
-  }, {
-    href: "/resources",
-    label: "Resources"
-  }, {
-    href: getPath("/skills"),
-    label: "Skills"
-  }, {
-    href: "/for-employers",
-    label: "For Employers"
-  }, {
-    href: "/faq",
-    label: "FAQ"
-  }, {
-    href: "/license",
-    label: "License"
-  }];
-  return <>
+
+  // Main navigation categories for the footer
+  const mainCategories = [
+    {
+      title: "Our Program",
+      path: "/entrepreneurship-academy"
+    },
+    {
+      title: "For Job Seekers",
+      path: "/jobs"
+    },
+    {
+      title: "For Employers",
+      path: "/for-employers"
+    },
+    {
+      title: "Resources",
+      path: "/resources"
+    },
+    {
+      title: "FAQ",
+      path: "/faq"
+    },
+    {
+      title: "License",
+      path: "/license"
+    }
+  ];
+  
+  // Bottom navigation links with simplified design
+  const bottomNavLinks = mainCategories.map(category => ({
+    href: category.path,
+    label: category.title
+  }));
+
+  return (
+    <>
       <div className="bg-muted py-4 border-t">
         <div className="container mx-auto px-4">
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {bottomNavLinks.map(link => <Link key={link.href} to={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            {bottomNavLinks.map(link => 
+              <Link 
+                key={link.href} 
+                to={link.href} 
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
                 {link.label}
-              </Link>)}
+              </Link>
+            )}
           </nav>
         </div>
       </div>
@@ -100,6 +118,8 @@ const Footer = () => {
           </div>
         </div>
       </footer>
-    </>;
+    </>
+  );
 };
+
 export default Footer;

@@ -14,6 +14,7 @@ const MainNavigation = ({ className }: { className?: string }) => {
 
   return (
     <nav className={cn("hidden lg:flex items-center space-x-6", className)}>
+      {/* Primary Navigation Links */}
       <NavLinks />
       
       {/* Dropdown Menus */}
