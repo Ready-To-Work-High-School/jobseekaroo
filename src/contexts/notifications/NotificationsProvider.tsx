@@ -23,7 +23,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       type: dbNotification.type,
       link: dbNotification.link,
       read: dbNotification.read,
-      createdAt: dbNotification.created_at,
+      createdAt: dbNotification.created_at, // Converting snake_case to camelCase
       metadata: dbNotification.metadata
     };
   };

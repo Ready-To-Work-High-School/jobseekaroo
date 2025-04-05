@@ -1,6 +1,6 @@
 
 import { Route } from 'react-router-dom';
-import NotFound from '../pages/NotFound';
+import NotFound from '@/pages/NotFound';
 
 const SharedRoutes = (
   <>

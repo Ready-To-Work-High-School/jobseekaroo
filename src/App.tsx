@@ -4,12 +4,12 @@ import { AuthProvider } from '@/contexts/auth';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { NotificationsProvider } from '@/contexts/notifications/NotificationsProvider';
 import { Toaster } from '@/components/ui/toaster';
-import HomeRoutes from './routes/homeRoutes';
-import { AuthRoutes } from './routes/authRoutes';
-import { AdminRoutes } from './routes/adminRoutes';
-import { JobSeekerRoutes } from './routes/jobSeekerRoutes';
-import { EmployerRoutes } from './routes/employerRoutes';
-import SharedRoutes from './routes/sharedRoutes';
+import HomeRoutes from '@/routes/homeRoutes';
+import { AuthRoutes } from '@/routes/authRoutes';
+import { AdminRoutes } from '@/routes/adminRoutes';
+import { JobSeekerRoutes } from '@/routes/jobSeekerRoutes';
+import { EmployerRoutes } from '@/routes/employerRoutes';
+import SharedRoutes from '@/routes/sharedRoutes';
 
 function App() {
   return (
