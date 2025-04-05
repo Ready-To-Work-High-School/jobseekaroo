@@ -8,7 +8,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Award, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ProgressDemo from '@/components/demos/ProgressDemo';
 
 const Index = () => {
   const fadeIn = useFadeIn(300);
@@ -21,12 +20,6 @@ const Index = () => {
     <Layout>
       <div className={`w-full ${fadeIn}`}>
         <EnhancedHero />
-        
-        {/* Progress Demo */}
-        <div className="container mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-4 text-center">Progress Component Demo</h2>
-          <ProgressDemo />
-        </div>
         
         {/* Quick access buttons */}
         <div className="container mx-auto px-4 py-8 flex flex-col sm:flex-row justify-center gap-4">

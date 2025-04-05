@@ -21,14 +21,16 @@ const MobileJobSwipe: React.FC = () => {
     setIsLoading(true);
     // Simulating API call to get jobs
     setTimeout(() => {
-      // Using searchJobsByZipCode with correct parameter format
+      // Using searchJobsByZipCode with correct parameter format - removed maxResults
       const fetchedJobs = searchJobsByZipCode('', { 
-        // Using proper filter parameters that are defined in JobSearchFilters type
+        // Using only valid properties defined in JobSearchFilters type
         isRemote: undefined, 
-        isFlexible: undefined,
-        maxResults: 10 
+        isFlexible: undefined
       });
-      setCurrentJobs(fetchedJobs);
+      
+      // Limit the number of jobs to display
+      const limitedJobs = fetchedJobs.slice(0, 10);
+      setCurrentJobs(limitedJobs);
       setIsLoading(false);
     }, 1000);
   };
