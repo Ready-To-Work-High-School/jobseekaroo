@@ -21,7 +21,13 @@ const MobileJobSwipe: React.FC = () => {
     setIsLoading(true);
     // Simulating API call to get jobs
     setTimeout(() => {
-      const fetchedJobs = searchJobsByZipCode('', { limit: 10 });
+      // Using searchJobsByZipCode with correct parameter format
+      const fetchedJobs = searchJobsByZipCode('', { 
+        // Using proper filter parameters that are defined in JobSearchFilters type
+        isRemote: undefined, 
+        isFlexible: undefined,
+        maxResults: 10 
+      });
       setCurrentJobs(fetchedJobs);
       setIsLoading(false);
     }, 1000);
