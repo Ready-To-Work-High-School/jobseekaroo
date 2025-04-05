@@ -62,8 +62,10 @@ const FirstJobToolkitContent = () => {
   
   // Clean up any timers when component unmounts
   useEffect(() => {
+    // No need to return a cleanup function if we don't set any timeouts in the effect
+    // If we need one in the future, we'll need to store the timer ID
     return () => {
-      clearTimeout();
+      // Removed the empty clearTimeout() call that was causing the error
     };
   }, []);
   
