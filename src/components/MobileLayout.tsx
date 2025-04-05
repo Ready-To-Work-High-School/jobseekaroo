@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import MobileNavbar from './mobile/MobileNavbar';
 import BackButton from './navigation/BackButton';
+import BackToTopButton from './navigation/BackToTopButton';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -29,6 +30,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
         </div>
       )}
       {children}
+      <BackToTopButton />
       {showNavigation && <MobileNavbar />}
     </div>
   );

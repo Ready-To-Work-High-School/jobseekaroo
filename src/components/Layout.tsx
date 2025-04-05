@@ -9,6 +9,7 @@ import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import SidePanel from './layout/SidePanel';
 import MobileNavbar from './mobile/MobileNavbar';
 import BackButton from './navigation/BackButton';
+import BackToTopButton from './navigation/BackToTopButton';
 
 interface LayoutProps {
   children?: ReactNode;
@@ -45,6 +46,7 @@ const Layout = ({ children }: LayoutProps = {}) => {
           </div>
           {showDisclaimer && <PlatformDisclaimer />}
           <SidePanel />
+          <BackToTopButton />
         </main>
         <Footer />
         <MobileNavbar />
