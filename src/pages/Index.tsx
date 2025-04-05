@@ -21,12 +21,12 @@ const Index = () => {
       <div className={`w-full ${fadeIn}`}>
         <EnhancedHero />
         
-        {/* Quick access to Student Success page */}
+        {/* Quick access to Our Program page */}
         <div className="container mx-auto px-4 py-8 flex justify-center">
           <Button className="bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
-            <Link to="/student-success">
+            <Link to="/entrepreneurship-academy">
               <Award className="h-5 w-5" />
-              Explore Student Success Stories & Pathways
+              Explore Our Program
             </Link>
           </Button>
         </div>

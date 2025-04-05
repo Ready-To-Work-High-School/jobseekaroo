@@ -82,10 +82,10 @@ const MainNavigation = ({ className }: { className?: string }) => {
       </Link>
       
       {/* Primary Navigation Links */}
-      <Link to="/student-success" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
-        location.pathname === "/student-success" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+      <Link to="/entrepreneurship-academy" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+        location.pathname === "/entrepreneurship-academy" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
         <Award className="w-4 h-4" />
-        Students
+        Our Program
       </Link>
 
       <Link to="/for-employers" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 

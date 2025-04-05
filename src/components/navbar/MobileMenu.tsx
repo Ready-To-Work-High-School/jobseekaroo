@@ -69,7 +69,7 @@ export const MobileMenu = () => {
           <div className="px-4 py-2 my-1 bg-blue-50">
             <MobileNavLink to="/entrepreneurship-academy">
               <GraduationCap className="h-5 w-5" />
-              <span className="font-semibold">Entrepreneurship Academy</span>
+              <span className="font-semibold">Our Program</span>
             </MobileNavLink>
             
             <MobileNavLink to="/student-success">
