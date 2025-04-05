@@ -14,6 +14,7 @@ const {
 const { rateLimiter } = require('./middleware/rateLimit.js');
 const { sqlInjectionProtection } = require('./middleware/sqlInjectionProtection.js');
 const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler.js');
+const { cacheMiddleware } = require('./middleware/cacheMiddleware.js');
 
 // Create Express app
 const app = express();
@@ -37,6 +38,9 @@ app.disable('x-powered-by'); // Remove Express fingerprinting
 app.use('/api', enforceJsonResponse);
 app.use(rateLimiter);
 app.use(sqlInjectionProtection);
+
+// Add cache middleware for API routes with 5 minute cache duration
+app.use('/api', cacheMiddleware(300));
 
 // API routes
 app.use('/api', statusRoutes);

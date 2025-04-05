@@ -9,6 +9,7 @@ const usersRoutes = require('./routes/users');
 const { rateLimiter } = require('./middleware/rateLimit');
 const { sqlInjectionProtection } = require('./middleware/sqlInjectionProtection');
 const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler');
+const cache = require('memory-cache');
 
 // Initialize the database
 initializeDatabase();
@@ -16,12 +17,42 @@ initializeDatabase();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Cache middleware
+const cacheMiddleware = (duration) => {
+  return (req, res, next) => {
+    if (req.method !== 'GET') return next();
+    
+    const key = `__express__${req.originalUrl || req.url}`;
+    const cachedBody = cache.get(key);
+    
+    if (cachedBody) {
+      console.log(`Cache hit for ${key}`);
+      return res.send(cachedBody);
+    }
+    
+    const originalSend = res.send;
+    res.send = function(body) {
+      if (res.statusCode === 200) {
+        cache.put(key, body, duration * 1000);
+        console.log(`Cache set for ${key} with duration ${duration}s`);
+      }
+      originalSend.call(this, body);
+      return this;
+    };
+    
+    next();
+  };
+};
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiter);
 app.use(sqlInjectionProtection);
+
+// Apply cache middleware with 5-minute duration to API routes
+app.use('/api', cacheMiddleware(300));
 
 // API Routes
 app.use('/api/status', statusRoutes);
