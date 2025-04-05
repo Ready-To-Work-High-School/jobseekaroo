@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +35,7 @@ const SchoolLanding = () => {
           if (error) throw error;
           
           if (data) {
-            setSchoolData(data as School);
+            setSchoolData(data as unknown as School);
           }
         } else {
           // Redirect to main page if not on a school subdomain
@@ -93,7 +92,7 @@ const SchoolLanding = () => {
       <div className={`container mx-auto py-8 ${fadeIn}`}>
         <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 rounded-xl p-8 mb-12">
           <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-            {schoolData.logo_url && (
+            {schoolData?.logo_url && (
               <img 
                 src={schoolData.logo_url} 
                 alt={`${schoolData.name} logo`} 
@@ -103,10 +102,10 @@ const SchoolLanding = () => {
             
             <div className="text-center lg:text-left">
               <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-                {schoolData.name} Student Job Portal
+                {schoolData?.name} Student Job Portal
               </h1>
               <p className="text-lg text-muted-foreground">
-                Exclusive job opportunities for {schoolData.name} students
+                Exclusive job opportunities for {schoolData?.name} students
               </p>
             </div>
           </div>
@@ -117,7 +116,7 @@ const SchoolLanding = () => {
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold mb-4">For Students</h2>
               <p className="mb-6">
-                Access exclusive job opportunities tailored for {schoolData.name} students. 
+                Access exclusive job opportunities tailored for {schoolData?.name} students. 
                 Create a profile to showcase your skills and experience.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -135,7 +134,7 @@ const SchoolLanding = () => {
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold mb-4">For Employers</h2>
               <p className="mb-6">
-                Post job opportunities specifically for {schoolData.name} students and alumni.
+                Post job opportunities specifically for {schoolData?.name} students and alumni.
                 Get a free trial of premium features for your first posting.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -150,7 +149,7 @@ const SchoolLanding = () => {
           </Card>
         </div>
         
-        {schoolData.featured_jobs && schoolData.featured_jobs.length > 0 && (
+        {schoolData?.featured_jobs && schoolData.featured_jobs.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6">Featured Opportunities</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
