@@ -14,7 +14,7 @@ import { DateRange } from "react-day-picker"
 
 interface DatePickerProps {
   selected?: Date
-  onSelect?: (date: Date | undefined) => void
+  onSelect?: (date: Date | undefined | DateRange) => void
   selectsRange?: boolean
   startDate?: Date
   endDate?: Date
@@ -41,13 +41,6 @@ export function DatePicker({
     return selected ? format(selected, "PPP") : placeholder
   }, [selected, selectsRange, startDate, endDate, placeholder])
 
-  // Handler for date range selection
-  const handleRangeSelect = (range: DateRange | undefined) => {
-    if (onSelect) {
-      onSelect(range as any);
-    }
-  };
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -71,7 +64,7 @@ export function DatePicker({
               from: startDate,
               to: endDate
             }}
-            onSelect={handleRangeSelect}
+            onSelect={onSelect}
             defaultMonth={startDate || new Date()}
             numberOfMonths={2}
             disabled={(date) => date < new Date("1900-01-01")}

@@ -105,15 +105,9 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                       startDate={field.value?.from}
                       endDate={field.value?.to}
                       onSelect={(dateRange) => {
-                        // Handle the date selection for range
-                        if (dateRange && typeof dateRange === 'object') {
-                          // Range object received from Calendar component
-                          const range = dateRange as DateRange;
-                          field.onChange({
-                            from: range.from,
-                            to: range.to
-                          });
-                        }
+                        // Properly handle the DateRange type
+                        // The dateRange parameter is already a DateRange object from the DatePicker component
+                        field.onChange(dateRange);
                       }}
                       placeholder="Select date range"
                       className="w-full"
