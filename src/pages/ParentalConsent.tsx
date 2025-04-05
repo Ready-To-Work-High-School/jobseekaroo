@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from "@/components/Layout";
 import ParentalConsentFlow from "@/components/consent/ParentalConsentFlow";
 
-const ParentalConsent = () => {
+const ParentalConsent: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto py-8 px-4">
