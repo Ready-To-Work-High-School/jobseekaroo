@@ -68,14 +68,14 @@ export const useAuthForm = () => {
       const requiresParentalConsent = data.userType === 'student' && 
         data.age && data.age < 18;
       
-      // Pass age as part of additionalData object
+      // Fix: Pass age as part of additionalData object
       const user = await signUp(
         data.email,
         data.password,
         data.firstName,
         data.lastName,
         data.userType,
-        { age: data.age } // This is the additional data parameter
+        { age: data.age }
       );
       
       if (!user) {
