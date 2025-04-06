@@ -22,18 +22,18 @@ export async function registerUser(username: string, email: string, password: st
   try {
     const hashedPassword = await hashPassword(password);
     
-    // Use RPC function instead of direct table access
+    // Use direct insert instead of RPC
     const { data, error } = await supabase
-      .rpc('register_user', {
-        p_username: username,
-        p_email: email,
-        p_password: hashedPassword
-      })
-      .select();
+      .from('users')
+      .insert([
+        { username, email, password: hashedPassword }
+      ])
+      .select('id, username, email, created_at')
+      .single();
       
     if (error) throw error;
     
-    return { user: data, error: null };
+    return { user: data as UserWithoutPassword, error: null };
   } catch (error) {
     console.error('Error registering user:', error);
     return { user: null, error };
@@ -42,9 +42,11 @@ export async function registerUser(username: string, email: string, password: st
 
 export async function loginUser(email: string, password: string) {
   try {
-    // Use RPC function to get user by email
+    // Use direct query instead of RPC
     const { data: user, error } = await supabase
-      .rpc('get_user_by_email', { p_email: email })
+      .from('users')
+      .select('id, username, email, password, created_at')
+      .eq('email', email)
       .single();
     
     if (error) throw error;
@@ -62,7 +64,7 @@ export async function loginUser(email: string, password: string) {
     // Don't return the password
     const { password: _, ...userWithoutPassword } = user;
     
-    return { user: userWithoutPassword, error: null };
+    return { user: userWithoutPassword as UserWithoutPassword, error: null };
   } catch (error) {
     console.error('Error logging in:', error);
     return { user: null, error };
@@ -71,19 +73,18 @@ export async function loginUser(email: string, password: string) {
 
 export async function getUserById(id: string): Promise<UserWithoutPassword | null> {
   try {
-    // Use RPC function to get user by id
+    // Use direct query instead of RPC
     const { data, error } = await supabase
-      .rpc('get_user_by_id', { p_id: id })
+      .from('users')
+      .select('id, username, email, created_at')
+      .eq('id', id)
       .single();
       
     if (error) throw error;
     
     if (!data) return null;
-
-    // Don't return the password
-    const { password: _, ...userWithoutPassword } = data;
     
-    return userWithoutPassword;
+    return data as UserWithoutPassword;
   } catch (error) {
     console.error('Error getting user:', error);
     return null;
@@ -92,18 +93,15 @@ export async function getUserById(id: string): Promise<UserWithoutPassword | nul
 
 export async function getAllUsers(): Promise<UserWithoutPassword[]> {
   try {
-    // Use RPC function to get all users
+    // Use direct query instead of RPC
     const { data, error } = await supabase
-      .rpc('get_all_users')
-      .select();
+      .from('users')
+      .select('id, username, email, created_at')
+      .order('created_at', { ascending: false });
       
     if (error) throw error;
     
-    // Remove passwords from the results
-    return data.map(user => {
-      const { password: _, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    });
+    return (data || []) as UserWithoutPassword[];
   } catch (error) {
     console.error('Error getting users:', error);
     return [];

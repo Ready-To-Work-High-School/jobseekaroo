@@ -12,21 +12,29 @@ export interface Post {
 
 export async function getAllPosts(): Promise<Post[]> {
   try {
-    // Use raw SQL query due to typings issues
+    // Use direct query instead of RPC
     const { data, error } = await supabase
-      .rpc('get_all_posts')
-      .select();
+      .from('posts')
+      .select(`
+        id,
+        title,
+        content,
+        user_id,
+        created_at,
+        users (username)
+      `)
+      .order('created_at', { ascending: false });
       
     if (error) throw error;
     
     // Format the response to match the expected structure
-    return data.map((post: any) => ({
+    return (data || []).map((post: any) => ({
       id: post.id,
       title: post.title,
       content: post.content,
       user_id: post.user_id,
       created_at: post.created_at,
-      username: post.username
+      username: post.users?.username
     }));
   } catch (error) {
     console.error('Error getting posts:', error);
@@ -36,10 +44,18 @@ export async function getAllPosts(): Promise<Post[]> {
 
 export async function getPostById(id: string): Promise<Post | null> {
   try {
-    // Use raw SQL query due to typings issues
+    // Use direct query instead of RPC
     const { data, error } = await supabase
-      .rpc('get_post_by_id', { post_id: id })
-      .select()
+      .from('posts')
+      .select(`
+        id,
+        title,
+        content,
+        user_id,
+        created_at,
+        users (username)
+      `)
+      .eq('id', id)
       .single();
       
     if (error) throw error;
@@ -52,7 +68,7 @@ export async function getPostById(id: string): Promise<Post | null> {
       content: data.content,
       user_id: data.user_id,
       created_at: data.created_at,
-      username: data.username
+      username: data.users?.username
     };
   } catch (error) {
     console.error('Error getting post:', error);
@@ -62,19 +78,18 @@ export async function getPostById(id: string): Promise<Post | null> {
 
 export async function createPost(title: string, content: string, userId: string): Promise<Post | null> {
   try {
-    // Use raw SQL query due to typings issues
+    // Use direct insert instead of RPC
     const { data, error } = await supabase
-      .rpc('create_post', { 
-        p_title: title, 
-        p_content: content, 
-        p_user_id: userId 
-      })
+      .from('posts')
+      .insert([
+        { title, content, user_id: userId }
+      ])
       .select()
       .single();
       
     if (error) throw error;
     
-    return data;
+    return data as Post;
   } catch (error) {
     console.error('Error creating post:', error);
     return null;
@@ -83,20 +98,31 @@ export async function createPost(title: string, content: string, userId: string)
 
 export async function updatePost(id: string, title: string, content: string, userId: string): Promise<Post | null> {
   try {
-    // Use raw SQL query due to typings issues
+    // First check if post exists and belongs to user
+    const { data: existingPost } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('id', id)
+      .eq('user_id', userId)
+      .single();
+    
+    if (!existingPost) {
+      console.error('Post not found or not owned by user');
+      return null;
+    }
+    
+    // Use direct update instead of RPC
     const { data, error } = await supabase
-      .rpc('update_post', { 
-        p_id: id, 
-        p_title: title, 
-        p_content: content, 
-        p_user_id: userId 
-      })
+      .from('posts')
+      .update({ title, content })
+      .eq('id', id)
+      .eq('user_id', userId)
       .select()
       .single();
       
     if (error) throw error;
     
-    return data;
+    return data as Post;
   } catch (error) {
     console.error('Error updating post:', error);
     return null;
@@ -105,12 +131,25 @@ export async function updatePost(id: string, title: string, content: string, use
 
 export async function deletePost(id: string, userId: string): Promise<boolean> {
   try {
-    // Use raw SQL query due to typings issues
+    // First check if post exists and belongs to user
+    const { data: existingPost } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('id', id)
+      .eq('user_id', userId)
+      .single();
+    
+    if (!existingPost) {
+      console.error('Post not found or not owned by user');
+      return false;
+    }
+    
+    // Use direct delete instead of RPC
     const { error } = await supabase
-      .rpc('delete_post', { 
-        p_id: id, 
-        p_user_id: userId 
-      });
+      .from('posts')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', userId);
       
     if (error) throw error;
     
