@@ -22,6 +22,7 @@ const LazyImage = ({
 }: LazyImageProps) => {
   const [imageSrc, setImageSrc] = useState<string>(placeholderSrc);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   
   useEffect(() => {
@@ -59,19 +60,30 @@ const LazyImage = ({
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+    setHasError(false);
     if (onLoad) onLoad();
+  };
+
+  const handleImageError = () => {
+    setHasError(true);
+    console.warn(`Failed to load image: ${src}`);
+    // Fallback to placeholder if there's an error
+    if (imageSrc !== placeholderSrc) {
+      setImageSrc(placeholderSrc);
+    }
   };
 
   return (
     <img
       ref={imageRef}
-      src={imageSrc}
+      src={hasError ? placeholderSrc : imageSrc}
       alt={alt}
-      className={`${className} ${!imageLoaded ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
+      className={`${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
       width={width}
       height={height}
       loading="lazy"
       onLoad={handleImageLoad}
+      onError={handleImageError}
     />
   );
 };

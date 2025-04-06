@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export const useSlideIn = (delay = 0, direction = 'up') => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,17 +12,22 @@ export const useSlideIn = (delay = 0, direction = 'up') => {
     return () => clearTimeout(timer);
   }, [delay]);
 
-  if (direction === 'up') {
+  try {
+    if (direction === 'up') {
+      return isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4';
+    } else if (direction === 'down') {
+      return isVisible ? 'animate-slide-down opacity-100' : 'opacity-0 -translate-y-4';
+    } else if (direction === 'right') {
+      return isVisible ? 'animate-slide-in-right opacity-100' : 'opacity-0 -translate-x-4';
+    } else if (direction === 'left') {
+      return isVisible ? 'animate-slide-in-left opacity-100' : 'opacity-0 translate-x-4';
+    }
+    
     return isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4';
-  } else if (direction === 'down') {
-    return isVisible ? 'animate-slide-down opacity-100' : 'opacity-0 -translate-y-4';
-  } else if (direction === 'right') {
-    return isVisible ? 'animate-slide-in-right opacity-100' : 'opacity-0 -translate-x-4';
-  } else if (direction === 'left') {
-    return isVisible ? 'animate-slide-in-left opacity-100' : 'opacity-0 translate-x-4';
+  } catch (error) {
+    console.error("Animation error:", error);
+    return ''; // Fallback to no animation in case of error
   }
-  
-  return isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4';
 };
 
 export const useFadeIn = (delay = 0) => {
@@ -126,7 +131,12 @@ export const createAnimationSequence = (animations: { el: HTMLElement; animation
     animations.map(({ el, animation, duration, delay }) => 
       new Promise(resolve => 
         setTimeout(() => {
-          animateElement(el, animation, duration).then(resolve);
+          try {
+            animateElement(el, animation, duration).then(resolve);
+          } catch (error) {
+            console.error("Animation sequence error:", error);
+            resolve(undefined);
+          }
         }, delay)
       )
     )

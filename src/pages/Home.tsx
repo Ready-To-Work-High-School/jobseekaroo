@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Bot } from 'lucide-react';
 import Chatbot from '@/components/support/Chatbot';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const Home = () => {
   return (
@@ -16,7 +17,9 @@ const Home = () => {
         <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." />
       </Helmet>
       
-      <EnhancedHero />
+      <ErrorBoundary>
+        <EnhancedHero />
+      </ErrorBoundary>
       
       {/* Premium Features Banner */}
       <div className="max-w-5xl mx-auto mt-12 mb-8 bg-gradient-to-r from-amber-50 to-blue-50 p-5 rounded-lg border border-amber-100 dark:from-amber-950/30 dark:to-blue-950/30 dark:border-amber-900/50">
@@ -55,7 +58,9 @@ const Home = () => {
       </div>
       
       {/* Chatbot Integration */}
-      <Chatbot />
+      <ErrorBoundary>
+        <Chatbot />
+      </ErrorBoundary>
     </Layout>
   );
 };
