@@ -1,7 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.170.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { validateSignedUrl } from "../secure-encrypt/crypto.ts";
+import { validateSignedUrl } from "../_shared/crypto.ts";
 import { corsHeaders, handleCors, addCorsHeaders } from "../_shared/cors.ts";
 import { secureApiRequest, getClientIP } from "../_shared/api-security.ts";
 

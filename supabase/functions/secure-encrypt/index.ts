@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { encrypt, decrypt, testEncryption, generateSignedUrl, validateSignedUrl } from "./crypto.ts";
+import { encrypt, decrypt, testEncryption, generateSignedUrl, validateSignedUrl } from "../_shared/crypto.ts";
 import { corsHeaders, handleCors, addCorsHeaders } from "../_shared/cors.ts";
 import { secureApiRequest } from "../_shared/api-security.ts";
 
