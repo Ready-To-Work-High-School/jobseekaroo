@@ -8,7 +8,6 @@ import PremiumFeaturesList from '@/components/employer/premium/PremiumFeaturesLi
 import ActiveSubscription from '@/components/employer/premium/ActiveSubscription';
 import { Separator } from '@/components/ui/separator';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
-import MarketNeedSection from '@/components/employer/premium/MarketNeedSection';
 import AnimatedStar from '@/components/animations/AnimatedStar';
 
 const EmployerPremiumServices = () => {
@@ -42,8 +41,6 @@ const EmployerPremiumServices = () => {
         ) : (
           <>
             <ValueProposition />
-            <Separator className="my-10" />
-            <MarketNeedSection />
             <Separator className="my-10" />
             <PremiumFeaturesList />
             <Separator className="my-12" />

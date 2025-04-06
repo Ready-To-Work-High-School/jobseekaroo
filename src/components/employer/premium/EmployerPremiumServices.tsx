@@ -5,7 +5,6 @@ import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AnimatedStar from '@/components/animations/AnimatedStar';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
-import MarketNeedSection from '@/components/employer/premium/MarketNeedSection';
 
 const EmployerPremiumServices = () => {
   return (
@@ -28,8 +27,6 @@ const EmployerPremiumServices = () => {
         </div>
         
         <ValueProposition />
-        
-        <MarketNeedSection />
         
         <div className="flex justify-center mt-4">
           <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
