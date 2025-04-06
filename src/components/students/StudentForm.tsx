@@ -28,9 +28,28 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
   };
 
   const handleAvatarComplete = (event: AvatarExportedEvent) => {
-    // Extract the URL from the event object
-    const avatarUrl = event.url;
-    setCreatedAvatarUrl(avatarUrl);
+    // The ReadyPlayerMe AvatarExportedEvent has the URL in the event itself
+    // Based on the API documentation, we need to access it differently
+    console.log("Avatar exported event:", event);
+    
+    // If event is directly the URL string 
+    if (typeof event === 'string') {
+      setCreatedAvatarUrl(event);
+    } 
+    // If event is an object with a URL property (common structure)
+    else if (event && typeof event === 'object') {
+      // Try various common property names for the URL
+      const avatarUrl = 
+        // @ts-ignore - We're checking properties dynamically
+        event.url || event.avatarUrl || event.modelUrl || event.model || event.avatar;
+      
+      if (avatarUrl) {
+        setCreatedAvatarUrl(avatarUrl);
+      } else {
+        console.error("Could not find URL in avatar export event:", event);
+      }
+    }
+    
     setShowAvatarCreator(false);
   };
 
@@ -121,3 +140,4 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
 };
 
 export default StudentForm;
+
