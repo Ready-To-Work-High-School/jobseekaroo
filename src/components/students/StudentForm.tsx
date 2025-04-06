@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { AvatarCreator } from '@readyplayerme/react-avatar-creator';
+import type { AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 
 type AvatarType = 'color' | 'readyplayer';
 
@@ -26,9 +27,9 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
     setCreatedAvatarUrl(null);
   };
 
-  const handleAvatarComplete = (event: any) => {
-    // Handle the correct event structure from AvatarCreator
-    const avatarUrl = event?.url || event;
+  const handleAvatarComplete = (event: AvatarExportedEvent) => {
+    // Extract the URL from the event object
+    const avatarUrl = event.url;
     setCreatedAvatarUrl(avatarUrl);
     setShowAvatarCreator(false);
   };
