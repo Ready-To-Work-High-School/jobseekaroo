@@ -5,7 +5,7 @@ import EnhancedHero from '../components/EnhancedHero';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Bot } from 'lucide-react';
 import Chatbot from '@/components/support/Chatbot';
 
 const Home = () => {
@@ -30,6 +30,24 @@ const Home = () => {
           <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
             <Link to="/employer-premium">
               Explore Premium Features
+            </Link>
+          </Button>
+        </div>
+      </div>
+      
+      {/* AI Job Help Banner */}
+      <div className="max-w-5xl mx-auto mt-12 mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-lg border border-blue-100 dark:from-blue-950/30 dark:to-purple-950/30 dark:border-blue-900/50">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Bot className="h-6 w-6 text-blue-500" />
+            <div>
+              <h3 className="font-medium">AI-Powered Job Search Help</h3>
+              <p className="text-sm text-muted-foreground">Get personalized resume, interview, and job application guidance</p>
+            </div>
+          </div>
+          <Button asChild className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+            <Link to="/job-help">
+              Get AI Assistance
             </Link>
           </Button>
         </div>

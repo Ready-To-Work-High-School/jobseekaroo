@@ -1,180 +1,162 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X, User, Home, Briefcase, Building2, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, NavLink as RouterLink } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/auth';
-import { NavbarNotifications } from '@/components/notifications/NavbarNotifications';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useToast } from "@/components/ui/use-toast"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
+import { useIsMobile } from '@/hooks/use-mobile';
+
+const NavbarBrand = () => (
+  <Link to="/" className="flex items-center font-bold text-xl md:text-2xl tracking-tight">
+    <img src="/logo.svg" alt="Job Seekers 4 HS Logo" className="mr-2 h-8 w-8" />
+    <span className="text-primary">Job Seekers</span> 4 HS
+  </Link>
+);
+
+const NavLink = React.forwardRef<
+  HTMLAnchorElement,
+  React.PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>>
+>(({ children, ...props }, ref) => (
+  <RouterLink
+    {...props}
+    ref={ref}
+    className="text-sm font-medium transition-colors hover:text-primary"
+  >
+    {children}
+  </RouterLink>
+));
+NavLink.displayName = "NavLink";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, signOut } = useAuth();
-  
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const { user, logout, userProfile } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const { toast } = useToast()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      })
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast({
+        title: "Logout Failed",
+        description: "There was an error logging you out. Please try again.",
+        variant: "destructive",
+      })
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
-    <nav className="bg-white shadow-sm dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 text-xl font-bold text-gray-900 dark:text-white">
-              Job Seekers 4 HS
-            </Link>
-            
-            <div className="hidden md:block ml-10">
-              <div className="flex space-x-4">
-                <Link to="/" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                  <Home className="h-4 w-4 mr-1" />
-                  Home
-                </Link>
-                <Link to="/jobs" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                  <Briefcase className="h-4 w-4 mr-1" />
-                  Jobs
-                </Link>
-                <Link to="/for-employers" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                  <Building2 className="h-4 w-4 mr-1" />
-                  Employers
-                </Link>
-                <Link to="/about" className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                  <Info className="h-4 w-4 mr-1" />
-                  About
-                </Link>
-                {user && (
-                  <Link to="/dashboard" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                    Dashboard
-                  </Link>
+    <header className="border-b bg-background">
+      <div className="container-custom py-3 flex items-center justify-between">
+        <NavbarBrand />
+        
+        <div className="hidden md:flex items-center space-x-1">
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/jobs">Jobs</NavLink>
+          <NavLink to="/resources">Resources</NavLink>
+          <NavLink to="/job-help">AI Job Help</NavLink>
+          <NavLink to="/about">About</NavLink>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={userProfile?.avatar_url || user?.photoURL || undefined} alt={user?.displayName || "Avatar"} />
+                    <AvatarFallback>{userProfile?.full_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "JS"}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuItem onClick={() => window.location.href = '/profile'}>Profile</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>Dashboard</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/register">Register</NavLink>
+            </>
+          )}
+          <Button variant="outline" size="icon" onClick={toggleTheme}>
+            {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        </div>
+        
+        {isMobile && (
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full sm:w-2/3 md:w-1/2">
+              <SheetHeader className="space-y-2">
+                <SheetTitle>Menu</SheetTitle>
+                <SheetDescription>
+                  Navigate the app and manage your account.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <Button variant="ghost" asChild><Link to="/" onClick={toggleMobileMenu}>Home</Link></Button>
+                <Button variant="ghost" asChild><Link to="/jobs" onClick={toggleMobileMenu}>Jobs</Link></Button>
+                <Button variant="ghost" asChild><Link to="/resources" onClick={toggleMobileMenu}>Resources</Link></Button>
+                <Button variant="ghost" asChild><Link to="/job-help" onClick={toggleMobileMenu}>AI Job Help</Link></Button>
+                <Button variant="ghost" asChild><Link to="/about" onClick={toggleMobileMenu}>About</Link></Button>
+                {user ? (
+                  <>
+                    <Button variant="ghost" asChild><Link to="/profile" onClick={toggleMobileMenu}>Profile</Link></Button>
+                    <Button variant="ghost" asChild><Link to="/dashboard" onClick={toggleMobileMenu}>Dashboard</Link></Button>
+                    <Button variant="ghost" onClick={() => { handleLogout(); toggleMobileMenu(); }}>Logout</Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" asChild><Link to="/login" onClick={toggleMobileMenu}>Login</Link></Button>
+                    <Button variant="ghost" asChild><Link to="/register" onClick={toggleMobileMenu}>Register</Link></Button>
+                  </>
                 )}
-              </div>
-            </div>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-2">
-            <NavbarNotifications />
-            
-            {user ? (
-              <div className="flex items-center">
-                <Button variant="ghost" onClick={() => signOut()} className="ml-2">
-                  Sign Out
+                <Button variant="outline" size="icon" onClick={toggleTheme}>
+                  {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+                  <span className="sr-only">Toggle theme</span>
                 </Button>
-                <Link to="/profile">
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </Link>
               </div>
-            ) : (
-              <div>
-                <Link to="/signin">
-                  <Button variant="ghost">Sign In</Button>
-                </Link>
-                <Link to="/signup">
-                  <Button variant="default" className="ml-2">Sign Up</Button>
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          <div className="md:hidden flex items-center">
-            <NavbarNotifications />
-            
-            <Button variant="ghost" onClick={toggleMenu} className="ml-2">
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-        </div>
+            </SheetContent>
+          </Sheet>
+        )}
       </div>
-
-      {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link 
-              to="/" 
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setIsOpen(false)}
-            >
-              <Home className="h-4 w-4 mr-1" />
-              Home
-            </Link>
-            <Link 
-              to="/jobs" 
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setIsOpen(false)}
-            >
-              <Briefcase className="h-4 w-4 mr-1" />
-              Jobs
-            </Link>
-            <Link 
-              to="/for-employers" 
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setIsOpen(false)}
-            >
-              <Building2 className="h-4 w-4 mr-1" />
-              Employers
-            </Link>
-            <Link 
-              to="/about" 
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setIsOpen(false)}
-            >
-              <Info className="h-4 w-4 mr-1" />
-              About
-            </Link>
-            {user && (
-              <Link 
-                to="/dashboard" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                onClick={() => setIsOpen(false)}
-              >
-                Dashboard
-              </Link>
-            )}
-            {user ? (
-              <>
-                <Link 
-                  to="/profile" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Profile
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  onClick={() => {
-                    signOut();
-                    setIsOpen(false);
-                  }} 
-                  className="w-full text-left px-3 py-2"
-                >
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link 
-                  to="/signin" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sign In
-                </Link>
-                <Link 
-                  to="/signup" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </nav>
+    </header>
   );
 };
 
