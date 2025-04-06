@@ -12,6 +12,7 @@ const ValueProposition = () => {
         <Card className="border-amber-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-200 to-amber-400 opacity-40 animate-pulse-very-slow"></div>
           <div className="absolute inset-0 border border-amber-300 animate-pulse-slow"></div>
+          <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_10px_rgba(245,158,11,0.2)] animate-pulse-slow glow-amber pointer-events-none"></div>
           <CardHeader className="bg-amber-50 border-b border-amber-100 relative z-10">
             <CardTitle className="text-lg flex items-center gap-2">
               <Users className="h-5 w-5 text-amber-600" />
@@ -46,6 +47,7 @@ const ValueProposition = () => {
         <Card className="border-blue-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-200 to-amber-400 opacity-40 animate-pulse-very-slow"></div>
           <div className="absolute inset-0 border border-amber-300 animate-pulse-slow"></div>
+          <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_10px_rgba(245,158,11,0.2)] animate-pulse-slow glow-amber pointer-events-none"></div>
           <CardHeader className="bg-blue-50 border-b border-blue-100 relative z-10">
             <CardTitle className="text-lg flex items-center gap-2">
               <Presentation className="h-5 w-5 text-blue-600" />

@@ -11,6 +11,7 @@ const EmployerPremiumServices = () => {
     <div className="max-w-5xl mx-auto bg-gradient-to-r from-amber-50 to-blue-50 p-6 rounded-lg border border-amber-100 dark:from-amber-950/30 dark:to-blue-950/30 dark:border-amber-900/50 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-amber-100/20 to-amber-200/20 animate-pulse-very-slow pointer-events-none"></div>
       <div className="absolute inset-0 border-2 border-amber-300/40 rounded-lg animate-pulse-slow pointer-events-none"></div>
+      <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse-slow glow-amber pointer-events-none"></div>
       
       <div className="flex flex-col gap-6 relative z-10">
         <div className="flex items-center gap-3">
