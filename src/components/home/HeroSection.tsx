@@ -2,37 +2,42 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Shield, Award, Users } from 'lucide-react';
+import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
-import LazyImage from '../LazyImage';
-import { Badge } from '@/components/ui/badge';
 
 const HeroSection = () => {
-  // Use shorter delays for initial animations
-  const logoAnimation = useFadeIn(50);
-  const titleAnimation = useFadeIn(100);
-  const subtitleAnimation = useFadeIn(150);
-  const buttonAnimation = useFadeIn(200);
+  const logoAnimation = useFadeIn(100);
+  const titleAnimation = useSlideIn(300, 'right');
+  const subtitleAnimation = useFadeIn(500);
+  const buttonAnimation = useFadeIn(700);
   
-  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-12 md:py-16 relative overflow-hidden">
-      {/* Simplified background pattern for faster paint */}
+  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
+      {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
-      {/* Reduce initial sparkles */}
-      <SparkleGroup count={4} />
+      {/* Add animated sparkles */}
+      <SparkleGroup count={10} />
+      
+      {/* Flying particles effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => <div key={i} className="absolute rounded-full bg-blue-400/20" style={{
+        width: `${Math.random() * 10 + 5}px`,
+        height: `${Math.random() * 10 + 5}px`,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDuration: `${Math.random() * 20 + 10}s`,
+        animationDelay: `${Math.random() * 5}s`,
+        animation: 'float-around infinite linear'
+      }} />)}
+      </div>
       
       <div className="container mx-auto px-4">
-        <div className={`flex justify-center mb-6 ${logoAnimation}`}>
-          {/* Enhanced logo display - use priority loading for logo */}
+        <div className={`flex justify-center mb-8 ${logoAnimation}`}>
+          {/* Enhanced logo display with dynamic glow effect */}
           <div className="relative">
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg"></div>
-            <LazyImage 
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-              alt="Job Seekers 4 High Schools Logo" 
-              className="h-28 w-auto relative z-10 drop-shadow-lg" 
-              priority={true}
-            />
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
+            <img src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" alt="Job Seekers 4 High Schools Logo" className="h-28 w-auto relative z-10 drop-shadow-lg" />
           </div>
         </div>
         
@@ -41,7 +46,7 @@ const HeroSection = () => {
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500 relative">
               Your First Job, Made Simple.
               <span className="absolute -right-6 -top-6 hidden md:block">
-                <Sparkles className="h-6 w-6 text-amber-400" />
+                <Sparkles className="h-6 w-6 text-amber-400 animate-bounce-subtle" />
               </span>
             </span>
           </h1>
@@ -59,8 +64,7 @@ const HeroSection = () => {
             A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
           </p>
           
-          {/* Defer non-critical feature cards - load asynchronously */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-8 mb-8 content-visibility-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Shield className="h-8 w-8 text-blue-600 mb-2" />
               <h3 className="font-medium mb-1">Safe & Simple</h3>
@@ -88,7 +92,7 @@ const HeroSection = () => {
           
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${buttonAnimation}`}>
             <Link to="/jobs">
-              <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md transition-all duration-300 group relative">
+              <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
                 Find Your First Job 
                 <ArrowRight className="h-4 w-4" />
                 <span className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -97,7 +101,7 @@ const HeroSection = () => {
               </Button>
             </Link>
             <Link to="/resources">
-              <Button size="lg" variant="outline" className="border-2 shadow-sm transition-all duration-300">
+              <Button size="lg" variant="outline" className="border-2 shadow-sm hover:shadow-md transition-all duration-300">
                 Student Resources
               </Button>
             </Link>
@@ -106,5 +110,8 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
+// Import the Badge component
+import { Badge } from '@/components/ui/badge';
 
 export default HeroSection;

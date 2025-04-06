@@ -9,7 +9,6 @@ interface LazyImageProps {
   height?: number | string;
   placeholderSrc?: string;
   onLoad?: () => void;
-  priority?: boolean; // Add priority prop for critical images
 }
 
 const LazyImage = ({
@@ -20,19 +19,12 @@ const LazyImage = ({
   height,
   placeholderSrc = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
   onLoad,
-  priority = false, // Default to false
 }: LazyImageProps) => {
-  const [imageSrc, setImageSrc] = useState<string>(priority ? src : placeholderSrc);
-  const [imageLoaded, setImageLoaded] = useState(priority);
+  const [imageSrc, setImageSrc] = useState<string>(placeholderSrc);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   
   useEffect(() => {
-    // If image is priority, load it immediately
-    if (priority) {
-      setImageSrc(src);
-      return;
-    }
-
     let observer: IntersectionObserver;
     let isUnmounted = false;
 
@@ -63,7 +55,7 @@ const LazyImage = ({
         observer.unobserve(imageRef.current);
       }
     };
-  }, [src, priority]);
+  }, [src]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -78,9 +70,8 @@ const LazyImage = ({
       className={`${className} ${!imageLoaded ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
       width={width}
       height={height}
-      loading={priority ? "eager" : "lazy"}
+      loading="lazy"
       onLoad={handleImageLoad}
-      fetchPriority={priority ? "high" : "auto"}
     />
   );
 };

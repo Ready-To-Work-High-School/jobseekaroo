@@ -1,27 +1,23 @@
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './styles/index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { preloadCriticalAssets } from './utils/preload';
-
-// Preload critical assets immediately
-preloadCriticalAssets();
 
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      // Remove the 'suspense: true' option that's causing the error
       staleTime: 60000, // 1 minute
       refetchOnWindowFocus: false,
     },
   },
 });
-
-// Lazy load the App component
-const App = lazy(() => import('./App'));
 
 // Create the root and render the app
 ReactDOM.createRoot(document.getElementById('root')!).render(
