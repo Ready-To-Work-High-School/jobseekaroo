@@ -14,52 +14,52 @@ import { useToast } from '@/hooks/use-toast';
 
 const plans = [
   {
-    name: 'Basic Analytics',
-    price: '$49.99',
-    period: 'monthly',
-    description: 'Essential analytics for small businesses',
+    name: 'Premium Post',
+    price: '$25',
+    period: 'per post',
+    description: 'Enhanced visibility for individual job postings',
     features: [
-      'Basic application tracking',
-      'Demographics overview',
-      'Limited engagement metrics',
-      'Monthly reports',
-      '1 user access'
+      'Custom branded profile',
+      'Priority placement in search results',
+      'Company logo featured on listing',
+      'Basic analytics (views and applies)',
+      'Higher visibility to candidates'
     ],
-    buttonText: 'Subscribe',
+    buttonText: 'Purchase',
     popular: false,
-    planId: 'basic_analytics'
+    planId: 'premium_post'
   },
   {
-    name: 'Premium Analytics',
-    price: '$99.99',
-    period: 'monthly',
-    description: 'Advanced analytics for growing companies',
+    name: 'Premium Post + Analytics',
+    price: '$50',
+    period: 'per post',
+    description: 'Advanced analytics for individual postings',
     features: [
-      'Advanced application tracking',
-      'Detailed demographic insights',
-      'Real-time engagement metrics',
-      'Weekly reports',
-      'Company profile customization',
-      'Featured job postings',
-      'Up to 5 user access'
+      'All Premium Post features',
+      'Detailed applicant statistics',
+      'Skill match scoring',
+      'Applicant demographics',
+      'Conversion rate analytics',
+      'Comparison with industry benchmarks',
+      'Weekly engagement reports'
     ],
-    buttonText: 'Subscribe',
+    buttonText: 'Purchase',
     popular: true,
-    planId: 'premium_analytics'
+    planId: 'premium_analytics_post'
   },
   {
     name: 'Enterprise',
-    price: '$199.99',
-    period: 'monthly',
-    description: 'Complete analytics suite for large organizations',
+    price: 'Custom',
+    period: '',
+    description: 'Complete solution for high-volume hiring',
     features: [
-      'Comprehensive application tracking',
+      'Unlimited premium job postings',
       'Custom reporting dashboards',
       'AI-powered candidate matching',
       'Real-time analytics',
       'Priority feature development',
-      'Premium company profile',
-      'Unlimited user access'
+      'Dedicated account manager',
+      'Bulk posting tools'
     ],
     buttonText: 'Contact Sales',
     popular: false,
@@ -79,7 +79,7 @@ const PricingPlans = () => {
       });
     } else {
       toast({
-        title: "Subscription Process",
+        title: "Purchase Process",
         description: "Redirecting to payment gateway...",
       });
       
@@ -101,18 +101,21 @@ const PricingPlans = () => {
         {plans.map((plan) => (
           <Card 
             key={plan.planId}
-            className={`flex flex-col ${plan.popular ? 'border-primary shadow-lg' : ''}`}
+            className={`flex flex-col ${plan.popular ? 'border-primary shadow-lg relative overflow-hidden' : ''}`}
           >
             {plan.popular && (
-              <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
-                Most Popular
-              </div>
+              <>
+                <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
+                  Most Popular
+                </div>
+                <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse-slow glow-amber pointer-events-none"></div>
+              </>
             )}
             <CardHeader>
               <CardTitle>{plan.name}</CardTitle>
               <div className="mt-2 flex items-baseline">
                 <span className="text-3xl font-extrabold">{plan.price}</span>
-                <span className="ml-1 text-sm text-muted-foreground">/{plan.period}</span>
+                <span className="ml-1 text-sm text-muted-foreground">{plan.period}</span>
               </div>
               <CardDescription className="mt-2">{plan.description}</CardDescription>
             </CardHeader>
