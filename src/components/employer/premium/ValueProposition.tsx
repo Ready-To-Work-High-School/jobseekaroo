@@ -33,6 +33,10 @@ const ValueProposition = () => {
                 <Sparkles className="h-4 w-4 text-amber-500 mt-1" />
                 <span className="text-sm">Detailed skill requirement matching to reduce unqualified applications</span>
               </li>
+              <li className="flex items-start gap-2">
+                <Sparkles className="h-4 w-4 text-amber-500 mt-1" />
+                <span className="text-sm">Custom application forms tailored to your specific hiring needs</span>
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -60,6 +64,14 @@ const ValueProposition = () => {
               <li className="flex items-start gap-2">
                 <TrendingUp className="h-4 w-4 text-blue-500 mt-1" />
                 <span className="text-sm">ROI tracking to measure the effectiveness of your listings</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <TrendingUp className="h-4 w-4 text-blue-500 mt-1" />
+                <span className="text-sm">Demographic insights to help diversify your applicant pool</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <TrendingUp className="h-4 w-4 text-blue-500 mt-1" />
+                <span className="text-sm">Performance comparison with industry benchmarks</span>
               </li>
             </ul>
           </CardContent>
