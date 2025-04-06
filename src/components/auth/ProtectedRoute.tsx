@@ -1,16 +1,32 @@
+
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react'; // Or useSupabaseAuth if using Supabase
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase'; // If Supabase is used
+import { useState } from 'react';
+import { toast } from 'sonner';
+import RequireVerification from './RequireVerification';
+import { isAdmin, isTestMode } from '@/utils/adminUtils';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: 'student' | 'employer' | 'school'; // Optional role-based access
+  adminOnly?: boolean;
+  requireVerification?: boolean;
+  requiredRoles?: string[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
+  children, 
+  requiredRole, 
+  adminOnly = false, 
+  requireVerification = false, 
+  requiredRoles = [] 
+}) => {
   const { isSignedIn, userId } = useAuth(); // Clerk auth
   const location = useLocation();
+  const [hasShownToast] = useState(false);
+  const testMode = isTestMode();
 
   // Fetch user role from Supabase (if roles stored there)
   const { data: userProfile, isLoading } = useQuery({
@@ -18,7 +34,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, user_type')
         .eq('id', userId)
         .single();
       if (error) throw error;
@@ -42,8 +58,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
     return <Navigate to="/unauthorized" replace />;
   }
 
-  return <>{children}</>;
-};
   // Check for admin-only routes
   if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
@@ -53,7 +67,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
         description: "You need admin privileges to access this page",
         variant: "destructive",
       });
-      setHasShownToast(true);
     }
     return <Navigate to="/" replace />;
   }
@@ -73,7 +86,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
           description: "You don't have the required role to access this page",
           variant: "destructive",
         });
-        setHasShownToast(true);
       }
       return <Navigate to="/" replace />;
     }
