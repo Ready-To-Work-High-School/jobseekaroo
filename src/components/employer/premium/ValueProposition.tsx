@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PresentationChart, Users, TrendingUp, Sparkles } from 'lucide-react';
+import { Presentation, Users, TrendingUp, Sparkles } from 'lucide-react';
 
 const ValueProposition = () => {
   return (
@@ -40,7 +40,7 @@ const ValueProposition = () => {
         <Card className="border-blue-200">
           <CardHeader className="bg-blue-50 border-b border-blue-100">
             <CardTitle className="text-lg flex items-center gap-2">
-              <PresentationChart className="h-5 w-5 text-blue-600" />
+              <Presentation className="h-5 w-5 text-blue-600" />
               Advanced Analytics
             </CardTitle>
           </CardHeader>
