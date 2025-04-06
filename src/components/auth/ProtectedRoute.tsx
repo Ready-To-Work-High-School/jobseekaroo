@@ -1,94 +1,49 @@
-
-import { ReactNode, useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isAdmin, isTestMode } from "@/utils/adminUtils";
-import AdvancedSpinner from "@/components/ui/advanced-spinner";
-import RequireVerification from "@/components/auth/RequireVerification";
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react'; // Or useSupabaseAuth if using Supabase
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase'; // If Supabase is used
 
 interface ProtectedRouteProps {
-  children: ReactNode;
-  redirectTo?: string;
-  adminOnly?: boolean;
-  requiredRoles?: string[];
-  requireVerification?: boolean;
+  children: React.ReactNode;
+  requiredRole?: 'student' | 'employer' | 'school'; // Optional role-based access
 }
 
-const ProtectedRoute = ({ 
-  children,
-  redirectTo = "/sign-in",
-  adminOnly = false,
-  requiredRoles = [],
-  requireVerification = false
-}: ProtectedRouteProps) => {
-  const { user, userProfile, isLoading, refreshProfile } = useAuth();
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
+  const { isSignedIn, userId } = useAuth(); // Clerk auth
   const location = useLocation();
-  const { toast } = useToast();
-  const testMode = isTestMode();
-  const [hasShownToast, setHasShownToast] = useState(false);
-  
-  // Add detailed debug logging to help diagnose issues
-  console.log('ProtectedRoute:', { 
-    path: location.pathname,
-    isLoading, 
-    authenticated: !!user,
-    userType: userProfile?.user_type,
-    userProfile,
-    adminOnly,
-    testMode,
-    adminAccess: isAdmin(userProfile) || testMode
+
+  // Fetch user role from Supabase (if roles stored there)
+  const { data: userProfile, isLoading } = useQuery({
+    queryKey: ['userProfile', userId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!userId, // Only fetch if signed in
   });
-  
-  // Attempt to refresh the profile if we have a user but no profile
-  useEffect(() => {
-    if (user && !userProfile && !isLoading) {
-      console.log('User exists but no profile, refreshing profile data');
-      refreshProfile();
-    }
-  }, [user, userProfile, isLoading, refreshProfile]);
-  
-  // Show auth toast only once, not on every render
-  useEffect(() => {
-    if (!user && !isLoading && !testMode && !hasShownToast) {
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to access this page",
-        variant: "destructive",
-      });
-      setHasShownToast(true);
-    }
-  }, [user, isLoading, toast, testMode, hasShownToast]);
 
-  // While checking auth status, show a loading spinner
+  // Loading state
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <AdvancedSpinner variant="circle" size="lg" text="Loading..." centered />
-      </div>
-    );
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
-  // If in test mode and trying to access admin routes, bypass auth checks
-  if (testMode && adminOnly) {
-    console.log('Admin test mode active - bypassing auth checks');
-    return <>{children}</>;
+  // Not signed in -> redirect to login with return URL
+  if (!isSignedIn) {
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
   }
 
-  // If not authenticated and not in test mode, redirect to login page with the return url
-  // Remove the toast here since we're already showing it in the useEffect above
-  if (!user && !testMode) {
-    console.log('Not authenticated, redirecting to', redirectTo);
-    // Save the current location they were trying to go to
-    return (
-      <Navigate 
-        to={redirectTo} 
-        state={{ from: location, redirectFrom: location.pathname.substring(1) }} 
-        replace
-      />
-    );
+  // Role-based access
+  if (requiredRole && userProfile?.role !== requiredRole) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
+  return <>{children}</>;
+};
   // Check for admin-only routes
   if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
