@@ -24,8 +24,8 @@ const SchoolLanding = () => {
         // Extract school name from hostname
         const hostname = window.location.hostname;
         
-        // Enhanced regex to match school.domain.tld pattern
-        const schoolRegex = /^([^.]+)\.(jobseekaroo\.com|jobseekers4hs\.org|localhost)(?::\d+)?$/;
+        // Enhanced regex to match school.domain.tld pattern (with both variations of the domain)
+        const schoolRegex = /^([^.]+)\.(jobseekaroo\.com|jobseekers4hs\.org|jobseeker4hs\.org|localhost)(?::\d+)?$/;
         const schoolMatch = hostname.match(schoolRegex);
         
         let schoolName = null;
@@ -48,7 +48,7 @@ const SchoolLanding = () => {
           }
         }
         
-        if (schoolName && schoolName !== 'jobseekaroo' && schoolName !== 'www' && schoolName !== 'jobseekers4hs') {
+        if (schoolName && schoolName !== 'jobseekaroo' && schoolName !== 'www' && schoolName !== 'jobseekers4hs' && schoolName !== 'jobseeker4hs') {
           // Use a raw query approach to avoid TypeScript issues
           const { data: schoolData, error } = await supabase
             .from('schools')
