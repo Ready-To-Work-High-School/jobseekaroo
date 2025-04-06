@@ -5,6 +5,7 @@ import AcademyDescription from './academy/AcademyDescription';
 import ProgramBenefits from './academy/ProgramBenefits';
 import CourseCurriculum from './academy/CourseCurriculum';
 import EntrepreneurshipStoreSection from './EntrepreneurshipStoreSection';
+import { Separator } from '@/components/ui/separator';
 
 const WestsideAcademy = () => {
   return (
@@ -24,6 +25,18 @@ const WestsideAcademy = () => {
           <AcademyHeader />
           <AcademyDescription />
           
+          {/* ESB Badge - MOVED UP above Program Benefits */}
+          <div className="mb-8 flex justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-md opacity-30 animate-pulse"></div>
+              <img 
+                src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+                alt="ESB Certification" 
+                className="h-32 w-auto relative z-10"
+              />
+            </div>
+          </div>
+          
           {/* Entrepreneurship School Store Section */}
           <div className="mb-10">
             <EntrepreneurshipStoreSection />
@@ -35,6 +48,9 @@ const WestsideAcademy = () => {
           </div>
         </div>
       </div>
+      
+      {/* Divider added above Nursing Academy */}
+      <Separator className="my-6 bg-gradient-to-r from-blue-300 via-red-300 to-blue-300 h-0.5" />
       
       {/* Enhanced Nursing Academy Section with Video */}
       <div className="mt-6 p-6 md:p-8 rounded-lg bg-gradient-to-r from-blue-50 to-red-50 border border-blue-100">
@@ -67,11 +83,15 @@ const WestsideAcademy = () => {
               Students learn essential healthcare skills and can earn NCLEX certification.
             </p>
             <div className="flex justify-center lg:justify-start">
-              <img 
-                src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
-                alt="Nursing Academy Certification" 
-                className="h-24 w-auto object-contain"
-              />
+              {/* Made nursing badge bigger with glow effect */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400 rounded-lg blur-lg opacity-40 animate-pulse glow-blue-gold"></div>
+                <img 
+                  src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                  alt="Nursing Academy Certification" 
+                  className="h-32 w-auto object-contain relative z-10"
+                />
+              </div>
             </div>
           </div>
         </div>
