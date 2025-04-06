@@ -5,6 +5,13 @@ import { Dot } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+// Define an interface for the slot object
+interface OTPSlot {
+  char?: string;
+  hasFakeCaret?: boolean;
+  isActive?: boolean;
+}
+
 const InputOTP = React.forwardRef<
   React.ElementRef<typeof OTPInput>,
   React.ComponentPropsWithoutRef<typeof OTPInput>
@@ -37,9 +44,9 @@ const InputOTPSlot = React.forwardRef<
   
   // Use null coalescing and provide default values for all properties
   const slots = inputOTPContext?.slots || [];
-  const slot = slots[index] || {};
+  const slot = slots[index] as OTPSlot || {}; // Cast to our defined interface
   
-  // Provide default values for all the properties we need to prevent TypeScript errors
+  // Access properties with proper typing
   const char = slot.char || '';
   const hasFakeCaret = !!slot.hasFakeCaret;
   const isActive = !!slot.isActive;
