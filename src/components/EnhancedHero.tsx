@@ -6,8 +6,14 @@ import CallToActionSection from '@/components/home/CallToActionSection';
 import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
+import TopEmployersSection from '@/components/job/TopEmployersSection';
+import SectionSeparator from '@/components/home/SectionSeparator';
 import { TrendingUp, Briefcase, GraduationCap } from 'lucide-react';
 import { SparkleGroup } from './animations/Sparkle';
+import { Divider } from './ui/divider';
+import { Separator } from './ui/separator';
+import CompanyDirectory from './resources/CompanyDirectory';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 
 const EnhancedHero = () => {
   return (
@@ -33,7 +39,23 @@ const EnhancedHero = () => {
       </div>
       
       <HeroSection />
+      
+      {/* Divider with text "For Students, Employers & Schools" */}
+      <div className="container mx-auto px-4">
+        <Separator className="my-8" />
+        <Divider className="mb-8">For Students, Employers & Schools</Divider>
+      </div>
+      
+      {/* Top Employers in Jacksonville Section */}
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold mb-6 text-center">Top 10 Employers in Jacksonville</h2>
+        <CompanyDirectory companies={topJacksonvilleCompanies} />
+      </div>
+      
+      <SectionSeparator />
+      
       <FeaturedJobsSection />
+      <TopEmployersSection />
       <FeaturesSection />
       <JobPlacementsSection />
       <PartnerLogosSection />
