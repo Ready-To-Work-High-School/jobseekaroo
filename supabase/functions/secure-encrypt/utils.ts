@@ -1,6 +1,4 @@
 
-import * as crypto from "https://deno.land/std@0.170.0/crypto/mod.ts";
-
 // Helper function to convert string to Uint8Array
 export function str2ab(str: string): Uint8Array {
   return new TextEncoder().encode(str);

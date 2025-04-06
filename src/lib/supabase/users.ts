@@ -62,9 +62,14 @@ export async function loginUser(email: string, password: string) {
     }
     
     // Don't return the password
-    const { password: _, ...userWithoutPassword } = user;
+    const userWithoutPassword = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      created_at: user.created_at
+    };
     
-    return { user: userWithoutPassword as UserWithoutPassword, error: null };
+    return { user: userWithoutPassword, error: null };
   } catch (error) {
     console.error('Error logging in:', error);
     return { user: null, error };
