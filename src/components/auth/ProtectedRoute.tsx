@@ -2,7 +2,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react'; // Or useSupabaseAuth if using Supabase
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../lib/supabase'; // If Supabase is used
+import { supabase } from '@/integrations/supabase/client'; // Fix the import path for supabase
 import { useState } from 'react';
 import { toast } from 'sonner';
 import RequireVerification from './RequireVerification';
@@ -62,10 +62,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
     if (!hasShownToast) {
-      toast({
-        title: "Access Denied",
+      // Fix the toast call to use the correct syntax for sonner
+      toast.error("Access Denied", {
         description: "You need admin privileges to access this page",
-        variant: "destructive",
       });
     }
     return <Navigate to="/" replace />;
@@ -81,10 +80,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         current: userProfile.user_type 
       });
       if (!hasShownToast) {
-        toast({
-          title: "Access Denied",
+        // Fix the toast call to use the correct syntax for sonner
+        toast.error("Access Denied", {
           description: "You don't have the required role to access this page",
-          variant: "destructive",
         });
       }
       return <Navigate to="/" replace />;
