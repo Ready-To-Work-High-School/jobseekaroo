@@ -7,11 +7,15 @@ import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import { TrendingUp, Briefcase, GraduationCap } from 'lucide-react';
+import { SparkleGroup } from './animations/Sparkle';
 
 const EnhancedHero = () => {
   return (
-    <div>
-      <div className="bg-blue-50 py-4 px-4 text-center">
+    <div className="relative">
+      {/* Add sparkles throughout the hero area */}
+      <SparkleGroup count={12} />
+      
+      <div className="bg-blue-50 py-4 px-4 text-center relative overflow-hidden">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
           <div className="flex items-center">
             <TrendingUp className="text-blue-600 h-5 w-5 mr-2" />

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
+import { SparkleGroup } from '../animations/Sparkle';
 
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
@@ -14,6 +15,9 @@ const HeroSection = () => {
   return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
+      
+      {/* Add animated sparkles */}
+      <SparkleGroup count={10} />
       
       {/* Flying particles effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -39,14 +43,20 @@ const HeroSection = () => {
         
         <div className="max-w-3xl mx-auto text-center">
           <h1 className={`text-4xl md:text-5xl font-bold mb-6 text-gray-900 ${titleAnimation}`}>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500 relative">
               Your First Job, Made Simple.
+              <span className="absolute -right-6 -top-6 hidden md:block">
+                <Sparkles className="h-6 w-6 text-amber-400 animate-bounce-subtle" />
+              </span>
             </span>
           </h1>
           
           <div className="my-6 flex justify-center">
-            <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium">
+            <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium relative">
               Exclusive to Westside High School Students
+              <span className="absolute -top-2 -right-2">
+                <Sparkles className="h-4 w-4 text-amber-500" />
+              </span>
             </Badge>
           </div>
           
@@ -82,8 +92,12 @@ const HeroSection = () => {
           
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${buttonAnimation}`}>
             <Link to="/jobs">
-              <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300">
-                Find Your First Job <ArrowRight className="h-4 w-4" />
+              <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
+                Find Your First Job 
+                <ArrowRight className="h-4 w-4" />
+                <span className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Sparkles className="h-5 w-5 text-amber-300" />
+                </span>
               </Button>
             </Link>
             <Link to="/resources">
