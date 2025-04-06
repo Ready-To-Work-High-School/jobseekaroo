@@ -48,8 +48,10 @@ const AvatarWithTooltip = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Avatar>
-            {(!useColorBackground && src) && <AvatarImage src={src} alt={alt || fallback} />}
+          <Avatar className="h-16 w-16"> {/* Increased size for better visibility */}
+            {!useColorBackground && src && (
+              <AvatarImage src={src} alt={alt || fallback} />
+            )}
             <AvatarFallback 
               className={`text-white ${useColorBackground ? backgroundColorClass : 'bg-gray-300'}`}
             >
