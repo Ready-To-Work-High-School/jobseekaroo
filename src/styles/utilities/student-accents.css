@@ -1,0 +1,95 @@
+
+/* Student accent styles */
+
+/* Gold-Lavender gradient for text, borders, accents */
+.text-gold-lavender-gradient {
+  background: linear-gradient(to right, #f59e0b, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gold-lavender gradient progress bar */
+.progress-gold-lavender {
+  background-image: linear-gradient(to right, #f59e0b, #d8b4fe);
+}
+
+.progress-lavender-gold-purple {
+  background-image: linear-gradient(to right, #a855f7, #f59e0b, #c084fc);
+}
+
+/* Student card with gold accent */
+.student-card {
+  @apply relative border rounded-lg overflow-hidden transition-all hover:shadow-md;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #f59e0b, #a855f7);
+}
+
+/* Student section accent background */
+.student-section-bg {
+  background: linear-gradient(135deg, #f59e0b10, #a855f715);
+}
+
+/* Student accent borders */
+.student-accent-border {
+  @apply border-l-4 pl-4;
+  border-image: linear-gradient(to bottom, #f59e0b, #a855f7) 1 100%;
+}
+
+/* Glow effects for student elements */
+.student-glow {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.15), 0 0 30px rgba(245, 158, 11, 0.1);
+}
+
+/* Accent buttons for student pages */
+.student-accent-button {
+  @apply relative overflow-hidden px-6 py-3 rounded-lg text-white transition-all;
+  background: linear-gradient(45deg, #f59e0b, #a855f7);
+}
+
+.student-accent-button:hover {
+  background: linear-gradient(45deg, #d97706, #9333ea);
+}
+
+/* Student heading accents */
+.student-heading {
+  @apply relative inline-block;
+}
+
+.student-heading::after {
+  content: '';
+  @apply block h-1 mt-1 rounded-full bg-gradient-to-r from-gold-500 to-lavender-500;
+  width: 70%;
+}
+
+/* Floating accents for student sections */
+.student-float-accent {
+  @apply absolute w-12 h-12 rounded-full opacity-20 blur-xl;
+  background: radial-gradient(circle, #f59e0b, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.student-float-accent-lavender {
+  @apply absolute w-16 h-16 rounded-full opacity-20 blur-xl;
+  background: radial-gradient(circle, #a855f7, transparent 70%);
+  animation: float 8s ease-in-out infinite;
+}
+
+/* Student card hover effect */
+.student-card-hover {
+  @apply transition-all duration-300;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.student-card-hover:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 2px rgba(245, 158, 11, 0.1), 0 0 0 4px rgba(168, 85, 247, 0.05);
+  transform: translateY(-2px);
+}

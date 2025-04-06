@@ -77,15 +77,15 @@ const FirstJobToolkitContent = () => {
       {showConfetti && <ConfettiAnimation />}
       
       <div className="flex flex-col items-center text-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Your First Job in {totalSteps} Steps</h1>
+        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gold-400 via-lavender-500 to-gold-500 bg-clip-text text-transparent">Your First Job in {totalSteps} Steps</h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
           Our guided toolkit to help you land and succeed in your first job. Complete each step to build your job readiness!
         </p>
       </div>
       
-      <Card className="shadow-md border-t-4 border-t-primary">
-        <CardHeader>
-          <CardTitle>Step {currentStep}: {stepTitles[currentStep - 1]}</CardTitle>
+      <Card className="shadow-md border-t-4 border-t-gold-400">
+        <CardHeader className="bg-gradient-to-r from-lavender-500/5 to-gold-400/5">
+          <CardTitle className="text-gold-lavender-gradient">Step {currentStep}: {stepTitles[currentStep - 1]}</CardTitle>
           <CardDescription>
             {currentStep === 1 && "Create a complete profile to showcase your skills and experience."}
             {currentStep === 2 && "Build a professional resume that stands out to employers."}
@@ -108,7 +108,7 @@ const FirstJobToolkitContent = () => {
             variant="outline" 
             onClick={handlePrevious} 
             disabled={currentStep === 1}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 border-gold-400/30 hover:bg-gold-400/10"
           >
             <ChevronLeft className="h-4 w-4" /> Previous
           </Button>
@@ -117,7 +117,7 @@ const FirstJobToolkitContent = () => {
             variant="default" 
             onClick={handleNext} 
             disabled={currentStep === totalSteps}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-lavender-500 hover:from-gold-600 hover:to-lavender-600"
           >
             Next <ChevronRight className="h-4 w-4" />
           </Button>

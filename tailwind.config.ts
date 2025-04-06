@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 import { blackA } from "@radix-ui/colors";
 
@@ -73,6 +74,13 @@ const config = {
           600: "#9333ea", // Medium-dark lavender
           700: "#7e22ce", // Dark lavender
         },
+        gold: {
+          300: "#fcd34d", // Light gold
+          400: "#fbbf24", // Medium-light gold
+          500: "#f59e0b", // Medium gold
+          600: "#d97706", // Medium-dark gold
+          700: "#b45309", // Dark gold
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -124,6 +132,14 @@ const config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-4px)" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -137,6 +153,13 @@ const config = {
         "fade-in": "fade-in 0.3s ease-out",
         "zoom-in": "zoom-in 0.3s ease-out",
         "bounce-subtle": "bounce-subtle 1.5s infinite",
+        "float": "float 3s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+      },
+      backgroundImage: {
+        'gold-lavender-gradient': 'linear-gradient(to right, #fbbf24, #c084fc)',
+        'lavender-gold-gradient': 'linear-gradient(to right, #a855f7, #f59e0b)',
+        'student-hero-gradient': 'linear-gradient(135deg, #f59e0b15, #a855f715)',
       },
     },
   },

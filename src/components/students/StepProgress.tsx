@@ -15,10 +15,10 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-center">
-        <span className="text-sm font-medium text-muted-foreground mb-2 sm:mb-0">
+        <span className="text-sm font-medium text-gold-500 mb-2 sm:mb-0">
           Step {currentStep} of {totalSteps}
         </span>
-        <span className="text-sm font-medium">
+        <span className="text-sm font-medium bg-gradient-to-r from-gold-400 to-lavender-500 bg-clip-text text-transparent">
           {progressPercentage}% Complete
         </span>
       </div>
@@ -34,14 +34,14 @@ const StepProgress = ({ currentStep, totalSteps, stepTitles }: StepProgressProps
             key={index} 
             className={cn(
               "text-center relative pt-6",
-              index + 1 <= currentStep ? "text-primary" : "text-muted-foreground"
+              index + 1 <= currentStep ? "text-lavender-500" : "text-muted-foreground"
             )}
           >
             <div 
               className={cn(
                 "absolute top-0 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full",
-                index + 1 < currentStep ? "bg-primary" : 
-                index + 1 === currentStep ? "bg-primary animate-pulse" : 
+                index + 1 < currentStep ? "bg-gradient-to-r from-gold-400 to-lavender-500" : 
+                index + 1 === currentStep ? "bg-lavender-500 animate-pulse" : 
                 "bg-muted border border-muted-foreground"
               )}
             />

@@ -9,7 +9,7 @@ const ResourceHeader = () => {
   return (
     <div className={headerAnimation}>
       <div className="text-center mb-12 relative">
-        {/* Small heart with gradient */}
+        {/* Small floating hearts with gradient */}
         <div className="absolute top-0 right-1/4 transform -translate-y-1/2 animate-bounce-subtle">
           <div className="relative">
             <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-400 via-purple-400 to-lavender-500 opacity-70 blur-sm"></div>
@@ -17,12 +17,19 @@ const ResourceHeader = () => {
           </div>
         </div>
         
+        <div className="absolute top-10 left-1/4 transform -translate-y-1/2 animate-float">
+          <div className="relative">
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-gold-400 to-lavender-400 opacity-60 blur-sm"></div>
+            <Heart className="h-4 w-4 text-white relative z-10 drop-shadow-md" />
+          </div>
+        </div>
+        
         {/* Enhanced gradient to match the shield logo */}
         <div className="flex justify-center mb-4 relative">
           <Link to="/admin?adminTest=true" className="relative" aria-label="Admin Access" title="Admin Access">
-            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
-            <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-            <div className="absolute -inset-3.5 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 opacity-25 blur-xl"></div>
+            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-600 via-gold-400 to-lavender-500 opacity-75 blur-sm animate-pulse"></div>
+            <div className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-blue-700 to-gold-400 opacity-30 blur-lg glow-pulse"></div>
+            <div className="absolute -inset-3.5 rounded-full bg-gradient-to-r from-gold-400 to-lavender-600 opacity-25 blur-xl"></div>
             <img 
               src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
               alt="Admin Access" 
@@ -31,14 +38,14 @@ const ResourceHeader = () => {
           </Link>
         </div>
         <h1 className="text-4xl font-bold mb-6 relative">
-          <span className="bg-gradient-to-r from-amber-500 via-purple-400 to-lavender-500 bg-clip-text text-transparent">Student Resources</span>
+          <span className="bg-gradient-to-r from-gold-500 via-lavender-400 to-lavender-500 bg-clip-text text-transparent">Student Resources</span>
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Access tools, guides, and resources to help you prepare for and succeed in your job search and career.
         </p>
         
         {/* Decorative diagonal gradient bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-purple-500 to-lavender-400 transform -rotate-1 translate-y-6 opacity-70"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold-400 via-lavender-500 to-lavender-400 transform -rotate-1 translate-y-6 opacity-70"></div>
       </div>
     </div>
   );
