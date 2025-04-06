@@ -75,7 +75,7 @@ const VerifyIdentity = () => {
                 <InputOTPGroup>
                   {slots.map((slot, index) => (
                     <React.Fragment key={index}>
-                      <InputOTPSlot className="w-10 h-12" index={index} {...slot} />
+                      <InputOTPSlot className="w-10 h-12" index={index} />
                       {index !== slots.length - 1 && <InputOTPSeparator />}
                     </React.Fragment>
                   ))}
