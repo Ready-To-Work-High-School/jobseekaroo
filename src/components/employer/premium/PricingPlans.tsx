@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 
 const plans = [
   {
@@ -69,27 +70,48 @@ const plans = [
 
 const PricingPlans = () => {
   const { toast } = useToast();
+  const { purchasePremiumPost, isLoading } = usePremiumFeatures();
 
-  const handleSubscribe = (planId: string) => {
-    // In a real implementation, this would redirect to a payment gateway or Stripe checkout
+  const handleSubscribe = async (planId: string) => {
+    // For enterprise plan, just show contact message
     if (planId === 'enterprise_analytics') {
       toast({
         title: "Contact Sales",
         description: "Our sales team will contact you shortly to discuss enterprise options.",
       });
-    } else {
-      toast({
-        title: "Purchase Process",
-        description: "Redirecting to payment gateway...",
+      return;
+    }
+    
+    try {
+      // For demo purposes, we'll use the first job in the jobs table
+      // In a real implementation, you would select the specific job to upgrade
+      const { data: jobs } = await supabase
+        .from('jobs')
+        .select('id')
+        .limit(1)
+        .single();
+        
+      if (!jobs?.id) {
+        toast({
+          title: "No Job Found",
+          description: "Please create a job posting before purchasing a premium plan.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      await purchasePremiumPost({
+        jobId: jobs.id,
+        includeAnalytics: planId === 'premium_analytics_post'
       });
       
-      // Mock payment gateway redirect
-      setTimeout(() => {
-        toast({
-          title: "Demo Only",
-          description: "In a production environment, this would connect to a payment processor.",
-        });
-      }, 2000);
+    } catch (error: any) {
+      console.error('Error initiating subscription:', error);
+      toast({
+        title: "Error",
+        description: error.message || "There was a problem processing your request.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -133,8 +155,9 @@ const PricingPlans = () => {
               <Button 
                 className={`w-full ${plan.popular ? 'bg-primary' : ''}`}
                 onClick={() => handleSubscribe(plan.planId)}
+                disabled={isLoading}
               >
-                {plan.buttonText}
+                {isLoading ? "Processing..." : plan.buttonText}
               </Button>
             </CardFooter>
           </Card>

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,13 +10,44 @@ import { Separator } from '@/components/ui/separator';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
+import PurchaseConfirmation from '@/components/employer/premium/PurchaseConfirmation';
 
 const EmployerPremiumServices = () => {
   const fadeIn = useFadeIn(300);
   const { userProfile } = useAuth();
+  const [searchParams] = useSearchParams();
+  const { toast } = useToast();
+  
+  // Check for success or canceled payment
+  const success = searchParams.get('success') === 'true';
+  const canceled = searchParams.get('canceled') === 'true';
+  const sessionId = searchParams.get('session_id');
+  
+  useEffect(() => {
+    // Display toast message based on payment result
+    if (canceled) {
+      toast({
+        title: "Payment Canceled",
+        description: "You've canceled the payment process. No charges were made.",
+      });
+    }
+  }, [canceled, toast]);
   
   // In a real implementation, this would come from Supabase or your backend
   const hasPremiumSubscription = userProfile?.preferences?.hasPremium === true;
+
+  // Show purchase confirmation if we have a session ID
+  if (sessionId) {
+    return (
+      <Layout>
+        <div className={`container max-w-5xl mx-auto px-4 py-8 ${fadeIn}`}>
+          <PurchaseConfirmation />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
