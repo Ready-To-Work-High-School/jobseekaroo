@@ -6,6 +6,7 @@ const { initializeDatabase } = require('./db');
 const statusRoutes = require('./routes/status');
 const postsRoutes = require('./routes/posts');
 const usersRoutes = require('./routes/users');
+const chatRoutes = require('./routes/chat');
 const { rateLimiter } = require('./middleware/rateLimit');
 const { sqlInjectionProtection } = require('./middleware/sqlInjectionProtection');
 const { apiErrorHandler, api404Handler } = require('./middleware/errorHandler');
@@ -59,6 +60,7 @@ app.use('/api', cacheMiddleware(300));
 app.use('/api/status', statusRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api', chatRoutes); // Add the chat routes
 
 // School-branded landing page route
 app.get('/', (req, res, next) => {
