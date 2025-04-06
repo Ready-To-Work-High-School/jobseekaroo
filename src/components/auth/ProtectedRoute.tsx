@@ -5,19 +5,22 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isAdmin, isTestMode } from "@/utils/adminUtils";
 import AdvancedSpinner from "@/components/ui/advanced-spinner";
+import RequireVerification from "@/components/auth/RequireVerification";
 
 interface ProtectedRouteProps {
   children: ReactNode;
   redirectTo?: string;
   adminOnly?: boolean;
   requiredRoles?: string[];
+  requireVerification?: boolean;
 }
 
 const ProtectedRoute = ({ 
   children,
   redirectTo = "/sign-in",
   adminOnly = false,
-  requiredRoles = []
+  requiredRoles = [],
+  requireVerification = false
 }: ProtectedRouteProps) => {
   const { user, userProfile, isLoading, refreshProfile } = useAuth();
   const location = useLocation();
@@ -119,6 +122,11 @@ const ProtectedRoute = ({
       }
       return <Navigate to="/" replace />;
     }
+  }
+
+  // If authenticated and has proper permissions, check if verification is required
+  if (requireVerification) {
+    return <RequireVerification>{children}</RequireVerification>;
   }
 
   // If authenticated and has proper permissions, render children

@@ -9,6 +9,7 @@ import RedemptionCode from '../pages/RedemptionCode';
 import Layout from '../components/Layout';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import AdminToggle from '../components/admin/AdminToggle';
+import VerifyIdentity from '../pages/VerifyIdentity';
 
 export const AuthRoutes = (
   <>
@@ -21,6 +22,7 @@ export const AuthRoutes = (
     <Route path="/signup" element={<SignUp />} /> {/* Alias route for /signup without hyphen */}
     <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="/redeem-code" element={<RedemptionCode />} />
+    <Route path="/verify-identity" element={<VerifyIdentity />} />
     
     {/* Admin toggle for testing */}
     <Route path="/admin-toggle" element={
