@@ -2,9 +2,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, Award, Users } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
+import LazyImage from '../LazyImage';
+import { Badge } from '@/components/ui/badge';
 
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
@@ -19,25 +21,36 @@ const HeroSection = () => {
       {/* Add animated sparkles */}
       <SparkleGroup count={10} />
       
-      {/* Flying particles effect */}
+      {/* Flying particles effect - defer this non-critical animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => <div key={i} className="absolute rounded-full bg-blue-400/20" style={{
-        width: `${Math.random() * 10 + 5}px`,
-        height: `${Math.random() * 10 + 5}px`,
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDuration: `${Math.random() * 20 + 10}s`,
-        animationDelay: `${Math.random() * 5}s`,
-        animation: 'float-around infinite linear'
-      }} />)}
+        {[...Array(10)].map((_, i) => (
+          <div 
+            key={i} 
+            className="absolute rounded-full bg-blue-400/20" 
+            style={{
+              width: `${Math.random() * 10 + 5}px`,
+              height: `${Math.random() * 10 + 5}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDuration: `${Math.random() * 20 + 10}s`,
+              animationDelay: `${Math.random() * 5}s`,
+              animation: 'float-around infinite linear'
+            }}
+          />
+        ))}
       </div>
       
       <div className="container mx-auto px-4">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
-          {/* Enhanced logo display with dynamic glow effect */}
+          {/* Enhanced logo display with dynamic glow effect - use priority loading for logo */}
           <div className="relative">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
-            <img src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" alt="Job Seekers 4 High Schools Logo" className="h-28 w-auto relative z-10 drop-shadow-lg" />
+            <LazyImage 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              alt="Job Seekers 4 High Schools Logo" 
+              className="h-28 w-auto relative z-10 drop-shadow-lg" 
+              priority={true}
+            />
           </div>
         </div>
         
@@ -64,6 +77,7 @@ const HeroSection = () => {
             A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
           </p>
           
+          {/* Defer non-critical feature cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Shield className="h-8 w-8 text-blue-600 mb-2" />
@@ -110,8 +124,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
-
-// Import the Badge component
-import { Badge } from '@/components/ui/badge';
 
 export default HeroSection;

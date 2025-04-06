@@ -11,6 +11,18 @@
     <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/src/styles/index.css" as="style" />
+    
+    <!-- Preload logo image -->
+    <link rel="preload" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" as="image" type="image/png" />
+    
+    <!-- Fix for FOUC (Flash of Unstyled Content) -->
+    <style>
+      body { opacity: 0; }
+      .no-fouc { opacity: 1; transition: opacity 0.1s; }
+    </style>
   </head>
 
   <body>
@@ -18,5 +30,11 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Apply no-fouc class once DOM is loaded -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('no-fouc');
+      });
+    </script>
   </body>
 </html>
