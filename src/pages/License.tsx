@@ -2,7 +2,7 @@
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, School } from 'lucide-react';
+import { Download, School, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const License = () => {
@@ -51,35 +51,59 @@ const License = () => {
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold mb-2">4. Educational Institution Licensing</h2>
-              <div className="bg-secondary/30 p-4 rounded-lg border border-muted">
-                <div className="flex items-start gap-3">
-                  <School className="text-primary mt-1" />
-                  <div>
-                    <h3 className="font-medium text-lg">Special Terms for Educational Institutions</h3>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      We offer specialized licensing options for educational institutions.
-                    </p>
-                    
-                    <h4 className="font-medium mb-1">License Fee Structure:</h4>
-                    <ul className="list-disc pl-8 mb-3 text-sm">
-                      <li>Small institutions (up to 500 students): $1,500 per year</li>
-                      <li>Medium institutions (501-2,000 students): $3,000 per year</li>
-                      <li>Large institutions (over 2,000 students): $6,500 per year</li>
-                    </ul>
-                    
-                    <h4 className="font-medium mb-1">License Benefits:</h4>
-                    <ul className="list-disc pl-8 mb-3 text-sm">
-                      <li>Full access to all platform features</li>
-                      <li>Dedicated technical support</li>
-                      <li>Data analytics and reporting tools</li>
-                      <li>Integration with institution's career services</li>
-                      <li>Custom implementation support</li>
-                    </ul>
-                    
-                    <p className="text-sm">
-                      For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseekers4highschools.com" className="text-primary hover:underline">education@jobseekers4highschools.com</a>
-                    </p>
+              <h2 className="text-xl font-semibold mb-2">4. Licensing Options</h2>
+              <div className="space-y-6">
+                {/* Employer Licensing Section */}
+                <div className="bg-secondary/30 p-4 rounded-lg border border-muted">
+                  <div className="flex items-start gap-3">
+                    <Briefcase className="text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-lg">Employer Licensing</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        We offer different plans for employers to access premium features.
+                      </p>
+                      
+                      <h4 className="font-medium mb-1">Available Plans:</h4>
+                      <ul className="list-disc pl-8 mb-3 text-sm">
+                        <li><span className="font-semibold">Basic:</span> Free forever - Essential job posting features</li>
+                        <li><span className="font-semibold">Premium Post:</span> $29 per job post - Enhanced visibility with custom branding and analytics</li>
+                        <li><span className="font-semibold">Pro:</span> $149 per month - Unlimited premium postings with full analytics and featured badge</li>
+                      </ul>
+                      
+                      <p className="text-sm">
+                        For more information about employer plans, please visit our <Link to="/employer/premium" className="text-primary hover:underline">Premium Services</Link> page.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Educational Institution Licensing */}
+                <div className="bg-secondary/30 p-4 rounded-lg border border-muted">
+                  <div className="flex items-start gap-3">
+                    <School className="text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-lg">School Licensing</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        We offer specialized licensing options for educational institutions.
+                      </p>
+                      
+                      <h4 className="font-medium mb-1">Available Plans:</h4>
+                      <ul className="list-disc pl-8 mb-3 text-sm">
+                        <li><span className="font-semibold">Basic:</span> Free forever - Essential tools for school career counselors</li>
+                        <li><span className="font-semibold">Premium:</span> $750 per year - Full suite of tools including counselor dashboard and analytics</li>
+                      </ul>
+                      
+                      <h4 className="font-medium mb-1">Educational Institution Fee Structure:</h4>
+                      <ul className="list-disc pl-8 mb-3 text-sm">
+                        <li>Small institutions (up to 500 students): $1,500 per year</li>
+                        <li>Medium institutions (501-2,000 students): $3,000 per year</li>
+                        <li>Large institutions (over 2,000 students): $6,500 per year</li>
+                      </ul>
+                      
+                      <p className="text-sm">
+                        For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseekers4highschools.com" className="text-primary hover:underline">education@jobseekers4highschools.com</a>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

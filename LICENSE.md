@@ -67,21 +67,69 @@ Licensed educational institutions must provide an annual report to the Licensor 
 
 Educational licenses must be renewed annually. Failure to renew will result in immediate termination of access to the Software and all associated services.
 
-## 8. Disclaimer of Warranty
+## 8. Employer Licensing
+
+### 8.1 Employer License Plans
+
+Employers may choose from the following licensing options to access premium features:
+
+a) **Basic Plan**: Free access to essential job posting features.
+
+b) **Premium Post Plan**: $29 per job post
+   - Enhanced visibility for individual job postings
+   - Custom branded profile
+   - Priority placement in search results
+   - Company logo featured on listing
+   - Basic analytics (views and applies)
+
+c) **Pro Plan**: $149 per month
+   - Unlimited premium job postings
+   - Full analytics dashboard
+   - Priority support
+   - Featured Employer badge
+   - Bulk posting capabilities
+
+### 8.2 Usage Restrictions
+
+All employer plans are subject to fair usage policies. Licensor reserves the right to limit or terminate access for accounts demonstrating patterns of abuse or misuse of the platform.
+
+## 9. School Administration Licensing
+
+### 9.1 School License Plans
+
+School career departments may choose from the following licensing options:
+
+a) **Basic Plan**: Free access to basic tools for school career counselors
+   - Student job access
+   - Job approval tools
+   - Basic support
+
+b) **Premium Plan**: $750 per year
+   - Counselor dashboard
+   - Student success reports
+   - Branded portal
+   - Priority support
+   - Career event management
+
+### 9.2 School Data Policies
+
+Schools must adhere to all relevant student privacy regulations and obtain appropriate parental consent for student participation as required by law.
+
+## 10. Disclaimer of Warranty
 
 THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. LICENSOR DISCLAIMS ALL WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT.
 
-## 9. Limitation of Liability
+## 11. Limitation of Liability
 
 IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
-## 10. General
+## 12. General
 
 This Agreement shall be governed by the laws of the United States and the state of California. This Agreement is the complete and exclusive statement of the agreement between Licensor and Licensee and supersedes all proposals or prior agreements, oral or written, and any other communications between the parties relating to the subject matter of this Agreement.
 
-## 11. Contact Information
+## 13. Contact Information
 
-For questions regarding this license or to inquire about educational licensing options, please contact:
+For questions regarding this license or to inquire about licensing options, please contact:
 
 - Email: legal@jobseekers4highschools.com
 - Address: 123 Education Lane, San Francisco, CA 94105, USA
