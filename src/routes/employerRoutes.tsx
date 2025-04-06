@@ -1,33 +1,33 @@
 
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import Layout from '../components/Layout';
 import EmployerDashboard from '../pages/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
 import EmployerPremiumServices from '../pages/EmployerPremiumServices';
-import JobAlerts from '../pages/JobAlerts';
+import ForEmployers from '../pages/ForEmployers';
+import EmployerBadges from '../pages/EmployerBadges';
 
 export const EmployerRoutes = (
   <>
-    {/* Employer routes */}
-    <Route path="/employer-dashboard" element={
-      <ProtectedRoute requiredRoles={['employer']}>
+    <Route path="/employer" element={<ForEmployers />} />
+    <Route path="/employer/dashboard" element={
+      <ProtectedRoute requiredRoles={['employer', 'admin']}>
         <EmployerDashboard />
       </ProtectedRoute>
     } />
-    <Route path="/employer-analytics" element={
-      <ProtectedRoute requiredRoles={['employer']}>
+    <Route path="/employer/analytics" element={
+      <ProtectedRoute requiredRoles={['employer', 'admin']}>
         <EmployerAnalytics />
       </ProtectedRoute>
     } />
-    <Route path="/employer-premium" element={
-      <ProtectedRoute requiredRoles={['employer']}>
+    <Route path="/employer/premium" element={
+      <ProtectedRoute requiredRoles={['employer', 'admin']}>
         <EmployerPremiumServices />
       </ProtectedRoute>
     } />
-    <Route path="/job-alerts" element={
-      <ProtectedRoute requiredRoles={['employer']}>
-        <JobAlerts />
-      </ProtectedRoute>
-    } />
+    <Route path="/employer/badges" element={<EmployerBadges />} />
   </>
 );
+
+export default EmployerRoutes;
