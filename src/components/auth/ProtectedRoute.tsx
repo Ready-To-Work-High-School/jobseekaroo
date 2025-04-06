@@ -16,6 +16,14 @@ interface ProtectedRouteProps {
   requiredRoles?: string[];
 }
 
+// Define a UserProfile interface to match the returned structure from Supabase
+interface UserProfile {
+  id: string;
+  role?: string;
+  user_type?: string;
+  [key: string]: any; // For any other properties
+}
+
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   requiredRole, 
@@ -25,7 +33,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { isSignedIn, userId } = useAuth(); // Clerk auth
   const location = useLocation();
-  const [hasShownToast] = useState(false);
+  const [hasShownToast, setHasShownToast] = useState(false);
   const testMode = isTestMode();
 
   // Fetch user role from Supabase (if roles stored there)
@@ -38,7 +46,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         .eq('id', userId)
         .single();
       if (error) throw error;
-      return data;
+      return data as UserProfile;
     },
     enabled: !!userId, // Only fetch if signed in
   });
