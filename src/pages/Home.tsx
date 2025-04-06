@@ -1,15 +1,16 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/auth';
 import EnhancedHero from '../components/EnhancedHero';
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
-  const { user } = useAuth();
-  
   return (
     <Layout>
+      <Helmet>
+        <title>JobSeekaroo - Your First Job, Made Simple.</title>
+        <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." />
+      </Helmet>
       <EnhancedHero />
     </Layout>
   );

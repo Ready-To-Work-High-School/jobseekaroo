@@ -48,7 +48,7 @@ const JobPlacementsSection = () => {
             </Card>
           </div>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Our platform connects credentialed high school students with meaningful career opportunities
+            We have the data to prove our platform works for students, employers, and schools
           </p>
         </div>
         

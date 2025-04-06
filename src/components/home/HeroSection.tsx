@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Target, Users, TrendingUp } from 'lucide-react';
+import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 
 const HeroSection = () => {
@@ -39,42 +39,43 @@ const HeroSection = () => {
         
         <div className="max-w-3xl mx-auto text-center">
           <h1 className={`text-4xl md:text-5xl font-bold mb-6 text-gray-900 ${titleAnimation}`}>
-            <div className="inline-block relative">
-              <Sparkles className="h-6 w-6 text-amber-500 absolute -left-8 top-0 animate-bounce" />
-              <span className="relative z-10">The Only Job Platform</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-amber-500">Designed for High School Students</span>
-              <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-100 to-amber-100 opacity-50 rounded-lg transform rotate-1 blur-sm"></div>
-            </div>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500">
+              Your First Job, Made Simple.
+            </span>
           </h1>
           
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-center mb-2">
-              <Target className="h-5 w-5 text-blue-600 mr-2" />
-              <p className="font-medium text-blue-800">For Ages 16-18 | No Experience Required</p>
-            </div>
-            <p className="text-sm text-gray-600">
-              While other platforms focus on professionals, we exclusively serve high school students
-            </p>
+          <div className="my-6 flex justify-center">
+            <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium">
+              Exclusive to Westside High School Students
+            </Badge>
           </div>
           
           <p className={`text-lg mb-8 text-gray-700 ${subtitleAnimation}`}>
-            Connect with employers looking for motivated high school students. Start building your resume and gaining valuable work experience today!
+            A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
           </p>
           
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex items-start max-w-xs">
-              <Users className="h-5 w-5 text-amber-600 mt-1 flex-shrink-0 mr-3" />
-              <p className="text-sm text-left">
-                <span className="font-medium block mb-1">Untapped Opportunity</span>
-                34% of 16-19 year-olds are in the labor force but struggle to find suitable jobs
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+              <Shield className="h-8 w-8 text-blue-600 mb-2" />
+              <h3 className="font-medium mb-1">Safe & Simple</h3>
+              <p className="text-sm text-gray-600 text-center">
+                Find jobs that fit your schedule, skills, and location - all pre-screened for safety
               </p>
             </div>
             
-            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex items-start max-w-xs">
-              <TrendingUp className="h-5 w-5 text-green-600 mt-1 flex-shrink-0 mr-3" />
-              <p className="text-sm text-left">
-                <span className="font-medium block mb-1">Career Development</span>
-                Build essential skills and gain experience that colleges and future employers value
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+              <Award className="h-8 w-8 text-amber-600 mb-2" />
+              <h3 className="font-medium mb-1">Earn Badges</h3>
+              <p className="text-sm text-gray-600 text-center">
+                Build your profile with skill badges that impress employers and strengthen your resume
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+              <Users className="h-8 w-8 text-green-600 mb-2" />
+              <h3 className="font-medium mb-1">Guidance & Support</h3>
+              <p className="text-sm text-gray-600 text-center">
+                Get help with interviews, resumes, and job skills from our resources and school partners
               </p>
             </div>
           </div>
@@ -82,7 +83,7 @@ const HeroSection = () => {
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${buttonAnimation}`}>
             <Link to="/jobs">
               <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300">
-                Find Jobs <ArrowRight className="h-4 w-4" />
+                Find Your First Job <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link to="/resources">
@@ -95,5 +96,8 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
+// Import the Badge component
+import { Badge } from '@/components/ui/badge';
 
 export default HeroSection;
