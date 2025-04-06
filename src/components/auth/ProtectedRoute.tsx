@@ -1,8 +1,8 @@
 
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react'; // Or useSupabaseAuth if using Supabase
+import { useAuth } from '@/contexts/auth'; // Updated import path to match the app's structure
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client'; // Fix the import path for supabase
+import { supabase } from '@/integrations/supabase/client';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import RequireVerification from './RequireVerification';
@@ -24,34 +24,36 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireVerification = false, 
   requiredRoles = [] 
 }) => {
-  const { isSignedIn, userId } = useAuth(); // Clerk auth
+  const { user, isLoading: authLoading } = useAuth(); // Use auth context
   const location = useLocation();
   const [hasShownToast, setHasShownToast] = useState(false);
   const testMode = isTestMode();
 
   // Fetch user role from Supabase (if roles stored there)
   const { data: userProfile, isLoading } = useQuery({
-    queryKey: ['userProfile', userId],
+    queryKey: ['userProfile', user?.id],
     queryFn: async () => {
+      if (!user?.id) throw new Error('No user ID available');
+      
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')  // Changed to select all fields instead of specific columns
-        .eq('id', userId)
+        .select('*')
+        .eq('id', user.id)
         .single();
       
       if (error) throw error;
       return data as UserProfile;
     },
-    enabled: !!userId, // Only fetch if signed in
+    enabled: !!user?.id, // Only fetch if signed in
   });
 
   // Loading state
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
   // Not signed in -> redirect to login with return URL
-  if (!isSignedIn) {
+  if (!user) {
     return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
   }
 

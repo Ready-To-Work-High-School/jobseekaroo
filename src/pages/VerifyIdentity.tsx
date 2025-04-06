@@ -10,7 +10,7 @@ import {
   InputOTPSlot,
   InputOTPSeparator
 } from "@/components/ui/input-otp";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth'; // Make sure this import path is correct
 import { markIdentityAsVerified, isIdentityVerified } from '@/utils/verificationUtils';
 
 const VerifyIdentity = () => {
