@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Separator } from "@/components/ui/separator";
 import EmployerHeader from '@/components/employer/EmployerHeader';
@@ -9,12 +8,9 @@ import { Link } from 'react-router-dom';
 import { Database, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-
 const ForEmployers = () => {
   const contentAnimation = useFadeIn(300);
-  
-  return (
-    <Layout>
+  return <Layout>
       <EmployerHeader />
       
       <div className={contentAnimation}>
@@ -39,9 +35,7 @@ const ForEmployers = () => {
               </div>
             </div>
             <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
-              <Link to="/employer-premium">
-                Explore Premium Features - Plans from $49.99/mo
-              </Link>
+              
             </Button>
           </div>
         </div>
@@ -52,8 +46,6 @@ const ForEmployers = () => {
       <Separator className="my-16" />
       
       <CallToAction />
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default ForEmployers;
