@@ -8,16 +8,41 @@ interface AvatarWithTooltipProps {
   fallback: string;
   tooltipContent: React.ReactNode;
   alt?: string;
+  name?: string; // Added name prop for color generation
 }
 
-const AvatarWithTooltip = ({ src, fallback, tooltipContent, alt }: AvatarWithTooltipProps) => {
+// Function to generate a consistent color from a name string
+const generateColorFromName = (name: string): string => {
+  // Get a hash value from the name to ensure consistency
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  // List of vibrant background colors
+  const colors = [
+    'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500',
+    'bg-purple-500', 'bg-pink-500', 'bg-indigo-500', 'bg-lavender-500',
+    'bg-brand-500', 'bg-cyan-500', 'bg-teal-500', 'bg-orange-500'
+  ];
+  
+  // Use the hash to select a color
+  const colorIndex = Math.abs(hash) % colors.length;
+  return colors[colorIndex];
+};
+
+const AvatarWithTooltip = ({ src, fallback, tooltipContent, alt, name }: AvatarWithTooltipProps) => {
+  // Use name for color generation, fallback to the fallback text if name not provided
+  const nameToUse = name || fallback;
+  const backgroundColorClass = generateColorFromName(nameToUse);
+  
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Avatar>
             {src && <AvatarImage src={src} alt={alt || fallback} />}
-            <AvatarFallback>{fallback}</AvatarFallback>
+            <AvatarFallback className={`text-white ${backgroundColorClass}`}>{fallback}</AvatarFallback>
           </Avatar>
         </TooltipTrigger>
         <TooltipContent side="top">
