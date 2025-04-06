@@ -1,80 +1,50 @@
 
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Shield, TrendingUp, Users, Clock } from 'lucide-react';
-import { useSlideIn } from '@/utils/animations';
+import { Button } from '@/components/ui/button';
+import { Shield, Users, ChartBar, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const EmployerHeader = () => {
-  const headerAnimation = useSlideIn(100);
-
   return (
-    <div className={headerAnimation}>
-      <div className="text-center mb-12">
-        <div className="flex justify-center mb-4 relative">
-          {/* Further reduced glow effect */}
-          <div className="relative">
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-20 blur-sm"></div>
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-10 blur-lg"></div>
-            <img 
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-              alt="JS4HS Logo" 
-              className="h-14 w-auto relative z-10 object-contain"
-            />
-          </div>
-        </div>
-        <Badge variant="outline" className="border-amber-500 text-amber-700 mb-4">
-          For Businesses & Organizations
-        </Badge>
-        <h1 className="text-4xl font-bold mb-6">
-          Hire Trained Students with Verified Skills
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-          Connect with Westside High School's Entrepreneurship and Nursing Academies to find pre-trained students
-          with industry-recognized credentials who are ready to join your workforce.
+    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
+      <div className="max-w-6xl mx-auto text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">For Employers</h1>
+        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          Connect with qualified high school students for entry-level positions, internships, 
+          and part-time opportunities. Shape the future workforce while filling your hiring needs.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-            <Users className="h-8 w-8 text-blue-600 mb-2" />
-            <h3 className="font-medium mb-1">Untapped Talent Pool</h3>
-            <p className="text-sm text-gray-600 text-center">
-              Access motivated young workers for flexible roles overlooked by mainstream platforms
-            </p>
-          </div>
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <Badge variant="outline" className="px-3 py-1 flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            <span>Verified Schools</span>
+          </Badge>
           
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-            <TrendingUp className="h-8 w-8 text-green-600 mb-2" />
-            <h3 className="font-medium mb-1">Growing Demand</h3>
-            <p className="text-sm text-gray-600 text-center">
-              Join the trend of businesses hiring high schoolers for entry-level and part-time positions
-            </p>
-          </div>
+          <Badge variant="outline" className="px-3 py-1 flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span>Qualified Candidates</span>
+          </Badge>
           
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-            <Clock className="h-8 w-8 text-amber-600 mb-2" />
-            <h3 className="font-medium mb-1">Streamlined Hiring</h3>
-            <p className="text-sm text-gray-600 text-center">
-              Save time with our pre-vetted candidates ready to start in retail, hospitality, and more
-            </p>
-          </div>
+          <Badge variant="outline" className="px-3 py-1 flex items-center gap-2">
+            <ChartBar className="h-4 w-4" />
+            <span>Hiring Analytics</span>
+          </Badge>
+          
+          <Badge variant="outline" className="px-3 py-1 flex items-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            <span>Premium Features</span>
+          </Badge>
         </div>
         
-        <div className="mt-8">
-          <Button asChild size="lg" className="gap-2">
-            <Link to="/employer-dashboard">
-              Access Employer Dashboard
-              <ExternalLink className="h-4 w-4 ml-1" />
-            </Link>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Button asChild size="lg">
+            <Link to="/employer/dashboard">Post a Job</Link>
           </Button>
-          <p className="text-sm text-muted-foreground mt-2">
-            Post jobs and manage applications in one place
-          </p>
-        </div>
-        
-        <div className="mt-6 flex items-center justify-center text-sm text-muted-foreground">
-          <Shield className="h-4 w-4 mr-1 text-green-600" />
-          <span>Secure employer area - All links and content verified for your protection</span>
+          
+          <Button asChild variant="outline" size="lg">
+            <Link to="/pricing">View Pricing</Link>
+          </Button>
         </div>
       </div>
     </div>
