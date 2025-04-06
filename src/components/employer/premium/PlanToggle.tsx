@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface PlanToggleProps {
   isEmployer: boolean;
@@ -15,6 +16,7 @@ const PlanToggle = ({ isEmployer, setIsEmployer }: PlanToggleProps) => {
         onClick={() => setIsEmployer(true)}
         className="rounded-r-none"
       >
+        <ArrowRight className="mr-1 h-4 w-4" />
         For Employers
       </Button>
       <Button
@@ -23,6 +25,7 @@ const PlanToggle = ({ isEmployer, setIsEmployer }: PlanToggleProps) => {
         className="rounded-l-none"
       >
         For Schools
+        <ArrowLeft className="ml-1 h-4 w-4" />
       </Button>
     </div>
   );
