@@ -6,6 +6,26 @@ import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import { Toaster } from '@/components/ui/toaster';
 import { AppRoutes } from '@/routes';
 import SidePanel from '@/components/layout/SidePanel';
+import { useMediaQuery } from '@/hooks/use-mobile';
+import MobileLayout from '@/components/MobileLayout';
+
+function AppContent() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
+  return (
+    <>
+      {isMobile ? (
+        <MobileLayout>
+          <Routes>{AppRoutes}</Routes>
+        </MobileLayout>
+      ) : (
+        <Routes>{AppRoutes}</Routes>
+      )}
+      <Toaster />
+      <SidePanel />
+    </>
+  );
+}
 
 function App() {
   return (
@@ -13,11 +33,7 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <NotificationsProvider>
-            <Routes>
-              {AppRoutes}
-            </Routes>
-            <Toaster />
-            <SidePanel />
+            <AppContent />
           </NotificationsProvider>
         </AuthProvider>
       </ThemeProvider>

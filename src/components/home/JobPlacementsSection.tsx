@@ -3,6 +3,7 @@ import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import { BriefcaseBusiness, GraduationCap, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Divider } from '@/components/ui/divider';
 
 // Job placement metrics
 const metrics = [
@@ -71,6 +72,8 @@ const JobPlacementsSection = () => {
             </div>
           ))}
         </div>
+        
+        <Divider>Success Stories</Divider>
       </div>
     </section>
   );

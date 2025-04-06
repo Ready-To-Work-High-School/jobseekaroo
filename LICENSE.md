@@ -46,9 +46,9 @@ This license is effective until terminated. Licensor may terminate this Agreemen
 Educational institutions may apply for a special educational license to use the Software within their academic programs, subject to the following terms:
 
 a) **License Fee Structure**: Educational institutions shall pay an annual licensing fee based on the number of students enrolled:
-   - Small institutions (up to 500 students): $1,000 per year
-   - Medium institutions (501-2,000 students): $2,500 per year
-   - Large institutions (over 2,000 students): $5,000 per year
+   - Small institutions (up to 500 students): $1,500 per year
+   - Medium institutions (501-2,000 students): $3,000 per year
+   - Large institutions (over 2,000 students): $6,500 per year
 
 b) **Multi-Campus Deployment**: For educational institutions with multiple campuses, each campus requires a separate license unless a multi-campus agreement is negotiated directly with the Licensor.
 

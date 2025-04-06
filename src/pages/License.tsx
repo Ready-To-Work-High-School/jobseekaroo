@@ -1,8 +1,10 @@
+
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, School } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 const License = () => {
   return <Layout>
       <div className="py-12">
@@ -62,8 +64,8 @@ const License = () => {
                     <h4 className="font-medium mb-1">License Fee Structure:</h4>
                     <ul className="list-disc pl-8 mb-3 text-sm">
                       <li>Small institutions (up to 500 students): $1,500 per year</li>
-                      <li>Medium institutions (501-2,000 students): $2,500 per year</li>
-                      <li>Large institutions (over 2,000 students): $5,000 per year</li>
+                      <li>Medium institutions (501-2,000 students): $3,000 per year</li>
+                      <li>Large institutions (over 2,000 students): $6,500 per year</li>
                     </ul>
                     
                     <h4 className="font-medium mb-1">License Benefits:</h4>
