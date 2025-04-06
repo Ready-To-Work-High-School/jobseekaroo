@@ -22,8 +22,18 @@ export async function awardBadge(userId: string, badgeId: string, badgeName: str
     if (fetchError) throw fetchError;
 
     // Initialize badges array if it doesn't exist
-    const currentBadges: UserBadge[] = profile?.badges ? 
-      (Array.isArray(profile.badges) ? profile.badges as UserBadge[] : []) : [];
+    let currentBadges: UserBadge[] = [];
+    
+    if (profile?.badges) {
+      // Safely convert the JSON data to UserBadge[]
+      if (Array.isArray(profile.badges)) {
+        currentBadges = profile.badges.filter((badge: any) => 
+          badge && typeof badge === 'object' && 
+          typeof badge.id === 'string' && 
+          typeof badge.name === 'string'
+        ) as UserBadge[];
+      }
+    }
     
     // Check if the badge already exists
     const badgeExists = currentBadges.some(badge => badge.id === badgeId);
@@ -43,7 +53,9 @@ export async function awardBadge(userId: string, badgeId: string, badgeName: str
     // Update the profile with the new badges
     const { error: updateError } = await supabase
       .from('profiles')
-      .update({ badges: updatedBadges })
+      .update({ 
+        badges: updatedBadges as any // Convert to Json type for Supabase
+      })
       .eq('id', userId);
       
     if (updateError) throw updateError;
@@ -74,14 +86,27 @@ export async function removeBadge(userId: string, badgeId: string): Promise<User
     if (fetchError) throw fetchError;
     
     // Handle case where badges might not exist
-    const currentBadges: UserBadge[] = profile?.badges ? 
-      (Array.isArray(profile.badges) ? profile.badges as UserBadge[] : []) : [];
+    let currentBadges: UserBadge[] = [];
+    
+    if (profile?.badges) {
+      // Safely convert the JSON data to UserBadge[]
+      if (Array.isArray(profile.badges)) {
+        currentBadges = profile.badges.filter((badge: any) => 
+          badge && typeof badge === 'object' && 
+          typeof badge.id === 'string' && 
+          typeof badge.name === 'string'
+        ) as UserBadge[];
+      }
+    }
+    
     const updatedBadges = currentBadges.filter(badge => badge.id !== badgeId);
     
     // Update the profile with the filtered badges
     const { error: updateError } = await supabase
       .from('profiles')
-      .update({ badges: updatedBadges })
+      .update({ 
+        badges: updatedBadges as any // Convert to Json type for Supabase
+      })
       .eq('id', userId);
       
     if (updateError) throw updateError;

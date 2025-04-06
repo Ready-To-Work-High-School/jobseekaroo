@@ -32,9 +32,19 @@ export function useUserBadges(userId?: string) {
         
         // Handle the case where badges might not exist in the profile
         if (data && data.badges) {
-          // Ensure we're working with an array by using type assertion
-          const badgesArray = Array.isArray(data.badges) ? data.badges as UserBadge[] : [];
-          setBadges(badgesArray);
+          // Ensure we're working with an array by using proper type conversion
+          if (Array.isArray(data.badges)) {
+            // Convert the unknown JSON array to UserBadge[] by validating each entry
+            const badgesArray = data.badges.filter((badge: any) => 
+              badge && typeof badge === 'object' && 
+              typeof badge.id === 'string' && 
+              typeof badge.name === 'string'
+            ) as UserBadge[];
+            
+            setBadges(badgesArray);
+          } else {
+            setBadges([]);
+          }
         } else {
           setBadges([]);
         }
