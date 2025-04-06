@@ -42,14 +42,36 @@ const InputOTPSlot = React.forwardRef<
 >(({ index, className, ...props }, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext)
   
-  // Safely access slots with null checks
-  const slots = inputOTPContext?.slots ?? [];
-  const slot = index < slots.length ? slots[index] as OTPSlot : {} as OTPSlot;
+  // Safely check if context and slots exist
+  if (!inputOTPContext || !inputOTPContext.slots) {
+    return (
+      <div 
+        ref={ref} 
+        className={cn("relative flex h-10 w-10 items-center justify-center border border-input rounded-md", className)}
+        {...props} 
+      />
+    );
+  }
+
+  // Get the slots array and handle index safely
+  const slots = inputOTPContext.slots;
+  if (!Array.isArray(slots) || index >= slots.length) {
+    return (
+      <div 
+        ref={ref} 
+        className={cn("relative flex h-10 w-10 items-center justify-center border border-input rounded-md", className)}
+        {...props} 
+      />
+    );
+  }
   
-  // Access properties with proper typing
-  const char = slot.char ?? '';
-  const hasFakeCaret = !!slot.hasFakeCaret;
-  const isActive = !!slot.isActive;
+  // Get the slot at the specified index
+  const slot = slots[index] as OTPSlot;
+  
+  // Safely extract properties with fallbacks
+  const char = slot && typeof slot === 'object' && 'char' in slot ? slot.char : '';
+  const hasFakeCaret = slot && typeof slot === 'object' && 'hasFakeCaret' in slot ? !!slot.hasFakeCaret : false;
+  const isActive = slot && typeof slot === 'object' && 'isActive' in slot ? !!slot.isActive : false;
 
   return (
     <div

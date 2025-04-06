@@ -50,6 +50,12 @@ const VerifyIdentity = () => {
     }, 1500);
   };
 
+  // Add debugging
+  const handleCodeChange = (value: string) => {
+    console.log("OTP value changed:", value);
+    setVerificationCode(value);
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <Card className="w-[400px] shadow-lg">
@@ -69,7 +75,7 @@ const VerifyIdentity = () => {
             <InputOTP 
               maxLength={6} 
               value={verificationCode} 
-              onChange={(value) => setVerificationCode(value)}
+              onChange={handleCodeChange}
               render={({ slots }) => (
                 <InputOTPGroup>
                   {slots.map((slot, index) => (
