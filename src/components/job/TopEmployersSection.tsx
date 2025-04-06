@@ -4,6 +4,7 @@ import { Briefcase, Building2, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 interface Employer {
   company_name: string;
@@ -217,10 +218,13 @@ const TopEmployersSection = () => {
               <CardContent className="py-2">
                 <p className="text-xs text-muted-foreground mb-1">{employer.industry}</p>
                 <div className="flex items-center justify-between mt-2">
-                  <div className="flex items-center gap-1">
-                    <Briefcase className="h-3 w-3 text-blue-600" />
+                  <Link 
+                    to={`/jobs?keyword=${encodeURIComponent(employer.company_name)}`}
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    <Briefcase className="h-3 w-3" />
                     <span className="text-xs">{employer.job_count} jobs</span>
-                  </div>
+                  </Link>
                   <div className="text-sm font-semibold text-green-700">
                     ${Number(employer.avg_min_wage).toFixed(2)}/hr
                   </div>
