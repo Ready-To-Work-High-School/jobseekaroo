@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
+import { supabase } from '@/integrations/supabase/client';
 
 const plans = [
   {
