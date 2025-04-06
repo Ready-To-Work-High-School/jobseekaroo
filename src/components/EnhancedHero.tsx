@@ -6,7 +6,7 @@ import { Divider } from './ui/divider';
 import { Separator } from './ui/separator';
 import CompanyDirectory from './resources/CompanyDirectory';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
-import { afterInitialRender } from '@/utils/performance';
+import { afterInitialRender, processBatchedTasks } from '@/utils/performance';
 
 // Import components that will be lazy loaded
 const PartnerLogosSection = React.lazy(() => import('@/components/home/PartnerLogosSection'));
@@ -28,18 +28,22 @@ const EnhancedHero = () => {
     afterInitialRender(() => {
       setRenderSecondary(true);
       
-      // Load tertiary components after another delay
-      setTimeout(() => {
-        setRenderTertiary(true);
-      }, 1000);
+      // Load tertiary components after another delay using requestIdleCallback
+      const loadTertiary = () => setRenderTertiary(true);
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadTertiary, { timeout: 2000 });
+      } else {
+        setTimeout(loadTertiary, 1500);
+      }
     });
   }, []);
 
   return (
     <div className="relative">
-      {/* Only include critical sparkles initially */}
-      <SparkleGroup count={4} />
+      {/* Only include critical sparkles initially - reduce initial count */}
+      <SparkleGroup count={2} />
       
+      {/* Optimize the announcement bar for immediate paint */}
       <div className="bg-blue-50 py-4 px-4 text-center relative overflow-hidden">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
           <div className="flex items-center">
@@ -66,15 +70,16 @@ const EnhancedHero = () => {
         <Divider className="mb-8">For Students, Employers & Schools</Divider>
       </div>
       
-      {/* Top Employers in Jacksonville Section - critical for SEO */}
-      <div className="container mx-auto px-4 py-8">
+      {/* Top Employers in Jacksonville Section - use skeleton loading for faster paint */}
+      <div className="container mx-auto px-4 py-8 content-visibility-auto">
         <h2 className="text-2xl font-bold mb-6 text-center">Top 10 Employers in Jacksonville</h2>
-        <CompanyDirectory companies={topJacksonvilleCompanies} />
+        <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 5)} />
+        {renderSecondary && <CompanyDirectory companies={topJacksonvilleCompanies.slice(5)} />}
       </div>
       
       {/* Only render non-critical components after initial load */}
       {renderSecondary && (
-        <React.Suspense fallback={<div className="min-h-[200px]"></div>}>
+        <React.Suspense fallback={<div className="min-h-[200px] content-visibility-auto"></div>}>
           <SectionSeparator />
           <FeaturedJobsSection />
         </React.Suspense>
@@ -82,12 +87,14 @@ const EnhancedHero = () => {
       
       {/* Load tertiary components last */}
       {renderTertiary && (
-        <React.Suspense fallback={<div className="min-h-[200px]"></div>}>
-          <TopEmployersSection />
-          <FeaturesSection />
-          <JobPlacementsSection />
-          <PartnerLogosSection />
-          <CallToActionSection />
+        <React.Suspense fallback={<div className="min-h-[200px] content-visibility-auto"></div>}>
+          <div className="content-visibility-auto">
+            <TopEmployersSection />
+            <FeaturesSection />
+            <JobPlacementsSection />
+            <PartnerLogosSection />
+            <CallToActionSection />
+          </div>
         </React.Suspense>
       )}
     </div>

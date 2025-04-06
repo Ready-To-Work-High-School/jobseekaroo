@@ -50,3 +50,28 @@ img {
     transform: translateX(100%);
   }
 }
+
+/* Add content visibility classes for better paint performance */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px; /* Estimate height to reduce layout shift */
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+/* Optimize paint performance for complex elements */
+.paint-optimization {
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+/* Progressive image loading */
+.progressive-img {
+  transition: filter 0.5s;
+}
+
+.progressive-img-loading {
+  filter: blur(10px);
+}
