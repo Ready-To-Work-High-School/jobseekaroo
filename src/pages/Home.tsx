@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
+import Chatbot from '@/components/support/Chatbot';
 
 const Home = () => {
   return (
@@ -33,6 +34,9 @@ const Home = () => {
           </Button>
         </div>
       </div>
+      
+      {/* Chatbot Integration */}
+      <Chatbot />
     </Layout>
   );
 };

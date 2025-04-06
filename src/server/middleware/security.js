@@ -25,7 +25,7 @@ const setupSecurityHeaders = (req, res, next) => {
   // Enhanced CSP with nonce
   res.setHeader('Content-Security-Policy', 
     `default-src 'self'; ` +
-    `connect-src 'self' ${isProd ? '' : 'http://localhost:* '}https://*.supabase.co; ` + 
+    `connect-src 'self' ${isProd ? '' : 'http://localhost:* '}https://*.supabase.co https://jobseekaroo.onrender.com; ` + 
     `script-src 'self' 'nonce-${nonce}' ${isProd ? '' : "'unsafe-eval'"}; ` + 
     `style-src 'self' 'unsafe-inline'; ` + 
     `img-src 'self' data:; ` + 
