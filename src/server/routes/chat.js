@@ -18,10 +18,12 @@ router.post('/chat', async (req, res) => {
     return res.status(400).json({ error: 'Invalid message format or length' });
   }
   
-  // Check for API key
-  if (!process.env.OPENAI_API_KEY) {
+  // Get API key from environment variable
+  const apiKey = process.env.OPENAI_API_KEY;
+  
+  if (!apiKey) {
     console.error("Missing OpenAI API key");
-    return res.status(500).json({ error: 'Configuration error' });
+    return res.status(500).json({ error: 'OpenAI API key not configured' });
   }
   
   try {
@@ -41,7 +43,7 @@ router.post('/chat', async (req, res) => {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [
           { 
             role: 'system', 
@@ -49,11 +51,11 @@ router.post('/chat', async (req, res) => {
           },
           { role: 'user', content: message }
         ],
-        max_tokens: 500,  // Add token limit
-        temperature: 0.7  // Control response creativity
+        max_tokens: 500,
+        temperature: 0.7
       },
       { 
-        headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+        headers: { Authorization: `Bearer ${apiKey}` },
         timeout: 10000  // 10 second timeout
       }
     );

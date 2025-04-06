@@ -3,8 +3,9 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Bot, User, ArrowRight, Loader2, Send } from 'lucide-react';
+import { Bot, User, Loader2, Send } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { supabaseClient } from '@/integrations/supabase/client';
 
 interface JobHelpAIProps {
   initialPrompt?: string;
@@ -45,20 +46,17 @@ const JobHelpAI = ({
     setMessages(prev => [...prev, { user: messageText, bot: '...' }]);
     
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: messageText }),
+      // Call the Supabase Edge Function
+      const { data, error } = await supabaseClient.functions.invoke('chat', {
+        body: { message: messageText }
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to get response');
+      if (error) {
+        throw new Error(error.message);
       }
       
-      const { reply } = await response.json();
-      
       // Update the last message with the bot's reply
-      setMessages(prev => prev.slice(0, -1).concat({ user: messageText, bot: reply }));
+      setMessages(prev => prev.slice(0, -1).concat({ user: messageText, bot: data.reply }));
     } catch (error) {
       console.error('Error sending message:', error);
       toast({

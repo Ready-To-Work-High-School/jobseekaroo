@@ -1,5 +1,5 @@
 
 project_id = "juzawihlfesurtewxgdy"
 
-[functions.get-employer-stats]
+[functions.chat]
 verify_jwt = false
