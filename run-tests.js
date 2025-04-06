@@ -28,7 +28,9 @@ exec('npm test', (error, stdout, stderr) => {
     console.error('\n❌ Tests failed with error code:', error.code);
     console.log('\n📋 Test Reports:');
     console.log('- Check the HTML report for details on failures');
-    console.log('  To open the HTML report, run: npx playwright show-report playwright-report\n');
+    console.log('  Opening HTML report automatically...\n');
+    // Show the report even if tests failed
+    showReport();
     process.exit(1);
   }
   
@@ -42,9 +44,25 @@ exec('npm test', (error, stdout, stderr) => {
   // Always provide information about reports
   console.log('\n📋 Test Reports:');
   console.log(`- HTML Report: ${path.join(reportDir, 'index.html')}`);
-  console.log('  To open the HTML report, run: npx playwright show-report playwright-report\n');
+  console.log('  Opening HTML report automatically...\n');
   
-  // Optionally, we could automatically open the report
-  console.log('Would you like to open the HTML report now? Run:');
-  console.log('  npx playwright show-report playwright-report\n');
+  // Automatically open the report
+  showReport();
 });
+
+// Function to show the Playwright report
+function showReport() {
+  exec('npx playwright show-report playwright-report', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error showing report: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Report stderr: ${stderr}`);
+      return;
+    }
+    if (stdout) {
+      console.log(`Report stdout: ${stdout}`);
+    }
+  });
+}
