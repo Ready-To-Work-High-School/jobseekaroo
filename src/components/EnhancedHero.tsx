@@ -1,25 +1,44 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HeroSection from '@/components/home/HeroSection';
-import PartnerLogosSection from '@/components/home/PartnerLogosSection';
-import CallToActionSection from '@/components/home/CallToActionSection';
-import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
-import JobPlacementsSection from '@/components/home/JobPlacementsSection';
-import FeaturesSection from '@/components/home/FeaturesSection';
-import TopEmployersSection from '@/components/job/TopEmployersSection';
-import SectionSeparator from '@/components/home/SectionSeparator';
-import { TrendingUp, Briefcase, GraduationCap } from 'lucide-react';
 import { SparkleGroup } from './animations/Sparkle';
 import { Divider } from './ui/divider';
 import { Separator } from './ui/separator';
 import CompanyDirectory from './resources/CompanyDirectory';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import { afterInitialRender } from '@/utils/performance';
+
+// Import components that will be lazy loaded
+const PartnerLogosSection = React.lazy(() => import('@/components/home/PartnerLogosSection'));
+const CallToActionSection = React.lazy(() => import('@/components/home/CallToActionSection'));
+const FeaturedJobsSection = React.lazy(() => import('@/components/home/FeaturedJobsSection'));
+const JobPlacementsSection = React.lazy(() => import('@/components/home/JobPlacementsSection'));
+const FeaturesSection = React.lazy(() => import('@/components/home/FeaturesSection'));
+const TopEmployersSection = React.lazy(() => import('@/components/job/TopEmployersSection'));
+const SectionSeparator = React.lazy(() => import('@/components/home/SectionSeparator'));
+import { TrendingUp, Briefcase, GraduationCap } from 'lucide-react';
 
 const EnhancedHero = () => {
+  // Use state to control when to render non-critical components
+  const [renderSecondary, setRenderSecondary] = useState(false);
+  const [renderTertiary, setRenderTertiary] = useState(false);
+
+  useEffect(() => {
+    // Load secondary components after initial render
+    afterInitialRender(() => {
+      setRenderSecondary(true);
+      
+      // Load tertiary components after another delay
+      setTimeout(() => {
+        setRenderTertiary(true);
+      }, 1000);
+    });
+  }, []);
+
   return (
     <div className="relative">
-      {/* Add sparkles throughout the hero area */}
-      <SparkleGroup count={12} />
+      {/* Only include critical sparkles initially */}
+      <SparkleGroup count={4} />
       
       <div className="bg-blue-50 py-4 px-4 text-center relative overflow-hidden">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
@@ -38,6 +57,7 @@ const EnhancedHero = () => {
         </div>
       </div>
       
+      {/* Hero section is critical and should always render */}
       <HeroSection />
       
       {/* Divider with text "For Students, Employers & Schools" */}
@@ -46,20 +66,30 @@ const EnhancedHero = () => {
         <Divider className="mb-8">For Students, Employers & Schools</Divider>
       </div>
       
-      {/* Top Employers in Jacksonville Section */}
+      {/* Top Employers in Jacksonville Section - critical for SEO */}
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Top 10 Employers in Jacksonville</h2>
         <CompanyDirectory companies={topJacksonvilleCompanies} />
       </div>
       
-      <SectionSeparator />
+      {/* Only render non-critical components after initial load */}
+      {renderSecondary && (
+        <React.Suspense fallback={<div className="min-h-[200px]"></div>}>
+          <SectionSeparator />
+          <FeaturedJobsSection />
+        </React.Suspense>
+      )}
       
-      <FeaturedJobsSection />
-      <TopEmployersSection />
-      <FeaturesSection />
-      <JobPlacementsSection />
-      <PartnerLogosSection />
-      <CallToActionSection />
+      {/* Load tertiary components last */}
+      {renderTertiary && (
+        <React.Suspense fallback={<div className="min-h-[200px]"></div>}>
+          <TopEmployersSection />
+          <FeaturesSection />
+          <JobPlacementsSection />
+          <PartnerLogosSection />
+          <CallToActionSection />
+        </React.Suspense>
+      )}
     </div>
   );
 };

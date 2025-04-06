@@ -1,12 +1,14 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import Layout from '../components/Layout';
-import EnhancedHero from '../components/EnhancedHero';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Bot } from 'lucide-react';
-import Chatbot from '@/components/support/Chatbot';
+
+// Use lazy loading for non-critical components
+const EnhancedHero = lazy(() => import('../components/EnhancedHero'));
+const Chatbot = lazy(() => import('@/components/support/Chatbot'));
 
 const Home = () => {
   return (
@@ -15,9 +17,17 @@ const Home = () => {
         <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
         <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." />
       </Helmet>
-      <EnhancedHero />
       
-      {/* Premium Features Banner */}
+      {/* Use Suspense for the EnhancedHero to prevent blocking rendering */}
+      <Suspense fallback={
+        <div className="min-h-[50vh] flex items-center justify-center">
+          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+        </div>
+      }>
+        <EnhancedHero />
+      </Suspense>
+      
+      {/* Premium Features Banner - simple component, doesn't need lazy loading */}
       <div className="max-w-5xl mx-auto mt-12 mb-8 bg-gradient-to-r from-amber-50 to-blue-50 p-5 rounded-lg border border-amber-100 dark:from-amber-950/30 dark:to-blue-950/30 dark:border-amber-900/50">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -53,8 +63,10 @@ const Home = () => {
         </div>
       </div>
       
-      {/* Chatbot Integration */}
-      <Chatbot />
+      {/* Lazy load the Chatbot component */}
+      <Suspense fallback={null}>
+        <Chatbot />
+      </Suspense>
     </Layout>
   );
 };

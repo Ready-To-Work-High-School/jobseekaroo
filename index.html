@@ -8,32 +8,83 @@
     <meta name="description" content="Connecting students with credential-ready opportunities" />
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    <!-- Preload critical resources -->
+    
+    <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Preload critical CSS -->
+    <!-- Preload critical assets -->
     <link rel="preload" href="/src/styles/index.css" as="style" />
-    
-    <!-- Preload logo image -->
     <link rel="preload" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" as="image" type="image/png" />
     
     <!-- Fix for FOUC (Flash of Unstyled Content) -->
     <style>
       body { opacity: 0; }
       .no-fouc { opacity: 1; transition: opacity 0.1s; }
+      /* Add critical CSS inline to prevent layout shifts */
+      .hero-placeholder {
+        min-height: 400px;
+        background-color: #f8fafc;
+      }
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
     </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Add minimal skeleton placeholder for better perceived performance -->
+      <div class="main-container">
+        <header style="height: 64px; background: #fff; border-bottom: 1px solid #e2e8f0;"></header>
+        <main>
+          <div class="hero-placeholder"></div>
+        </main>
+      </div>
+    </div>
+    
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Use module/defer for main script to prevent blocking -->
+    <script type="module" src="/src/main.tsx" defer></script>
+    
     <!-- Apply no-fouc class once DOM is loaded -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('no-fouc');
+        
+        // Add script loading optimization
+        const deferredScripts = document.querySelectorAll('script[data-defer]');
+        if (window.requestIdleCallback) {
+          window.requestIdleCallback(() => {
+            deferredScripts.forEach(script => {
+              const newScript = document.createElement('script');
+              [...script.attributes].forEach(attr => {
+                if (attr.name !== 'data-defer') {
+                  newScript.setAttribute(attr.name, attr.value);
+                }
+              });
+              newScript.innerHTML = script.innerHTML;
+              script.parentNode.replaceChild(newScript, script);
+            });
+          }, { timeout: 5000 });
+        } else {
+          setTimeout(() => {
+            deferredScripts.forEach(script => {
+              const newScript = document.createElement('script');
+              [...script.attributes].forEach(attr => {
+                if (attr.name !== 'data-defer') {
+                  newScript.setAttribute(attr.name, attr.value);
+                }
+              });
+              newScript.innerHTML = script.innerHTML;
+              script.parentNode.replaceChild(newScript, script);
+            });
+          }, 2000);
+        }
       });
     </script>
   </body>
