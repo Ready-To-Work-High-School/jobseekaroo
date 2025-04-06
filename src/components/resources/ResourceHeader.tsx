@@ -44,8 +44,8 @@ const ResourceHeader = () => {
           Access tools, guides, and resources to help you prepare for and succeed in your job search and career.
         </p>
         
-        {/* Decorative diagonal gradient bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold-400 via-lavender-500 to-lavender-400 transform -rotate-1 translate-y-6 opacity-70"></div>
+        {/* Decorative gradient bar - now straight */}
+        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold-400 via-lavender-500 to-lavender-400 translate-y-6 opacity-70"></div>
       </div>
     </div>
   );
