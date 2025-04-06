@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
+import { isIdentityVerified } from '@/utils/verificationUtils';
 
 // This component checks if the user has gone through verification
 // If not, it redirects to the verification page
@@ -8,12 +10,12 @@ const RequireVerification: React.FC<{ children: React.ReactNode }> = ({ children
   const location = useLocation();
   const [hasVerified, setHasVerified] = useState<boolean>(() => {
     // Check if user has verified in this session
-    return sessionStorage.getItem('identityVerified') === 'true';
+    return isIdentityVerified();
   });
 
   useEffect(() => {
     // Check verification status when the component mounts
-    const verificationStatus = sessionStorage.getItem('identityVerified') === 'true';
+    const verificationStatus = isIdentityVerified();
     
     if (!verificationStatus && location.pathname !== '/verify-identity') {
       toast.info("Please verify your identity to continue");

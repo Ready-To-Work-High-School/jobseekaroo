@@ -10,7 +10,7 @@ import {
   InputOTPSlot,
   InputOTPSeparator
 } from "@/components/ui/input-otp";
-import { useAuth } from '@/contexts/auth'; // Make sure this import path is correct
+import { useAuth } from '@/contexts/auth'; // Correct import path
 import { markIdentityAsVerified, isIdentityVerified } from '@/utils/verificationUtils';
 
 const VerifyIdentity = () => {
@@ -25,9 +25,16 @@ const VerifyIdentity = () => {
 
   // Check if user is already verified
   useEffect(() => {
-    if (isIdentityVerified()) {
-      navigate(from, { replace: true });
-    }
+    const checkVerification = () => {
+      if (isIdentityVerified()) {
+        console.log("User already verified, redirecting to:", from);
+        navigate(from, { replace: true });
+      }
+    };
+    
+    // Small delay to ensure everything is ready
+    const timer = setTimeout(checkVerification, 100);
+    return () => clearTimeout(timer);
   }, [from, navigate]);
 
   // For demo purposes, let's use a hardcoded verification code
