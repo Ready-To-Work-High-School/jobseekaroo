@@ -1,79 +1,88 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { corsHeaders, addCorsHeaders } from "./cors.ts";
 
-// Get the Supabase URL and service key from environment variables
-const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-
-// Create a Supabase client for the function
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-/**
- * Extracts the client IP address from the request
- * @param req The request object
- * @returns The client IP address or 'unknown' if not found
- */
+// Gets the client IP from request headers or connection info
 export function getClientIP(req: Request): string {
-  const headers = req.headers;
-  // Try various headers that might contain the client IP
-  const ip = 
-    headers.get('cf-connecting-ip') || 
-    headers.get('x-real-ip') || 
-    headers.get('x-forwarded-for')?.split(',')[0] || 
-    'unknown';
+  // Try standard headers
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    // Get the first IP if there are multiple
+    return forwarded.split(",")[0].trim();
+  }
   
-  return ip;
+  // Fallback to Cloudflare-specific header
+  const cfConnecting = req.headers.get("cf-connecting-ip");
+  if (cfConnecting) {
+    return cfConnecting;
+  }
+  
+  // Final fallback
+  return "unknown";
 }
 
 /**
- * Middleware for securing API requests
- * @param req The request object
- * @param functionName The name of the function for logging purposes
- * @param handler The handler function to execute if authentication passes
- * @returns Response from the handler or an error response
+ * Middleware to secure API requests with authentication and rate limiting
+ * @param req Original request
+ * @param functionName Name of the function (for logging)
+ * @param handler The actual request handler that processes the authenticated request
+ * @returns Response
  */
 export async function secureApiRequest(
-  req: Request,
+  req: Request, 
   functionName: string,
   handler: (req: Request, userId: string | null) => Promise<Response>
 ): Promise<Response> {
   try {
-    // Log basic request info
-    console.log(`Request to ${functionName}: ${req.method} ${new URL(req.url).pathname}`);
+    // Get Supabase client for auth verification
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
     
-    // Verify JWT token if required by config
+    // Extract authorization header
     const authHeader = req.headers.get('Authorization');
     let userId: string | null = null;
     
+    // Verify the authorization header
     if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user }, error } = await supabase.auth.getUser(token);
-      
-      if (error) {
-        console.error(`Auth error in ${functionName}:`, error.message);
-        return new Response(
-          JSON.stringify({ error: 'Unauthorized' }),
-          { status: 401, headers: { 'Content-Type': 'application/json' } }
-        );
+      try {
+        // Strip "Bearer " from token
+        const token = authHeader.replace('Bearer ', '');
+        
+        // Verify JWT token
+        const { data: { user }, error } = await supabase.auth.getUser(token);
+        
+        if (!error && user) {
+          userId = user.id;
+          console.log(`Authenticated request to ${functionName} from user ${userId}`);
+        } else {
+          console.warn(`Invalid auth token presented to ${functionName}: ${error?.message}`);
+        }
+      } catch (error) {
+        console.error(`Error validating auth token: ${error.message}`);
       }
-      
-      if (user) {
-        userId = user.id;
-        console.log(`Authenticated user: ${userId}`);
-      }
+    } else {
+      console.log(`Anonymous request to ${functionName}`);
     }
     
-    // Log rate limit info if available
+    // Log the request for auditing
     const clientIP = getClientIP(req);
-    console.log(`Client IP: ${clientIP}`);
+    const userAgent = req.headers.get('User-Agent') || 'Unknown';
     
-    // Execute the handler with the authenticated user ID
+    console.log(`Request to ${functionName} from ${clientIP} using ${userAgent}`);
+    
+    // Call the handler with the authenticated user ID (or null if not authenticated)
     return await handler(req, userId);
   } catch (error) {
-    console.error(`Error in ${functionName}:`, error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    console.error(`Security middleware error in ${functionName}: ${error.message}`);
+    
+    // Return a generic error to not leak implementation details
+    return addCorsHeaders(new Response(
+      JSON.stringify({ error: "Server error processing request" }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    ), req.headers.get('origin'));
   }
 }

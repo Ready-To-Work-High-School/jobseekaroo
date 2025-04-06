@@ -8,32 +8,30 @@ export const corsHeaders = {
 
 // Handle CORS preflight requests
 export function handleCors(req: Request): Response | null {
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, {
-      status: 204,
-      headers: corsHeaders
+      headers: corsHeaders,
     });
   }
   return null;
 }
 
 // Add CORS headers to a response
-export function addCorsHeaders(response: Response, origin?: string | null): Response {
-  const headers = new Headers(response.headers);
+export function addCorsHeaders(res: Response, origin?: string | null): Response {
+  const headers = new Headers(res.headers);
   
-  // Add all CORS headers
   Object.entries(corsHeaders).forEach(([key, value]) => {
     headers.set(key, value);
   });
   
-  // If a specific origin was provided, use it instead of wildcard
   if (origin) {
     headers.set("Access-Control-Allow-Origin", origin);
   }
   
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
+  return new Response(res.body, {
+    status: res.status,
+    statusText: res.statusText,
     headers
   });
 }
