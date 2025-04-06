@@ -69,6 +69,11 @@ const UserMenu = () => {
               <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
             </div>
           )}
+          {hasPremium && (
+            <div className="absolute -bottom-1 -right-1">
+              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-amber-400 ring-1 ring-white" aria-label="Premium user"></span>
+            </div>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -83,7 +88,10 @@ const UserMenu = () => {
               </div>
               <span className="text-xs text-muted-foreground">{user.email}</span>
               {isCeo && <span className="text-xs font-semibold text-blue-600">CEO Access</span>}
-              {hasPremium && <span className="text-xs font-semibold text-amber-600">Premium</span>}
+              {hasPremium && <span className="text-xs font-semibold text-amber-600 flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-amber-500" />
+                Gold Status
+              </span>}
             </div>
           ) : (
             <span>My Account</span>

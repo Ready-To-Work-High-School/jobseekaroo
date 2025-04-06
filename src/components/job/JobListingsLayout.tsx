@@ -28,6 +28,9 @@ const JobListingsLayout = ({
     <Layout>
       <div className={`space-y-8 ${animation}`}>
         <div className="p-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 shadow-sm">
+          <div className="mb-2">
+            <BackButton />
+          </div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{title}</h1>

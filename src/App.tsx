@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import { Toaster } from '@/components/ui/toaster';
 import { AppRoutes } from '@/routes';
+import SidePanel from '@/components/layout/SidePanel';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               {AppRoutes}
             </Routes>
             <Toaster />
+            <SidePanel />
           </NotificationsProvider>
         </AuthProvider>
       </ThemeProvider>

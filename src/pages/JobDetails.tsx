@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -7,6 +6,7 @@ import { Job } from '@/types/job';
 import { cn } from '@/lib/utils';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import ShareJobButton from '@/components/ShareJobButton';
+import BackButton from '@/components/navigation/BackButton';
 
 const JobDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -105,194 +105,189 @@ const JobDetails = () => {
         </div>
       )}
       
-      <div className="mb-4">
-        <Link 
-          to={`/jobs${location.search}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-          Back to search results
-        </Link>
-      </div>
-      
-      <div className={`mb-8 ${headerAnimation}`}>
-        <div className="flex items-center gap-4 mb-6">
-          {job.logoUrl ? (
-            <div className="w-16 h-16 rounded-lg border border-border overflow-hidden bg-white flex-shrink-0">
-              <img 
-                src={job.logoUrl} 
-                alt={`${job.company.name} logo`} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className="w-16 h-16 rounded-lg border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <span className="text-primary font-semibold text-2xl">
-                {job.company.name.substring(0, 1)}
-              </span>
-            </div>
-          )}
-          
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-1">{job.title}</h1>
-            <p className="text-lg text-muted-foreground">{job.company.name}</p>
-          </div>
-          
-          <ShareJobButton 
-            jobId={job.id} 
-            jobTitle={job.title} 
-            companyName={job.company.name} 
-            className="self-start"
-          />
+      <div className="container mx-auto px-4">
+        <div className="mb-4">
+          <BackButton />
         </div>
         
-        <div className="flex flex-wrap gap-3">
-          <Badge icon="location">
-            {job.location.city}, {job.location.state} {job.location.zipCode}
-          </Badge>
-          
-          <Badge icon="dollar">
-            {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
-          </Badge>
-          
-          <Badge icon="clock" className="capitalize">
-            {job.type.replace('-', ' ')}
-          </Badge>
-          
-          {job.isRemote && (
-            <Badge icon="laptop" className="bg-primary/10 text-primary">
-              Remote
-            </Badge>
-          )}
-          
-          {job.isFlexible && (
-            <Badge icon="calendar" className="bg-emerald-100 text-emerald-800">
-              Flexible Schedule
-            </Badge>
-          )}
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className={`md:col-span-2 ${contentAnimation}`}>
-          <div className="bg-white border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-            <p className="text-foreground/80 mb-6">
-              {job.description}
-            </p>
-            
-            <h3 className="text-lg font-semibold mb-3">Requirements</h3>
-            <ul className="space-y-2 mb-6">
-              {job.requirements.map((req, index) => (
-                <li key={index} className="flex items-start gap-2 text-foreground/80">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                  </div>
-                  <span>{req}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <div className="bg-secondary/50 rounded-lg p-4 text-sm">
-              <p className="text-foreground/70 italic">
-                This position is ideal for high school students looking to gain valuable work experience
-                while maintaining their studies. No prior experience is required for most of our positions.
-              </p>
-            </div>
-          </div>
-          
-          <div className="bg-white border border-border rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-4">How to Apply</h2>
-            <p className="text-foreground/80 mb-6">
-              Interested in this position? Click the apply button to submit your application. 
-              You'll need to provide some basic information about yourself and explain why 
-              you're interested in this role.
-            </p>
-            
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleApply}
-                className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors focus-ring"
-              >
-                Apply Now
-              </button>
-              
-              <ShareJobButton 
-                jobId={job.id} 
-                jobTitle={job.title} 
-                companyName={job.company.name}
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className={`md:col-span-1 ${sidebarAnimation}`}>
-          <div className="sticky top-24">
-            <div className="bg-white border border-border rounded-xl p-6 mb-6">
-              <h2 className="text-lg font-semibold mb-4">Job Details</h2>
-              
-              <div className="space-y-4">
-                <DetailItem icon="building" label="Company">
-                  {job.company.name}
-                </DetailItem>
-                
-                <DetailItem icon="calendar" label="Posted On">
-                  {formatDate(job.postedDate)}
-                </DetailItem>
-                
-                <DetailItem icon="briefcase" label="Experience">
-                  {job.experienceLevel === 'no-experience' && 'No Experience Required'}
-                  {job.experienceLevel === 'entry-level' && 'Entry Level'}
-                  {job.experienceLevel === 'some-experience' && 'Some Experience Required'}
-                </DetailItem>
-                
-                <DetailItem icon="clock" label="Schedule">
-                  {job.type === 'part-time' && 'Part Time'}
-                  {job.type === 'full-time' && 'Full Time'}
-                  {job.type === 'internship' && 'Internship'}
-                  {job.type === 'temporary' && 'Temporary'}
-                  {job.type === 'weekend' && 'Weekend Only'}
-                  {job.type === 'summer' && 'Summer Job'}
-                </DetailItem>
-                
-                <DetailItem icon="dollar-sign" label="Pay Rate">
-                  {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
-                </DetailItem>
+        <div className={`mb-8 ${headerAnimation}`}>
+          <div className="flex items-center gap-4 mb-6">
+            {job.logoUrl ? (
+              <div className="w-16 h-16 rounded-lg border border-border overflow-hidden bg-white flex-shrink-0">
+                <img 
+                  src={job.logoUrl} 
+                  alt={`${job.company.name} logo`} 
+                  className="w-full h-full object-cover"
+                />
               </div>
+            ) : (
+              <div className="w-16 h-16 rounded-lg border border-border bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <span className="text-primary font-semibold text-2xl">
+                  {job.company.name.substring(0, 1)}
+                </span>
+              </div>
+            )}
+            
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold mb-1">{job.title}</h1>
+              <p className="text-lg text-muted-foreground">{job.company.name}</p>
             </div>
             
-            <div className="bg-primary/5 border border-primary/20 rounded-xl p-6">
-              <h3 className="text-lg font-semibold mb-3 text-primary">Tips for Applicants</h3>
-              <ul className="space-y-3">
-                {[
-                  'Be honest about your availability and experience',
-                  'Highlight your relevant skills and interests',
-                  'Show enthusiasm for the position',
-                  'Include any school activities that demonstrate your skills'
-                ].map((tip, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+            <ShareJobButton 
+              jobId={job.id} 
+              jobTitle={job.title} 
+              companyName={job.company.name} 
+              className="self-start"
+            />
+          </div>
+          
+          <div className="flex flex-wrap gap-3">
+            <Badge icon="location">
+              {job.location.city}, {job.location.state} {job.location.zipCode}
+            </Badge>
+            
+            <Badge icon="dollar">
+              {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
+            </Badge>
+            
+            <Badge icon="clock" className="capitalize">
+              {job.type.replace('-', ' ')}
+            </Badge>
+            
+            {job.isRemote && (
+              <Badge icon="laptop" className="bg-primary/10 text-primary">
+                Remote
+              </Badge>
+            )}
+            
+            {job.isFlexible && (
+              <Badge icon="calendar" className="bg-emerald-100 text-emerald-800">
+                Flexible Schedule
+              </Badge>
+            )}
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={`md:col-span-2 ${contentAnimation}`}>
+            <div className="bg-white border border-border rounded-xl p-6 mb-8">
+              <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+              <p className="text-foreground/80 mb-6">
+                {job.description}
+              </p>
+              
+              <h3 className="text-lg font-semibold mb-3">Requirements</h3>
+              <ul className="space-y-2 mb-6">
+                {job.requirements.map((req, index) => (
+                  <li key={index} className="flex items-start gap-2 text-foreground/80">
                     <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-0.5">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M15 17h3a3 3 0 0 0 0-6h-3v9" />
                         <path d="M9 17V8h4.5a3 3 0 0 1 0 6H9" />
                       </svg>
                     </div>
-                    <span>{tip}</span>
+                    <span>{req}</span>
                   </li>
                 ))}
               </ul>
               
-              <div className="mt-4 pt-4 border-t border-primary/20 text-center">
-                <Link 
-                  to="/resources" 
-                  className="text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+              <div className="bg-secondary/50 rounded-lg p-4 text-sm">
+                <p className="text-foreground/70 italic">
+                  This position is ideal for high school students looking to gain valuable work experience
+                  while maintaining their studies. No prior experience is required for most of our positions.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white border border-border rounded-xl p-6">
+              <h2 className="text-xl font-semibold mb-4">How to Apply</h2>
+              <p className="text-foreground/80 mb-6">
+                Interested in this position? Click the apply button to submit your application. 
+                You'll need to provide some basic information about yourself and explain why 
+                you're interested in this role.
+              </p>
+              
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleApply}
+                  className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors focus-ring"
                 >
-                  View More Resources
-                </Link>
+                  Apply Now
+                </button>
+                
+                <ShareJobButton 
+                  jobId={job.id} 
+                  jobTitle={job.title} 
+                  companyName={job.company.name}
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className={`md:col-span-1 ${sidebarAnimation}`}>
+            <div className="sticky top-24">
+              <div className="bg-white border border-border rounded-xl p-6 mb-6">
+                <h2 className="text-lg font-semibold mb-4">Job Details</h2>
+                
+                <div className="space-y-4">
+                  <DetailItem icon="building" label="Company">
+                    {job.company.name}
+                  </DetailItem>
+                  
+                  <DetailItem icon="calendar" label="Posted On">
+                    {formatDate(job.postedDate)}
+                  </DetailItem>
+                  
+                  <DetailItem icon="briefcase" label="Experience">
+                    {job.experienceLevel === 'no-experience' && 'No Experience Required'}
+                    {job.experienceLevel === 'entry-level' && 'Entry Level'}
+                    {job.experienceLevel === 'some-experience' && 'Some Experience Required'}
+                  </DetailItem>
+                  
+                  <DetailItem icon="clock" label="Schedule">
+                    {job.type === 'part-time' && 'Part Time'}
+                    {job.type === 'full-time' && 'Full Time'}
+                    {job.type === 'internship' && 'Internship'}
+                    {job.type === 'temporary' && 'Temporary'}
+                    {job.type === 'weekend' && 'Weekend Only'}
+                    {job.type === 'summer' && 'Summer Job'}
+                  </DetailItem>
+                  
+                  <DetailItem icon="dollar-sign" label="Pay Rate">
+                    {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
+                  </DetailItem>
+                </div>
+              </div>
+              
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-6">
+                <h3 className="text-lg font-semibold mb-3 text-primary">Tips for Applicants</h3>
+                <ul className="space-y-3">
+                  {[
+                    'Be honest about your availability and experience',
+                    'Highlight your relevant skills and interests',
+                    'Show enthusiasm for the position',
+                    'Include any school activities that demonstrate your skills'
+                  ].map((tip, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M15 17h3a3 3 0 0 0 0-6h-3v9" />
+                          <path d="M9 17V8h4.5a3 3 0 0 1 0 6H9" />
+                        </svg>
+                      </div>
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="mt-4 pt-4 border-t border-primary/20 text-center">
+                  <Link 
+                    to="/resources" 
+                    className="text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+                  >
+                    View More Resources
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
