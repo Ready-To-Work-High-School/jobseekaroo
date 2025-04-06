@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AnimatedStar from '@/components/animations/AnimatedStar';
+import { motion } from 'framer-motion';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
 
 const EmployerPremiumServices = () => {
@@ -12,10 +12,21 @@ const EmployerPremiumServices = () => {
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Sparkles className="h-6 w-6 text-amber-500" />
-            <div className="absolute -top-3 -right-3">
-              <AnimatedStar size={16} />
-            </div>
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1], 
+                rotate: [0, 15, -15, 0],
+                opacity: [0.7, 1, 0.7] 
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut" 
+              }}
+              className="bg-amber-100 dark:bg-amber-900/50 p-2 rounded-full"
+            >
+              <Sparkles className="h-6 w-6 text-amber-500" />
+            </motion.div>
           </div>
           <div>
             <h2 className="text-2xl font-bold">Premium Employer Services</h2>

@@ -8,7 +8,8 @@ import PremiumFeaturesList from '@/components/employer/premium/PremiumFeaturesLi
 import ActiveSubscription from '@/components/employer/premium/ActiveSubscription';
 import { Separator } from '@/components/ui/separator';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
-import AnimatedStar from '@/components/animations/AnimatedStar';
+import { Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const EmployerPremiumServices = () => {
   const fadeIn = useFadeIn(300);
@@ -22,7 +23,20 @@ const EmployerPremiumServices = () => {
       <div className={`container max-w-5xl mx-auto px-4 py-8 ${fadeIn}`}>
         <div className="text-center mb-8 relative">
           <div className="absolute top-0 right-1/4 -translate-y-1/2">
-            <AnimatedStar />
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1], 
+                rotate: [0, 10, -10, 0],
+                opacity: [0.7, 1, 0.7] 
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut" 
+              }}
+            >
+              <Sparkles className="h-8 w-8 text-amber-500" />
+            </motion.div>
           </div>
           <h1 className="text-3xl font-bold mb-2">Premium Fees for Employers</h1>
           <p className="text-muted-foreground max-w-3xl mx-auto">
