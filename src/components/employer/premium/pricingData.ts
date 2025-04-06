@@ -1,0 +1,81 @@
+
+export const employerPlans = [
+  {
+    name: 'Basic',
+    price: '$0',
+    period: 'Forever free',
+    description: 'Get started with essential job posting features',
+    features: [
+      'Basic job postings',
+      'Unlimited applications',
+      'Standard visibility'
+    ],
+    buttonText: 'Get Started',
+    popular: false,
+    planId: 'free'
+  },
+  {
+    name: 'Premium Post',
+    price: '$25',
+    period: 'per post',
+    description: 'Enhanced visibility for individual job postings',
+    features: [
+      'Custom branded profile',
+      'Priority placement in search results',
+      'Company logo featured on listing',
+      'Basic analytics (views and applies)'
+    ],
+    buttonText: 'Purchase',
+    popular: true,
+    planId: 'premium_post'
+  },
+  {
+    name: 'Pro',
+    price: '$99',
+    period: 'per month',
+    description: 'Complete solution for high-volume hiring',
+    features: [
+      'Unlimited premium job postings',
+      'Full analytics dashboard',
+      'Priority support',
+      'Candidate matching tools',
+      'Bulk posting capabilities'
+    ],
+    buttonText: 'Subscribe Now',
+    popular: false,
+    planId: 'enterprise_analytics'
+  }
+];
+
+export const schoolPlans = [
+  {
+    name: 'Basic',
+    price: '$0',
+    period: 'Forever free',
+    description: 'Basic tools for school career counselors',
+    features: [
+      'Student job access',
+      'Job approval tools',
+      'Basic support'
+    ],
+    buttonText: 'Get Started',
+    popular: false,
+    planId: 'school_free'
+  },
+  {
+    name: 'Premium',
+    price: '$500',
+    period: 'per year',
+    description: 'Advanced features for school career departments',
+    features: [
+      'Counselor dashboard',
+      'Student analytics',
+      'Branded portal',
+      'Priority support',
+      'Career event management'
+    ],
+    buttonText: 'Sign Up',
+    popular: true,
+    planId: 'school_premium'
+  }
+];
