@@ -970,6 +970,15 @@ export type Database = {
         }
         Relationships: []
       }
+      employer_job_counts: {
+        Row: {
+          avg_min_wage: number | null
+          company_name: string | null
+          job_count: number | null
+          last_updated: string | null
+        }
+        Relationships: []
+      }
       messages_for_moderation_view: {
         Row: {
           content: string | null
