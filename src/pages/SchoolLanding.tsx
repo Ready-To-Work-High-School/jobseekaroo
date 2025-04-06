@@ -25,7 +25,7 @@ const SchoolLanding = () => {
         const hostname = window.location.hostname;
         const schoolName = hostname.split('.')[0];
         
-        if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo') {
+        if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo' && schoolName !== 'jobseekers4hs') {
           // Use a raw query approach to avoid TypeScript issues
           const { data: schoolData, error } = await supabase
             .from('schools')
@@ -85,8 +85,8 @@ const SchoolLanding = () => {
   return (
     <Layout>
       <Helmet>
-        <title>{schoolData.name} Job Portal | Jobseekaroo</title>
-        <meta name="description" content={`Find student jobs through ${schoolData.name}'s partnership with Jobseekaroo`} />
+        <title>{schoolData.name} Job Portal | Jobseekers4HS</title>
+        <meta name="description" content={`Find student jobs through ${schoolData.name}'s partnership with Jobseekers4HS`} />
         <meta property="og:title" content={`${schoolData.name} Job Portal`} />
         <meta property="og:image" content={schoolData.logo_url || ''} />
       </Helmet>
