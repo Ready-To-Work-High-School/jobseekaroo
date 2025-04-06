@@ -1,44 +1,19 @@
+import { Routes, Route } from 'react-router-dom';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import Profile from './pages/Profile';
+import EmployerDashboard from './pages/EmployerDashboard';
 
-import { BrowserRouter, Routes } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/auth';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import { NotificationsProvider } from '@/contexts/NotificationsContext';
-import { Toaster } from '@/components/ui/toaster';
-import { AppRoutes } from '@/routes';
-import SidePanel from '@/components/layout/SidePanel';
-import { useIsMobile } from '@/hooks/use-mobile';
-import MobileLayout from '@/components/MobileLayout';
-
-function AppContent() {
-  const isMobile = useIsMobile();
-  
-  return (
-    <>
-      {isMobile ? (
-        <MobileLayout>
-          <Routes>{AppRoutes}</Routes>
-        </MobileLayout>
-      ) : (
-        <Routes>{AppRoutes}</Routes>
-      )}
-      <Toaster />
-      <SidePanel />
-    </>
-  );
-}
-
-function App() {
-  return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-          <NotificationsProvider>
-            <AppContent />
-          </NotificationsProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  );
-}
-
-export default App;
+const App = () => (
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/unauthorized" element={<div>Access Denied</div>} />
+    <Route
+      path="/profile"
+      element={<ProtectedRoute><Profile /></ProtectedRoute>}
+    />
+    <Route
+      path="/employer-dashboard"
+      element={<ProtectedRoute requiredRole="employer"><EmployerDashboard /></ProtectedRoute>}
+    />
+  </Routes>
+);
