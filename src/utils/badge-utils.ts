@@ -31,7 +31,7 @@ export async function awardBadge(userId: string, badgeId: string, badgeName: str
           badge && typeof badge === 'object' && 
           typeof badge.id === 'string' && 
           typeof badge.name === 'string'
-        ) as UserBadge[];
+        ) as unknown as UserBadge[];
       }
     }
     
@@ -95,7 +95,7 @@ export async function removeBadge(userId: string, badgeId: string): Promise<User
           badge && typeof badge === 'object' && 
           typeof badge.id === 'string' && 
           typeof badge.name === 'string'
-        ) as UserBadge[];
+        ) as unknown as UserBadge[];
       }
     }
     

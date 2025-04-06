@@ -39,7 +39,7 @@ export function useUserBadges(userId?: string) {
               badge && typeof badge === 'object' && 
               typeof badge.id === 'string' && 
               typeof badge.name === 'string'
-            ) as UserBadge[];
+            ) as unknown as UserBadge[];
             
             setBadges(badgesArray);
           } else {
