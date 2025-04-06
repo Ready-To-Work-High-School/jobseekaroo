@@ -10,6 +10,7 @@ import ForEmployers from '@/pages/ForEmployers';
 import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
 import Resources from '@/pages/Resources';
 import JobHelp from '@/pages/JobHelp';
+import RadixDemo from '@/pages/RadixDemo'; // Add the new import
 
 export const PublicRoutes = (
   <>
@@ -23,6 +24,7 @@ export const PublicRoutes = (
     <Route path="/employer-premium" element={<EmployerPremiumServices />} />
     <Route path="/resources" element={<Resources />} />
     <Route path="/job-help" element={<JobHelp />} />
+    <Route path="/radix-demo" element={<RadixDemo />} /> {/* Add the new route */}
   </>
 );
 
