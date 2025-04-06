@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import RequireVerification from './RequireVerification';
 import { isAdmin, isTestMode } from '@/utils/adminUtils';
+import { UserProfile } from '@/types/user'; // Import the UserProfile type
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,14 +15,6 @@ interface ProtectedRouteProps {
   adminOnly?: boolean;
   requireVerification?: boolean;
   requiredRoles?: string[];
-}
-
-// Define a UserProfile interface to match the returned structure from Supabase
-interface UserProfile {
-  id: string;
-  role?: string;
-  user_type?: string;
-  [key: string]: any; // For any other properties
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
@@ -70,10 +63,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (adminOnly && !isAdmin(userProfile) && !testMode) {
     console.log('Access denied: Admin only route, user type is', userProfile?.user_type);
     if (!hasShownToast) {
-      // Fix the toast call to use the correct syntax for sonner
       toast.error("Access Denied", {
         description: "You need admin privileges to access this page",
       });
+      setHasShownToast(true);
     }
     return <Navigate to="/" replace />;
   }
@@ -88,10 +81,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         current: userProfile.user_type 
       });
       if (!hasShownToast) {
-        // Fix the toast call to use the correct syntax for sonner
         toast.error("Access Denied", {
           description: "You don't have the required role to access this page",
         });
+        setHasShownToast(true);
       }
       return <Navigate to="/" replace />;
     }
