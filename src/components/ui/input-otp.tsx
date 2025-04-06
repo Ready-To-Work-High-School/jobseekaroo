@@ -42,12 +42,12 @@ const InputOTPSlot = React.forwardRef<
 >(({ index, className, ...props }, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext)
   
-  // Use null coalescing and provide default values for all properties
-  const slots = inputOTPContext?.slots || [];
-  const slot = slots[index] as OTPSlot || {}; // Cast to our defined interface
+  // Safely access slots with null checks
+  const slots = inputOTPContext?.slots ?? [];
+  const slot = index < slots.length ? slots[index] as OTPSlot : {} as OTPSlot;
   
   // Access properties with proper typing
-  const char = slot.char || '';
+  const char = slot.char ?? '';
   const hasFakeCaret = !!slot.hasFakeCaret;
   const isActive = !!slot.isActive;
 

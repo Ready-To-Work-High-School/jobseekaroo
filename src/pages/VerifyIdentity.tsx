@@ -57,7 +57,6 @@ const VerifyIdentity = () => {
           <CardTitle className="text-2xl">Verify Your Identity</CardTitle>
           <CardDescription>
             Please enter the 6-digit verification code sent to your device.
-            {/* In a real app, you'd display part of the user's email/phone */}
             {user && user.email && (
               <span className="block mt-1">
                 Code sent to: {user.email.replace(/(.{2})(.*)(@.*)/, "$1****$3")}
@@ -70,7 +69,7 @@ const VerifyIdentity = () => {
             <InputOTP 
               maxLength={6} 
               value={verificationCode} 
-              onChange={setVerificationCode}
+              onChange={(value) => setVerificationCode(value)}
               render={({ slots }) => (
                 <InputOTPGroup>
                   {slots.map((slot, index) => (
