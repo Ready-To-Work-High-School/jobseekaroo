@@ -11,22 +11,43 @@ const cacheMiddleware = (duration) => {
     if (req.method !== 'GET') {
       return next();
     }
+    
+    // Skip caching in development if specified
+    if (process.env.NODE_ENV !== 'production' && process.env.DISABLE_CACHE === 'true') {
+      return next();
+    }
 
     const key = `__express__${req.originalUrl || req.url}`;
     const cachedBody = cache.get(key);
 
     if (cachedBody) {
+      // Add cache header
+      res.setHeader('X-Cache', 'HIT');
+      
       // Return cached response
-      console.log(`Cache hit for ${key}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`Cache hit for ${key}`);
+      }
       return res.send(cachedBody);
     }
+    
+    // Add cache header
+    res.setHeader('X-Cache', 'MISS');
 
     // Override res.send to cache the response before sending
     const originalSend = res.send;
     res.send = function(body) {
       if (res.statusCode === 200) {
-        cache.put(key, body, duration * 1000);
-        console.log(`Cache set for ${key} with duration ${duration}s`);
+        // Only cache successful responses
+        const cacheDuration = duration * 1000;
+        cache.put(key, body, cacheDuration);
+        
+        // Add cache control headers
+        res.setHeader('Cache-Control', `max-age=${duration}`);
+        
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`Cache set for ${key} with duration ${duration}s`);
+        }
       }
       originalSend.call(this, body);
       return this;
@@ -35,5 +56,14 @@ const cacheMiddleware = (duration) => {
     next();
   };
 };
+
+// Clean up expired cache entries periodically
+const cleanupInterval = 3600000; // 1 hour
+setInterval(() => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('Performing cache cleanup');
+  }
+  cache.clear();
+}, cleanupInterval);
 
 module.exports = { cacheMiddleware };

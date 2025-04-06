@@ -2,8 +2,16 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const { 
+  generateNonce, 
+  setupSecurityHeaders 
+} = require('./src/server/middleware/security');
 
 const PORT = process.env.PORT || 3000;
+
+// Security middleware
+app.use(generateNonce);
+app.use(setupSecurityHeaders);
 
 // Enhanced handler for school-branded subdomains
 app.use((req, res, next) => {
@@ -60,6 +68,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`Visit a school-branded page at school.jobseekers4hs.org:${PORT} or school.jobseeker4hs.org:${PORT} (update /etc/hosts if testing locally)`);
 });
