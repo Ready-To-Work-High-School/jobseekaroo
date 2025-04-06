@@ -35,9 +35,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('role, user_type')
+        .select('*')  // Changed to select all fields instead of specific columns
         .eq('id', userId)
         .single();
+      
       if (error) throw error;
       return data as UserProfile;
     },
