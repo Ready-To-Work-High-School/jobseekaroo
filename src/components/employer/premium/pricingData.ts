@@ -16,7 +16,7 @@ export const employerPlans = [
   },
   {
     name: 'Premium Post',
-    price: '$25',
+    price: '$29',
     period: 'per post',
     description: 'Enhanced visibility for individual job postings',
     features: [
@@ -31,14 +31,14 @@ export const employerPlans = [
   },
   {
     name: 'Pro',
-    price: '$99',
+    price: '$149',
     period: 'per month',
     description: 'Complete solution for high-volume hiring',
     features: [
       'Unlimited premium job postings',
       'Full analytics dashboard',
       'Priority support',
-      'Candidate matching tools',
+      'Featured Employer badge',
       'Bulk posting capabilities'
     ],
     buttonText: 'Subscribe Now',
@@ -64,12 +64,12 @@ export const schoolPlans = [
   },
   {
     name: 'Premium',
-    price: '$500',
+    price: '$750',
     period: 'per year',
     description: 'Advanced features for school career departments',
     features: [
       'Counselor dashboard',
-      'Student analytics',
+      'Student success reports',
       'Branded portal',
       'Priority support',
       'Career event management'
