@@ -15,19 +15,19 @@ export const employerPlans = [
     planId: 'free'
   },
   {
-    name: 'Premium Post',
-    price: '$29',
-    period: 'per post',
-    description: 'Enhanced visibility for individual job postings',
+    name: 'Standard',
+    price: '$59',
+    period: 'per month',
+    description: 'Perfect for small chains with moderate hiring needs',
     features: [
+      '5 premium job posts per month',
       'Custom branded profile',
       'Priority placement in search results',
-      'Company logo featured on listing',
-      'Basic analytics (views and applies)'
+      'Basic analytics'
     ],
-    buttonText: 'Purchase',
+    buttonText: 'Subscribe',
     popular: true,
-    planId: 'premium_post'
+    planId: 'standard_monthly'
   },
   {
     name: 'Pro',
@@ -77,5 +77,21 @@ export const schoolPlans = [
     buttonText: 'Sign Up',
     popular: true,
     planId: 'school_premium'
+  },
+  {
+    name: 'Enterprise',
+    price: '$10',
+    period: 'per student/year',
+    description: 'Scalable solution for larger schools',
+    features: [
+      'All Premium features',
+      'Volume-based pricing',
+      'Dedicated account manager',
+      'Custom reporting',
+      'API access'
+    ],
+    buttonText: 'Contact Us',
+    popular: false,
+    planId: 'school_enterprise'
   }
 ];

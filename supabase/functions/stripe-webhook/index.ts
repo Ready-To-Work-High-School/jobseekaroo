@@ -58,10 +58,52 @@ serve(async (req) => {
       const session = event.data.object;
       
       // Get the metadata from the session
-      const { jobId, planType, userId } = session.metadata;
+      const { jobId, planType, userId, planId } = session.metadata;
       
-      if (jobId && planType && userId) {
-        // Update the job as premium
+      // Handle different subscription plans
+      if (planId === "standard_monthly") {
+        // For the $59/month Standard plan
+        await supabaseAdmin
+          .from("employer_subscriptions")
+          .insert({
+            user_id: userId,
+            plan_type: "standard",
+            posts_remaining: 5,
+            is_active: true,
+            start_date: new Date().toISOString(),
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days later
+          });
+      } 
+      else if (planId === "enterprise_analytics") {
+        // For the $149/month Pro plan
+        await supabaseAdmin
+          .from("employer_subscriptions")
+          .insert({
+            user_id: userId,
+            plan_type: "pro",
+            is_active: true,
+            is_featured_employer: true,
+            start_date: new Date().toISOString(),
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days later
+          });
+      }
+      else if (planId && planId.startsWith("school_")) {
+        // For school plans
+        const isEnterprise = planId === "school_enterprise";
+        const isPremium = planId === "school_premium";
+        
+        await supabaseAdmin
+          .from("school_subscriptions")
+          .insert({
+            school_id: userId, // In this case userId would be schoolId
+            plan_type: isEnterprise ? "enterprise" : (isPremium ? "premium" : "basic"),
+            is_active: true,
+            start_date: new Date().toISOString(),
+            end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 year later
+          });
+      }
+      else if (jobId && planType) {
+        // For individual premium job posts
         await supabaseAdmin
           .from("jobs")
           .update({ 

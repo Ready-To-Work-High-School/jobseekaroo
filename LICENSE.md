@@ -50,11 +50,13 @@ a) **License Fee Structure**: Educational institutions shall pay an annual licen
    - Medium institutions (501-2,000 students): $3,000 per year
    - Large institutions (over 2,000 students): $6,500 per year
 
-b) **Multi-Campus Deployment**: For educational institutions with multiple campuses, each campus requires a separate license unless a multi-campus agreement is negotiated directly with the Licensor.
+b) **Per-Student Pricing Option**: Educational institutions may alternatively choose a per-student pricing model at $10 per student per year, which may be more cost-effective for larger schools.
 
-c) **Usage Limitations**: The educational license permits use of the Software for educational and career development purposes only. Commercial use of the Software by the institution is expressly prohibited.
+c) **Multi-Campus Deployment**: For educational institutions with multiple campuses, each campus requires a separate license unless a multi-campus agreement is negotiated directly with the Licensor.
 
-d) **User Restrictions**: The license extends only to currently enrolled students, faculty, and staff of the licensed educational institution.
+d) **Usage Limitations**: The educational license permits use of the Software for educational and career development purposes only. Commercial use of the Software by the institution is expressly prohibited.
+
+e) **User Restrictions**: The license extends only to currently enrolled students, faculty, and staff of the licensed educational institution.
 
 ### 7.2 Reporting Requirements
 
@@ -75,12 +77,11 @@ Employers may choose from the following licensing options to access premium feat
 
 a) **Basic Plan**: Free access to essential job posting features.
 
-b) **Premium Post Plan**: $29 per job post
-   - Enhanced visibility for individual job postings
+b) **Standard Plan**: $59 per month
+   - 5 premium job posts per month
    - Custom branded profile
    - Priority placement in search results
-   - Company logo featured on listing
-   - Basic analytics (views and applies)
+   - Basic analytics
 
 c) **Pro Plan**: $149 per month
    - Unlimited premium job postings
@@ -110,6 +111,13 @@ b) **Premium Plan**: $750 per year
    - Branded portal
    - Priority support
    - Career event management
+
+c) **Enterprise Plan**: $10 per student per year
+   - All Premium features
+   - Volume-based pricing
+   - Dedicated account manager
+   - Custom reporting
+   - API access
 
 ### 9.2 School Data Policies
 

@@ -66,12 +66,12 @@ const License = () => {
                       <h4 className="font-medium mb-1">Available Plans:</h4>
                       <ul className="list-disc pl-8 mb-3 text-sm">
                         <li><span className="font-semibold">Basic:</span> Free forever - Essential job posting features</li>
-                        <li><span className="font-semibold">Premium Post:</span> $29 per job post - Enhanced visibility with custom branding and analytics</li>
+                        <li><span className="font-semibold">Standard:</span> $59 per month - 5 premium job posts with branded profile</li>
                         <li><span className="font-semibold">Pro:</span> $149 per month - Unlimited premium postings with full analytics and featured badge</li>
                       </ul>
                       
                       <p className="text-sm">
-                        For more information about employer plans, please visit our <Link to="/employer/premium" className="text-primary hover:underline">Premium Services</Link> page.
+                        For more information about employer plans, please visit our <Link to="/for-employers" className="text-primary hover:underline">Premium Services</Link> page.
                       </p>
                     </div>
                   </div>
@@ -91,9 +91,10 @@ const License = () => {
                       <ul className="list-disc pl-8 mb-3 text-sm">
                         <li><span className="font-semibold">Basic:</span> Free forever - Essential tools for school career counselors</li>
                         <li><span className="font-semibold">Premium:</span> $750 per year - Full suite of tools including counselor dashboard and analytics</li>
+                        <li><span className="font-semibold">Enterprise:</span> $10 per student/year - Volume-based pricing for larger institutions</li>
                       </ul>
                       
-                      <h4 className="font-medium mb-1">Educational Institution Fee Structure:</h4>
+                      <h4 className="font-medium mb-1">Educational Institution Standard Fee Structure:</h4>
                       <ul className="list-disc pl-8 mb-3 text-sm">
                         <li>Small institutions (up to 500 students): $1,500 per year</li>
                         <li>Medium institutions (501-2,000 students): $3,000 per year</li>
