@@ -44,6 +44,27 @@ const cacheMiddleware = (duration) => {
   };
 };
 
+// Enhanced handler for school-branded subdomains
+app.use((req, res, next) => {
+  const host = req.hostname;
+  
+  // Check if the request is coming from a school subdomain
+  // Format: school.jobseekaroo.com or school.jobseekers4hs.org
+  const schoolSubdomainRegex = /^([^.]+)\.(jobseekaroo\.com|jobseekers4hs\.org)$/;
+  const schoolSubdomainMatch = host.match(schoolSubdomainRegex);
+  
+  if (schoolSubdomainMatch) {
+    // Extract school name from subdomain
+    req.schoolName = schoolSubdomainMatch[1];
+    console.log(`School subdomain detected: ${req.schoolName}`);
+    // Set a flag to indicate this is a school-branded request
+    req.isSchoolBranded = true;
+  } else {
+    req.isSchoolBranded = false;
+  }
+  next();
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -59,6 +80,17 @@ app.use('/api/status', statusRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/users', usersRoutes);
 
+// School-branded landing page route
+app.get('/', (req, res, next) => {
+  if (req.isSchoolBranded) {
+    console.log(`Serving school-branded landing page for: ${req.schoolName}`);
+    // Continue to serve the React app
+    next();
+  } else {
+    next();
+  }
+});
+
 // Serve static files from the React app in production
 if (process.env.NODE_ENV === 'production') {
   console.log('Serving static files from', path.join(__dirname, '../../dist'));
@@ -66,9 +98,9 @@ if (process.env.NODE_ENV === 'production') {
   
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api/')) {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'));
-    }
+    // Previously we were only forwarding non-API routes
+    // Now we handle both normal and school-branded routes
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
   });
 }
 
@@ -82,6 +114,7 @@ app.listen(PORT, '0.0.0.0', () => {
   if (process.env.NODE_ENV === 'production') {
     console.log(`Static files being served from: ${path.join(__dirname, '../../dist')}`);
   }
+  console.log(`School-branded pages available at school.jobseekers4hs.org:${PORT} (requires proper DNS or hosts file setup)`);
 });
 
 module.exports = app;

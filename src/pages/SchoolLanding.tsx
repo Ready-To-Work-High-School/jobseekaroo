@@ -23,9 +23,32 @@ const SchoolLanding = () => {
       try {
         // Extract school name from hostname
         const hostname = window.location.hostname;
-        const schoolName = hostname.split('.')[0];
         
-        if (schoolName !== 'localhost' && schoolName !== 'jobseekaroo' && schoolName !== 'jobseekers4hs') {
+        // Enhanced regex to match school.domain.tld pattern
+        const schoolRegex = /^([^.]+)\.(jobseekaroo\.com|jobseekers4hs\.org|localhost)(?::\d+)?$/;
+        const schoolMatch = hostname.match(schoolRegex);
+        
+        let schoolName = null;
+        
+        if (schoolMatch) {
+          // Extract the school slug from the subdomain
+          schoolName = schoolMatch[1];
+          console.log(`Detected school subdomain: ${schoolName}`);
+        } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+          // For local development, check if there's a school parameter in the URL
+          const urlParams = new URLSearchParams(window.location.search);
+          schoolName = urlParams.get('school');
+          
+          if (schoolName) {
+            console.log(`Using school param from URL: ${schoolName}`);
+          } else {
+            // For testing on localhost without a param, redirect to main landing
+            navigate('/');
+            return;
+          }
+        }
+        
+        if (schoolName && schoolName !== 'jobseekaroo' && schoolName !== 'www' && schoolName !== 'jobseekers4hs') {
           // Use a raw query approach to avoid TypeScript issues
           const { data: schoolData, error } = await supabase
             .from('schools')
@@ -33,18 +56,25 @@ const SchoolLanding = () => {
             .eq('slug', schoolName)
             .maybeSingle();
             
-          if (error) throw error;
+          if (error) {
+            console.error('Error fetching school data:', error);
+            throw error;
+          }
           
           if (schoolData) {
             // Use type assertion to handle the type safely
+            console.log('School data found:', schoolData);
             setSchoolData(schoolData as unknown as School);
+          } else {
+            console.log(`No school found with slug: ${schoolName}`);
+            // School not found in database, but we're on a subdomain - show generic not found
           }
         } else {
-          // Redirect to main page if not on a school subdomain
+          // Not on a school subdomain and no school parameter, redirect to main page
           navigate('/');
         }
       } catch (error) {
-        console.error('Error fetching school data:', error);
+        console.error('Error in fetchSchoolData:', error);
       } finally {
         setLoading(false);
       }
@@ -68,7 +98,7 @@ const SchoolLanding = () => {
   }
   
   if (!schoolData) {
-    // School not found
+    // School not found but we're on a school subdomain
     return (
       <Layout>
         <div className="container mx-auto py-16 text-center">
@@ -82,6 +112,7 @@ const SchoolLanding = () => {
     );
   }
   
+  // Render the school-branded landing page with the school data
   return (
     <Layout>
       <Helmet>
