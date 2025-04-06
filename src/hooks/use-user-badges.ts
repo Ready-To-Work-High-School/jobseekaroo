@@ -30,10 +30,16 @@ export function useUserBadges(userId?: string) {
         
         if (error) throw error;
         
-        setBadges(data?.badges || []);
+        // Handle the case where badges might not exist in the profile
+        if (data && data.badges) {
+          setBadges(data.badges);
+        } else {
+          setBadges([]);
+        }
       } catch (err) {
         console.error('Error fetching user badges:', err);
         setError(err instanceof Error ? err : new Error('Failed to fetch badges'));
+        setBadges([]); // Set empty badges array on error
       } finally {
         setIsLoading(false);
       }

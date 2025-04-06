@@ -4,8 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Award, Star, Users, Clock, Brain, Briefcase, Shield } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { StudentBadge } from '@/types/badges';
 import BadgeIcon from '@/components/badges/BadgeIcon';
+
+export interface StudentBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  earned: boolean;
+  earnedDate?: string;
+  type: 'skill' | 'character' | 'achievement';
+}
 
 interface StudentBadgesProps {
   badges: StudentBadge[];
