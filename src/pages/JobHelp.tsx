@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -7,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import JobHelpAI from '@/components/support/JobHelpAI';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { ArrowRight } from 'lucide-react';
 
 const HELP_CATEGORIES = [
   {

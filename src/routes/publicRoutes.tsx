@@ -11,7 +11,7 @@ import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
 import Resources from '@/pages/Resources';
 import JobHelp from '@/pages/JobHelp';
 
-const PublicRoutes = (
+export const PublicRoutes = (
   <>
     <Route path="/about" element={<About />} />
     <Route path="/contact" element={<Contact />} />
