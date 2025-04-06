@@ -7,6 +7,7 @@ import AdminDashboard from '../pages/AdminDashboard';
 import AdminUserManagement from '../pages/AdminUserManagement';
 import AdminRedemptionCodes from '../pages/AdminRedemptionCodes';
 import AdminMessageModeration from '../pages/AdminMessageModeration';
+import AdminPremiumManagement from '../pages/AdminPremiumManagement';
 
 export const AdminRoutes = (
   <>
@@ -42,6 +43,11 @@ export const AdminRoutes = (
         <Layout>
           <AdminMessageModeration />
         </Layout>
+      </ProtectedRoute>
+    } />
+    <Route path="/admin/premium" element={
+      <ProtectedRoute adminOnly>
+        <AdminPremiumManagement />
       </ProtectedRoute>
     } />
   </>

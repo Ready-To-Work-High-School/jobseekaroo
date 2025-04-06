@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Briefcase } from 'lucide-react';
+import { Briefcase, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const CeoHeader: React.FC = () => {
@@ -11,20 +11,34 @@ const CeoHeader: React.FC = () => {
     navigate('/employer-dashboard');
   };
 
+  const handleManagePremium = () => {
+    navigate('/admin/premium');
+  };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
         <h2 className="text-xl font-semibold">CEO Dashboard</h2>
-        <p className="text-sm text-muted-foreground">Manage codes and job postings</p>
+        <p className="text-sm text-muted-foreground">Manage codes, job postings, and premium privileges</p>
       </div>
-      <Button 
-        onClick={handleManageJobs} 
-        variant="outline" 
-        className="flex items-center gap-2"
-      >
-        <Briefcase className="h-4 w-4" />
-        Manage Job Postings
-      </Button>
+      <div className="flex gap-2">
+        <Button 
+          onClick={handleManagePremium} 
+          variant="default" 
+          className="flex items-center gap-2"
+        >
+          <Sparkles className="h-4 w-4" />
+          Premium Privileges
+        </Button>
+        <Button 
+          onClick={handleManageJobs} 
+          variant="outline" 
+          className="flex items-center gap-2"
+        >
+          <Briefcase className="h-4 w-4" />
+          Manage Job Postings
+        </Button>
+      </div>
     </div>
   );
 };
