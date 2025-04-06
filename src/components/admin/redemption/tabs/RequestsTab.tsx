@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { CheckIcon, CrossIcon } from 'lucide-react';
+import { Check as CheckIcon, X as CrossIcon } from 'lucide-react';
 
 // Mock data for demonstration
 const mockRequests = [
@@ -39,6 +39,34 @@ const mockRequests = [
     amount: 5,
     justification: 'Local businesses participating in internship program.',
     status: 'pending'
+  },
+  {
+    id: '4',
+    requestedBy: 'Lisa Rodriguez',
+    requestedAt: new Date(Date.now() - 86400000 * 3),
+    codeType: 'teacher',
+    amount: 10,
+    schoolName: 'Westside High School',
+    justification: 'New teachers starting next semester need access to the platform.',
+    status: 'pending'
+  },
+  {
+    id: '5',
+    requestedBy: 'David Williams',
+    requestedAt: new Date(Date.now() - 86400000 * 4),
+    codeType: 'admin',
+    amount: 3,
+    justification: 'New administrators need system access for the upcoming academic year.',
+    status: 'pending'
+  },
+  {
+    id: '6',
+    requestedBy: 'Emily Taylor',
+    requestedAt: new Date(Date.now() - 86400000 * 7),
+    codeType: 'school',
+    amount: 1,
+    justification: 'Creating institutional account for Northside Academy.',
+    status: 'approved'
   }
 ];
 
@@ -88,6 +116,17 @@ const RequestsTab: React.FC<RequestsTabProps> = ({ isCeo = false }) => {
     }
   };
 
+  const getRequestTypeDisplay = (type: string) => {
+    switch (type) {
+      case 'student': return 'Student';
+      case 'employer': return 'Employer';
+      case 'teacher': return 'Teacher';
+      case 'admin': return 'Administrator';
+      case 'school': return 'School';
+      default: return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+  };
+
   return (
     <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -122,7 +161,7 @@ const RequestsTab: React.FC<RequestsTabProps> = ({ isCeo = false }) => {
                         <div className="flex justify-between items-start">
                           <div>
                             <h4 className="font-medium">
-                              {request.amount} {request.codeType} codes
+                              {request.amount} {getRequestTypeDisplay(request.codeType)} codes
                               {request.schoolName && ` for ${request.schoolName}`}
                             </h4>
                             <p className="text-sm text-muted-foreground">
@@ -167,7 +206,7 @@ const RequestsTab: React.FC<RequestsTabProps> = ({ isCeo = false }) => {
                             <div className="flex justify-between items-start">
                               <div>
                                 <h4 className="font-medium">
-                                  {request.amount} {request.codeType} codes
+                                  {request.amount} {getRequestTypeDisplay(request.codeType)} codes
                                   {request.schoolName && ` for ${request.schoolName}`}
                                 </h4>
                                 <p className="text-sm">

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,9 +17,13 @@ import {
 import { Sparkles, Loader2, AlertCircle, Check, X } from 'lucide-react';
 import { UserProfile } from '@/types/user';
 
+interface PremiumUser extends UserProfile {
+  premium_status?: string;
+}
+
 const PremiumManagement = () => {
   const { toast } = useToast();
-  const [users, setUsers] = useState<Array<UserProfile & { premium_status?: string }>>([]);
+  const [users, setUsers] = useState<PremiumUser[]>([]);
   const [loading, setLoading] = useState(true);
   const { userProfile } = useAuth();
 
@@ -57,7 +61,7 @@ const PremiumManagement = () => {
         return {
           ...profile,
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
-        };
+        } as PremiumUser;
       });
       
       setUsers(usersWithPremium);
@@ -256,6 +260,8 @@ const PremiumManagement = () => {
                           <Badge variant="secondary">Student</Badge>
                         ) : user.user_type === 'teacher' ? (
                           <Badge variant="outline">Teacher</Badge>
+                        ) : user.user_type === 'school' ? (
+                          <Badge variant="outline" className="bg-purple-100 text-purple-800">School</Badge>
                         ) : (
                           <Badge variant="outline">Unknown</Badge>
                         )}

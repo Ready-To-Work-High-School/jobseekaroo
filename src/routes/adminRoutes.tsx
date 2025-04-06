@@ -47,7 +47,9 @@ export const AdminRoutes = (
     } />
     <Route path="/admin/premium" element={
       <ProtectedRoute adminOnly>
-        <AdminPremiumManagement />
+        <Layout>
+          <AdminPremiumManagement />
+        </Layout>
       </ProtectedRoute>
     } />
   </>

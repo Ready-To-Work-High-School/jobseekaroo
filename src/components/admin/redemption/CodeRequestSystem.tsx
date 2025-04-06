@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,7 @@ interface CodeRequestSystemProps {
 const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({ 
   onRequestSubmitted 
 }) => {
-  const [requestType, setRequestType] = useState<'student' | 'employer'>('student');
+  const [requestType, setRequestType] = useState<'student' | 'employer' | 'admin' | 'teacher' | 'school'>('student');
   const [amount, setAmount] = useState<number>(10);
   const [justification, setJustification] = useState('');
   const [schoolName, setSchoolName] = useState('');
@@ -37,10 +38,10 @@ const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({
       return;
     }
     
-    if (requestType === 'student' && !schoolName) {
+    if ((requestType === 'student' || requestType === 'teacher') && !schoolName) {
       toast({
         title: 'Missing Information',
-        description: 'Please provide a school name for student code requests',
+        description: 'Please provide a school name for student or teacher code requests',
         variant: 'destructive',
       });
       return;
@@ -89,7 +90,7 @@ const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({
             <Label htmlFor="code-type">Code Type</Label>
             <Select 
               value={requestType} 
-              onValueChange={(value) => setRequestType(value as 'student' | 'employer')}
+              onValueChange={(value) => setRequestType(value as 'student' | 'employer' | 'admin' | 'teacher' | 'school')}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select code type" />
@@ -97,6 +98,9 @@ const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({
               <SelectContent>
                 <SelectItem value="student">Student</SelectItem>
                 <SelectItem value="employer">Employer</SelectItem>
+                <SelectItem value="admin">Administrator</SelectItem>
+                <SelectItem value="teacher">Teacher</SelectItem>
+                <SelectItem value="school">School</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -113,7 +117,7 @@ const CodeRequestSystem: React.FC<CodeRequestSystemProps> = ({
             />
           </div>
           
-          {requestType === 'student' && (
+          {(requestType === 'student' || requestType === 'teacher') && (
             <div className="space-y-2">
               <Label htmlFor="school-name">School or Institution Name</Label>
               <Input

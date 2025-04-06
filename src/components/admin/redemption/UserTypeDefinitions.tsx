@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GraduationCap, Briefcase, School, ShieldCheck, Code2 } from 'lucide-react';
+import { GraduationCap, Briefcase, School, ShieldCheck, Code2, Building } from 'lucide-react';
 
 export type UserTypeInfo = {
   value: string;
@@ -45,5 +45,12 @@ export const userTypes: Record<string, UserTypeInfo> = {
     icon: <Code2 className="h-5 w-5 text-blue-500" />,
     description: 'Generate codes for technical partners and platform developers',
     emailDomainExample: 'partner.westsidehigh.edu'
+  },
+  school: {
+    value: 'school',
+    label: 'Schools',
+    icon: <Building className="h-5 w-5 text-purple-500" />,
+    description: 'Generate codes for school institutional accounts',
+    emailDomainExample: 'westsidehigh.edu'
   }
 };
