@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +14,21 @@ import { useToast } from '@/hooks/use-toast';
 import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 import { supabase } from '@/integrations/supabase/client';
 
-const plans = [
+const employerPlans = [
+  {
+    name: 'Basic',
+    price: '$0',
+    period: 'Forever free',
+    description: 'Get started with essential job posting features',
+    features: [
+      'Basic job postings',
+      'Unlimited applications',
+      'Standard visibility'
+    ],
+    buttonText: 'Get Started',
+    popular: false,
+    planId: 'free'
+  },
   {
     name: 'Premium Post',
     price: '$25',
@@ -24,57 +38,79 @@ const plans = [
       'Custom branded profile',
       'Priority placement in search results',
       'Company logo featured on listing',
-      'Basic analytics (views and applies)',
-      'Higher visibility to candidates'
-    ],
-    buttonText: 'Purchase',
-    popular: false,
-    planId: 'premium_post'
-  },
-  {
-    name: 'Premium Post + Analytics',
-    price: '$50',
-    period: 'per post',
-    description: 'Advanced analytics for individual postings',
-    features: [
-      'All Premium Post features',
-      'Detailed applicant statistics',
-      'Skill match scoring',
-      'Applicant demographics',
-      'Conversion rate analytics',
-      'Comparison with industry benchmarks',
-      'Weekly engagement reports'
+      'Basic analytics (views and applies)'
     ],
     buttonText: 'Purchase',
     popular: true,
-    planId: 'premium_analytics_post'
+    planId: 'premium_post'
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
+    name: 'Pro',
+    price: '$99',
+    period: 'per month',
     description: 'Complete solution for high-volume hiring',
     features: [
       'Unlimited premium job postings',
-      'Custom reporting dashboards',
-      'AI-powered candidate matching',
-      'Real-time analytics',
-      'Priority feature development',
-      'Dedicated account manager',
-      'Bulk posting tools'
+      'Full analytics dashboard',
+      'Priority support',
+      'Candidate matching tools',
+      'Bulk posting capabilities'
     ],
-    buttonText: 'Contact Sales',
+    buttonText: 'Subscribe Now',
     popular: false,
     planId: 'enterprise_analytics'
+  }
+];
+
+const schoolPlans = [
+  {
+    name: 'Basic',
+    price: '$0',
+    period: 'Forever free',
+    description: 'Basic tools for school career counselors',
+    features: [
+      'Student job access',
+      'Job approval tools',
+      'Basic support'
+    ],
+    buttonText: 'Get Started',
+    popular: false,
+    planId: 'school_free'
+  },
+  {
+    name: 'Premium',
+    price: '$500',
+    period: 'per year',
+    description: 'Advanced features for school career departments',
+    features: [
+      'Counselor dashboard',
+      'Student analytics',
+      'Branded portal',
+      'Priority support',
+      'Career event management'
+    ],
+    buttonText: 'Sign Up',
+    popular: true,
+    planId: 'school_premium'
   }
 ];
 
 const PricingPlans = () => {
   const { toast } = useToast();
   const { purchasePremiumPost, isLoading } = usePremiumFeatures();
+  const [isEmployer, setIsEmployer] = useState(true);
 
   const handleSubscribe = async (planId: string) => {
-    // For enterprise plan, just show contact message
+    // For non-employer plans or free plans, just show message
+    if (planId.startsWith('school_') || planId === 'free') {
+      toast({
+        title: "Coming Soon",
+        description: "This plan is coming soon. Please check back later.",
+      });
+      return;
+    }
+    
+    // For enterprise plan, show contact message
     if (planId === 'enterprise_analytics') {
       toast({
         title: "Contact Sales",
@@ -116,23 +152,45 @@ const PricingPlans = () => {
     }
   };
   
+  const plans = isEmployer ? employerPlans : schoolPlans;
+  
   return (
     <div className="py-8">
-      <h2 className="text-2xl font-bold text-center mb-8">Choose Your Plan</h2>
+      <h2 className="text-3xl font-bold text-center mb-2">Pricing Plans</h2>
+      <p className="text-center text-muted-foreground mb-10 max-w-3xl mx-auto">
+        Simple, affordable plans for employers and schools. Students always use our platform for free.
+      </p>
       
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* Toggle between Employer and School plans */}
+      <div className="flex justify-center mb-8">
+        <div className="inline-flex rounded-md shadow-sm mb-8">
+          <Button
+            variant={isEmployer ? "default" : "outline"}
+            onClick={() => setIsEmployer(true)}
+            className="rounded-r-none"
+          >
+            For Employers
+          </Button>
+          <Button
+            variant={!isEmployer ? "default" : "outline"}
+            onClick={() => setIsEmployer(false)}
+            className="rounded-l-none"
+          >
+            For Schools
+          </Button>
+        </div>
+      </div>
+      
+      <div className={`grid ${isEmployer ? 'md:grid-cols-3' : 'md:grid-cols-2 md:max-w-4xl mx-auto'} gap-6`}>
         {plans.map((plan) => (
           <Card 
             key={plan.planId}
             className={`flex flex-col ${plan.popular ? 'border-primary shadow-lg relative overflow-hidden' : ''}`}
           >
             {plan.popular && (
-              <>
-                <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
-                  Most Popular
-                </div>
-                <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse-slow glow-amber pointer-events-none"></div>
-              </>
+              <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
+                Most Popular
+              </div>
             )}
             <CardHeader>
               <CardTitle>{plan.name}</CardTitle>
@@ -157,6 +215,7 @@ const PricingPlans = () => {
                 className={`w-full ${plan.popular ? 'bg-primary' : ''}`}
                 onClick={() => handleSubscribe(plan.planId)}
                 disabled={isLoading}
+                variant={plan.planId === 'free' || plan.planId === 'school_free' ? 'outline' : 'default'}
               >
                 {isLoading ? "Processing..." : plan.buttonText}
               </Button>
