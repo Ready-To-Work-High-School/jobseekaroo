@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { AvatarCreator } from '@readyplayerme/react-avatar-creator';
 import type { AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import { toast } from 'sonner';
 
 type AvatarType = 'color' | 'readyplayer';
 
@@ -25,28 +26,32 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
     onAddStudent(studentName, avatarType, createdAvatarUrl);
     setStudentName('');
     setCreatedAvatarUrl(null);
+    toast.success(`Student ${studentName} added successfully!`);
   };
 
   const handleAvatarComplete = (event: AvatarExportedEvent) => {
-    // The ReadyPlayerMe AvatarExportedEvent has the URL in the event itself
-    // Based on the API documentation, we need to access it differently
     console.log("Avatar exported event:", event);
     
-    // If event is directly the URL string 
     if (typeof event === 'string') {
       setCreatedAvatarUrl(event);
     } 
-    // If event is an object with a URL property (common structure)
     else if (event && typeof event === 'object') {
-      // Try various common property names for the URL
-      const avatarUrl = 
-        // @ts-ignore - We're checking properties dynamically
-        event.url || event.avatarUrl || event.modelUrl || event.model || event.avatar;
-      
-      if (avatarUrl) {
-        setCreatedAvatarUrl(avatarUrl);
+      // Access the nested data structure based on the console logs
+      if (event.data && event.data.url) {
+        setCreatedAvatarUrl(event.data.url);
+        toast.success("Avatar created successfully!");
       } else {
-        console.error("Could not find URL in avatar export event:", event);
+        // Try various common property names for the URL
+        // @ts-ignore - We're checking properties dynamically
+        const avatarUrl = event.url || event.avatarUrl || event.modelUrl || event.model || event.avatar;
+        
+        if (avatarUrl) {
+          setCreatedAvatarUrl(avatarUrl);
+          toast.success("Avatar created successfully!");
+        } else {
+          console.error("Could not find URL in avatar export event:", event);
+          toast.error("Couldn't create avatar. Please try again.");
+        }
       }
     }
     
@@ -140,4 +145,3 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
 };
 
 export default StudentForm;
-
