@@ -6,11 +6,11 @@ import { NotificationsProvider } from '@/contexts/NotificationsContext';
 import { Toaster } from '@/components/ui/toaster';
 import { AppRoutes } from '@/routes';
 import SidePanel from '@/components/layout/SidePanel';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileLayout from '@/components/MobileLayout';
 
 function AppContent() {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
   
   return (
     <>
