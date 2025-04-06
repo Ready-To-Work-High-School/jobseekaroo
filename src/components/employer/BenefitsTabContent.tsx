@@ -1,14 +1,11 @@
 
+import React from 'react';
 import EmployerBenefits from './EmployerBenefits';
-import CredentialCard from './CredentialCard';
-import SecureFrameworksCard from './SecureFrameworksCard';
 
 const BenefitsTabContent = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <EmployerBenefits />
-      <CredentialCard />
-      <SecureFrameworksCard />
     </div>
   );
 };

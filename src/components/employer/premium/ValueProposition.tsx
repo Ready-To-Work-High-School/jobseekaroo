@@ -5,8 +5,8 @@ import { Presentation, Users, TrendingUp, Sparkles } from 'lucide-react';
 
 const ValueProposition = () => {
   return (
-    <div className="py-6">
-      <h2 className="text-2xl font-bold mb-6">Value Delivered</h2>
+    <div>
+      <h3 className="text-xl font-bold mb-4">Value Delivered</h3>
       
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="border-amber-200">
