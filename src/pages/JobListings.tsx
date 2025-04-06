@@ -11,6 +11,7 @@ import JobListingsLayout from '@/components/job/JobListingsLayout';
 import JobFilterSidebar from '@/components/job/JobFilterSidebar';
 import JobMobileFilters from '@/components/job/JobMobileFilters';
 import JobListContent from '@/components/job/JobListContent';
+import TopEmployersSection from '@/components/job/TopEmployersSection';
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,47 +130,52 @@ const JobListings = () => {
   };
 
   return (
-    <JobListingsLayout
-      title="Find Jobs Near You"
-      zipCode={zipCodeParam}
-      radius={radiusParam}
-      searchForm={
-        <SearchForm 
-          variant="minimal" 
-          initialZipCode={zipCodeParam} 
-          initialRadius={radiusParam}
-          className="w-full md:w-auto"
-        />
-      }
-    >
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <JobFilterSidebar 
-          onFilterChange={applyFilters}
-          onSyncMockData={handleSyncMockData}
-          syncingData={syncingData}
-        />
-        
-        <JobMobileFilters
-          showFilters={showMobileFilters}
-          setShowFilters={setShowMobileFilters}
-          onFilterChange={applyFilters}
-          onSyncMockData={handleSyncMockData}
-          syncingData={syncingData}
-        />
-        
-        <div className="md:col-span-3">
-          <JobListContent
-            jobs={jobs}
-            loading={loading}
-            currentPage={currentPage}
-            jobsPerPage={jobsPerPage}
-            zipCode={zipCodeParam}
-            onResetFilters={resetFilters}
-            onPageChange={setCurrentPage}
+    <>
+      {/* Add the TopEmployersSection component before the JobListingsLayout */}
+      <TopEmployersSection />
+      
+      <JobListingsLayout
+        title="Find Jobs Near You"
+        zipCode={zipCodeParam}
+        radius={radiusParam}
+        searchForm={
+          <SearchForm 
+            variant="minimal" 
+            initialZipCode={zipCodeParam} 
+            initialRadius={radiusParam}
+            className="w-full md:w-auto"
           />
+        }
+      >
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <JobFilterSidebar 
+            onFilterChange={applyFilters}
+            onSyncMockData={handleSyncMockData}
+            syncingData={syncingData}
+          />
+          
+          <JobMobileFilters
+            showFilters={showMobileFilters}
+            setShowFilters={setShowMobileFilters}
+            onFilterChange={applyFilters}
+            onSyncMockData={handleSyncMockData}
+            syncingData={syncingData}
+          />
+          
+          <div className="md:col-span-3">
+            <JobListContent
+              jobs={jobs}
+              loading={loading}
+              currentPage={currentPage}
+              jobsPerPage={jobsPerPage}
+              zipCode={zipCodeParam}
+              onResetFilters={resetFilters}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </div>
-      </div>
-    </JobListingsLayout>
+      </JobListingsLayout>
+    </>
   );
 };
 

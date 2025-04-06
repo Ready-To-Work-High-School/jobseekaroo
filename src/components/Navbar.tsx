@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, User, Home, Briefcase, Building2, Info } from 'lucide-react';
@@ -51,7 +50,6 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-2">
-            {/* Notifications icon for job seekers */}
             <NavbarNotifications />
             
             {user ? (
@@ -78,7 +76,6 @@ const Navbar = () => {
           </div>
           
           <div className="md:hidden flex items-center">
-            {/* Mobile Notifications icon */}
             <NavbarNotifications />
             
             <Button variant="ghost" onClick={toggleMenu} className="ml-2">
@@ -92,7 +89,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
