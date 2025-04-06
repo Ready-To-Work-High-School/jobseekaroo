@@ -32,7 +32,9 @@ export function useUserBadges(userId?: string) {
         
         // Handle the case where badges might not exist in the profile
         if (data && data.badges) {
-          setBadges(data.badges);
+          // Ensure we're working with an array by using type assertion
+          const badgesArray = Array.isArray(data.badges) ? data.badges as UserBadge[] : [];
+          setBadges(badgesArray);
         } else {
           setBadges([]);
         }

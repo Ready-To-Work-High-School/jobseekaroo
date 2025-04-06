@@ -22,7 +22,8 @@ export async function awardBadge(userId: string, badgeId: string, badgeName: str
     if (fetchError) throw fetchError;
 
     // Initialize badges array if it doesn't exist
-    const currentBadges = profile?.badges ? [...profile.badges] : [];
+    const currentBadges: UserBadge[] = profile?.badges ? 
+      (Array.isArray(profile.badges) ? profile.badges as UserBadge[] : []) : [];
     
     // Check if the badge already exists
     const badgeExists = currentBadges.some(badge => badge.id === badgeId);
@@ -73,7 +74,8 @@ export async function removeBadge(userId: string, badgeId: string): Promise<User
     if (fetchError) throw fetchError;
     
     // Handle case where badges might not exist
-    const currentBadges = profile?.badges ? [...profile.badges] : [];
+    const currentBadges: UserBadge[] = profile?.badges ? 
+      (Array.isArray(profile.badges) ? profile.badges as UserBadge[] : []) : [];
     const updatedBadges = currentBadges.filter(badge => badge.id !== badgeId);
     
     // Update the profile with the filtered badges
