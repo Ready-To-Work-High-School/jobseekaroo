@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 import { blackA } from "@radix-ui/colors";
 

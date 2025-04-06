@@ -19,7 +19,7 @@ export const EmployerDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="p-0 h-auto">
           <span className={cn("text-sm font-medium transition-colors", 
-          location.pathname.includes("/for-employers") || location.pathname.includes("/employer-dashboard") ? 
+          location.pathname.includes("/for-employers") || location.pathname.includes("/employer") ? 
           "text-primary" : "text-muted-foreground hover:text-primary")}>
             For Employers
           </span>

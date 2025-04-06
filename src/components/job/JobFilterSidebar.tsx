@@ -25,10 +25,10 @@ const JobFilterSidebar = ({
   
   return (
     <div className="hidden md:block md:col-span-1">
-      <div className={`sticky top-24 space-y-4 ${className}`}>
+      <div className={`sticky top-24 space-y-4 w-full max-w-[280px] ${className}`}>
         <JobFilter 
           onFilterChange={onFilterChange} 
-          className="max-h-[calc(100vh-180px)] overflow-y-auto"
+          className="max-h-[calc(100vh-180px)] overflow-y-auto w-full"
         />
         
         {user && onSyncMockData && (
