@@ -9,6 +9,7 @@ interface AvatarWithTooltipProps {
   tooltipContent: React.ReactNode;
   alt?: string;
   name?: string; // Added name prop for color generation
+  useColorBackground?: boolean; // Added prop to toggle between image and color
 }
 
 // Function to generate a consistent color from a name string
@@ -31,7 +32,14 @@ const generateColorFromName = (name: string): string => {
   return colors[colorIndex];
 };
 
-const AvatarWithTooltip = ({ src, fallback, tooltipContent, alt, name }: AvatarWithTooltipProps) => {
+const AvatarWithTooltip = ({ 
+  src, 
+  fallback, 
+  tooltipContent, 
+  alt, 
+  name,
+  useColorBackground = true // Default to color background if not specified
+}: AvatarWithTooltipProps) => {
   // Use name for color generation, fallback to the fallback text if name not provided
   const nameToUse = name || fallback;
   const backgroundColorClass = generateColorFromName(nameToUse);
@@ -41,8 +49,12 @@ const AvatarWithTooltip = ({ src, fallback, tooltipContent, alt, name }: AvatarW
       <Tooltip>
         <TooltipTrigger asChild>
           <Avatar>
-            {src && <AvatarImage src={src} alt={alt || fallback} />}
-            <AvatarFallback className={`text-white ${backgroundColorClass}`}>{fallback}</AvatarFallback>
+            {(!useColorBackground && src) && <AvatarImage src={src} alt={alt || fallback} />}
+            <AvatarFallback 
+              className={`text-white ${useColorBackground ? backgroundColorClass : 'bg-gray-300'}`}
+            >
+              {fallback}
+            </AvatarFallback>
           </Avatar>
         </TooltipTrigger>
         <TooltipContent side="top">
