@@ -18,13 +18,12 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
+import { useUserBadges } from '@/hooks/use-user-badges';
 
 const UserMenu = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
-
-  // Debug log to check admin status
-  console.log('UserMenu - userProfile:', userProfile);
+  const { badges } = useUserBadges();
 
   const handleSignOut = async () => {
     try {
@@ -53,6 +52,9 @@ const UserMenu = () => {
 
   // Check if user has premium subscription
   const hasPremium = userProfile?.preferences?.hasPremium === true;
+  
+  // Check if user has badges
+  const hasBadges = badges && badges.length > 0;
 
   if (!user) return null;
 
@@ -72,6 +74,13 @@ const UserMenu = () => {
           {hasPremium && (
             <div className="absolute -bottom-1 -right-1">
               <span className="flex h-3 w-3 items-center justify-center rounded-full bg-amber-400 ring-1 ring-white" aria-label="Premium user"></span>
+            </div>
+          )}
+          {hasBadges && (
+            <div className="absolute -bottom-1 -left-1">
+              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-blue-400 ring-1 ring-white" aria-label="Has achievements">
+                <Award className="h-2 w-2 text-white" />
+              </span>
             </div>
           )}
         </Button>

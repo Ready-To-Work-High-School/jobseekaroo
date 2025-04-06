@@ -8,10 +8,13 @@ import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
 import { Briefcase } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import UserBadges from '@/components/badges/UserBadges';
+import { useUserBadges } from '@/hooks/use-user-badges';
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
+  const { badges, isLoading: badgesLoading } = useUserBadges();
   
   // Check if user is CEO based on job title or company name
   const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
@@ -52,6 +55,13 @@ const Profile = () => {
                   </div>
                 </div>
               </CardHeader>
+              <CardContent>
+                {badgesLoading ? (
+                  <p className="text-muted-foreground">Loading badges...</p>
+                ) : (
+                  <UserBadges badges={badges} />
+                )}
+              </CardContent>
             </Card>
             
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

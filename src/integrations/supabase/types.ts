@@ -627,6 +627,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          badges: Json | null
           bio: string | null
           company_name: string | null
           company_website: string | null
@@ -652,6 +653,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          badges?: Json | null
           bio?: string | null
           company_name?: string | null
           company_website?: string | null
@@ -677,6 +679,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          badges?: Json | null
           bio?: string | null
           company_name?: string | null
           company_website?: string | null

@@ -4,16 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Award, Star, Users, Clock, Brain, Briefcase, Shield } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-export interface StudentBadge {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ReactNode;
-  earned: boolean;
-  earnedDate?: string;
-  type: 'skill' | 'character' | 'achievement';
-}
+import { StudentBadge } from '@/types/badges';
+import BadgeIcon from '@/components/badges/BadgeIcon';
 
 interface StudentBadgesProps {
   badges: StudentBadge[];
@@ -21,10 +13,10 @@ interface StudentBadgesProps {
   onEarnBadgeClick?: (badgeId: string) => void;
 }
 
-const BadgeIcon = ({ badge }: { badge: StudentBadge }) => {
+const BadgeIconComponent = ({ badge }: { badge: StudentBadge }) => {
   return (
     <div className={`${badge.earned ? 'text-amber-500' : 'text-gray-400'} ${badge.earned ? 'opacity-100' : 'opacity-60'}`}>
-      {badge.icon}
+      <BadgeIcon badgeId={badge.id} />
     </div>
   );
 };
@@ -59,7 +51,7 @@ const StudentBadges: React.FC<StudentBadgesProps> = ({
               ${badge.earned ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}
             >
               <div className="shrink-0">
-                <BadgeIcon badge={badge} />
+                <BadgeIconComponent badge={badge} />
               </div>
               <div>
                 <div className="flex items-center">
