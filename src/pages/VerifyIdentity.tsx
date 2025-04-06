@@ -16,6 +16,7 @@ import { markIdentityAsVerified, isIdentityVerified } from '@/utils/verification
 const VerifyIdentity = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
@@ -61,6 +62,10 @@ const VerifyIdentity = () => {
   const handleCodeChange = (value: string) => {
     console.log("OTP value changed:", value);
     setVerificationCode(value);
+    
+    // Set focus to next empty slot
+    const nextEmptyIndex = value.length < 6 ? value.length : null;
+    setFocusedIndex(nextEmptyIndex);
   };
 
   return (
@@ -87,7 +92,16 @@ const VerifyIdentity = () => {
                 <InputOTPGroup>
                   {slots.map((slot, index) => (
                     <React.Fragment key={index}>
-                      <InputOTPSlot className="w-10 h-12" index={index} />
+                      <InputOTPSlot 
+                        className={`w-10 h-12 relative ${focusedIndex === index ? 'ring-2 ring-primary' : ''}`} 
+                        index={index} 
+                      >
+                        {focusedIndex === index && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="h-5 w-0.5 bg-primary animate-pulse"></div>
+                          </div>
+                        )}
+                      </InputOTPSlot>
                       {index !== slots.length - 1 && <InputOTPSeparator />}
                     </React.Fragment>
                   ))}
@@ -111,7 +125,10 @@ const VerifyIdentity = () => {
           <Button 
             variant="outline" 
             className="w-full" 
-            onClick={() => setVerificationCode("")}
+            onClick={() => {
+              setVerificationCode("");
+              setFocusedIndex(0);
+            }}
           >
             Clear
           </Button>
