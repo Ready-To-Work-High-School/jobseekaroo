@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Link, NavLink as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
@@ -30,22 +31,18 @@ const NavbarBrand = () => (
   </Link>
 );
 
-const NavLink = React.forwardRef<
-  HTMLAnchorElement,
-  React.PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>>
->(({ children, ...props }, ref) => (
-  <RouterLink
-    {...props}
-    ref={ref}
-    className="text-sm font-medium transition-colors hover:text-primary"
+// Custom NavLink component that wraps around React Router's Link
+const NavLink = ({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) => (
+  <Link
+    to={to}
+    className={`text-sm font-medium transition-colors hover:text-primary ${className || ''}`}
   >
     {children}
-  </RouterLink>
-));
-NavLink.displayName = "NavLink";
+  </Link>
+);
 
 const Navbar = () => {
-  const { user, logout, userProfile } = useAuth();
+  const { user, signOut, userProfile } = useAuth();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -57,7 +54,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await signOut();
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
@@ -92,8 +89,15 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={userProfile?.avatar_url || user?.photoURL || undefined} alt={user?.displayName || "Avatar"} />
-                    <AvatarFallback>{userProfile?.full_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "JS"}</AvatarFallback>
+                    <AvatarImage 
+                      src={userProfile?.avatar_url || undefined} 
+                      alt={user?.email || "Avatar"} 
+                    />
+                    <AvatarFallback>
+                      {userProfile?.first_name?.substring(0, 1).toUpperCase() || 
+                      userProfile?.last_name?.substring(0, 1).toUpperCase() || 
+                      user?.email?.substring(0, 2).toUpperCase() || "JS"}
+                    </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
