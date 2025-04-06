@@ -18,7 +18,7 @@ export interface StudentBadge {
 interface StudentBadgesProps {
   badges: StudentBadge[];
   showEarnBadgeButton?: boolean;
-  onEarnBadgeClick?: (badgeType: string) => void;
+  onEarnBadgeClick?: (badgeId: string) => void;
 }
 
 const BadgeIcon = ({ badge }: { badge: StudentBadge }) => {

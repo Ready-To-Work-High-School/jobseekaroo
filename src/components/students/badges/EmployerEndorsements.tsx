@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Briefcase, Quote, Star } from 'lucide-react';
+import { Building2, MessageSquareQuote } from 'lucide-react';
 
 export interface EmployerEndorsement {
   id: string;
@@ -15,7 +15,7 @@ export interface EmployerEndorsement {
 
 interface EmployerEndorsementsProps {
   endorsements: EmployerEndorsement[];
-  studentBadges: { id: string; name: string }[];
+  studentBadges: { id: string, name: string }[];
 }
 
 const EmployerEndorsements: React.FC<EmployerEndorsementsProps> = ({ endorsements, studentBadges }) => {
@@ -24,17 +24,15 @@ const EmployerEndorsements: React.FC<EmployerEndorsementsProps> = ({ endorsement
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Briefcase className="h-5 w-5 text-blue-600" />
+            <Building2 className="h-5 w-5 text-blue-500" />
             Employer Endorsements
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
+            <MessageSquareQuote className="h-12 w-12 text-gray-300 mx-auto mb-2" />
             <p className="text-muted-foreground">
-              You haven't received any employer endorsements yet.
-            </p>
-            <p className="text-sm mt-2">
-              These will appear when employers validate your skills and character.
+              No employer endorsements yet. Endorsements will appear here when employers recognize your skills.
             </p>
           </div>
         </CardContent>
@@ -46,37 +44,34 @@ const EmployerEndorsements: React.FC<EmployerEndorsementsProps> = ({ endorsement
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Briefcase className="h-5 w-5 text-blue-600" />
+          <Building2 className="h-5 w-5 text-blue-500" />
           Employer Endorsements
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {endorsements.map(endorsement => (
-            <div key={endorsement.id} className="border border-blue-100 rounded-md p-4 bg-blue-50">
-              <div className="flex items-start">
-                <Quote className="h-5 w-5 text-blue-600 mr-2 shrink-0 mt-1" />
+            <div key={endorsement.id} className="border rounded-lg p-4 bg-blue-50 border-blue-200">
+              <div className="flex justify-between items-start mb-2">
                 <div>
-                  <p className="text-sm italic mb-3">{endorsement.endorsementText}</p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {endorsement.badgeIds.map(badgeId => {
-                      const badge = studentBadges.find(b => b.id === badgeId);
-                      return badge ? (
-                        <Badge key={badgeId} variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
-                          {badge.name}
-                        </Badge>
-                      ) : null;
-                    })}
-                  </div>
-                  
-                  <div className="flex justify-between items-center text-xs text-muted-foreground">
-                    <div>
-                      <span className="font-medium">{endorsement.employerName}</span> at {endorsement.companyName}
-                    </div>
-                    <div>{endorsement.date}</div>
-                  </div>
+                  <h3 className="font-medium">{endorsement.employerName}</h3>
+                  <p className="text-sm text-muted-foreground">{endorsement.companyName}</p>
                 </div>
+                <p className="text-xs text-muted-foreground">{endorsement.date}</p>
+              </div>
+              
+              <p className="text-sm mb-3">"{endorsement.endorsementText}"</p>
+              
+              <div className="flex flex-wrap gap-2">
+                <span className="text-xs text-muted-foreground mr-1">Badges earned:</span>
+                {endorsement.badgeIds.map(badgeId => {
+                  const badge = studentBadges.find(b => b.id === badgeId);
+                  return badge ? (
+                    <Badge key={badgeId} variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
+                      {badge.name}
+                    </Badge>
+                  ) : null;
+                })}
               </div>
             </div>
           ))}
