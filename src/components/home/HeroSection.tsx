@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -13,29 +14,36 @@ const HeroSection = () => {
   const subtitleAnimation = useFadeIn(500);
   const buttonAnimation = useFadeIn(700);
   
-  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
-      {/* Animated background pattern */}
+  return (
+    <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
+      {/* Simplified background pattern with fewer DOM elements */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
-      {/* Add animated sparkles */}
-      <SparkleGroup count={10} />
+      {/* Reduced number of sparkles */}
+      <SparkleGroup count={5} />
       
-      {/* Flying particles effect */}
+      {/* Simplified particles effect with fewer elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => <div key={i} className="absolute rounded-full bg-blue-400/20" style={{
-        width: `${Math.random() * 10 + 5}px`,
-        height: `${Math.random() * 10 + 5}px`,
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDuration: `${Math.random() * 20 + 10}s`,
-        animationDelay: `${Math.random() * 5}s`,
-        animation: 'float-around infinite linear'
-      }} />)}
+        {[...Array(8)].map((_, i) => (
+          <div 
+            key={i} 
+            className="absolute rounded-full bg-blue-400/20" 
+            style={{
+              width: `${Math.random() * 10 + 5}px`,
+              height: `${Math.random() * 10 + 5}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDuration: `${Math.random() * 20 + 10}s`,
+              animationDelay: `${Math.random() * 5}s`,
+              animation: 'float-around infinite linear'
+            }} 
+          />
+        ))}
       </div>
       
       <div className="container mx-auto px-4">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
-          {/* Enhanced logo display with dynamic glow effect - explicitly marked as priority for LCP */}
+          {/* Optimized logo display */}
           <div className="relative">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
             <LazyImage 
@@ -74,29 +82,24 @@ const HeroSection = () => {
             A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
           </p>
           
+          {/* Simplified feature cards with fewer DOM elements */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Shield className="h-8 w-8 text-blue-600 mb-2" />
               <h3 className="font-medium mb-1">Safe & Simple</h3>
-              <p className="text-sm text-gray-600 text-center">
-                Find jobs that fit your schedule, skills, and location - all pre-screened for safety
-              </p>
+              <p className="text-sm text-gray-600 text-center">Find jobs that fit your schedule, skills, and location</p>
             </div>
             
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Award className="h-8 w-8 text-amber-600 mb-2" />
               <h3 className="font-medium mb-1">Earn Badges</h3>
-              <p className="text-sm text-gray-600 text-center">
-                Build your profile with skill badges that impress employers and strengthen your resume
-              </p>
+              <p className="text-sm text-gray-600 text-center">Build your profile with skill badges that impress employers</p>
             </div>
             
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Users className="h-8 w-8 text-green-600 mb-2" />
               <h3 className="font-medium mb-1">Guidance & Support</h3>
-              <p className="text-sm text-gray-600 text-center">
-                Get help with interviews, resumes, and job skills from our resources and school partners
-              </p>
+              <p className="text-sm text-gray-600 text-center">Get help with interviews, resumes, and job skills</p>
             </div>
           </div>
           
@@ -118,7 +121,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default HeroSection;

@@ -14,7 +14,7 @@ const FloridaReadyToWorkStats = () => {
   return (
     <div className="mb-8 p-4 bg-white/70 rounded-lg shadow-sm border border-blue-200">
       <h3 className="text-xl font-bold mb-3 text-center text-blue-800">Florida Ready to Work</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {statistics.map((stat, index) => (
           <div key={index} className="text-center p-2 bg-blue-50 rounded-md">
             <p className="text-blue-800 font-bold text-2xl">{stat.value}</p>

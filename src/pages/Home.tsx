@@ -16,6 +16,12 @@ const Home = () => {
       <Helmet>
         <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
         <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." />
+        
+        {/* Preload critical assets */}
+        <link rel="preload" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" as="image" fetchpriority="high" type="image/webp" />
+        
+        {/* Preconnect to critical domains */}
+        <link rel="preconnect" href="https://cdn.gpteng.co" crossorigin="anonymous" />
       </Helmet>
       
       <ErrorBoundary>

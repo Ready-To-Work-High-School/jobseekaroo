@@ -21,11 +21,12 @@ const ProgramCards = () => {
     }
   }, []);
 
+  // Optimized program data structure
   const programs = [
     {
       image: "/lovable-uploads/21bca716-a220-4a1d-a37a-3f6a052d0096.png",
       title: "Small Business",
-      description: "Learn the fundamentals of starting and running your own business with the ESB certification program. Created by Ms. Coleman, Entrepreneurship Academy.",
+      description: "Learn the fundamentals of starting and running your own business with the ESB certification program.",
       employerBenefits: [
         "Students understand business fundamentals",
         "Candidates with proven initiative and leadership",

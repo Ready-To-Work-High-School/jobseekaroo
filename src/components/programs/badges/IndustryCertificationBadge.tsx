@@ -22,10 +22,11 @@ const IndustryCertificationBadge = ({
   width = 180,
   height = 180
 }: IndustryCertificationBadgeProps) => {
+  // Use CSS for animation and effects instead of multiple DOM elements
   return (
-    <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
+    <div className="skill-badge hover:scale-110 transition-all duration-300 flex flex-col items-center">
       <div className="relative">
-        <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+        <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20"></div>
         <LazyImage 
           src={imageSrc} 
           webpSrc={webpSrc}
@@ -34,6 +35,7 @@ const IndustryCertificationBadge = ({
           className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" 
           width={width}
           height={height}
+          loading="lazy"
         />
         <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
       </div>

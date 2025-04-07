@@ -17,9 +17,12 @@ interface BadgeGridProps {
 }
 
 const BadgeGrid = ({ badges }: BadgeGridProps) => {
+  // Only render a subset of badges if there are too many
+  const optimizedBadges = badges.length > 10 ? badges.slice(0, 10) : badges;
+  
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
-      {badges.map((badge, index) => (
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+      {optimizedBadges.map((badge, index) => (
         <SkillBadge 
           key={index} 
           image={badge.image} 
