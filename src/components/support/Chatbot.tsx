@@ -90,10 +90,10 @@ const Chatbot = () => {
         <Button
           variant="default"
           size="icon"
-          className="fixed bottom-4 right-4 rounded-full shadow-md bg-primary hover:bg-primary/90 z-50"
+          className="fixed bottom-4 right-4 rounded-full shadow-md bg-primary hover:bg-primary/90 z-50 w-12 h-12 flex items-center justify-center"
         >
-          <Briefcase className="w-5 h-5" />
-          <span className="sr-only">Job Help</span>
+          <span className="text-white font-medium text-sm">AI</span>
+          <span className="sr-only">Job Help AI</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md h-[80vh] max-h-[600px] p-0">

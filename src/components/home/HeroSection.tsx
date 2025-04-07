@@ -16,45 +16,27 @@ const HeroSection = () => {
   
   return (
     <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
-      {/* Simplified background pattern with fewer DOM elements */}
+      {/* Simplified background pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       {/* Reduced number of sparkles */}
       <SparkleGroup count={5} />
       
-      {/* Simplified particles effect with fewer elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <div 
-            key={i} 
-            className="absolute rounded-full bg-blue-400/20" 
-            style={{
-              width: `${Math.random() * 10 + 5}px`,
-              height: `${Math.random() * 10 + 5}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDuration: `${Math.random() * 20 + 10}s`,
-              animationDelay: `${Math.random() * 5}s`,
-              animation: 'float-around infinite linear'
-            }} 
-          />
-        ))}
-      </div>
-      
       <div className="container mx-auto px-4">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
-          {/* Optimized logo display */}
-          <div className="relative">
+          {/* Optimized logo display with proper sizing */}
+          <div className="relative w-24 h-24 md:w-28 md:h-28">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
             <LazyImage 
               src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
               webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp"
               avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif"
               alt="Job Seekers 4 High Schools Logo" 
-              className="h-28 w-auto relative z-10 drop-shadow-lg" 
+              className="h-full w-full relative z-10 drop-shadow-lg object-contain" 
               width={112}
               height={112}
               priority={true}
+              sizes="(max-width: 640px) 96px, 112px"
             />
           </div>
         </div>
@@ -82,7 +64,7 @@ const HeroSection = () => {
             A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
           </p>
           
-          {/* Simplified feature cards with fewer DOM elements */}
+          {/* Feature cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
               <Shield className="h-8 w-8 text-blue-600 mb-2" />

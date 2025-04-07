@@ -37,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children, hideAuthLinks, showBackButton
       <FloatingSidebar />
       <AccessibilityMenu />
       <BackToTopButton />
-      <SignUpPrompt autoDismiss={true} />
+      <SignUpPrompt autoDismiss={true} dismissTime={3000} />
     </div>
   );
 };

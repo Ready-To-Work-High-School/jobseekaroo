@@ -6,11 +6,12 @@ import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, CheckCircle, Award, Building, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import EmployerBenefits from '@/components/employer/EmployerBenefits';
 import LazyImage from '@/components/LazyImage';
 import { getImageSizes } from '@/utils/imageUtils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const EmployerDashboard = () => {
   const { user, userProfile } = useAuth();
@@ -25,9 +26,9 @@ const EmployerDashboard = () => {
     return (
       <Layout>
         <div className="container max-w-6xl mx-auto px-4 py-12">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-4">Employer Dashboard</h1>
-            <p className="text-lg text-muted-foreground mb-8">Connect with qualified students and post job opportunities</p>
+            <p className="text-lg text-muted-foreground mb-6">Connect with qualified students and post job opportunities</p>
           </div>
           
           <Card className="mb-10 border-primary/20 shadow-lg">
@@ -63,6 +64,60 @@ const EmployerDashboard = () => {
               </div>
             </CardContent>
           </Card>
+          
+          {/* Key Employer Features */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-center mb-8">Key Employer Features</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col items-center">
+                    <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                      <Building className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Post Jobs</h3>
+                    <p className="text-sm text-center text-muted-foreground">Unlimited job listings with detailed descriptions</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col items-center">
+                    <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                      <Users className="h-6 w-6 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Candidate Management</h3>
+                    <p className="text-sm text-center text-muted-foreground">Review applicants and schedule interviews</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col items-center">
+                    <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                      <CheckCircle className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Analytics</h3>
+                    <p className="text-sm text-center text-muted-foreground">Track job posting performance and applicant metrics</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col items-center">
+                    <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                      <Award className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Apprenticeships</h3>
+                    <p className="text-sm text-center text-muted-foreground">Create training programs and apprenticeships</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
           
           <EmployerBenefits />
           

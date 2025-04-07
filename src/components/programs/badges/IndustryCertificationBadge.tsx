@@ -2,6 +2,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import LazyImage from '@/components/LazyImage';
+import { getImageSizes } from '@/utils/imageUtils';
 
 interface IndustryCertificationBadgeProps {
   imageSrc: string;
@@ -22,7 +23,6 @@ const IndustryCertificationBadge = ({
   width = 180,
   height = 180
 }: IndustryCertificationBadgeProps) => {
-  // Use CSS for animation and effects instead of multiple DOM elements
   return (
     <div className="skill-badge hover:scale-110 transition-all duration-300 flex flex-col items-center">
       <div className="relative">
@@ -32,10 +32,11 @@ const IndustryCertificationBadge = ({
           webpSrc={webpSrc}
           avifSrc={avifSrc}
           alt={`${name} Certification`} 
-          className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" 
+          className="rounded-lg shadow-lg w-auto mx-auto relative z-10 object-contain" 
           width={width}
           height={height}
-          // Removed the loading attribute that was causing the error
+          sizes={getImageSizes('badge')}
+          // Removed decoding attribute that was causing issues
         />
         <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
       </div>
