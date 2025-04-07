@@ -5,6 +5,7 @@ const { initializeDatabase } = require('./db.js');
 const userRoutes = require('./routes/users.js');
 const postRoutes = require('./routes/posts.js');
 const statusRoutes = require('./routes/status.js');
+const chatRoutes = require('./routes/chat.js');
 const { 
   generateNonce, 
   setupSecurityHeaders, 
@@ -72,6 +73,7 @@ app.use('/api', cacheMiddleware(1800));
 app.use('/api', statusRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api', chatRoutes); // Add the chat routes
 
 // Catch-all for API 404 errors to return JSON instead of HTML
 app.use('/api/*', api404Handler);
