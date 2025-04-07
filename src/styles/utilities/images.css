@@ -19,6 +19,7 @@ img.lazy-load.loaded {
 picture {
   display: inline-block;
   max-width: 100%;
+  line-height: 0; /* Remove extra space beneath images in picture element */
 }
 
 /* Performance optimizations for LCP images */
@@ -37,4 +38,22 @@ img:not([width]):not([height]) {
 /* Prevents layout shift when images are loading */
 img[width][height] {
   aspect-ratio: attr(width) / attr(height);
+}
+
+/* Support for modern image formats */
+.modern-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optimize picture element rendering */
+picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* WebP/AVIF optimizations */
+.webp-image, .avif-image {
+  max-width: 100%;
 }

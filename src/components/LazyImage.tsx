@@ -10,6 +10,8 @@ interface LazyImageProps {
   placeholderSrc?: string;
   onLoad?: () => void;
   priority?: boolean; // Add priority flag for critical images
+  webpSrc?: string; // Add support for WebP format
+  avifSrc?: string; // Add support for AVIF format
 }
 
 const LazyImage = ({
@@ -20,7 +22,9 @@ const LazyImage = ({
   height,
   placeholderSrc = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
   onLoad,
-  priority = false, // Default to false
+  priority = false,
+  webpSrc,
+  avifSrc,
 }: LazyImageProps) => {
   const [imageSrc, setImageSrc] = useState<string>(placeholderSrc);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -91,6 +95,30 @@ const LazyImage = ({
     }
   };
 
+  // If we have modern format sources, use picture element
+  if (avifSrc || webpSrc) {
+    return (
+      <picture>
+        {avifSrc && <source srcSet={avifSrc} type="image/avif" />}
+        {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
+        <img
+          ref={imageRef}
+          src={hasError ? placeholderSrc : imageSrc}
+          alt={alt}
+          className={`${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
+          width={width}
+          height={height}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding={priority ? "sync" : "async"}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+        />
+      </picture>
+    );
+  }
+
+  // Fall back to standard img if no modern formats provided
   return (
     <img
       ref={imageRef}

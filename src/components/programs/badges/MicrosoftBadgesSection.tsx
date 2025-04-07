@@ -2,19 +2,28 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import LazyImage from '@/components/LazyImage';
 
 interface BadgeProps {
   image: string;
+  webpImage?: string;
+  avifImage?: string;
   name: string;
   subtitle: string;
+  width?: number;
+  height?: number;
 }
 
 const MicrosoftBadgesSection = () => {
   const microsoftBadges: BadgeProps[] = [
     {
       image: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png",
+      webpImage: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.webp",
+      avifImage: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.avif",
       name: "Microsoft Fundamentals",
-      subtitle: "Microsoft Certified"
+      subtitle: "Microsoft Certified",
+      width: 180,
+      height: 180
     }
   ];
 
@@ -33,10 +42,14 @@ const MicrosoftBadgesSection = () => {
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="max-w-[220px] relative">
               <Badge className="absolute -top-2 right-0 z-20 bg-red-700" size="sm">Microsoft</Badge>
-              <img 
+              <LazyImage 
                 src={microsoftBadges[0].image} 
+                webpSrc={microsoftBadges[0].webpImage}
+                avifSrc={microsoftBadges[0].avifImage}
                 alt={microsoftBadges[0].name} 
                 className="w-full h-auto" 
+                width={microsoftBadges[0].width}
+                height={microsoftBadges[0].height}
               />
             </div>
             <div>

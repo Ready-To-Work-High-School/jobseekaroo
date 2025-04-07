@@ -7,6 +7,7 @@ import SearchForm from './SearchForm';
 import FeatureCard from './FeatureCard';
 import { SparkleGroup } from './animations/Sparkle';
 import { Sparkles } from 'lucide-react';
+import LazyImage from './LazyImage';
 
 const Hero = () => {
   const titleAnimation = useSlideIn(100);

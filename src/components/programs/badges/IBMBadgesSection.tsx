@@ -4,9 +4,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BadgeCheck, Award, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LazyImage from '@/components/LazyImage';
 
 interface IBMBadgeProps {
   image: string;
+  webpImage?: string;
+  avifImage?: string;
   name: string;
   subtitle: string;
   description: string;
@@ -16,18 +19,24 @@ const IBMBadgesSection = () => {
   const ibmBadges: IBMBadgeProps[] = [
     {
       image: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
+      webpImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.webp",
+      avifImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.avif", 
       name: "IBM SkillsBuild Educator",
       subtitle: "Teacher Credential",
       description: "This credential validates an educator's ability to effectively teach IBM SkillsBuild content, implementing industry-relevant technology curriculum in the classroom."
     },
     {
       image: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
+      webpImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.webp",
+      avifImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.avif",
       name: "IBM Artificial Intelligence Foundations",
       subtitle: "Student Credential",
       description: "This badge certifies proficiency in AI fundamentals, including machine learning concepts, neural networks, and practical applications of artificial intelligence."
     },
     {
       image: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
+      webpImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.webp",
+      avifImage: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.avif",
       name: "IBM Cloud Computing Fundamentals",
       subtitle: "Student Credential",
       description: "Students earn this badge by demonstrating knowledge of cloud infrastructure, services, and deployment models used in modern business environments."
@@ -48,10 +57,14 @@ const IBMBadgesSection = () => {
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="max-w-[180px] relative">
                   <Badge className="absolute -top-2 right-0 z-20 bg-blue-700">IBM</Badge>
-                  <img 
+                  <LazyImage 
                     src={badge.image} 
+                    webpSrc={badge.webpImage}
+                    avifSrc={badge.avifImage}
                     alt={badge.name} 
                     className="w-full h-auto rounded-md shadow-sm" 
+                    width={180}
+                    height={180}
                   />
                 </div>
                 <div className="flex-1">

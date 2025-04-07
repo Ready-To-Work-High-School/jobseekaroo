@@ -6,6 +6,7 @@ import ProgramBenefits from './academy/ProgramBenefits';
 import CourseCurriculum from './academy/CourseCurriculum';
 import EntrepreneurshipStoreSection from './EntrepreneurshipStoreSection';
 import { Separator } from '@/components/ui/separator';
+import LazyImage from '@/components/LazyImage';
 
 const WestsideAcademy = () => {
   return (
@@ -18,6 +19,7 @@ const WestsideAcademy = () => {
           className="w-full h-auto object-cover"
           width={1200}
           height={300}
+          loading="lazy"
         />
       </div>
       
@@ -31,8 +33,10 @@ const WestsideAcademy = () => {
           <div className="mb-8 flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-blue-400 rounded-lg blur-md opacity-30 animate-pulse"></div>
-              <img 
+              <LazyImage 
                 src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+                webpSrc="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp"
+                avifSrc="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif"
                 alt="ESB Certification" 
                 className="h-32 w-auto relative z-10"
                 width={180}
@@ -73,6 +77,7 @@ const WestsideAcademy = () => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowFullScreen
                 className="rounded-lg"
+                loading="lazy"
               ></iframe>
             </div>
           </div>
@@ -90,8 +95,10 @@ const WestsideAcademy = () => {
               {/* Made nursing badge bigger with glow effect */}
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400 rounded-lg blur-lg opacity-40 animate-pulse glow-blue-gold"></div>
-                <img 
+                <LazyImage 
                   src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+                  webpSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp"
+                  avifSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif"
                   alt="Nursing Academy Certification" 
                   className="h-32 w-auto object-contain relative z-10"
                   width={180}

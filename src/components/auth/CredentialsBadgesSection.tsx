@@ -3,56 +3,80 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Award, BadgeCheck, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import LazyImage from '@/components/LazyImage';
 
 const CredentialsBadgesSection = () => {
-  // Credential badge data
+  // Credential badge data with WebP and AVIF variants
   const readyToWorkBadges = [
     {
       image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
+      webp: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.webp",
+      avif: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.avif",
       name: "Career Exploration",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.png",
+      webp: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.webp",
+      avif: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.avif",
       name: "Communication",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png",
+      webp: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.webp",
+      avif: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.avif",
       name: "Professionalism",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
+      webp: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.webp",
+      avif: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.avif",
       name: "Florida Soft Skills",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.png",
+      webp: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.webp",
+      avif: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.avif",
       name: "Team Building",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png",
+      webp: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.webp",
+      avif: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.avif",
       name: "Capstone Experience",
       width: 100,
       height: 100
     },
     {
       image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
+      webp: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.webp",
+      avif: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.avif",
       name: "Problem Solving",
       width: 100,
       height: 100
     }
   ];
   
-  const esbBadge = "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png";
-  const nursingBadge = "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png";
+  const esbBadge = {
+    png: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png",
+    webp: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp",
+    avif: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif",
+  };
+  
+  const nursingBadge = {
+    png: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
+    webp: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp",
+    avif: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif",
+  };
   
   return (
     <Card className="border-blue-200 shadow-md">
@@ -81,8 +105,10 @@ const CredentialsBadgesSection = () => {
           {readyToWorkBadges.map((badge, index) => (
             <div key={index} className="flex flex-col items-center">
               <div className="w-16 h-16 md:w-20 md:h-20 relative hover:scale-110 transition-transform duration-200">
-                <img 
+                <LazyImage 
                   src={badge.image} 
+                  webpSrc={badge.webp}
+                  avifSrc={badge.avif}
                   alt={badge.name} 
                   className="w-full h-full object-contain"
                   width={badge.width} 
@@ -104,8 +130,10 @@ const CredentialsBadgesSection = () => {
             
             <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
               <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-              <img 
-                src={esbBadge} 
+              <LazyImage 
+                src={esbBadge.png} 
+                webpSrc={esbBadge.webp}
+                avifSrc={esbBadge.avif}
                 alt="ESB Certification" 
                 className="w-full h-full object-contain relative z-10 rounded-md" 
                 width={140}
@@ -124,8 +152,10 @@ const CredentialsBadgesSection = () => {
             
             <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
               <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-              <img 
-                src={nursingBadge} 
+              <LazyImage 
+                src={nursingBadge.png} 
+                webpSrc={nursingBadge.webp}
+                avifSrc={nursingBadge.avif}
                 alt="Nursing Certification" 
                 className="w-full h-full object-contain relative z-10 rounded-md" 
                 width={140}

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
+import LazyImage from '@/components/LazyImage';
 
 interface SkillBadgeProps {
   image: string;
@@ -8,14 +9,25 @@ interface SkillBadgeProps {
   isESB?: boolean;
   width?: number;
   height?: number;
+  webpImage?: string;
+  avifImage?: string;
 }
 
-const SkillBadge = ({ image, name, width = 150, height = 150 }: SkillBadgeProps) => {
+const SkillBadge = ({ 
+  image, 
+  name, 
+  width = 150, 
+  height = 150, 
+  webpImage,
+  avifImage
+}: SkillBadgeProps) => {
   return (
     <div className="skill-badge hover:scale-105 transition-transform flex flex-col items-center">
       <div className="relative">
-        <img 
+        <LazyImage 
           src={image} 
+          webpSrc={webpImage}
+          avifSrc={avifImage}
           alt={`${name} Badge`} 
           className="rounded-lg shadow-md h-32 md:h-40 w-auto mx-auto" 
           width={width}

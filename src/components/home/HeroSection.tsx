@@ -6,6 +6,7 @@ import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from '
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
 import LazyImage from '@/components/LazyImage';
+import { Badge } from '@/components/ui/badge';
 
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
@@ -40,6 +41,8 @@ const HeroSection = () => {
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
             <LazyImage 
               src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp"
+              avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif"
               alt="Job Seekers 4 High Schools Logo" 
               className="h-28 w-auto relative z-10 drop-shadow-lg" 
               width={112}
@@ -118,8 +121,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
-
-// Import the Badge component
-import { Badge } from '@/components/ui/badge';
 
 export default HeroSection;
