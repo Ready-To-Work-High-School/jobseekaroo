@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Award, BadgeCheck, Shield, Copyright } from 'lucide-react';
+import { Award, BadgeCheck, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import LazyImage from '@/components/LazyImage';
 
@@ -70,8 +70,12 @@ const CredentialBadges = () => {
     png: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png",
     webp: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp",
     avif: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif",
-    width: 140,
-    height: 140
+  };
+  
+  const nursingBadge = {
+    png: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
+    webp: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp",
+    avif: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif",
   };
   
   return (
@@ -85,44 +89,15 @@ const CredentialBadges = () => {
       <CardContent className="pt-6">
         <div className="text-center mb-6">
           <h3 className="text-lg font-semibold mb-2">High School Scholars Distinction</h3>
-          <p className="text-sm text-muted-foreground mb-1">
+          <p className="text-sm text-muted-foreground mb-4">
             Students can earn these digital badges which showcase career-ready skills and enhanced knowledge
           </p>
-          <p className="text-xs text-blue-800 italic mb-4">Created by Pamela Coleman, Entrepreneurship Academy</p>
           
           <div className="inline-flex items-center gap-2 mb-4">
             <Badge variant="brandSolid" className="text-sm py-1">
               <Award className="h-4 w-4 mr-1" />
               Florida Ready to Work
             </Badge>
-          </div>
-          
-          {/* Florida Ready to Work Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 max-w-md mx-auto bg-blue-50 p-3 rounded-md">
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">699</p>
-              <p className="text-xs text-blue-600">Learners Enrolled</p>
-            </div>
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">259</p>
-              <p className="text-xs text-blue-600">Active Learners</p>
-            </div>
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">874</p>
-              <p className="text-xs text-blue-600">Hours Logged</p>
-            </div>
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">347</p>
-              <p className="text-xs text-blue-600">eBadges Earned</p>
-            </div>
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">63</p>
-              <p className="text-xs text-blue-600">Certificates Earned</p>
-            </div>
-            <div className="text-center">
-              <p className="text-blue-700 font-bold text-xl">50</p>
-              <p className="text-xs text-blue-600">Credentials Earned</p>
-            </div>
           </div>
         </div>
         
@@ -136,7 +111,7 @@ const CredentialBadges = () => {
                   avifSrc={badge.avif}
                   alt={badge.name} 
                   className="w-full h-full object-contain"
-                  width={badge.width}
+                  width={badge.width} 
                   height={badge.height}
                 />
               </div>
@@ -145,43 +120,55 @@ const CredentialBadges = () => {
           ))}
         </div>
         
-        <div className="flex flex-col items-center mb-6">
-          <Badge variant="new" className="text-sm py-1 mb-3">
-            <Shield className="h-4 w-4 mr-1" />
-            ESB Industry Certification
-          </Badge>
-          
-          <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
-            <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <LazyImage 
-              src={esbBadge.png} 
-              webpSrc={esbBadge.webp}
-              avifSrc={esbBadge.avif}
-              alt="ESB Certification" 
-              className="w-full h-full object-contain relative z-10 rounded-md"
-              width={esbBadge.width}
-              height={esbBadge.height}
-            />
+        <div className="flex flex-row justify-center gap-6 mb-6">
+          {/* ESB Badge */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3">
+              <Shield className="h-4 w-4 mr-1" />
+              ESB Industry Certification
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <LazyImage 
+                src={esbBadge.png} 
+                webpSrc={esbBadge.webp}
+                avifSrc={esbBadge.avif}
+                alt="ESB Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+                width={140}
+                height={140}
+              />
+            </div>
+            <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
           </div>
-          <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
+          
+          {/* Nursing Badge - with matching effects */}
+          <div className="flex flex-col items-center">
+            <Badge variant="new" className="text-sm py-1 mb-3">
+              <Shield className="h-4 w-4 mr-1" />
+              CNA Certification
+            </Badge>
+            
+            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
+              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
+              <LazyImage 
+                src={nursingBadge.png} 
+                webpSrc={nursingBadge.webp}
+                avifSrc={nursingBadge.avif}
+                alt="Nursing Certification" 
+                className="w-full h-full object-contain relative z-10 rounded-md" 
+                width={140}
+                height={140}
+              />
+            </div>
+            <p className="text-xs text-center mt-2 text-red-800">Certified Nursing Assistant</p>
+          </div>
         </div>
         
-        <p className="text-xs text-center text-muted-foreground mb-4">
+        <p className="text-xs text-center text-muted-foreground">
           Sign in or sign up to see more details about these valuable credentials and how they can boost your career
         </p>
-
-        {/* Intellectual Property Rights Notice */}
-        <div className="bg-gray-50 border border-gray-200 rounded-md p-3 mt-2">
-          <div className="flex items-center gap-2 mb-2 justify-center">
-            <Copyright className="h-4 w-4 text-gray-700" />
-            <p className="text-xs font-medium text-gray-700">Intellectual Property Notice</p>
-          </div>
-          <p className="text-xs text-gray-600 text-center">
-            All credential badges, designs, and associated materials are protected by copyright and intellectual property laws.
-            Unauthorized reproduction, distribution, or use is strictly prohibited. These materials are the exclusive property
-            of Pamela Coleman and are expressly leased to the Entrepreneurship Academy program for educational purposes.
-          </p>
-        </div>
       </CardContent>
     </Card>
   );

@@ -7,8 +7,8 @@ export const NavbarBrand = () => {
       <div className="flex items-center gap-2 relative">
         <div className="relative">
           {/* Enhanced accent glow behind the logo */}
-          <div className="absolute -inset-3 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-lg -z-10"></div>
-          <Link to="/" className="relative flex items-center px-4 py-3 logo-accent">
+          <div className="absolute -inset-3 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-lg -z-10 animate-pulse-slow"></div>
+          <Link to="/" className="relative flex items-center px-4 py-3 logo-accent logo-shimmer">
             <picture>
               <source 
                 type="image/webp" 
@@ -17,7 +17,7 @@ export const NavbarBrand = () => {
               <img 
                 src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
                 alt="Job Seekers 4 High Schools"
-                className="h-16 w-auto logo-shadow" 
+                className="h-16 w-auto logo-shadow logo-hover-effect" 
                 width="160"
                 height="64"
               />

@@ -117,3 +117,58 @@
 .animate-float-around {
   animation: float-around 8s ease-in-out infinite;
 }
+
+/* Additional badge animations */
+@keyframes badge-shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.badge-shine-effect {
+  background: linear-gradient(to right, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.2) 25%, 
+    rgba(255,255,255,0.2) 50%, 
+    rgba(255,255,255,0) 100%);
+  background-size: 200% auto;
+  animation: badge-shine 3s linear infinite;
+}
+
+@keyframes badge-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.badge-bounce-animation {
+  animation: badge-bounce 2s ease-in-out infinite;
+}
+
+/* Special badge highlight effect */
+.badge-highlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.badge-highlight::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.badge-highlight:hover::after {
+  opacity: 1;
+}
