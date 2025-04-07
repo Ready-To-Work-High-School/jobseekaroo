@@ -11,6 +11,7 @@ import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
 import Resources from '@/pages/Resources';
 import JobHelp from '@/pages/JobHelp';
 import RadixDemo from '@/pages/RadixDemo';
+import License from '@/pages/License';
 
 export const PublicRoutes = (
   <>
@@ -26,6 +27,7 @@ export const PublicRoutes = (
     <Route path="/resources" element={<Resources />} />
     <Route path="/job-help" element={<JobHelp />} />
     <Route path="/radix-demo" element={<RadixDemo />} />
+    <Route path="/license" element={<License />} />
   </>
 );
 
