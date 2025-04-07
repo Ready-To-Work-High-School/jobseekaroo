@@ -64,3 +64,44 @@ picture img {
 img.cacheable {
   will-change: auto; /* Hint to the browser that this element is worth caching */
 }
+
+/* Responsive image classes */
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent layout shift with responsive placeholders */
+.image-placeholder {
+  background-color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+}
+
+.image-placeholder::before {
+  content: "";
+  display: block;
+  width: 100%;
+  padding-top: 75%; /* Default 4:3 aspect ratio */
+}
+
+.image-placeholder.square::before {
+  padding-top: 100%; /* 1:1 aspect ratio */
+}
+
+.image-placeholder.wide::before {
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+/* Badge image styles */
+.badge-image {
+  display: inline-block;
+  max-width: 180px;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .badge-image {
+    max-width: 120px;
+  }
+}

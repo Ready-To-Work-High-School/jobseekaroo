@@ -12,6 +12,12 @@ interface LazyImageProps {
   priority?: boolean; // Add priority flag for critical images
   webpSrc?: string; // Add support for WebP format
   avifSrc?: string; // Add support for AVIF format
+  sizes?: string; // Add sizes attribute for responsive images
+  srcSets?: {
+    src?: string[];
+    webp?: string[];
+    avif?: string[];
+  };
 }
 
 const LazyImage = ({
@@ -25,6 +31,8 @@ const LazyImage = ({
   priority = false,
   webpSrc,
   avifSrc,
+  sizes = '100vw',
+  srcSets,
 }: LazyImageProps) => {
   const [imageSrc, setImageSrc] = useState<string>(priority ? src : placeholderSrc);
   const [imageLoaded, setImageLoaded] = useState(priority);
@@ -94,6 +102,30 @@ const LazyImage = ({
       setImageSrc(placeholderSrc);
     }
   };
+  
+  // Generate srcset for responsive images
+  const generateSrcset = (baseSrc: string, widths: number[] = [320, 640, 960, 1280, 1920]) => {
+    if (srcSets) {
+      // Use provided custom srcsets if available
+      if (baseSrc === src && srcSets.src) {
+        return srcSets.src.join(', ');
+      } else if (baseSrc === webpSrc && srcSets.webp) {
+        return srcSets.webp.join(', ');
+      } else if (baseSrc === avifSrc && srcSets.avif) {
+        return srcSets.avif.join(', ');
+      }
+    }
+    
+    // Extract file name and extension
+    const lastDotIndex = baseSrc.lastIndexOf('.');
+    if (lastDotIndex === -1) return ''; // No extension found
+    
+    const fileName = baseSrc.substring(0, lastDotIndex);
+    const fileExt = baseSrc.substring(lastDotIndex);
+    
+    // Generate srcset with different widths
+    return widths.map(w => `${fileName}-${w}w${fileExt} ${w}w`).join(', ');
+  };
 
   // Common image attributes for optimal caching and performance
   const imageAttributes = {
@@ -107,6 +139,7 @@ const LazyImage = ({
     decoding: priority ? "sync" as const : "async" as const,
     onLoad: handleImageLoad,
     onError: handleImageError,
+    sizes: sizes,
     // Add Cache-Control hints via data attributes (for documentation, not functional)
     'data-cache-control': 'max-age=31536000, immutable'
   };
@@ -115,10 +148,19 @@ const LazyImage = ({
   if (avifSrc || webpSrc) {
     return (
       <picture>
-        {avifSrc && <source srcSet={avifSrc} type="image/avif" />}
-        {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
+        {avifSrc && <source 
+          srcSet={generateSrcset(avifSrc)} 
+          type="image/avif" 
+          sizes={sizes}
+        />}
+        {webpSrc && <source 
+          srcSet={generateSrcset(webpSrc)} 
+          type="image/webp" 
+          sizes={sizes}
+        />}
         <img
           src={hasError ? placeholderSrc : imageSrc}
+          srcSet={generateSrcset(src)}
           {...imageAttributes}
         />
       </picture>
@@ -129,6 +171,7 @@ const LazyImage = ({
   return (
     <img
       src={hasError ? placeholderSrc : imageSrc}
+      srcSet={generateSrcset(src)}
       {...imageAttributes}
     />
   );

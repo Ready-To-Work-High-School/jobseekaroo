@@ -17,9 +17,24 @@ services:
       - path: /lovable-uploads/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.jpg
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.png
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.webp
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.avif
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
       - path: /api/*
         name: Cache-Control
         value: public, max-age=1800, stale-while-revalidate=86400
+      - path: /*
+        name: Vary
+        value: Accept-Encoding
 
 staticSites:
   - name: job-seekers-static
@@ -39,4 +54,18 @@ staticSites:
       - path: /lovable-uploads/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
-
+      - path: /lovable-uploads/*-*w.jpg
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.png
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.webp
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lovable-uploads/*-*w.avif
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: Vary
+        value: Accept-Encoding
