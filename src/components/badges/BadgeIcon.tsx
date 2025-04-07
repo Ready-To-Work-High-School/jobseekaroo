@@ -47,7 +47,7 @@ export const BadgeIcon: React.FC<BadgeIconProps> = ({ badgeId, className = "", s
   if (size !== 5 && React.isValidElement(iconElement)) {
     return (
       <div className={className}>
-        {React.cloneElement(iconElement, {
+        {React.cloneElement(iconElement as React.ReactElement, {
           className: `h-${size} w-${size}`
         })}
       </div>

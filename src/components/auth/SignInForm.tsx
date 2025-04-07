@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
@@ -21,12 +20,9 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Get redirectUrl from location state
   const from = location.state?.from?.pathname || '/dashboard';
   
-  // Store the current location on component mount
   useEffect(() => {
-    // Store current path to redirect back after login
     if (location.state?.from) {
       sessionStorage.setItem('redirectAfterLogin', location.state.from.pathname);
     } else {
@@ -45,12 +41,10 @@ const SignInForm = () => {
         description: "You have successfully signed in",
       });
       
-      // Check if there's a redirect in the state from protected routes
       navigate(from);
     } catch (error: any) {
       console.error("Sign in error:", error);
       
-      // Provide more helpful error messages based on the error
       let errorMessage = "An unexpected error occurred during sign in";
       
       if (error.message?.includes("auth/invalid-login-credentials") || 
@@ -87,8 +81,6 @@ const SignInForm = () => {
     try {
       console.log("Initiating Apple sign-in from SignInForm");
       await signInWithApple();
-      // OAuth redirects will happen automatically
-      // Success toast will be shown after redirect completes
     } catch (error: any) {
       console.error("Apple sign-in error:", error);
       toast({
@@ -104,12 +96,10 @@ const SignInForm = () => {
     setIsGoogleLoading(true);
     try {
       console.log("Initiating Google sign-in from SignInForm");
-      // getCurrentPath is just a debug log to verify the path
       const currentPath = window.location.pathname;
       console.log("Current path before Google login:", currentPath);
             
       await signInWithGoogle();
-      // OAuth redirects will happen automatically
     } catch (error: any) {
       console.error("Google sign-in error in form:", error);
       toast({
@@ -145,6 +135,7 @@ const SignInForm = () => {
           onAppleSignIn={handleAppleSignIn}
           isGoogleLoading={isGoogleLoading}
           isAppleLoading={isAppleLoading}
+          isFormLoading={isLoading}
         />
       </div>
       
