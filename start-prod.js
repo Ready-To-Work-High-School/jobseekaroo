@@ -2,7 +2,7 @@
 const { spawn } = require('child_process');
 
 // Start the production server
-const server = spawn('node', ['dist/server/start-server.js'], {
+const server = spawn('node', ['server.js'], {
   stdio: 'inherit',
   shell: true,
   env: {
