@@ -18,7 +18,6 @@ app.use((req, res, next) => {
   const host = req.hostname;
   
   // Check if the request is coming from a school subdomain
-  // Format: school.jobseekaroo.com, school.jobseekers4hs.org, or school.jobseeker4hs.org (without 's')
   const schoolSubdomainRegex = /^([^.]+)\.(jobseekaroo\.com|jobseekers4hs\.org|jobseeker4hs\.org)$/;
   const schoolSubdomainMatch = host.match(schoolSubdomainRegex);
   

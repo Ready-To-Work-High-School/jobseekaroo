@@ -25,17 +25,17 @@ const setupSecurityHeaders = (req, res, next) => {
   // Enhanced CSP with nonce and improved directives
   res.setHeader('Content-Security-Policy', 
     `default-src 'self'; ` +
-    `connect-src 'self' ${isProd ? '' : 'http://localhost:* '}https://*.supabase.co https://jobseekaroo.onrender.com; ` + 
-    `script-src 'self' 'nonce-${nonce}' https://cdn.gpteng.co ${isProd ? '' : "'unsafe-eval'"}; ` + 
+    `connect-src 'self' ${isProd ? '' : 'http://localhost:* ws://localhost:* '}https://*.supabase.co https://jobseekaroo.onrender.com; ` + 
+    `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} https://cdn.gpteng.co; ` + 
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ` + 
     `img-src 'self' data: https: blob:; ` + 
     `font-src 'self' https://fonts.gstatic.com; ` +
     `object-src 'none'; ` + 
     `base-uri 'self'; ` + 
-    `frame-ancestors 'none'; ` + // Added frame-ancestors directive to protect against clickjacking
+    `frame-ancestors 'none'; ` + 
     `form-action 'self'; ` +
-    `upgrade-insecure-requests; ` + // Force HTTPS
-    `block-all-mixed-content;`      // Block mixed content
+    `upgrade-insecure-requests; ` + 
+    `block-all-mixed-content;`
   );
   
   // Production-only headers

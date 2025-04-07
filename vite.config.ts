@@ -42,15 +42,13 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
-    // Enable minification and tree-shaking
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
+    // Disable minification temporarily to resolve dynamic import issues
+    minify: false,
     // Improve chunking
     cssCodeSplit: true,
-    sourcemap: false,
+    sourcemap: true, // Enable sourcemaps in all environments to help with debugging
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'], // Explicitly include these dependencies
+  }
 }));
