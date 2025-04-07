@@ -9,6 +9,7 @@ interface LazyImageProps {
   height?: number | string;
   placeholderSrc?: string;
   onLoad?: () => void;
+  priority?: boolean; // Add priority flag for critical images
 }
 
 const LazyImage = ({
@@ -19,6 +20,7 @@ const LazyImage = ({
   height,
   placeholderSrc = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
   onLoad,
+  priority = false, // Default to false
 }: LazyImageProps) => {
   const [imageSrc, setImageSrc] = useState<string>(placeholderSrc);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -29,34 +31,50 @@ const LazyImage = ({
     let observer: IntersectionObserver;
     let isUnmounted = false;
 
+    // If priority is true, load immediately
+    if (priority) {
+      setImageSrc(src);
+      return;
+    }
+
     if (imageRef.current && src) {
-      if ('loading' in HTMLImageElement.prototype) {
-        // Browser supports loading="lazy"
-        setImageSrc(src);
-      } else {
-        // Use IntersectionObserver as fallback
-        observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !isUnmounted) {
-              setImageSrc(src);
-              observer.unobserve(entry.target);
-            }
+      try {
+        if ('loading' in HTMLImageElement.prototype) {
+          // Browser supports loading="lazy"
+          setImageSrc(src);
+        } else {
+          // Use IntersectionObserver as fallback
+          observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && !isUnmounted) {
+                setImageSrc(src);
+                observer?.unobserve(entry.target);
+              }
+            });
+          }, {
+            rootMargin: '200px 0px', // Start loading when image is 200px from viewport
           });
-        }, {
-          rootMargin: '200px 0px', // Start loading when image is 200px from viewport
-        });
-        
-        observer.observe(imageRef.current);
+          
+          observer.observe(imageRef.current);
+        }
+      } catch (error) {
+        console.error("LazyImage intersection observer error:", error);
+        // Fallback to immediate loading if error
+        setImageSrc(src);
       }
     }
     
     return () => {
       isUnmounted = true;
       if (observer && imageRef.current) {
-        observer.unobserve(imageRef.current);
+        try {
+          observer.unobserve(imageRef.current);
+        } catch (error) {
+          console.error("Error unobserving image:", error);
+        }
       }
     };
-  }, [src]);
+  }, [src, priority]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -81,7 +99,9 @@ const LazyImage = ({
       className={`${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
       width={width}
       height={height}
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding={priority ? "sync" : "async"}
       onLoad={handleImageLoad}
       onError={handleImageError}
     />

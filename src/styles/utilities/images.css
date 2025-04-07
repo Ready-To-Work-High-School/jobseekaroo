@@ -1,4 +1,10 @@
 
+/* Critical image styles */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px; /* Helps browser allocate space before image loads */
+}
+
 /* Image loading optimization */
 img.lazy-load {
   opacity: 0;
@@ -9,7 +15,16 @@ img.lazy-load.loaded {
   opacity: 1;
 }
 
-/* Performance optimizations for image rendering */
-img {
-  content-visibility: auto;
+/* Add picture element support for responsive images */
+picture {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Performance optimizations for LCP images */
+.lcp-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
 }

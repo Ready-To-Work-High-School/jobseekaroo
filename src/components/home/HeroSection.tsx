@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
+import LazyImage from '@/components/LazyImage';
 
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
@@ -34,10 +35,15 @@ const HeroSection = () => {
       
       <div className="container mx-auto px-4">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
-          {/* Enhanced logo display with dynamic glow effect */}
+          {/* Enhanced logo display with dynamic glow effect - mark as priority */}
           <div className="relative">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
-            <img src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" alt="Job Seekers 4 High Schools Logo" className="h-28 w-auto relative z-10 drop-shadow-lg" />
+            <LazyImage 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              alt="Job Seekers 4 High Schools Logo" 
+              className="h-28 w-auto relative z-10 drop-shadow-lg" 
+              priority={true}
+            />
           </div>
         </div>
         

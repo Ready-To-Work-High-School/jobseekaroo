@@ -1,10 +1,22 @@
-
 import { useEffect, useState, useRef } from 'react';
+
+// Only run animations if the device prefers animations
+const prefersReducedMotion = typeof window !== 'undefined' && 
+  window.matchMedia && 
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Helper function to determine if animations should run
+const shouldAnimate = () => !prefersReducedMotion;
 
 export const useSlideIn = (delay = 0, direction = 'up') => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!shouldAnimate()) {
+      setIsVisible(true);
+      return;
+    }
+    
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, delay);
@@ -13,6 +25,10 @@ export const useSlideIn = (delay = 0, direction = 'up') => {
   }, [delay]);
 
   try {
+    if (!shouldAnimate()) {
+      return '';  // No animation classes if reduced motion is preferred
+    }
+    
     if (direction === 'up') {
       return isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4';
     } else if (direction === 'down') {
@@ -34,6 +50,11 @@ export const useFadeIn = (delay = 0) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!shouldAnimate()) {
+      setIsVisible(true);
+      return;
+    }
+    
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, delay);
@@ -41,13 +62,18 @@ export const useFadeIn = (delay = 0) => {
     return () => clearTimeout(timer);
   }, [delay]);
 
-  return isVisible ? 'animate-fade-in opacity-100' : 'opacity-0';
+  return shouldAnimate() ? (isVisible ? 'animate-fade-in opacity-100' : 'opacity-0') : '';
 };
 
 export const useZoomIn = (delay = 0) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!shouldAnimate()) {
+      setIsVisible(true);
+      return;
+    }
+    
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, delay);
@@ -127,6 +153,10 @@ export const useInView = (ref: React.RefObject<HTMLElement>, options = {}) => {
 
 // Animation sequences for more complex animations
 export const createAnimationSequence = (animations: { el: HTMLElement; animation: string; duration: number; delay: number }[]) => {
+  if (!shouldAnimate()) {
+    return Promise.resolve(); // Skip animations if reduced motion is preferred
+  }
+  
   return Promise.all(
     animations.map(({ el, animation, duration, delay }) => 
       new Promise(resolve => 
