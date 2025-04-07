@@ -1,13 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Shield, Users, ChartBar, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
 const EmployerHeader = () => {
-  return (
-    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
+  return <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">For Employers</h1>
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
@@ -43,12 +40,10 @@ const EmployerHeader = () => {
           </Button>
           
           <Button asChild variant="outline" size="lg">
-            <Link to="/pricing">View Pricing</Link>
+            
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default EmployerHeader;
