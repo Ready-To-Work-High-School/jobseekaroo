@@ -29,7 +29,7 @@ const setupSecurityHeaders = (req, res, next) => {
     `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} https://cdn.gpteng.co; ` + 
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ` + 
     `img-src 'self' data: https: blob:; ` + 
-    `font-src 'self' https://fonts.gstatic.com; ` +
+    `font-src 'self' https://fonts.gstatic.com; ` + 
     `object-src 'none'; ` + 
     `base-uri 'self'; ` + 
     `frame-ancestors 'none'; ` + 

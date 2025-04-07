@@ -28,9 +28,27 @@ initializeDatabase();
 // App info
 app.locals.appName = "Job Seekers 4 High School";
 
+// CORS Configuration - More restrictive configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [
+        'https://jobseekaroo.com', 
+        'https://jobseekers4hs.org', 
+        'https://jobseeker4hs.org',
+        /\.jobseekaroo\.com$/,
+        /\.jobseekers4hs\.org$/,
+        /\.jobseeker4hs\.org$/
+      ]
+    : ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:5173'], // Dev environments
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400 // 24 hours
+};
+
 // Security middleware chain
 app.use(generateNonce);
-app.use(cors()); // Enable CORS for all routes
+app.use(cors(corsOptions)); // Use configured CORS options instead of wildcards
 app.use(express.json());
 app.use(setupSecurityHeaders);
 app.use(injectNonceIntoHtml);
