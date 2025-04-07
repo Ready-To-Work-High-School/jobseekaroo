@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Briefcase } from 'lucide-react';
+import { Award, Briefcase, MapPin, Mail } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import UserBadges from '@/components/badges/UserBadges';
 import { useUserBadges } from '@/hooks/use-user-badges';
@@ -28,38 +28,62 @@ const Profile = () => {
         
         {user && (
           <>
-            <Card className="mb-6">
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16">
+            <Card className="mb-6 overflow-hidden">
+              <CardHeader className="relative border-b bg-gradient-to-r from-blue-50 to-white dark:from-blue-950/30 dark:to-background pb-6">
+                {/* Profile background accent */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -mr-20 -mt-20"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-100 rounded-full blur-2xl opacity-30 -ml-10 -mb-10"></div>
+                
+                <div className="flex items-center gap-4 relative">
+                  <Avatar className="h-16 w-16 border-2 border-blue-100 shadow-md">
                     <AvatarImage src={userProfile?.avatar_url || ''} alt="Profile" />
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
                       {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <CardTitle className="text-2xl">
                         {userProfile?.first_name} {userProfile?.last_name}
                       </CardTitle>
                       {isCeo && (
-                        <Badge variant="outline" className="bg-black text-white">
+                        <Badge variant="outline" className="bg-black text-white border-gray-700">
                           Chief Executive Officer
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                    {userProfile?.job_title && !isCeo && (
-                      <p className="text-sm font-medium">{userProfile.job_title}</p>
-                    )}
+                    
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <span className="flex items-center text-sm text-muted-foreground">
+                        <Mail className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                        {user.email}
+                      </span>
+                      
+                      {userProfile?.job_title && !isCeo && (
+                        <span className="flex items-center text-sm text-muted-foreground">
+                          <Briefcase className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                          {userProfile.job_title}
+                        </span>
+                      )}
+                      
+                      {userProfile?.location && (
+                        <span className="flex items-center text-sm text-muted-foreground">
+                          <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                          {userProfile.location}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 {badgesLoading ? (
-                  <p className="text-muted-foreground">Loading badges...</p>
+                  <div className="flex items-center gap-2 text-muted-foreground animate-pulse">
+                    <Award className="h-5 w-5 text-amber-500/50" />
+                    <p>Loading badges...</p>
+                  </div>
                 ) : (
-                  <UserBadges badges={badges} />
+                  <UserBadges badges={badges} className="mt-0" />
                 )}
               </CardContent>
             </Card>
@@ -73,48 +97,28 @@ const Profile = () => {
               <TabsContent value="profile">
                 <Card>
                   <CardContent className="space-y-4 pt-6">
-                    <div>
-                      <h3 className="font-medium">Email</h3>
-                      <p>{user.email}</p>
-                    </div>
+                    {userProfile?.bio && (
+                      <div>
+                        <h3 className="font-medium">Bio</h3>
+                        <p className="mt-1 text-muted-foreground">{userProfile.bio}</p>
+                      </div>
+                    )}
                     
-                    {userProfile && (
-                      <>
-                        {userProfile.bio && (
-                          <div>
-                            <h3 className="font-medium">Bio</h3>
-                            <p>{userProfile.bio}</p>
-                          </div>
-                        )}
-                        
-                        {userProfile.location && (
-                          <div>
-                            <h3 className="font-medium">Location</h3>
-                            <p>{userProfile.location}</p>
-                          </div>
-                        )}
-                        
-                        {userProfile.job_title && (
-                          <div>
-                            <h3 className="font-medium">Job Title</h3>
-                            <p>{userProfile.job_title}</p>
-                            {isCeo && <p className="text-xs text-blue-600 font-semibold mt-1">Chief Executive Officer Access</p>}
-                          </div>
-                        )}
-                        
-                        {userProfile.skills && userProfile.skills.length > 0 && (
-                          <div>
-                            <h3 className="font-medium">Skills</h3>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {userProfile.skills.map(skill => (
-                                <span key={skill} className="px-2 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                                  {skill}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </>
+                    {userProfile?.skills && userProfile.skills.length > 0 && (
+                      <div>
+                        <h3 className="font-medium">Skills</h3>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {userProfile.skills.map(skill => (
+                            <Badge 
+                              key={skill} 
+                              variant="outline" 
+                              className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                            >
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
                     )}
                   </CardContent>
                 </Card>

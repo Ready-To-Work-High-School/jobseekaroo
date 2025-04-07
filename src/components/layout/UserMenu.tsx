@@ -63,22 +63,29 @@ const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.email} />
-            <AvatarFallback>{userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}</AvatarFallback>
+            <AvatarImage src={userProfile?.avatar_url || `https://avatar.vercel.sh/${user.email}.png`} alt={user.email} />
+            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+              {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
+            </AvatarFallback>
           </Avatar>
+          
           {userProfile?.user_type && (
             <div className="absolute -top-2 -right-2">
-              <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
+              <AccountTypeBadge userProfile={userProfile} className="h-4 w-4 p-0" showText={false} />
             </div>
           )}
+          
           {hasPremium && (
             <div className="absolute -bottom-1 -right-1">
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-amber-400 ring-1 ring-white" aria-label="Premium user"></span>
+              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 ring-1 ring-white" aria-label="Premium user">
+                <Sparkles className="h-2 w-2 text-white" />
+              </span>
             </div>
           )}
+          
           {hasBadges && (
             <div className="absolute -bottom-1 -left-1">
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-blue-400 ring-1 ring-white" aria-label="Has achievements">
+              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-blue-400 to-blue-500 ring-1 ring-white animate-pulse-slow" aria-label="Has achievements">
                 <Award className="h-2 w-2 text-white" />
               </span>
             </div>

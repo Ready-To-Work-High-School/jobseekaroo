@@ -8,12 +8,20 @@ export const NavbarBrand = () => {
         <div className="relative">
           {/* Enhanced accent glow behind the logo */}
           <div className="absolute -inset-3 rounded-md bg-gradient-to-r from-amber-400 via-blue-500 to-blue-700 opacity-75 blur-lg -z-10"></div>
-          <Link to="/" className="relative flex items-center px-4 py-3">
-            <img 
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-              alt="Job Seekers 4 High Schools"
-              className="h-16 w-auto" 
-            />
+          <Link to="/" className="relative flex items-center px-4 py-3 logo-accent">
+            <picture>
+              <source 
+                type="image/webp" 
+                srcSet="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" 
+              />
+              <img 
+                src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+                alt="Job Seekers 4 High Schools"
+                className="h-16 w-auto logo-shadow" 
+                width="160"
+                height="64"
+              />
+            </picture>
           </Link>
         </div>
       </div>

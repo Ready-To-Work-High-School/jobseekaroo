@@ -31,9 +31,11 @@ const badgeVariants = cva(
         ghost:
           "border-transparent bg-transparent text-foreground hover:bg-muted",
         premium:
-          "border-transparent bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 font-bold",
+          "border-transparent bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 font-bold shadow-sm",
         new:
           "border-transparent bg-brand-500 text-white hover:bg-brand-600 animate-pulse",
+        gold:
+          "border-transparent bg-gradient-to-r from-amber-300 to-amber-500 text-white hover:from-amber-400 hover:to-amber-600 shadow-sm"
       },
       size: {
         default: "px-2.5 py-0.5 text-xs",
@@ -45,6 +47,7 @@ const badgeVariants = cva(
         none: "",
         pulse: "animate-pulse-slow",
         bounce: "animate-bounce",
+        glow: "animate-glow-pulse"
       }
     },
     defaultVariants: {
