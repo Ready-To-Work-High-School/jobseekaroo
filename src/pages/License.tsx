@@ -1,10 +1,8 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, School, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const License = () => {
   return <Layout>
       <div className="py-12">
@@ -31,7 +29,7 @@ const License = () => {
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold mb-2">2. License Grant</h2>
+              <h2 className="text-xl font-semibold mb-2">2. License </h2>
               <p>
                 Job Seekers 4 High Schools grants you a limited, non-exclusive, non-transferable, non-sublicensable license to access and use the application for personal, non-commercial purposes. This license does not include any resale or commercial use of the application or its contents; any collection and use of any product listings, descriptions, or prices; any derivative use of the application or its contents; any downloading or copying of account information for the benefit of another merchant; or any use of data mining, robots, or similar data gathering and extraction tools.
               </p>
@@ -94,12 +92,8 @@ const License = () => {
                         <li><span className="font-semibold">Enterprise:</span> $10 per student/year - Volume-based pricing for larger institutions</li>
                       </ul>
                       
-                      <h4 className="font-medium mb-1">Educational Institution Standard Fee Structure:</h4>
-                      <ul className="list-disc pl-8 mb-3 text-sm">
-                        <li>Small institutions (up to 500 students): $1,500 per year</li>
-                        <li>Medium institutions (501-2,000 students): $3,000 per year</li>
-                        <li>Large institutions (over 2,000 students): $6,500 per year</li>
-                      </ul>
+                      
+                      
                       
                       <p className="text-sm">
                         For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseekers4highschools.com" className="text-primary hover:underline">education@jobseekers4highschools.com</a>
