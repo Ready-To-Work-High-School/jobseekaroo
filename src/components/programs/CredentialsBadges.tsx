@@ -11,25 +11,39 @@ import { Separator } from '@/components/ui/separator';
 const CredentialsBadges = () => {
   const badges = [{
     image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
-    name: "Career Exploration"
+    name: "Career Exploration",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.png",
-    name: "Communication"
+    name: "Communication",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png",
-    name: "Professionalism"
+    name: "Professionalism",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
-    name: "Florida Soft Skills"
+    name: "Florida Soft Skills",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.png",
-    name: "Team Building"
+    name: "Team Building",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png",
-    name: "Capstone Experience"
+    name: "Capstone Experience",
+    width: 150,
+    height: 150
   }, {
     image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
-    name: "Problem Solving"
+    name: "Problem Solving",
+    width: 150,
+    height: 150
   }];
   
   return <div className="p-8 rounded-xl shadow-xl border-2 border-blue-200 bg-gradient-to-br from-sky-100 to-blue-100">
@@ -81,13 +95,19 @@ const CredentialsBadges = () => {
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
-        {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} />)}
+        {badges.map((badge, index) => <SkillBadge key={index} image={badge.image} name={badge.name} width={badge.width} height={badge.height} />)}
         
         {/* ESB Badge - Entrepreneurship */}
         <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <img src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" alt="ESB Certification" className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" />
+            <img 
+              src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
+              alt="ESB Certification" 
+              className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" 
+              width={180}
+              height={180}
+            />
             <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
           </div>
           <p className="text-center text-sm font-semibold mt-2">Entrepreneurship &amp; Small Business</p>
@@ -100,7 +120,13 @@ const CredentialsBadges = () => {
         <div className="skill-badge transform hover:scale-110 transition-all duration-300 flex flex-col items-center">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-            <img src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" alt="Nursing Academy Certification" className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" />
+            <img 
+              src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
+              alt="Nursing Academy Certification" 
+              className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" 
+              width={180}
+              height={180}
+            />
             <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
           </div>
           <p className="text-center text-sm font-semibold mt-2">Nursing Assistant</p>

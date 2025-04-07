@@ -9,23 +9,33 @@ const PartnerLogosSection = () => {
     id: 1,
     name: "Entrepreneurship & Small Business",
     logo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png",
+    width: 180,
+    height: 180,
     isESB: true
   }, {
     id: 2,
     name: "Certified Nursing Assistant",
-    logo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png"
+    logo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
+    width: 180,
+    height: 180
   }, {
     id: 3,
     name: "Microsoft Fundamentals",
-    logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png"
+    logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png",
+    width: 180,
+    height: 180
   }, {
     id: 4,
     name: "IBM SkillsBuild",
-    logo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png"
+    logo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
+    width: 180,
+    height: 180
   }, {
     id: 5,
     name: "Florida Ready to Work",
-    logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png"
+    logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
+    width: 180,
+    height: 180
   }];
   
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
@@ -65,7 +75,13 @@ const PartnerLogosSection = () => {
                   />
                 </div>
                 
-                <img src={badge.logo} alt={`${badge.name} credential`} className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} />
+                <img 
+                  src={badge.logo} 
+                  alt={`${badge.name} credential`} 
+                  className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} 
+                  width={badge.width}
+                  height={badge.height}
+                />
                 
                 {/* Ribbon-style badge for all credentials */}
                 <div className="absolute -top-3 -right-3 z-20">

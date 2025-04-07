@@ -16,6 +16,8 @@ const WestsideAcademy = () => {
           src="/lovable-uploads/09aa9c55-7120-40c3-8212-c2c0ab608abc.png" 
           alt="Advanced Academy Accreditation" 
           className="w-full h-auto object-cover"
+          width={1200}
+          height={300}
         />
       </div>
       
@@ -33,6 +35,8 @@ const WestsideAcademy = () => {
                 src="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png" 
                 alt="ESB Certification" 
                 className="h-32 w-auto relative z-10"
+                width={180}
+                height={180}
               />
             </div>
           </div>
@@ -90,6 +94,8 @@ const WestsideAcademy = () => {
                   src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
                   alt="Nursing Academy Certification" 
                   className="h-32 w-auto object-contain relative z-10"
+                  width={180}
+                  height={180}
                 />
               </div>
             </div>

@@ -28,3 +28,13 @@ picture {
   height: auto;
   max-width: 100%;
 }
+
+/* Add default aspect ratio for images missing dimensions */
+img:not([width]):not([height]) {
+  aspect-ratio: 1/1; /* Default square aspect ratio for images missing dimensions */
+}
+
+/* Prevents layout shift when images are loading */
+img[width][height] {
+  aspect-ratio: attr(width) / attr(height);
+}

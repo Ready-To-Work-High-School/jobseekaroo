@@ -9,31 +9,45 @@ const CredentialsBadgesSection = () => {
   const readyToWorkBadges = [
     {
       image: "/lovable-uploads/c67cc463-3678-4af8-864e-31d0daa26ac7.png",
-      name: "Career Exploration"
+      name: "Career Exploration",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/06372f1b-6e04-4b68-8afc-231f9529270e.png",
-      name: "Communication"
+      name: "Communication",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png",
-      name: "Professionalism"
+      name: "Professionalism",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
-      name: "Florida Soft Skills"
+      name: "Florida Soft Skills",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/8c5ed117-c79a-4c36-9d1a-0879567002c1.png",
-      name: "Team Building"
+      name: "Team Building",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/46b0f373-3093-499f-97b2-25610a4344d9.png",
-      name: "Capstone Experience"
+      name: "Capstone Experience",
+      width: 100,
+      height: 100
     },
     {
       image: "/lovable-uploads/c96aadf1-ef42-4e8f-a4e3-de0e999cba2d.png",
-      name: "Problem Solving"
+      name: "Problem Solving",
+      width: 100,
+      height: 100
     }
   ];
   
@@ -70,7 +84,9 @@ const CredentialsBadgesSection = () => {
                 <img 
                   src={badge.image} 
                   alt={badge.name} 
-                  className="w-full h-full object-contain" 
+                  className="w-full h-full object-contain"
+                  width={badge.width} 
+                  height={badge.height}
                 />
               </div>
               <p className="text-xs text-center mt-1">{badge.name}</p>
@@ -92,6 +108,8 @@ const CredentialsBadgesSection = () => {
                 src={esbBadge} 
                 alt="ESB Certification" 
                 className="w-full h-full object-contain relative z-10 rounded-md" 
+                width={140}
+                height={140}
               />
             </div>
             <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
@@ -110,6 +128,8 @@ const CredentialsBadgesSection = () => {
                 src={nursingBadge} 
                 alt="Nursing Certification" 
                 className="w-full h-full object-contain relative z-10 rounded-md" 
+                width={140}
+                height={140}
               />
             </div>
             <p className="text-xs text-center mt-2 text-red-800">Certified Nursing Assistant</p>

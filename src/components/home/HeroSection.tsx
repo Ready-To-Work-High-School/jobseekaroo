@@ -42,6 +42,8 @@ const HeroSection = () => {
               src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
               alt="Job Seekers 4 High Schools Logo" 
               className="h-28 w-auto relative z-10 drop-shadow-lg" 
+              width={112}
+              height={112}
               priority={true}
             />
           </div>
