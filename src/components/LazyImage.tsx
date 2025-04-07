@@ -102,9 +102,9 @@ const LazyImage = ({
     className: `${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'} ${priority ? 'lcp-critical' : ''} cacheable`,
     width: width,
     height: height,
-    loading: priority ? "eager" : "lazy",
-    fetchPriority: priority ? "high" : "auto",
-    decoding: priority ? "sync" : "async",
+    loading: priority ? "eager" as const : "lazy" as const,
+    fetchPriority: priority ? "high" as const : "auto" as const,
+    decoding: priority ? "sync" as const : "async" as const,
     onLoad: handleImageLoad,
     onError: handleImageError,
     // Add Cache-Control hints via data attributes (for documentation, not functional)
