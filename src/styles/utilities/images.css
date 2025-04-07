@@ -1,5 +1,4 @@
 
-
 /* Critical image styles */
 img {
   content-visibility: auto;
@@ -24,12 +23,13 @@ picture {
 }
 
 /* Performance optimizations for LCP images */
-.lcp-image {
+.lcp-image, .lcp-critical {
   display: block;
   width: auto;
   height: auto;
   max-width: 100%;
   contain: paint;
+  content-visibility: visible !important; /* Override auto content-visibility for LCP images */
 }
 
 /* Add default aspect ratio for images missing dimensions */
@@ -60,19 +60,7 @@ picture img {
   max-width: 100%;
 }
 
-/* Hint to the browser for resource prioritization */
-.important-image {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 300px;
-}
-
-/* Critical for LCP images */
-.lcp-critical {
-  content-visibility: visible;
-}
-
 /* Cache hints for browsers via CSS properties */
 img.cacheable {
   will-change: auto; /* Hint to the browser that this element is worth caching */
 }
-

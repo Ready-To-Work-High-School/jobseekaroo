@@ -26,8 +26,8 @@ const LazyImage = ({
   webpSrc,
   avifSrc,
 }: LazyImageProps) => {
-  const [imageSrc, setImageSrc] = useState<string>(placeholderSrc);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string>(priority ? src : placeholderSrc);
+  const [imageLoaded, setImageLoaded] = useState(priority);
   const [hasError, setHasError] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   

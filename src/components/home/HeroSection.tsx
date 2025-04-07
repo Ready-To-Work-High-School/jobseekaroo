@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Target, Users, TrendingUp, Award, Shield } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, Award, Users } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
 import LazyImage from '@/components/LazyImage';
@@ -36,7 +35,7 @@ const HeroSection = () => {
       
       <div className="container mx-auto px-4">
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
-          {/* Enhanced logo display with dynamic glow effect - mark as priority */}
+          {/* Enhanced logo display with dynamic glow effect - explicitly marked as priority for LCP */}
           <div className="relative">
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
             <LazyImage 

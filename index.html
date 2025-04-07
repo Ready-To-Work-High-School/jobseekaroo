@@ -9,14 +9,61 @@
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
-    <!-- Preload critical resources -->
+    <!-- Preconnect to important domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="image" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" />
+    <link rel="preload" as="image" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" fetchpriority="high" />
     
     <!-- Critical CSS inline -->
     <style>
       /* Critical above-the-fold styles */
+      :root {
+        --background: 210 20% 98%;
+        --foreground: 222.2 84% 4.9%;
+        --primary: 210 100% 50%;
+        --secondary: 210 40% 96.1%;
+        --border: 214.3 31.8% 91.4%;
+        --radius: 0.8rem;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Header and hero section critical styles */
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+      }
+      
+      .container-custom {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      .hero {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem 1rem;
+        background-image: linear-gradient(to bottom, rgba(239, 246, 255, 0.5), white);
+      }
+      
       .spinner {
         width: 40px;
         height: 40px;
@@ -25,9 +72,11 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
+      
       @keyframes spin {
         to { transform: rotate(360deg); }
       }
+      
       #root:empty:before {
         content: '';
         display: block;
@@ -42,13 +91,44 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
+      
+      /* Button and link styles that appear above the fold */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      
+      .btn-primary {
+        background-color: hsl(var(--primary));
+        color: white;
+      }
+      
+      /* Critical image styles */
+      img {
+        max-width: 100%;
+        height: auto;
+        content-visibility: auto;
+      }
     </style>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    
+    <!-- Defer non-critical CSS -->
+    <link rel="stylesheet" href="/assets/index.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/assets/index.css"></noscript>
   </head>
 
   <body>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx" defer></script>
   </body>
 </html>
