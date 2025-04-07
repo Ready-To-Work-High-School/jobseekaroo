@@ -53,8 +53,8 @@ app.disable('x-powered-by'); // Remove Express fingerprinting
 app.use('/api', rateLimiter);
 app.use('/api', sqlInjectionProtection);
 
-// Apply cache middleware with 5-minute duration to API routes
-app.use('/api', cacheMiddleware(300));
+// Apply cache middleware with 30-minute duration to API routes (increased from 5 min)
+app.use('/api', cacheMiddleware(1800));
 
 // API Routes
 app.use('/api/status', statusRoutes);
@@ -73,10 +73,30 @@ app.get('/', (req, res, next) => {
   }
 });
 
+// Static file caching - 1 year for images and assets
+const staticOptions = {
+  maxAge: '31536000000', // 1 year in milliseconds
+  etag: true,
+  lastModified: true,
+  immutable: true,
+  cacheControl: true,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.webp') || path.endsWith('.avif')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (path.includes('assets') && (path.endsWith('.js') || path.endsWith('.css'))) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+};
+
 // Serve static files from the React app in production
 if (process.env.NODE_ENV === 'production') {
   console.log('Serving static files from', path.join(__dirname, '../../dist'));
-  app.use(express.static(path.join(__dirname, '../../dist')));
+  app.use('/lovable-uploads', express.static(path.join(__dirname, '../../public/lovable-uploads'), staticOptions));
+  app.use('/assets', express.static(path.join(__dirname, '../../dist/assets'), staticOptions));
+  app.use(express.static(path.join(__dirname, '../../dist'), {
+    maxAge: '86400000' // 24 hours for other static files
+  }));
   
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {

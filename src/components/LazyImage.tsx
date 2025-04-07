@@ -95,6 +95,22 @@ const LazyImage = ({
     }
   };
 
+  // Common image attributes for optimal caching and performance
+  const imageAttributes = {
+    ref: imageRef,
+    alt: alt,
+    className: `${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'} ${priority ? 'lcp-critical' : ''} cacheable`,
+    width: width,
+    height: height,
+    loading: priority ? "eager" : "lazy",
+    fetchPriority: priority ? "high" : "auto",
+    decoding: priority ? "sync" : "async",
+    onLoad: handleImageLoad,
+    onError: handleImageError,
+    // Add Cache-Control hints via data attributes (for documentation, not functional)
+    'data-cache-control': 'max-age=31536000, immutable'
+  };
+
   // If we have modern format sources, use picture element
   if (avifSrc || webpSrc) {
     return (
@@ -102,17 +118,8 @@ const LazyImage = ({
         {avifSrc && <source srcSet={avifSrc} type="image/avif" />}
         {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
         <img
-          ref={imageRef}
           src={hasError ? placeholderSrc : imageSrc}
-          alt={alt}
-          className={`${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
-          width={width}
-          height={height}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
-          decoding={priority ? "sync" : "async"}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
+          {...imageAttributes}
         />
       </picture>
     );
@@ -121,17 +128,8 @@ const LazyImage = ({
   // Fall back to standard img if no modern formats provided
   return (
     <img
-      ref={imageRef}
       src={hasError ? placeholderSrc : imageSrc}
-      alt={alt}
-      className={`${className} ${!imageLoaded && !hasError ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
-      width={width}
-      height={height}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : "auto"}
-      decoding={priority ? "sync" : "async"}
-      onLoad={handleImageLoad}
-      onError={handleImageError}
+      {...imageAttributes}
     />
   );
 };

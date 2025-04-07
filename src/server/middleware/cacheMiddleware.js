@@ -42,8 +42,9 @@ const cacheMiddleware = (duration) => {
         const cacheDuration = duration * 1000;
         cache.put(key, body, cacheDuration);
         
-        // Add cache control headers
-        res.setHeader('Cache-Control', `max-age=${duration}`);
+        // Add cache control headers with a long max-age
+        res.setHeader('Cache-Control', `public, max-age=${duration}, stale-while-revalidate=86400`);
+        res.setHeader('Expires', new Date(Date.now() + duration * 1000).toUTCString());
         
         if (process.env.NODE_ENV !== 'production') {
           console.log(`Cache set for ${key} with duration ${duration}s`);
@@ -57,8 +58,8 @@ const cacheMiddleware = (duration) => {
   };
 };
 
-// Clean up expired cache entries periodically
-const cleanupInterval = 3600000; // 1 hour
+// Clean up expired cache entries periodically (but less frequently)
+const cleanupInterval = 86400000; // 24 hours
 setInterval(() => {
   if (process.env.NODE_ENV !== 'production') {
     console.log('Performing cache cleanup');

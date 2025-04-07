@@ -37,6 +37,22 @@ app.use((req, res, next) => {
   next();
 });
 
+// Static file caching - 1 year for images and JS/CSS assets
+const staticOptions = {
+  maxAge: '31536000000', // 1 year in milliseconds
+  etag: true,
+  lastModified: true,
+  immutable: true,
+  cacheControl: true,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.webp') || path.endsWith('.avif')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (path.includes('assets') && (path.endsWith('.js') || path.endsWith('.css'))) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+};
+
 // School-branded landing page route
 app.get('/', (req, res, next) => {
   if (req.isSchoolBranded) {
@@ -59,8 +75,12 @@ app.get('/:path', (req, res, next) => {
   }
 });
 
-// Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files from the dist directory with enhanced caching
+app.use('/lovable-uploads', express.static(path.join(__dirname, 'public/lovable-uploads'), staticOptions));
+app.use('/assets', express.static(path.join(__dirname, 'dist/assets'), staticOptions));
+app.use(express.static(path.join(__dirname, 'dist'), {
+  maxAge: '86400000' // 24 hours for other static files
+}));
 
 // For any request that doesn't match a static file, send the index.html
 app.get('*', (req, res) => {
