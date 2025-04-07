@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -7,13 +7,28 @@ import { X } from 'lucide-react';
 
 interface SignUpPromptProps {
   message?: string;
+  autoDismiss?: boolean;
+  dismissTime?: number; // in milliseconds
 }
 
 const SignUpPrompt: React.FC<SignUpPromptProps> = ({ 
-  message = "Sign up to access all features" 
+  message = "Sign up to access all features",
+  autoDismiss = false,
+  dismissTime = 3000 // 3 seconds
 }) => {
   const { user } = useAuth();
   const [dismissed, setDismissed] = React.useState(false);
+  
+  // Auto-dismiss after specified time if autoDismiss is true
+  useEffect(() => {
+    if (autoDismiss && !dismissed && !user) {
+      const timer = setTimeout(() => {
+        setDismissed(true);
+      }, dismissTime);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [autoDismiss, dismissed, user, dismissTime]);
 
   if (user || dismissed) {
     return null;

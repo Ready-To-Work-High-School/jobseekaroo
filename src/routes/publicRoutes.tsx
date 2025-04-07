@@ -12,6 +12,9 @@ import Resources from '@/pages/Resources';
 import JobHelp from '@/pages/JobHelp';
 import RadixDemo from '@/pages/RadixDemo';
 import License from '@/pages/License';
+import FirstJobToolkit from '@/pages/FirstJobToolkit';
+import FirstJobBootcamp from '@/pages/FirstJobBootcamp';
+import EntrepreneurshipAcademy from '@/pages/EntrepreneurshipAcademy';
 
 export const PublicRoutes = (
   <>
@@ -28,6 +31,11 @@ export const PublicRoutes = (
     <Route path="/job-help" element={<JobHelp />} />
     <Route path="/radix-demo" element={<RadixDemo />} />
     <Route path="/license" element={<License />} />
+    <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
+    <Route path="/employee-toolkit" element={<FirstJobToolkit />} /> {/* Alias for the FirstJobToolkit */}
+    <Route path="/first-job-bootcamp" element={<FirstJobBootcamp />} />
+    <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} /> {/* Our Program */}
+    <Route path="/our-program" element={<EntrepreneurshipAcademy />} /> {/* Alias for Our Program */}
   </>
 );
 

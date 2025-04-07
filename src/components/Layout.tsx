@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import FloatingSidebar from '@/components/layout/FloatingSidebar';
 import { AccessibilityMenu } from '@/components/AccessibilityMenu';
 import BackButton from '@/components/navigation/BackButton';
+import BackToTopButton from '@/components/navigation/BackToTopButton';
 import { useLocation } from 'react-router-dom';
 import SignUpPrompt from './auth/SignUpPrompt';
 
@@ -35,7 +36,8 @@ const Layout: React.FC<LayoutProps> = ({ children, hideAuthLinks, showBackButton
       <Footer />
       <FloatingSidebar />
       <AccessibilityMenu />
-      <SignUpPrompt />
+      <BackToTopButton />
+      <SignUpPrompt autoDismiss={true} />
     </div>
   );
 };

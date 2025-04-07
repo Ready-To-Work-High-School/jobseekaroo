@@ -1,33 +1,109 @@
 
+import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import EmployerBenefits from '@/components/employer/EmployerBenefits';
+import LazyImage from '@/components/LazyImage';
+import { getImageSizes } from '@/utils/imageUtils';
 
 const EmployerDashboard = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState("postings");
-  const navigate = useNavigate();
   
   const handlePostNewJob = () => {
     setActiveTab("create");
   };
   
-  return (
-    <ProtectedRoute requiredRoles={['employer', 'admin']}>
+  // If user is not authenticated, show sign in/sign up options
+  if (!user) {
+    return (
       <Layout>
-        <div className="container max-w-6xl mx-auto px-4 py-6">
-          <DashboardHeader />
+        <div className="container max-w-6xl mx-auto px-4 py-12">
+          <div className="text-center mb-12">
+            <h1 className="text-3xl font-bold mb-4">Employer Dashboard</h1>
+            <p className="text-lg text-muted-foreground mb-8">Connect with qualified students and post job opportunities</p>
+          </div>
           
-          <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Card className="mb-10 border-primary/20 shadow-lg">
+            <CardHeader className="bg-primary/5">
+              <CardTitle className="text-2xl text-center">Access Your Employer Dashboard</CardTitle>
+              <CardDescription className="text-center">Sign in to access all employer features</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center py-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
+                <Card className="bg-muted/50">
+                  <CardHeader>
+                    <CardTitle>Existing Employers</CardTitle>
+                    <CardDescription>Sign in to access your dashboard</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-center pb-8">
+                    <Button asChild size="lg">
+                      <Link to="/sign-in">Sign In</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-primary/5 border-primary/30">
+                  <CardHeader>
+                    <CardTitle>New Employers</CardTitle>
+                    <CardDescription>Create an account to get started</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-center pb-8">
+                    <Button asChild size="lg">
+                      <Link to="/sign-up">Sign Up</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <EmployerBenefits />
+          
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Why Join Our Platform</h2>
+              <p className="mb-4 text-muted-foreground">
+                Our employer dashboard provides you with powerful tools to find and connect
+                with qualified students ready to enter the workforce.
+              </p>
+              <ul className="space-y-2 list-disc list-inside text-muted-foreground">
+                <li>Post unlimited job listings with detailed descriptions</li>
+                <li>Review applicants through our streamlined candidate management system</li>
+                <li>Schedule interviews directly through our integrated calendar</li>
+                <li>Access analytics on job posting performance</li>
+                <li>Offer apprenticeships and training programs</li>
+              </ul>
+            </div>
+            <div className="relative rounded-lg overflow-hidden h-64 md:h-auto">
+              <LazyImage
+                src="/lovable-uploads/05bd40401-b911-4d3b-a1f2-3e1712199dbc.png"
+                alt="Employer Dashboard Preview"
+                className="object-cover w-full h-full"
+                sizes={getImageSizes('hero')}
+              />
+            </div>
+          </div>
         </div>
       </Layout>
-    </ProtectedRoute>
+    );
+  }
+  
+  // For authenticated users, show the actual dashboard
+  return (
+    <Layout>
+      <div className="container max-w-6xl mx-auto px-4 py-6">
+        <DashboardHeader />
+        
+        <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
+    </Layout>
   );
 };
 
