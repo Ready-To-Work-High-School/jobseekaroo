@@ -136,29 +136,19 @@ const SignInForm = () => {
       />
       
       <div className="mt-6 mb-6">
-        <Separator>
-          <span className="px-2 text-xs text-muted-foreground">OR</span>
+        <Separator className="mb-6">
+          <span className="mx-2 text-xs text-muted-foreground">OR CONTINUE WITH</span>
         </Separator>
+
+        <SocialAuthButtons 
+          onGoogleSignIn={handleGoogleSignIn}
+          onAppleSignIn={handleAppleSignIn}
+          isGoogleLoading={isGoogleLoading}
+          isAppleLoading={isAppleLoading}
+        />
       </div>
       
-      <SocialAuthButtons 
-        onAppleSignIn={handleAppleSignIn}
-        onGoogleSignIn={handleGoogleSignIn}
-        isAppleLoading={isAppleLoading}
-        isGoogleLoading={isGoogleLoading}
-        isFormLoading={isLoading}
-      />
-      
-      <div className="mt-6 space-y-4">
-        <SignInLinks />
-        
-        <Alert className="bg-amber-50 border-amber-200 text-amber-800">
-          <AlertCircle className="h-4 w-4 text-amber-500" />
-          <AlertDescription className="text-sm">
-            <span>Having trouble signing in? Please contact support.</span>
-          </AlertDescription>
-        </Alert>
-      </div>
+      <SignInLinks />
     </div>
   );
 };

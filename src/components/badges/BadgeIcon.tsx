@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap } from 'lucide-react';
+import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target } from 'lucide-react';
 
 // Map badge IDs to their respective icons with improved organization
 export const badgeIconMap: Record<string, React.ReactNode> = {
@@ -17,8 +17,11 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
   leader: <Award className="h-5 w-5" />,
   creative: <Wand className="h-5 w-5" />,
   
-  // Additional badge
-  initiative: <Zap className="h-5 w-5" />
+  // Additional badges
+  initiative: <Zap className="h-5 w-5" />,
+  achievement: <Check className="h-5 w-5" />,
+  innovative: <Lightbulb className="h-5 w-5" />,
+  goal_oriented: <Target className="h-5 w-5" />
 };
 
 interface BadgeIconProps {
@@ -27,13 +30,34 @@ interface BadgeIconProps {
   size?: number;
 }
 
-export const BadgeIcon: React.FC<BadgeIconProps> = ({ badgeId, className, size = 5 }) => {
-  // Find the icon in the map, or use a default if not found
-  const IconComponent = badgeIconMap[badgeId] || <Award className={`h-${size} w-${size}`} />;
+export const BadgeIcon: React.FC<BadgeIconProps> = ({ badgeId, className = "", size = 5 }) => {
+  // Get the icon component based on the badgeId
+  const iconElement = badgeIconMap[badgeId];
   
+  // If no matching icon is found, use a default
+  if (!iconElement) {
+    return (
+      <div className={className}>
+        <Award className={`h-${size} w-${size}`} />
+      </div>
+    );
+  }
+  
+  // For existing icons, we need to ensure proper sizing if customized
+  if (size !== 5 && React.isValidElement(iconElement)) {
+    return (
+      <div className={className}>
+        {React.cloneElement(iconElement, {
+          className: `h-${size} w-${size}`
+        })}
+      </div>
+    );
+  }
+  
+  // Return the icon with the original className
   return (
     <div className={className}>
-      {IconComponent}
+      {iconElement}
     </div>
   );
 };

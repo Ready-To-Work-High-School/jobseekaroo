@@ -52,6 +52,16 @@
     0 4px 6px -4px rgba(251, 191, 36, 0.3);
 }
 
+/* Logo hover effect */
+.logo-hover-effect {
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo-hover-effect:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
 @keyframes glow-pulse {
   0% {
     opacity: 0.5;
