@@ -35,7 +35,7 @@ const IndustryCertificationBadge = ({
           className="rounded-lg shadow-lg h-21 md:h-30 w-auto mx-auto relative z-10 object-fill" 
           width={width}
           height={height}
-          loading="lazy"
+          // Removed the loading attribute that was causing the error
         />
         <Badge className="absolute -top-2 -right-2 bg-red-600 text-white shadow-md z-20">Industry Certification</Badge>
       </div>

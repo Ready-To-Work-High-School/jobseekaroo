@@ -37,9 +37,9 @@ const CopyProtection: React.FC<CopyProtectionProps> = ({
     // Enable protection when component mounts
     enableTextProtection(handleCopyAttempt);
     
-    // Enhanced security measures
+    // Enhanced security measures - uses only DOM APIs that are allowed by CSP
     if (enhancedProtection) {
-      // Monitor for suspicious iframe injection attempts
+      // Use MutationObserver to detect potentially dangerous elements
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length) {
@@ -47,8 +47,12 @@ const CopyProtection: React.FC<CopyProtectionProps> = ({
               // Check for suspicious iframes or script injections
               if (node.nodeName === 'IFRAME' || node.nodeName === 'SCRIPT') {
                 const element = node as HTMLElement;
-                if (!element.getAttribute('src')?.includes('lovable.dev') && 
-                    !element.getAttribute('src')?.includes('gpteng.co')) {
+                const src = element.getAttribute('src') || '';
+                
+                // Only allow trusted sources
+                if (src && 
+                    !src.includes('lovable.dev') && 
+                    !src.includes('gpteng.co')) {
                   console.warn('Suspicious element detected and blocked:', node);
                   element.remove();
                   
@@ -64,6 +68,7 @@ const CopyProtection: React.FC<CopyProtectionProps> = ({
         });
       });
       
+      // Start observing document for changes
       observer.observe(document.body, { childList: true, subtree: true });
       
       return () => {

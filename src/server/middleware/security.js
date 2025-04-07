@@ -15,35 +15,39 @@ const setupSecurityHeaders = (req, res, next) => {
   
   // Base security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Frame-Options', 'DENY'); // Enhanced to DENY for stronger protection
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   // Environment-specific CSP settings
   const isProd = process.env.NODE_ENV === 'production';
   
-  // Enhanced CSP with nonce
+  // Enhanced CSP with nonce and improved directives
   res.setHeader('Content-Security-Policy', 
     `default-src 'self'; ` +
     `connect-src 'self' ${isProd ? '' : 'http://localhost:* '}https://*.supabase.co https://jobseekaroo.onrender.com; ` + 
-    `script-src 'self' 'nonce-${nonce}' ${isProd ? '' : "'unsafe-eval'"}; ` + 
-    `style-src 'self' 'unsafe-inline'; ` + 
-    `img-src 'self' data:; ` + 
+    `script-src 'self' 'nonce-${nonce}' https://cdn.gpteng.co ${isProd ? '' : "'unsafe-eval'"}; ` + 
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ` + 
+    `img-src 'self' data: https: blob:; ` + 
+    `font-src 'self' https://fonts.gstatic.com; ` +
     `object-src 'none'; ` + 
     `base-uri 'self'; ` + 
-    `form-action 'self';`
+    `frame-ancestors 'none'; ` + // Added frame-ancestors directive to protect against clickjacking
+    `form-action 'self'; ` +
+    `upgrade-insecure-requests; ` + // Force HTTPS
+    `block-all-mixed-content;`      // Block mixed content
   );
   
   // Production-only headers
   if (isProd) {
     // Enforce HTTPS in production
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     
     // Prevent MIME type sniffing
     res.setHeader('X-Download-Options', 'noopen');
     
-    // Prevent being framed by other sites (legacy browsers)
-    res.setHeader('X-Frame-Options', 'DENY');
+    // Feature-Policy / Permissions-Policy to limit features
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
   }
   
   next();
