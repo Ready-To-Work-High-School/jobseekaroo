@@ -40,11 +40,11 @@ const BadgeGrid = ({ badges }: BadgeGridProps) => {
         height={200}
       />
       
-      {/* Nursing Academy Badge */}
+      {/* Nursing Academy Badge - Updated */}
       <IndustryCertificationBadge
-        imageSrc="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png"
+        imageSrc="/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png"
         name="Nursing Academy"
-        subtitle="CNA certification pathway"
+        subtitle="Westside High School"
         width={200}
         height={200}
       />

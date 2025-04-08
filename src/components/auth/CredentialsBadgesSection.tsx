@@ -73,9 +73,9 @@ const CredentialsBadgesSection = () => {
   };
   
   const nursingBadge = {
-    png: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
-    webp: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp",
-    avif: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif",
+    png: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png", // Updated to new Nursing Academy logo
+    webp: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.webp",
+    avif: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.avif",
   };
   
   return (
@@ -143,11 +143,11 @@ const CredentialsBadgesSection = () => {
             <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
           </div>
           
-          {/* Nursing Badge - with matching effects */}
+          {/* Nursing Badge - Updated with new logo */}
           <div className="flex flex-col items-center">
             <Badge variant="new" className="text-sm py-1 mb-3">
               <Shield className="h-4 w-4 mr-1" />
-              CNA Certification
+              Nursing Academy
             </Badge>
             
             <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
@@ -156,13 +156,13 @@ const CredentialsBadgesSection = () => {
                 src={nursingBadge.png} 
                 webpSrc={nursingBadge.webp}
                 avifSrc={nursingBadge.avif}
-                alt="Nursing Certification" 
+                alt="Nursing Academy" 
                 className="w-full h-full object-contain relative z-10 rounded-md" 
                 width={140}
                 height={140}
               />
             </div>
-            <p className="text-xs text-center mt-2 text-red-800">Certified Nursing Assistant</p>
+            <p className="text-xs text-center mt-2 text-red-800">Westside High School</p>
           </div>
         </div>
         

@@ -92,13 +92,11 @@ const WestsideAcademy = () => {
               Students learn essential healthcare skills and can earn NCLEX certification.
             </p>
             <div className="flex justify-center lg:justify-start">
-              {/* Made nursing badge bigger with glow effect */}
+              {/* Updated nursing badge with glow effect */}
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-400 rounded-lg blur-lg opacity-40 animate-pulse glow-blue-gold"></div>
                 <LazyImage 
-                  src="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png" 
-                  webpSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp"
-                  avifSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif"
+                  src="/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png" 
                   alt="Nursing Academy Certification" 
                   className="h-32 w-auto object-contain relative z-10"
                   width={180}

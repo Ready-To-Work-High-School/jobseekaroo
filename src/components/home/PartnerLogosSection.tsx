@@ -18,7 +18,7 @@ const PartnerLogosSection = () => {
     {
       id: 2,
       name: "Nursing Academy",
-      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Nursing Academy logo
+      logo: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png", // Updated Nursing Academy logo
       width: 180,
       height: 180
     }, 
