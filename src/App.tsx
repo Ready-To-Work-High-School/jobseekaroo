@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Profile from './pages/Profile';
@@ -7,10 +8,9 @@ import { AppRoutes } from './routes';
 import License from './pages/License';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/navigation/ScrollToTop';
-import { BrowserRouter } from 'react-router-dom';
 
 const App = () => (
-  <BrowserRouter>
+  <>
     <ScrollToTop />
     <Routes>
       {/* Use AppRoutes from routes/index.tsx */}
@@ -32,7 +32,7 @@ const App = () => (
       {/* Catch all route for 404s */}
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </BrowserRouter>
+  </>
 );
 
 export default App;
