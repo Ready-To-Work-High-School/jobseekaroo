@@ -82,10 +82,10 @@ const EnhancedHero = () => {
         <Divider className="mb-8">For Students, Employers & Schools</Divider>
       </div>
       
-      {/* Lazy load below-the-fold content */}
+      {/* Top Jacksonville Employers with logos */}
       <Suspense fallback={<SectionSkeleton />}>
         <div className="container mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-6 text-center">Top 10 Employers in Jacksonville</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">Top Employers in Jacksonville</h2>
           <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 6)} />
         </div>
         

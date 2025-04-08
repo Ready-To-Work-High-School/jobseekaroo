@@ -1,5 +1,5 @@
 
-import { Briefcase, Building2 } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 
@@ -20,16 +20,16 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
         <div className="flex justify-between items-center">
           <div className="mr-2 flex items-center gap-2">
             {employer.logoUrl ? (
-              <div className="w-8 h-8 flex items-center justify-center rounded-full overflow-hidden bg-white border">
+              <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden bg-white border">
                 <img 
                   src={employer.logoUrl} 
                   alt={employer.company_name} 
-                  className="h-6 w-auto object-contain" 
+                  className="max-h-8 w-auto object-contain" 
                 />
               </div>
             ) : (
-              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100">
-                <Building2 className="h-4 w-4 text-blue-600" />
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100">
+                <Building2 className="h-5 w-5 text-blue-600" />
               </div>
             )}
             <CardTitle className="text-md font-medium">{employer.company_name}</CardTitle>
@@ -43,7 +43,6 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
             to={`/jobs?keyword=${encodeURIComponent(employer.company_name)}`}
             className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline"
           >
-            <Briefcase className="h-3 w-3" />
             <span className="text-xs">{employer.job_count} jobs</span>
           </Link>
           <div className="text-sm font-semibold text-green-700">

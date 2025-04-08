@@ -26,10 +26,15 @@ const INDUSTRY_MAP: Record<string, string> = {
 };
 
 const LOGO_MAP: Record<string, string> = {
-  'Mayo Clinic': '/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png',
-  'Amazon': '/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png',
-  'Publix': '/lovable-uploads/a585f4d8-beac-4716-bafc-20991924d911.png',
-  'Bank of America': '/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png'
+  'Mayo Clinic': '/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png',
+  'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
+  'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
+  'Bank of America': '/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png',
+  'CSX Transportation': '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png',
+  'Florida Blue': '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png',
+  'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',
+  'Fidelity National Financial': '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png',
+  'Knight': '/lovable-uploads/500d4fef-f22b-43d5-84c4-3cdd2b22ddcf.png'
 };
 
 export const useEmployerData = () => {
@@ -66,7 +71,7 @@ export const useEmployerData = () => {
             avg_min_wage: 22.50, 
             job_count: 12,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/b96e959f-99d4-498f-ba6f-8dd2871db916.png'
+            logoUrl: '/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png'
           },
           { 
             company_name: 'Advent Health', 
@@ -83,19 +88,20 @@ export const useEmployerData = () => {
             last_updated: new Date().toISOString()
           },
           { 
-            company_name: 'Amazon', 
-            industry: 'Technology & Retail', 
+            company_name: 'CSX Transportation', 
+            industry: 'Transportation', 
             avg_min_wage: 20.50, 
             job_count: 15,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png'
+            logoUrl: '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png'
           },
           { 
-            company_name: 'CSX Transportation', 
-            industry: 'Transportation', 
+            company_name: 'Florida Blue', 
+            industry: 'Healthcare & Insurance', 
             avg_min_wage: 19.75, 
             job_count: 5,
-            last_updated: new Date().toISOString()
+            last_updated: new Date().toISOString(),
+            logoUrl: '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png'
           },
           { 
             company_name: 'Publix', 
@@ -103,28 +109,31 @@ export const useEmployerData = () => {
             avg_min_wage: 18.50, 
             job_count: 18,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/a585f4d8-beac-4716-bafc-20991924d911.png' 
+            logoUrl: '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png' 
           },
           { 
-            company_name: 'Nemours Children\'s Health', 
+            company_name: 'Johnson & Johnson Vision', 
             industry: 'Healthcare', 
             avg_min_wage: 18.25, 
             job_count: 6,
-            last_updated: new Date().toISOString()
+            last_updated: new Date().toISOString(),
+            logoUrl: '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png'
           },
           { 
-            company_name: 'Florida Blue', 
-            industry: 'Healthcare & Insurance', 
+            company_name: 'Fidelity National Financial', 
+            industry: 'Financial Services', 
             avg_min_wage: 18.00, 
             job_count: 9,
-            last_updated: new Date().toISOString()
+            last_updated: new Date().toISOString(),
+            logoUrl: '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png'
           },
           { 
-            company_name: 'Johnson & Johnson', 
-            industry: 'Healthcare', 
+            company_name: 'Web.com', 
+            industry: 'Technology', 
             avg_min_wage: 17.50, 
             job_count: 4,
-            last_updated: new Date().toISOString()
+            last_updated: new Date().toISOString(),
+            logoUrl: '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png'
           },
           { 
             company_name: 'Bank of America', 
