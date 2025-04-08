@@ -114,15 +114,25 @@ export const enrollMfa = async () => {
 
 export const verifyMfa = async (code: string, factorId: string) => {
   try {
-    const { data, error } = await supabase.auth.mfa.challengeAndVerify({
+    // Fix: Remove challengeType as it's not in the MFAChallengeAndVerifyParams type
+    // Create a challenge first
+    const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+      factorId
+    });
+    
+    if (challengeError) throw challengeError;
+    
+    // Then verify with the challenge ID
+    const { data, error } = await supabase.auth.mfa.verify({
       factorId,
-      challengeType: 'totp',
+      challengeId: challengeData.id,
       code
     });
     
     if (error) throw error;
     
-    return data.success;
+    // Fix: The response doesn't have a success property directly
+    return true; // If we get here without errors, verification was successful
   } catch (err) {
     console.error('Error verifying MFA:', err);
     return false;
