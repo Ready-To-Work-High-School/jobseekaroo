@@ -9,6 +9,16 @@ const License = () => {
   return (
     <Layout>
       <div className="py-12">
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
+            alt="JS4HS Logo" 
+            className="h-24 w-auto"
+            width="200"
+            height="200"
+          />
+        </div>
+        
         <h1 className="text-3xl font-bold mb-8 text-center">License Agreement</h1>
         
         <div className="max-w-4xl mx-auto mb-8 flex justify-end">
@@ -32,7 +42,7 @@ const License = () => {
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold mb-2">2. License </h2>
+              <h2 className="text-xl font-semibold mb-2">2. License </h2>
               <p>
                 Job Seekers 4 High Schools grants you a limited, non-exclusive, non-transferable, non-sublicensable license to access and use the application for personal, non-commercial purposes. This license does not include any resale or commercial use of the application or its contents; any collection and use of any product listings, descriptions, or prices; any derivative use of the application or its contents; any downloading or copying of account information for the benefit of another merchant; or any use of data mining, robots, or similar data gathering and extraction tools.
               </p>

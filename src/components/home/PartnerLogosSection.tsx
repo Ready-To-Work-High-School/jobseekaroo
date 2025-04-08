@@ -6,48 +6,48 @@ import LazyImage from '@/components/LazyImage';
 
 const PartnerLogosSection = () => {
   // Credential badge data with WebP and AVIF support
-  const industryBadges = [{
-    id: 1,
-    name: "Entrepreneurship & Small Business",
-    logo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png",
-    webpLogo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp", 
-    avifLogo: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif",
-    width: 180,
-    height: 180,
-    isESB: true
-  }, {
-    id: 2,
-    name: "Certified Nursing Assistant",
-    logo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
-    webpLogo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp",
-    avifLogo: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif",
-    width: 180,
-    height: 180
-  }, {
-    id: 3,
-    name: "Microsoft Fundamentals",
-    logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png",
-    webpLogo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.webp",
-    avifLogo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.avif",
-    width: 180,
-    height: 180
-  }, {
-    id: 4,
-    name: "IBM SkillsBuild",
-    logo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.png",
-    webpLogo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.webp",
-    avifLogo: "/lovable-uploads/56ca4b63-43dc-4b12-839f-533334c1e97e.avif",
-    width: 180,
-    height: 180
-  }, {
-    id: 5,
-    name: "Florida Ready to Work",
-    logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
-    webpLogo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.webp",
-    avifLogo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.avif",
-    width: 180,
-    height: 180
-  }];
+  const industryBadges = [
+    {
+      id: 1,
+      name: "Entrepreneurship & Small Business",
+      logo: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png", // Updated to ESB logo
+      width: 180,
+      height: 180,
+      isESB: true
+    }, 
+    {
+      id: 2,
+      name: "Nursing Academy",
+      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Updated to Nursing Academy logo
+      width: 180,
+      height: 180
+    }, 
+    {
+      id: 3,
+      name: "Microsoft Fundamentals",
+      logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png",
+      webpSrc: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.webp",
+      avifSrc: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.avif",
+      width: 180,
+      height: 180
+    }, 
+    {
+      id: 4,
+      name: "IBM SkillsBuild",
+      logo: "/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png", // Updated to IBM SkillsBuild logo
+      width: 180,
+      height: 180
+    }, 
+    {
+      id: 5,
+      name: "Florida Ready to Work",
+      logo: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png",
+      webpSrc: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.webp",
+      avifSrc: "/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.avif",
+      width: 180,
+      height: 180
+    }
+  ];
   
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto bg-yellow-50">
@@ -62,7 +62,8 @@ const PartnerLogosSection = () => {
         </div>
         
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {industryBadges.map(badge => <div key={badge.id} className="flex flex-col items-center group">
+          {industryBadges.map(badge => (
+            <div key={badge.id} className="flex flex-col items-center group">
               <div className="relative mb-3">
                 {/* Enhanced glow effect with multiple layers and slow pulsating animation */}
                 <div className="absolute -inset-3 bg-gradient-to-r from-blue-400 to-blue-300 rounded-lg opacity-0 group-hover:opacity-50 transition-opacity duration-700 blur-xl animate-pulse-slow"></div>
@@ -86,10 +87,8 @@ const PartnerLogosSection = () => {
                   />
                 </div>
                 
-                <LazyImage
+                <img 
                   src={badge.logo}
-                  webpSrc={badge.webpLogo}
-                  avifSrc={badge.avifLogo}
                   alt={`${badge.name} credential`} 
                   className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} 
                   width={badge.width}
@@ -105,7 +104,8 @@ const PartnerLogosSection = () => {
                 </div>
               </div>
               <p className="text-sm font-medium text-center max-w-[140px]">{badge.name}</p>
-            </div>)}
+            </div>
+          ))}
         </div>
       </div>
     </section>;

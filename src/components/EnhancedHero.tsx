@@ -16,6 +16,7 @@ const FeaturesSection = lazy(() => import('@/components/home/FeaturesSection'));
 const TopEmployersSection = lazy(() => import('@/components/job/TopEmployersSection'));
 const SectionSeparator = lazy(() => import('@/components/home/SectionSeparator'));
 const CompanyDirectory = lazy(() => import('./resources/CompanyDirectory'));
+const CredentialBadges = lazy(() => import('./auth/CredentialBadges'));
 
 // Loading fallback component
 const SectionSkeleton = () => (
@@ -58,6 +59,23 @@ const EnhancedHero = () => {
       {/* Hero section is critical for initial render, so not lazy loaded */}
       <HeroSection />
       
+      {/* Prominent JS4HS Logo Display */}
+      <div className="container mx-auto px-4 py-8 text-center">
+        <div className="flex justify-center mb-4">
+          <img 
+            src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
+            alt="JS4HS Logo" 
+            className="h-32 md:h-40 w-auto"
+            width="300"
+            height="300"
+          />
+        </div>
+        <h2 className="text-2xl font-bold">Job Seekers 4 High Schools</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
+          Connecting students with credential-ready opportunities at Westside High School
+        </p>
+      </div>
+      
       {/* Divider with text */}
       <div className="container mx-auto px-4">
         <Separator className="my-8" />
@@ -78,6 +96,7 @@ const EnhancedHero = () => {
       </Suspense>
       
       <Suspense fallback={<SectionSkeleton />}>
+        <CredentialBadges />
         <FeaturesSection />
         <JobPlacementsSection />
         <PartnerLogosSection />

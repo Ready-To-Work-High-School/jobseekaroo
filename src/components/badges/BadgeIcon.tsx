@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target } from 'lucide-react';
+import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target, GraduationCap } from 'lucide-react';
 
 // Map badge IDs to their respective icons with improved organization
 export const badgeIconMap: Record<string, React.ReactNode> = {
@@ -21,7 +21,37 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
   initiative: <Zap className="h-5 w-5" />,
   achievement: <Check className="h-5 w-5" />,
   innovative: <Lightbulb className="h-5 w-5" />,
-  goal_oriented: <Target className="h-5 w-5" />
+  goal_oriented: <Target className="h-5 w-5" />,
+  
+  // School-specific badges
+  js4hs: <div className="h-5 w-5 relative">
+    <img 
+      src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
+      alt="JS4HS" 
+      className="h-full w-full object-contain"
+    />
+  </div>,
+  nursing_academy: <div className="h-5 w-5 relative">
+    <img 
+      src="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png" 
+      alt="Nursing Academy" 
+      className="h-full w-full object-contain"
+    />
+  </div>,
+  esb: <div className="h-5 w-5 relative">
+    <img 
+      src="/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png" 
+      alt="Entrepreneurship & Small Business" 
+      className="h-full w-full object-contain"
+    />
+  </div>,
+  ibm_skillsbuild: <div className="h-5 w-5 relative">
+    <img 
+      src="/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png" 
+      alt="IBM SkillsBuild" 
+      className="h-full w-full object-contain"
+    />
+  </div>
 };
 
 interface BadgeIconProps {

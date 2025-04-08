@@ -21,7 +21,44 @@ const BadgeGrid = ({ badges }: BadgeGridProps) => {
   const optimizedBadges = badges.length > 10 ? badges.slice(0, 10) : badges;
   
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+      {/* JS4HS Logo - Primary Program */}
+      <IndustryCertificationBadge
+        imageSrc="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png"
+        name="Job Seekers 4 High Schools"
+        subtitle="Main program"
+        width={200}
+        height={200}
+      />
+      
+      {/* ESB Badge - Entrepreneurship */}
+      <IndustryCertificationBadge
+        imageSrc="/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png"
+        name="Entrepreneurship &amp; Small Business"
+        subtitle="Industry-recognized credential"
+        width={200}
+        height={200}
+      />
+      
+      {/* Nursing Academy Badge */}
+      <IndustryCertificationBadge
+        imageSrc="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png"
+        name="Nursing Academy"
+        subtitle="CNA certification pathway"
+        width={200}
+        height={200}
+      />
+      
+      {/* IBM SkillsBuild Badge */}
+      <IndustryCertificationBadge
+        imageSrc="/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png"
+        name="AI Foundations"
+        subtitle="IBM SkillsBuild & ISTE"
+        width={200}
+        height={200}
+      />
+      
+      {/* Show other badges if provided */}
       {optimizedBadges.map((badge, index) => (
         <SkillBadge 
           key={index} 
@@ -33,24 +70,6 @@ const BadgeGrid = ({ badges }: BadgeGridProps) => {
           height={badge.height} 
         />
       ))}
-      
-      {/* ESB Badge - Entrepreneurship */}
-      <IndustryCertificationBadge
-        imageSrc="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png"
-        webpSrc="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp"
-        avifSrc="/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif"
-        name="Entrepreneurship &amp; Small Business"
-        subtitle="Industry-recognized credential"
-      />
-      
-      {/* Nursing Academy Badge */}
-      <IndustryCertificationBadge
-        imageSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png"
-        webpSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp"
-        avifSrc="/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif"
-        name="Nursing Assistant"
-        subtitle="CNA certification pathway"
-      />
     </div>
   );
 };
