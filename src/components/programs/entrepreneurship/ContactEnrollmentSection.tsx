@@ -1,5 +1,11 @@
+
 import React from 'react';
+import { sanitizeHtml } from '@/utils/sanitization';
+
 const ContactEnrollmentSection = () => {
+  // Sanitize the email address for safe rendering in href
+  const safeEmail = sanitizeHtml('ColemanP3@duvalschools.org');
+  
   return <section>
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 mb-12 border border-amber-800/30 bg-yellow-100">
         <div className="max-w-3xl mx-auto text-center">
@@ -9,7 +15,10 @@ const ContactEnrollmentSection = () => {
             Contact us today to schedule a visit or speak with our program coordinator.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="mailto:ColemanP3@duvalschools.org" className="inline-flex items-center justify-center px-6 py-3 border border-amber-600 text-base font-medium rounded-md text-amber-200 hover:text-white bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700">
+            <a 
+              href={`mailto:${safeEmail}`} 
+              className="inline-flex items-center justify-center px-6 py-3 border border-amber-600 text-base font-medium rounded-md text-amber-200 hover:text-white bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700"
+            >
               Contact Program Coordinator
             </a>
           </div>
@@ -17,4 +26,5 @@ const ContactEnrollmentSection = () => {
       </div>
     </section>;
 };
+
 export default ContactEnrollmentSection;

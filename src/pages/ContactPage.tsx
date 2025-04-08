@@ -106,6 +106,11 @@ const ContactPage = () => {
     }
   };
   
+  // Display sanitized values or sanitize on demand
+  const displayName = safeName || sanitizeHtml(name);
+  const displayEmail = safeEmail || sanitizeHtml(email, true);
+  const displayMessage = safeMessage || sanitizeHtml(message);
+  
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
