@@ -4,10 +4,10 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Profile from './pages/Profile';
 import EmployerDashboard from './pages/EmployerDashboard';
 import Login from './pages/Login';
-import { AppRoutes } from './routes';
 import License from './pages/License';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/navigation/ScrollToTop';
+import { AppRoutes } from './routes';
 
 const App = () => (
   <>

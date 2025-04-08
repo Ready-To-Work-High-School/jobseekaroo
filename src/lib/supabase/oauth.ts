@@ -2,6 +2,7 @@
 import { supabase } from '@/lib/supabase';
 import { Provider } from '@supabase/supabase-js';
 
+// OAuth sign-in function
 export const signInWithOAuth = async (provider: Provider) => {
   console.log(`Initiating ${provider} sign-in`);
   
@@ -74,4 +75,74 @@ export const signInWithOAuth = async (provider: Provider) => {
     console.error(`${provider} sign-in unexpected error:`, err);
     return { user: null, error: err };
   }
+};
+
+// MFA functions that were missing
+export const checkMfaEnabled = async (userId: string) => {
+  try {
+    const { data, error } = await supabase.auth.mfa.listFactors();
+    
+    if (error) throw error;
+    
+    // Check if there are any verified factors
+    return data.totp.some(factor => factor.status === 'verified');
+  } catch (err) {
+    console.error('Error checking MFA status:', err);
+    return false;
+  }
+};
+
+export const enrollMfa = async () => {
+  try {
+    const { data, error } = await supabase.auth.mfa.enroll({
+      factorType: 'totp',
+    });
+    
+    if (error) throw error;
+    
+    return {
+      factorId: data.id,
+      qrCode: data.totp.qr_code,
+      secret: data.totp.secret,
+      enrollUrl: data.totp.uri
+    };
+  } catch (err) {
+    console.error('Error enrolling in MFA:', err);
+    return null;
+  }
+};
+
+export const verifyMfa = async (code: string, factorId: string) => {
+  try {
+    const { data, error } = await supabase.auth.mfa.challengeAndVerify({
+      factorId,
+      challengeType: 'totp',
+      code
+    });
+    
+    if (error) throw error;
+    
+    return data.success;
+  } catch (err) {
+    console.error('Error verifying MFA:', err);
+    return false;
+  }
+};
+
+export const unenrollMfa = async (factorId: string) => {
+  try {
+    const { data, error } = await supabase.auth.mfa.unenroll({ factorId });
+    
+    if (error) throw error;
+    
+    return true;
+  } catch (err) {
+    console.error('Error unenrolling MFA:', err);
+    return false;
+  }
+};
+
+// Optional helper to check network status for OAuth operations
+export const checkNetworkStatus = () => {
+  return navigator.onLine;
 };

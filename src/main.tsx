@@ -1,10 +1,11 @@
 
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import { ThemeProvider } from './contexts/ThemeContext';
+import App from './App';
 
 import './styles/index.css';
 
@@ -27,20 +28,21 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy load the App component
-const App = lazy(() => import('./App'));
-
 // Wait for the DOM to be fully loaded before rendering
 const renderApp = () => {
-  ReactDOM.createRoot(document.getElementById('root')!).render(
+  const root = document.getElementById('root');
+  if (!root) {
+    console.error('Root element not found');
+    return;
+  }
+
+  ReactDOM.createRoot(root).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ThemeProvider>
             <BrowserRouter>
-              <Suspense fallback={<LoadingFallback />}>
-                <App />
-              </Suspense>
+              <App />
             </BrowserRouter>
           </ThemeProvider>
         </AuthProvider>
@@ -50,31 +52,8 @@ const renderApp = () => {
 };
 
 // Use either requestIdleCallback or setTimeout to defer non-critical initialization
-if ('requestIdleCallback' in window) {
-  window.requestIdleCallback(() => {
-    renderApp();
-  });
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderApp);
 } else {
-  // Fallback for browsers that don't support requestIdleCallback
-  setTimeout(renderApp, 0);
-}
-
-// Preload additional routes after initial render
-const preloadRoutes = () => {
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(() => {
-      // Preload important routes that might be visited next
-      import('./pages/JobListings');
-      import('./pages/Resources');
-    }, { timeout: 3000 }); // Set a timeout to ensure it runs within 3 seconds
-  }
-};
-
-// Run preload after the app has mounted
-if (document.readyState === 'complete') {
-  setTimeout(preloadRoutes, 2000);
-} else {
-  window.addEventListener('load', () => {
-    setTimeout(preloadRoutes, 2000);
-  });
+  renderApp();
 }
