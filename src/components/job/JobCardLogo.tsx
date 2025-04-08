@@ -14,13 +14,13 @@ const JobCardLogo = ({ logoUrl, companyName, useAmberStyling }: JobCardLogoProps
   if (logoUrl) {
     return (
       <div 
-        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-muted flex-shrink-0`}
+        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-md ${useAmberStyling ? 'border-amber-400' : 'border-border'} border overflow-hidden bg-white flex-shrink-0 flex items-center justify-center`}
         aria-hidden="true"
       >
         <LazyImage
           src={logoUrl}
           alt={`${companyName} logo`}
-          className="w-full h-full object-contain relative z-10 rounded-md"
+          className="max-h-10 max-w-10 sm:max-h-11 sm:max-w-11 object-contain relative z-10"
           onLoad={() => setImageLoaded(true)}
           width="48"
           height="48"

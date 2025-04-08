@@ -74,33 +74,33 @@ export const topJacksonvilleCompanies: Company[] = [
     industry: "Technology",
     icon: MapPin,
     website: "https://www.web.com/careers",
-    logoUrl: "/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png"
+    logoUrl: "/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png"
   },
   {
-    name: "Black Knight Financial Services",
-    location: "601 Riverside Ave, Jacksonville, FL 32204",
+    name: "Baptist Health",
+    location: "841 Prudential Dr, Jacksonville, FL 32207",
     salaryRange: "$65,000 - $135,000",
-    industry: "Financial Technology",
+    industry: "Healthcare",
     icon: MapPin,
-    website: "https://www.blackknightinc.com/careers/",
-    logoUrl: ""
+    website: "https://www.baptistjax.com/careers",
+    logoUrl: "/lovable-uploads/7358ed5d-5e1f-401b-b378-0f7679ff7802.png"
   },
   {
-    name: "Deutsche Bank",
+    name: "American Express",
     location: "5022 Gate Pkwy, Jacksonville, FL 32256",
     salaryRange: "$75,000 - $155,000",
-    industry: "Banking",
+    industry: "Finance",
     icon: MapPin,
-    website: "https://careers.db.com/",
-    logoUrl: ""
+    website: "https://careers.americanexpress.com/",
+    logoUrl: "/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png"
   },
   {
-    name: "Acosta Sales & Marketing",
+    name: "UnitedHealthcare",
     location: "6600 Corporate Center Pkwy, Jacksonville, FL 32216",
-    salaryRange: "$55,000 - $125,000",
-    industry: "Marketing",
+    salaryRange: "$68,000 - $140,000",
+    industry: "Healthcare",
     icon: MapPin,
-    website: "https://www.acosta.com/careers",
-    logoUrl: ""
+    website: "https://careers.unitedhealthgroup.com/",
+    logoUrl: "/lovable-uploads/84397b4a-da78-47d9-9ed4-daa193847fd7.png"
   }
 ];

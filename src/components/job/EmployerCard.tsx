@@ -23,8 +23,8 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
               <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden bg-white border">
                 <img 
                   src={employer.logoUrl} 
-                  alt={employer.company_name} 
-                  className="max-h-8 w-auto object-contain" 
+                  alt={`${employer.company_name} logo`} 
+                  className="max-h-8 max-w-8 w-auto h-auto object-contain" 
                 />
               </div>
             ) : (
