@@ -26,7 +26,7 @@ const LazyImage = ({
   className = '',
   width,
   height,
-  placeholderSrc = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
+  placeholderSrc = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='7'%3E%3C/circle%3E%3Cpolyline points='8.21 13.89 7 23 12 20 17 23 15.79 13.88'%3E%3C/polyline%3E%3C/svg%3E",
   onLoad,
   priority = false,
   webpSrc,
@@ -116,6 +116,9 @@ const LazyImage = ({
       }
     }
     
+    // Don't generate srcset if baseSrc contains a placeholder or data URI
+    if (baseSrc.startsWith('data:')) return '';
+    
     // Extract file name and extension
     const lastDotIndex = baseSrc.lastIndexOf('.');
     if (lastDotIndex === -1) return ''; // No extension found
@@ -136,7 +139,7 @@ const LazyImage = ({
     height: height,
     loading: priority ? "eager" as const : "lazy" as const,
     fetchPriority: priority ? "high" as const : "auto" as const,
-    decoding: priority ? "sync" as const : "async" as const,
+    decoding: "async" as const,
     onLoad: handleImageLoad,
     onError: handleImageError,
     sizes: sizes,
@@ -148,19 +151,19 @@ const LazyImage = ({
   if (avifSrc || webpSrc) {
     return (
       <picture>
-        {avifSrc && <source 
+        {avifSrc && !hasError && <source 
           srcSet={generateSrcset(avifSrc)} 
           type="image/avif" 
           sizes={sizes}
         />}
-        {webpSrc && <source 
+        {webpSrc && !hasError && <source 
           srcSet={generateSrcset(webpSrc)} 
           type="image/webp" 
           sizes={sizes}
         />}
         <img
-          src={hasError ? placeholderSrc : imageSrc}
-          srcSet={generateSrcset(src)}
+          src={imageSrc}
+          srcSet={!hasError ? generateSrcset(src) : undefined}
           {...imageAttributes}
         />
       </picture>
@@ -170,8 +173,8 @@ const LazyImage = ({
   // Fall back to standard img if no modern formats provided
   return (
     <img
-      src={hasError ? placeholderSrc : imageSrc}
-      srcSet={generateSrcset(src)}
+      src={imageSrc}
+      srcSet={!hasError ? generateSrcset(src) : undefined}
       {...imageAttributes}
     />
   );

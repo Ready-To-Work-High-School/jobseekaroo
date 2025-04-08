@@ -65,9 +65,15 @@ const EnhancedHero = () => {
           <img 
             src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
             alt="JS4HS Logo" 
-            className="h-32 md:h-40 w-auto"
+            className="h-32 md:h-40 w-auto object-contain"
             width="300"
             height="300"
+            loading="eager"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='7'%3E%3C/circle%3E%3Cpolyline points='8.21 13.89 7 23 12 20 17 23 15.79 13.88'%3E%3C/polyline%3E%3C/svg%3E";
+            }}
           />
         </div>
         <h2 className="text-2xl font-bold">Job Seekers 4 High Schools</h2>
