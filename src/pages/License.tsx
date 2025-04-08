@@ -1,10 +1,13 @@
+
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, School, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 const License = () => {
-  return <Layout>
+  return (
+    <Layout>
       <div className="py-12">
         <h1 className="text-3xl font-bold mb-8 text-center">License Agreement</h1>
         
@@ -92,9 +95,6 @@ const License = () => {
                         <li><span className="font-semibold">Enterprise:</span> $10 per student/year - Volume-based pricing for larger institutions</li>
                       </ul>
                       
-                      
-                      
-                      
                       <p className="text-sm">
                         For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseekers4highschools.com" className="text-primary hover:underline">education@jobseekers4highschools.com</a>
                       </p>
@@ -136,6 +136,8 @@ const License = () => {
           </p>
         </div>
       </div>
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default License;

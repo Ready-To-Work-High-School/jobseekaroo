@@ -43,11 +43,11 @@ export const BadgeIcon: React.FC<BadgeIconProps> = ({ badgeId, className = "", s
     );
   }
   
-  // For existing icons, we need to ensure proper sizing if customized
+  // Fix the TypeScript error by properly handling the clone element type
   if (size !== 5 && React.isValidElement(iconElement)) {
     return (
       <div className={className}>
-        {React.cloneElement(iconElement as React.ReactElement<any>, {
+        {React.cloneElement(iconElement as React.ReactElement, {
           className: `h-${size} w-${size}`
         })}
       </div>
