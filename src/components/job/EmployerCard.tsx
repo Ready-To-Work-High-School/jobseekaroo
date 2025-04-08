@@ -25,6 +25,7 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
                   src={employer.logoUrl} 
                   alt={`${employer.company_name} logo`} 
                   className="max-h-8 max-w-8 w-auto h-auto object-contain" 
+                  loading="lazy"
                 />
               </div>
             ) : (

@@ -67,15 +67,15 @@ const CredentialBadges = () => {
   ];
   
   const esbBadge = {
-    png: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.png",
-    webp: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.webp",
-    avif: "/lovable-uploads/92527ccc-ba6d-4860-99fb-a70c0c3955b6.avif",
+    png: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png",
+    webp: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.webp",
+    avif: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.avif",
   };
   
   const nursingBadge = {
-    png: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.png",
-    webp: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.webp",
-    avif: "/lovable-uploads/e624fc50-435f-4c99-96dc-bbace0660393.avif",
+    png: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png",
+    webp: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.webp",
+    avif: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.avif",
   };
   
   return (
@@ -138,6 +138,7 @@ const CredentialBadges = () => {
                 className="w-full h-full object-contain relative z-10 rounded-md" 
                 width={140}
                 height={140}
+                priority={true}
               />
             </div>
             <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
@@ -160,6 +161,7 @@ const CredentialBadges = () => {
                 className="w-full h-full object-contain relative z-10 rounded-md" 
                 width={140}
                 height={140}
+                priority={true}
               />
             </div>
             <p className="text-xs text-center mt-2 text-red-800">Certified Nursing Assistant</p>

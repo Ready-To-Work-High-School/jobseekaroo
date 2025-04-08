@@ -95,6 +95,15 @@ export const topJacksonvilleCompanies: Company[] = [
     logoUrl: "/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png"
   },
   {
+    name: "Bank of America",
+    location: "6600 Corporate Center Pkwy, Jacksonville, FL 32216",
+    salaryRange: "$68,000 - $140,000",
+    industry: "Finance",
+    icon: MapPin,
+    website: "https://careers.bankofamerica.com/",
+    logoUrl: "/lovable-uploads/c71583b7-2543-47d9-9ac4-a4f9582752bd.png"
+  },
+  {
     name: "UnitedHealthcare",
     location: "6600 Corporate Center Pkwy, Jacksonville, FL 32216",
     salaryRange: "$68,000 - $140,000",

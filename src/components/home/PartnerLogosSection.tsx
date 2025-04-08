@@ -10,7 +10,7 @@ const PartnerLogosSection = () => {
     {
       id: 1,
       name: "Entrepreneurship & Small Business",
-      logo: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png", // Updated to ESB logo
+      logo: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png", // ESB logo
       width: 180,
       height: 180,
       isESB: true
@@ -18,7 +18,7 @@ const PartnerLogosSection = () => {
     {
       id: 2,
       name: "Nursing Academy",
-      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Updated to Nursing Academy logo
+      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Nursing Academy logo
       width: 180,
       height: 180
     }, 
@@ -34,7 +34,7 @@ const PartnerLogosSection = () => {
     {
       id: 4,
       name: "IBM SkillsBuild",
-      logo: "/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png", // Updated to IBM SkillsBuild logo
+      logo: "/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png", // IBM SkillsBuild logo
       width: 180,
       height: 180
     }, 
@@ -50,7 +50,7 @@ const PartnerLogosSection = () => {
   ];
   
   return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
-      <div className="container px-4 mx-auto bg-yellow-50">
+      <div className="container px-4 mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <BadgeCheck className="h-5 w-5 text-blue-600" />
@@ -87,12 +87,15 @@ const PartnerLogosSection = () => {
                   />
                 </div>
                 
-                <img 
+                <LazyImage 
                   src={badge.logo}
+                  webpSrc={badge.webpSrc}
+                  avifSrc={badge.avifSrc}
                   alt={`${badge.name} credential`} 
                   className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} 
                   width={badge.width}
                   height={badge.height}
+                  priority={true}
                 />
                 
                 {/* Ribbon-style badge for all credentials */}
