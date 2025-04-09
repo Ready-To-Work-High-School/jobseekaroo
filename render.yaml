@@ -25,3 +25,5 @@ services:
       - path: /*
         name: Vary
         value: Accept-Encoding
+    healthCheckPath: /health
+    autoDeploy: true

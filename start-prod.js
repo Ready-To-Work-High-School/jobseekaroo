@@ -15,6 +15,7 @@ const server = spawn('node', ['server.js'], {
 console.log('Running production server...');
 console.log(`Server available at: http://localhost:${process.env.PORT || 5000}`);
 console.log(`API available at: http://localhost:${process.env.PORT || 5000}/api/status`);
+console.log(`Health check at: http://localhost:${process.env.PORT || 5000}/health`);
 
 // Handle process termination
 process.on('SIGINT', () => {
