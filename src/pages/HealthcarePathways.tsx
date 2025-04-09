@@ -15,7 +15,7 @@ const HealthcarePathways = () => {
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-amber-600 bg-clip-text text-transparent">
               Pathways into Healthcare Careers Florida Program
             </h1>
             <div className="flex items-center justify-center gap-2">
@@ -32,12 +32,12 @@ const HealthcarePathways = () => {
                 Hosted by the Mayo Clinic School of Health Sciences
               </p>
             </div>
-            <Badge className="mt-4 bg-red-600 hover:bg-red-700">Summer 2025</Badge>
+            <Badge className="mt-4 bg-amber-600 hover:bg-amber-700">Summer 2025</Badge>
           </div>
 
           {/* Program Overview */}
           <Card className="mb-8 shadow-md border-blue-200">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-red-50">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-amber-50">
               <CardTitle className="text-xl text-blue-800">Program Overview</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -84,9 +84,9 @@ const HealthcarePathways = () => {
             </Card>
 
             <Card className="shadow-md">
-              <CardHeader className="bg-red-50">
+              <CardHeader className="bg-amber-50">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-red-600" />
+                  <FileText className="h-5 w-5 text-amber-600" />
                   Application Information
                 </CardTitle>
               </CardHeader>
@@ -95,13 +95,13 @@ const HealthcarePathways = () => {
                   <strong>Application Period:</strong> March 1 – May 15, 2025
                 </p>
                 <div className="flex flex-col gap-3 mt-4">
-                  <Button className="gap-2" asChild>
+                  <Button className="gap-2 bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" asChild>
                     <a href="https://college.mayo.edu/academics/health-sciences-education/pathways-into-healthcare-careers-program-florida" target="_blank" rel="noopener noreferrer">
                       Apply Now
                       <ExternalLink className="h-4 w-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="gap-2 border-amber-300 text-blue-700" asChild>
                     <a href="/pdf/healthcare-pathways-program.pdf" download>
                       Download Program PDF
                       <Download className="h-4 w-4" />
@@ -114,7 +114,7 @@ const HealthcarePathways = () => {
 
           {/* Why Consider a Healthcare Career */}
           <Card className="mb-8 shadow-md border-blue-200">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-red-50">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-amber-50">
               <CardTitle className="text-xl text-blue-800">Why Consider a Healthcare Career?</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -132,7 +132,7 @@ const HealthcarePathways = () => {
           </Card>
 
           <div className="text-center mt-10">
-            <Button className="gap-2" size="lg" asChild>
+            <Button className="gap-2 bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" size="lg" asChild>
               <a href="https://college.mayo.edu/academics/health-sciences-education/pathways-into-healthcare-careers-program-florida" target="_blank" rel="noopener noreferrer">
                 Learn More and Apply
                 <ExternalLink className="h-4 w-4" />

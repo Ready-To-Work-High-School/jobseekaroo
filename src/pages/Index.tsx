@@ -27,11 +27,11 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8 relative overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute -left-24 -top-24 w-96 h-96 rounded-full bg-blue-100/30 blur-3xl"></div>
-          <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-red-100/30 blur-3xl"></div>
+          <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-amber-100/30 blur-3xl"></div>
           
           <div className="relative z-10 text-center mb-8">
-            <Badge className="mb-2 bg-red-600 hover:bg-red-700">Featured Summer Opportunity</Badge>
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
+            <Badge className="mb-2 bg-amber-600 hover:bg-amber-700">Featured Summer Opportunity</Badge>
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-amber-600 bg-clip-text text-transparent">
               Mayo Clinic's Pathways into Healthcare Careers
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -43,7 +43,7 @@ const Index = () => {
             <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Heart className="h-8 w-8 text-red-600" />
+                  <Heart className="h-8 w-8 text-amber-600" />
                   <h3 className="text-xl font-bold">Program Highlights:</h3>
                 </div>
                 <ul className="space-y-2 mb-6">
@@ -64,11 +64,11 @@ const Index = () => {
                     <span>No cost to attend, free meals provided</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700" asChild>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" asChild>
                   <Link to="/healthcare-pathways">Learn More</Link>
                 </Button>
               </div>
-              <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-red-600 text-white p-6">
+              <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-amber-600 text-white p-6">
                 <div className="h-full flex flex-col justify-between">
                   <div>
                     <h4 className="text-xl font-bold mb-4">Program Details</h4>
@@ -120,13 +120,13 @@ const Index = () => {
             
             {/* Healthcare Pathways Program */}
             <Card className="shadow-md hover:shadow-lg transition-all duration-300 border-blue-200 transform scale-105 z-10">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-amber-50">
                 <CardTitle className="text-lg text-blue-800">Healthcare Pathways</CardTitle>
-                <Badge className="bg-red-600 hover:bg-red-700">Summer 2025</Badge>
+                <Badge className="bg-amber-600 hover:bg-amber-700">Summer 2025</Badge>
               </CardHeader>
               <CardContent className="pt-4">
                 <p className="mb-4 text-sm">Mayo Clinic's 3-day immersive program exploring allied healthcare careers.</p>
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700" asChild>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" asChild>
                   <Link to="/healthcare-pathways" className="flex items-center justify-center gap-2">
                     <Heart className="h-4 w-4" />
                     Learn More
