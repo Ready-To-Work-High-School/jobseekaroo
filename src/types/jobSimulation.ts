@@ -41,4 +41,5 @@ export type SimulationCredential = {
   simulation_id: string;
   issue_date: string;
   certificate_id: string;
+  job_simulations?: JobSimulation; // Add this for joined queries
 };

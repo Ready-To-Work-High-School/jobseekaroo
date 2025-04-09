@@ -91,7 +91,8 @@ export const startSimulation = async (
         simulation_id: simulationId,
         current_task_id: firstTaskId,
         progress_percentage: 0,
-        completed: false
+        completed: false,
+        started_at: new Date().toISOString()
       }
     ])
     .select()

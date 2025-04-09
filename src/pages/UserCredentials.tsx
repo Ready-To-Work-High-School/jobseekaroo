@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Award, Calendar, CheckCircle, Download, ExternalLink } from 'lucide-react';
 import { getUserCredentials } from '@/lib/supabase/simulations';
 import { jobSimulationsPath } from '@/lib/utils';
+import { SimulationCredential } from '@/types/jobSimulation';
 
 const UserCredentials = () => {
   const fadeIn = useFadeIn(300);
@@ -79,7 +80,7 @@ const UserCredentials = () => {
             </div>
           ) : credentials && credentials.length > 0 ? (
             <div className="space-y-6">
-              {credentials.map(credential => (
+              {credentials.map((credential: SimulationCredential & { job_simulations?: any }) => (
                 <Card key={credential.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
@@ -87,7 +88,7 @@ const UserCredentials = () => {
                         <div className="p-2 rounded-full bg-blue-100">
                           <Award className="h-5 w-5 text-blue-700" />
                         </div>
-                        <CardTitle>{credential.job_simulations.title}</CardTitle>
+                        <CardTitle>{credential.job_simulations?.title || 'Job Simulation'}</CardTitle>
                       </div>
                       <Badge>
                         Certificate #{credential.certificate_id.split('-')[1]}
@@ -100,13 +101,15 @@ const UserCredentials = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="mb-4">
-                      This certifies that you have successfully completed the {credential.job_simulations.title} simulation
+                      This certifies that you have successfully completed the {credential.job_simulations?.title || 'job simulation'} simulation
                       and demonstrated proficiency in the required skills.
                     </p>
                     <div className="flex flex-wrap gap-1 mb-2">
-                      {credential.job_simulations.skills_gained.map((skill, i) => (
+                      {credential.job_simulations?.skills_gained?.map((skill: string, i: number) => (
                         <Badge key={i} variant="secondary">{skill}</Badge>
-                      ))}
+                      )) || (
+                        <Badge variant="secondary">Simulation Skills</Badge>
+                      )}
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-between">
