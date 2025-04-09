@@ -17,46 +17,26 @@ import DOMPurify from 'dompurify';
  */
 export const sanitizeHtml = (input: string | null | undefined, isEmail = false): string => {
   if (input == null) return '';
-  
-  // Use DOMPurify for client-side sanitization
+
   if (typeof window !== 'undefined') {
-    // For emails, we need special handling
-    if (isEmail) {
-      const str = String(input);
-      // Extract email more carefully - remove all HTML and script content
-      // This is a more aggressive approach specifically for emails
-      return str.replace(/<[^>]*>|javascript:|on\w+=|data:/gi, '');
-    }
-    
     return DOMPurify.sanitize(String(input), {
       USE_PROFILES: { html: true },
-      FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link', 'svg'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href', 'src', 'formaction', 'on*']
+      FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href']
     });
   }
-  
-  // Special handling for emails
+
   const str = String(input);
   if (isEmail) {
     // For emails, strip all HTML and validate later
-    return str.replace(/<[^>]*>|javascript:|on\w+=|data:/gi, ''); // Remove tags entirely
+    return str.replace(/<[^>]*>/g, ''); // Remove tags entirely
   }
-  
-  // Fallback to basic sanitization for SSR contexts
+
   return str
-    // Replace < and > with HTML entities
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    // Replace quotes to prevent attribute breaking
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    // Replace parentheses to prevent JavaScript execution
-    .replace(/\(/g, '&#40;')
-    .replace(/\)/g, '&#41;')
-    // Replace equals sign to prevent attribute assignment
-    .replace(/=/g, '&#61;')
-    // Replace backticks to prevent template literals
-    .replace(/`/g, '&#96;');
+    .replace(/'/g, '&#x27;');
 };
 
 /**
@@ -165,3 +145,4 @@ export const sanitizeSqlValue = (value: string): string => {
     .replace(/\0/g, "") // Remove null bytes
     .replace(/\x1a/g, ""); // Remove ASCII 26 (Substitute) character
 };
+
