@@ -19,7 +19,7 @@ export type SimulationTask = {
   title: string;
   description: string;
   order_number: number;
-  content: Record<string, any>;
+  content: Record<string, any> | string | any; // Updated to accept Json type from Supabase
   created_at: string;
   updated_at: string;
 };
