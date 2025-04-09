@@ -8,6 +8,8 @@ import License from '@/pages/License';
 import FirstJobToolkit from '@/pages/FirstJobToolkit';
 import EnhancedJobListings from '@/pages/EnhancedJobListings';
 import JobSimulations from '@/pages/JobSimulations';
+import SimulationDetail from '@/pages/SimulationDetail';
+import UserCredentials from '@/pages/UserCredentials';
 import StudentSuccess from '@/pages/StudentSuccess';
 import SchoolLanding from '@/pages/SchoolLanding';
 import EntrepreneurshipAcademy from '@/pages/EntrepreneurshipAcademy';
@@ -24,6 +26,8 @@ const SharedRoutes = (
     <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
     <Route path="/enhanced-job-listings" element={<EnhancedJobListings />} />
     <Route path="/job-simulations" element={<JobSimulations />} />
+    <Route path="/job-simulations/:id" element={<SimulationDetail />} />
+    <Route path="/credentials" element={<UserCredentials />} />
     <Route path="/student-success" element={<StudentSuccess />} />
     <Route path="/school-landing" element={<SchoolLanding />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />

@@ -3,8 +3,28 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Blocks, Briefcase, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth';
+import { useEffect, useState } from 'react';
+import { getJobSimulations } from '@/lib/supabase/simulations';
+import { JobSimulation } from '@/types/jobSimulation';
 
 const JobSimulationsCard = () => {
+  const { user } = useAuth();
+  const [simCount, setSimCount] = useState<number>(0);
+  
+  useEffect(() => {
+    const fetchSimulationCount = async () => {
+      try {
+        const simulations = await getJobSimulations();
+        setSimCount(simulations.length);
+      } catch (error) {
+        console.error("Error fetching simulations count:", error);
+      }
+    };
+    
+    fetchSimulationCount();
+  }, []);
+
   return (
     <Card className="shadow-md border-l-4 border-l-blue-500 hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
@@ -38,7 +58,7 @@ const JobSimulationsCard = () => {
             <div>
               <h4 className="font-medium text-sm">Individual Sims</h4>
               <p className="text-xs text-muted-foreground">
-                Develop specific skills for your target job
+                {simCount} simulations available to build your skills
               </p>
             </div>
           </div>

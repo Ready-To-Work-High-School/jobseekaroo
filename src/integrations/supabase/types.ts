@@ -278,6 +278,48 @@ export type Database = {
         }
         Relationships: []
       }
+      job_simulations: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          difficulty: string
+          duration: string
+          id: string
+          requirements: string[] | null
+          skills_gained: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          difficulty: string
+          duration: string
+          id?: string
+          requirements?: string[] | null
+          skills_gained?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          difficulty?: string
+          duration?: string
+          id?: string
+          requirements?: string[] | null
+          skills_gained?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       jobs: {
         Row: {
           company_name: string
@@ -846,6 +888,79 @@ export type Database = {
         }
         Relationships: []
       }
+      simulation_credentials: {
+        Row: {
+          certificate_id: string
+          id: string
+          issue_date: string
+          simulation_id: string
+          user_id: string
+        }
+        Insert: {
+          certificate_id: string
+          id?: string
+          issue_date?: string
+          simulation_id: string
+          user_id: string
+        }
+        Update: {
+          certificate_id?: string
+          id?: string
+          issue_date?: string
+          simulation_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_credentials_simulation_id_fkey"
+            columns: ["simulation_id"]
+            isOneToOne: false
+            referencedRelation: "job_simulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      simulation_tasks: {
+        Row: {
+          content: Json
+          created_at: string
+          description: string
+          id: string
+          order_number: number
+          simulation_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          description: string
+          id?: string
+          order_number: number
+          simulation_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          description?: string
+          id?: string
+          order_number?: number
+          simulation_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_tasks_simulation_id_fkey"
+            columns: ["simulation_id"]
+            isOneToOne: false
+            referencedRelation: "job_simulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       skill_resources: {
         Row: {
           created_at: string
@@ -896,6 +1011,54 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      user_simulation_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          current_task_id: string | null
+          id: string
+          progress_percentage: number
+          simulation_id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          current_task_id?: string | null
+          id?: string
+          progress_percentage?: number
+          simulation_id: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          current_task_id?: string | null
+          id?: string
+          progress_percentage?: number
+          simulation_id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_simulation_progress_current_task_id_fkey"
+            columns: ["current_task_id"]
+            isOneToOne: false
+            referencedRelation: "simulation_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_simulation_progress_simulation_id_fkey"
+            columns: ["simulation_id"]
+            isOneToOne: false
+            referencedRelation: "job_simulations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_skills: {
         Row: {

@@ -3,8 +3,19 @@ import React from 'react';
 import { Blocks, Monitor, Briefcase, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth';
+import { useQuery } from '@tanstack/react-query';
+import { getJobSimulations } from '@/lib/supabase/simulations';
 
 const JobSimulationsSection = () => {
+  const { user } = useAuth();
+  
+  const { data: simulations } = useQuery({
+    queryKey: ['jobSimulations'],
+    queryFn: getJobSimulations,
+    enabled: true,
+  });
+
   return (
     <section className="py-16 bg-gradient-to-r from-slate-50 to-blue-50">
       <div className="container mx-auto px-4">
@@ -56,27 +67,23 @@ const JobSimulationsSection = () => {
               <div className="flex items-center justify-between mb-4">
                 <Briefcase className="h-8 w-8 text-blue-600" />
                 <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">
-                  100% Free
+                  For Students
                 </span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Virtual Work Experience</h3>
               <ul className="space-y-2 mb-4">
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  Marketing & Business simulations
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  Tech & Data Science programs
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  Finance & Accounting projects
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  Engineering & Product roles
-                </li>
+                {simulations?.slice(0, 4).map((sim, index) => (
+                  <li key={sim.id} className="flex items-center gap-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span className="truncate">{sim.title}</span>
+                  </li>
+                ))}
+                {!simulations && Array(4).fill(0).map((_, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="animate-pulse bg-gray-200 h-4 rounded w-full"></span>
+                  </li>
+                ))}
               </ul>
               <p className="text-sm text-muted-foreground mb-4">
                 Gain valuable skills and experience that you can add directly to your resume.

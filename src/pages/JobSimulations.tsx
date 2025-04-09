@@ -1,5 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/contexts/auth';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "sonner";
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,61 +11,53 @@ import { Button } from '@/components/ui/button';
 import { Blocks, Briefcase, GraduationCap, BookOpen, CheckCircle, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { getJobSimulations, getUserSimulationProgress, startSimulation } from '@/lib/supabase/simulations';
+import { JobSimulation } from '@/types/jobSimulation';
 
 const JobSimulations = () => {
   const fadeIn = useFadeIn(300);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Sample simulations data
-  const careerPaths = [
-    {
-      title: "Marketing & Business",
-      description: "Learn marketing strategies, business operations and customer analysis.",
-      skills: ["Digital Marketing", "Market Research", "Business Strategy", "Customer Analysis"],
-      icon: <Briefcase className="h-10 w-10 text-amber-600" />,
-      color: "border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100"
-    },
-    {
-      title: "Technology & Software",
-      description: "Develop coding skills, learn software design and technical problem-solving.",
-      skills: ["Programming", "Software Design", "Product Development", "Testing"],
-      icon: <Blocks className="h-10 w-10 text-blue-600" />,
-      color: "border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100"
-    },
-    {
-      title: "Finance & Accounting",
-      description: "Learn financial analysis, accounting principles and investment strategies.",
-      skills: ["Financial Analysis", "Accounting", "Investment Analysis", "Risk Management"],
-      icon: <BookOpen className="h-10 w-10 text-green-600" />,
-      color: "border-green-200 bg-gradient-to-br from-green-50 to-green-100"
-    }
-  ];
+  // Fetch all job simulations
+  const { data: simulations, isLoading } = useQuery({
+    queryKey: ['jobSimulations'],
+    queryFn: getJobSimulations,
+  });
 
-  const individualSimulations = [
-    {
-      title: "Marketing Campaign Development",
-      duration: "4 weeks",
-      difficulty: "Beginner",
-      category: "Marketing"
-    },
-    {
-      title: "Financial Statement Analysis",
-      duration: "3 weeks",
-      difficulty: "Intermediate",
-      category: "Finance"
-    },
-    {
-      title: "Web Application Development",
-      duration: "6 weeks",
-      difficulty: "Advanced",
-      category: "Technology"
-    },
-    {
-      title: "Customer Experience Analysis",
-      duration: "2 weeks",
-      difficulty: "Beginner",
-      category: "Business"
+  // Handle starting a simulation
+  const handleStartSimulation = async (simulation: JobSimulation) => {
+    if (!user) {
+      toast.error("Please sign in to start a simulation", {
+        description: "You need to be signed in to track your progress"
+      });
+      return;
     }
-  ];
+    
+    try {
+      await startSimulation(user.id, simulation.id);
+      toast.success(`Started: ${simulation.title}`, {
+        description: "Your progress will be saved automatically"
+      });
+      navigate(`/job-simulations/${simulation.id}`);
+    } catch (error) {
+      console.error("Error starting simulation:", error);
+      toast.error("Failed to start simulation", {
+        description: "Please try again later"
+      });
+    }
+  };
+
+  // Filter simulations by category
+  const filteredSimulations = selectedCategory === 'all' 
+    ? simulations 
+    : simulations?.filter(sim => sim.category === selectedCategory);
+
+  // Get unique categories
+  const categories = simulations 
+    ? ['all', ...new Set(simulations.map(sim => sim.category))]
+    : ['all'];
 
   return (
     <Layout>
@@ -112,41 +108,19 @@ const JobSimulations = () => {
           </div>
         </div>
 
-        {/* Career Paths Section */}
-        <div className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">Career Paths</h2>
-            <Button variant="outline" size="sm">View All Paths</Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {careerPaths.map((path, index) => (
-              <Card key={index} className={`shadow-md hover:shadow-lg transition-shadow ${path.color}`}>
-                <CardHeader>
-                  <div className="flex items-center justify-center mb-4">
-                    {path.icon}
-                  </div>
-                  <CardTitle className="text-xl text-center">{path.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-4">{path.description}</p>
-                  
-                  <div className="mb-4">
-                    <h4 className="font-semibold mb-2 text-sm">Key Skills:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {path.skills.map((skill, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{skill}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="ghost" size="sm" className="w-full flex items-center justify-center gap-1">
-                    <span>Learn More</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </CardFooter>
-              </Card>
+        {/* Category Filter */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Browse by Category</h2>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Badge 
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                className="cursor-pointer text-sm py-1 px-3 capitalize"
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </Badge>
             ))}
           </div>
         </div>
@@ -154,48 +128,100 @@ const JobSimulations = () => {
         {/* Individual Simulations Section */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">Individual Simulations</h2>
-            <Button variant="outline" size="sm">View All Simulations</Button>
+            <h2 className="text-2xl font-bold">Available Simulations</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {individualSimulations.map((sim, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-center">
-                    <Badge variant="outline">{sim.category}</Badge>
-                    <div className="flex items-center">
-                      <span className="text-sm text-muted-foreground mr-2">{sim.duration}</span>
-                      <Badge variant={sim.difficulty === "Beginner" ? "secondary" : 
-                              sim.difficulty === "Intermediate" ? "outline" : "default"}>
-                        {sim.difficulty}
-                      </Badge>
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[...Array(4)].map((_, index) => (
+                <Card key={index} className="animate-pulse">
+                  <CardHeader className="pb-2">
+                    <div className="h-6 bg-gray-200 rounded w-1/3 mb-2"></div>
+                    <div className="h-8 bg-gray-200 rounded w-2/3"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+                  </CardContent>
+                  <CardFooter>
+                    <div className="h-10 bg-gray-200 rounded w-full"></div>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : filteredSimulations && filteredSimulations.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredSimulations.map((simulation) => (
+                <Card key={simulation.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <Badge variant="outline" className="capitalize">{simulation.category}</Badge>
+                      <div className="flex items-center">
+                        <span className="text-sm text-muted-foreground mr-2">{simulation.duration}</span>
+                        <Badge variant={simulation.difficulty === "Beginner" ? "secondary" : 
+                                simulation.difficulty === "Intermediate" ? "outline" : "default"}>
+                          {simulation.difficulty}
+                        </Badge>
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="mt-2">{sim.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-1">
-                    <li className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Practical work experience</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Self-paced learning</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Downloadable certificate</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="default" className="w-full">Start Simulation</Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+                    <CardTitle className="mt-2">{simulation.title}</CardTitle>
+                    <CardDescription className="line-clamp-2">{simulation.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-3">
+                      <h4 className="text-sm font-semibold mb-1">Skills you'll gain:</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {simulation.skills_gained.map((skill, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">{skill}</Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>Practical work experience</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>Self-paced learning</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>Downloadable certificate</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button 
+                      variant="default" 
+                      className="w-full"
+                      onClick={() => handleStartSimulation(simulation)}
+                    >
+                      Start Simulation
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                <Briefcase className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-medium mb-2">No simulations found</h3>
+              <p className="text-muted-foreground mb-4">
+                We couldn't find any simulations for the selected category.
+              </p>
+              <Button 
+                variant="outline"
+                onClick={() => setSelectedCategory('all')}
+              >
+                View All Simulations
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Benefits Section */}
@@ -235,7 +261,12 @@ const JobSimulations = () => {
             Start building practical skills today with our interactive job simulations designed 
             to give you the experience employers are looking for.
           </p>
-          <Button size="lg">Start Your First Simulation</Button>
+          <Button 
+            size="lg"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Explore All Simulations
+          </Button>
         </div>
       </div>
     </Layout>
