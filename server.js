@@ -1,17 +1,41 @@
 
 const express = require('express');
 const path = require('path');
-const app = express();
+const cors = require('cors');
 const { 
   generateNonce, 
   setupSecurityHeaders 
 } = require('./src/server/middleware/security');
 
+// Create Express app
+const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Security middleware
 app.use(generateNonce);
 app.use(setupSecurityHeaders);
+
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [
+        'https://jobseekaroo.com', 
+        'https://jobseekers4hs.org', 
+        'https://jobseeker4hs.org',
+        /\.jobseekaroo\.com$/,
+        /\.jobseekers4hs\.org$/,
+        /\.jobseeker4hs\.org$/
+      ]
+    : ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080'], 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400 // 24 hours
+};
+app.use(cors(corsOptions));
+
+// Parse JSON body
+app.use(express.json());
 
 // Enhanced handler for school-branded subdomains
 app.use((req, res, next) => {
@@ -74,6 +98,17 @@ app.get('/:path', (req, res, next) => {
   }
 });
 
+// API routes
+const userRoutes = require('./src/server/routes/users');
+const postRoutes = require('./src/server/routes/posts');
+const statusRoutes = require('./src/server/routes/status');
+const chatRoutes = require('./src/server/routes/chat');
+
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api', statusRoutes);
+app.use('/api', chatRoutes);
+
 // Serve static files from the dist directory with enhanced caching
 app.use('/lovable-uploads', express.static(path.join(__dirname, 'public/lovable-uploads'), staticOptions));
 app.use('/assets', express.static(path.join(__dirname, 'dist/assets'), staticOptions));
@@ -86,7 +121,13 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-  console.log(`Visit a school-branded page at school.jobseekers4hs.org:${PORT} or school.jobseeker4hs.org:${PORT} (update /etc/hosts if testing locally)`);
-});
+// Start the server if this file is run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+    console.log(`Visit a school-branded page at school.jobseekers4hs.org:${PORT} or school.jobseeker4hs.org:${PORT} (update /etc/hosts if testing locally)`);
+  });
+}
+
+// Export the app for testing purposes
+module.exports = app;
