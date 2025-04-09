@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, MapPin, FileText, ExternalLink, Download } from 'lucide-react';
+import { Calendar, Clock, MapPin, FileText, ExternalLink, Download, Heart } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 
@@ -18,9 +18,20 @@ const HealthcarePathways = () => {
             <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
               Pathways into Healthcare Careers Florida Program
             </h1>
-            <p className="text-lg">
-              Hosted by the Mayo Clinic School of Health Sciences
-            </p>
+            <div className="flex items-center justify-center gap-2">
+              <img 
+                src="/mayoclinic-logo.png" 
+                alt="Mayo Clinic Logo" 
+                className="h-8 mr-2" 
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  console.log('Mayo Clinic logo failed to load');
+                }}
+              />
+              <p className="text-lg font-semibold">
+                Hosted by the Mayo Clinic School of Health Sciences
+              </p>
+            </div>
             <Badge className="mt-4 bg-red-600 hover:bg-red-700">Summer 2025</Badge>
           </div>
 
