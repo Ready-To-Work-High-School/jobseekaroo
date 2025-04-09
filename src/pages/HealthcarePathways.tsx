@@ -24,6 +24,7 @@ const HealthcarePathways = () => {
             <Badge className="mt-4 bg-red-600 hover:bg-red-700">Summer 2025</Badge>
           </div>
 
+          {/* Program Overview */}
           <Card className="mb-8 shadow-md border-blue-200">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-red-50">
               <CardTitle className="text-xl text-blue-800">Program Overview</CardTitle>
@@ -90,7 +91,7 @@ const HealthcarePathways = () => {
                     </a>
                   </Button>
                   <Button variant="outline" className="gap-2">
-                    <a href="#" download>
+                    <a href="/pdf/healthcare-pathways-program.pdf" download>
                       Download Program PDF
                       <Download className="h-4 w-4" />
                     </a>
@@ -100,6 +101,7 @@ const HealthcarePathways = () => {
             </Card>
           </div>
 
+          {/* Why Consider a Healthcare Career */}
           <Card className="mb-8 shadow-md border-blue-200">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-red-50">
               <CardTitle className="text-xl text-blue-800">Why Consider a Healthcare Career?</CardTitle>
