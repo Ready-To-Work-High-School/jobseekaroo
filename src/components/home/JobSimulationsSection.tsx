@@ -2,6 +2,7 @@
 import React from 'react';
 import { Blocks, Monitor, Briefcase, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const JobSimulationsSection = () => {
   return (
@@ -42,10 +43,10 @@ const JobSimulationsSection = () => {
             </div>
             
             <Button asChild className="bg-blue-600 hover:bg-blue-700">
-              <a href="https://www.theforage.com/simulations" target="_blank" rel="noopener noreferrer" className="gap-2 flex items-center">
+              <Link to="/job-simulations" className="gap-2 flex items-center">
                 <Monitor className="h-4 w-4" />
                 Explore Job Simulations
-              </a>
+              </Link>
             </Button>
           </div>
           
@@ -81,9 +82,9 @@ const JobSimulationsSection = () => {
                 Gain valuable skills and experience that you can add directly to your resume.
               </p>
               <Button asChild variant="outline" className="w-full">
-                <a href="https://www.theforage.com/simulations" target="_blank" rel="noopener noreferrer">
+                <Link to="/job-simulations">
                   Start a Simulation Today
-                </a>
+                </Link>
               </Button>
             </div>
           </div>

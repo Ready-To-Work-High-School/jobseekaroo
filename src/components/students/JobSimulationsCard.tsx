@@ -2,6 +2,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Blocks, Briefcase, GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const JobSimulationsCard = () => {
   return (
@@ -45,9 +46,9 @@ const JobSimulationsCard = () => {
       </CardContent>
       <CardFooter>
         <Button asChild variant="default" className="w-full bg-blue-600 hover:bg-blue-700">
-          <a href="https://www.theforage.com/simulations" target="_blank" rel="noopener noreferrer">
+          <Link to="/job-simulations">
             Explore Job Simulations
-          </a>
+          </Link>
         </Button>
       </CardFooter>
     </Card>
