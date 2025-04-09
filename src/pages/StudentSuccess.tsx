@@ -6,7 +6,7 @@ import StudentSuccessSection from '@/components/programs/entrepreneurship/Studen
 import CredentialsBadges from '@/components/programs/CredentialsBadges';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GraduationCap, Award, Briefcase, Heart, BookOpen, ChevronRight, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { GraduationCap, Award, Briefcase, Heart, BookOpen, ChevronRight, ArrowRight, CheckCircle2, Calendar } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -188,6 +188,24 @@ const StudentSuccess = () => {
                       ))}
                     </ul>
                   </div>
+                  
+                  {/* New Mayo Clinic Program Card */}
+                  <Card className="bg-blue-50 border border-blue-100 mb-4">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-blue-600" />
+                        Upcoming Opportunity
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <h4 className="font-bold text-blue-800">Mayo Clinic Pathways Program</h4>
+                      <p className="text-sm mb-2">3-day immersive healthcare careers program</p>
+                      <p className="text-xs text-gray-600 mb-3">July 10-12, 2025 • Jacksonville, FL</p>
+                      <Button size="sm" asChild className="w-full">
+                        <a href="/healthcare-pathways">Learn More</a>
+                      </Button>
+                    </CardContent>
+                  </Card>
                   
                   <div className="text-center mt-6">
                     <Button variant="outline" asChild>

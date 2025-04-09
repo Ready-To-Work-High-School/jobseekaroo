@@ -21,3 +21,4 @@ export function capitalize(str: string): string {
 // Paths
 export const jobSimulationsPath = '/job-simulations';
 export const userCredentialsPath = '/credentials';
+export const healthcarePathwaysPath = '/healthcare-pathways';

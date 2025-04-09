@@ -15,6 +15,7 @@ import SchoolLanding from '@/pages/SchoolLanding';
 import EntrepreneurshipAcademy from '@/pages/EntrepreneurshipAcademy';
 import JobHelp from '@/pages/JobHelp';
 import InterviewPrep from '@/pages/InterviewPrep';
+import HealthcarePathways from '@/pages/HealthcarePathways';
 
 const SharedRoutes = (
   <>
@@ -33,6 +34,7 @@ const SharedRoutes = (
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/job-help" element={<JobHelp />} />
     <Route path="/interview-prep" element={<InterviewPrep />} />
+    <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
   </>
 );
 
