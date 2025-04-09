@@ -4,10 +4,11 @@ import Layout from "@/components/Layout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ResumeChat from "@/components/resume/ResumeChat";
 import ResumeTemplates from "@/components/resume/ResumeTemplates";
+import ResumeResources from "@/components/resume/ResumeResources";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { FileText, MessageSquare, FileSymlink } from "lucide-react";
+import { FileText, MessageSquare, FileSymlink, Download } from "lucide-react";
 
 const ResumeAssistant = () => {
   const [activeTab, setActiveTab] = useState("chat");
@@ -44,6 +45,10 @@ const ResumeAssistant = () => {
                   <FileText className="h-4 w-4" />
                   Resume Templates
                 </TabsTrigger>
+                <TabsTrigger value="resources" className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Resources
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="chat" className="mt-0">
@@ -52,6 +57,10 @@ const ResumeAssistant = () => {
               
               <TabsContent value="templates" className="mt-0">
                 <ResumeTemplates />
+              </TabsContent>
+
+              <TabsContent value="resources" className="mt-0">
+                <ResumeResources />
               </TabsContent>
             </Tabs>
           </div>

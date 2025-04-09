@@ -2,15 +2,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, Copy, Eye } from "lucide-react";
+import { Download, Copy, Eye, FileText } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { getSecureFileURL } from "@/lib/supabase/encryption/file-security";
 
 interface ResumeTemplate {
   id: string;
   title: string;
   description: string;
   image: string;
+  pdfUrl: string;
   suitable: string[];
   color?: string;
 }
@@ -21,6 +23,7 @@ const templates: ResumeTemplate[] = [
     title: "Professional",
     description: "A clean, straightforward layout suitable for most industries.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/professional-template.pdf",
     suitable: ["Business", "Finance", "Management"],
     color: "bg-blue-50"
   },
@@ -29,6 +32,7 @@ const templates: ResumeTemplate[] = [
     title: "Creative",
     description: "A dynamic layout highlighting portfolio work and creativity.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/creative-template.pdf",
     suitable: ["Design", "Marketing", "Arts"],
     color: "bg-purple-50"
   },
@@ -37,6 +41,7 @@ const templates: ResumeTemplate[] = [
     title: "Entry-Level",
     description: "Emphasizes skills and education for those with limited experience.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/entry-level-template.pdf",
     suitable: ["Students", "Recent Graduates", "Career Changers"],
     color: "bg-green-50"
   },
@@ -45,6 +50,7 @@ const templates: ResumeTemplate[] = [
     title: "Technical",
     description: "Focuses on technical skills and project experience.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/technical-template.pdf",
     suitable: ["IT", "Engineering", "Development"],
     color: "bg-cyan-50"
   },
@@ -53,6 +59,7 @@ const templates: ResumeTemplate[] = [
     title: "Executive",
     description: "Highlights leadership experience and accomplishments.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/executive-template.pdf",
     suitable: ["Directors", "VPs", "C-Suite"],
     color: "bg-slate-50"
   },
@@ -61,6 +68,7 @@ const templates: ResumeTemplate[] = [
     title: "Minimal",
     description: "Simple and elegant with focus on content over design.",
     image: "/lovable-uploads/aaf637dd-c5d6-46e1-ae48-b8adb777f7cb.png",
+    pdfUrl: "/pdf/resume-templates/minimal-template.pdf",
     suitable: ["All Industries", "Legal", "Academic"],
     color: "bg-gray-50"
   }
@@ -69,6 +77,7 @@ const templates: ResumeTemplate[] = [
 const ResumeTemplates = () => {
   const { toast } = useToast();
   const [previewTemplate, setPreviewTemplate] = useState<ResumeTemplate | null>(null);
+  const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
 
   const handleUseTemplate = (templateId: string) => {
     toast({
@@ -87,15 +96,42 @@ const ResumeTemplates = () => {
     setPreviewTemplate(null);
   };
 
-  const handleDownloadTemplate = () => {
+  const handleDownloadTemplate = async () => {
+    if (!previewTemplate) return;
+    
+    // In a real implementation, we would use secure file URLs for premium templates
+    // For now, we'll use direct links for public templates
     toast({
       title: "Download Started",
       description: "Your template is being downloaded.",
     });
-    // In a real app, this would trigger the actual download
-    setTimeout(() => {
-      handlePreviewClose();
-    }, 1500);
+    
+    try {
+      // For demonstration - in a real app, we might check if user has permission
+      const link = document.createElement('a');
+      link.href = previewTemplate.pdfUrl;
+      link.download = `${previewTemplate.title.toLowerCase()}-resume-template.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      setTimeout(() => {
+        handlePreviewClose();
+      }, 1500);
+    } catch (error) {
+      console.error("Error downloading template:", error);
+      toast({
+        title: "Download Failed",
+        description: "There was an error downloading the template. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleViewPdf = () => {
+    if (previewTemplate) {
+      setIsPdfPreviewOpen(true);
+    }
   };
 
   const handleCopyTemplate = () => {
@@ -154,6 +190,7 @@ const ResumeTemplates = () => {
                 onClick={() => setPreviewTemplate(template)}
                 variant="outline"
                 size="icon"
+                title="Preview template"
               >
                 <Eye className="h-4 w-4" />
               </Button>
@@ -181,8 +218,39 @@ const ResumeTemplates = () => {
                 <Copy className="h-4 w-4 mr-2" />
                 Copy
               </Button>
+              <Button variant="outline" onClick={handleViewPdf} className="gap-2">
+                <FileText className="h-4 w-4" />
+                View PDF
+              </Button>
               <Button variant="outline" onClick={handlePreviewClose}>Cancel</Button>
             </div>
+            <Button onClick={handleDownloadTemplate}>
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* PDF Preview Dialog */}
+      <Dialog open={isPdfPreviewOpen} onOpenChange={setIsPdfPreviewOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>{previewTemplate?.title} PDF Template</DialogTitle>
+          </DialogHeader>
+          <div className="h-[70vh] overflow-auto">
+            {previewTemplate && (
+              <iframe 
+                src={previewTemplate.pdfUrl} 
+                title={`${previewTemplate.title} Resume Template`} 
+                className="w-full h-full border-0"
+              />
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setIsPdfPreviewOpen(false)} variant="outline">
+              Close
+            </Button>
             <Button onClick={handleDownloadTemplate}>
               <Download className="h-4 w-4 mr-2" />
               Download
