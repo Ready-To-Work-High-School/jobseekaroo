@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: 'dist',
-    // Optimize chunks and code-splitting
+    // Optimize chunks for better performance in production
     rollupOptions: {
       output: {
         manualChunks: {
@@ -36,19 +36,17 @@ export default defineConfig(({ mode }) => ({
           ui: ['@radix-ui/react-dropdown-menu', '@radix-ui/react-tooltip', '@radix-ui/react-dialog'],
           lucide: ['lucide-react'],
         },
-        // Reduce chunk size for better performance
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
-    // Disable minification temporarily to resolve dynamic import issues
-    minify: false,
-    // Improve chunking
+    // Enable minification to reduce bundle size for production
+    minify: true,
     cssCodeSplit: true,
-    sourcemap: true, // Enable sourcemaps in all environments to help with debugging
+    sourcemap: mode !== 'production', // Only enable sourcemaps in development
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'], // Explicitly include these dependencies
+    include: ['react', 'react-dom', 'react-router-dom'], 
   }
 }));

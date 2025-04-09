@@ -1,0 +1,11 @@
+
+# This file provides additional build instructions for Render
+
+# Make sure yarn has access to all dependencies
+yarnRunArgs=['--network-timeout', '600000']
+
+# Use Node.js LTS version
+nodeVersion=18.x
+
+# Use Yarn for package management
+packageManager=yarn

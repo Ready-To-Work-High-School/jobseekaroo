@@ -76,6 +76,14 @@ const staticOptions = {
   }
 };
 
+// Health check endpoint for Render (before any other routes)
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    uptime: process.uptime()
+  });
+});
+
 // School-branded landing page route
 app.get('/', (req, res, next) => {
   if (req.isSchoolBranded) {
