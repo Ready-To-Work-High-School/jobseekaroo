@@ -16,7 +16,8 @@ router.get('/status', (req, res) => {
 router.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
   });
 });
 

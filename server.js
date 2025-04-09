@@ -76,11 +76,12 @@ const staticOptions = {
   }
 };
 
-// Health check endpoint for Render (before any other routes)
+// Root-level health check endpoint for Render (accessible at /health)
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -134,6 +135,7 @@ if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
     console.log(`Visit a school-branded page at school.jobseekers4hs.org:${PORT} or school.jobseeker4hs.org:${PORT} (update /etc/hosts if testing locally)`);
+    console.log(`Health check available at: http://localhost:${PORT}/health`);
   });
 }
 
