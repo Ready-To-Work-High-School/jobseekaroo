@@ -17,6 +17,7 @@ const TopEmployersSection = lazy(() => import('@/components/job/TopEmployersSect
 const SectionSeparator = lazy(() => import('@/components/home/SectionSeparator'));
 const CompanyDirectory = lazy(() => import('./resources/CompanyDirectory'));
 const CredentialBadges = lazy(() => import('./auth/CredentialBadges'));
+const JobSimulationsSection = lazy(() => import('./home/JobSimulationsSection'));
 
 // Loading fallback component
 const SectionSkeleton = () => (
@@ -87,6 +88,11 @@ const EnhancedHero = () => {
         <Separator className="my-8" />
         <Divider className="mb-8">For Students, Employers & Schools</Divider>
       </div>
+      
+      {/* Featured Job Simulations Section - added here near the top for visibility */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <JobSimulationsSection />
+      </Suspense>
       
       {/* Top Jacksonville Employers with logos */}
       <Suspense fallback={<SectionSkeleton />}>

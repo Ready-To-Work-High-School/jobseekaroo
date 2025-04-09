@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useFadeIn } from '@/utils/animations';
-import { Briefcase, FileText, GraduationCap, Settings, User } from 'lucide-react';
+import { Briefcase, FileText, GraduationCap, Settings, User, Blocks } from 'lucide-react';
+import JobSimulationsCard from '@/components/students/JobSimulationsCard';
 
 const Dashboard = () => {
   const { user, userProfile } = useAuth();
@@ -70,6 +71,45 @@ const Dashboard = () => {
               </CardFooter>
             </Card>
           ))}
+        </div>
+        
+        {/* Featured Job Simulations */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Blocks className="h-5 w-5 text-blue-600" />
+            Featured Resources
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <JobSimulationsCard />
+            
+            {/* Second card space for another resource */}
+            <Card className="shadow-md border-l-4 border-l-amber-500 hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-full bg-amber-100">
+                    <GraduationCap className="h-6 w-6 text-amber-700" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl">First Job Toolkit</CardTitle>
+                    <CardDescription>Step-by-step guide to career readiness</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Our comprehensive toolkit walks you through resume building, 
+                  interview preparation, and workplace success strategies.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button asChild variant="default" className="w-full bg-amber-600 hover:bg-amber-700">
+                  <Link to="/first-job-toolkit">
+                    Access Toolkit
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
         </div>
         
         <div className="mt-8 pt-6 border-t">
