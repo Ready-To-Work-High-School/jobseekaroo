@@ -1,0 +1,41 @@
+
+{
+  "name": "Job Seekers 4 High Schools",
+  "short_name": "JS4HS",
+  "description": "Your first job, made simple! Connect with employers looking for high school talent.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Find Jobs",
+      "short_name": "Jobs",
+      "description": "Browse available job opportunities",
+      "url": "/jobs",
+      "icons": [{ "src": "/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Resources",
+      "short_name": "Resources",
+      "description": "View student resources",
+      "url": "/resources",
+      "icons": [{ "src": "/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png", "sizes": "192x192" }]
+    }
+  ]
+}

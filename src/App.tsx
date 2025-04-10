@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -22,6 +21,7 @@ import MobileLayout from './components/MobileLayout';
 import UserOnboardingGuide from './components/onboarding/UserOnboardingGuide';
 import ScrollToTop from './components/navigation/ScrollToTop';
 import Pricing from './components/Pricing';
+import OnboardingWizard from './components/onboarding/OnboardingWizard';
 
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
@@ -33,10 +33,8 @@ function App() {
   
   return (
     <>
-      {/* Add ScrollToTop component to scroll to top when route changes */}
       <ScrollToTop />
       <Toaster position="top-right" />
-      {/* Wrap the routes in the appropriate layout based on device */}
       {isMobile ? (
         <MobileLayout>
           <Routes>
@@ -81,6 +79,7 @@ function App() {
             <Route path="/privacy" element={<Suspense fallback={<div>Loading...</div>}><PrivacyPolicy /></Suspense>} />
             <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>} />
             <Route path="/about" element={<Suspense fallback={<div>Loading...</div>}><About /></Suspense>} />
+            <Route path="/onboarding" element={<OnboardingWizard />} />
           </Routes>
           <UserOnboardingGuide />
         </>

@@ -1,136 +1,196 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Seekers 4 High Schools</title>
-    <meta name="description" content="Connecting students with credential-ready opportunities" />
-    <meta name="author" content="Lovable" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <link rel="icon" type="image/svg+xml" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="description" content="Job Seekers 4 High Schools - Your first job, made simple! A platform connecting high school students with credential-ready job opportunities." />
+    <meta name="keywords" content="jobs, high school, students, employers, career, internship, part-time" />
+    <meta property="og:title" content="Job Seekers 4 High Schools" />
+    <meta property="og:description" content="Your first job, made simple! Connect with employers looking for high school talent." />
+    <meta property="og:image" content="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" />
     
-    <!-- Preconnect to important domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.gpteng.co" crossorigin />
+    <!-- Preconnect to critical domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical images with modern formats -->
-    <link rel="preload" as="image" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" fetchpriority="high" type="image/webp" />
+    <!-- Modern font for teen appeal -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Critical CSS inline -->
+    <!-- App manifest for PWA support -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png">
+    
+    <title>Job Seekers 4 High Schools | Your First Job, Made Simple</title>
+    
+    <!-- Inline critical CSS for faster loading -->
     <style>
-      /* Critical above-the-fold styles */
       :root {
-        --background: 210 20% 98%;
-        --foreground: 222.2 84% 4.9%;
-        --primary: 210 100% 50%;
-        --secondary: 210 40% 96.1%;
-        --border: 214.3 31.8% 91.4%;
-        --radius: 0.8rem;
+        --loading-bg: #3b82f6;
+        --loading-text: #ffffff;
       }
       
       body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         margin: 0;
         padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background-color: hsl(var(--background));
-        color: hsl(var(--foreground));
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
       
-      /* Header and hero section critical styles */
-      .header {
-        position: sticky;
+      /* Fun loading animation that teens will appreciate */
+      .app-loader {
+        position: fixed;
         top: 0;
-        z-index: 50;
+        left: 0;
         width: 100%;
-        border-bottom: 1px solid rgba(0,0,0,0.1);
-        background-color: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(8px);
-      }
-      
-      .container-custom {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 1rem;
-      }
-      
-      .hero {
-        min-height: 80vh;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        text-align: center;
-        padding: 2rem 1rem;
-        background-image: linear-gradient(to bottom, rgba(239, 246, 255, 0.5), white);
+        align-items: center;
+        background: radial-gradient(circle, #f0f4fe, #e0e7fa);
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
       }
       
-      .spinner {
+      .app-loader.fade-out {
+        opacity: 0;
+      }
+      
+      .app-loader__logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+      
+      .app-loader__spinner {
         width: 40px;
         height: 40px;
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-left-color: #3b82f6;
+        border: 3px solid rgba(59, 130, 246, 0.3);
         border-radius: 50%;
+        border-top-color: #3b82f6;
         animation: spin 1s linear infinite;
+      }
+      
+      .app-loader__text {
+        margin-top: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #3b82f6;
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
       }
       
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
       
-      #root:empty:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 40px;
-        height: 40px;
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-left-color: #3b82f6;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
+      /* Fun confetti effect for special moments */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: #3b82f6;
+        opacity: 0;
+        z-index: 999;
+        animation: confetti-fall 4s linear forwards;
+        pointer-events: none;
       }
       
-      /* Button and link styles that appear above the fold */
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: var(--radius);
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        transition: background-color 0.2s, color 0.2s;
-      }
-      
-      .btn-primary {
-        background-color: hsl(var(--primary));
-        color: white;
-      }
-      
-      /* Critical image styles */
-      img {
-        max-width: 100%;
-        height: auto;
-        content-visibility: auto;
+      @keyframes confetti-fall {
+        0% {
+          opacity: 1;
+          top: -10px;
+          transform: translateX(0) rotateZ(0);
+        }
+        100% {
+          opacity: 0;
+          top: 100vh;
+          transform: translateX(100px) rotateZ(360deg);
+        }
       }
     </style>
     
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
-    
-    <!-- Defer non-critical CSS -->
-    <link rel="stylesheet" href="/assets/index.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/assets/index.css"></noscript>
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <!-- GPT Engineer script for "Select" feature -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx" defer></script>
+  </head>
+  <body>
+    <!-- Fun loading screen that teens will appreciate -->
+    <div class="app-loader" id="app-loader">
+      <img src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" alt="Job Seekers 4 High Schools Logo" class="app-loader__logo" />
+      <div class="app-loader__spinner"></div>
+      <p class="app-loader__text">Getting your opportunities ready...</p>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Loading animation script -->
+    <script>
+      // Cool loading animation
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          const loader = document.getElementById('app-loader');
+          loader.classList.add('fade-out');
+          setTimeout(function() {
+            loader.style.display = 'none';
+          }, 500);
+        }, 1000);
+      });
+      
+      // Fun confetti for achievements (will be triggered by the app)
+      function celebrateAchievement() {
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement('div');
+          confetti.classList.add('confetti');
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.backgroundColor = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'][Math.floor(Math.random() * 5)];
+          confetti.style.animationDelay = Math.random() * 3 + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => {
+            confetti.remove();
+          }, 4000);
+        }
+      }
+      
+      // Add to window for access from React
+      window.celebrateAchievement = celebrateAchievement;
+      
+      // Easter egg: Double tap on logo to trigger confetti
+      let lastTap = 0;
+      document.addEventListener('click', function(e) {
+        const logoEl = document.querySelector('.app-loader__logo');
+        if (!logoEl) return;
+        
+        const rect = logoEl.getBoundingClientRect();
+        const isClickOnLogo = e.clientX >= rect.left && e.clientX <= rect.right &&
+                              e.clientY >= rect.top && e.clientY <= rect.bottom;
+                              
+        if (isClickOnLogo) {
+          const currentTime = new Date().getTime();
+          const tapLength = currentTime - lastTap;
+          if (tapLength < 500 && tapLength > 0) {
+            celebrateAchievement();
+            e.preventDefault();
+          }
+          lastTap = currentTime;
+        }
+      });
+    </script>
   </body>
 </html>
