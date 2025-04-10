@@ -203,16 +203,16 @@ const ResumeChat = () => {
           firstName: userProfile?.first_name || "John",
           lastName: userProfile?.last_name || "Doe",
           email: userProfile?.email || "email@example.com",
-          phone: userProfile?.phone || "(123) 456-7890",
+          phone: userProfile?.contact_details_encrypted ? "Retrieved from encrypted data" : "(123) 456-7890",
           location: userProfile?.location || "City, State",
-          title: userProfile?.title || "Professional"
+          title: userProfile?.job_title || "Professional" // Using job_title instead of title
         },
         skills: userProfile?.skills || ["Communication", "Problem Solving", "Teamwork"],
         experience: [
           {
-            title: "Job Title",
-            company: "Company Name",
-            location: "City, State",
+            title: userProfile?.job_title || "Job Title",
+            company: userProfile?.company_name || "Company Name",
+            location: userProfile?.location || "City, State",
             startDate: "2020-01",
             endDate: "Present",
             description: "• Collaborated with cross-functional teams to achieve project goals\n• Implemented new processes that improved efficiency by 15%\n• Managed client relationships and resolved customer issues"
@@ -220,7 +220,7 @@ const ResumeChat = () => {
         ],
         education: [
           {
-            institution: userProfile?.school || "University Name",
+            institution: userProfile?.bio ? userProfile.bio.split(" ").slice(0, 2).join(" ") + " University" : "University Name", // Using part of bio as a fallback for school
             degree: "Degree",
             field: "Field of Study",
             startDate: "2016-09",
@@ -263,16 +263,16 @@ const ResumeChat = () => {
           firstName: userProfile?.first_name || "John",
           lastName: userProfile?.last_name || "Doe",
           email: userProfile?.email || "email@example.com",
-          phone: userProfile?.phone || "(123) 456-7890",
+          phone: userProfile?.contact_details_encrypted ? "Retrieved from encrypted data" : "(123) 456-7890",
           location: userProfile?.location || "City, State",
-          title: "Professional"
+          title: userProfile?.job_title || "Professional" // Using job_title instead of title
         },
         skills: userProfile?.skills || ["Communication", "Problem Solving", "Teamwork"],
         experience: [
           {
-            title: "Job Title",
-            company: "Company Name",
-            location: "City, State",
+            title: userProfile?.job_title || "Job Title",
+            company: userProfile?.company_name || "Company Name",
+            location: userProfile?.location || "City, State",
             startDate: "2020-01",
             endDate: "Present",
             description: "• Implemented new processes\n• Managed client relationships\n• Collaborated with teams"
@@ -280,7 +280,7 @@ const ResumeChat = () => {
         ],
         education: [
           {
-            institution: userProfile?.school || "University Name",
+            institution: userProfile?.bio ? userProfile.bio.split(" ").slice(0, 2).join(" ") + " University" : "University Name", // Using part of bio as a fallback for school
             degree: "Degree",
             field: "Field of Study",
             startDate: "2016-09",
