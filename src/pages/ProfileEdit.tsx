@@ -1,10 +1,10 @@
 
 import React from 'react';
 import Layout from '@/components/Layout';
-import { ProfileForm } from '@/components/profile/ProfileForm';
+import ProfileForm from '@/components/profile/ProfileForm';
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import { NotSignedInAlert } from '@/components/profile/NotSignedInAlert';
+import NotSignedInAlert from '@/components/profile/NotSignedInAlert';
 
 const ProfileEdit = () => {
   const { user, userProfile, isLoading } = useAuth();
