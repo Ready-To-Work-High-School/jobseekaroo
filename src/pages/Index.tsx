@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -43,7 +42,13 @@ const Index = () => {
             <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Heart className="h-8 w-8 text-amber-600" />
+                  <div className="flex-shrink-0 w-10 h-10 overflow-hidden">
+                    <img 
+                      src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
+                      alt="Mayo Clinic Logo" 
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                   <h3 className="text-xl font-bold">Program Highlights:</h3>
                 </div>
                 <ul className="space-y-2 mb-6">
