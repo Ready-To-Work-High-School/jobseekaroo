@@ -14,6 +14,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
+import { jsPDF } from "jspdf";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   role: "user" | "assistant";
@@ -52,9 +54,13 @@ const ResumeChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [hasUploadedResume, setHasUploadedResume] = useState(false);
+  const [generatedResume, setGeneratedResume] = useState<{ data: any, template: string } | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const { userProfile } = useAuth();
+  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollToBottom();
@@ -110,6 +116,10 @@ const ResumeChat = () => {
         response = "To quantify achievements:\n\n• Add numbers to show scale (e.g., 'Managed a team of 12 employees')\n• Include percentages for improvements (e.g., 'Increased efficiency by 25%')\n• Add dollar amounts for budgets or revenue (e.g., 'Managed $500K annual budget')\n• Mention timeframes (e.g., 'Completed project 2 weeks ahead of schedule')\n• Include frequency (e.g., 'Processed 200+ customer requests weekly')";
       } else if (lowercaseInput.includes("upload") || lowercaseInput.includes("review my resume")) {
         response = "I'd be happy to review your existing resume. Click the upload button below the chat to upload your current resume, and I'll provide specific feedback on how to improve it.";
+      } else if (lowercaseInput.includes("generate") || lowercaseInput.includes("create") || lowercaseInput.includes("make") || lowercaseInput.includes("build")) {
+        // Generate a simple resume based on the user profile
+        await generateResumeFromProfile("Professional");
+        response = "I've created a draft Professional resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat.";
       } else {
         response = "I'd be happy to help with your resume. Could you provide more specific details about what you're looking for assistance with? For example:\n\n• Reviewing a specific section\n• Crafting better bullet points\n• Highlighting certain skills or experiences\n• Tailoring your resume for a particular position";
       }
@@ -137,9 +147,33 @@ const ResumeChat = () => {
   };
 
   const handleUploadResume = () => {
+    // Trigger file input
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    
+    if (!file) {
+      return;
+    }
+    
     setIsUploading(true);
     
-    // Simulate file upload
+    // Check if the file is a PDF or Word document
+    if (!file.type.includes('pdf') && !file.type.includes('word')) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload a PDF or Word document.",
+        variant: "destructive",
+      });
+      setIsUploading(false);
+      return;
+    }
+    
+    // Simulate file processing
     setTimeout(() => {
       setIsUploading(false);
       setHasUploadedResume(true);
@@ -158,18 +192,201 @@ const ResumeChat = () => {
     }, 2000);
   };
 
+  const generateResumeFromProfile = async (template: string) => {
+    setIsGeneratingPdf(true);
+    
+    try {
+      // In a real app, we would make an API call to generate the resume
+      // For now, we'll create a simple data structure based on userProfile
+      const resumeData = {
+        personalInfo: {
+          firstName: userProfile?.first_name || "John",
+          lastName: userProfile?.last_name || "Doe",
+          email: userProfile?.email || "email@example.com",
+          phone: userProfile?.phone || "(123) 456-7890",
+          location: userProfile?.location || "City, State",
+          title: userProfile?.title || "Professional"
+        },
+        skills: userProfile?.skills || ["Communication", "Problem Solving", "Teamwork"],
+        experience: [
+          {
+            title: "Job Title",
+            company: "Company Name",
+            location: "City, State",
+            startDate: "2020-01",
+            endDate: "Present",
+            description: "• Collaborated with cross-functional teams to achieve project goals\n• Implemented new processes that improved efficiency by 15%\n• Managed client relationships and resolved customer issues"
+          }
+        ],
+        education: [
+          {
+            institution: userProfile?.school || "University Name",
+            degree: "Degree",
+            field: "Field of Study",
+            startDate: "2016-09",
+            endDate: "2020-05"
+          }
+        ]
+      };
+      
+      // Store the generated resume data
+      setGeneratedResume({
+        data: resumeData,
+        template: template
+      });
+      
+      setHasUploadedResume(true);
+    } catch (error) {
+      console.error("Error generating resume:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate resume. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
+  const downloadGeneratedResume = async () => {
+    if (!generatedResume) {
+      // If we have uploaded a resume but haven't generated one, create a sample
+      await generateResumeFromProfile("Professional");
+    }
+    
+    setIsGeneratingPdf(true);
+    
+    try {
+      const doc = new jsPDF();
+      const data = generatedResume?.data || {
+        personalInfo: {
+          firstName: userProfile?.first_name || "John",
+          lastName: userProfile?.last_name || "Doe",
+          email: userProfile?.email || "email@example.com",
+          phone: userProfile?.phone || "(123) 456-7890",
+          location: userProfile?.location || "City, State",
+          title: "Professional"
+        },
+        skills: userProfile?.skills || ["Communication", "Problem Solving", "Teamwork"],
+        experience: [
+          {
+            title: "Job Title",
+            company: "Company Name",
+            location: "City, State",
+            startDate: "2020-01",
+            endDate: "Present",
+            description: "• Implemented new processes\n• Managed client relationships\n• Collaborated with teams"
+          }
+        ],
+        education: [
+          {
+            institution: userProfile?.school || "University Name",
+            degree: "Degree",
+            field: "Field of Study",
+            startDate: "2016-09",
+            endDate: "2020-05"
+          }
+        ]
+      };
+      
+      // Add content to PDF
+      const fullName = `${data.personalInfo.firstName} ${data.personalInfo.lastName}`;
+      
+      // Header with name and title
+      doc.setFontSize(24);
+      doc.setFont("helvetica", "bold");
+      doc.text(fullName, 20, 20);
+      
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text(data.personalInfo.title, 20, 30);
+      
+      // Contact info
+      doc.setFontSize(10);
+      doc.text(`Email: ${data.personalInfo.email}`, 20, 40);
+      doc.text(`Phone: ${data.personalInfo.phone}`, 20, 45);
+      doc.text(`Location: ${data.personalInfo.location}`, 20, 50);
+      
+      // Skills section
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Skills", 20, 65);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(data.skills.join(", "), 20, 75);
+      
+      // Experience section
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Experience", 20, 90);
+      
+      let yPos = 100;
+      data.experience.forEach(job => {
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${job.title} - ${job.company}, ${job.location}`, 20, yPos);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "italic");
+        doc.text(`${job.startDate} to ${job.endDate}`, 20, yPos + 7);
+        
+        doc.setFont("helvetica", "normal");
+        const descLines = doc.splitTextToSize(job.description, 170);
+        doc.text(descLines, 20, yPos + 15);
+        
+        yPos += 35;
+      });
+      
+      // Education section
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Education", 20, yPos);
+      
+      yPos += 10;
+      data.education.forEach(edu => {
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${edu.degree} in ${edu.field}`, 20, yPos);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${edu.institution}, ${edu.startDate} to ${edu.endDate}`, 20, yPos + 7);
+        
+        yPos += 15;
+      });
+      
+      // Save the PDF
+      const pdfName = `${fullName.replace(/\s+/g, '_')}_Resume.pdf`;
+      doc.save(pdfName);
+      
+      toast({
+        title: "Resume Downloaded",
+        description: "Your resume has been successfully downloaded.",
+      });
+    } catch (error) {
+      console.error("Error downloading resume:", error);
+      toast({
+        title: "Download Failed",
+        description: "Failed to download resume. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
   const generateResume = (template: string) => {
     toast({
       title: "Generating Resume",
       description: `Creating a ${template} resume based on your profile information.`,
     });
     
-    // Simulate generation response
-    setTimeout(() => {
+    // Generate resume based on template
+    generateResumeFromProfile(template).then(() => {
       const generateResponse = `I've created a draft ${template} resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat.`;
       
       setMessages(prev => [...prev, { role: "assistant", content: generateResponse }]);
-    }, 2000);
+    });
   };
 
   return (
@@ -178,8 +395,18 @@ const ResumeChat = () => {
         <h3 className="font-medium">Resume AI Assistant</h3>
         <div className="flex gap-2">
           {hasUploadedResume && (
-            <Button size="sm" variant="outline" className="flex gap-1 items-center text-xs">
-              <DownloadCloud className="h-3.5 w-3.5" />
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="flex gap-1 items-center text-xs"
+              onClick={downloadGeneratedResume}
+              disabled={isGeneratingPdf}
+            >
+              {isGeneratingPdf ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <DownloadCloud className="h-3.5 w-3.5" />
+              )}
               Download Resume
             </Button>
           )}
@@ -197,6 +424,13 @@ const ResumeChat = () => {
             )}
             Upload Resume
           </Button>
+          <input 
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept=".pdf,.doc,.docx"
+            onChange={handleFileUpload}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="text-xs">Actions</Button>

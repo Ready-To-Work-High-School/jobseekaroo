@@ -6,6 +6,7 @@ import { Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
+import { BadgeIcon } from "../badges/BadgeIcon";
 
 const ResumeResources = () => {
   const { toast } = useToast();
@@ -21,13 +22,13 @@ const ResumeResources = () => {
     }
 
     // Check if it's an employer dashboard link
-    if (url === "/employer-dashboard") {
-      navigate("/employer-dashboard");
+    if (url === "/employer-dashboard" || url === "/employer/dashboard") {
+      navigate("/employer/dashboard");
       return;
     }
     
     // Check if it's an employer badges link
-    if (url === "/employer-badges") {
+    if (url === "/employer-badges" || url === "/employer/badges") {
       navigate("/employer/badges");
       return;
     }
@@ -65,7 +66,11 @@ const ResumeResources = () => {
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <resource.icon className="h-5 w-5 text-blue-600" />
+                    {resource.icon ? (
+                      <resource.icon className="h-5 w-5 text-blue-600" />
+                    ) : (
+                      <Download className="h-5 w-5 text-blue-600" />
+                    )}
                     {resource.title}
                   </CardTitle>
                 </CardHeader>
@@ -95,7 +100,15 @@ const ResumeResources = () => {
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <resource.icon className="h-5 w-5 text-blue-600" />
+                    {resource.icon ? (
+                      <resource.icon className="h-5 w-5 text-blue-600" />
+                    ) : (
+                      resource.type === "Badge" ? (
+                        <BadgeIcon badgeId={resource.badgeId || "achievement"} />
+                      ) : (
+                        <Download className="h-5 w-5 text-blue-600" />
+                      )
+                    )}
                     {resource.title}
                   </CardTitle>
                 </CardHeader>

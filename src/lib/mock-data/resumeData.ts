@@ -9,6 +9,7 @@ export type ResumeResource = {
   icon: LucideIcon;
   action: string;
   url: string;
+  badgeId?: string;
 };
 
 export interface ResumeTemplateData {
@@ -118,7 +119,7 @@ export const resumeResources: ResumeResource[] = [
     type: "Dashboard Demo",
     icon: Building2,
     action: "View Demo",
-    url: "/employer-dashboard"
+    url: "/employer/dashboard"
   }
 ];
 
@@ -145,6 +146,16 @@ export const interviewResources: ResumeResource[] = [
     type: "Feature Overview",
     icon: Award,
     action: "Learn More",
-    url: "/employer/badges"
+    url: "/employer/badges",
+    badgeId: "achievement"
+  },
+  {
+    title: "JS4HS Certification",
+    description: "Learn about our Job Seekers for High Schools certification program and how it can benefit your career.",
+    type: "Badge",
+    icon: Award,
+    action: "Learn More",
+    url: "/programs/js4hs",
+    badgeId: "js4hs"
   }
 ];
