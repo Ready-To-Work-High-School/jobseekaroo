@@ -14,6 +14,7 @@ interface JobListContentProps {
   zipCode?: string;
   onResetFilters: () => void;
   onPageChange: (pageNumber: number) => void;
+  renderJobCard?: (job: Job) => React.ReactNode;
 }
 
 const JobListContent = ({
@@ -23,7 +24,8 @@ const JobListContent = ({
   jobsPerPage,
   zipCode,
   onResetFilters,
-  onPageChange
+  onPageChange,
+  renderJobCard
 }: JobListContentProps) => {
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -52,7 +54,7 @@ const JobListContent = ({
       <div className="space-y-4">
         {currentJobs.map((job, index) => (
           <div key={job.id} className="bg-white rounded-lg border border-border shadow-sm p-4 hover:border-primary/30 transition-all duration-200">
-            <JobCard job={job} index={index} />
+            {renderJobCard ? renderJobCard(job) : <JobCard job={job} index={index} />}
           </div>
         ))}
       </div>

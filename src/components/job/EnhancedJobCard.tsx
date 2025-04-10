@@ -138,17 +138,13 @@ const EnhancedJobCard = ({ job, size = 'default', className }: EnhancedJobCardPr
           </div>
           
           <div className="flex items-center gap-2">
-            <Button 
-              as="a" 
-              href={jobUrl}
-              variant="outline" 
-              size={isCompact ? "sm" : "default"} 
-              className="gap-1"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Link to={jobUrl} className={cn(
+              buttonVariants({ variant: "outline", size: isCompact ? "sm" : "default" }),
+              "gap-1"
+            )}>
               <ExternalLink className={cn("", isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} />
               <span>Details</span>
-            </Button>
+            </Link>
             
             <Button 
               size={isCompact ? "sm" : "default"} 
@@ -167,5 +163,8 @@ const EnhancedJobCard = ({ job, size = 'default', className }: EnhancedJobCardPr
     </>
   );
 };
+
+// Add this import to use buttonVariants
+import { buttonVariants } from '@/components/ui/button';
 
 export default EnhancedJobCard;

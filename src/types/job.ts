@@ -8,6 +8,7 @@ export interface Job {
   title: string;
   company: {
     name: string;
+    logoUrl?: string;  // Added logoUrl as optional property
   };
   location: {
     city: string;
