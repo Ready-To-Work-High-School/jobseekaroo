@@ -7,6 +7,10 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 // Only import the EnhancedHero directly since it's visible immediately
 import EnhancedHero from '../components/EnhancedHero';
 
+// Import our new components
+import EnhancedJobListings from '@/components/home/EnhancedJobListings';
+import SuccessStories from '@/components/home/SuccessStories';
+
 // Lazy load the content that appears below the fold
 const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
 
@@ -26,6 +30,16 @@ const Home = () => {
       
       <ErrorBoundary>
         <EnhancedHero />
+      </ErrorBoundary>
+      
+      {/* Add new enhanced job listings component */}
+      <ErrorBoundary>
+        <EnhancedJobListings />
+      </ErrorBoundary>
+      
+      {/* Add success stories component */}
+      <ErrorBoundary>
+        <SuccessStories />
       </ErrorBoundary>
       
       <Suspense fallback={<div className="py-8 flex justify-center">

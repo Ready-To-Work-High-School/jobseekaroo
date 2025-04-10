@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,7 +30,6 @@ const NavbarBrand = () => (
   </Link>
 );
 
-// Custom NavLink component that wraps around React Router's Link
 const NavLink = ({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) => (
   <Link
     to={to}
@@ -78,9 +76,10 @@ const Navbar = () => {
       <div className="container-custom py-3 flex items-center justify-between">
         <NavbarBrand />
         
-        <div className="hidden md:flex items-center space-x-1">
+        <div className="hidden md:flex items-center space-x-4">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/jobs">Jobs</NavLink>
+          <NavLink to="/demo">Demo Access</NavLink>
           <NavLink to="/resources">Resources</NavLink>
           <NavLink to="/job-help">AI Job Help</NavLink>
           <NavLink to="/about">About</NavLink>
@@ -136,6 +135,7 @@ const Navbar = () => {
               <div className="grid gap-4 py-4">
                 <Button variant="ghost" asChild><Link to="/" onClick={toggleMobileMenu}>Home</Link></Button>
                 <Button variant="ghost" asChild><Link to="/jobs" onClick={toggleMobileMenu}>Jobs</Link></Button>
+                <Button variant="ghost" asChild><Link to="/demo" onClick={toggleMobileMenu}>Demo Access</Link></Button>
                 <Button variant="ghost" asChild><Link to="/resources" onClick={toggleMobileMenu}>Resources</Link></Button>
                 <Button variant="ghost" asChild><Link to="/job-help" onClick={toggleMobileMenu}>AI Job Help</Link></Button>
                 <Button variant="ghost" asChild><Link to="/about" onClick={toggleMobileMenu}>About</Link></Button>

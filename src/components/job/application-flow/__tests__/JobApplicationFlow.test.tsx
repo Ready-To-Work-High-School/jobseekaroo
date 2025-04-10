@@ -1,8 +1,7 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import JobApplicationFlow from '../../JobApplicationFlow';
+import JobApplicationFlow from '../JobApplicationFlow';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Job } from '@/types/job';
@@ -55,7 +54,6 @@ const mockJob: Job = {
   isRemote: true,
   isFlexible: true,
   experienceLevel: 'entry-level',
-  skills: ['Test Skill 1', 'Test Skill 2'],
   applicationUrl: 'https://example.com/apply',
   contactEmail: 'hr@example.com'
 };
