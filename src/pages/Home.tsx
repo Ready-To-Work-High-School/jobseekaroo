@@ -15,6 +15,7 @@ import JobLocationsMap from '@/components/job/JobLocationsMap';
 import StudentProfileGrid from '@/components/students/StudentProfileGrid';
 import SampleCandidates from '@/components/employer/SampleCandidates';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
+import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 
 // Lazy load the content that appears below the fold
 const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
@@ -38,6 +39,11 @@ const Home = () => {
       
       <ErrorBoundary>
         <EnhancedHero />
+      </ErrorBoundary>
+      
+      {/* Add Mayo Summer Program Feature prominently after the hero */}
+      <ErrorBoundary>
+        <MayoSummerFeature />
       </ErrorBoundary>
       
       {/* Add the How It Works section */}
