@@ -7,9 +7,13 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 // Only import the EnhancedHero directly since it's visible immediately
 import EnhancedHero from '../components/EnhancedHero';
 
-// Import our new components
+// Import our components
 import EnhancedJobListings from '@/components/home/EnhancedJobListings';
 import SuccessStories from '@/components/home/SuccessStories';
+import HowItWorksSection from '@/components/home/HowItWorksSection';
+import JobLocationsMap from '@/components/job/JobLocationsMap';
+import StudentProfileGrid from '@/components/students/StudentProfileGrid';
+import SampleCandidates from '@/components/employer/SampleCandidates';
 
 // Lazy load the content that appears below the fold
 const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
@@ -26,16 +30,40 @@ const Home = () => {
         
         {/* Preconnect to critical domains */}
         <link rel="preconnect" href="https://cdn.gpteng.co" crossOrigin="anonymous" />
+        
+        {/* Add responsive viewport meta tag */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
       
       <ErrorBoundary>
         <EnhancedHero />
       </ErrorBoundary>
       
-      {/* Add new enhanced job listings component */}
+      {/* Add the How It Works section */}
+      <ErrorBoundary>
+        <HowItWorksSection />
+      </ErrorBoundary>
+      
+      {/* Add enhanced job listings component */}
       <ErrorBoundary>
         <EnhancedJobListings />
       </ErrorBoundary>
+      
+      {/* Add map of job locations */}
+      <div className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
+        <ErrorBoundary>
+          <JobLocationsMap />
+        </ErrorBoundary>
+      </div>
+      
+      {/* Add sample candidates section */}
+      <div className="container mx-auto px-4 py-12 bg-gray-50">
+        <h2 className="text-3xl font-bold mb-8 text-center">Sample Candidates</h2>
+        <ErrorBoundary>
+          <SampleCandidates />
+        </ErrorBoundary>
+      </div>
       
       {/* Add success stories component */}
       <ErrorBoundary>

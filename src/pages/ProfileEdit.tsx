@@ -25,8 +25,23 @@ const ProfileEdit = () => {
         
         {!isLoading && !user && <NotSignedInAlert />}
         
-        {!isLoading && user && (
-          <ProfileForm user={user} userProfile={userProfile} />
+        {!isLoading && user && userProfile && (
+          <ProfileForm 
+            user={user} 
+            userProfile={userProfile}
+            isEditing={true}
+            firstName={userProfile?.firstName || ''}
+            setFirstName={() => {}}
+            lastName={userProfile?.lastName || ''}
+            setLastName={() => {}}
+            email={user?.email || ''}
+            bio={userProfile?.bio || ''}
+            setBio={() => {}}
+            phoneNumber={userProfile?.phoneNumber || ''}
+            setPhoneNumber={() => {}}
+            zipCode={userProfile?.zipCode || ''}
+            setZipCode={() => {}}
+          />
         )}
       </div>
     </Layout>

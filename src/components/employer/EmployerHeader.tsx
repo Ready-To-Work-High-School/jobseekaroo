@@ -43,7 +43,7 @@ const EmployerHeader = () => {
           </Button>
           
           <Button asChild variant="outline" size="lg">
-            <Link to="/employer/badges">Award Badges</Link>
+            <Link to="/sample-candidates">See Sample Candidates</Link>
           </Button>
         </div>
       </div>

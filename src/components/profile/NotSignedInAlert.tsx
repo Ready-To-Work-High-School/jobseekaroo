@@ -1,16 +1,25 @@
 
 import React from 'react';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { InfoIcon } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
-const NotSignedInAlert: React.FC = () => {
+const NotSignedInAlert = () => {
   return (
-    <Alert>
-      <InfoIcon className="h-4 w-4" />
-      <AlertTitle>You are not signed in.</AlertTitle>
+    <Alert variant="destructive">
+      <AlertCircle className="h-4 w-4" />
+      <AlertTitle>Authentication Required</AlertTitle>
       <AlertDescription>
-        Please <Link to="/sign-in" className="underline">sign in</Link> to view your profile.
+        <p className="mb-4">You need to be signed in to view and edit your profile.</p>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" asChild>
+            <Link to="/sign-in">Sign In</Link>
+          </Button>
+          <Button variant="default" asChild>
+            <Link to="/sign-up">Create Account</Link>
+          </Button>
+        </div>
       </AlertDescription>
     </Alert>
   );

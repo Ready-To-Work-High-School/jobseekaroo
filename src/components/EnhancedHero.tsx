@@ -7,7 +7,7 @@ import { Divider } from './ui/divider';
 import { Separator } from './ui/separator';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 
-// Lazy load components that aren't visible in the initial viewport
+// Lazy load components that aren't immediately visible
 const PartnerLogosSection = lazy(() => import('@/components/home/PartnerLogosSection'));
 const CallToActionSection = lazy(() => import('@/components/home/CallToActionSection'));
 const FeaturedJobsSection = lazy(() => import('@/components/home/FeaturedJobsSection'));
@@ -59,15 +59,15 @@ const EnhancedHero = () => {
       {/* Hero section is critical for initial render, so not lazy loaded */}
       <HeroSection />
       
-      {/* Prominent JS4HS Logo Display */}
-      <div className="container mx-auto px-4 py-8 text-center">
-        <div className="flex justify-center mb-4">
+      {/* Prominent JS4HS Logo Display - Updated for better visibility */}
+      <div className="container mx-auto px-4 py-12 text-center">
+        <div className="flex justify-center mb-6">
           <img 
             src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
             alt="JS4HS Logo" 
-            className="h-32 md:h-40 w-auto object-contain"
-            width="300"
-            height="300"
+            className="h-48 md:h-56 w-auto object-contain"
+            width="400"
+            height="400"
             loading="eager"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -76,8 +76,8 @@ const EnhancedHero = () => {
             }}
           />
         </div>
-        <h2 className="text-2xl font-bold">Job Seekers 4 High Schools</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
+        <h2 className="text-3xl font-bold">Job Seekers 4 High Schools</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto mt-2 text-lg">
           Connecting students with credential-ready opportunities at Westside High School
         </p>
       </div>
