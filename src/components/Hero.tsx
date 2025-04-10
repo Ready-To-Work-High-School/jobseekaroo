@@ -37,7 +37,7 @@ const Hero = () => {
         </p>
 
         <p className="text-base font-semibold text-black bg-amber-200 inline-block px-4 py-2 rounded-md border border-amber-500 relative">
-          * <em>This opportunity is limited to Westside High School students enrolled in the Entrepreneurship Academy</em>
+          * <em>This opportunity is limited to Westside High School students enrolled in the Entrepreneurship or Nursing Academy</em>
           <span className="absolute -top-2 -right-2">
             <Sparkles className="h-5 w-5 text-amber-600" />
           </span>

@@ -53,7 +53,7 @@ const HeroSection = () => {
           
           <div className="my-6 flex justify-center">
             <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium relative">
-              Exclusive to Westside High School Students
+              Exclusive to Westside High School Students in Entrepreneurship or Nursing Academy
               <span className="absolute -top-2 -right-2">
                 <Sparkles className="h-4 w-4 text-amber-500" />
               </span>
