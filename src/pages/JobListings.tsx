@@ -9,9 +9,11 @@ import { Job } from '@/types/job';
 import { toast } from 'sonner';
 import JobListingsLayout from '@/components/job/JobListingsLayout';
 import JobFilterSidebar from '@/components/job/JobFilterSidebar';
-import JobMobileFilters from '@/components/job/JobMobileFilters';
+import MobileJobFilters from '@/components/mobile/MobileJobFilters';
 import JobListContent from '@/components/job/JobListContent';
 import TopEmployersSection from '@/components/job/TopEmployersSection';
+import EnhancedJobCard from '@/components/job/EnhancedJobCard';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,7 +22,8 @@ const JobListings = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncingData, setSyncingData] = useState(false);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [appliedFiltersCount, setAppliedFiltersCount] = useState(0);
+  const isMobile = useIsMobile();
   
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5;
@@ -33,6 +36,17 @@ const JobListings = () => {
       ...filters,
       radius: radiusParam > 0 ? radiusParam : undefined
     };
+    
+    // Calculate how many filters are applied for the badge
+    let count = 0;
+    if (filters.type && filters.type !== 'all') count++;
+    if (filters.experienceLevel && filters.experienceLevel !== 'all') count++;
+    if (filters.isRemote !== null) count++;
+    if (filters.isFlexible !== null) count++;
+    if (filters.salary) count++;
+    if (filters.postedWithin) count++;
+    if (filters.keywords && filters.keywords.length > 0) count++;
+    setAppliedFiltersCount(count);
     
     setTimeout(() => {
       const results = searchJobsByZipCode(zipCodeParam, searchFilters);
@@ -105,6 +119,17 @@ const JobListings = () => {
         searchFilters.keywords = [keywordParam];
       }
       
+      // Count applied filters for the badge
+      let count = 0;
+      if (jobTypeParam && jobTypeParam !== 'all') count++;
+      if (expLevelParam && expLevelParam !== 'all') count++;
+      if (searchParams.has('remote')) count++;
+      if (searchParams.has('flexible')) count++;
+      if (salaryMinParam || salaryMaxParam) count++;
+      if (postedWithinParam) count++;
+      if (keywordParam) count++;
+      setAppliedFiltersCount(count);
+      
       let filteredJobs = allJobs;
       if (zipCodeParam) {
         filteredJobs = searchJobsByZipCode(zipCodeParam, searchFilters);
@@ -127,6 +152,7 @@ const JobListings = () => {
   // Reset filters
   const resetFilters = () => {
     setSearchParams(new URLSearchParams({ zipCode: zipCodeParam }));
+    setAppliedFiltersCount(0);
   };
 
   return (
@@ -147,19 +173,23 @@ const JobListings = () => {
           />
         }
       >
+        {/* Mobile filters for better small screen experience */}
+        {isMobile && (
+          <div className="sticky top-0 z-30 bg-background pt-4 pb-3 -mx-4 px-4 border-b">
+            <MobileJobFilters 
+              onFilterChange={applyFilters} 
+              appliedFiltersCount={appliedFiltersCount}
+            />
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Desktop sidebar filters */}
           <JobFilterSidebar 
             onFilterChange={applyFilters}
             onSyncMockData={handleSyncMockData}
             syncingData={syncingData}
-          />
-          
-          <JobMobileFilters
-            showFilters={showMobileFilters}
-            setShowFilters={setShowMobileFilters}
-            onFilterChange={applyFilters}
-            onSyncMockData={handleSyncMockData}
-            syncingData={syncingData}
+            className="hidden md:block"
           />
           
           <div className="md:col-span-3">
@@ -171,6 +201,14 @@ const JobListings = () => {
               zipCode={zipCodeParam}
               onResetFilters={resetFilters}
               onPageChange={setCurrentPage}
+              renderJobCard={(job) => (
+                <EnhancedJobCard 
+                  key={job.id}
+                  job={job}
+                  size={isMobile ? 'compact' : 'default'}
+                  className={isMobile ? "job-card-mobile" : ""}
+                />
+              )}
             />
           </div>
         </div>
