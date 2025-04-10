@@ -1,6 +1,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom'; 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -38,12 +39,13 @@ const renderApp = () => {
   ReactDOM.createRoot(root).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ThemeProvider>
-            {/* Remove BrowserRouter from here since it's already included in App.tsx */}
-            <App />
-          </ThemeProvider>
-        </AuthProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>
   );

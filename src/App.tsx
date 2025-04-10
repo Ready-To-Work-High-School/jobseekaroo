@@ -1,6 +1,6 @@
 
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from './components/theme-provider';
 import { AuthProvider } from './contexts/AuthContext';
@@ -33,7 +33,7 @@ function App() {
   const isMobile = useIsMobile();
   
   return (
-    <BrowserRouter>
+    <>
       {/* Add ScrollToTop component to scroll to top when route changes */}
       <ScrollToTop />
       <Toaster position="top-right" />
@@ -86,7 +86,7 @@ function App() {
           </>
         )}
       </ThemeProvider>
-    </BrowserRouter>
+    </>
   );
 }
 
