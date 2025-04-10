@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -7,15 +6,12 @@ import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
 import LazyImage from '@/components/LazyImage';
 import { Badge } from '@/components/ui/badge';
-
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
   const titleAnimation = useSlideIn(300, 'right');
   const subtitleAnimation = useFadeIn(500);
   const buttonAnimation = useFadeIn(700);
-  
-  return (
-    <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
+  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
       {/* Simplified background pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
@@ -26,18 +22,8 @@ const HeroSection = () => {
         <div className={`flex justify-center mb-8 ${logoAnimation}`}>
           {/* Optimized logo display with proper sizing */}
           <div className="relative w-24 h-24 md:w-28 md:h-28">
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-400 to-amber-400 opacity-30 blur-lg animate-pulse"></div>
-            <LazyImage 
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
-              webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp"
-              avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif"
-              alt="Job Seekers 4 High Schools Logo" 
-              className="h-full w-full relative z-10 drop-shadow-lg object-contain" 
-              width={112}
-              height={112}
-              priority={true}
-              sizes="(max-width: 640px) 96px, 112px"
-            />
+            
+            <LazyImage src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif" alt="Job Seekers 4 High Schools Logo" className="h-full w-full relative z-10 drop-shadow-lg object-contain" width={112} height={112} priority={true} sizes="(max-width: 640px) 96px, 112px" />
           </div>
         </div>
         
@@ -103,8 +89,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
