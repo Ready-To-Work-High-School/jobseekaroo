@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MainNavigation from './MainNavigation';
 import AuthLinks from './AuthLinks';
 import MobileMenu from './MobileMenu'; // Changed from named import to default import
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth';
 
 interface HeaderProps {
   hideAuthLinks?: boolean;
