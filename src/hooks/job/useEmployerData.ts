@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -53,11 +54,25 @@ export const useEmployerData = () => {
     setLoading(true);
     
     try {
+      console.log('Fetching top employers data...');
       const response = await supabase.functions.invoke('get-employer-stats');
       
-      if (response.error) throw new Error(response.error.message);
+      if (response.error) {
+        console.error("Error from function:", response.error);
+        throw new Error(response.error.message || 'Error fetching data');
+      }
+      
+      if (!response.data) {
+        console.error("No data returned from function");
+        throw new Error('No data returned from function');
+      }
       
       const data = response.data.employers;
+      console.log('Received employer data:', data);
+      
+      if (!data || !Array.isArray(data)) {
+        throw new Error('Invalid response format');
+      }
       
       const enhancedData = data.map((employer: Employer) => ({
         ...employer,
@@ -68,8 +83,11 @@ export const useEmployerData = () => {
       setEmployers(enhancedData);
     } catch (error) {
       console.error("Error fetching top employers:", error);
-      toast.error("Couldn't load employer data. Using fallback data.");
+      toast.error("Couldn't load employer data. Using fallback data.", {
+        duration: 5000
+      });
       
+      // Use fallback data after a short delay
       setTimeout(() => {
         const fallbackData: Employer[] = [
           { 
@@ -160,19 +178,23 @@ export const useEmployerData = () => {
   };
 
   useEffect(() => {
+    // Set up realtime listener for job changes
     const channel = supabase
-      .channel('employer-job-counts')
+      .channel('employer-job-counts-changes')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'jobs' },
         () => {
+          console.log('Job data changed, refreshing employer stats');
           fetchTopEmployers();
         }
       )
       .subscribe();
 
+    // Initial data fetch
     fetchTopEmployers();
 
+    // Clean up subscription
     return () => {
       supabase.removeChannel(channel);
     };

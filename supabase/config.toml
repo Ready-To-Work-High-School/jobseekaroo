@@ -1,5 +1,14 @@
 
 project_id = "juzawihlfesurtewxgdy"
 
-[functions.chat]
-verify_jwt = false
+[api]
+enabled = true
+
+[db]
+enabled = true
+
+[analytics]
+enabled = true
+
+[functions]
+enabled = true
