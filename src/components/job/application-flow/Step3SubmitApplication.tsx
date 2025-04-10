@@ -2,6 +2,7 @@
 import React from 'react';
 import { FileCheck } from 'lucide-react';
 import { Job } from '@/types/job';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface Step3SubmitApplicationProps {
   job: Job;
@@ -17,14 +18,16 @@ const Step3SubmitApplication: React.FC<Step3SubmitApplicationProps> = ({ job }) 
       </p>
       
       <div className="flex items-center justify-center py-4">
-        <FileCheck className="h-16 w-16 text-primary" />
+        <div className="bg-primary/10 p-4 rounded-full">
+          <FileCheck className="h-16 w-16 text-primary" />
+        </div>
       </div>
       
-      <div className="bg-blue-50 p-3 rounded-md border border-blue-100">
-        <p className="text-sm text-blue-800">
+      <Alert variant="info" className="bg-blue-50 text-blue-800 border-blue-100">
+        <AlertDescription>
           <strong>Tip:</strong> After applying, follow up with the employer in 3-5 days if you haven't heard back.
-        </p>
-      </div>
+        </AlertDescription>
+      </Alert>
     </div>
   );
 };

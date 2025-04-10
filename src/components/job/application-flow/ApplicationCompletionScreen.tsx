@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ApplicationCompletionScreenProps {
   job: Job;
@@ -32,32 +33,34 @@ const ApplicationCompletionScreen: React.FC<ApplicationCompletionScreenProps> = 
       </DialogHeader>
 
       <div className="grid gap-6 py-6">
-        <div className="border rounded-md p-4 bg-muted/30">
-          <h4 className="font-medium mb-2 flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            Next Steps
-          </h4>
-          <ul className="space-y-2 text-sm">
-            <li className="flex gap-2">
-              <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
-                <span className="text-xs font-medium text-primary">1</span>
-              </div>
-              <span>The employer will review your application</span>
-            </li>
-            <li className="flex gap-2">
-              <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
-                <span className="text-xs font-medium text-primary">2</span>
-              </div>
-              <span>You'll receive an email when there are updates</span>
-            </li>
-            <li className="flex gap-2">
-              <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
-                <span className="text-xs font-medium text-primary">3</span>
-              </div>
-              <span>Track your application status in your dashboard</span>
-            </li>
-          </ul>
-        </div>
+        <Card>
+          <CardContent className="p-4">
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Next Steps
+            </h4>
+            <ul className="space-y-2 text-sm">
+              <li className="flex gap-2">
+                <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-medium text-primary">1</span>
+                </div>
+                <span>The employer will review your application</span>
+              </li>
+              <li className="flex gap-2">
+                <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-medium text-primary">2</span>
+                </div>
+                <span>You'll receive an email when there are updates</span>
+              </li>
+              <li className="flex gap-2">
+                <div className="bg-primary/20 rounded-full h-5 w-5 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-medium text-primary">3</span>
+                </div>
+                <span>Track your application status in your dashboard</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
       </div>
 
       <DialogFooter className="flex sm:justify-between">

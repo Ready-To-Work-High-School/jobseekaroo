@@ -3,6 +3,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
+import Spinner from '@/components/ui/spinner';
 
 interface ApplicationFooterProps {
   currentStep: number;
@@ -40,11 +41,11 @@ const ApplicationFooter: React.FC<ApplicationFooterProps> = ({
       <Button 
         onClick={onNext}
         disabled={isSubmitting}
-        className="gap-1"
+        className="gap-1.5"
       >
         {isSubmitting ? (
           <>
-            <span className="animate-spin">◌</span>
+            <Spinner size="sm" />
             Submitting...
           </>
         ) : currentStep < totalSteps ? (
