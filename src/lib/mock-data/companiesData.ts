@@ -83,7 +83,7 @@ export const topJacksonvilleCompanies: Company[] = [
     industry: "Healthcare",
     icon: MapPin,
     website: "https://www.baptistjax.com/careers",
-    logoUrl: "/lovable-uploads/7358ed5d-5e1f-401b-b378-0f7679ff7802.png"
+    logoUrl: "/lovable-uploads/fa5d62af-3190-44aa-b88c-55ebbc363b88.png"
   },
   {
     name: "American Express",

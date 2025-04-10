@@ -39,7 +39,7 @@ const LOGO_MAP: Record<string, string> = {
   'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',
   'Fidelity National Financial': '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png',
   'Knight': '/lovable-uploads/500d4fef-f22b-43d5-84c4-3cdd2b22ddcf.png',
-  'Baptist Health': '/lovable-uploads/7358ed5d-5e1f-401b-b378-0f7679ff7802.png',
+  'Baptist Health': '/lovable-uploads/fa5d62af-3190-44aa-b88c-55ebbc363b88.png',
   'American Express': '/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png',
   'UnitedHealthcare': '/lovable-uploads/84397b4a-da78-47d9-9ed4-daa193847fd7.png',
   'Web.com': '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png'
