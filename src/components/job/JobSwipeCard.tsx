@@ -37,7 +37,7 @@ const JobSwipeCard: React.FC<JobSwipeCardProps> = ({ job, onSwipeLeft, onSwipeRi
         initial={{ opacity: 0 }}
         animate={{ opacity: 0 }}
         whileDrag={{ opacity: 0.8 }}
-        style={{ x: [-100, 0] }}
+        style={{ x: -100 }} 
         transition={{ type: "spring" }}
       >
         <div className="bg-red-500/80 rounded-full p-2">
@@ -50,7 +50,7 @@ const JobSwipeCard: React.FC<JobSwipeCardProps> = ({ job, onSwipeLeft, onSwipeRi
         initial={{ opacity: 0 }}
         animate={{ opacity: 0 }}
         whileDrag={{ opacity: 0.8 }}
-        style={{ x: [100, 0] }}
+        style={{ x: 100 }}
         transition={{ type: "spring" }}
       >
         <div className="bg-green-500/80 rounded-full p-2">
@@ -79,7 +79,7 @@ const JobSwipeCard: React.FC<JobSwipeCardProps> = ({ job, onSwipeLeft, onSwipeRi
         </div>
         
         {/* Featured/Top job indicator */}
-        {job.featured && (
+        {job.isFeatured && (
           <motion.div 
             className="absolute top-3 right-3 bg-amber-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1"
             initial={{ scale: 0.8, opacity: 0 }}

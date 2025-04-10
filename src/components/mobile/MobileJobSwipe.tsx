@@ -49,7 +49,6 @@ const MobileJobSwipe: React.FC = () => {
     toast({
       title: "Job saved! 🎉",
       description: "This job has been added to your saved jobs.",
-      icon: <Star className="h-4 w-4 text-yellow-400" />
     });
     setCurrentJobs(prev => prev.filter(job => job.id !== jobId));
     if (currentJobs.length <= 3) {
