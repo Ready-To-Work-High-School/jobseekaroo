@@ -64,7 +64,7 @@ const EnhancedJobListings = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <JobCard job={job} />
+                    <JobCard job={job} index={index} />
                   </motion.div>
                 ))}
               </div>
