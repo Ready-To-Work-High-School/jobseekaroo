@@ -1,3 +1,4 @@
+
 import { MapPin, DollarSign } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 
@@ -109,7 +110,7 @@ export const topJacksonvilleCompanies: Company[] = [
     industry: "Finance",
     icon: MapPin,
     website: "https://careers.bankofamerica.com/",
-    logoUrl: "/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png"
+    logoUrl: "/lovable-uploads/7518f1a5-62ad-490c-9c24-0bbc649ab7ff.png"
   },
   {
     name: "UnitedHealthcare",

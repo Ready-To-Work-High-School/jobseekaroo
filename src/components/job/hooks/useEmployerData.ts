@@ -33,7 +33,7 @@ const LOGO_MAP: Record<string, string> = {
   'Advent Health': '/lovable-uploads/63532fbf-0320-4113-ae09-e054b4f4b3bf.png',
   'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
-  'Bank of America': '/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png',
+  'Bank of America': '/lovable-uploads/7518f1a5-62ad-490c-9c24-0bbc649ab7ff.png',
   'CSX Transportation': '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png',
   'Florida Blue': '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png',
   'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',
@@ -149,7 +149,7 @@ export const useEmployerData = () => {
             avg_min_wage: 17.25, 
             job_count: 7,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png'
+            logoUrl: '/lovable-uploads/7518f1a5-62ad-490c-9c24-0bbc649ab7ff.png'
           },
         ];
         setEmployers(fallbackData);

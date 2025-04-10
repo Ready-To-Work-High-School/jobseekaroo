@@ -86,6 +86,9 @@ const EnhancedHero = () => {
       <div className="container mx-auto px-4">
         <Separator className="my-8" />
         <Divider className="mb-8">For Students, Employers & Schools</Divider>
+        <p className="text-center text-muted-foreground mb-8">
+          Job Seekers 4 High Schools brings together all parts of the career readiness ecosystem
+        </p>
       </div>
       
       {/* Top Jacksonville Employers with logos */}
