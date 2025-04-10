@@ -23,7 +23,7 @@ const Step3SubmitApplication: React.FC<Step3SubmitApplicationProps> = ({ job }) 
         </div>
       </div>
       
-      <Alert variant="info" className="bg-blue-50 text-blue-800 border-blue-100">
+      <Alert variant="default" className="bg-blue-50 text-blue-800 border-blue-100">
         <AlertDescription>
           <strong>Tip:</strong> After applying, follow up with the employer in 3-5 days if you haven't heard back.
         </AlertDescription>

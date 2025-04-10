@@ -25,7 +25,7 @@ const Step2ConfirmDetails: React.FC = () => {
         </CardContent>
       </Card>
       
-      <Alert variant="warning" className="bg-amber-50 text-amber-800 border-amber-100">
+      <Alert variant="default" className="bg-amber-50 text-amber-800 border-amber-100">
         <AlertDescription>
           Make sure your profile is up-to-date to increase your chances of getting hired!
         </AlertDescription>
