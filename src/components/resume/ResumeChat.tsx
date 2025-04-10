@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Send, User, Bot, Upload, FileText, DownloadCloud } from "lucide-react";
+import { Loader2, Send, User, Bot, Upload, FileText, DownloadCloud, Sparkles, Layout, Coffee } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserProfile } from "@/types/user";
 import { 
@@ -48,6 +48,42 @@ const ADVANCED_COMMANDS = [
   "Create a LinkedIn summary from my resume",
 ];
 
+// Resume templates configuration
+const RESUME_TEMPLATES = [
+  { 
+    id: "professional", 
+    name: "Professional",
+    color: "#1e40af",
+    fontTitle: "Helvetica",
+    fontBody: "Helvetica",
+    description: "Clean, traditional design suitable for corporate environments"
+  },
+  { 
+    id: "creative", 
+    name: "Creative",
+    color: "#047857", 
+    fontTitle: "Helvetica",
+    fontBody: "Helvetica",
+    description: "Modern design with visual elements for creative industries"
+  },
+  { 
+    id: "academic", 
+    name: "Academic",
+    color: "#7c3aed", 
+    fontTitle: "Times",
+    fontBody: "Times",
+    description: "Formal layout emphasizing education and publications"
+  },
+  { 
+    id: "minimalist", 
+    name: "Minimalist",
+    color: "#475569", 
+    fontTitle: "Helvetica",
+    fontBody: "Helvetica",
+    description: "Simple design with focus on content and readability"
+  }
+];
+
 const ResumeChat = () => {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
@@ -56,6 +92,7 @@ const ResumeChat = () => {
   const [hasUploadedResume, setHasUploadedResume] = useState(false);
   const [generatedResume, setGeneratedResume] = useState<{ data: any, template: string } | null>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("professional");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const { userProfile } = useAuth();
@@ -116,12 +153,14 @@ const ResumeChat = () => {
         response = "To quantify achievements:\n\n• Add numbers to show scale (e.g., 'Managed a team of 12 employees')\n• Include percentages for improvements (e.g., 'Increased efficiency by 25%')\n• Add dollar amounts for budgets or revenue (e.g., 'Managed $500K annual budget')\n• Mention timeframes (e.g., 'Completed project 2 weeks ahead of schedule')\n• Include frequency (e.g., 'Processed 200+ customer requests weekly')";
       } else if (lowercaseInput.includes("upload") || lowercaseInput.includes("review my resume")) {
         response = "I'd be happy to review your existing resume. Click the upload button below the chat to upload your current resume, and I'll provide specific feedback on how to improve it.";
+      } else if (lowercaseInput.includes("template") || lowercaseInput.includes("design") || lowercaseInput.includes("format")) {
+        response = "I can help you choose the right template for your resume. We offer several professionally designed templates:\n\n• Professional: Clean design ideal for corporate roles\n• Creative: Modern layout for design and marketing positions\n• Academic: Format optimized for research and teaching positions\n• Minimalist: Simple, elegant design that focuses on content\n\nWhich style interests you most?";
       } else if (lowercaseInput.includes("generate") || lowercaseInput.includes("create") || lowercaseInput.includes("make") || lowercaseInput.includes("build")) {
-        // Generate a simple resume based on the user profile
-        await generateResumeFromProfile("Professional");
-        response = "I've created a draft Professional resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat.";
+        // Generate a resume based on the user profile
+        await generateResumeFromProfile(selectedTemplate);
+        response = `I've created a draft ${RESUME_TEMPLATES.find(t => t.id === selectedTemplate)?.name || "Professional"} resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat or try a different template if you prefer a different style.`;
       } else {
-        response = "I'd be happy to help with your resume. Could you provide more specific details about what you're looking for assistance with? For example:\n\n• Reviewing a specific section\n• Crafting better bullet points\n• Highlighting certain skills or experiences\n• Tailoring your resume for a particular position";
+        response = "I'd be happy to help with your resume. Could you provide more specific details about what you're looking for assistance with? For example:\n\n• Reviewing a specific section\n• Crafting better bullet points\n• Highlighting certain skills or experiences\n• Tailoring your resume for a particular position\n• Choosing a template design that stands out";
       }
       
       // Add personalization if user profile exists
@@ -251,12 +290,15 @@ const ResumeChat = () => {
   const downloadGeneratedResume = async () => {
     if (!generatedResume) {
       // If we have uploaded a resume but haven't generated one, create a sample
-      await generateResumeFromProfile("Professional");
+      await generateResumeFromProfile(selectedTemplate);
     }
     
     setIsGeneratingPdf(true);
     
     try {
+      // Get selected template configuration
+      const templateConfig = RESUME_TEMPLATES.find(t => t.id === (generatedResume?.template || selectedTemplate)) || RESUME_TEMPLATES[0];
+      
       const doc = new jsPDF();
       const data = generatedResume?.data || {
         personalInfo: {
@@ -289,71 +331,347 @@ const ResumeChat = () => {
         ]
       };
       
-      // Add content to PDF
+      // Add content to PDF with visual enhancements based on selected template
       const fullName = `${data.personalInfo.firstName} ${data.personalInfo.lastName}`;
+      const themeColor = templateConfig.color;
       
-      // Header with name and title
-      doc.setFontSize(24);
-      doc.setFont("helvetica", "bold");
-      doc.text(fullName, 20, 20);
-      
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "normal");
-      doc.text(data.personalInfo.title, 20, 30);
-      
-      // Contact info
-      doc.setFontSize(10);
-      doc.text(`Email: ${data.personalInfo.email}`, 20, 40);
-      doc.text(`Phone: ${data.personalInfo.phone}`, 20, 45);
-      doc.text(`Location: ${data.personalInfo.location}`, 20, 50);
-      
-      // Skills section
-      doc.setFontSize(16);
-      doc.setFont("helvetica", "bold");
-      doc.text("Skills", 20, 65);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(data.skills.join(", "), 20, 75);
-      
-      // Experience section
-      doc.setFontSize(16);
-      doc.setFont("helvetica", "bold");
-      doc.text("Experience", 20, 90);
-      
-      let yPos = 100;
-      data.experience.forEach(job => {
+      // Add visual header based on template
+      if (templateConfig.id === "creative") {
+        // Creative template has a side bar with color
+        doc.setFillColor(themeColor);
+        doc.rect(0, 0, 60, 297, "F");
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(16);
+        doc.text("CONTACT", 20, 60, { align: "center" });
+        
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.setFontSize(9);
+        doc.text("Email:", 20, 70, { align: "center" });
+        doc.text(data.personalInfo.email, 20, 75, { align: "center" });
+        doc.text("Phone:", 20, 85, { align: "center" });
+        doc.text(data.personalInfo.phone, 20, 90, { align: "center" });
+        doc.text("Location:", 20, 100, { align: "center" });
+        doc.text(data.personalInfo.location, 20, 105, { align: "center" });
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(16);
+        doc.text("SKILLS", 20, 125, { align: "center" });
+        
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.setFontSize(9);
+        let skillY = 135;
+        data.skills.forEach(skill => {
+          doc.text(skill, 20, skillY, { align: "center" });
+          skillY += 7;
+        });
+        
+        // Main content area
+        doc.setTextColor(0, 0, 0);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(24);
+        doc.text(fullName, 140, 25, { align: "center" });
+        
+        doc.setFontSize(16);
+        doc.setFont(templateConfig.fontBody, "italic");
+        doc.text(data.personalInfo.title, 140, 35, { align: "center" });
+        
+        doc.setDrawColor(themeColor);
+        doc.setLineWidth(1);
+        doc.line(70, 45, 210, 45);
+        
+        // Experience section
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(16);
+        doc.text("EXPERIENCE", 140, 60);
+        
+        let expY = 70;
+        data.experience.forEach(job => {
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.setFontSize(12);
+          doc.text(job.title, 70, expY);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.setFontSize(11);
+          doc.text(`${job.company}, ${job.location}`, 70, expY + 7);
+          
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.setFontSize(10);
+          doc.text(`${job.startDate} to ${job.endDate}`, 70, expY + 14);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          const descLines = doc.splitTextToSize(job.description, 135);
+          doc.text(descLines, 70, expY + 22);
+          
+          expY += 45;
+        });
+        
+        // Education section
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(16);
+        doc.text("EDUCATION", 140, expY);
+        
+        expY += 10;
+        data.education.forEach(edu => {
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.setFontSize(12);
+          doc.text(`${edu.degree} in ${edu.field}`, 70, expY);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.setFontSize(11);
+          doc.text(`${edu.institution}`, 70, expY + 7);
+          
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.setFontSize(10);
+          doc.text(`${edu.startDate} to ${edu.endDate}`, 70, expY + 14);
+          
+          expY += 25;
+        });
+      } else if (templateConfig.id === "minimalist") {
+        // Minimalist template with clean typography
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(26);
+        doc.text(fullName, 20, 20);
+        
+        doc.setFontSize(14);
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.text(data.personalInfo.title, 20, 30);
+        
+        doc.setDrawColor(100, 100, 100);
+        doc.setLineWidth(0.5);
+        doc.line(20, 35, 190, 35);
+        
+        // Contact info in a single line
+        doc.setFontSize(9);
+        doc.text(`${data.personalInfo.email} • ${data.personalInfo.phone} • ${data.personalInfo.location}`, 105, 42, { align: "center" });
+        
+        // Experience section
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(14);
+        doc.text("EXPERIENCE", 20, 55);
+        
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(20, 58, 190, 58);
+        
+        let yPos = 65;
+        data.experience.forEach(job => {
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.setFontSize(12);
+          doc.text(job.title, 20, yPos);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.text(`${job.company}, ${job.location}`, 20, yPos + 7);
+          
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.setFontSize(10);
+          doc.text(`${job.startDate} to ${job.endDate}`, 170, yPos, { align: "right" });
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          const descLines = doc.splitTextToSize(job.description, 170);
+          doc.text(descLines, 20, yPos + 15);
+          
+          yPos += 35;
+        });
+        
+        // Education section
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(14);
+        doc.text("EDUCATION", 20, yPos);
+        
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(20, yPos + 3, 190, yPos + 3);
+        
+        yPos += 10;
+        data.education.forEach(edu => {
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.setFontSize(12);
+          doc.text(`${edu.degree} in ${edu.field}`, 20, yPos);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.text(`${edu.institution}`, 20, yPos + 7);
+          
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.setFontSize(10);
+          doc.text(`${edu.startDate} to ${edu.endDate}`, 170, yPos, { align: "right" });
+          
+          yPos += 15;
+        });
+        
+        // Skills section
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(14);
+        doc.text("SKILLS", 20, yPos + 10);
+        
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(20, yPos + 13, 190, yPos + 13);
+        
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.setFontSize(11);
+        doc.text(data.skills.join(" • "), 20, yPos + 22);
+      } else if (templateConfig.id === "academic") {
+        // Academic template with formal layout
+        doc.setFont("Times", "bold");
+        doc.setFontSize(18);
+        doc.text(fullName, 105, 20, { align: "center" });
+        
         doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.text(`${job.title} - ${job.company}, ${job.location}`, 20, yPos);
+        doc.text(data.personalInfo.title, 105, 28, { align: "center" });
         
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "italic");
-        doc.text(`${job.startDate} to ${job.endDate}`, 20, yPos + 7);
+        doc.setFont("Times", "normal");
+        doc.setFontSize(11);
+        doc.text(data.personalInfo.email, 70, 36);
+        doc.text(data.personalInfo.phone, 140, 36);
+        doc.text(data.personalInfo.location, 105, 42, { align: "center" });
         
-        doc.setFont("helvetica", "normal");
-        const descLines = doc.splitTextToSize(job.description, 170);
-        doc.text(descLines, 20, yPos + 15);
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(1);
+        doc.line(20, 46, 190, 46);
         
-        yPos += 35;
-      });
-      
-      // Education section
-      doc.setFontSize(16);
-      doc.setFont("helvetica", "bold");
-      doc.text("Education", 20, yPos);
-      
-      yPos += 10;
-      data.education.forEach(edu => {
+        // Education section first (academic focus)
+        doc.setFont("Times", "bold");
+        doc.setFontSize(14);
+        doc.text("EDUCATION", 20, 56);
+        
+        let yPos = 66;
+        data.education.forEach(edu => {
+          doc.setFont("Times", "bold");
+          doc.setFontSize(12);
+          doc.text(`${edu.degree} in ${edu.field}`, 20, yPos);
+          
+          doc.setFont("Times", "normal");
+          doc.text(`${edu.institution}`, 20, yPos + 6);
+          doc.text(`${edu.startDate} to ${edu.endDate}`, 20, yPos + 12);
+          
+          yPos += 20;
+        });
+        
+        // Experience section
+        doc.setFont("Times", "bold");
+        doc.setFontSize(14);
+        doc.text("PROFESSIONAL EXPERIENCE", 20, yPos + 10);
+        
+        yPos += 20;
+        data.experience.forEach(job => {
+          doc.setFont("Times", "bold");
+          doc.setFontSize(12);
+          doc.text(job.title, 20, yPos);
+          
+          doc.setFont("Times", "italic");
+          doc.text(`${job.company}, ${job.location}`, 20, yPos + 6);
+          
+          doc.setFont("Times", "normal");
+          doc.text(`${job.startDate} to ${job.endDate}`, 20, yPos + 12);
+          
+          const descLines = doc.splitTextToSize(job.description, 170);
+          doc.text(descLines, 30, yPos + 20);
+          
+          yPos += 40;
+        });
+        
+        // Skills section
+        doc.setFont("Times", "bold");
+        doc.setFontSize(14);
+        doc.text("SKILLS AND COMPETENCIES", 20, yPos + 10);
+        
+        doc.setFont("Times", "normal");
         doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.text(`${edu.degree} in ${edu.field}`, 20, yPos);
+        doc.text(data.skills.join(", "), 20, yPos + 20, { maxWidth: 170 });
+      } else {
+        // Professional (default) template
+        // Header with name and title
+        doc.setFillColor(themeColor);
+        doc.rect(0, 0, 210, 40, "F");
         
+        doc.setTextColor(255, 255, 255);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.setFontSize(24);
+        doc.text(fullName, 105, 20, { align: "center" });
+        
+        doc.setFontSize(14);
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.text(data.personalInfo.title, 105, 30, { align: "center" });
+        
+        // Contact info
+        doc.setTextColor(0, 0, 0);
         doc.setFontSize(10);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${edu.institution}, ${edu.startDate} to ${edu.endDate}`, 20, yPos + 7);
+        doc.text(`Email: ${data.personalInfo.email}`, 20, 50);
+        doc.text(`Phone: ${data.personalInfo.phone}`, 20, 58);
+        doc.text(`Location: ${data.personalInfo.location}`, 20, 66);
         
-        yPos += 15;
-      });
+        // Skills section
+        doc.setFontSize(16);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.text("Skills", 20, 85);
+        
+        doc.setDrawColor(themeColor);
+        doc.setLineWidth(1);
+        doc.line(20, 88, 190, 88);
+        
+        doc.setFont(templateConfig.fontBody, "normal");
+        doc.setFontSize(11);
+        doc.text(data.skills.join(" • "), 20, 98, { maxWidth: 170 });
+        
+        // Experience section
+        doc.setFontSize(16);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.text("Experience", 20, 118);
+        
+        doc.setDrawColor(themeColor);
+        doc.setLineWidth(1);
+        doc.line(20, 121, 190, 121);
+        
+        let yPos = 131;
+        data.experience.forEach(job => {
+          doc.setFontSize(14);
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.text(`${job.title}`, 20, yPos);
+          
+          doc.setFontSize(12);
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.text(`${job.company}, ${job.location}`, 20, yPos + 8);
+          
+          doc.setFontSize(10);
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.text(`${job.startDate} to ${job.endDate}`, 20, yPos + 16);
+          
+          doc.setFont(templateConfig.fontBody, "normal");
+          const descLines = doc.splitTextToSize(job.description, 170);
+          doc.text(descLines, 20, yPos + 26);
+          
+          yPos += 46;
+        });
+        
+        // Education section
+        doc.setFontSize(16);
+        doc.setFont(templateConfig.fontTitle, "bold");
+        doc.text("Education", 20, yPos);
+        
+        doc.setDrawColor(themeColor);
+        doc.setLineWidth(1);
+        doc.line(20, yPos + 3, 190, yPos + 3);
+        
+        yPos += 13;
+        data.education.forEach(edu => {
+          doc.setFontSize(14);
+          doc.setFont(templateConfig.fontTitle, "bold");
+          doc.text(`${edu.degree} in ${edu.field}`, 20, yPos);
+          
+          doc.setFontSize(12);
+          doc.setFont(templateConfig.fontBody, "normal");
+          doc.text(`${edu.institution}`, 20, yPos + 8);
+          
+          doc.setFontSize(10);
+          doc.setFont(templateConfig.fontBody, "italic");
+          doc.text(`${edu.startDate} to ${edu.endDate}`, 20, yPos + 16);
+          
+          yPos += 25;
+        });
+      }
       
       // Save the PDF
       const pdfName = `${fullName.replace(/\s+/g, '_')}_Resume.pdf`;
@@ -376,23 +694,28 @@ const ResumeChat = () => {
   };
 
   const generateResume = (template: string) => {
+    setSelectedTemplate(template);
+    const templateName = RESUME_TEMPLATES.find(t => t.id === template)?.name || template;
+    
     toast({
       title: "Generating Resume",
-      description: `Creating a ${template} resume based on your profile information.`,
+      description: `Creating a ${templateName} resume based on your profile information.`,
     });
     
     // Generate resume based on template
     generateResumeFromProfile(template).then(() => {
-      const generateResponse = `I've created a draft ${template} resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat.`;
+      const generateResponse = `I've created a draft ${templateName} resume based on your profile information. Here are some recommendations to complete it:\n\n1. Add more specific achievements to your work experience\n2. Consider adding certifications if you have any\n3. Include a link to your portfolio or LinkedIn profile\n\nYou can download the draft resume using the button at the top of this chat.`;
       
       setMessages(prev => [...prev, { role: "assistant", content: generateResponse }]);
     });
   };
 
   return (
-    <div className="flex flex-col h-[70vh] rounded-lg border">
+    <div className="flex flex-col h-[70vh] rounded-lg border shadow-sm">
       <div className="bg-muted p-3 border-b flex justify-between items-center">
-        <h3 className="font-medium">Resume AI Assistant</h3>
+        <h3 className="font-medium flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-amber-500" /> Resume AI Assistant
+        </h3>
         <div className="flex gap-2">
           {hasUploadedResume && (
             <Button 
@@ -433,14 +756,41 @@ const ResumeChat = () => {
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline" className="text-xs flex gap-1 items-center">
+                <Layout className="h-3.5 w-3.5" />
+                Templates
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {RESUME_TEMPLATES.map((template) => (
+                <DropdownMenuItem 
+                  key={template.id} 
+                  onClick={() => generateResume(template.id)}
+                  className="flex gap-2 cursor-pointer"
+                >
+                  <div className="h-4 w-4 rounded-sm" style={{ backgroundColor: template.color }}></div>
+                  <div>
+                    <span className="font-medium">{template.name}</span>
+                    <p className="text-xs text-muted-foreground">{template.description}</p>
+                  </div>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleSuggestionClick("Help me choose a template")}>
+                Help me choose a template
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="text-xs">Actions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => generateResume("Professional")}>
+              <DropdownMenuItem onClick={() => generateResume("professional")}>
                 <FileText className="h-4 w-4 mr-2" />
                 Generate Professional Resume
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => generateResume("Creative")}>
+              <DropdownMenuItem onClick={() => generateResume("creative")}>
                 <FileText className="h-4 w-4 mr-2" />
                 Generate Creative Resume
               </DropdownMenuItem>
@@ -450,6 +800,10 @@ const ResumeChat = () => {
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleSuggestionClick("Analyze my resume for ATS")}>
                 ATS Analysis
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/resume-builder")}>
+                <Coffee className="h-4 w-4 mr-2" />
+                Go to Resume Builder
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
