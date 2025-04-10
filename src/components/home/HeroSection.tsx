@@ -30,6 +30,14 @@ const HeroSection = () => {
         </div>
         
         <div className="max-w-3xl mx-auto text-center">
+          {/* JS4HS Section - Moved above the main headline */}
+          <div className="mb-6">
+            <h2 className="text-xl md:text-2xl font-semibold">Job Seekers 4 High Schools</h2>
+            <p className="text-muted-foreground mt-2">
+              Connecting students with credential-ready opportunities at Westside High School
+            </p>
+          </div>
+          
           <h1 className={`text-4xl md:text-5xl font-bold mb-6 text-gray-900 ${titleAnimation}`}>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500 relative">
               Your First Job, Made Simple.
@@ -38,14 +46,6 @@ const HeroSection = () => {
               </span>
             </span>
           </h1>
-          
-          {/* JS4HS Section - Moved here */}
-          <div className="mt-6 mb-8">
-            <h2 className="text-xl md:text-2xl font-semibold">Job Seekers 4 High Schools</h2>
-            <p className="text-muted-foreground mt-2">
-              Connecting students with credential-ready opportunities at Westside High School
-            </p>
-          </div>
           
           <div className="my-6 flex justify-center">
             <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium relative">
