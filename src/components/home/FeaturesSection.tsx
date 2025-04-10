@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, Book, GraduationCap, Users, Shield, Award, Clock } from 'lucide-react';
+import { Briefcase, Book, GraduationCap, Users, Shield, Award, Clock, TrendingUp } from 'lucide-react';
 import { useFadeIn } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 
@@ -145,7 +145,5 @@ const FeaturesSection = () => {
     </section>
   );
 };
-
-import { TrendingUp } from 'lucide-react';
 
 export default FeaturesSection;

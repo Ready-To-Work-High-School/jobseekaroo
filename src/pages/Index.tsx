@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import EnhancedHero from '@/components/EnhancedHero';
 import AdminToggle from '@/components/admin/AdminToggle';
-import { useAuth } from '@/contexts/auth'; // Make sure this import path is correct
+import { useAuth } from '@/contexts/AuthContext'; // Fixed import path
 import { Button } from '@/components/ui/button';
 import { Award, Compass, Heart, MapPin, Calendar, Clock, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
