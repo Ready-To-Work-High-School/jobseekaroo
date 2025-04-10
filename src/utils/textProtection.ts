@@ -37,34 +37,21 @@ export const enableTextProtection = (onCopyAttempt?: CopyAttemptCallback) => {
   `;
   document.head.appendChild(style);
   
-  // Block suspicious redirects
-  const originalAssign = window.location.assign;
-  const originalReplace = window.location.replace;
-  const originalOpen = window.open;
-  
-  window.location.assign = function(url: string) {
-    if (isSuspiciousUrl(url)) {
-      console.warn('Blocked redirect to suspicious URL:', url);
-      return;
+  // Monitor URL navigation without overriding native methods
+  // Use event listeners instead of replacing native methods
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const anchor = target.closest('a');
+    
+    if (anchor) {
+      const href = anchor.getAttribute('href');
+      if (href && isSuspiciousUrl(href)) {
+        console.warn('Blocked navigation to suspicious URL:', href);
+        e.preventDefault();
+        if (onCopyAttempt) onCopyAttempt();
+      }
     }
-    return originalAssign.call(window.location, url);
-  };
-  
-  window.location.replace = function(url: string) {
-    if (isSuspiciousUrl(url)) {
-      console.warn('Blocked redirect to suspicious URL:', url);
-      return;
-    }
-    return originalReplace.call(window.location, url);
-  };
-  
-  window.open = function(url?: string, target?: string, features?: string) {
-    if (url && isSuspiciousUrl(url)) {
-      console.warn('Blocked opening suspicious URL:', url);
-      return null;
-    }
-    return originalOpen.call(window, url, target, features);
-  };
+  });
   
   // Monitor and clean URLs
   cleanExistingLinks();
