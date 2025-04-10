@@ -33,7 +33,7 @@ const LOGO_MAP: Record<string, string> = {
   'Mayo Clinic': '/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png',
   'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
-  'Bank of America': '/lovable-uploads/db3bbdbe-4e13-45f6-9d94-45a126fdc1ef.png',
+  'Bank of America': '/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png',
   'CSX Transportation': '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png',
   'Florida Blue': '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png',
   'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',

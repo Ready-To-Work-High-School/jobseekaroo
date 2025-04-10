@@ -101,7 +101,7 @@ export const topJacksonvilleCompanies: Company[] = [
     industry: "Finance",
     icon: MapPin,
     website: "https://careers.bankofamerica.com/",
-    logoUrl: "/lovable-uploads/c71583b7-2543-47d9-9ac4-a4f9582752bd.png"
+    logoUrl: "/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png"
   },
   {
     name: "UnitedHealthcare",
