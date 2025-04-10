@@ -18,7 +18,7 @@ const PartnerLogosSection = () => {
     {
       id: 2,
       name: "Nursing Academy",
-      logo: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png", // Updated Nursing Academy logo
+      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Original Nursing Academy logo
       width: 180,
       height: 180
     }, 
@@ -49,7 +49,8 @@ const PartnerLogosSection = () => {
     }
   ];
   
-  return <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
+  return (
+    <section className="py-12 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container px-4 mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
@@ -87,15 +88,13 @@ const PartnerLogosSection = () => {
                   />
                 </div>
                 
-                <LazyImage 
+                {/* Use direct image path to ensure proper loading */}
+                <img 
                   src={badge.logo}
-                  webpSrc={badge.webpSrc}
-                  avifSrc={badge.avifSrc}
                   alt={`${badge.name} credential`} 
                   className={`relative z-10 transition-transform duration-300 group-hover:scale-110 object-contain ${badge.id === 5 ? 'h-28 w-auto' : 'h-24 w-auto'}`} 
                   width={badge.width}
                   height={badge.height}
-                  priority={true}
                 />
                 
                 {/* Ribbon-style badge for all credentials */}
@@ -111,7 +110,8 @@ const PartnerLogosSection = () => {
           ))}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default PartnerLogosSection;

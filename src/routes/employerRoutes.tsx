@@ -9,6 +9,7 @@ import EmployerBadges from '../pages/EmployerBadges';
 
 export const EmployerRoutes = (
   <>
+    <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
     <Route path="/employer/dashboard" element={
       <ProtectedRoute requiredRoles={['employer', 'admin']}>
@@ -31,6 +32,7 @@ export const EmployerRoutes = (
       </ProtectedRoute>
     } />
     <Route path="/employer/badges" element={<EmployerBadges />} />
+    <Route path="/employer-badges" element={<EmployerBadges />} />
   </>
 );
 

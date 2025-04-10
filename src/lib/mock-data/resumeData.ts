@@ -1,5 +1,5 @@
 
-import { FileText, Download, Briefcase, MessageSquare, User, Award } from 'lucide-react';
+import { FileText, Download, Briefcase, MessageSquare, User, Award, Building2 } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 
 export type ResumeResource = {
@@ -113,12 +113,12 @@ export const resumeResources: ResumeResource[] = [
     url: "/pdf/resume-resources/listing-credentials-guide.pdf"
   },
   {
-    title: "Resume Review Checklist",
-    description: "A comprehensive checklist to ensure your resume is complete and error-free.",
-    type: "Checklist",
-    icon: FileText,
-    action: "Download",
-    url: "/pdf/resume-resources/resume-checklist.pdf"
+    title: "Employer Dashboard Demo",
+    description: "Preview what employers see when they review your resume and credentials.",
+    type: "Dashboard Demo",
+    icon: Building2,
+    action: "View Demo",
+    url: "/employer-dashboard"
   }
 ];
 
@@ -140,11 +140,11 @@ export const interviewResources: ResumeResource[] = [
     url: "/pdf/interview-resources/common-questions.pdf"
   },
   {
-    title: "What to Wear to an Interview",
-    description: "Guidelines for appropriate interview attire for different types of jobs.",
-    type: "Article",
-    icon: User,
-    action: "Download",
-    url: "/pdf/interview-resources/interview-attire.pdf"
+    title: "Employer Badge Recognition",
+    description: "Learn how employers can award badges to recognize your skills and character traits.",
+    type: "Feature Overview",
+    icon: Award,
+    action: "Learn More",
+    url: "/employer/badges"
   }
 ];

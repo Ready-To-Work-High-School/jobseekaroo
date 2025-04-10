@@ -24,28 +24,28 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
   goal_oriented: <Target className="h-5 w-5" />,
   
   // School-specific badges
-  js4hs: <div className="h-5 w-5 relative">
+  js4hs: <div className="h-5 w-5 relative flex items-center justify-center">
     <img 
       src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
       alt="JS4HS" 
       className="h-full w-full object-contain"
     />
   </div>,
-  nursing_academy: <div className="h-5 w-5 relative">
+  nursing_academy: <div className="h-5 w-5 relative flex items-center justify-center">
     <img 
       src="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png" 
       alt="Nursing Academy" 
       className="h-full w-full object-contain"
     />
   </div>,
-  esb: <div className="h-5 w-5 relative">
+  esb: <div className="h-5 w-5 relative flex items-center justify-center">
     <img 
       src="/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png" 
       alt="Entrepreneurship & Small Business" 
       className="h-full w-full object-contain"
     />
   </div>,
-  ibm_skillsbuild: <div className="h-5 w-5 relative">
+  ibm_skillsbuild: <div className="h-5 w-5 relative flex items-center justify-center">
     <img 
       src="/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png" 
       alt="IBM SkillsBuild" 

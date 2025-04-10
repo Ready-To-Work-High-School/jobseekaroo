@@ -6,7 +6,8 @@ import { Shield, Users, ChartBar, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const EmployerHeader = () => {
-  return <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
+  return (
+    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">For Employers</h1>
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
@@ -38,15 +39,16 @@ const EmployerHeader = () => {
         
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild size="lg">
-            <Link to="/employer/dashboard">Post a Job</Link>
+            <Link to="/employer-dashboard">Post a Job</Link>
           </Button>
           
           <Button asChild variant="outline" size="lg">
-            <Link to="/employer-badges">Award Badges</Link>
+            <Link to="/employer/badges">Award Badges</Link>
           </Button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default EmployerHeader;

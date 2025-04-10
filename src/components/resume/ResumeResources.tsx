@@ -5,16 +5,30 @@ import { resumeResources, interviewResources } from "@/lib/mock-data/resumeData"
 import { Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
 
 const ResumeResources = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleResourceAction = (url: string, title: string) => {
+  const handleResourceAction = (url: string, title: string, action: string) => {
     if (!url) {
       toast({
         title: "Resource Not Available",
         description: "This resource is currently being updated. Please check back later.",
       });
+      return;
+    }
+
+    // Check if it's an employer dashboard link
+    if (url === "/employer-dashboard") {
+      navigate("/employer-dashboard");
+      return;
+    }
+    
+    // Check if it's an employer badges link
+    if (url === "/employer-badges") {
+      navigate("/employer/badges");
       return;
     }
 
@@ -60,7 +74,7 @@ const ResumeResources = () => {
                   <Button 
                     variant={resource.url ? "default" : "outline"} 
                     className="w-full gap-2"
-                    onClick={() => handleResourceAction(resource.url, resource.title)}
+                    onClick={() => handleResourceAction(resource.url, resource.title, resource.action)}
                   >
                     {resource.action === "Download" ? (
                       <Download className="h-4 w-4" />
@@ -90,7 +104,7 @@ const ResumeResources = () => {
                   <Button 
                     variant={resource.url ? "default" : "outline"} 
                     className="w-full gap-2"
-                    onClick={() => handleResourceAction(resource.url, resource.title)}
+                    onClick={() => handleResourceAction(resource.url, resource.title, resource.action)}
                   >
                     {resource.action === "Download" ? (
                       <Download className="h-4 w-4" />
