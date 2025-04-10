@@ -14,6 +14,7 @@ import HowItWorksSection from '@/components/home/HowItWorksSection';
 import JobLocationsMap from '@/components/job/JobLocationsMap';
 import StudentProfileGrid from '@/components/students/StudentProfileGrid';
 import SampleCandidates from '@/components/employer/SampleCandidates';
+import FeeTeaser from '@/components/pricing/FeeTeaser';
 
 // Lazy load the content that appears below the fold
 const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
@@ -47,6 +48,11 @@ const Home = () => {
       {/* Add enhanced job listings component */}
       <ErrorBoundary>
         <EnhancedJobListings />
+      </ErrorBoundary>
+      
+      {/* Add Fee Teaser section */}
+      <ErrorBoundary>
+        <FeeTeaser />
       </ErrorBoundary>
       
       {/* Add map of job locations */}

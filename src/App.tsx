@@ -21,6 +21,7 @@ import { useIsMobile } from './hooks/use-mobile';
 import MobileLayout from './components/MobileLayout';
 import UserOnboardingGuide from './components/onboarding/UserOnboardingGuide';
 import ScrollToTop from './components/navigation/ScrollToTop';
+import Pricing from './components/Pricing';
 
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
@@ -52,6 +53,7 @@ function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/employer-dashboard" element={<EmployerDashboard />} />
             <Route path="/mobile/jobs" element={<MobileJobSwipe />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/terms" element={<Suspense fallback={<div>Loading...</div>}><TermsOfService /></Suspense>} />
             <Route path="/privacy" element={<Suspense fallback={<div>Loading...</div>}><PrivacyPolicy /></Suspense>} />
             <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>} />
@@ -74,6 +76,7 @@ function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/employer-dashboard" element={<EmployerDashboard />} />
             <Route path="/mobile/jobs" element={<MobileJobSwipe />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/terms" element={<Suspense fallback={<div>Loading...</div>}><TermsOfService /></Suspense>} />
             <Route path="/privacy" element={<Suspense fallback={<div>Loading...</div>}><PrivacyPolicy /></Suspense>} />
             <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>} />

@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from './Layout';
 import PricingPlans from './employer/premium/PricingPlans';
+import FeeTeaser from './pricing/FeeTeaser';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 
@@ -18,7 +19,7 @@ const Pricing = () => {
           </p>
         </div>
 
-        <PricingPlans />
+        <FeeTeaser />
 
         <div className="mt-16 text-center">
           <h2 className="text-2xl font-semibold mb-4">Need a custom plan?</h2>
