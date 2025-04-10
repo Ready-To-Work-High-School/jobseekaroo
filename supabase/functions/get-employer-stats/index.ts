@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Create a Supabase client with the service role key (for admin access)
+    // Create a Supabase client with the anon key
     const supabase = createClient(
       supabaseUrl,
       supabaseAnonKey
@@ -26,15 +26,25 @@ Deno.serve(async (req) => {
       .order('job_count', { ascending: false })
       .limit(10)
 
-    if (error) throw error
+    if (error) {
+      console.error('Database error:', error.message)
+      throw error
+    }
 
-    return new Response(JSON.stringify({ employers: data }), {
+    // Return the data with proper headers
+    return new Response(JSON.stringify({ 
+      employers: data || [],
+      success: true 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
     console.error('Error fetching employer stats:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      success: false 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
     })

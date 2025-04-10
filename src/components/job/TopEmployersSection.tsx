@@ -3,6 +3,7 @@ import { useEmployerData } from './hooks/useEmployerData';
 import { EmployerCard } from './EmployerCard';
 import { EmployerSectionHeader } from './EmployerSectionHeader';
 import { EmployerSectionLoading } from './EmployerSectionLoading';
+import { AlertCircle } from 'lucide-react';
 
 const TopEmployersSection = () => {
   const { employers, loading } = useEmployerData();
@@ -22,11 +23,20 @@ const TopEmployersSection = () => {
       <div className="container mx-auto px-4">
         <EmployerSectionHeader />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {employers.map((employer, index) => (
-            <EmployerCard key={index} employer={employer} />
-          ))}
-        </div>
+        {employers.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10">
+            <AlertCircle className="h-10 w-10 text-amber-500 mb-2" />
+            <p className="text-center text-muted-foreground">
+              No employer data available at the moment.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {employers.map((employer, index) => (
+              <EmployerCard key={index} employer={employer} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
