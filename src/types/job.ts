@@ -30,6 +30,7 @@ export interface Job {
   experienceLevel: ExperienceLevel;
   postedDate: string;
   applicationUrl?: string;
+  contactEmail?: string;
   logoUrl?: string;
   isRemote: boolean;
   isFlexible: boolean;
