@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -5,7 +6,7 @@ import EnhancedHero from '@/components/EnhancedHero';
 import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/auth'; // Make sure this import path is correct
 import { Button } from '@/components/ui/button';
-import { Award, Compass, Heart, MapPin, Calendar, Clock } from 'lucide-react';
+import { Award, Compass, Heart, MapPin, Calendar, Clock, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -97,6 +98,28 @@ const Index = () => {
                     <p className="font-bold">March 1 – May 15, 2025</p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+        
+        {/* Platform Guide Callout */}
+        <div className="container mx-auto px-4 py-4 mb-8">
+          <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50 overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center p-6">
+              <div className="md:w-3/4 mb-4 md:mb-0 md:pr-4">
+                <h3 className="text-xl font-bold mb-2">New! Platform Guide Available</h3>
+                <p className="text-gray-600">
+                  Explore our comprehensive guide with detailed information for students, employers, schools, administrators, and counselors.
+                </p>
+              </div>
+              <div className="md:w-1/4 flex justify-center">
+                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" asChild>
+                  <Link to="/platform-guide" className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5" />
+                    View Platform Guide
+                  </Link>
+                </Button>
               </div>
             </div>
           </Card>

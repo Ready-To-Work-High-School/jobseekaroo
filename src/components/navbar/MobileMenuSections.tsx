@@ -48,6 +48,11 @@ export const PrimaryNavigationLinks = () => (
       <span className="font-semibold">About</span>
     </MobileNavLink>
     
+    <MobileNavLink to="/platform-guide">
+      <BookOpen className="h-5 w-5" />
+      <span className="font-semibold">Platform Guide</span>
+    </MobileNavLink>
+    
     <MobileNavLink to="/resources">
       <BookOpen className="h-5 w-5" />
       <span className="font-semibold">Resources</span>

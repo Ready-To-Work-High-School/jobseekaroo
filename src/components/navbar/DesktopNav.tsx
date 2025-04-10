@@ -28,6 +28,10 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
           <Compass className="h-4 w-4" />
           <span>First Job Toolkit</span>
         </NavLink>
+        <NavLink to="/platform-guide" className="flex items-center gap-1">
+          <BookOpen className="h-4 w-4" />
+          <span>Platform Guide</span>
+        </NavLink>
         <NavLink to="/resume-assistant" className="flex items-center gap-1">
           <FileText className="h-4 w-4" />
           <span>Resume Help</span>
