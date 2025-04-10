@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import JobApplicationFlow from '../../JobApplicationFlow';
+import JobApplicationFlow from '../JobApplicationFlow';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Job } from '@/types/job';
@@ -51,7 +51,6 @@ const mockJob: Job = {
   },
   requirements: ['Test requirement 1', 'Test requirement 2'],
   postedDate: '2023-01-01',
-  expiresDate: '2023-12-31',
   type: 'full-time',
   isRemote: true,
   isFlexible: true,
