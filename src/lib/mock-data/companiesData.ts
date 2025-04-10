@@ -1,4 +1,3 @@
-
 import { MapPin, DollarSign } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 
@@ -21,6 +20,15 @@ export const topJacksonvilleCompanies: Company[] = [
     icon: MapPin,
     website: "https://jobs.mayo.edu/",
     logoUrl: "/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png"
+  },
+  {
+    name: "Advent Health",
+    location: "1235 Lake Pointe Parkway, Jacksonville, FL 32216",
+    salaryRange: "$65,000 - $155,000",
+    industry: "Healthcare",
+    icon: MapPin,
+    website: "https://careers.adventhealth.com/",
+    logoUrl: "/lovable-uploads/63532fbf-0320-4113-ae09-e054b4f4b3bf.png"
   },
   {
     name: "CSX Corporation",

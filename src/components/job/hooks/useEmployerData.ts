@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -31,6 +30,7 @@ const INDUSTRY_MAP: Record<string, string> = {
 
 const LOGO_MAP: Record<string, string> = {
   'Mayo Clinic': '/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png',
+  'Advent Health': '/lovable-uploads/63532fbf-0320-4113-ae09-e054b4f4b3bf.png',
   'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
   'Bank of America': '/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png',
@@ -71,7 +71,6 @@ export const useEmployerData = () => {
       toast.error("Couldn't load employer data. Using fallback data.");
       
       setTimeout(() => {
-        // Define fallback data with the correct interface structure
         const fallbackData: Employer[] = [
           { 
             company_name: 'Mayo Clinic', 
@@ -86,7 +85,8 @@ export const useEmployerData = () => {
             industry: 'Healthcare', 
             avg_min_wage: 21.75, 
             job_count: 8,
-            last_updated: new Date().toISOString()
+            last_updated: new Date().toISOString(),
+            logoUrl: '/lovable-uploads/63532fbf-0320-4113-ae09-e054b4f4b3bf.png'
           },
           { 
             company_name: 'Baptist Medical Center', 
