@@ -35,26 +35,24 @@ const mockJob: Job = {
   id: 'test-job-1',
   title: 'Test Job',
   company: {
-    id: 'test-company-1',
     name: 'Test Company',
     logoUrl: '/test-logo.png'
   },
   location: {
     city: 'Test City',
     state: 'TS',
-    country: 'Test Country',
-    remote: true
+    zipCode: '12345'
   },
   description: 'This is a test job description',
   payRate: {
     min: 15,
     max: 25,
-    period: 'hour'
+    period: 'hourly'
   },
   requirements: ['Test requirement 1', 'Test requirement 2'],
   postedDate: '2023-01-01',
   expiresDate: '2023-12-31',
-  type: 'Full-time',
+  type: 'full-time',
   isRemote: true,
   isFlexible: true,
   benefits: ['Health Insurance', 'Paid Time Off'],
