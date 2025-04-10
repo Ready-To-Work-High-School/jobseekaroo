@@ -7,39 +7,67 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { User } from '@supabase/supabase-js';
+import { UserProfile } from '@/types/user';
 
-export interface ProfileFormProps {
-  user: any;
-  userProfile: any;
-  isEditing: boolean;
-  firstName: string;
-  setFirstName: (value: string) => void;
-  lastName: string;
-  setLastName: (value: string) => void;
-  email: string;
-  bio: string;
-  setBio: (value: string) => void;
-  phoneNumber: string;
-  setPhoneNumber: (value: string) => void;
-  zipCode: string;
-  setZipCode: (value: string) => void;
+interface ProfileFormProps {
+  user: User;
+  userProfile: UserProfile;
+  isEditing?: boolean;
+  firstName?: string;
+  setFirstName?: (value: string) => void;
+  lastName?: string;
+  setLastName?: (value: string) => void;
+  email?: string;
+  bio?: string;
+  setBio?: (value: string) => void;
+  phoneNumber?: string;
+  setPhoneNumber?: (value: string) => void;
+  zipCode?: string;
+  setZipCode?: (value: string) => void;
 }
 
-const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => {
-  // State for form fields
-  const [isEditing, setIsEditing] = useState(true);
-  const [firstName, setFirstName] = useState(userProfile?.firstName || '');
-  const [lastName, setLastName] = useState(userProfile?.lastName || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [bio, setBio] = useState(userProfile?.bio || '');
-  const [phoneNumber, setPhoneNumber] = useState(userProfile?.phoneNumber || '');
-  const [zipCode, setZipCode] = useState(userProfile?.zipCode || '');
+const ProfileForm: React.FC<ProfileFormProps> = ({ 
+  user, 
+  userProfile,
+  isEditing = true,
+  firstName: propFirstName,
+  setFirstName: propSetFirstName,
+  lastName: propLastName,
+  setLastName: propSetLastName,
+  email: propEmail,
+  bio: propBio,
+  setBio: propSetBio,
+  phoneNumber: propPhoneNumber,
+  setPhoneNumber: propSetPhoneNumber,
+  zipCode: propZipCode,
+  setZipCode: propSetZipCode
+}) => {
+  // Internal state if props not provided
+  const [internalIsEditing, setInternalIsEditing] = useState(isEditing);
+  const [internalFirstName, setInternalFirstName] = useState(propFirstName || userProfile?.first_name || '');
+  const [internalLastName, setInternalLastName] = useState(propLastName || userProfile?.last_name || '');
+  const [internalBio, setInternalBio] = useState(propBio || userProfile?.bio || '');
+  const [internalPhoneNumber, setInternalPhoneNumber] = useState(propPhoneNumber || userProfile?.contact_details_encrypted || '');
+  const [internalZipCode, setInternalZipCode] = useState(propZipCode || userProfile?.location || '');
+  
+  // Use prop handlers if provided, otherwise use internal state handlers
+  const firstName = propFirstName !== undefined ? propFirstName : internalFirstName;
+  const setFirstName = propSetFirstName || setInternalFirstName;
+  const lastName = propLastName !== undefined ? propLastName : internalLastName;
+  const setLastName = propSetLastName || setInternalLastName;
+  const bio = propBio !== undefined ? propBio : internalBio;
+  const setBio = propSetBio || setInternalBio;
+  const phoneNumber = propPhoneNumber !== undefined ? propPhoneNumber : internalPhoneNumber;
+  const setPhoneNumber = propSetPhoneNumber || setInternalPhoneNumber;
+  const zipCode = propZipCode !== undefined ? propZipCode : internalZipCode;
+  const setZipCode = propSetZipCode || setInternalZipCode;
   
   const handleSave = async () => {
     try {
       // Simulate saving profile
       toast.success('Profile updated successfully!');
-      setIsEditing(false);
+      setInternalIsEditing(false);
     } catch (error) {
       toast.error('Failed to update profile. Please try again.');
     }
@@ -59,7 +87,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
               id="firstName" 
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              disabled={!isEditing}
+              disabled={!internalIsEditing}
             />
           </div>
           <div className="space-y-2">
@@ -68,7 +96,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
               id="lastName" 
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              disabled={!isEditing}
+              disabled={!internalIsEditing}
             />
           </div>
         </div>
@@ -77,7 +105,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
           <Label htmlFor="email">Email</Label>
           <Input 
             id="email" 
-            value={email}
+            value={propEmail || user?.email || ''}
             disabled
             type="email"
           />
@@ -92,7 +120,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
             id="bio" 
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            disabled={!isEditing}
+            disabled={!internalIsEditing}
             placeholder="Write a short bio about yourself..."
             className="min-h-[120px]"
           />
@@ -105,7 +133,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
               id="phoneNumber" 
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              disabled={!isEditing}
+              disabled={!internalIsEditing}
               type="tel"
             />
           </div>
@@ -115,15 +143,15 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
               id="zipCode" 
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
-              disabled={!isEditing}
+              disabled={!internalIsEditing}
             />
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {!isEditing ? (
+        {!internalIsEditing ? (
           <Button 
-            onClick={() => setIsEditing(true)}
+            onClick={() => setInternalIsEditing(true)}
             variant="outline"
           >
             Edit Profile
@@ -131,7 +159,7 @@ const ProfileForm = ({ user, userProfile }: { user: any, userProfile: any }) => 
         ) : (
           <div className="flex gap-2">
             <Button 
-              onClick={() => setIsEditing(false)}
+              onClick={() => setInternalIsEditing(false)}
               variant="outline"
             >
               Cancel

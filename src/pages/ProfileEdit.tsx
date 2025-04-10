@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import ProfileForm from '@/components/profile/ProfileForm';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,6 +8,11 @@ import NotSignedInAlert from '@/components/profile/NotSignedInAlert';
 
 const ProfileEdit = () => {
   const { user, userProfile, isLoading } = useAuth();
+  const [firstName, setFirstName] = useState(userProfile?.first_name || '');
+  const [lastName, setLastName] = useState(userProfile?.last_name || '');
+  const [bio, setBio] = useState(userProfile?.bio || '');
+  const [phoneNumber, setPhoneNumber] = useState(userProfile?.contact_details_encrypted || '');
+  const [zipCode, setZipCode] = useState(userProfile?.location || '');
 
   return (
     <Layout>
@@ -30,17 +35,17 @@ const ProfileEdit = () => {
             user={user} 
             userProfile={userProfile}
             isEditing={true}
-            firstName={userProfile?.firstName || ''}
-            setFirstName={() => {}}
-            lastName={userProfile?.lastName || ''}
-            setLastName={() => {}}
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
             email={user?.email || ''}
-            bio={userProfile?.bio || ''}
-            setBio={() => {}}
-            phoneNumber={userProfile?.phoneNumber || ''}
-            setPhoneNumber={() => {}}
-            zipCode={userProfile?.zipCode || ''}
-            setZipCode={() => {}}
+            bio={bio}
+            setBio={setBio}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            zipCode={zipCode}
+            setZipCode={setZipCode}
           />
         )}
       </div>

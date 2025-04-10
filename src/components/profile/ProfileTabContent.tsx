@@ -54,6 +54,8 @@ const ProfileTabContent: React.FC<ProfileTabContentProps> = ({
       <CardContent className="space-y-4">
         {userProfile ? (
           <ProfileForm
+            user={user}
+            userProfile={userProfile}
             isEditing={isEditing}
             firstName={firstName}
             setFirstName={setFirstName}
@@ -61,10 +63,8 @@ const ProfileTabContent: React.FC<ProfileTabContentProps> = ({
             setLastName={setLastName}
             bio={bio}
             setBio={setBio}
-            location={location}
-            setLocation={setLocation}
-            user={user}
-            userProfile={userProfile}
+            zipCode={location}
+            setZipCode={setLocation}
           />
         ) : (
           <Alert>
