@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 
 // Import styles
-import './index.css'
+import './styles/index.css'
 import './styles/global.css'
 import './styles/mobile.css'
 import './styles/mobile-optimization.css' // Add our new mobile optimizations
