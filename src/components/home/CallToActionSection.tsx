@@ -38,7 +38,7 @@ const CallToActionSection = () => {
             <p className="text-sm text-blue-100 mb-4">
               Access our talent pool of eager high school students ready to join your workforce
             </p>
-            <Link to="/employer-dashboard">
+            <Link to="/for-employers">
               <Button variant="default" size="sm" className="bg-amber-500 hover:bg-amber-600 text-blue-900">
                 Hire Students
               </Button>
