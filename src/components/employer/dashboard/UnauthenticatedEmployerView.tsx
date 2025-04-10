@@ -10,6 +10,8 @@ import EmployerBenefits from '../EmployerBenefits';
 import EmployerPremiumServices from '../premium/EmployerPremiumServices';
 import LazyImage from '@/components/LazyImage';
 import { getImageSizes } from '@/utils/imageUtils';
+import EmployerKeyFeatures from './EmployerKeyFeatures';
+import EmployerDirectAccessSection from './EmployerDirectAccessSection';
 
 const UnauthenticatedEmployerView = () => {
   return (
