@@ -17,12 +17,15 @@ import InterviewPrep from '@/pages/InterviewPrep';
 import HealthcarePathways from '@/pages/HealthcarePathways';
 import PlatformGuide from '@/pages/PlatformGuide';
 import SkillDevelopment from '@/pages/SkillDevelopment';
+import Skills from '@/pages/Skills';
 import ResumeAssistant from '@/pages/ResumeAssistant';
+import ResumeBuilder from '@/pages/ResumeBuilder';
 import SafetyCompliance from '@/pages/SafetyCompliance';
 import SchoolIntegration from '@/pages/SchoolIntegration';
 import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
 import CommunicationTools from '@/pages/CommunicationTools';
 import PremiumServices from '@/pages/PremiumServices';
+import Resources from '@/pages/Resources';
 
 const SharedRoutes = (
   <>
@@ -42,10 +45,18 @@ const SharedRoutes = (
     <Route path="/interview-prep" element={<InterviewPrep />} />
     <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
+    <Route path="/resources" element={<Resources />} />
+    
+    {/* Fix skills routes - add both paths */}
+    <Route path="/skill-development" element={<SkillDevelopment />} />
+    <Route path="/skills" element={<Skills />} />
+    
+    {/* Resume related pages */}
+    <Route path="/resume-assistant" element={<ResumeAssistant />} />
+    <Route path="/resume-builder" element={<ResumeBuilder />} />
+    <Route path="/resume-help" element={<ResumeAssistant />} /> {/* Alias for resume-assistant */}
     
     {/* Additional routes for platform features */}
-    <Route path="/skill-development" element={<SkillDevelopment />} />
-    <Route path="/resume-assistant" element={<ResumeAssistant />} />
     <Route path="/safety-compliance" element={<SafetyCompliance />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/analytics" element={<AnalyticsDashboard />} />

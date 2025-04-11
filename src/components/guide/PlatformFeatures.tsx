@@ -14,13 +14,13 @@ const features = [
     icon: <GraduationCap className="h-6 w-6 text-green-500" />,
     title: "Skill Development",
     description: "Access to training resources and skill-building opportunities to help students prepare for the workforce.",
-    link: "/skill-development"
+    link: "/skill-development"  // Ensure consistent path
   },
   {
     icon: <FileText className="h-6 w-6 text-amber-500" />,
     title: "Resume Building",
     description: "Dynamic resume creation tools with multiple templates and AI-assisted content suggestions tailored for high school students.",
-    link: "/resume-assistant"
+    link: "/resume-assistant"  // Ensure consistent path
   },
   {
     icon: <Briefcase className="h-6 w-6 text-purple-500" />,

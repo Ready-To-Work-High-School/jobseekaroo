@@ -32,7 +32,7 @@ export const JobSeekerDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/skills" className="flex items-center gap-2">
+          <Link to="/skill-development" className="flex items-center gap-2">
             <GraduationCap className="h-4 w-4" />
             Skills Development
           </Link>
