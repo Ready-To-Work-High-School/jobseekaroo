@@ -1,89 +1,41 @@
+
 import React, { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useRoutes } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import ScrollToTop from './components/navigation/ScrollToTop';
+import { AppRoutes } from './routes';
 import Layout from './components/Layout';
+
+// Pages that are needed for fallback
 import Home from './pages/Home';
-import JobListings from './pages/JobListings';
-import JobDetails from './pages/JobDetails';
-import Profile from './pages/Profile';
-import SavedJobs from './pages/SavedJobs';
-import Applications from './pages/Applications';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import AuthCallback from './pages/AuthCallback';
-import EmployerDashboard from './pages/employer/EmployerDashboard';
-import EnhancedJobListings from './pages/EnhancedJobListings';
-import MobileJobSwipe from './components/mobile/MobileJobSwipe';
-import { useIsMobile } from './hooks/use-mobile';
-import MobileLayout from './components/MobileLayout';
-import UserOnboardingGuide from './components/onboarding/UserOnboardingGuide';
-import ScrollToTop from './components/navigation/ScrollToTop';
-import Pricing from './components/Pricing';
-import OnboardingWizard from './components/onboarding/OnboardingWizard';
 
+// Lazy-loaded pages
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Contact = lazy(() => import('./pages/Contact'));
 const About = lazy(() => import('./pages/About'));
 
 function App() {
-  const isMobile = useIsMobile();
-  
   return (
     <>
       <ScrollToTop />
       <Toaster position="top-right" />
-      {isMobile ? (
-        <MobileLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jobs" element={<EnhancedJobListings />} />
-            <Route path="/jobs/:jobId" element={<JobDetails />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/saved-jobs" element={<SavedJobs />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/mobile/jobs" element={<MobileJobSwipe />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/terms" element={<Suspense fallback={<div>Loading...</div>}><TermsOfService /></Suspense>} />
-            <Route path="/privacy" element={<Suspense fallback={<div>Loading...</div>}><PrivacyPolicy /></Suspense>} />
-            <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>} />
-            <Route path="/about" element={<Suspense fallback={<div>Loading...</div>}><About /></Suspense>} />
-          </Routes>
-        </MobileLayout>
-      ) : (
-        <>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jobs" element={<EnhancedJobListings />} />
-            <Route path="/jobs/:jobId" element={<JobDetails />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/saved-jobs" element={<SavedJobs />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/mobile/jobs" element={<MobileJobSwipe />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/terms" element={<Suspense fallback={<div>Loading...</div>}><TermsOfService /></Suspense>} />
-            <Route path="/privacy" element={<Suspense fallback={<div>Loading...</div>}><PrivacyPolicy /></Suspense>} />
-            <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>} />
-            <Route path="/about" element={<Suspense fallback={<div>Loading...</div>}><About /></Suspense>} />
-            <Route path="/onboarding" element={<OnboardingWizard />} />
-          </Routes>
-          <UserOnboardingGuide />
-        </>
-      )}
+      <Routes>
+        {AppRoutes}
+        
+        {/* Add fallback route for 404 errors */}
+        <Route path="*" element={
+          <Layout>
+            <div className="container mx-auto px-4 py-16 text-center">
+              <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
+              <p className="mb-8">The page you're looking for doesn't exist or has been moved.</p>
+              <a href="/" className="text-blue-500 hover:underline">Return to home page</a>
+            </div>
+          </Layout>
+        } />
+      </Routes>
     </>
   );
 }

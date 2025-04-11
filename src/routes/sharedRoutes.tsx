@@ -1,6 +1,5 @@
 
 import { Route } from 'react-router-dom';
-import Resources from '@/pages/Resources';
 import About from '@/pages/About';
 import FAQ from '@/pages/FAQ';
 import Contact from '@/pages/Contact';
@@ -20,7 +19,6 @@ import PlatformGuide from '@/pages/PlatformGuide';
 
 const SharedRoutes = (
   <>
-    <Route path="/resources" element={<Resources />} />
     <Route path="/about" element={<About />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/contact" element={<Contact />} />

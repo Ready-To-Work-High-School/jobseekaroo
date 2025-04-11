@@ -9,9 +9,14 @@ import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
 import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
+import Resources from '../pages/Resources';
 
+// Export all routes as an array for use in App.tsx
 export const AppRoutes = (
   <>
+    {/* Make sure the Resources page is directly accessible */}
+    <Route path="/resources" element={<Resources />} />
+    
     {/* Home routes */}
     {HomeRoutes}
     
@@ -35,8 +40,7 @@ export const AppRoutes = (
     
     {/* Shared routes */}
     {SharedRoutes}
-    
-    {/* Catch all route - must be last */}
-    <Route path="*" element={<NotFound />} />
   </>
 );
+
+export default AppRoutes;

@@ -24,7 +24,18 @@ const api404Handler = (req, res) => {
   });
 };
 
+// Handler for SPA routing - return index.html for non-API routes
+const spaHandler = (req, res, next) => {
+  if (!req.path.startsWith('/api/') && !req.path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+    // Send the index.html for any non-API, non-asset request
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   apiErrorHandler,
-  api404Handler
+  api404Handler,
+  spaHandler
 };
