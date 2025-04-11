@@ -1,6 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 
+// Use environment variable with fallback for JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 class AuthError extends Error {
