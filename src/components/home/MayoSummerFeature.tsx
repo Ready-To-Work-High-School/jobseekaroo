@@ -46,6 +46,9 @@ const MayoSummerFeature = () => {
       viewport={{ once: true }}
       variants={containerVariants}
     >
+      {/* Radiant blinking label for Summer Program */}
+      <div className="summer-program-label">Summer Program</div>
+      
       {/* Urgency badge */}
       <motion.div 
         className="absolute -top-2 -right-2 z-10"
@@ -88,7 +91,7 @@ const MayoSummerFeature = () => {
       
       <div className="flex flex-col md:flex-row items-center p-6 z-10 relative">
         <motion.div
-          className="md:w-1/2 lg:w-2/5 mb-6 md:mb-0 md:mr-6"
+          className="md:w-1/3 lg:w-1/4 mb-6 md:mb-0 md:mr-6" /* Made logo smaller */
           variants={itemVariants}
         >
           <img 
@@ -98,7 +101,7 @@ const MayoSummerFeature = () => {
           />
         </motion.div>
         
-        <div className="md:w-1/2 lg:w-3/5 space-y-4">
+        <div className="md:w-2/3 lg:w-3/4 space-y-4"> {/* Increased content area */}
           <motion.div variants={itemVariants}>
             <div className="flex items-center gap-2 mb-1">
               <div className="bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">

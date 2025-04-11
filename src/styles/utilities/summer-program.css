@@ -1,0 +1,50 @@
+
+/* Radiant glow label for summer program */
+@keyframes radiant-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.4),
+               0 0 10px rgba(245, 158, 11, 0.1);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.6),
+                0 0 20px rgba(245, 158, 11, 0.3),
+                0 0 30px rgba(245, 158, 11, 0.1);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.4),
+               0 0 10px rgba(245, 158, 11, 0.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes blink-soft {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+.summer-program-label {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, #f59e0b, #ef4444, #f59e0b);
+  background-size: 200% 200%;
+  color: white;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 20px;
+  z-index: 10;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  animation: radiant-glow 2s infinite, blink-soft 3s infinite, gradient 5s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

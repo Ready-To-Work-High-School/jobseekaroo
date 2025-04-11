@@ -8,6 +8,7 @@ import { SparkleGroup } from '../animations/Sparkle';
 import LazyImage from '@/components/LazyImage';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
+import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
 
 const HeroSection = () => {
   const logoAnimation = useFadeIn(100);
@@ -16,8 +17,9 @@ const HeroSection = () => {
   const buttonAnimation = useFadeIn(700);
   const [isHovered, setIsHovered] = useState(false);
 
-  return <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 relative overflow-hidden">
-      {/* Improved background pattern with subtle animation */}
+  return (
+    <section className="bg-gradient-to-b from-blue-50 via-white to-blue-50 py-16 md:py-24 relative overflow-hidden">
+      {/* Enhanced background pattern with subtle animation */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10" />
       
       {/* Enhanced sparkle effect */}
@@ -31,11 +33,26 @@ const HeroSection = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <LazyImage src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif" alt="Job Seekers 4 High Schools Logo" className="h-full w-full relative z-10 drop-shadow-lg object-contain" width={112} height={112} priority={true} sizes="(max-width: 640px) 96px, 112px" />
+            <LazyImage 
+              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+              webpSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" 
+              avifSrc="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.avif" 
+              alt="Job Seekers 4 High Schools Logo" 
+              className="h-full w-full relative z-10 drop-shadow-lg object-contain" 
+              width={112} 
+              height={112} 
+              priority={true} 
+              sizes="(max-width: 640px) 96px, 112px" 
+            />
           </motion.div>
         </div>
         
         <div className="max-w-3xl mx-auto text-center">
+          {/* Prominent Free for Students Badge */}
+          <div className="mb-6 flex justify-center">
+            <FreeForStudentsBadge variant="large" />
+          </div>
+          
           {/* JS4HS Section - Above the main headline */}
           <div className="mb-6">
             <motion.h2 
@@ -57,7 +74,7 @@ const HeroSection = () => {
           </div>
           
           <motion.h1 
-            className={`text-4xl md:text-5xl font-bold mb-6 text-gray-900 ${titleAnimation}`}
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 ${titleAnimation}`}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -85,12 +102,23 @@ const HeroSection = () => {
           </div>
           
           <motion.p 
-            className={`text-lg mb-8 text-gray-700 ${subtitleAnimation}`}
+            className={`text-lg md:text-xl mb-8 text-gray-700 max-w-2xl mx-auto ${subtitleAnimation}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            A fun, safe, mobile-first app to land your first job, with badges and guidance that makes the process simple
+            A fun, safe, mobile-first app to help high school students find their perfect first job, 
+            with badges, guidance, and a simple application process
+          </motion.p>
+          
+          {/* Sign up reminder */}
+          <motion.p 
+            className="text-md mb-8 font-medium text-blue-600"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            Easy sign up with just an email – 100% Free for Westside High School students!
           </motion.p>
           
           {/* Enhanced feature cards with motion */}
@@ -147,20 +175,22 @@ const HeroSection = () => {
                 </Button>
               </motion.div>
             </Link>
-            <Link to="/resources">
+            <Link to="/sign-up">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button size="lg" variant="outline" className="border-2 shadow-sm hover:shadow-md transition-all duration-300">
-                  Student Resources
+                <Button size="lg" variant="outline" className="border-2 shadow-sm hover:shadow-md transition-all duration-300 gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  Sign Up Free
                 </Button>
               </motion.div>
             </Link>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default HeroSection;
