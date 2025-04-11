@@ -1,8 +1,14 @@
 
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
-// Use environment variable with fallback for JWT secret
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+// Use environment variable for JWT secret, or generate a secure random one if not provided
+// IMPORTANT: In production, ALWAYS set JWT_SECRET as an environment variable
+// The generated secret is only meant as a fallback for development
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  console.warn('⚠️  WARNING: JWT_SECRET not set in environment variables. Using generated secret. This is insecure for production.');
+  return crypto.randomBytes(32).toString('hex');
+})();
 
 class AuthError extends Error {
   constructor() {
