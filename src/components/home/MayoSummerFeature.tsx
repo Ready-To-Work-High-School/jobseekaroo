@@ -92,8 +92,8 @@ const MayoSummerFeature = () => {
           variants={itemVariants}
         >
           <img 
-            src="/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png" 
-            alt="Mayo Clinic Summer Program" 
+            src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
+            alt="Mayo Clinic Logo" 
             className="rounded-lg shadow-md w-full h-auto"
           />
         </motion.div>
