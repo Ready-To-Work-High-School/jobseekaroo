@@ -6,6 +6,7 @@ import { SparkleGroup } from './animations/Sparkle';
 import { Divider } from './ui/divider';
 import { Separator } from './ui/separator';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import FreeForStudentsBadge from './badges/FreeForStudentsBadge';
 
 // Lazy load components that aren't immediately visible
 const PartnerLogosSection = lazy(() => import('@/components/home/PartnerLogosSection'));
@@ -35,6 +36,18 @@ const EnhancedHero = () => {
     <div className="relative">
       {/* Reduced number of sparkles */}
       <SparkleGroup count={6} />
+      
+      {/* Free for students banner - NEW */}
+      <div className="bg-amber-50 py-3 px-4 text-center border-b border-amber-100">
+        <div className="container mx-auto">
+          <div className="flex justify-center">
+            <FreeForStudentsBadge variant="large" />
+          </div>
+          <p className="text-sm text-amber-800 mt-2">
+            Exclusive to Westside High School students in Entrepreneurship or Nursing Academy
+          </p>
+        </div>
+      </div>
       
       {/* Info banner with optimized DOM */}
       <div className="bg-blue-50 py-4 px-4 text-center">
