@@ -40,6 +40,9 @@ export const AppRoutes = (
     
     {/* Shared routes */}
     {SharedRoutes}
+    
+    {/* Add a catch-all route for 404 errors */}
+    <Route path="*" element={<NotFound />} />
   </>
 );
 

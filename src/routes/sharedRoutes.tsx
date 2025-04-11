@@ -16,6 +16,13 @@ import JobHelp from '@/pages/JobHelp';
 import InterviewPrep from '@/pages/InterviewPrep';
 import HealthcarePathways from '@/pages/HealthcarePathways';
 import PlatformGuide from '@/pages/PlatformGuide';
+import SkillDevelopment from '@/pages/SkillDevelopment';
+import ResumeAssistant from '@/pages/ResumeAssistant';
+import SafetyCompliance from '@/pages/SafetyCompliance';
+import SchoolIntegration from '@/pages/SchoolIntegration';
+import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
+import CommunicationTools from '@/pages/CommunicationTools';
+import PremiumServices from '@/pages/PremiumServices';
 
 const SharedRoutes = (
   <>
@@ -35,6 +42,15 @@ const SharedRoutes = (
     <Route path="/interview-prep" element={<InterviewPrep />} />
     <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
+    
+    {/* Additional routes for platform features */}
+    <Route path="/skill-development" element={<SkillDevelopment />} />
+    <Route path="/resume-assistant" element={<ResumeAssistant />} />
+    <Route path="/safety-compliance" element={<SafetyCompliance />} />
+    <Route path="/school-integration" element={<SchoolIntegration />} />
+    <Route path="/analytics" element={<AnalyticsDashboard />} />
+    <Route path="/communication" element={<CommunicationTools />} />
+    <Route path="/premium-services" element={<PremiumServices />} />
   </>
 );
 
