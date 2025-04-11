@@ -19,24 +19,32 @@ export const sanitizeHtml = (input: string | null | undefined, isEmail = false):
   if (input == null) return '';
 
   if (typeof window !== 'undefined') {
+    // Use DOMPurify in browser environments for comprehensive sanitization
     return DOMPurify.sanitize(String(input), {
       USE_PROFILES: { html: true },
       FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'object', 'embed', 'link'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href']
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'href', 'src']
     });
   }
 
+  // Server-side or fallback sanitization
   const str = String(input);
   if (isEmail) {
     // For emails, strip all HTML and validate later
     return str.replace(/<[^>]*>/g, ''); // Remove tags entirely
   }
 
+  // Enhanced encoding of special characters
   return str
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;');
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;')
+    .replace(/`/g, '&#x60;')
+    .replace(/\(/g, '&#40;')
+    .replace(/\)/g, '&#41;')
+    .replace(/=/g, '&#61;');
 };
 
 /**
@@ -49,7 +57,10 @@ export const escapeHtml = (input: string | null | undefined): string => {
   
   return String(input)
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 };
 
 /**
@@ -88,6 +99,7 @@ export const sanitizeObject = <T extends Record<string, any>>(obj: T): T => {
  * Creates a safe HTML attribute value
  */
 export const safeAttr = (value: string): string => {
+  // Ensure only alphanumeric, underscore, hyphen, and space characters are allowed
   return value.replace(/[^\w\s-]/gi, '');
 };
 
@@ -108,6 +120,7 @@ export const containsXssVector = (input: string): boolean => {
     /vbscript:/gi, // vbscript: URLs
     /<img[^>]*\s+on\w+\s*=/gi, // Image with event handlers
     /<[^>]*\s+src\s*=\s*['"]?(?:javascript:|data:image\/[^;]*;base64)/gi, // Dangerous src attributes
+    /url\s*\(\s*['"]?\s*(?:javascript:|data:text)/gi, // CSS url() with JavaScript or data
   ];
   
   return dangerousPatterns.some(pattern => pattern.test(input));
@@ -132,6 +145,18 @@ export const generateCspNonce = (): string => {
 };
 
 /**
+ * URL parameter sanitization
+ */
+export const sanitizeUrlParam = (param: string): string => {
+  if (!param) return '';
+  
+  // Remove potentially dangerous characters from URL parameters
+  return encodeURIComponent(String(param)
+    .replace(/[<>'"()\[\]\\\/]/g, '')
+    .trim());
+};
+
+/**
  * Secure SQL sanitization for values to be used in queries
  * This is a last-resort function - always use parameterized queries instead
  */
@@ -145,4 +170,3 @@ export const sanitizeSqlValue = (value: string): string => {
     .replace(/\0/g, "") // Remove null bytes
     .replace(/\x1a/g, ""); // Remove ASCII 26 (Substitute) character
 };
-

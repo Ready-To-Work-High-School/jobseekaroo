@@ -22,11 +22,11 @@ const setupSecurityHeaders = (req, res, next) => {
   // Environment-specific CSP settings
   const isProd = process.env.NODE_ENV === 'production';
   
-  // Enhanced CSP with nonce and improved directives
+  // Enhanced CSP with nonce and stricter directives
   res.setHeader('Content-Security-Policy', 
     `default-src 'self'; ` +
     `connect-src 'self' ${isProd ? '' : 'http://localhost:* ws://localhost:* '}https://*.supabase.co https://jobseekaroo.onrender.com; ` + 
-    `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} https://cdn.gpteng.co; ` + 
+    `script-src 'self' 'nonce-${nonce}' ${isProd ? '' : "'unsafe-eval'"} https://cdn.gpteng.co; ` + 
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ` + 
     `img-src 'self' data: https: blob:; ` + 
     `font-src 'self' https://fonts.gstatic.com; ` + 
@@ -40,7 +40,7 @@ const setupSecurityHeaders = (req, res, next) => {
   
   // Production-only headers
   if (isProd) {
-    // Enforce HTTPS in production
+    // Enforce HTTPS in production with longer duration
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     
     // Prevent MIME type sniffing

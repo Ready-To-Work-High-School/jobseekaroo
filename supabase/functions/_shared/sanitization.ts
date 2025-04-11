@@ -44,3 +44,29 @@ export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+
+// URL parameter sanitization
+export const sanitizeUrlParam = (param: string): string => {
+  if (!param) return '';
+  return encodeURIComponent(String(param).replace(/[<>'"()\\\/]/g, '').trim());
+};
+
+// Convert special characters for HTML output
+export const escapeHtml = (input: string): string => {
+  return String(input)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/\//g, '&#x2F;');
+};
+
+// Sanitize SQL parameters (though parameterized queries are preferred)
+export const sanitizeSql = (input: string): string => {
+  return String(input)
+    .replace(/'/g, "''")
+    .replace(/\\/g, "\\\\")
+    .replace(/\0/g, "")
+    .replace(/\x1a/g, "");
+};
