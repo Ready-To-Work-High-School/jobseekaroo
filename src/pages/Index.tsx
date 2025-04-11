@@ -1,15 +1,16 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import EnhancedHero from '@/components/EnhancedHero';
 import AdminToggle from '@/components/admin/AdminToggle';
-import { useAuth } from '@/contexts/AuthContext'; // Fixed import path
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Award, Compass, Heart, MapPin, Calendar, Clock, BookOpen } from 'lucide-react';
+import { Award, Compass, Heart, MapPin, Calendar, Clock, BookOpen, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import MayoSummerFeature from '@/components/home/MayoSummerFeature';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import FeeTeaser from '@/components/pricing/FeeTeaser';
 
 const Index = () => {
   const fadeIn = useFadeIn(300);
@@ -21,111 +22,82 @@ const Index = () => {
   return (
     <Layout>
       <div className={`w-full ${fadeIn}`}>
-        <EnhancedHero />
-        
-        {/* Healthcare Pathways Featured Summer Opportunity */}
-        <div className="container mx-auto px-4 py-8 relative overflow-hidden">
-          {/* Background decorative elements */}
-          <div className="absolute -left-24 -top-24 w-96 h-96 rounded-full bg-blue-100/30 blur-3xl"></div>
-          <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-amber-100/30 blur-3xl"></div>
-          
-          <div className="relative z-10 text-center mb-8">
-            <Badge className="mb-2 bg-amber-600 hover:bg-amber-700">Featured Summer Opportunity</Badge>
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-amber-600 bg-clip-text text-transparent">
-              Mayo Clinic's Pathways into Healthcare Careers
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              A prestigious three-day immersive program exploring allied healthcare careers
+        {/* Info banner with key message */}
+        <div className="bg-blue-50 py-4 px-4 text-center mb-6">
+          <div className="container mx-auto">
+            <p className="text-lg font-medium text-blue-800">
+              Free to Westside High School participants: Employers, and Students
             </p>
           </div>
-          
-          <Card className="border-0 shadow-xl max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-white to-blue-50">
-            <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 overflow-hidden">
-                    <img 
-                      src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
-                      alt="Mayo Clinic Logo" 
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold">Program Highlights:</h3>
-                </div>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span>Open to high school and college students in Jacksonville, FL</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span>Explore healthcare careers beyond becoming a doctor</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span>Network with Mayo Clinic faculty and students</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span>No cost to attend, free meals provided</span>
-                  </li>
-                </ul>
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" asChild>
-                  <Link to="/healthcare-pathways">Learn More</Link>
-                </Button>
-              </div>
-              <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-amber-600 text-white p-6">
-                <div className="h-full flex flex-col justify-between">
-                  <div>
-                    <h4 className="text-xl font-bold mb-4">Program Details</h4>
-                    <ul className="space-y-4">
-                      <li className="flex items-center gap-3">
-                        <Calendar className="h-5 w-5 flex-shrink-0" />
-                        <span>July 10–12, 2025</span>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <Clock className="h-5 w-5 flex-shrink-0" />
-                        <span>8:00 a.m. – 3:00 p.m. daily</span>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <MapPin className="h-5 w-5 flex-shrink-0" />
-                        <span>Mayo Clinic – Jacksonville, FL</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm mb-2 text-blue-100">Application Period:</p>
-                    <p className="font-bold">March 1 – May 15, 2025</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
         </div>
         
-        {/* Platform Guide Callout */}
-        <div className="container mx-auto px-4 py-4 mb-8">
-          <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50 overflow-hidden">
-            <div className="flex flex-col md:flex-row items-center p-6">
-              <div className="md:w-3/4 mb-4 md:mb-0 md:pr-4">
-                <h3 className="text-xl font-bold mb-2">New! Platform Guide Available</h3>
-                <p className="text-gray-600">
-                  Explore our comprehensive guide with detailed information for students, employers, schools, administrators, and counselors.
-                </p>
-              </div>
-              <div className="md:w-1/4 flex justify-center">
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" asChild>
-                  <Link to="/platform-guide" className="flex items-center gap-2">
-                    <BookOpen className="h-5 w-5" />
-                    View Platform Guide
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </Card>
+        {/* Mayo Clinic Feature moved to top */}
+        <div className="container mx-auto px-4 mb-8">
+          <MayoSummerFeature />
         </div>
         
-        {/* Featured Programs Section */}
+        {/* Simple pricing for employers moved up */}
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-3xl font-bold text-center mb-6">Simple Pricing for Employers</h2>
+          <FeeTeaser />
+        </div>
+        
+        {/* Dropdown for credentials */}
+        <div className="container mx-auto px-4 py-4 mb-8 text-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="border-amber-300">
+                Industry Recognized Credentials
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-white">
+              <DropdownMenuItem asChild>
+                <Link to="/entrepreneurship-academy" className="cursor-pointer flex items-center">
+                  <Award className="mr-2 h-4 w-4 text-amber-500" />
+                  Entrepreneurship & Small Business
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/nursing-academy" className="cursor-pointer flex items-center">
+                  <Heart className="mr-2 h-4 w-4 text-red-500" />
+                  Nursing Academy
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/credentials" className="cursor-pointer flex items-center">
+                  <BookOpen className="mr-2 h-4 w-4 text-blue-500" />
+                  View All Credentials
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        
+        {/* Prominent JS4HS Logo Display - Kept */}
+        <div className="container mx-auto px-4 py-12 text-center">
+          <div className="flex justify-center mb-6">
+            <img 
+              src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
+              alt="JS4HS Logo" 
+              className="h-48 md:h-56 w-auto object-contain"
+              width="400"
+              height="400"
+              loading="eager"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='7'%3E%3C/circle%3E%3Cpolyline points='8.21 13.89 7 23 12 20 17 23 15.79 13.88'%3E%3C/polyline%3E%3C/svg%3E";
+              }}
+            />
+          </div>
+          <h2 className="text-3xl font-bold">Job Seekers 4 High Schools</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-2 text-lg">
+            Connecting students with credential-ready opportunities at Westside High School
+          </p>
+        </div>
+        
+        {/* Featured Programs Section - Kept */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold mb-6 text-center">Featured Programs</h2>
           
