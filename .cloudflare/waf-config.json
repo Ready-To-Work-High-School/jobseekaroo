@@ -1,0 +1,61 @@
+
+{
+  "zone_id": "YOUR_CLOUDFLARE_ZONE_ID",
+  "waf_settings": {
+    "mode": "on",
+    "sensitivity": "high",
+    "block_status_code": 403
+  },
+  "firewall_rules": [
+    {
+      "description": "Block suspicious IPs",
+      "filter": {
+        "expression": "cf.threat_score > 10"
+      },
+      "action": "block"
+    },
+    {
+      "description": "Rate limit API requests",
+      "filter": {
+        "expression": "(http.request.uri.path contains \"/api/\") and (rate_limit.http.requests(10, 1m))"
+      },
+      "action": "block",
+      "rate_limit": {
+        "threshold": 100,
+        "period": 60
+      }
+    },
+    {
+      "description": "Block common attack patterns",
+      "filter": {
+        "expression": "http.request.uri.path contains \"..\" or http.request.uri.path contains \"%00\""
+      },
+      "action": "block"
+    }
+  ],
+  "rate_limits": [
+    {
+      "threshold": 100,
+      "period": 60,
+      "match": {
+        "request": {
+          "methods": ["POST", "PUT", "DELETE"],
+          "schemes": ["HTTP", "HTTPS"],
+          "url_pattern": "/api/*"
+        }
+      },
+      "action": {
+        "mode": "simulate",
+        "timeout": 300,
+        "response": {
+          "content_type": "application/json",
+          "body": "{\"error\": \"Rate limit exceeded. Please try again later.\"}"
+        }
+      }
+    }
+  ],
+  "security_level": "high",
+  "browser_check": true,
+  "challenge_ttl": 3600,
+  "privacy_pass": true
+}

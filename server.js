@@ -1,4 +1,3 @@
-
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -9,7 +8,7 @@ const {
 
 // Create Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.NODE_ENV === 'production' ? 443 : (process.env.PORT || 3000);
 
 // Security middleware
 app.use(generateNonce);
@@ -130,12 +129,35 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
+// Disable development-specific features in production
+if (process.env.NODE_ENV === 'production') {
+  console.log('Running in production mode - development features disabled');
+  // Disable error stack traces in production responses
+  app.set('json spaces', 0);
+  app.set('env', 'production');
+  // Disable X-Powered-By header (already done in security middleware)
+  app.disable('x-powered-by');
+} else {
+  console.log('Running in development mode');
+  // Pretty JSON in development
+  app.set('json spaces', 2);
+}
+
 // Start the server if this file is run directly
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
     console.log(`Visit a school-branded page at school.jobseekers4hs.org:${PORT} or school.jobseeker4hs.org:${PORT} (update /etc/hosts if testing locally)`);
     console.log(`Health check available at: http://localhost:${PORT}/health`);
+  });
+  
+  // Properly handle shutdown for security
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
   });
 }
 

@@ -25,5 +25,36 @@ services:
       - path: /*
         name: Vary
         value: Accept-Encoding
+      # Security headers
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains; preload
     healthCheckPath: /health
     autoDeploy: true
+    # Cloudflare integration
+    domains:
+      - jobseekaroo.com
+      - jobseekers4hs.org
+      - jobseeker4hs.org
+    # Restrict port access - only allow 443 (HTTPS)
+    port: 443
+    # Ensure SSL is enabled
+    sslCertificate:
+      type: managed
+    routes:
+      - type: redirect
+        source: http://*
+        destination: https://$host$request_uri
+        statusCode: 301
