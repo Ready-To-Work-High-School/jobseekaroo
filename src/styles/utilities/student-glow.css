@@ -1,123 +1,91 @@
 
-/* Student-specific glow effects */
-
-@keyframes student-glow {
-  0% {
-    box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 15px 5px rgba(245, 158, 11, 0.4), 0 0 20px 10px rgba(168, 85, 247, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.2);
-  }
-}
-
-@keyframes student-badge-glow {
-  0% {
-    box-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), 0 0 20px rgba(245, 158, 11, 0.2);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
-  }
-}
-
 .student-glow {
-  animation: student-glow 3s ease-in-out infinite;
+  position: relative;
 }
 
-.student-badge-glow {
-  animation: student-badge-glow 2s ease-in-out infinite;
+.student-glow::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(79, 70, 229, 0.3));
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(30px);
+  animation: pulse-glow 4s infinite alternate;
 }
 
-.student-gradient-text {
-  background: linear-gradient(to right, #f59e0b, #a855f7);
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.snyk-gradient-text {
+  background: linear-gradient(90deg, #4338ca, #3b82f6);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.student-highlight {
-  position: relative;
+.snyk-card {
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border: 1px solid rgba(203, 213, 225, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.student-highlight::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, #f59e0b, #a855f7);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+.snyk-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(79, 70, 229, 0.2);
 }
 
-.student-highlight:hover::after {
-  transform: scaleX(1);
+.shadow-snyk {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
-/* Free badge pulsing border */
-.free-badge-pulse {
-  position: relative;
+.hero-animation-element {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.free-badge-pulse::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  bottom: -3px;
-  left: -3px;
-  border-radius: 9999px;
-  background: linear-gradient(to right, #f59e0b, #a855f7);
-  z-index: -1;
-  animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.hero-animation-fade-in {
+  animation: hero-fade-in 0.5s ease forwards;
 }
 
-@keyframes pulse-border {
-  0%, 100% {
-    opacity: 0.7;
-    transform: scale(1);
+.hero-animation-slide-in {
+  animation: hero-slide-in 0.5s ease forwards;
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
   }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.05);
+  to {
+    opacity: 1;
   }
 }
 
-/* Shine effect for student badges */
-@keyframes shine {
-  0% {
-    background-position: -100% 0;
+@keyframes hero-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  100% {
-    background-position: 200% 0;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.student-badge-shine {
-  position: relative;
-  overflow: hidden;
-}
-
-.student-badge-shine::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 200% 100%;
-  animation: shine 3s infinite;
+.summer-hero-gradient {
+  background: linear-gradient(135deg, #0f172a, #1e40af);
 }
