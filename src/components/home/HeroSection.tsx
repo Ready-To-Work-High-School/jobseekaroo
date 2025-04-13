@@ -55,7 +55,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="hero-gradient py-16 md:py-24 relative overflow-hidden">
+    <section className="summer-hero-gradient py-16 md:py-24 relative overflow-hidden">
       {/* Enhanced background pattern with subtle animation */}
       <motion.div 
         className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] -z-10"
@@ -213,7 +213,7 @@ const HeroSection = () => {
               </motion.div>
             </Link>
             
-            {/* Begin Now button (for students) - NEW */}
+            {/* Begin Now button (for students) - UPDATED TO PURPLE */}
             <Link to="/sign-up">
               <motion.div
                 whileHover={{ scale: 1.05 }}

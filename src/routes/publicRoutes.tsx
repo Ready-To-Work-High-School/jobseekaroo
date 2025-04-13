@@ -16,10 +16,15 @@ export const PublicRoutes = (
     <Route path="/job-listings" element={<JobListings />} />
     <Route path="/job-search" element={<EnhancedJobListings />} />
     <Route path="/employer" element={<EnhancedJobListings />} />
+    <Route path="/for-employers" element={<EnhancedJobListings />} />
+    <Route path="/nursing-academy" element={<EnhancedJobListings />} />
+    <Route path="/entrepreneurship-academy" element={<EnhancedJobListings />} />
+    <Route path="/skills-build" element={<EnhancedJobListings />} />
     <Route path="/contact" element={<ContactUs />} />
     <Route path="/waiting-list" element={<EnhancedJobListings />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
     <Route path="/terms-of-service" element={<TermsOfService />} />
     <Route path="/sample-candidates" element={<SampleCandidates />} />
+    <Route path="/credentials" element={<EnhancedJobListings />} />
   </>
 );

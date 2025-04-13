@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -36,7 +37,26 @@ const Index = () => {
           <MayoSummerFeature />
         </div>
         
-        {/* Simple pricing for employers moved up */}
+        {/* First Job Toolkit MOVED UP above pricing */}
+        <div className="container mx-auto px-4 py-8 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl mb-8">
+          <h2 className="text-3xl font-bold text-center mb-6">First Job Toolkit</h2>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-center mb-6 text-gray-700">
+              Resources and tools to help you prepare for and succeed in your first job.
+              Learn essential skills, prepare for interviews, and build your professional profile.
+            </p>
+            <div className="flex justify-center">
+              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
+                <Link to="/first-job-toolkit" className="flex items-center justify-center gap-2">
+                  <Compass className="h-5 w-5" />
+                  Explore Toolkit
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Simple pricing for employers */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-3xl font-bold text-center mb-6">Simple Pricing for Employers</h2>
           <FeeTeaser />
@@ -97,7 +117,7 @@ const Index = () => {
           </p>
         </div>
         
-        {/* Featured Programs Section - Kept */}
+        {/* Featured Programs Section - UPDATED */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold mb-6 text-center">Featured Programs</h2>
           
@@ -108,6 +128,15 @@ const Index = () => {
                 <CardTitle className="text-lg text-amber-800">Entrepreneurship Academy</CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src="/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png" 
+                    alt="ESB Certification" 
+                    className="h-24 w-auto object-contain"
+                    width="120"
+                    height="120"
+                  />
+                </div>
                 <p className="mb-4 text-sm">Prepare for business careers or start your own company with our specialized program.</p>
                 <Button className="w-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700" asChild>
                   <Link to="/entrepreneurship-academy" className="flex items-center justify-center gap-2">
@@ -118,16 +147,25 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            {/* Healthcare Pathways Program */}
+            {/* Nursing Academy - UPDATED FROM HEALTHCARE PATHWAYS */}
             <Card className="shadow-md hover:shadow-lg transition-all duration-300 border-blue-200 transform scale-105 z-10">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-amber-50">
-                <CardTitle className="text-lg text-blue-800">Healthcare Pathways</CardTitle>
-                <Badge className="bg-amber-600 hover:bg-amber-700">Summer 2025</Badge>
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100">
+                <CardTitle className="text-lg text-blue-800">Nursing Academy</CardTitle>
+                <Badge className="bg-red-600 hover:bg-red-700">In-Demand Career</Badge>
               </CardHeader>
               <CardContent className="pt-4">
-                <p className="mb-4 text-sm">Mayo Clinic's 3-day immersive program exploring allied healthcare careers.</p>
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700" asChild>
-                  <Link to="/healthcare-pathways" className="flex items-center justify-center gap-2">
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png" 
+                    alt="Nursing Academy" 
+                    className="h-24 w-auto object-contain"
+                    width="120"
+                    height="120"
+                  />
+                </div>
+                <p className="mb-4 text-sm">Prepare for healthcare careers with industry-recognized Certified Nursing Assistant credentials.</p>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700" asChild>
+                  <Link to="/nursing-academy" className="flex items-center justify-center gap-2">
                     <Heart className="h-4 w-4" />
                     Learn More
                   </Link>
@@ -138,14 +176,23 @@ const Index = () => {
             {/* First Job Toolkit */}
             <Card className="shadow-md hover:shadow-lg transition-all duration-300 border-indigo-200">
               <CardHeader className="bg-gradient-to-r from-indigo-50 to-indigo-100">
-                <CardTitle className="text-lg text-indigo-800">First Job Toolkit</CardTitle>
+                <CardTitle className="text-lg text-indigo-800">IBM SkillsBuild</CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                <p className="mb-4 text-sm">Resources and tools to help you prepare for and succeed in your first job.</p>
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src="/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png" 
+                    alt="IBM SkillsBuild" 
+                    className="h-24 w-auto object-contain"
+                    width="120"
+                    height="120"
+                  />
+                </div>
+                <p className="mb-4 text-sm">Earn digital credentials through IBM's SkillsBuild platform for in-demand technology skills.</p>
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" asChild>
-                  <Link to="/first-job-toolkit" className="flex items-center justify-center gap-2">
-                    <Compass className="h-4 w-4" />
-                    Explore Toolkit
+                  <Link to="/skills-build" className="flex items-center justify-center gap-2">
+                    <Award className="h-4 w-4" />
+                    Explore Credentials
                   </Link>
                 </Button>
               </CardContent>
@@ -162,7 +209,7 @@ const Index = () => {
             </Link>
           </Button>
           
-          <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
+          <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
             <Link to="/first-job-toolkit">
               <Compass className="h-5 w-5" />
               First Job Toolkit
