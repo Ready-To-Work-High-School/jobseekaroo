@@ -23,7 +23,7 @@ const HeroSection = () => {
     transition: { 
       duration: 4, 
       repeat: Infinity, 
-      repeatType: "mirror", // Fixed: Using a valid repeatType value
+      repeatType: "mirror" as const, // Fixed: TypeScript literal type
       ease: "easeInOut"
     }
   };
@@ -35,7 +35,7 @@ const HeroSection = () => {
     transition: {
       duration: 8,
       repeat: Infinity,
-      repeatType: "mirror", // Fixed: Using a valid repeatType value
+      repeatType: "mirror" as const, // Fixed: TypeScript literal type
     }
   };
 
@@ -59,18 +59,18 @@ const HeroSection = () => {
         className="absolute top-20 -right-16 w-48 h-48 bg-blue-100 rounded-full opacity-20 blur-2xl"
         animate={{
           scale: [1, 1.1, 1],
-          opacity: [0.2, 0.3, 0.2]
+          opacity: [0.2, 0.3, 0.2],
+          transition: { duration: 7, repeat: Infinity, repeatType: "mirror" as const }
         }}
-        transition={{ duration: 7, repeat: Infinity, repeatType: "mirror" }}
       ></motion.div>
       
       <motion.div 
         className="absolute -bottom-16 -left-16 w-64 h-64 bg-amber-100 rounded-full opacity-20 blur-2xl"
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.2, 0.25, 0.2]
+          opacity: [0.2, 0.25, 0.2],
+          transition: { duration: 9, repeat: Infinity, repeatType: "mirror" as const }
         }}
-        transition={{ duration: 9, repeat: Infinity, repeatType: "mirror" }}
       ></motion.div>
       
       {/* Enhanced sparkle effect */}
@@ -235,7 +235,7 @@ const HeroSection = () => {
                   animate={{ 
                     opacity: [0.3, 0.6, 0.3],
                   }}
-                  transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+                  transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" as const }}
                 ></motion.div>
                 
                 <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
