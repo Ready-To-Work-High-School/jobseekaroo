@@ -12,6 +12,7 @@ import LandingPage from '../pages/LandingPage';
 
 export const PublicRoutes = (
   <>
+    <Route path="/" element={<LandingPage />} />
     <Route path="/about" element={<About />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/job-listings" element={<JobListings />} />

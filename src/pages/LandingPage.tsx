@@ -21,8 +21,8 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-blue-900">
-      {/* Hero Section with Gradient Background */}
-      <header className="bg-gradient-to-r from-cyan-400 to-pink-500 text-center py-16 px-4 md:py-24">
+      {/* Hero Section with Updated Gradient Background */}
+      <header className="bg-gradient-to-r from-[#00d4ff] to-[#ff2e63] text-center py-16 px-4 md:py-24">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ const LandingPage = () => {
           <Link to="/jobs">
             <Button 
               size="lg" 
-              className="rounded-full bg-pink-600 hover:bg-pink-700 text-white font-bold px-8 transition-transform hover:scale-105"
+              className="rounded-full bg-[#ff2e63] hover:bg-[#e02b5a] text-white font-bold px-8 transition-transform hover:scale-105"
             >
               Explore Jobs
             </Button>
@@ -58,7 +58,7 @@ const LandingPage = () => {
           <Link to="/for-employers">
             <Button 
               size="lg" 
-              className="rounded-full bg-blue-900 hover:bg-blue-800 text-white font-bold px-8 transition-transform hover:scale-105"
+              className="rounded-full bg-[#1e3a8a] hover:bg-[#1a3378] text-white font-bold px-8 transition-transform hover:scale-105"
             >
               Hire Now
             </Button>
@@ -77,24 +77,24 @@ const LandingPage = () => {
       
       {/* Features Section */}
       <section className="py-16 px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-[#1e3a8a]">How It Works</h2>
         <div 
           ref={featureCardsRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
         >
           <div className="feature-card opacity-0 transition-opacity duration-500 bg-white p-6 rounded-xl shadow-md hover:-translate-y-2 transition-transform">
-            <div className="bg-blue-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Code className="w-8 h-8 text-blue-600" />
+            <div className="bg-[#e0f2fe] p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <Code className="w-8 h-8 text-[#00d4ff]" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Learn Skills</h3>
+            <h3 className="text-xl font-bold mb-2 text-[#1e3a8a]">Learn Skills</h3>
             <p className="text-gray-600">Teens: Build coding, retail, or leadership skills.</p>
           </div>
           
           <div className="feature-card opacity-0 transition-opacity duration-500 bg-white p-6 rounded-xl shadow-md hover:-translate-y-2 transition-transform">
-            <div className="bg-pink-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Store className="w-8 h-8 text-pink-500" />
+            <div className="bg-[#ffe0eb] p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <Store className="w-8 h-8 text-[#ff2e63]" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Find Talent</h3>
+            <h3 className="text-xl font-bold mb-2 text-[#1e3a8a]">Find Talent</h3>
             <p className="text-gray-600">Employers: Hire motivated, trained teens.</p>
           </div>
           
@@ -102,23 +102,23 @@ const LandingPage = () => {
             <div className="bg-amber-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <Award className="w-8 h-8 text-amber-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Get Certified</h3>
+            <h3 className="text-xl font-bold mb-2 text-[#1e3a8a]">Get Certified</h3>
             <p className="text-gray-600">Earn industry-recognized credentials.</p>
           </div>
         </div>
       </section>
       
       {/* Testimonials Section */}
-      <section className="py-16 px-4 bg-blue-50">
-        <h2 className="text-3xl font-bold text-center mb-12">Success Stories</h2>
+      <section className="py-16 px-4 bg-[#e0f2fe]">
+        <h2 className="text-3xl font-bold text-center mb-12 text-[#1e3a8a]">Success Stories</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div className="bg-white p-6 rounded-xl shadow-sm">
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
-                <span className="text-xl font-bold text-blue-600">M</span>
+              <div className="w-12 h-12 rounded-full bg-[#e0f2fe] flex items-center justify-center mr-4">
+                <span className="text-xl font-bold text-[#00d4ff]">M</span>
               </div>
               <div>
-                <h3 className="font-bold">Mia, 17</h3>
+                <h3 className="font-bold text-[#1e3a8a]">Mia, 17</h3>
                 <p className="text-gray-500 text-sm">Student</p>
               </div>
             </div>
@@ -127,11 +127,11 @@ const LandingPage = () => {
           
           <div className="bg-white p-6 rounded-xl shadow-sm">
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mr-4">
-                <span className="text-xl font-bold text-pink-600">C</span>
+              <div className="w-12 h-12 rounded-full bg-[#ffe0eb] flex items-center justify-center mr-4">
+                <span className="text-xl font-bold text-[#ff2e63]">C</span>
               </div>
               <div>
-                <h3 className="font-bold">Cafe XYZ</h3>
+                <h3 className="font-bold text-[#1e3a8a]">Cafe XYZ</h3>
                 <p className="text-gray-500 text-sm">Local Business</p>
               </div>
             </div>
@@ -142,12 +142,12 @@ const LandingPage = () => {
       
       {/* CTA Section */}
       <section className="py-16 px-4 text-center">
-        <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
+        <h2 className="text-3xl font-bold mb-6 text-[#1e3a8a]">Ready to Get Started?</h2>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/sign-up">
             <Button 
               size="lg" 
-              className="rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 text-white font-bold px-8"
+              className="rounded-full bg-gradient-to-r from-[#00d4ff] to-[#2e63ff] hover:from-[#00bfe6] hover:to-[#2a5ae6] text-white font-bold px-8 transition-transform hover:scale-105"
             >
               Sign Up Now <ArrowRight className="ml-2" />
             </Button>
