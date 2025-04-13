@@ -7,6 +7,7 @@ import { Bot, User, Loader2, Send, AlertCircle, RefreshCw } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { supabaseClient } from '@/integrations/supabase/client';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 
 interface JobHelpAIProps {
   initialPrompt?: string;
@@ -157,7 +158,7 @@ const JobHelpAI = ({
       </CardHeader>
       <CardContent className="space-y-4">
         {!apiAvailable && (
-          <Alert variant="warning" className="bg-amber-50 border-amber-200">
+          <Alert variant="default" className="bg-amber-50 border-amber-200">
             <AlertCircle className="h-5 w-5 text-amber-600" />
             <AlertTitle>AI Service Unavailable</AlertTitle>
             <AlertDescription className="flex flex-col gap-2">

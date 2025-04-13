@@ -182,7 +182,7 @@ const Chatbot = () => {
             
             {!apiAvailable && (
               <div className="px-4 pt-4">
-                <Alert variant="warning" className="bg-amber-50 border-amber-200">
+                <Alert variant="default" className="bg-amber-50 border-amber-200">
                   <AlertCircle className="h-5 w-5 text-amber-600" />
                   <AlertTitle>AI Service Unavailable</AlertTitle>
                   <AlertDescription className="flex flex-col gap-2">
