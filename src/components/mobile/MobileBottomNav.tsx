@@ -8,11 +8,16 @@ import { cn } from '@/lib/utils';
 const MobileBottomNav = () => {
   const location = useLocation();
   
+  // Skip rendering on certain paths
+  if (['/sign-in', '/sign-up', '/forgot-password', '/landing'].includes(location.pathname)) {
+    return null;
+  }
+  
   const items = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Jobs', path: '/jobs' },
     { icon: Book, label: 'Interview', path: '/interview-prep' },
-    { icon: Briefcase, label: 'Applications', path: '/applications' },
+    { icon: Briefcase, label: 'Toolkit', path: '/first-job-toolkit' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
 
