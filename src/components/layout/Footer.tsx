@@ -1,6 +1,7 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield } from 'lucide-react';
+import { Shield, FileText, Briefcase, Book } from 'lucide-react';
 
 const Footer = () => {
   const { user } = useAuth();
@@ -87,10 +88,19 @@ const Footer = () => {
             <div>
               <h4 className="font-medium mb-3">For Job Seekers</h4>
               <ul className="space-y-2">
-                <li><Link to="/jobs" className="text-sm text-muted-foreground hover:text-foreground">Browse Jobs</Link></li>
+                <li className="flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-primary/60" />
+                  <Link to="/jobs" className="text-sm text-muted-foreground hover:text-foreground">Browse Jobs</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-primary/60" />
+                  <Link to={getPath("/resume-assistant")} className="text-sm text-muted-foreground hover:text-foreground">Resume Builder</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Book className="h-4 w-4 text-primary/60" />
+                  <Link to={getPath("/interview-prep")} className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link>
+                </li>
                 <li><Link to={getPath("/skills")} className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
-                <li><Link to={getPath("/resume-assistant")} className="text-sm text-muted-foreground hover:text-foreground">Resume Help</Link></li>
-                <li><Link to={getPath("/interview-prep")} className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link></li>
               </ul>
             </div>
             <div>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Search, Briefcase, User, Heart } from 'lucide-react';
+import { Home, Search, Briefcase, User, Book } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -16,8 +16,8 @@ const MobileBottomNavigation = () => {
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Jobs', path: '/jobs' },
+    { icon: Book, label: 'Interview', path: '/interview-prep' },
     { icon: Briefcase, label: 'Applications', path: '/applications' },
-    { icon: Heart, label: 'Saved', path: '/saved-jobs' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
   
