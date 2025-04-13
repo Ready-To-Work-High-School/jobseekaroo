@@ -8,11 +8,9 @@ import ContactUs from '../pages/Contact';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import SampleCandidates from '../pages/SampleCandidates';
-import LandingPage from '../pages/LandingPage';
 
 export const PublicRoutes = (
   <>
-    <Route path="/" element={<LandingPage />} />
     <Route path="/about" element={<About />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/job-listings" element={<JobListings />} />
@@ -23,6 +21,5 @@ export const PublicRoutes = (
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
     <Route path="/terms-of-service" element={<TermsOfService />} />
     <Route path="/sample-candidates" element={<SampleCandidates />} />
-    <Route path="/landing" element={<LandingPage />} />
   </>
 );
