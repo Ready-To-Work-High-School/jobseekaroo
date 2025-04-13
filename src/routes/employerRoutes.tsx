@@ -1,11 +1,13 @@
 
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
-import EmployerDashboard from '../pages/EmployerDashboard';
+import ForEmployers from '../pages/ForEmployers';
+import EmployerDashboard from '../pages/employer/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
 import EmployerPremiumServices from '../pages/EmployerPremiumServices';
-import ForEmployers from '../pages/ForEmployers';
 import EmployerBadges from '../pages/EmployerBadges';
+import PremiumServices from '../pages/PremiumServices';
+import AnalyticsDashboard from '../pages/AnalyticsDashboard';
 
 export const EmployerRoutes = (
   <>
@@ -26,13 +28,16 @@ export const EmployerRoutes = (
         <EmployerAnalytics />
       </ProtectedRoute>
     } />
+    <Route path="/analytics" element={<AnalyticsDashboard />} />
     <Route path="/employer/premium" element={
       <ProtectedRoute requiredRoles={['employer', 'admin']}>
         <EmployerPremiumServices />
       </ProtectedRoute>
     } />
+    <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/employer/badges" element={<EmployerBadges />} />
     <Route path="/employer-badges" element={<EmployerBadges />} />
+    <Route path="/resume-assistant" element={<ForEmployers />} />
   </>
 );
 

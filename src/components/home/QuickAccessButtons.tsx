@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Award, Compass } from 'lucide-react';
+import { Award, Compass, Briefcase, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const QuickAccessButtons = () => {
@@ -28,6 +28,30 @@ const QuickAccessButtons = () => {
           <Link to="/first-job-toolkit">
             <Compass className="h-5 w-5" />
             First Job Toolkit
+          </Link>
+        </Button>
+      </motion.div>
+
+      <motion.div 
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
+          <Link to="/employer-dashboard">
+            <Briefcase className="h-5 w-5" />
+            Employer Dashboard
+          </Link>
+        </Button>
+      </motion.div>
+
+      <motion.div 
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
+          <Link to="/resume-assistant">
+            <FileText className="h-5 w-5" />
+            Resume Assistant
           </Link>
         </Button>
       </motion.div>

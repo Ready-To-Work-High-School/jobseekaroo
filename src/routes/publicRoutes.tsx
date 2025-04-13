@@ -14,6 +14,8 @@ import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
 import FirstJobToolkit from '../pages/FirstJobToolkit';
 import Resources from '../pages/Resources';
 import SkillDevelopment from '../pages/SkillDevelopment';
+import ForEmployers from '../pages/ForEmployers';
+import ResumeAssistant from '../pages/ResumeAssistant';
 
 export const PublicRoutes = (
   <>
@@ -21,14 +23,15 @@ export const PublicRoutes = (
     <Route path="/faq" element={<FAQ />} />
     <Route path="/job-listings" element={<JobListings />} />
     <Route path="/job-search" element={<EnhancedJobListings />} />
-    <Route path="/employer" element={<EnhancedJobListings />} />
-    <Route path="/for-employers" element={<EnhancedJobListings />} />
+    <Route path="/employer-info" element={<EnhancedJobListings />} />
+    <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/nursing-academy" element={<NursingAcademy />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
     <Route path="/skills-build" element={<EnhancedJobListings />} />
     <Route path="/skill-development" element={<SkillDevelopment />} />
     <Route path="/resources" element={<Resources />} />
+    <Route path="/resume-assistant" element={<ResumeAssistant />} />
     <Route path="/contact" element={<ContactUs />} />
     <Route path="/waiting-list" element={<EnhancedJobListings />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
