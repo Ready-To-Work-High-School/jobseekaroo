@@ -11,6 +11,9 @@ import SampleCandidates from '../pages/SampleCandidates';
 import CredentialsPage from '../pages/Credentials';
 import NursingAcademy from '../pages/NursingAcademy';
 import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
+import FirstJobToolkit from '../pages/FirstJobToolkit';
+import Resources from '../pages/Resources';
+import SkillDevelopment from '../pages/SkillDevelopment';
 
 export const PublicRoutes = (
   <>
@@ -22,7 +25,10 @@ export const PublicRoutes = (
     <Route path="/for-employers" element={<EnhancedJobListings />} />
     <Route path="/nursing-academy" element={<NursingAcademy />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
+    <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
     <Route path="/skills-build" element={<EnhancedJobListings />} />
+    <Route path="/skill-development" element={<SkillDevelopment />} />
+    <Route path="/resources" element={<Resources />} />
     <Route path="/contact" element={<ContactUs />} />
     <Route path="/waiting-list" element={<EnhancedJobListings />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
