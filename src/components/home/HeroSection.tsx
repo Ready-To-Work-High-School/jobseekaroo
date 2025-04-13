@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Shield, Award, Users, Star, Briefcase, GraduationCap } from 'lucide-react';
@@ -14,6 +14,17 @@ const HeroSection = () => {
   const titleAnimation = useSlideIn(300, 'right');
   const subtitleAnimation = useFadeIn(500);
   const buttonAnimation = useFadeIn(700);
+  
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 200);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Animation for the floating elements
   const floatingAnimation = {
@@ -44,10 +55,10 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="bg-gradient-to-b from-white via-blue-50 to-white py-16 md:py-24 relative overflow-hidden">
+    <section className="summer-hero-gradient py-16 md:py-24 relative overflow-hidden">
       {/* Enhanced background pattern with subtle animation */}
       <motion.div 
-        className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px] -z-10"
+        className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] -z-10"
         animate={patternAnimation}
       />
       
@@ -77,22 +88,18 @@ const HeroSection = () => {
         <div className="max-w-3xl mx-auto text-center">
           {/* Prominent Free for Students Badge */}
           <motion.div 
-            className="mb-6 flex justify-center"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            className={`mb-6 flex justify-center hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "0.1s" }}
           >
             <FreeForStudentsBadge variant="large" />
           </motion.div>
           
           {/* Main headline with animation - UPDATED HEADLINE */}
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 hero-animation-element ${isVisible ? 'hero-animation-slide-in' : ''}`}
+            style={{ animationDelay: "0.3s" }}
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500 relative">
+            <span className="relative">
               Hire Certified High School Talent in Jacksonville.
               <motion.span 
                 className="absolute -right-6 -top-6 hidden md:block"
@@ -105,55 +112,47 @@ const HeroSection = () => {
           
           {/* Stats Teaser - NEW */}
           <motion.div
-            className="bg-blue-50 border border-blue-100 rounded-lg py-4 px-6 mb-8 inline-block"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
+            className={`bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg py-4 px-6 mb-8 inline-block hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "0.5s" }}
           >
             <div className="flex items-center justify-center gap-2">
-              <Users className="h-5 w-5 text-blue-600" />
-              <span className="text-lg font-semibold text-blue-800">50+ Certified Students Ready to Work</span>
+              <Users className="h-5 w-5 text-white" />
+              <span className="text-lg font-semibold text-white">50+ Certified Students Ready to Work</span>
             </div>
           </motion.div>
           
           {/* Academy information badge */}
           <motion.div 
-            className="my-6 flex justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+            className={`my-6 flex justify-center hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "0.7s" }}
           >
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Badge variant="outline" className="border-amber-500 px-3 py-1 text-amber-700 font-medium relative">
+              <Badge variant="outline" className="border-white px-3 py-1 text-white font-medium relative">
                 Exclusive to Westside High School Students in Entrepreneurship or Nursing Academy
                 <motion.span 
                   className="absolute -top-2 -right-2"
                   animate={floatingAnimation}
                 >
-                  <Sparkles className="h-4 w-4 text-amber-500" />
+                  <Sparkles className="h-4 w-4 text-white" />
                 </motion.span>
               </Badge>
             </motion.div>
           </motion.div>
           
           <motion.p 
-            className="text-lg md:text-xl mb-8 text-gray-700 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
+            className={`text-lg md:text-xl mb-8 text-white/90 max-w-2xl mx-auto hero-animation-element ${isVisible ? 'hero-animation-slide-in' : ''}`}
+            style={{ animationDelay: "0.9s" }}
           >
             A safe, mobile-first platform connecting certified high school students with local businesses
           </motion.p>
           
           {/* CTA Buttons with enhanced animations - UPDATED */}
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 0.5 }}
+            className={`flex flex-col sm:flex-row gap-4 justify-center hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "1.1s" }}
           >
             {/* Browse Candidates button (for companies) */}
             <Link to="/for-employers">
@@ -164,14 +163,14 @@ const HeroSection = () => {
               >
                 {/* Button glow effect */}
                 <motion.div 
-                  className="absolute inset-0 rounded-md bg-blue-400/30 blur-md"
+                  className="absolute inset-0 rounded-md bg-white/30 blur-md"
                   animate={{ 
                     opacity: [0.3, 0.6, 0.3],
                   }}
                   transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" as const }}
                 ></motion.div>
                 
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
+                <Button size="lg" className="gap-2 bg-white text-[#ff2e63] hover:bg-white/90 shadow-md hover:shadow-lg transition-all duration-300 group relative">
                   <Briefcase className="h-4 w-4" />
                   Browse Candidates
                   <motion.span 
@@ -190,12 +189,12 @@ const HeroSection = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button size="lg" variant="outline" className="border-2 shadow-sm hover:shadow-md transition-all duration-300 gap-2 group">
-                  <GraduationCap className="h-4 w-4 text-amber-500" />
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 shadow-sm hover:shadow-md transition-all duration-300 gap-2 group">
+                  <GraduationCap className="h-4 w-4 text-white" />
                   <span className="relative">
                     Join as a Student
                     <motion.span
-                      className="absolute inset-x-0 -bottom-1 h-0.5 bg-amber-500 scale-x-0 group-hover:scale-x-100 origin-left"
+                      className="absolute inset-x-0 -bottom-1 h-0.5 bg-white scale-x-0 group-hover:scale-x-100 origin-left"
                       transition={{ duration: 0.3 }}
                     />
                   </span>
@@ -206,24 +205,33 @@ const HeroSection = () => {
           
           {/* Animated benefits badges */}
           <motion.div 
-            className="flex justify-center flex-wrap gap-3 mt-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
+            className={`flex justify-center flex-wrap gap-3 mt-8 hero-animation-element ${isVisible ? 'hero-animation-slide-in' : ''}`}
+            style={{ animationDelay: "1.3s" }}
           >
             {benefits.map((benefit, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1 + (i * 0.2) }}
                 whileHover={{ scale: 1.05 }}
-                className="flex items-center bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 shadow-sm"
+                className="flex items-center bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/25 shadow-sm"
               >
-                <span className="text-amber-500 mr-1.5">{benefit.icon}</span>
-                <span className="text-sm font-medium">{benefit.text}</span>
+                <span className="text-amber-300 mr-1.5">{benefit.icon}</span>
+                <span className="text-sm font-medium text-white">{benefit.text}</span>
               </motion.div>
             ))}
+          </motion.div>
+          
+          {/* New image from the upload */}
+          <motion.div 
+            className={`mt-12 hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "1.5s" }}
+          >
+            <img 
+              src="/lovable-uploads/836039bf-fe12-4e65-8785-83207fef23f0.png" 
+              alt="Students working together" 
+              className="rounded-xl shadow-lg max-w-full md:max-w-xl mx-auto" 
+              width="600"
+              height="400"
+            />
           </motion.div>
         </div>
       </div>
