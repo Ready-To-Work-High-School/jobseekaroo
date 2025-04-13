@@ -5,6 +5,11 @@
   color: white;
 }
 
+.hero-gradient {
+  background: linear-gradient(135deg, #9b87f5, #ff2e63, #ffc857);
+  color: white;
+}
+
 .hero-animation-element {
   opacity: 0;
   transform: translateY(20px);

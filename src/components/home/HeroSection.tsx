@@ -55,7 +55,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="summer-hero-gradient py-16 md:py-24 relative overflow-hidden">
+    <section className="hero-gradient py-16 md:py-24 relative overflow-hidden">
       {/* Enhanced background pattern with subtle animation */}
       <motion.div 
         className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] -z-10"
@@ -64,7 +64,7 @@ const HeroSection = () => {
       
       {/* Decorative elements */}
       <motion.div 
-        className="absolute top-20 -right-16 w-48 h-48 bg-blue-100 rounded-full opacity-20 blur-2xl"
+        className="absolute top-20 -right-16 w-48 h-48 bg-purple-200 rounded-full opacity-20 blur-2xl"
         animate={{
           scale: [1, 1.1, 1],
           opacity: [0.2, 0.3, 0.2],
@@ -149,6 +149,36 @@ const HeroSection = () => {
             A safe, mobile-first platform connecting certified high school students with local businesses
           </motion.p>
           
+          {/* NEW: Find your dream job in 3 easy steps */}
+          <motion.div
+            className={`mb-8 hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
+            style={{ animationDelay: "1.0s" }}
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Find Your Dream Job in 3 Easy Steps
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">1</div>
+                <h3 className="font-medium text-white">Create Profile</h3>
+                <p className="text-sm text-white/80">Sign up and showcase your skills</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <div className="w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">2</div>
+                <h3 className="font-medium text-white">Browse Jobs</h3>
+                <p className="text-sm text-white/80">Explore certified opportunities</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">3</div>
+                <h3 className="font-medium text-white">Get Hired</h3>
+                <p className="text-sm text-white/80">Apply and launch your career</p>
+              </div>
+            </div>
+          </motion.div>
+          
           {/* CTA Buttons with enhanced animations - UPDATED */}
           <motion.div 
             className={`flex flex-col sm:flex-row gap-4 justify-center hero-animation-element ${isVisible ? 'hero-animation-fade-in' : ''}`}
@@ -183,21 +213,26 @@ const HeroSection = () => {
               </motion.div>
             </Link>
             
-            {/* Join as a Student button */}
+            {/* Begin Now button (for students) - NEW */}
             <Link to="/sign-up">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="relative"
               >
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 shadow-sm hover:shadow-md transition-all duration-300 gap-2 group">
-                  <GraduationCap className="h-4 w-4 text-white" />
-                  <span className="relative">
-                    Join as a Student
-                    <motion.span
-                      className="absolute inset-x-0 -bottom-1 h-0.5 bg-white scale-x-0 group-hover:scale-x-100 origin-left"
-                      transition={{ duration: 0.3 }}
-                    />
-                  </span>
+                {/* Button glow effect */}
+                <motion.div 
+                  className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-400 via-pink-500 to-amber-400 opacity-70 blur-md"
+                  animate={{ 
+                    opacity: [0.4, 0.7, 0.4],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" as const }}
+                ></motion.div>
+                
+                <Button size="lg" className="gap-2 bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white hover:brightness-110 shadow-md hover:shadow-lg transition-all duration-300 group relative">
+                  <GraduationCap className="h-4 w-4" />
+                  Begin Now
+                  <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </motion.div>
             </Link>
