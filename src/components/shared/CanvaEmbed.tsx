@@ -1,12 +1,16 @@
 
 import React, { useState } from 'react';
+import { Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface CanvaEmbedProps {
   designId: string;
   designName?: string;
   authorName?: string;
-  aspectRatio?: string; // Format like "56.25%" for 16:9
+  aspectRatio?: string;
   className?: string;
+  downloadUrl?: string;
 }
 
 const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
@@ -15,6 +19,7 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
   authorName,
   aspectRatio = "56.2225%",
   className = "",
+  downloadUrl
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -26,6 +31,23 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
   const handleIframeError = () => {
     setIsError(true);
     console.error("Failed to load Canva embed");
+  };
+
+  const handleDownload = () => {
+    if (!downloadUrl) {
+      toast.error("Download URL not available");
+      return;
+    }
+    
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `${designName}.mp4`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success("Download started");
   };
 
   // Build the Canva embed URL
@@ -85,34 +107,50 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
           />
         </div>
         
-        {/* Attribution with better styling */}
-        {(designName || authorName) && (
-          <div className="flex flex-wrap items-center justify-center mt-3 mb-2 text-center px-2">
-            {designName && (
-              <a 
-                href={shareUrl.replace(/designId/g, designId)}
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1"
+        {/* Download button and attribution */}
+        <div className="flex flex-wrap items-center justify-between mt-3 mb-2 px-2">
+          <div className="flex items-center">
+            {downloadUrl && (
+              <Button
+                onClick={handleDownload}
+                variant="outline"
+                size="sm"
+                className="mr-4"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.29 7 12 12 20.71 7"></polyline>
-                  <line x1="12" y1="22" x2="12" y2="12"></line>
-                </svg>
-                <span>{designName}</span>
-              </a>
+                <Download className="w-4 h-4 mr-2" />
+                Download MP4
+              </Button>
             )}
             
-            {designName && authorName && (
-              <span className="mx-2 text-gray-400">•</span>
-            )}
-            
-            {authorName && (
-              <span className="text-sm text-gray-500">by {authorName}</span>
+            {(designName || authorName) && (
+              <div className="flex items-center">
+                {designName && (
+                  <a 
+                    href={shareUrl.replace(/designId/g, designId)}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.29 7 12 12 20.71 7"></polyline>
+                      <line x1="12" y1="22" x2="12" y2="12"></line>
+                    </svg>
+                    <span>{designName}</span>
+                  </a>
+                )}
+                
+                {designName && authorName && (
+                  <span className="mx-2 text-gray-400">•</span>
+                )}
+                
+                {authorName && (
+                  <span className="text-sm text-gray-500">by {authorName}</span>
+                )}
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
