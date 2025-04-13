@@ -38,6 +38,48 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
       
+      {/* Canva Design Embed */}
+      <div style={{ 
+        position: "relative", 
+        width: "100%", 
+        height: "0", 
+        paddingTop: "56.2225%",
+        paddingBottom: "0", 
+        boxShadow: "0 2px 8px 0 rgba(63,69,81,0.16)", 
+        marginTop: "1.6em", 
+        marginBottom: "0.9em", 
+        overflow: "hidden",
+        borderRadius: "8px", 
+        willChange: "transform"
+      }}>
+        <iframe 
+          loading="lazy" 
+          style={{
+            position: "absolute", 
+            width: "100%", 
+            height: "100%", 
+            top: "0", 
+            left: "0", 
+            border: "none", 
+            padding: "0",
+            margin: "0"
+          }}
+          src="https://www.canva.com/design/DAGkhyBr97U/mhY4WIvBv8Dw9yz13QDmRQ/view?embed" 
+          allowFullScreen
+          allow="fullscreen"
+        />
+      </div>
+      <div className="text-center text-sm text-gray-500 mb-8">
+        <a 
+          href="https://www.canva.com/design/DAGkhyBr97U/mhY4WIvBv8Dw9yz13QDmRQ/view?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=embeds&utm_source=link" 
+          target="_blank" 
+          rel="noopener"
+          className="hover:underline"
+        >
+          Company Website Business Website in Violet Dark Blue Neon Pink Gradient Tech Style
+        </a> by Coleman, Pamela Y.
+      </div>
+      
       <ErrorBoundary>
         <EnhancedHero />
       </ErrorBoundary>
