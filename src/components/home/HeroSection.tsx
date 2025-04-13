@@ -23,7 +23,7 @@ const HeroSection = () => {
     transition: { 
       duration: 4, 
       repeat: Infinity, 
-      repeatType: "mirror",
+      repeatType: "mirror", // Fixed: Using a valid repeatType value
       ease: "easeInOut"
     }
   };
@@ -35,7 +35,7 @@ const HeroSection = () => {
     transition: {
       duration: 8,
       repeat: Infinity,
-      repeatType: "mirror"
+      repeatType: "mirror", // Fixed: Using a valid repeatType value
     }
   };
 
@@ -235,7 +235,7 @@ const HeroSection = () => {
                   animate={{ 
                     opacity: [0.3, 0.6, 0.3],
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
                 ></motion.div>
                 
                 <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
