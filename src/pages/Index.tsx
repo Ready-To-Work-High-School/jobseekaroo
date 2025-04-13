@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -62,7 +61,7 @@ const Index = () => {
           <FeeTeaser />
         </div>
         
-        {/* Dropdown for credentials */}
+        {/* Dropdown for credentials - UPDATED WITH CORRECT LINKS */}
         <div className="container mx-auto px-4 py-4 mb-8 text-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -117,7 +116,7 @@ const Index = () => {
           </p>
         </div>
         
-        {/* Featured Programs Section - UPDATED */}
+        {/* Featured Programs Section */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold mb-6 text-center">Featured Programs</h2>
           

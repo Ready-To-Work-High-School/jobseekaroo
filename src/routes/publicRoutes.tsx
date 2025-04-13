@@ -8,6 +8,9 @@ import ContactUs from '../pages/Contact';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import SampleCandidates from '../pages/SampleCandidates';
+import CredentialsPage from '../pages/Credentials';
+import NursingAcademy from '../pages/NursingAcademy';
+import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
 
 export const PublicRoutes = (
   <>
@@ -17,14 +20,14 @@ export const PublicRoutes = (
     <Route path="/job-search" element={<EnhancedJobListings />} />
     <Route path="/employer" element={<EnhancedJobListings />} />
     <Route path="/for-employers" element={<EnhancedJobListings />} />
-    <Route path="/nursing-academy" element={<EnhancedJobListings />} />
-    <Route path="/entrepreneurship-academy" element={<EnhancedJobListings />} />
+    <Route path="/nursing-academy" element={<NursingAcademy />} />
+    <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/skills-build" element={<EnhancedJobListings />} />
     <Route path="/contact" element={<ContactUs />} />
     <Route path="/waiting-list" element={<EnhancedJobListings />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
     <Route path="/terms-of-service" element={<TermsOfService />} />
     <Route path="/sample-candidates" element={<SampleCandidates />} />
-    <Route path="/credentials" element={<EnhancedJobListings />} />
+    <Route path="/credentials" element={<CredentialsPage />} />
   </>
 );
