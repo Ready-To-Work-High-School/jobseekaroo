@@ -17,7 +17,7 @@ const MobileBottomNavigation = () => {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Jobs', path: '/jobs' },
     { icon: Book, label: 'Interview', path: '/interview-prep' },
-    { icon: Briefcase, label: 'Applications', path: '/applications' },
+    { icon: Briefcase, label: 'Toolkit', path: '/first-job-toolkit' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
   

@@ -1,11 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Shield, Award, Users, Star, Check } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, Award, Users, Star, Briefcase, GraduationCap } from 'lucide-react';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import { SparkleGroup } from '../animations/Sparkle';
-import LazyImage from '@/components/LazyImage';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
@@ -15,7 +14,6 @@ const HeroSection = () => {
   const titleAnimation = useSlideIn(300, 'right');
   const subtitleAnimation = useFadeIn(500);
   const buttonAnimation = useFadeIn(700);
-  const [isHovered, setIsHovered] = useState(false);
   
   // Animation for the floating elements
   const floatingAnimation = {
@@ -23,7 +21,7 @@ const HeroSection = () => {
     transition: { 
       duration: 4, 
       repeat: Infinity, 
-      repeatType: "mirror" as const, // Fixed: TypeScript literal type
+      repeatType: "mirror" as const,
       ease: "easeInOut"
     }
   };
@@ -35,14 +33,13 @@ const HeroSection = () => {
     transition: {
       duration: 8,
       repeat: Infinity,
-      repeatType: "mirror" as const, // Fixed: TypeScript literal type
+      repeatType: "mirror" as const,
     }
   };
 
   // Array of benefits with staggered animations
   const benefits = [
     { icon: <Shield className="h-5 w-5" />, text: "Safe & Secure" },
-    { icon: <Check className="h-5 w-5" />, text: "School Verified" },
     { icon: <Award className="h-5 w-5" />, text: "Earn Badges" }
   ];
 
@@ -74,7 +71,7 @@ const HeroSection = () => {
       ></motion.div>
       
       {/* Enhanced sparkle effect */}
-      <SparkleGroup count={7} />
+      <SparkleGroup count={5} />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
@@ -88,7 +85,7 @@ const HeroSection = () => {
             <FreeForStudentsBadge variant="large" />
           </motion.div>
           
-          {/* Main headline with animation */}
+          {/* Main headline with animation - UPDATED HEADLINE */}
           <motion.h1 
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900"
             initial={{ opacity: 0, y: 20 }}
@@ -96,7 +93,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500 relative">
-              Your First Job, Made Simple.
+              Hire Certified High School Talent in Jacksonville.
               <motion.span 
                 className="absolute -right-6 -top-6 hidden md:block"
                 animate={floatingAnimation}
@@ -106,23 +103,20 @@ const HeroSection = () => {
             </span>
           </motion.h1>
           
-          {/* Animated benefits badges */}
-          <div className="flex justify-center flex-wrap gap-3 mb-8">
-            {benefits.map((benefit, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + (i * 0.2) }}
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 shadow-sm"
-              >
-                <span className="text-amber-500 mr-1.5">{benefit.icon}</span>
-                <span className="text-sm font-medium">{benefit.text}</span>
-              </motion.div>
-            ))}
-          </div>
+          {/* Stats Teaser - NEW */}
+          <motion.div
+            className="bg-blue-50 border border-blue-100 rounded-lg py-4 px-6 mb-8 inline-block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <Users className="h-5 w-5 text-blue-600" />
+              <span className="text-lg font-semibold text-blue-800">50+ Certified Students Ready to Work</span>
+            </div>
+          </motion.div>
           
+          {/* Academy information badge */}
           <motion.div 
             className="my-6 flex justify-center"
             initial={{ opacity: 0 }}
@@ -151,79 +145,18 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            A fun, safe, mobile-first app to help high school students find their perfect first job, 
-            with badges, guidance, and a simple application process
+            A safe, mobile-first platform connecting certified high school students with local businesses
           </motion.p>
           
-          {/* Sign up reminder with enhanced styling */}
-          <motion.div 
-            className="mb-10 max-w-md mx-auto bg-blue-50 p-4 rounded-lg border border-blue-100"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-          >
-            <p className="text-md font-medium text-blue-700 flex items-center justify-center">
-              <Star className="h-4 w-4 mr-2 text-amber-500" />
-              Easy sign up with just an email – 100% Free for Westside High School students!
-            </p>
-          </motion.div>
-          
-          {/* Enhanced feature cards with motion */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-12">
-            {/* Card 1 */}
-            <motion.div 
-              className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-blue-200 transition-all duration-200"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <Shield className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="font-medium text-lg mb-2">Safe & Simple</h3>
-              <p className="text-sm text-gray-600 text-center">Find jobs that fit your schedule, skills, and location</p>
-            </motion.div>
-            
-            {/* Card 2 */}
-            <motion.div 
-              className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-amber-200 transition-all duration-200"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="bg-amber-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <Award className="h-8 w-8 text-amber-600" />
-              </div>
-              <h3 className="font-medium text-lg mb-2">Earn Badges</h3>
-              <p className="text-sm text-gray-600 text-center">Build your profile with skill badges that impress employers</p>
-            </motion.div>
-            
-            {/* Card 3 */}
-            <motion.div 
-              className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-green-200 transition-all duration-200"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="bg-green-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="font-medium text-lg mb-2">Guidance & Support</h3>
-              <p className="text-sm text-gray-600 text-center">Get help with interviews, resumes, and job skills</p>
-            </motion.div>
-          </div>
-          
-          {/* CTA Buttons with enhanced animations */}
+          {/* CTA Buttons with enhanced animations - UPDATED */}
           <motion.div 
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.5 }}
           >
-            <Link to="/jobs">
+            {/* Browse Candidates button (for companies) */}
+            <Link to="/for-employers">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -239,8 +172,8 @@ const HeroSection = () => {
                 ></motion.div>
                 
                 <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-300 group relative">
-                  Find Your First Job 
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Briefcase className="h-4 w-4" />
+                  Browse Candidates
                   <motion.span 
                     className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                     animate={floatingAnimation}
@@ -251,15 +184,16 @@ const HeroSection = () => {
               </motion.div>
             </Link>
             
+            {/* Join as a Student button */}
             <Link to="/sign-up">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Button size="lg" variant="outline" className="border-2 shadow-sm hover:shadow-md transition-all duration-300 gap-2 group">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
+                  <GraduationCap className="h-4 w-4 text-amber-500" />
                   <span className="relative">
-                    Sign Up Free
+                    Join as a Student
                     <motion.span
                       className="absolute inset-x-0 -bottom-1 h-0.5 bg-amber-500 scale-x-0 group-hover:scale-x-100 origin-left"
                       transition={{ duration: 0.3 }}
@@ -268,6 +202,28 @@ const HeroSection = () => {
                 </Button>
               </motion.div>
             </Link>
+          </motion.div>
+          
+          {/* Animated benefits badges */}
+          <motion.div 
+            className="flex justify-center flex-wrap gap-3 mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          >
+            {benefits.map((benefit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1 + (i * 0.2) }}
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 shadow-sm"
+              >
+                <span className="text-amber-500 mr-1.5">{benefit.icon}</span>
+                <span className="text-sm font-medium">{benefit.text}</span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>
