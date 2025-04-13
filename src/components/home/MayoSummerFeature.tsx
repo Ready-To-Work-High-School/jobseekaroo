@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Star, Clock, Award } from 'lucide-react';
+import { Star, Clock, Award, Calendar, MapPin, Sparkles } from 'lucide-react';
 
 const MayoSummerFeature = () => {
   // Animation variants
@@ -12,7 +12,8 @@ const MayoSummerFeature = () => {
     visible: { 
       opacity: 1,
       transition: { 
-        staggerChildren: 0.2
+        staggerChildren: 0.2,
+        when: "beforeChildren"
       }
     }
   };
@@ -94,16 +95,27 @@ const MayoSummerFeature = () => {
           className="md:w-1/3 lg:w-1/4 mb-6 md:mb-0 md:mr-6" /* Made logo smaller */
           variants={itemVariants}
         >
-          <img 
-            src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
-            alt="Mayo Clinic Logo" 
-            className="rounded-lg shadow-md w-full h-auto"
-          />
+          <div className="relative">
+            {/* Glow effect behind the logo */}
+            <motion.div 
+              className="absolute inset-0 bg-amber-200/50 blur-xl rounded-lg"
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+            ></motion.div>
+            
+            <img 
+              src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
+              alt="Mayo Clinic Logo" 
+              className="rounded-lg shadow-md w-full h-auto relative z-10"
+            />
+          </div>
         </motion.div>
         
         <div className="md:w-2/3 lg:w-3/4 space-y-4"> {/* Increased content area */}
           <motion.div variants={itemVariants}>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <div className="bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
                 LIMITED SPOTS
               </div>
@@ -124,6 +136,21 @@ const MayoSummerFeature = () => {
             Exclusive opportunity for Westside High School students to gain hands-on experience in healthcare at the prestigious Mayo Clinic. Perfect for students in the Nursing Academy pathway. Limited spots available!
           </motion.p>
           
+          {/* Program details with icons */}
+          <motion.div
+            className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-amber-100 space-y-2 my-3"
+            variants={itemVariants}
+          >
+            <div className="flex items-center text-sm text-gray-700">
+              <Calendar className="h-4 w-4 mr-2 text-amber-600" />
+              <span>June 15 - August 15, 2025</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-700">
+              <MapPin className="h-4 w-4 mr-2 text-amber-600" />
+              <span>Mayo Clinic Jacksonville, Florida</span>
+            </div>
+          </motion.div>
+          
           <motion.div
             className="flex flex-wrap gap-3 pt-2"
             variants={itemVariants}
@@ -143,15 +170,28 @@ const MayoSummerFeature = () => {
             className="pt-4"
             variants={itemVariants}
           >
-            <Button 
-              asChild
-              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl transition-all"
-              size="lg"
-            >
-              <Link to="/jobs/mayo-summer-program">
-                Apply Now
-              </Link>
-            </Button>
+            {/* Button with animated glow effect */}
+            <div className="relative inline-block">
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-amber-400/30 blur-md"
+                animate={{ 
+                  opacity: [0.4, 0.8, 0.4],
+                  scale: [0.95, 1.05, 0.95],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              ></motion.div>
+              
+              <Button 
+                asChild
+                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl transition-all relative z-10"
+                size="lg"
+              >
+                <Link to="/jobs/mayo-summer-program" className="flex items-center gap-2">
+                  Apply Now
+                  <Sparkles className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
             <p className="text-xs text-gray-500 mt-2">
               *Only for Westside High School Nursing Academy students
             </p>

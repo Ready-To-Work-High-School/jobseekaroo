@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -15,6 +16,7 @@ import StudentProfileGrid from '@/components/students/StudentProfileGrid';
 import SampleCandidates from '@/components/employer/SampleCandidates';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
+import SearchSection from '@/components/home/SearchSection';
 
 // Lazy load the content that appears below the fold
 const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
@@ -43,6 +45,11 @@ const Home = () => {
       {/* Add Mayo Summer Program Feature prominently after the hero */}
       <ErrorBoundary>
         <MayoSummerFeature />
+      </ErrorBoundary>
+      
+      {/* Add the Search section (similar to Snyk's approach) */}
+      <ErrorBoundary>
+        <SearchSection />
       </ErrorBoundary>
       
       {/* Add the How It Works section */}
