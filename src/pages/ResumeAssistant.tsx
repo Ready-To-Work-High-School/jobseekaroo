@@ -2,6 +2,7 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 import { FileText } from 'lucide-react';
+import ResumeChat from '@/components/resume/ResumeChat';
 
 const ResumeAssistant = () => {
   return (
@@ -13,16 +14,11 @@ const ResumeAssistant = () => {
         </div>
         
         <p className="text-lg mb-8">
-          Our resume assistant helps you create a professional resume that stands out to employers.
-          This page is currently under development.
+          Our AI-powered resume assistant helps you create a professional resume that stands out to employers.
+          Upload your current resume for feedback, or generate a new one from scratch.
         </p>
         
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border border-blue-100">
-          <h2 className="text-xl font-semibold mb-4 text-center">Coming Soon</h2>
-          <p className="text-center">
-            The Resume Assistant is currently being developed. Please check back soon for this feature.
-          </p>
-        </div>
+        <ResumeChat />
       </div>
     </Layout>
   );
