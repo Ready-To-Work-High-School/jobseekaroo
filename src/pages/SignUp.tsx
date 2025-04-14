@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +16,7 @@ import GoogleIcon from '@/components/icons/GoogleIcon';
 
 const SignUp = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const defaultUserType = queryParams.get('type') === 'employer' ? 'employer' : 'student';
   
@@ -35,10 +35,29 @@ const SignUp = () => {
     formState: { errors },
   } = signUpForm;
   
-  // Set default user type based on URL parameter
   useState(() => {
     setValue('userType', defaultUserType as 'student' | 'employer');
   });
+
+  const onSubmit = async (data: SignUpFormValues) => {
+    try {
+      // If student is under 18, redirect to parental consent
+      if (data.userType === 'student' && data.age && data.age < 18) {
+        navigate('/parental-consent', { 
+          state: { 
+            userData: data
+          }
+        });
+        return;
+      }
+      
+      // Otherwise proceed with normal signup
+      await handleSignUp(data);
+    } catch (error) {
+      console.error('Signup error:', error);
+      // Error handling is already managed by useAuthForm
+    }
+  };
   
   const userType = watch('userType');
   const fadeIn = useFadeIn(200);
@@ -60,7 +79,6 @@ const SignUp = () => {
           </CardHeader>
           
           <CardContent className="space-y-4">
-            {/* Account type selection */}
             <RadioGroup 
               defaultValue={userType}
               onValueChange={(value) => setValue('userType', value as 'student' | 'employer')}
@@ -97,7 +115,6 @@ const SignUp = () => {
               </div>
             </RadioGroup>
             
-            {/* Social Sign In Options */}
             <div className="grid grid-cols-2 gap-4">
               <Button 
                 variant="outline" 
@@ -128,8 +145,7 @@ const SignUp = () => {
               </div>
             </div>
             
-            {/* Sign Up Form */}
-            <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First name</Label>
@@ -158,7 +174,6 @@ const SignUp = () => {
                 </div>
               </div>
               
-              {/* New Age field - only shown for student user type */}
               {userType === 'student' && (
                 <div className="space-y-2">
                   <Label htmlFor="age">Age</Label>
@@ -168,7 +183,14 @@ const SignUp = () => {
                     min="13"
                     max="100"
                     placeholder="Your age" 
-                    {...register('age', { valueAsNumber: true })}
+                    {...register('age', { 
+                      valueAsNumber: true,
+                      required: 'Age is required for student accounts',
+                      min: {
+                        value: 13,
+                        message: 'You must be at least 13 years old'
+                      }
+                    })}
                     className={errors.age ? 'border-red-500' : ''}
                     disabled={isSubmitting}
                   />
