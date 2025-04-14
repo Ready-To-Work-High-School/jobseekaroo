@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,12 +13,12 @@ interface CanvaEmbedProps {
 }
 
 const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
-  designId = "DAGkhyBr97U", // Updated default design ID
+  designId = "DAGkhyBr97U",
   designName = "JS4HS",
   authorName = "Coleman, Pamela Y.",
-  aspectRatio = "62.8111%", // Updated aspect ratio from the new embed
+  aspectRatio = "62.8111%",
   className = "",
-  downloadUrl = "https://www.canva.com/design/DAGkhyBr97U/mhY4WIvBv8Dw9yz13QDmRQ/view?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=embeds&utm_source=link"
+  downloadUrl = "https://www.canva.com/design/DAGkhyBr97U/kIS1g2e3EuNKS3na00_FPg/download?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7739408825"
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -39,7 +38,6 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
       return;
     }
     
-    // Create a temporary anchor element to trigger download
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.download = `${designName}.mp4`;
@@ -50,21 +48,18 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
     toast.success("Download started");
   };
 
-  // Build the Canva embed URL
   const embedUrl = `https://www.canva.com/design/${designId}/view?embed`;
-  const shareUrl = `https://www.canva.com/design/${designId}/view?utm_content=${designId}&utm_campaign=designshare&utm_medium=embeds&utm_source=link`;
+  const shareUrl = `https://www.canva.com/design/${designId}/view?utm_content=${designId}&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7739408825`;
 
   return (
     <div className={`w-full ${className}`}>
       <div className="relative w-full overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-        {/* Loading spinner overlay */}
         {!isLoaded && !isError && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100/80 z-10">
             <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
           </div>
         )}
         
-        {/* Error state */}
         {isError && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-10 p-4 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500 mb-2">
@@ -84,7 +79,6 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
           </div>
         )}
         
-        {/* Responsive container with custom aspect ratio */}
         <div 
           className="relative w-full"
           style={{ 
@@ -107,7 +101,6 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
           />
         </div>
         
-        {/* Download button and attribution */}
         <div className="flex flex-wrap items-center justify-between mt-3 mb-2 px-2">
           <div className="flex items-center">
             {downloadUrl && (
