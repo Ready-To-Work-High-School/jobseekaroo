@@ -14,12 +14,12 @@ interface CanvaEmbedProps {
 }
 
 const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
-  designId,
-  designName = "Canva Design",
-  authorName,
-  aspectRatio = "56.2225%",
+  designId = "DAGkhyBr97U", // Updated default design ID
+  designName = "JS4HS",
+  authorName = "Coleman, Pamela Y.",
+  aspectRatio = "62.8111%", // Updated aspect ratio from the new embed
   className = "",
-  downloadUrl
+  downloadUrl = "https://www.canva.com/design/DAGkhyBr97U/mhY4WIvBv8Dw9yz13QDmRQ/view?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=embeds&utm_source=link"
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
