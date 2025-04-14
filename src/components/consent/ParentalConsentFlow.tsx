@@ -9,7 +9,11 @@ import CompleteStep from './steps/CompleteStep';
 import CoppaInformationDialog from './CoppaInformationDialog';
 import SupportFooter from './SupportFooter';
 
-const ParentalConsentFlow = () => {
+interface ParentalConsentFlowProps {
+  initialUserData?: any;
+}
+
+const ParentalConsentFlow: React.FC<ParentalConsentFlowProps> = ({ initialUserData }) => {
   const isMobile = useIsMobile();
   const {
     step,
@@ -22,7 +26,7 @@ const ParentalConsentFlow = () => {
     handleSendVerification,
     handleVerify,
     user
-  } = useConsentFlow();
+  } = useConsentFlow(initialUserData);
   
   return (
     <div className={`max-w-md mx-auto bg-white p-6 ${isMobile ? 'rounded-none' : 'rounded-lg shadow-md'}`}>

@@ -6,7 +6,7 @@ import { ParentFormValues, VerificationFormValues } from '../schemas';
 
 export type ConsentStep = 'introduction' | 'parentEmail' | 'verification' | 'complete';
 
-export const useConsentFlow = () => {
+export const useConsentFlow = (initialUserData?: any) => {
   const [step, setStep] = useState<ConsentStep>('introduction');
   const [parentEmail, setParentEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -15,6 +15,9 @@ export const useConsentFlow = () => {
   const [showHelp, setShowHelp] = useState(false);
   const { toast } = useToast();
   const { user, userProfile, updateProfile } = useAuth();
+  
+  // Store the initialUserData for use in the flow
+  const [userData, setUserData] = useState(initialUserData || {});
 
   // Check if consent is already verified when component mounts
   useEffect(() => {
@@ -78,6 +81,9 @@ export const useConsentFlow = () => {
         await updateProfile({
           preferences: updatedPreferences
         });
+        
+        // If we have initialUserData, we could continue the sign-up process
+        // This would be implemented based on your authentication flow
       }
     } catch (error) {
       toast({
@@ -106,6 +112,7 @@ export const useConsentFlow = () => {
     toggleHelpDialog,
     handleSendVerification,
     handleVerify,
-    user
+    user,
+    userData
   };
 };
