@@ -1,5 +1,5 @@
 
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -19,8 +19,12 @@ import FeeTeaser from '@/components/pricing/FeeTeaser';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import SearchSection from '@/components/home/SearchSection';
 
-// Lazy load the content that appears below the fold
-const LazyLoadedContent = lazy(() => import('../components/home/LazyLoadedContent'));
+// Import content directly instead of lazy loading to avoid dynamic import issues
+import { Sparkles, Bot } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
+import Chatbot from '@/components/support/Chatbot';
 
 const Home = () => {
   return (
@@ -100,11 +104,54 @@ const Home = () => {
         <SuccessStories />
       </ErrorBoundary>
       
-      <Suspense fallback={<div className="py-8 flex justify-center">
-        <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-      </div>}>
-        <LazyLoadedContent />
-      </Suspense>
+      {/* Previously lazy loaded content now directly included */}
+      <ErrorBoundary>
+        {/* Premium Features Banner - simplified DOM */}
+        <div className="max-w-5xl mx-auto mt-12 mb-8 bg-gradient-to-r from-amber-50 to-blue-50 p-5 rounded-lg border border-amber-100">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Sparkles className="h-6 w-6 text-amber-500" />
+              <div>
+                <h3 className="font-medium">Premium Features for Employers</h3>
+                <p className="text-sm text-muted-foreground">Access advanced analytics and premium company profiles</p>
+              </div>
+            </div>
+            <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
+              <Link to="/employer-premium">
+                Explore Premium Features
+              </Link>
+            </Button>
+          </div>
+        </div>
+        
+        {/* AI Job Help Banner - simplified DOM */}
+        <div className="max-w-5xl mx-auto mt-12 mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-lg border border-blue-100">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Bot className="h-6 w-6 text-blue-500" />
+              <div>
+                <h3 className="font-medium">AI-Powered Job Search Help</h3>
+                <p className="text-sm text-muted-foreground">Get personalized resume, interview, and job application guidance</p>
+              </div>
+            </div>
+            <Button asChild className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+              <Link to="/job-help">
+                Get AI Assistance
+              </Link>
+            </Button>
+          </div>
+        </div>
+        
+        {/* User recommendations section */}
+        <ErrorBoundary>
+          <UserRecommendationsSection />
+        </ErrorBoundary>
+        
+        {/* Chatbot */}
+        <ErrorBoundary>
+          <Chatbot />
+        </ErrorBoundary>
+      </ErrorBoundary>
     </Layout>
   );
 };
