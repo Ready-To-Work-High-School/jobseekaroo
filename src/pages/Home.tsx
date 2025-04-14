@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useState } from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -25,10 +24,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import Chatbot from '@/components/support/Chatbot';
-
 const Home = () => {
-  return (
-    <Layout>
+  return <Layout>
       <Helmet>
         <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
         <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." />
@@ -45,14 +42,7 @@ const Home = () => {
       </Helmet>
       
       {/* Enhanced Canva Design Embed with responsive styling and download button */}
-      <div className="container mx-auto px-4 py-4">
-        <CanvaEmbed 
-          designId="DAGkhyBr97U"
-          designName="Career Platform Template"
-          authorName="Coleman, Pamela Y."
-          downloadUrl="https://www.canva.com/design/DAGkhyBr97U/download?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&type=4"
-        />
-      </div>
+      
       
       <ErrorBoundary>
         <EnhancedHero />
@@ -152,8 +142,6 @@ const Home = () => {
           <Chatbot />
         </ErrorBoundary>
       </ErrorBoundary>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Home;
