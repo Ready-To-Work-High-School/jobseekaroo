@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,7 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
   authorName = "Coleman, Pamela Y.",
   aspectRatio = "62.8111%",
   className = "",
-  downloadUrl = "https://www.canva.com/design/DAGkhyBr97U/kIS1g2e3EuNKS3na00_FPg/download?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7739408825"
+  downloadUrl = "https://www.canva.com/design/DAGkhyBr97U/download?utm_content=DAGkhyBr97U&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&type=4"
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -49,7 +50,7 @@ const CanvaEmbed: React.FC<CanvaEmbedProps> = ({
   };
 
   const embedUrl = `https://www.canva.com/design/${designId}/view?embed`;
-  const shareUrl = `https://www.canva.com/design/${designId}/view?utm_content=${designId}&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7739408825`;
+  const shareUrl = `https://www.canva.com/design/${designId}/view?utm_content=${designId}&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink`;
 
   return (
     <div className={`w-full ${className}`}>
