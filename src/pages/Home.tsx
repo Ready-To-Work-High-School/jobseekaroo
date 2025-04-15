@@ -20,6 +20,9 @@ import UserRecommendationsSection from '@/components/home/UserRecommendationsSec
 import Chatbot from '@/components/support/Chatbot';
 import JobSimulationsSection from '@/components/home/JobSimulationsSection';
 import InfoBanner from '@/components/home/InfoBanner';
+import SectionSeparator from '@/components/home/SectionSeparator';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import CompanyDirectory from '@/components/resources/CompanyDirectory';
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
@@ -58,20 +61,28 @@ const Home = () => {
         <Hero />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
       {/* Search Section - Keep it prominent for quick job search */}
       <ErrorBoundary>
         <SearchSection />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* Enhanced Job Listings - Show available opportunities */}
       <ErrorBoundary>
         <EnhancedJobListings />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
       {/* How It Works - Make the process clear */}
       <ErrorBoundary>
         <HowItWorksSection />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* Job Locations Map */}
       <ErrorBoundary>
@@ -81,35 +92,59 @@ const Home = () => {
         </div>
       </ErrorBoundary>
 
+      <SectionSeparator />
+
+      {/* Top Jacksonville Employers with logos */}
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-6 text-center">Top Employers in Jacksonville</h2>
+          <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 6)} />
+        </div>
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
       {/* Success Stories - Show real outcomes */}
       <ErrorBoundary>
         <SuccessStories />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* First Job Toolkit - Help students prepare */}
       <ErrorBoundary>
         <FirstJobToolkit />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
       {/* Job Simulations Section */}
       <ErrorBoundary>
         <JobSimulationsSection />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* Mayo Summer Program Feature */}
       <ErrorBoundary>
         <MayoSummerFeature />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
       {/* Fee Teaser */}
       <ErrorBoundary>
         <FeeTeaser />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
       {/* Call to Action */}
       <ErrorBoundary>
         <CallToActionSection />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* Admin Toggle (if user is logged in) */}
       {user && (
@@ -118,10 +153,14 @@ const Home = () => {
         </div>
       )}
 
+      <SectionSeparator />
+
       {/* User Recommendations */}
       <ErrorBoundary>
         <UserRecommendationsSection />
       </ErrorBoundary>
+
+      <SectionSeparator />
 
       {/* Chatbot for support */}
       <ErrorBoundary>
