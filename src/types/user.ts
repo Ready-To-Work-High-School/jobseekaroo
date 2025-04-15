@@ -1,4 +1,3 @@
-
 import { UserBadge } from '@/types/badges';
 
 export interface UserProfile {
@@ -73,3 +72,5 @@ export interface AccessibilitySettings {
   reduce_motion: boolean;
   screen_reader_optimized: boolean;
 }
+
+export type { UserBadge } from '@/types/badges';
