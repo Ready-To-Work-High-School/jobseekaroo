@@ -60,6 +60,23 @@ const Home = () => {
         <Hero />
       </ErrorBoundary>
 
+      {/* Video Section */}
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg">
+            <iframe 
+              src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1" 
+              width="100%" 
+              height="504" 
+              className="w-full aspect-video"
+              frameBorder="0" 
+              title="Kickstart Your Career with Ease!" 
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </ErrorBoundary>
+
       <SectionSeparator />
 
       {/* Search Section - Keep it prominent for quick job search */}
