@@ -19,12 +19,9 @@ const StepFour = () => {
   const startRecording = (question: string) => {
     setSelectedQuestion(question);
     setIsRecording(true);
-    // In a real implementation, this would use the MediaRecorder API
-    // For now we'll just simulate recording with a timer
     setTimeout(() => {
-      // After a simulated recording time, we set a fake video URL
       setIsRecording(false);
-      setRecordedVideo("mock-video-url");  // This would be a real blob URL in a complete implementation
+      setRecordedVideo("mock-video-url");
     }, 3000);
   };
   
@@ -49,23 +46,23 @@ const StepFour = () => {
           </div>
           <div className="p-4 space-y-3">
             <div className="space-y-1">
-              <h5 className="font-medium">Tell me about yourself.</h5>
-              <p className="text-sm text-muted-foreground">Briefly share your education, interests, and why you want the job.</p>
+              <h5 className="font-medium">About Yourself</h5>
+              <p className="text-sm text-muted-foreground">Share your background briefly</p>
             </div>
             
             <div className="space-y-1">
-              <h5 className="font-medium">Why do you want to work here?</h5>
-              <p className="text-sm text-muted-foreground">Research the company beforehand and share what interests you.</p>
+              <h5 className="font-medium">Why This Job?</h5>
+              <p className="text-sm text-muted-foreground">Show your interest and research</p>
             </div>
             
             <div className="space-y-1">
-              <h5 className="font-medium">What's your availability?</h5>
-              <p className="text-sm text-muted-foreground">Be honest about your school schedule and other commitments.</p>
+              <h5 className="font-medium">Your Availability</h5>
+              <p className="text-sm text-muted-foreground">Explain your school schedule</p>
             </div>
             
             <div className="space-y-1">
-              <h5 className="font-medium">What are your strengths?</h5>
-              <p className="text-sm text-muted-foreground">Highlight qualities relevant to the job (responsible, team player, etc.).</p>
+              <h5 className="font-medium">Your Strengths</h5>
+              <p className="text-sm text-muted-foreground">Highlight key skills</p>
             </div>
           </div>
         </div>
@@ -83,27 +80,27 @@ const StepFour = () => {
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">👔</span>
-                <span className="text-sm">Dress neatly and appropriately</span>
+                <span className="text-sm">Dress professionally</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">📱</span>
-                <span className="text-sm">Turn off your phone</span>
+                <span className="text-sm">Silence phone</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">👋</span>
-                <span className="text-sm">Give a firm handshake and smile</span>
+                <span className="text-sm">Firm handshake, smile</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">👁️</span>
-                <span className="text-sm">Maintain good eye contact</span>
+                <span className="text-sm">Maintain eye contact</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">❓</span>
-                <span className="text-sm">Prepare questions to ask them</span>
+                <span className="text-sm">Prepare questions</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-medium text-sm">🙏</span>
-                <span className="text-sm">Thank them for their time</span>
+                <span className="text-sm">Thank them</span>
               </li>
             </ul>
           </div>
@@ -114,13 +111,13 @@ const StepFour = () => {
       <Card className="p-4 border-primary/20 bg-gradient-to-r from-blue-50 to-indigo-50">
         <div className="flex items-center gap-2 mb-4">
           <Video className="h-6 w-6 text-primary" />
-          <h4 className="font-medium text-lg">Interview Practice Recorder</h4>
+          <h4 className="font-medium text-lg">Interview Practice</h4>
         </div>
         
         {!recordedVideo ? (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Record yourself answering common interview questions and review your responses to improve your interview skills.
+              Record and review your interview responses.
             </p>
             
             {isRecording ? (
@@ -130,7 +127,7 @@ const StepFour = () => {
                     <div className="animate-pulse mb-2">
                       <Mic className="h-12 w-12 text-red-500" />
                     </div>
-                    <p className="font-medium text-red-600">Recording in progress...</p>
+                    <p className="font-medium text-red-600">Recording...</p>
                     <p className="text-sm text-muted-foreground mt-1">Answering: {selectedQuestion}</p>
                   </div>
                 </div>
@@ -144,7 +141,7 @@ const StepFour = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="font-medium">Select a question to practice:</p>
+                <p className="font-medium">Select a question:</p>
                 <div className="grid grid-cols-1 gap-2">
                   {commonQuestions.map((question, index) => (
                     <Button 
@@ -167,19 +164,19 @@ const StepFour = () => {
                 <div className="mb-2">
                   <Check className="h-10 w-10 text-green-500" />
                 </div>
-                <p className="font-medium text-green-600">Recording complete!</p>
+                <p className="font-medium text-green-600">Recording Complete!</p>
                 <p className="text-sm text-muted-foreground mt-1 max-w-xs">
-                  You've recorded your answer to: <span className="font-medium">{selectedQuestion}</span>
+                  Answered: <span className="font-medium">{selectedQuestion}</span>
                 </p>
               </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-2">
               <Button variant="secondary" className="flex-1" onClick={resetRecording}>
-                <X className="h-4 w-4 mr-2" /> Discard & Try Again
+                <X className="h-4 w-4 mr-2" /> Retry
               </Button>
               <Button className="flex-1 bg-primary">
-                <Video className="h-4 w-4 mr-2" /> Review Recording
+                <Video className="h-4 w-4 mr-2" /> Review
               </Button>
             </div>
           </div>
@@ -191,8 +188,8 @@ const StepFour = () => {
           <Lightbulb className="h-6 w-6 text-amber-500" />
         </div>
         <div>
-          <h5 className="font-medium">Did you know?</h5>
-          <p className="text-sm">You can use our Interview Practice tool to record yourself answering common interview questions and get feedback on your responses!</p>
+          <h5 className="font-medium">Pro Tip</h5>
+          <p className="text-sm">Use our Interview Practice tool to record and improve your responses!</p>
         </div>
       </div>
       
@@ -202,7 +199,7 @@ const StepFour = () => {
         </div>
         <div>
           <h5 className="font-medium">Virtual Interview Tips</h5>
-          <p className="text-sm">Test your camera and microphone beforehand, choose a quiet location with good lighting, and dress professionally from head to toe.</p>
+          <p className="text-sm">Test tech, choose quiet location, dress professionally.</p>
         </div>
       </div>
     </div>
