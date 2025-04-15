@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -20,7 +19,7 @@ import CallToActionSection from '@/components/home/CallToActionSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import Chatbot from '@/components/support/Chatbot';
 import JobSimulationsSection from '@/components/home/JobSimulationsSection';
-import InfoBanner from '@/components/home/InfoBanner'; // Added missing import
+import InfoBanner from '@/components/home/InfoBanner';
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
@@ -54,47 +53,47 @@ const Home = () => {
         <InfoBanner />
       </ErrorBoundary>
 
-      {/* Hero Section */}
+      {/* Hero Section - Updated for student focus */}
       <ErrorBoundary>
         <Hero />
       </ErrorBoundary>
 
-      {/* Search Section */}
+      {/* Search Section - Keep it prominent for quick job search */}
       <ErrorBoundary>
         <SearchSection />
       </ErrorBoundary>
 
-      {/* Enhanced Job Listings */}
+      {/* Enhanced Job Listings - Show available opportunities */}
       <ErrorBoundary>
         <EnhancedJobListings />
       </ErrorBoundary>
 
-      {/* How It Works */}
+      {/* How It Works - Make the process clear */}
       <ErrorBoundary>
         <HowItWorksSection />
       </ErrorBoundary>
 
       {/* Job Locations Map */}
-      <div className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-12">
+          <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
           <JobLocationsMap />
-        </ErrorBoundary>
-      </div>
+        </div>
+      </ErrorBoundary>
+
+      {/* Success Stories - Show real outcomes */}
+      <ErrorBoundary>
+        <SuccessStories />
+      </ErrorBoundary>
+
+      {/* First Job Toolkit - Help students prepare */}
+      <ErrorBoundary>
+        <FirstJobToolkit />
+      </ErrorBoundary>
 
       {/* Job Simulations Section */}
       <ErrorBoundary>
         <JobSimulationsSection />
-      </ErrorBoundary>
-
-      {/* Success Metrics */}
-      <ErrorBoundary>
-        <JobPlacementsSection />
-      </ErrorBoundary>
-
-      {/* First Job Toolkit */}
-      <ErrorBoundary>
-        <FirstJobToolkit />
       </ErrorBoundary>
 
       {/* Mayo Summer Program Feature */}
@@ -105,11 +104,6 @@ const Home = () => {
       {/* Fee Teaser */}
       <ErrorBoundary>
         <FeeTeaser />
-      </ErrorBoundary>
-
-      {/* Success Stories */}
-      <ErrorBoundary>
-        <SuccessStories />
       </ErrorBoundary>
 
       {/* Call to Action */}
@@ -129,7 +123,7 @@ const Home = () => {
         <UserRecommendationsSection />
       </ErrorBoundary>
 
-      {/* Chatbot */}
+      {/* Chatbot for support */}
       <ErrorBoundary>
         <Chatbot />
       </ErrorBoundary>
