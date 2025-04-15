@@ -1,3 +1,4 @@
+
 export interface UserProfile {
   id: string;
   first_name: string | null;
@@ -23,6 +24,7 @@ export interface UserProfile {
   verification_notes?: string | null;
   resume_data_encrypted?: string | null;
   contact_details_encrypted?: string | null;
+  badges?: UserBadge[];
 }
 
 export interface UserProfileUpdate {
