@@ -3,18 +3,14 @@ import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useFadeIn } from '@/utils/animations';
-import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import InfoBanner from '@/components/home/InfoBanner';
+import AdminToggle from '@/components/admin/AdminToggle';
 import SearchSection from '@/components/home/SearchSection';
 import EnhancedJobListings from '@/components/home/EnhancedJobListings';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
-import CredentialsDropdown from '@/components/home/CredentialsDropdown';
-import BrandLogo from '@/components/home/BrandLogo';
-import QuickAccessButtons from '@/components/home/QuickAccessButtons';
 import Hero from '@/components/Hero';
 import SuccessStories from '@/components/home/SuccessStories';
 import JobLocationsMap from '@/components/job/JobLocationsMap';
@@ -22,6 +18,7 @@ import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import CallToActionSection from '@/components/home/CallToActionSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import Chatbot from '@/components/support/Chatbot';
+import JobSimulationsSection from '@/components/home/JobSimulationsSection';
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
@@ -55,7 +52,7 @@ const Home = () => {
         <InfoBanner />
       </ErrorBoundary>
 
-      {/* Hero Section - Now includes job search immediately */}
+      {/* Hero Section */}
       <ErrorBoundary>
         <Hero />
       </ErrorBoundary>
@@ -82,6 +79,11 @@ const Home = () => {
           <JobLocationsMap />
         </ErrorBoundary>
       </div>
+
+      {/* Job Simulations Section */}
+      <ErrorBoundary>
+        <JobSimulationsSection />
+      </ErrorBoundary>
 
       {/* Success Metrics */}
       <ErrorBoundary>
@@ -111,11 +113,6 @@ const Home = () => {
       {/* Call to Action */}
       <ErrorBoundary>
         <CallToActionSection />
-      </ErrorBoundary>
-
-      {/* Quick Access Buttons */}
-      <ErrorBoundary>
-        <QuickAccessButtons />
       </ErrorBoundary>
 
       {/* Admin Toggle (if user is logged in) */}
