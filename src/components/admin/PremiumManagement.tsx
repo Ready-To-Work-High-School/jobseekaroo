@@ -15,7 +15,7 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { Sparkles, Loader2, AlertCircle, Check, X } from 'lucide-react';
-import { UserProfile } from '@/types/user';
+import { UserProfile, UserBadge } from '@/types/user';
 
 interface PremiumUser extends UserProfile {
   premium_status?: string;
@@ -55,11 +55,23 @@ const PremiumManagement = () => {
         
       if (premiumError) throw premiumError;
       
-      // Map premium data to users
+      // Map premium data to users with proper type handling for badges
       const usersWithPremium = profiles.map(profile => {
+        const rawProfile = profile as any;
         const premiumSub = premiumData?.find(sub => sub.user_id === profile.id);
+        
+        // Convert badges from JSON to UserBadge[]
+        const badges: UserBadge[] = Array.isArray(rawProfile.badges) 
+          ? rawProfile.badges.map((badge: any) => ({
+              id: badge.id,
+              name: badge.name,
+              earned_at: badge.earned_at
+            }))
+          : [];
+        
         return {
           ...profile,
+          badges,
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
         } as PremiumUser;
       });

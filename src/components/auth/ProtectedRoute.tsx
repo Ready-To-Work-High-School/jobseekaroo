@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import RequireVerification from './RequireVerification';
 import { isAdmin, isTestMode } from '@/utils/adminUtils';
-import { UserProfile } from '@/types/user'; // Import the UserProfile type
+import { UserProfile, UserBadge } from '@/types/user'; // Import the UserProfile type
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -42,7 +42,22 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         .single();
       
       if (error) throw error;
-      return data as UserProfile;
+      
+      // Convert the generic JSON badges to UserBadge[] type
+      const profile = data as any;
+      if (profile && profile.badges) {
+        profile.badges = Array.isArray(profile.badges) 
+          ? profile.badges.map((badge: any) => ({
+              id: badge.id,
+              name: badge.name,
+              earned_at: badge.earned_at
+            }))
+          : [];
+      } else {
+        profile.badges = [];
+      }
+      
+      return profile as UserProfile;
     },
     enabled: !!user?.id, // Only fetch if signed in
   });
