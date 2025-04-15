@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -11,7 +10,6 @@ import SearchSection from '@/components/home/SearchSection';
 import EnhancedJobListings from '@/components/home/EnhancedJobListings';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
-import FeaturedProgramsSection from '@/components/home/FeaturedProgramsSection';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import CredentialsDropdown from '@/components/home/CredentialsDropdown';
@@ -20,7 +18,7 @@ import QuickAccessButtons from '@/components/home/QuickAccessButtons';
 import Hero from '@/components/Hero';
 import SuccessStories from '@/components/home/SuccessStories';
 import JobLocationsMap from '@/components/job/JobLocationsMap';
-import SampleCandidates from '@/components/employer/SampleCandidates';
+import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import CallToActionSection from '@/components/home/CallToActionSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import Chatbot from '@/components/support/Chatbot';
@@ -62,28 +60,33 @@ const Home = () => {
         <Hero />
       </ErrorBoundary>
 
-      {/* Search Section - Moved up */}
+      {/* Search Section */}
       <ErrorBoundary>
         <SearchSection />
       </ErrorBoundary>
 
-      {/* Enhanced Job Listings - Moved up */}
+      {/* Enhanced Job Listings */}
       <ErrorBoundary>
         <EnhancedJobListings />
       </ErrorBoundary>
 
-      {/* How It Works - Moved up since it's job-related */}
+      {/* How It Works */}
       <ErrorBoundary>
         <HowItWorksSection />
       </ErrorBoundary>
 
-      {/* Job Locations Map - Moved up */}
+      {/* Job Locations Map */}
       <div className="container mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
         <ErrorBoundary>
           <JobLocationsMap />
         </ErrorBoundary>
       </div>
+
+      {/* Success Metrics */}
+      <ErrorBoundary>
+        <JobPlacementsSection />
+      </ErrorBoundary>
 
       {/* First Job Toolkit */}
       <ErrorBoundary>
@@ -95,23 +98,10 @@ const Home = () => {
         <MayoSummerFeature />
       </ErrorBoundary>
 
-      {/* Featured Programs */}
-      <ErrorBoundary>
-        <FeaturedProgramsSection />
-      </ErrorBoundary>
-
       {/* Fee Teaser */}
       <ErrorBoundary>
         <FeeTeaser />
       </ErrorBoundary>
-
-      {/* Sample Candidates */}
-      <div className="container mx-auto px-4 py-12 bg-gray-50">
-        <h2 className="text-3xl font-bold mb-8 text-center">Sample Candidates</h2>
-        <ErrorBoundary>
-          <SampleCandidates />
-        </ErrorBoundary>
-      </div>
 
       {/* Success Stories */}
       <ErrorBoundary>
