@@ -1,4 +1,6 @@
 
+import { UserBadge } from '@/types/badges';
+
 export interface UserProfile {
   id: string;
   first_name: string | null;
