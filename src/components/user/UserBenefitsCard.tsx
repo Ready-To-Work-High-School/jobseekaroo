@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, AlertCircle, Sparkles } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, Sparkles, Crown } from 'lucide-react';
 import { UserProfile } from '@/types/user';
 
 interface UserBenefitsCardProps {
@@ -25,6 +24,11 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       day: 'numeric'
     });
   };
+  
+  // Check if user has founding member badge
+  const isFoundingMember = userProfile?.badges?.some(
+    (badge: any) => badge.id === 'founding_member'
+  );
   
   // Define benefits based on account type
   const getBenefits = () => {
@@ -124,6 +128,18 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
+          {isFoundingMember && (
+            <div className="bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-lg p-3 mb-4">
+              <div className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-amber-600" />
+                <span className="font-medium text-amber-900">Founding Member</span>
+              </div>
+              <p className="text-sm text-amber-800 mt-1">
+                One of our earliest employer partners, helping shape the future of student employment.
+              </p>
+            </div>
+          )}
+          
           <ul className="space-y-2">
             {getBenefits().map((benefit, index) => (
               <li key={index} className="flex items-start gap-2">

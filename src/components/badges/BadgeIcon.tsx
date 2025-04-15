@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target, GraduationCap } from 'lucide-react';
+import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target, GraduationCap, Crown } from 'lucide-react';
 
 // Map badge IDs to their respective icons with improved organization
 export const badgeIconMap: Record<string, React.ReactNode> = {
@@ -51,7 +50,10 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
       alt="IBM SkillsBuild" 
       className="h-full w-full object-contain"
     />
-  </div>
+  </div>,
+  
+  // Early adopter badges
+  founding_member: <Crown className="h-5 w-5" />
 };
 
 interface BadgeIconProps {
