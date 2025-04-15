@@ -1,8 +1,7 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Award, UserCheck, ArrowRight, GraduationCap } from 'lucide-react';
+import { Search, Award, UserCheck, ArrowRight, GraduationCap, Heart } from 'lucide-react';
 import { SparkleGroup } from './animations/Sparkle';
 import { motion } from 'framer-motion';
 
@@ -39,11 +38,23 @@ const Hero = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 relative"
           >
             <span className="bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">
               Your First Job, Made Simple.
             </span>
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+              className="absolute -right-12 top-0 text-red-500"
+            >
+              <Heart className="h-8 w-8" fill="currentColor" />
+            </motion.div>
           </motion.h1>
           
           <motion.p 
@@ -55,7 +66,6 @@ const Hero = () => {
             A safe, mobile-first platform connecting certified high school students with local businesses. Exclusive to Westside High School students in Entrepreneurship or Nursing Academy.
           </motion.p>
 
-          {/* Feature cards with purple and gold accents */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -81,7 +91,6 @@ const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Animated CTA buttons */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -102,7 +111,6 @@ const Hero = () => {
             </Link>
           </motion.div>
 
-          {/* Employer Section with gradient background */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
