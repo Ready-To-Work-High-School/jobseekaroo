@@ -22,6 +22,7 @@ import InfoBanner from '@/components/home/InfoBanner';
 import SectionSeparator from '@/components/home/SectionSeparator';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 import CompanyDirectory from '@/components/resources/CompanyDirectory';
+import CanvaEmbed from '@/components/shared/CanvaEmbed';
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
@@ -55,9 +56,27 @@ const Home = () => {
         <InfoBanner />
       </ErrorBoundary>
 
-      {/* Hero Section - Updated for student focus */}
+      {/* Hero Section */}
       <ErrorBoundary>
         <Hero />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Video Intro Section */}
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Watch Our Platform Overview</h2>
+          <div className="max-w-4xl mx-auto">
+            <CanvaEmbed 
+              designId="a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67"
+              designName="JS4HS Platform Overview"
+              authorName="Job Seekers 4 High Schools"
+              aspectRatio="56.25%"
+              downloadUrl="https://www.veed.io/download/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67"
+            />
+          </div>
+        </div>
       </ErrorBoundary>
 
       <SectionSeparator />
