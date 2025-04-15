@@ -6,19 +6,19 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import { useFadeIn } from '@/utils/animations';
 import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import MayoSummerFeature from '@/components/home/MayoSummerFeature';
-import FeeTeaser from '@/components/pricing/FeeTeaser';
 import InfoBanner from '@/components/home/InfoBanner';
-import CredentialsDropdown from '@/components/home/CredentialsDropdown';
-import BrandLogo from '@/components/home/BrandLogo';
-import FeaturedProgramsSection from '@/components/home/FeaturedProgramsSection';
-import QuickAccessButtons from '@/components/home/QuickAccessButtons';
-import FirstJobToolkit from '@/components/home/FirstJobToolkit';
-import Hero from '@/components/Hero';
 import SearchSection from '@/components/home/SearchSection';
 import EnhancedJobListings from '@/components/home/EnhancedJobListings';
-import SuccessStories from '@/components/home/SuccessStories';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import FirstJobToolkit from '@/components/home/FirstJobToolkit';
+import FeaturedProgramsSection from '@/components/home/FeaturedProgramsSection';
+import MayoSummerFeature from '@/components/home/MayoSummerFeature';
+import FeeTeaser from '@/components/pricing/FeeTeaser';
+import CredentialsDropdown from '@/components/home/CredentialsDropdown';
+import BrandLogo from '@/components/home/BrandLogo';
+import QuickAccessButtons from '@/components/home/QuickAccessButtons';
+import Hero from '@/components/Hero';
+import SuccessStories from '@/components/home/SuccessStories';
 import JobLocationsMap from '@/components/job/JobLocationsMap';
 import SampleCandidates from '@/components/employer/SampleCandidates';
 import CallToActionSection from '@/components/home/CallToActionSection';
@@ -57,9 +57,37 @@ const Home = () => {
         <InfoBanner />
       </ErrorBoundary>
 
-      {/* Hero Section */}
+      {/* Hero Section - Now includes job search immediately */}
       <ErrorBoundary>
         <Hero />
+      </ErrorBoundary>
+
+      {/* Search Section - Moved up */}
+      <ErrorBoundary>
+        <SearchSection />
+      </ErrorBoundary>
+
+      {/* Enhanced Job Listings - Moved up */}
+      <ErrorBoundary>
+        <EnhancedJobListings />
+      </ErrorBoundary>
+
+      {/* How It Works - Moved up since it's job-related */}
+      <ErrorBoundary>
+        <HowItWorksSection />
+      </ErrorBoundary>
+
+      {/* Job Locations Map - Moved up */}
+      <div className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
+        <ErrorBoundary>
+          <JobLocationsMap />
+        </ErrorBoundary>
+      </div>
+
+      {/* First Job Toolkit */}
+      <ErrorBoundary>
+        <FirstJobToolkit />
       </ErrorBoundary>
 
       {/* Mayo Summer Program Feature */}
@@ -67,43 +95,15 @@ const Home = () => {
         <MayoSummerFeature />
       </ErrorBoundary>
 
-      {/* First Job Toolkit */}
-      <ErrorBoundary>
-        <FirstJobToolkit />
-      </ErrorBoundary>
-
-      {/* Search Section */}
-      <ErrorBoundary>
-        <SearchSection />
-      </ErrorBoundary>
-
-      {/* How It Works */}
-      <ErrorBoundary>
-        <HowItWorksSection />
-      </ErrorBoundary>
-
       {/* Featured Programs */}
       <ErrorBoundary>
         <FeaturedProgramsSection />
-      </ErrorBoundary>
-
-      {/* Enhanced Job Listings */}
-      <ErrorBoundary>
-        <EnhancedJobListings />
       </ErrorBoundary>
 
       {/* Fee Teaser */}
       <ErrorBoundary>
         <FeeTeaser />
       </ErrorBoundary>
-
-      {/* Job Locations Map */}
-      <div className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
-        <ErrorBoundary>
-          <JobLocationsMap />
-        </ErrorBoundary>
-      </div>
 
       {/* Sample Candidates */}
       <div className="container mx-auto px-4 py-12 bg-gray-50">
