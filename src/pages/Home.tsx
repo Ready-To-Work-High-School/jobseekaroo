@@ -13,7 +13,6 @@ import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import Hero from '@/components/Hero';
 import SuccessStories from '@/components/home/SuccessStories';
-import JobLocationsMap from '@/components/job/JobLocationsMap';
 import JobPlacementsSection from '@/components/home/JobPlacementsSection';
 import CallToActionSection from '@/components/home/CallToActionSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
@@ -80,16 +79,6 @@ const Home = () => {
       {/* How It Works - Make the process clear */}
       <ErrorBoundary>
         <HowItWorksSection />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      {/* Job Locations Map */}
-      <ErrorBoundary>
-        <div className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl font-bold mb-8 text-center">Discover Jobs Near You</h2>
-          <JobLocationsMap />
-        </div>
       </ErrorBoundary>
 
       <SectionSeparator />
