@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -19,6 +20,7 @@ import CallToActionSection from '@/components/home/CallToActionSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 import Chatbot from '@/components/support/Chatbot';
 import JobSimulationsSection from '@/components/home/JobSimulationsSection';
+import InfoBanner from '@/components/home/InfoBanner'; // Added missing import
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
