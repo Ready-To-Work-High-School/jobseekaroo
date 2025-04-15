@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -23,25 +22,10 @@ import InfoBanner from '@/components/home/InfoBanner';
 import SectionSeparator from '@/components/home/SectionSeparator';
 import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 import CompanyDirectory from '@/components/resources/CompanyDirectory';
-import { Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 
 const Home = () => {
   const fadeIn = useFadeIn(300);
   const { user } = useAuth();
-
-  const handleDownload = () => {
-    const downloadUrl = "https://www.veed.io/download/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67";
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = "JS4HS-Platform-Overview.mp4";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast.success("Download started");
-  };
 
   return (
     <Layout>
@@ -71,45 +55,9 @@ const Home = () => {
         <InfoBanner />
       </ErrorBoundary>
 
-      {/* Hero Section */}
+      {/* Hero Section - Updated for student focus */}
       <ErrorBoundary>
         <Hero />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      {/* Video Intro Section */}
-      <ErrorBoundary>
-        <div className="container mx-auto px-4 py-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Watch Our Platform Overview</h2>
-          <div className="max-w-4xl mx-auto">
-            <div className="relative w-full overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                <iframe 
-                  className="absolute top-0 left-0 w-full h-full border-0" 
-                  src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67" 
-                  title="JS4HS Platform Overview" 
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                ></iframe>
-              </div>
-              <div className="flex items-center justify-between mt-3 mb-2 px-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleDownload} 
-                  className="flex items-center gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  Download MP4
-                </Button>
-                <div className="text-sm text-gray-600">
-                  JS4HS Platform Overview • Job Seekers 4 High Schools
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </ErrorBoundary>
 
       <SectionSeparator />
