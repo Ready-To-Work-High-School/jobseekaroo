@@ -1,9 +1,12 @@
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Search, Award, UserCheck, ArrowRight, GraduationCap, Heart } from 'lucide-react';
-import { SparkleGroup } from './animations/Sparkle';
+
 import { motion } from 'framer-motion';
+import { SparkleGroup } from './animations/Sparkle';
+import { FreeBadge } from './hero/FreeBadge';
+import { HeartIcon } from './hero/HeartIcon';
+import { FeatureCards } from './hero/FeatureCards';
+import { HeroButtons } from './hero/HeroButtons';
+import { VideoSection } from './hero/VideoSection';
+import { EmployerSection } from './hero/EmployerSection';
 
 const Hero = () => {
   return (
@@ -21,18 +24,7 @@ const Hero = () => {
       
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Free Badge */}
-          <motion.div 
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6 inline-block"
-          >
-            <Badge variant="outline" className="px-4 py-1 text-lg bg-amber-50 border-amber-200 text-amber-700">
-              <Award className="h-5 w-5 mr-2" />
-              Free for Students
-            </Badge>
-          </motion.div>
+          <FreeBadge />
           
           <motion.h1 
             initial={{ y: 20, opacity: 0 }}
@@ -43,34 +35,7 @@ const Hero = () => {
             <span className="bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">
               Your First Job, Made Simple.
             </span>
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-              className="absolute -right-12 top-0"
-            >
-              <Heart 
-                className="h-8 w-8"
-                style={{
-                  fill: "url(#heartGradient)",
-                  stroke: "none"
-                }}
-              />
-              <svg width="0" height="0">
-                <defs>
-                  <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style={{ stopColor: '#9333EA' }} />
-                    <stop offset="33%" style={{ stopColor: '#3B82F6' }} />
-                    <stop offset="66%" style={{ stopColor: '#EF4444' }} />
-                    <stop offset="100%" style={{ stopColor: '#F59E0B' }} />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </motion.div>
+            <HeartIcon />
           </motion.h1>
           
           <motion.p 
@@ -82,86 +47,10 @@ const Hero = () => {
             A safe, mobile-first platform connecting certified high school students with local businesses. Exclusive to Westside High School students in Entrepreneurship or Nursing Academy.
           </motion.p>
 
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12"
-          >
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-100 hover:border-purple-200 transition-colors">
-              <Search className="h-8 w-8 text-purple-500 mb-2 mx-auto" />
-              <h3 className="font-medium">Find Jobs Fast</h3>
-              <p className="text-sm text-gray-600">Local opportunities matched to your skills</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-amber-100 hover:border-amber-200 transition-colors">
-              <Award className="h-8 w-8 text-amber-500 mb-2 mx-auto" />
-              <h3 className="font-medium">Earn Badges</h3>
-              <p className="text-sm text-gray-600">Track your achievements and grow</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-100 hover:border-purple-200 transition-colors">
-              <UserCheck className="h-8 w-8 text-purple-500 mb-2 mx-auto" />
-              <h3 className="font-medium">Easy Sign Up</h3>
-              <p className="text-sm text-gray-600">Get started in minutes</p>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-          >
-            <Link to="/sign-up">
-              <Button size="lg" className="w-full sm:w-auto gap-2 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-700 hover:to-amber-600">
-                <GraduationCap className="h-5 w-5" />
-                Sign Up Now
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to="/jobs">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-purple-200 hover:border-purple-300">
-                Browse Jobs
-              </Button>
-            </Link>
-          </motion.div>
-
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
-            className="bg-gradient-to-r from-purple-50 to-amber-50 p-6 rounded-lg border border-purple-100 mt-8"
-          >
-            <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">For Employers</h2>
-            <p className="text-gray-700 mb-4">
-              Access our talent pool of certified high school students ready to contribute to your business.
-            </p>
-            <Link to="/for-employers">
-              <Button variant="secondary" size="lg" className="gap-2 bg-white hover:bg-gray-50">
-                Hire Students
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mb-12 rounded-lg overflow-hidden shadow-xl"
-          >
-            <iframe 
-              src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1" 
-              width="744" 
-              height="504" 
-              frameBorder="0" 
-              title="Kickstart Your Career with Ease!" 
-              className="w-full aspect-video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </motion.div>
+          <FeatureCards />
+          <HeroButtons />
+          <VideoSection />
+          <EmployerSection />
         </div>
       </div>
     </div>
