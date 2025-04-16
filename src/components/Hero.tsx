@@ -51,9 +51,25 @@ const Hero = () => {
                 repeat: Infinity,
                 repeatType: "reverse"
               }}
-              className="absolute -right-12 top-0 text-red-500"
+              className="absolute -right-12 top-0"
             >
-              <Heart className="h-8 w-8" fill="currentColor" />
+              <Heart 
+                className="h-8 w-8"
+                style={{
+                  fill: "url(#heartGradient)",
+                  stroke: "none"
+                }}
+              />
+              <svg width="0" height="0">
+                <defs>
+                  <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{ stopColor: '#9333EA' }} />
+                    <stop offset="33%" style={{ stopColor: '#3B82F6' }} />
+                    <stop offset="66%" style={{ stopColor: '#EF4444' }} />
+                    <stop offset="100%" style={{ stopColor: '#F59E0B' }} />
+                  </linearGradient>
+                </defs>
+              </svg>
             </motion.div>
           </motion.h1>
           
@@ -127,6 +143,24 @@ const Hero = () => {
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mb-12 rounded-lg overflow-hidden shadow-xl"
+          >
+            <iframe 
+              src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1" 
+              width="744" 
+              height="504" 
+              frameBorder="0" 
+              title="Kickstart Your Career with Ease!" 
+              className="w-full aspect-video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </motion.div>
         </div>
       </div>
