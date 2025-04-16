@@ -22,6 +22,7 @@ export const PublicRoutes = (
     <Route path="/about" element={<About />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/job-listings" element={<JobListings />} />
+    <Route path="/jobs" element={<JobListings />} />
     <Route path="/job-search" element={<EnhancedJobListings />} />
     <Route path="/employer-info" element={<EnhancedJobListings />} />
     <Route path="/for-employers" element={<ForEmployers />} />

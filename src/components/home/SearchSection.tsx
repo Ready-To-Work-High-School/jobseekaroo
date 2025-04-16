@@ -1,3 +1,4 @@
+
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -91,7 +92,7 @@ const SearchSection = () => {
             transition={{ delayChildren: 0.3, staggerChildren: 0.1 }}
           >
             <motion.div variants={itemVariants}>
-              <Link to={getPath("/jobs?experienceLevel=entry-level")} className="group">
+              <Link to="/jobs?experienceLevel=entry-level" className="group">
                 <Button variant="outline" size="lg" className="w-full border-blue-200 hover:border-blue-500 transition-all relative">
                   Entry Level Jobs
                   <ArrowUpRight className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -100,7 +101,7 @@ const SearchSection = () => {
             </motion.div>
             
             <motion.div variants={itemVariants}>
-              <Link to={getPath("/jobs")} className="group">
+              <Link to="/jobs" className="group">
                 <Button variant="default" size="lg" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 relative">
                   Find Jobs
                   <ArrowUpRight className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -109,7 +110,7 @@ const SearchSection = () => {
             </motion.div>
             
             <motion.div variants={itemVariants}>
-              <Link to={getPath("/jobs?jobType=internship")} className="group">
+              <Link to="/jobs?jobType=internship" className="group">
                 <Button variant="outline" size="lg" className="w-full border-amber-200 hover:border-amber-500 transition-all relative">
                   Internships
                   <ArrowUpRight className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />

@@ -37,9 +37,9 @@ const QuickAccessButtons = () => {
         whileTap={{ scale: 0.95 }}
       >
         <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300" asChild>
-          <Link to="/employer-dashboard">
+          <Link to="/jobs">
             <Briefcase className="h-5 w-5" />
-            Employer Dashboard
+            Find Jobs
           </Link>
         </Button>
       </motion.div>
