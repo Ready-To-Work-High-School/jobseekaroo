@@ -30,7 +30,10 @@ const EnhancedJobListings = () => {
     <div className={`py-12 px-4 ${slideIn}`}>
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Latest Job Opportunities</h2>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Briefcase className="h-6 w-6 text-blue-600" />
+            Latest Job Opportunities
+          </h2>
           <Button asChild variant="outline" size="sm">
             <Link to="/jobs">Browse All Jobs</Link>
           </Button>
@@ -71,10 +74,12 @@ const EnhancedJobListings = () => {
             ) : (
               <div className="text-center py-12">
                 <FilterX className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-medium mb-2">No jobs found</h3>
-                <p className="text-gray-500 mb-6">No job listings match your search criteria.</p>
+                <h3 className="text-xl font-medium mb-2">No Jobs Found</h3>
+                <p className="text-gray-500 mb-6">
+                  We're updating our job listings. Check back soon or explore our featured opportunities.
+                </p>
                 <Button asChild>
-                  <Link to="/jobs">Browse All Jobs</Link>
+                  <Link to="/jobs">Explore More Jobs</Link>
                 </Button>
               </div>
             )}
@@ -85,7 +90,7 @@ const EnhancedJobListings = () => {
           <Button asChild size="lg">
             <Link to="/jobs" className="flex items-center">
               <Briefcase className="h-4 w-4 mr-2" />
-              View All Job Listings
+              View All Job Opportunities
             </Link>
           </Button>
         </div>

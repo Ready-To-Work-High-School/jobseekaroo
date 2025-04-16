@@ -1,4 +1,3 @@
-
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import EnhancedSearchForm from '@/components/EnhancedSearchForm';
 import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Filter, ArrowUpRight } from 'lucide-react';
+import { Search, MapPin, Filter, ArrowUpRight, Briefcase } from 'lucide-react';
 
 const SearchSection = () => {
   const searchAnimation = useFadeIn(400);
@@ -40,13 +39,6 @@ const SearchSection = () => {
 
   return (
     <section className="py-16 bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
-      {/* Decorative background elements (Snyk-style) */}
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-amber-100 rounded-full opacity-20"></div>
-        <div className="absolute bottom-10 right-10 w-48 h-48 bg-blue-100 rounded-full opacity-30"></div>
-        <div className="absolute -bottom-10 left-1/3 w-24 h-24 bg-green-100 rounded-full opacity-20"></div>
-      </div>
-      
       <div className="container mx-auto px-4 relative z-10">
         <motion.div 
           className={cn("max-w-3xl mx-auto text-center", searchAnimation)}
@@ -58,17 +50,23 @@ const SearchSection = () => {
             className="flex items-center justify-center mb-6"
             variants={itemVariants}
           >
-            <Search className="h-8 w-8 text-blue-600 mr-3" />
+            <Briefcase className="h-8 w-8 text-blue-600 mr-3" />
             <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-500">
-              Find Your Next Opportunity
+              Find Your Next Career Opportunity
             </h2>
           </motion.div>
+          
+          <motion.p 
+            className="text-lg mb-8 text-gray-600 max-w-xl mx-auto"
+            variants={itemVariants}
+          >
+            Browse curated job opportunities from local businesses seeking motivated high school students with verified credentials.
+          </motion.p>
           
           <motion.div 
             className="mb-8 flex justify-center relative"
             variants={itemVariants}
           >
-            {/* Search form with animated highlights */}
             <div className="relative w-full max-w-2xl">
               <motion.div 
                 className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 to-blue-500 rounded-lg opacity-50 blur-sm"
@@ -120,7 +118,6 @@ const SearchSection = () => {
             </motion.div>
           </motion.div>
           
-          {/* Feature cards with Snyk-style animations */}
           <motion.div 
             className="grid grid-cols-1 sm:grid-cols-3 gap-6"
             variants={containerVariants}
