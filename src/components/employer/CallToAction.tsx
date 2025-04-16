@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,10 +25,14 @@ const CallToAction = () => {
         Connect with us today to find your next great hire.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button asChild size="lg">
+        <Button 
+          asChild 
+          size="lg" 
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+        >
           <Link to="/employer-dashboard" className="gap-2">
             <Briefcase className="h-4 w-4" />
-            Post a Job
+            Hire Students
           </Link>
         </Button>
         <Button variant="outline" size="lg" asChild>
