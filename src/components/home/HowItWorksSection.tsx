@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Search, BookOpen, FileText, CheckCircle, Calendar, Briefcase } from 'lucide-react';
+import VideoPlayer from '../video/VideoPlayer';
 import LazyImage from '../LazyImage';
+
 const steps = [{
   icon: <Search className="h-10 w-10 text-blue-500" />,
   title: "Find Jobs",
@@ -27,66 +29,66 @@ const steps = [{
   title: "Start Working",
   description: "Begin your first job with ongoing support from our platform and school advisors."
 }];
+
 const HowItWorksSection = () => {
   return <section className="py-16 bg-gradient-to-b from-blue-50/50 to-transparent">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">How It Works</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our platform simplifies the job search process for high school students, making it easy to find, prepare for, and secure your first job opportunity.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {steps.map((step, index) => <Card key={index} className="border-muted shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="mb-4 p-3 rounded-full bg-primary/5">
-                    {step.icon}
-                  </div>
-                  <h3 className="text-xl font-medium mb-2">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">How It Works</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Our platform simplifies the job search process for high school students, making it easy to find, prepare for, and secure your first job opportunity.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {steps.map((step, index) => <Card key={index} className="border-muted shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 p-3 rounded-full bg-primary/5">
+                  {step.icon}
                 </div>
-              </CardContent>
-            </Card>)}
-        </div>
-        
-        <div className="mt-16 bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/2 flex items-center p-8">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">See the App in Action</h3>
-                <p className="text-muted-foreground mb-6">
-                  Watch our quick demo video to see how easy it is to use Job Seekers 4 HS and start your journey to employment.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span>Simple profile creation</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span>Customized job recommendations</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span>Interview preparation tools</span>
-                  </li>
-                  
-                </ul>
+                <h3 className="text-xl font-medium mb-2">{step.title}</h3>
+                <p className="text-muted-foreground">{step.description}</p>
               </div>
+            </CardContent>
+          </Card>)}
+      </div>
+      
+      <div className="mt-16 bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/2 flex items-center p-8">
+            <div>
+              <h3 className="text-2xl font-bold mb-4">See the App in Action</h3>
+              <p className="text-muted-foreground mb-6">
+                Watch our quick demo video to see how easy it is to use Job Seekers 4 HS and start your journey to employment.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Simple profile creation</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Customized job recommendations</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Interview preparation tools</span>
+                </li>
+              </ul>
             </div>
-            <div className="md:w-1/2 relative min-h-[300px] bg-gray-100">
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-800/20">
-                <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg cursor-pointer hover:bg-white transition-colors">
-                  <div className="w-0 h-0 border-t-8 border-t-transparent border-l-14 border-l-blue-600 border-b-8 border-b-transparent ml-1"></div>
-                </div>
-              </div>
-              <LazyImage src="/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png" alt="App demonstration" className="object-cover w-full h-full" width="600" height="400" />
-            </div>
+          </div>
+          <div className="md:w-1/2 relative min-h-[300px]">
+            <VideoPlayer
+              thumbnailUrl="/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png"
+              videoUrl="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1"
+              title="App Demo"
+            />
           </div>
         </div>
       </div>
-    </section>;
+    </div>
+  </section>;
 };
+
 export default HowItWorksSection;
