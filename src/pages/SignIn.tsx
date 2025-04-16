@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ import { useFadeIn } from '@/utils/animations';
 import { Helmet } from 'react-helmet';
 import Layout from '@/components/Layout';
 import GoogleIcon from '@/components/icons/GoogleIcon';
-import SignInBenefitsCard from '@/components/SignInBenefitsCard';
+import SignInBenefitsCard from '@/components/auth/SignInBenefitsCard';
 
 const SignIn = () => {
   const { 

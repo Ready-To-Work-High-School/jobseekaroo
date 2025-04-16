@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,14 +8,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Apple, Briefcase, Loader2, School } from 'lucide-react';
+import { Apple, Briefcase, Loader2, School, Users, BadgeCheck, Zap, ChartBar, Shield, CheckCircle, BookOpen, UserCheck, Building2 } from 'lucide-react';
 import { useFadeIn } from '@/utils/animations';
 import { useAuthForm, SignUpFormValues } from '@/hooks/useAuthForm';
 import { Helmet } from 'react-helmet';
 import Layout from '@/components/Layout';
 import GoogleIcon from '@/components/icons/GoogleIcon';
-import { CheckCircle, BookOpen, UserCheck, Shield, Briefcase, Users, BadgeCheck, Zap, ChartBar, Building2 } from 'lucide-react';
-import SignUpBenefitCard from '@/components/SignUpBenefitCard';
+import SignUpBenefitCard from '@/components/auth/SignUpBenefitCard';
 
 const SignUp = () => {
   const location = useLocation();
