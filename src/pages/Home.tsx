@@ -60,32 +60,6 @@ const Home = () => {
         <Hero />
       </ErrorBoundary>
 
-      {/* Video Section */}
-      <ErrorBoundary>
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg bg-gradient-to-r from-purple-50 to-amber-50 p-4">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <video 
-                controls 
-                className="w-full h-full object-cover"
-                poster="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png"
-              >
-                <source 
-                  src="/career-kickstart-video.mp4" 
-                  type="video/mp4"
-                />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div className="mt-3 text-center">
-              <p className="text-sm text-gray-500">
-                Career Kickstart Orientation Video
-              </p>
-            </div>
-          </div>
-        </div>
-      </ErrorBoundary>
-
       <SectionSeparator />
 
       {/* Search Section - Keep it prominent for quick job search */}
