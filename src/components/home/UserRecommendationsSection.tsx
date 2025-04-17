@@ -3,8 +3,10 @@ import { useFadeIn } from '@/utils/animations';
 import JobRecommendations from '@/components/JobRecommendations';
 import { TriggerRecommendations } from '@/components/TriggerRecommendations';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, UserCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const UserRecommendationsSection = () => {
   const fadeInFast = useFadeIn(200);
@@ -34,7 +36,25 @@ const UserRecommendationsSection = () => {
           </div>
           <div className="md:col-span-1">
             <ErrorBoundary>
-              <TriggerRecommendations />
+              <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
+                <div className="flex items-center gap-3 mb-4">
+                  <UserCircle className="h-6 w-6 text-blue-600" />
+                  <h3 className="font-medium">Your Profile</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  View all your job recommendations and get more personalized matches by updating your profile.
+                </p>
+                <Button asChild className="w-full">
+                  <Link to="/profile">
+                    {user ? "View Full Recommendations" : "Sign In to Get Started"}
+                  </Link>
+                </Button>
+                {user && (
+                  <div className="mt-4">
+                    <TriggerRecommendations />
+                  </div>
+                )}
+              </div>
             </ErrorBoundary>
           </div>
         </div>
