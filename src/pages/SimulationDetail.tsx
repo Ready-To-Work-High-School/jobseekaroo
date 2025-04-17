@@ -1,204 +1,232 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/auth';
 import { toast } from 'sonner';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
+import { getJobSimulation, getSimulationTasks, getUserSimulationProgress, updateSimulationProgress } from '@/lib/supabase/simulations';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, CheckCircle, Award, Clock, FileText, List, Target } from 'lucide-react';
-import { 
-  getJobSimulation, 
-  getSimulationTasks, 
-  getUserSimulationProgress,
-  startSimulation,
-  updateSimulationProgress,
-  completeSimulation 
-} from '@/lib/supabase/simulations';
-import { JobSimulation, SimulationTask, UserSimulationProgress } from '@/types/jobSimulation';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { ArrowLeft, CheckCircle, Clock, Award } from 'lucide-react';
+
+// Mock data for the simulation detail page if needed
+const mockSimulationData = {
+  "sim-001": {
+    id: "sim-001",
+    title: "Customer Service Representative",
+    description: "Experience what it's like to work in a customer service role, handling inquiries and resolving issues.",
+    category: "retail",
+    difficulty: "Beginner",
+    duration: "45 minutes",
+    requirements: ["Communication skills", "Problem solving"],
+    skills_gained: ["Customer service", "Conflict resolution", "Time management"],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  "sim-002": {
+    id: "sim-002",
+    title: "Administrative Assistant",
+    description: "Learn essential office skills through realistic scenarios in an office environment.",
+    category: "office",
+    difficulty: "Beginner",
+    duration: "60 minutes",
+    requirements: ["Basic computer skills", "Organization"],
+    skills_gained: ["Email management", "Scheduling", "Document processing"],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  "sim-003": {
+    id: "sim-003",
+    title: "Retail Sales Associate",
+    description: "Practice helping customers find products, processing transactions, and managing inventory.",
+    category: "retail",
+    difficulty: "Beginner",
+    duration: "40 minutes",
+    requirements: ["Communication skills", "Basic math"],
+    skills_gained: ["Sales techniques", "Point of sale systems", "Inventory management"],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  "sim-004": {
+    id: "sim-004",
+    title: "Healthcare Assistant",
+    description: "Experience patient interaction scenarios and basic healthcare procedures.",
+    category: "healthcare",
+    difficulty: "Intermediate",
+    duration: "75 minutes",
+    requirements: ["Interest in healthcare", "Attention to detail"],
+    skills_gained: ["Patient care", "Medical terminology", "Record keeping"],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+};
+
+const mockTasks = {
+  "sim-001": [
+    {
+      id: "task-001",
+      simulation_id: "sim-001",
+      title: "Customer Greeting",
+      description: "Learn how to properly greet customers and make them feel welcome.",
+      order_number: 1,
+      content: {
+        type: "text",
+        value: "In this task, you'll learn the importance of a proper greeting. First impressions matter! A warm, friendly greeting sets the tone for the entire customer interaction."
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: "task-002",
+      simulation_id: "sim-001",
+      title: "Handling Inquiries",
+      description: "Practice responding to common customer questions and requests.",
+      order_number: 2,
+      content: {
+        type: "text",
+        value: "Customers will have many questions about products, services, and policies. In this module, you'll learn techniques for answering questions efficiently and accurately."
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: "task-003",
+      simulation_id: "sim-001",
+      title: "Resolving Complaints",
+      description: "Learn strategies for de-escalating situations and resolving customer issues.",
+      order_number: 3,
+      content: {
+        type: "text",
+        value: "When customers are unhappy, your response can turn a negative experience into a positive one. This module covers the LAST method: Listen, Apologize, Solve, and Thank."
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ]
+};
 
 const SimulationDetail = () => {
-  const fadeIn = useFadeIn(300);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const fadeIn = useFadeIn(300);
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [useMockData, setUseMockData] = useState(false);
 
   // Fetch simulation details
-  const { 
-    data: simulation,
-    isLoading: isLoadingSimulation 
-  } = useQuery({
-    queryKey: ['jobSimulation', id],
+  const { data: simulation, isLoading: isLoadingSimulation } = useQuery({
+    queryKey: ['simulation', id],
     queryFn: () => id ? getJobSimulation(id) : Promise.reject('No simulation ID'),
-    enabled: !!id
+    onError: (error) => {
+      console.error("Error fetching simulation:", error);
+      setUseMockData(true);
+    }
   });
 
   // Fetch simulation tasks
-  const { 
-    data: tasks,
-    isLoading: isLoadingTasks 
-  } = useQuery({
+  const { data: tasks, isLoading: isLoadingTasks } = useQuery({
     queryKey: ['simulationTasks', id],
     queryFn: () => id ? getSimulationTasks(id) : Promise.reject('No simulation ID'),
-    enabled: !!id
+    enabled: !!simulation || useMockData,
+    onError: (error) => {
+      console.error("Error fetching tasks:", error);
+      setUseMockData(true);
+    }
   });
 
   // Fetch user progress if logged in
-  const { 
-    data: userProgress,
-    isLoading: isLoadingProgress 
-  } = useQuery({
+  const { data: userProgress, isLoading: isLoadingProgress } = useQuery({
     queryKey: ['userProgress', id, user?.id],
-    queryFn: () => user && id ? getUserSimulationProgress(user.id, id) : Promise.reject('Not authenticated'),
-    enabled: !!user && !!id
-  });
-
-  // Mutation to start a simulation
-  const startSimulationMutation = useMutation({
-    mutationFn: async () => {
-      if (!user || !id || !tasks || tasks.length === 0) return null;
-      return startSimulation(user.id, id, tasks[0].id);
-    },
-    onSuccess: (data) => {
-      if (data) {
-        toast.success('Simulation started!', {
-          description: 'Your progress will be saved automatically.'
-        });
-        queryClient.invalidateQueries({ queryKey: ['userProgress', id, user?.id] });
-      }
-    },
+    queryFn: () => (id && user?.id) ? getUserSimulationProgress(user.id, id) : Promise.reject('Missing ID'),
+    enabled: !!user && !!id,
     onError: (error) => {
-      toast.error('Failed to start simulation', {
-        description: 'Please try again later.'
-      });
-      console.error('Error starting simulation:', error);
+      console.error("Error fetching user progress:", error);
     }
   });
 
-  // Mutation to update progress
-  const updateProgressMutation = useMutation({
-    mutationFn: async ({ progressId, updates }: { progressId: string, updates: Partial<UserSimulationProgress> }) => {
-      return updateSimulationProgress(progressId, updates);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userProgress', id, user?.id] });
-    },
-    onError: (error) => {
-      toast.error('Failed to update progress', {
-        description: 'Please try again later.'
-      });
-      console.error('Error updating progress:', error);
-    }
-  });
-
-  // Mutation to complete simulation
-  const completeSimulationMutation = useMutation({
-    mutationFn: async (progressId: string) => {
-      return completeSimulation(progressId);
-    },
-    onSuccess: () => {
-      toast.success('Simulation completed!', {
-        description: 'You have earned a credential for this simulation.'
-      });
-      queryClient.invalidateQueries({ queryKey: ['userProgress', id, user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['userCredentials', user?.id] });
-    },
-    onError: (error) => {
-      toast.error('Failed to complete simulation', {
-        description: 'Please try again later.'
-      });
-      console.error('Error completing simulation:', error);
-    }
-  });
-
-  // Handle task completion
-  const handleCompleteTask = () => {
-    if (!userProgress || !tasks) return;
-    
-    const nextTaskIndex = currentTaskIndex + 1;
-    const isLastTask = nextTaskIndex >= tasks.length;
-    
-    if (isLastTask) {
-      completeSimulationMutation.mutate(userProgress.id);
-    } else {
-      const nextTask = tasks[nextTaskIndex];
-      const progressPercentage = Math.round((nextTaskIndex / tasks.length) * 100);
-      
-      updateProgressMutation.mutate({
-        progressId: userProgress.id,
-        updates: {
-          current_task_id: nextTask.id,
-          progress_percentage: progressPercentage
-        }
-      });
-      
-      setCurrentTaskIndex(nextTaskIndex);
-    }
-  };
-
-  // Set current task index based on user progress
   useEffect(() => {
-    if (userProgress && tasks && tasks.length > 0) {
-      const currentTaskId = userProgress.current_task_id;
-      const foundIndex = tasks.findIndex(task => task.id === currentTaskId);
-      if (foundIndex !== -1) {
-        setCurrentTaskIndex(foundIndex);
+    if (userProgress) {
+      setProgress(userProgress.progress_percentage);
+      
+      // Find the current task index based on the current_task_id
+      if (tasks && tasks.length > 0 && userProgress.current_task_id) {
+        const index = tasks.findIndex(task => task.id === userProgress.current_task_id);
+        if (index !== -1) {
+          setCurrentTaskIndex(index);
+        }
       }
     }
   }, [userProgress, tasks]);
 
-  const isLoading = isLoadingSimulation || isLoadingTasks || (user && isLoadingProgress);
+  // Use mock data if needed
+  const currentSimulation = useMockData && id ? mockSimulationData[id as keyof typeof mockSimulationData] : simulation;
+  const currentTasks = useMockData && id ? mockTasks[id as keyof typeof mockTasks] || [] : tasks;
 
-  // Determine if the user has completed the simulation
-  const isCompleted = userProgress?.completed || false;
+  const handleTaskCompletion = async () => {
+    if (!user) {
+      toast.error("Please sign in to track progress");
+      return;
+    }
+    
+    if (!currentTasks || currentTasks.length === 0) return;
+    
+    const nextTaskIndex = currentTaskIndex + 1;
+    const isLastTask = nextTaskIndex >= currentTasks.length;
+    const newProgress = isLastTask ? 100 : Math.round((nextTaskIndex / currentTasks.length) * 100);
+    
+    setProgress(newProgress);
+    
+    if (isLastTask) {
+      toast.success("Simulation completed! 🎉", {
+        description: "You've earned a new credential for your profile."
+      });
+    } else {
+      setCurrentTaskIndex(nextTaskIndex);
+    }
+    
+    // Update progress in database if not using mock data
+    if (!useMockData && userProgress && id) {
+      try {
+        await updateSimulationProgress(userProgress.id, {
+          current_task_id: isLastTask ? undefined : currentTasks[nextTaskIndex].id,
+          progress_percentage: newProgress,
+          completed: isLastTask
+        });
+      } catch (error) {
+        console.error("Error updating progress:", error);
+        toast.error("Failed to save progress");
+      }
+    }
+  };
 
-  // Determine if the user can start the simulation
-  const canStartSimulation = !userProgress && user;
-
-  // Get current task
-  const currentTask = tasks && tasks.length > currentTaskIndex ? tasks[currentTaskIndex] : null;
+  // Loading state
+  const isLoading = isLoadingSimulation || isLoadingTasks || (!!user && isLoadingProgress);
 
   if (isLoading) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="h-6 bg-gray-200 rounded w-2/3 mb-12"></div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="col-span-2">
-                <div className="h-10 bg-gray-200 rounded w-1/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
-                
-                <div className="h-10 bg-gray-200 rounded w-1/4 my-6"></div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                  <div className="h-24 bg-gray-200 rounded"></div>
-                  <div className="h-24 bg-gray-200 rounded"></div>
-                </div>
-              </div>
-              <div>
-                <div className="h-60 bg-gray-200 rounded mb-4"></div>
-                <div className="h-10 bg-gray-200 rounded w-full"></div>
-              </div>
+          <div className="flex items-center mb-6">
+            <Button variant="ghost" className="mr-4" onClick={() => navigate(-1)}>
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back
+            </Button>
+            <div className="h-8 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="h-12 bg-gray-200 rounded w-full mb-4 animate-pulse"></div>
+              <div className="h-40 bg-gray-200 rounded w-full mb-4 animate-pulse"></div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="h-60 bg-gray-200 rounded w-full animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -206,14 +234,17 @@ const SimulationDetail = () => {
     );
   }
 
-  if (!simulation) {
+  // Error state - if simulation doesn't exist
+  if (!currentSimulation) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Simulation Not Found</h1>
-          <p className="mb-8">The simulation you are looking for does not exist or has been removed.</p>
+          <h1 className="text-2xl font-bold mb-4">Simulation not found</h1>
+          <p className="text-muted-foreground mb-6">
+            We couldn't find the simulation you're looking for.
+          </p>
           <Button onClick={() => navigate('/job-simulations')}>
-            Back to Simulations
+            View All Simulations
           </Button>
         </div>
       </Layout>
@@ -223,259 +254,182 @@ const SimulationDetail = () => {
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        {/* Back button and title */}
-        <Button 
-          variant="ghost" 
-          className="mb-4 p-0 flex items-center gap-1 hover:bg-transparent"
-          onClick={() => navigate('/job-simulations')}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Back to Simulations</span>
-        </Button>
-
-        <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">{simulation.title}</h1>
-            <div className="flex flex-wrap gap-2 mt-2 items-center">
-              <Badge variant="outline" className="capitalize">{simulation.category}</Badge>
-              <Badge variant={simulation.difficulty === "Beginner" ? "secondary" : 
-                      simulation.difficulty === "Intermediate" ? "outline" : "default"}>
-                {simulation.difficulty}
-              </Badge>
-              <span className="text-sm text-muted-foreground flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
-                {simulation.duration}
-              </span>
-            </div>
+        {/* Navigation */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+          <div className="flex items-center">
+            <Button variant="ghost" size="sm" className="mr-2" onClick={() => navigate('/job-simulations')}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              All Simulations
+            </Button>
           </div>
-
-          {userProgress && (
-            <div className="flex flex-col items-end">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-medium">{userProgress.progress_percentage}% Complete</span>
-                {isCompleted && (
-                  <Badge variant="success" className="bg-green-100 text-green-800">
-                    <CheckCircle className="h-3 w-3 mr-1" /> Completed
-                  </Badge>
-                )}
-              </div>
-              <Progress value={userProgress.progress_percentage} className="w-48" />
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="capitalize">{currentSimulation.category}</Badge>
+            <Badge variant="secondary">
+              <Clock className="h-3 w-3 mr-1" />
+              {currentSimulation.duration}
+            </Badge>
+            <Badge variant={
+              currentSimulation.difficulty === "Beginner" ? "secondary" : 
+              currentSimulation.difficulty === "Intermediate" ? "outline" : 
+              "default"
+            }>
+              {currentSimulation.difficulty}
+            </Badge>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Main content area */}
-          <div className="md:col-span-2">
+        {/* Title */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">{currentSimulation.title}</h1>
+          <p className="text-muted-foreground">{currentSimulation.description}</p>
+        </div>
+
+        {/* Progress bar */}
+        {user && (
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">Your progress</span>
+              <span className="text-sm">{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+        )}
+
+        {/* Main content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList>
-                <TabsTrigger value="overview">
-                  <FileText className="h-4 w-4 mr-1" /> Overview
-                </TabsTrigger>
-                <TabsTrigger value="tasks" disabled={!userProgress}>
-                  <List className="h-4 w-4 mr-1" /> Tasks
-                </TabsTrigger>
-                {isCompleted && (
-                  <TabsTrigger value="certificate">
-                    <Award className="h-4 w-4 mr-1" /> Certificate
-                  </TabsTrigger>
-                )}
+              <TabsList className="grid grid-cols-2 mb-6">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="tasks">Tasks & Activities</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="overview" className="p-4">
-                <h2 className="text-xl font-semibold mb-3">About this Simulation</h2>
-                <p className="mb-6">{simulation.description}</p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div>
-                    <h3 className="text-lg font-medium mb-2">Skills You'll Gain</h3>
-                    <ul className="space-y-1">
-                      {simulation.skills_gained.map((skill, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span>{skill}</span>
+              <TabsContent value="overview" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Skills You'll Gain</CardTitle>
+                    <CardDescription>
+                      These are the key competencies you'll develop in this simulation.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {currentSimulation.skills_gained.map((skill, index) => (
+                        <Badge key={index} className="bg-blue-100 text-blue-800 border-blue-200">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <Separator className="my-6" />
+                    
+                    <h3 className="font-medium mb-3">Requirements</h3>
+                    <ul className="space-y-2 mb-6">
+                      {currentSimulation.requirements.map((req, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>{req}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
-                  
-                  {simulation.requirements && simulation.requirements.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Requirements</h3>
-                      <ul className="space-y-1">
-                        {simulation.requirements.map((req, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            <Target className="h-4 w-4 text-blue-500" />
-                            <span>{req}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    
+                    <Separator className="my-6" />
+                    
+                    <div className="text-center">
+                      <Award className="h-12 w-12 mx-auto text-amber-500 mb-4" />
+                      <h3 className="font-medium mb-2">Earn a Certificate</h3>
+                      <p className="text-muted-foreground text-sm mb-4">
+                        Complete this simulation to earn a digital certificate you can add to your profile and resume.
+                      </p>
+                      <Button onClick={() => setActiveTab('tasks')}>Start Simulation</Button>
                     </div>
-                  )}
-                </div>
-
-                {canStartSimulation && (
-                  <Button 
-                    onClick={() => startSimulationMutation.mutate()}
-                    disabled={startSimulationMutation.isPending}
-                  >
-                    Start This Simulation
-                  </Button>
-                )}
+                  </CardContent>
+                </Card>
               </TabsContent>
-
-              <TabsContent value="tasks" className="p-4">
-                {tasks && tasks.length > 0 ? (
-                  <div>
-                    <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-xl font-semibold">
-                        Task {currentTaskIndex + 1} of {tasks.length}
-                      </h2>
-                      <div className="flex items-center">
-                        <Progress value={((currentTaskIndex + (isCompleted ? 1 : 0)) / tasks.length) * 100} className="w-32 mr-2" />
-                        <span className="text-sm">
-                          {((currentTaskIndex + (isCompleted ? 1 : 0)) / tasks.length) * 100}%
-                        </span>
+              
+              <TabsContent value="tasks" className="space-y-6">
+                {currentTasks && currentTasks.length > 0 ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>
+                        Task {currentTaskIndex + 1} of {currentTasks.length}: {currentTasks[currentTaskIndex].title}
+                      </CardTitle>
+                      <CardDescription>
+                        {currentTasks[currentTaskIndex].description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="prose max-w-none">
+                        <p>{currentTasks[currentTaskIndex].content.value || currentTasks[currentTaskIndex].content}</p>
                       </div>
-                    </div>
-
-                    {currentTask && !isCompleted && (
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>{currentTask.title}</CardTitle>
-                          <CardDescription>{currentTask.description}</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="prose max-w-none">
-                            {/* Render task content based on the content type */}
-                            <div className="p-4 border rounded bg-gray-50">
-                              <h3 className="text-lg font-medium mb-2">Task Instructions</h3>
-                              <p className="mb-4">This is where the detailed task instructions would be displayed. The content would be stored as structured JSON in the database and rendered appropriately based on the task type.</p>
-                              <div className="bg-white p-4 border rounded">
-                                <h4 className="font-medium mb-2">Sample Exercise</h4>
-                                <p>Complete the following exercise to practice the skills related to this task.</p>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                        <CardFooter>
-                          <Button onClick={handleCompleteTask}>
-                            {currentTaskIndex === tasks.length - 1 ? 'Complete Simulation' : 'Complete Task & Continue'}
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    )}
-
-                    {isCompleted && (
-                      <div className="text-center py-12">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-                          <Award className="h-8 w-8 text-green-600" />
-                        </div>
-                        <h3 className="text-xl font-medium mb-2">Simulation Completed!</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Congratulations! You've successfully completed all tasks in this simulation.
-                        </p>
-                        <Button 
-                          variant="outline"
-                          onClick={() => setActiveTab('certificate')}
-                        >
-                          View Your Certificate
+                    </CardContent>
+                    <CardFooter>
+                      <Button 
+                        className="w-full" 
+                        onClick={handleTaskCompletion}
+                      >
+                        {currentTaskIndex < currentTasks.length - 1 ? "Complete & Continue" : "Complete Simulation"}
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ) : (
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="text-center py-8">
+                        <p className="mb-4">No tasks available for this simulation yet.</p>
+                        <Button variant="outline" onClick={() => setActiveTab('overview')}>
+                          Return to Overview
                         </Button>
                       </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <p>No tasks found for this simulation.</p>
-                  </div>
+                    </CardContent>
+                  </Card>
                 )}
-              </TabsContent>
-
-              <TabsContent value="certificate" className="p-4">
-                <div className="bg-gradient-to-b from-blue-50 to-white border border-blue-100 rounded-lg p-8 text-center">
-                  <div className="mb-6">
-                    <Award className="h-16 w-16 text-blue-600 mx-auto" />
-                  </div>
-                  <h2 className="text-2xl font-bold mb-2">Certificate of Completion</h2>
-                  <Separator className="my-4 mx-auto w-24" />
-                  <p className="text-lg mb-2">This certifies that</p>
-                  <p className="text-xl font-bold mb-2">{user?.email?.split('@')[0] || 'Student'}</p>
-                  <p className="text-lg mb-4">has successfully completed</p>
-                  <p className="text-xl font-bold mb-2">{simulation.title}</p>
-                  <p className="text-md text-muted-foreground mb-6">
-                    Demonstrating proficiency in: {simulation.skills_gained.join(', ')}
-                  </p>
-                  <Separator className="my-4 mx-auto w-24" />
-                  <p className="text-sm text-muted-foreground">
-                    Issued on {new Date().toLocaleDateString()}
-                  </p>
-                  <div className="mt-8">
-                    <Button>Download Certificate</Button>
-                  </div>
-                </div>
               </TabsContent>
             </Tabs>
           </div>
           
-          {/* Sidebar */}
-          <div className="md:col-span-1">
+          <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Simulation Details</CardTitle>
+                <CardTitle>Simulation Guide</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium text-sm mb-1">Category</h3>
-                    <p>{simulation.category}</p>
+              <CardContent className="space-y-4">
+                <div className="space-y-1">
+                  <h3 className="font-medium text-sm">How to complete this simulation:</h3>
+                  <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-2 pl-4">
+                    <li>Read through each task carefully</li>
+                    <li>Complete the activities for each section</li>
+                    <li>Mark tasks complete when you're done</li>
+                    <li>Receive your credential after completing all tasks</li>
+                  </ol>
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-1">
+                  <h3 className="font-medium text-sm">Task List:</h3>
+                  <div className="space-y-2">
+                    {currentTasks && currentTasks.map((task, index) => (
+                      <div key={task.id} className="flex items-center gap-2">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                          index < currentTaskIndex 
+                            ? "bg-green-100 text-green-700 border border-green-200" 
+                            : index === currentTaskIndex
+                              ? "bg-blue-100 text-blue-700 border border-blue-200"
+                              : "bg-gray-100 text-gray-500 border border-gray-200"
+                        }`}>
+                          {index < currentTaskIndex ? <CheckCircle className="h-4 w-4" /> : index + 1}
+                        </div>
+                        <span className={`text-sm ${
+                          index === currentTaskIndex ? "font-medium" : "text-muted-foreground"
+                        }`}>
+                          {task.title}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <h3 className="font-medium text-sm mb-1">Difficulty</h3>
-                    <p>{simulation.difficulty}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-sm mb-1">Duration</h3>
-                    <p>{simulation.duration}</p>
-                  </div>
-                  
-                  {tasks && (
-                    <div>
-                      <h3 className="font-medium text-sm mb-1">Tasks</h3>
-                      <p>{tasks.length} tasks to complete</p>
-                    </div>
-                  )}
                 </div>
               </CardContent>
-              <CardFooter>
-                {!userProgress && !user && (
-                  <Button 
-                    variant="secondary" 
-                    className="w-full"
-                    onClick={() => navigate('/sign-in')}
-                  >
-                    Sign In to Start
-                  </Button>
-                )}
-                
-                {userProgress && !isCompleted && (
-                  <Button 
-                    className="w-full"
-                    onClick={() => setActiveTab('tasks')}
-                  >
-                    {userProgress.progress_percentage > 0 ? 'Continue Simulation' : 'Start Simulation'}
-                  </Button>
-                )}
-                
-                {isCompleted && (
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={() => setActiveTab('certificate')}
-                  >
-                    View Certificate
-                  </Button>
-                )}
-              </CardFooter>
             </Card>
           </div>
         </div>

@@ -6,17 +6,16 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth';
 import { useEffect, useState } from 'react';
 import { getJobSimulations } from '@/lib/supabase/simulations';
-import { JobSimulation } from '@/types/jobSimulation';
 
 const JobSimulationsCard = () => {
   const { user } = useAuth();
-  const [simCount, setSimCount] = useState<number>(0);
+  const [simCount, setSimCount] = useState<number>(4); // Default to 4 simulations
   
   useEffect(() => {
     const fetchSimulationCount = async () => {
       try {
         const simulations = await getJobSimulations();
-        setSimCount(simulations.length);
+        setSimCount(simulations.length || 4); // Use mock count if no actual simulations
       } catch (error) {
         console.error("Error fetching simulations count:", error);
       }

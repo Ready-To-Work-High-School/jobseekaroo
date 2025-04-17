@@ -16,6 +16,8 @@ import Resources from '../pages/Resources';
 import SkillDevelopment from '../pages/SkillDevelopment';
 import ForEmployers from '../pages/ForEmployers';
 import ResumeAssistant from '../pages/ResumeAssistant';
+import JobSimulations from '../pages/JobSimulations';
+import SimulationDetail from '../pages/SimulationDetail';
 
 export const PublicRoutes = (
   <>
@@ -39,5 +41,7 @@ export const PublicRoutes = (
     <Route path="/terms-of-service" element={<TermsOfService />} />
     <Route path="/sample-candidates" element={<SampleCandidates />} />
     <Route path="/credentials" element={<CredentialsPage />} />
+    <Route path="/job-simulations" element={<JobSimulations />} />
+    <Route path="/job-simulations/:id" element={<SimulationDetail />} />
   </>
 );
