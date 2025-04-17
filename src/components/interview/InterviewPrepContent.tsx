@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 
-// Common interview questions by category
 const INTERVIEW_QUESTIONS = {
   behavioral: [
     "Tell me about a time when you had to work on a team project.",
@@ -35,11 +33,17 @@ const INTERVIEW_QUESTIONS = {
 };
 
 const InterviewPrepContent = () => {
+  console.log('InterviewPrepContent rendering');
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [activeCategory, setActiveCategory] = useState('behavioral');
   
+  useEffect(() => {
+    console.log('InterviewPrepContent mounted');
+    return () => console.log('InterviewPrepContent unmounted');
+  }, []);
+
   const handleStartPractice = () => {
     if (!user) {
       toast({
@@ -48,7 +52,6 @@ const InterviewPrepContent = () => {
       });
       navigate('/sign-in');
     } else {
-      // If signed in, navigate to the practice area
       navigate('/interview-practice');
     }
   };
@@ -59,7 +62,6 @@ const InterviewPrepContent = () => {
         <h2 className="text-2xl md:text-3xl font-bold mb-2">Interview Preparation</h2>
         <p className="text-muted-foreground mb-8">Prepare for your interviews with our comprehensive tools and resources.</p>
         
-        {/* Premium features banner for signed in users */}
         {user ? (
           <Card className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
             <CardContent className="pt-6">
@@ -106,7 +108,6 @@ const InterviewPrepContent = () => {
           </Card>
         )}
         
-        {/* Common Interview Questions */}
         <Card>
           <CardHeader>
             <CardTitle>Common Interview Questions</CardTitle>
@@ -156,7 +157,6 @@ const InterviewPrepContent = () => {
           </CardFooter>
         </Card>
         
-        {/* Tips Section */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
