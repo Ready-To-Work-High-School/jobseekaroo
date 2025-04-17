@@ -4,6 +4,7 @@ import Header from './layout/Header';
 import Footer from './layout/Footer';
 import SignUpPrompt from './auth/SignUpPrompt';
 import BackButton from './navigation/BackButton';
+import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
 import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
@@ -29,6 +30,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
         {children}
       </main>
       {!user && <SignUpPrompt autoDismiss={true} dismissTime={3000} />}
+      <UserOnboardingGuide />
       <Footer />
     </div>
   );
