@@ -4,7 +4,6 @@ import Header from './layout/Header';
 import Footer from './layout/Footer';
 import SignUpPrompt from './auth/SignUpPrompt';
 import BackButton from './navigation/BackButton';
-import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
@@ -13,7 +12,8 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
-  const { user } = useAuth();
+  // Mock the auth hook for now to prevent white screen
+  const user = null;
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 

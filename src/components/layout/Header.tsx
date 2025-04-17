@@ -1,9 +1,5 @@
 
-import React, { useState } from 'react';
-import MainNavigation from './MainNavigation';
-import AuthLinks from './AuthLinks';
-import MobileMenu from './MobileMenu';
-import { useAuth } from '@/contexts/auth';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface HeaderProps {
@@ -11,20 +7,23 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
-  const { user } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <MainNavigation />
-        <div className="flex items-center gap-4">
-          <Link to="/pricing" className="hidden md:inline-block text-sm font-medium hover:text-primary transition-colors">
-            Pricing
-          </Link>
-          {!hideAuthLinks && <AuthLinks />}
-          <MobileMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
-        </div>
+    <header className="bg-background border-b">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <Link to="/" className="font-bold text-xl">JobConnect</Link>
+        
+        <nav>
+          <ul className="flex gap-6">
+            <li><Link to="/jobs" className="hover:text-primary">Jobs</Link></li>
+            <li><Link to="/about-us" className="hover:text-primary">About</Link></li>
+            {!hideAuthLinks && (
+              <>
+                <li><Link to="/login" className="hover:text-primary">Login</Link></li>
+                <li><Link to="/signup" className="hover:text-primary">Sign Up</Link></li>
+              </>
+            )}
+          </ul>
+        </nav>
       </div>
     </header>
   );

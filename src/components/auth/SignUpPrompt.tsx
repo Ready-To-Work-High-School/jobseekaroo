@@ -1,62 +1,52 @@
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
 interface SignUpPromptProps {
-  message?: string;
   autoDismiss?: boolean;
-  dismissTime?: number; // in milliseconds
+  dismissTime?: number;
 }
 
 const SignUpPrompt: React.FC<SignUpPromptProps> = ({ 
-  message = "Sign up to access all features",
   autoDismiss = false,
-  dismissTime = 3000
+  dismissTime = 5000
 }) => {
-  const { user } = useAuth();
-  const [dismissed, setDismissed] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   
-  // Auto-dismiss after specified time if autoDismiss is true
-  React.useEffect(() => {
-    if (autoDismiss && !dismissed && !user) {
+  useEffect(() => {
+    if (autoDismiss) {
       const timer = setTimeout(() => {
-        setDismissed(true);
+        setIsVisible(false);
       }, dismissTime);
       
       return () => clearTimeout(timer);
     }
-  }, [autoDismiss, dismissed, user, dismissTime]);
-
-  if (user || dismissed) {
-    return null;
-  }
-
+  }, [autoDismiss, dismissTime]);
+  
+  if (!isVisible) return null;
+  
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-96 p-4 bg-primary text-primary-foreground rounded-lg shadow-lg z-50 animate-in slide-in-from-bottom-5 duration-300">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="font-medium mb-3">{message}</p>
-          <div className="flex space-x-3">
-            <Button asChild variant="secondary" size="sm">
-              <Link to="/sign-in">Sign In</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/sign-up">Sign Up</Link>
-            </Button>
-          </div>
+    <div className="fixed bottom-0 inset-x-0 p-4 bg-background border-t shadow-lg z-50 animate-in slide-in-from-bottom">
+      <div className="container mx-auto flex items-center justify-between">
+        <p className="text-sm md:text-base">
+          Create an account to save jobs and access all features
+        </p>
+        <div className="flex items-center gap-2 ml-4">
+          <Button asChild size="sm">
+            <Link to="/signup">Sign Up</Link>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8"
+            onClick={() => setIsVisible(false)}
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Dismiss</span>
+          </Button>
         </div>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="h-6 w-6 rounded-full" 
-          onClick={() => setDismissed(true)}
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Dismiss</span>
-        </Button>
       </div>
     </div>
   );

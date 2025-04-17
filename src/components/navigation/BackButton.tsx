@@ -1,28 +1,24 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-interface BackButtonProps {
-  className?: string;
-}
-
-const BackButton: React.FC<BackButtonProps> = ({ className = '' }) => {
+const BackButton = () => {
   const navigate = useNavigate();
   
-  const handleGoBack = () => {
+  const goBack = () => {
     navigate(-1);
   };
   
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={`flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group ${className}`}
-      onClick={handleGoBack}
+    <Button 
+      variant="ghost" 
+      size="sm" 
+      className="flex items-center text-muted-foreground hover:text-foreground"
+      onClick={goBack}
     >
-      <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+      <ChevronLeft className="h-4 w-4 mr-1" />
       Back
     </Button>
   );
