@@ -10,8 +10,11 @@ import { AdminRoutes } from './adminRoutes';
 import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
 
-// Export all routes as an array for use in App.tsx
-export const AppRoutes = (
+// Add console logging to debug route loading
+console.log("Shared routes loaded");
+
+// Export all routes as a JSX fragment for use in App.tsx
+const AppRoutes = (
   <>
     {/* Home routes */}
     {HomeRoutes}

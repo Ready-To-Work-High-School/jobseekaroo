@@ -4,9 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './contexts/auth'
-import { ThemeProvider } from './contexts/ThemeContext'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Toaster } from '@/components/ui/toaster' 
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { Toaster as SonnerToaster } from 'sonner'
 
 // Import styles
@@ -14,7 +12,7 @@ import './styles/index.css'
 import './styles/global.css'
 import './styles/mobile.css'
 import './styles/mobile-optimization.css'
-import './styles/animations.css' // Ensure animations are loaded
+import './styles/animations.css'
 
 // Configure the Query Client with teen-friendly colors
 const queryClient = new QueryClient({
@@ -39,28 +37,25 @@ console.log(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <ThemeProvider>
-            <App />
-            {/* Modern toast notifications with animations */}
-            <SonnerToaster 
-              position="top-center"
-              toastOptions={{
-                style: {
-                  background: 'white',
-                  color: 'black',
-                  border: '1px solid #e2e8f0',
-                },
-                className: 'font-medium',
-              }}
-            />
-            <Toaster />
-          </ThemeProvider>
+          <App />
+          {/* Modern toast notifications with animations */}
+          <SonnerToaster 
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: 'white',
+                color: 'black',
+                border: '1px solid #e2e8f0',
+              },
+              className: 'font-medium',
+            }}
+          />
         </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )
 

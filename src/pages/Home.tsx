@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -24,6 +25,7 @@ import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
 import CompanyDirectory from '@/components/resources/CompanyDirectory';
 
 const Home = () => {
+  console.log("Home component rendering");
   const fadeIn = useFadeIn(300);
   const { user } = useAuth();
 

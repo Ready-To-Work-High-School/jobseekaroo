@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import SignUpPrompt from './auth/SignUpPrompt';
@@ -16,6 +16,12 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const { user } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  
+  console.log("Layout rendering, isHomePage:", isHomePage);
+  
+  useEffect(() => {
+    console.log("Layout mounted with pathname:", location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
