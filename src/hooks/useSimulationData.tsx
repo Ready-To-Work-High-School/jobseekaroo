@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getJobSimulations } from '@/lib/supabase/simulations';
 import { JobSimulation } from '@/types/jobSimulation';
+import { supabase } from '@/integrations/supabase/client';
 
 // Mock data for simulations
 const mockSimulations: JobSimulation[] = [
@@ -64,27 +64,35 @@ export const useSimulationData = () => {
   const [useMockData, setUseMockData] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Fetch all job simulations
-  const { data: fetchedSimulations, isLoading } = useQuery({
+  // Fetch all job simulations with more detailed logging
+  const { data: fetchedSimulations, isLoading, error } = useQuery({
     queryKey: ['jobSimulations'],
-    queryFn: getJobSimulations,
+    queryFn: async () => {
+      try {
+        console.log('Attempting to fetch job simulations from database');
+        const simulations = await getJobSimulations();
+        console.log('Fetched simulations:', simulations);
+        return simulations;
+      } catch (err) {
+        console.error('Error fetching simulations:', err);
+        setUseMockData(true);
+        return [];
+      }
+    },
     meta: {
       onError: (error: any) => {
-        console.error("Error fetching simulations:", error);
+        console.error("Error in job simulations query:", error);
         setUseMockData(true);
       }
     }
   });
   
-  // Handle empty data or errors with useEffect
+  // Log when mock data is being used
   useEffect(() => {
-    if (fetchedSimulations !== undefined) {
-      if (!fetchedSimulations || fetchedSimulations.length === 0) {
-        console.log("No simulations found in database, using mock data");
-        setUseMockData(true);
-      }
+    if (useMockData) {
+      console.log('Using mock simulations due to database fetch failure');
     }
-  }, [fetchedSimulations]);
+  }, [useMockData]);
 
   // Use mock data if no simulations are returned from the database
   const simulations = useMockData ? mockSimulations : fetchedSimulations;
@@ -100,7 +108,8 @@ export const useSimulationData = () => {
     useMockData, 
     selectedCategory, 
     setSelectedCategory,
-    categories
+    categories,
+    error // Add error to the return object for debugging
   };
 };
 
