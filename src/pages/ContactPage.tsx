@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card } from '@/components/ui/card';
@@ -114,7 +113,7 @@ const ContactPage = () => {
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        <BackButton className="mb-6" />
+        <BackButton />
         
         <h1 className="text-3xl font-bold mb-6">Contact Us</h1>
         
