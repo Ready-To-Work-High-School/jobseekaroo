@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -7,15 +6,15 @@ import { toast } from 'sonner';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import { getJobSimulation, getSimulationTasks, getUserSimulationProgress, updateSimulationProgress } from '@/lib/supabase/simulations';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, CheckCircle, Clock, Award } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import SimulationHeader from '@/components/job-simulations/SimulationHeader';
+import SimulationProgressBar from '@/components/job-simulations/SimulationProgressBar';
+import SimulationOverview from '@/components/job-simulations/SimulationOverview';
+import SimulationTasks from '@/components/job-simulations/SimulationTasks';
+import SimulationGuideSidebar from '@/components/job-simulations/SimulationGuideSidebar';
 
-// Mock data for the simulation detail page if needed
 const mockSimulationData = {
   "sim-001": {
     id: "sim-001",
@@ -121,7 +120,6 @@ const SimulationDetail = () => {
   const [progress, setProgress] = useState(0);
   const [useMockData, setUseMockData] = useState(false);
 
-  // Fetch simulation details
   const { data: simulation, isLoading: isLoadingSimulation } = useQuery({
     queryKey: ['simulation', id],
     queryFn: () => id ? getJobSimulation(id) : Promise.reject('No simulation ID'),
@@ -133,7 +131,6 @@ const SimulationDetail = () => {
     }
   });
 
-  // Fetch simulation tasks
   const { data: tasks, isLoading: isLoadingTasks } = useQuery({
     queryKey: ['simulationTasks', id],
     queryFn: () => id ? getSimulationTasks(id) : Promise.reject('No simulation ID'),
@@ -146,7 +143,6 @@ const SimulationDetail = () => {
     }
   });
 
-  // Fetch user progress if logged in
   const { data: userProgress, isLoading: isLoadingProgress } = useQuery({
     queryKey: ['userProgress', id, user?.id],
     queryFn: () => (id && user?.id) ? getUserSimulationProgress(user.id, id) : Promise.reject('Missing ID'),
@@ -162,7 +158,6 @@ const SimulationDetail = () => {
     if (userProgress) {
       setProgress(userProgress.progress_percentage);
       
-      // Find the current task index based on the current_task_id
       if (tasks && tasks.length > 0 && userProgress.current_task_id) {
         const index = tasks.findIndex(task => task.id === userProgress.current_task_id);
         if (index !== -1) {
@@ -172,7 +167,6 @@ const SimulationDetail = () => {
     }
   }, [userProgress, tasks]);
 
-  // Use mock data if needed
   const currentSimulation = useMockData && id ? mockSimulationData[id as keyof typeof mockSimulationData] : simulation;
   const currentTasks = useMockData && id ? mockTasks[id as keyof typeof mockTasks] || [] : tasks;
 
@@ -198,7 +192,6 @@ const SimulationDetail = () => {
       setCurrentTaskIndex(nextTaskIndex);
     }
     
-    // Update progress in database if not using mock data
     if (!useMockData && userProgress && id) {
       try {
         await updateSimulationProgress(userProgress.id, {
@@ -213,7 +206,6 @@ const SimulationDetail = () => {
     }
   };
 
-  // Loading state
   const isLoading = isLoadingSimulation || isLoadingTasks || (!!user && isLoadingProgress);
 
   if (isLoading) {
@@ -240,7 +232,6 @@ const SimulationDetail = () => {
     );
   }
 
-  // Error state - if simulation doesn't exist
   if (!currentSimulation) {
     return (
       <Layout>
@@ -260,48 +251,10 @@ const SimulationDetail = () => {
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        {/* Navigation */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-          <div className="flex items-center">
-            <Button variant="ghost" size="sm" className="mr-2" onClick={() => navigate('/job-simulations')}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              All Simulations
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="capitalize">{currentSimulation?.category}</Badge>
-            <Badge variant="secondary">
-              <Clock className="h-3 w-3 mr-1" />
-              {currentSimulation?.duration}
-            </Badge>
-            <Badge variant={
-              currentSimulation?.difficulty === "Beginner" ? "secondary" : 
-              currentSimulation?.difficulty === "Intermediate" ? "outline" : 
-              "default"
-            }>
-              {currentSimulation?.difficulty}
-            </Badge>
-          </div>
-        </div>
+        <SimulationHeader simulation={currentSimulation} />
+        
+        <SimulationProgressBar progress={progress} showProgress={!!user} />
 
-        {/* Title */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{currentSimulation?.title}</h1>
-          <p className="text-muted-foreground">{currentSimulation?.description}</p>
-        </div>
-
-        {/* Progress bar */}
-        {user && (
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium">Your progress</span>
-              <span className="text-sm">{progress}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        )}
-
-        {/* Main content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -311,132 +264,28 @@ const SimulationDetail = () => {
               </TabsList>
               
               <TabsContent value="overview" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Skills You'll Gain</CardTitle>
-                    <CardDescription>
-                      These are the key competencies you'll develop in this simulation.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {currentSimulation?.skills_gained.map((skill, index) => (
-                        <Badge key={index} className="bg-blue-100 text-blue-800 border-blue-200">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    <Separator className="my-6" />
-                    
-                    <h3 className="font-medium mb-3">Requirements</h3>
-                    <ul className="space-y-2 mb-6">
-                      {currentSimulation?.requirements.map((req, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    
-                    <Separator className="my-6" />
-                    
-                    <div className="text-center">
-                      <Award className="h-12 w-12 mx-auto text-amber-500 mb-4" />
-                      <h3 className="font-medium mb-2">Earn a Certificate</h3>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        Complete this simulation to earn a digital certificate you can add to your profile and resume.
-                      </p>
-                      <Button onClick={() => setActiveTab('tasks')}>Start Simulation</Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <SimulationOverview 
+                  simulation={currentSimulation} 
+                  setActiveTab={setActiveTab} 
+                />
               </TabsContent>
               
               <TabsContent value="tasks" className="space-y-6">
-                {currentTasks && currentTasks.length > 0 ? (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>
-                        Task {currentTaskIndex + 1} of {currentTasks.length}: {currentTasks[currentTaskIndex].title}
-                      </CardTitle>
-                      <CardDescription>
-                        {currentTasks[currentTaskIndex].description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="prose max-w-none">
-                        <p>{currentTasks[currentTaskIndex].content.value || currentTasks[currentTaskIndex].content}</p>
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <Button 
-                        className="w-full" 
-                        onClick={handleTaskCompletion}
-                      >
-                        {currentTaskIndex < currentTasks.length - 1 ? "Complete & Continue" : "Complete Simulation"}
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ) : (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="text-center py-8">
-                        <p className="mb-4">No tasks available for this simulation yet.</p>
-                        <Button variant="outline" onClick={() => setActiveTab('overview')}>
-                          Return to Overview
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                <SimulationTasks 
+                  tasks={currentTasks} 
+                  currentTaskIndex={currentTaskIndex}
+                  handleTaskCompletion={handleTaskCompletion}
+                  setActiveTab={setActiveTab}
+                />
               </TabsContent>
             </Tabs>
           </div>
           
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Simulation Guide</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-1">
-                  <h3 className="font-medium text-sm">How to complete this simulation:</h3>
-                  <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-2 pl-4">
-                    <li>Read through each task carefully</li>
-                    <li>Complete the activities for each section</li>
-                    <li>Mark tasks complete when you're done</li>
-                    <li>Receive your credential after completing all tasks</li>
-                  </ol>
-                </div>
-                
-                <Separator />
-                
-                <div className="space-y-1">
-                  <h3 className="font-medium text-sm">Task List:</h3>
-                  <div className="space-y-2">
-                    {currentTasks && currentTasks.map((task, index) => (
-                      <div key={task.id} className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                          index < currentTaskIndex 
-                            ? "bg-green-100 text-green-700 border border-green-200" 
-                            : index === currentTaskIndex
-                              ? "bg-blue-100 text-blue-700 border border-blue-200"
-                              : "bg-gray-100 text-gray-500 border border-gray-200"
-                        }`}>
-                          {index < currentTaskIndex ? <CheckCircle className="h-4 w-4" /> : index + 1}
-                        </div>
-                        <span className={`text-sm ${
-                          index === currentTaskIndex ? "font-medium" : "text-muted-foreground"
-                        }`}>
-                          {task.title}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <SimulationGuideSidebar 
+              tasks={currentTasks} 
+              currentTaskIndex={currentTaskIndex} 
+            />
           </div>
         </div>
       </div>
