@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/auth';
 import { useNavigate, Link } from 'react-router-dom';
@@ -85,14 +85,18 @@ const JobSimulations = () => {
         console.error("Error fetching simulations:", error);
         setUseMockData(true);
       }
-    },
-    onSuccess: (data) => {
-      if (!data || data.length === 0) {
+    }
+  });
+  
+  // Handle empty data or errors with useEffect instead of onSuccess
+  useEffect(() => {
+    if (fetchedSimulations !== undefined) {
+      if (!fetchedSimulations || fetchedSimulations.length === 0) {
         console.log("No simulations found in database, using mock data");
         setUseMockData(true);
       }
     }
-  });
+  }, [fetchedSimulations]);
 
   // Use mock data if no simulations are returned from the database
   const simulations = useMockData ? mockSimulations : fetchedSimulations;
