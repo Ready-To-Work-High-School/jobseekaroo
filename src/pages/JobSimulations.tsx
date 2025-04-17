@@ -13,7 +13,6 @@ import { Separator } from '@/components/ui/separator';
 import { getJobSimulations, getUserSimulationProgress, startSimulation } from '@/lib/supabase/simulations';
 import { JobSimulation } from '@/types/jobSimulation';
 
-// Mock data for simulations if database is empty
 const mockSimulations: JobSimulation[] = [
   {
     id: "sim-001",
