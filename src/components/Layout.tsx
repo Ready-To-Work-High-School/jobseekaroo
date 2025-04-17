@@ -2,10 +2,10 @@
 import React, { useEffect } from 'react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
-import SignUpPrompt from './auth/SignUpPrompt';
 import BackButton from './navigation/BackButton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
+import ErrorBoundary from './ErrorBoundary';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -25,17 +25,27 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header hideAuthLinks={hideAuthLinks} />
+      <ErrorBoundary>
+        <Header hideAuthLinks={hideAuthLinks} />
+      </ErrorBoundary>
+      
       <main className="flex-grow">
-        {!isHomePage && (
-          <div className="container mx-auto px-4 py-4">
-            <BackButton />
-          </div>
-        )}
-        {children}
+        <ErrorBoundary>
+          {!isHomePage && (
+            <div className="container mx-auto px-4 py-4">
+              <BackButton />
+            </div>
+          )}
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </main>
-      {!user && <SignUpPrompt autoDismiss={true} dismissTime={3000} />}
-      <Footer />
+      
+      <ErrorBoundary>
+        <Footer />
+      </ErrorBoundary>
     </div>
   );
 };
