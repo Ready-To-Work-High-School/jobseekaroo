@@ -1,4 +1,5 @@
-import { JobSimulation, SimulationTask } from '@/types/jobSimulation';
+
+import { JobSimulation, SimulationTask, UserSimulationProgress, SimulationCredential } from '@/types/jobSimulation';
 import { supabase } from '@/integrations/supabase/client';
 
 export const startSimulation = async (userId: string, simulationId: string): Promise<void> => {
@@ -21,6 +22,26 @@ export const startSimulation = async (userId: string, simulationId: string): Pro
   } catch (error) {
     console.error('Exception starting simulation:', error);
     throw error;
+  }
+};
+
+export const getJobSimulation = async (simulationId: string): Promise<JobSimulation | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('job_simulations')
+      .select('*')
+      .eq('id', simulationId)
+      .single();
+      
+    if (error) {
+      console.error('Error fetching job simulation:', error);
+      return null;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Exception fetching job simulation:', error);
+    return null;
   }
 };
 
@@ -66,7 +87,7 @@ export const getSimulationTasks = async (simulationId: string): Promise<Simulati
   }
 };
 
-export const getUserSimulationProgress = async (userId: string, simulationId?: string) => {
+export const getUserSimulationProgress = async (userId: string, simulationId?: string): Promise<UserSimulationProgress | null> => {
   try {
     let query = supabase
       .from('user_simulation_progress')
@@ -79,38 +100,48 @@ export const getUserSimulationProgress = async (userId: string, simulationId?: s
       query = query.eq('simulation_id', simulationId);
     }
     
-    query = query.eq('user_id', userId);
+    query = query.eq('user_id', userId).single();
     
     const { data, error } = await query;
       
     if (error) {
       console.error('Error fetching user simulation progress:', error);
-      return [];
+      return null;
     }
     
-    return data || [];
+    return data;
   } catch (error) {
     console.error('Exception fetching user simulation progress:', error);
-    return [];
+    return null;
   }
 };
 
 export const updateSimulationProgress = async (
-  userId: string, 
-  simulationId: string, 
-  progressPercentage: number,
-  completed: boolean = false
+  progressId: string,
+  updates: {
+    current_task_id?: string;
+    progress_percentage: number;
+    completed?: boolean;
+  }
 ) => {
   try {
+    const updateData: any = {
+      progress_percentage: updates.progress_percentage,
+    };
+    
+    if (updates.completed !== undefined) {
+      updateData.completed = updates.completed;
+      updateData.completed_at = updates.completed ? new Date().toISOString() : null;
+    }
+    
+    if (updates.current_task_id !== undefined) {
+      updateData.current_task_id = updates.current_task_id;
+    }
+    
     const { error } = await supabase
       .from('user_simulation_progress')
-      .update({
-        progress_percentage: progressPercentage,
-        completed,
-        completed_at: completed ? new Date().toISOString() : null
-      })
-      .eq('user_id', userId)
-      .eq('simulation_id', simulationId);
+      .update(updateData)
+      .eq('id', progressId);
       
     if (error) {
       console.error('Error updating simulation progress:', error);
@@ -119,5 +150,28 @@ export const updateSimulationProgress = async (
   } catch (error) {
     console.error('Exception updating simulation progress:', error);
     throw error;
+  }
+};
+
+export const getUserCredentials = async (userId: string): Promise<SimulationCredential[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('simulation_credentials')
+      .select(`
+        *,
+        job_simulations(*)
+      `)
+      .eq('user_id', userId)
+      .order('issue_date', { ascending: false });
+      
+    if (error) {
+      console.error('Error fetching user credentials:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Exception fetching user credentials:', error);
+    return [];
   }
 };

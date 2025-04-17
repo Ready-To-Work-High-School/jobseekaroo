@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -192,7 +193,7 @@ const SimulationDetail = () => {
       setCurrentTaskIndex(nextTaskIndex);
     }
     
-    if (!useMockData && userProgress && id) {
+    if (!useMockData && userProgress && userProgress.id) {
       try {
         await updateSimulationProgress(userProgress.id, {
           current_task_id: isLastTask ? undefined : currentTasks[nextTaskIndex].id,

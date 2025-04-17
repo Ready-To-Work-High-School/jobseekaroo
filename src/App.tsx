@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { ThemeProvider } from './components/ui/theme-provider';
+import { ThemeProvider } from '@/components/ui/theme-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from "@/components/ui/toaster"
-import { ErrorBoundary } from 'react-error-boundary'
+import { Toaster } from "@/components/ui/toaster";
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Import pages
 import Home from './pages/Home';
@@ -51,7 +51,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <ErrorBoundary>
+          <ErrorBoundary fallback={<div>Something went wrong</div>}>
             <div className="min-h-screen flex flex-col">
               <CopyProtection />
               <Routes>
@@ -72,7 +72,6 @@ function App() {
                 <Route path="/job-simulations/:id" element={<SimulationDetail />} />
                 <Route path="/skill-development" element={<SkillDevelopment />} />
                 <Route path="/assessment" element={<PersonalizedAssessment />} />
-                {/* Add new route for personalized assessment */}
                 
                 {/* Admin routes */}
                 <Route path="/admin" element={<Admin />} />
