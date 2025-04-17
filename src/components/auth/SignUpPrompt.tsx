@@ -14,13 +14,13 @@ interface SignUpPromptProps {
 const SignUpPrompt: React.FC<SignUpPromptProps> = ({ 
   message = "Sign up to access all features",
   autoDismiss = false,
-  dismissTime = 3000 // 3 seconds by default
+  dismissTime = 3000
 }) => {
   const { user } = useAuth();
   const [dismissed, setDismissed] = React.useState(false);
   
   // Auto-dismiss after specified time if autoDismiss is true
-  useEffect(() => {
+  React.useEffect(() => {
     if (autoDismiss && !dismissed && !user) {
       const timer = setTimeout(() => {
         setDismissed(true);
