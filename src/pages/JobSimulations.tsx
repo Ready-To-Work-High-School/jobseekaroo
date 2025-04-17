@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "sonner";
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -81,9 +80,11 @@ const JobSimulations = () => {
   const { data: fetchedSimulations, isLoading } = useQuery({
     queryKey: ['jobSimulations'],
     queryFn: getJobSimulations,
-    onError: (error) => {
-      console.error("Error fetching simulations:", error);
-      setUseMockData(true);
+    meta: {
+      onError: (error: any) => {
+        console.error("Error fetching simulations:", error);
+        setUseMockData(true);
+      }
     },
     onSuccess: (data) => {
       if (!data || data.length === 0) {

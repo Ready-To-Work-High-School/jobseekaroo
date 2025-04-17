@@ -125,9 +125,11 @@ const SimulationDetail = () => {
   const { data: simulation, isLoading: isLoadingSimulation } = useQuery({
     queryKey: ['simulation', id],
     queryFn: () => id ? getJobSimulation(id) : Promise.reject('No simulation ID'),
-    onError: (error) => {
-      console.error("Error fetching simulation:", error);
-      setUseMockData(true);
+    meta: {
+      onError: (error: any) => {
+        console.error("Error fetching simulation:", error);
+        setUseMockData(true);
+      }
     }
   });
 
@@ -136,9 +138,11 @@ const SimulationDetail = () => {
     queryKey: ['simulationTasks', id],
     queryFn: () => id ? getSimulationTasks(id) : Promise.reject('No simulation ID'),
     enabled: !!simulation || useMockData,
-    onError: (error) => {
-      console.error("Error fetching tasks:", error);
-      setUseMockData(true);
+    meta: {
+      onError: (error: any) => {
+        console.error("Error fetching tasks:", error);
+        setUseMockData(true);
+      }
     }
   });
 
@@ -147,8 +151,10 @@ const SimulationDetail = () => {
     queryKey: ['userProgress', id, user?.id],
     queryFn: () => (id && user?.id) ? getUserSimulationProgress(user.id, id) : Promise.reject('Missing ID'),
     enabled: !!user && !!id,
-    onError: (error) => {
-      console.error("Error fetching user progress:", error);
+    meta: {
+      onError: (error: any) => {
+        console.error("Error fetching user progress:", error);
+      }
     }
   });
 
@@ -263,25 +269,25 @@ const SimulationDetail = () => {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="capitalize">{currentSimulation.category}</Badge>
+            <Badge variant="outline" className="capitalize">{currentSimulation?.category}</Badge>
             <Badge variant="secondary">
               <Clock className="h-3 w-3 mr-1" />
-              {currentSimulation.duration}
+              {currentSimulation?.duration}
             </Badge>
             <Badge variant={
-              currentSimulation.difficulty === "Beginner" ? "secondary" : 
-              currentSimulation.difficulty === "Intermediate" ? "outline" : 
+              currentSimulation?.difficulty === "Beginner" ? "secondary" : 
+              currentSimulation?.difficulty === "Intermediate" ? "outline" : 
               "default"
             }>
-              {currentSimulation.difficulty}
+              {currentSimulation?.difficulty}
             </Badge>
           </div>
         </div>
 
         {/* Title */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{currentSimulation.title}</h1>
-          <p className="text-muted-foreground">{currentSimulation.description}</p>
+          <h1 className="text-3xl font-bold mb-2">{currentSimulation?.title}</h1>
+          <p className="text-muted-foreground">{currentSimulation?.description}</p>
         </div>
 
         {/* Progress bar */}
@@ -314,7 +320,7 @@ const SimulationDetail = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {currentSimulation.skills_gained.map((skill, index) => (
+                      {currentSimulation?.skills_gained.map((skill, index) => (
                         <Badge key={index} className="bg-blue-100 text-blue-800 border-blue-200">
                           {skill}
                         </Badge>
@@ -325,7 +331,7 @@ const SimulationDetail = () => {
                     
                     <h3 className="font-medium mb-3">Requirements</h3>
                     <ul className="space-y-2 mb-6">
-                      {currentSimulation.requirements.map((req, index) => (
+                      {currentSimulation?.requirements.map((req, index) => (
                         <li key={index} className="flex items-start gap-2">
                           <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{req}</span>
