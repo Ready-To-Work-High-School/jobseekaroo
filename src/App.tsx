@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/ui/theme-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from 'react-error-boundary';
+import ScrollToTop from './components/navigation/ScrollToTop';
 
 // Import routes
 import AppRoutes from './routes';
@@ -20,6 +21,7 @@ function App() {
       <BrowserRouter>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
           <ErrorBoundary fallback={<ErrorPage />}>
+            <ScrollToTop />
             <div className="min-h-screen flex flex-col">
               <Routes>
                 {AppRoutes}

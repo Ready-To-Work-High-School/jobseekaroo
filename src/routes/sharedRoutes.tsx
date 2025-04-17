@@ -9,12 +9,9 @@ console.log('Shared routes loaded');
 
 const SharedRoutes = (
   <>
-    {/* Log when this specific route is matched */}
     <Route 
       path="/interview-prep" 
-      element={
-        <>{console.log('Interview prep route matched')} <InterviewPrep /></>
-      } 
+      element={<InterviewPrep />} 
     />
     <Route path="/resources" element={<Resources />} />
     <Route path="/pricing" element={<Pricing />} />

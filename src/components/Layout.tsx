@@ -26,7 +26,6 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Using comments for logging instead of expressions */}
       {/* Header rendering */}
       <Header hideAuthLinks={hideAuthLinks} />
       <main className="flex-grow">

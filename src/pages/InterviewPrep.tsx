@@ -14,7 +14,6 @@ const InterviewPrep = () => {
 
   return (
     <Layout>
-      {/* Using comments for logging instead of expressions */}
       <Helmet>
         <title>Interview Preparation | Job Seekers 4 HS</title>
         <meta 

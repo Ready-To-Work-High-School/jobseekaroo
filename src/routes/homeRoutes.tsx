@@ -1,10 +1,10 @@
 
 import { Route } from 'react-router-dom';
-import Index from '@/pages/Index';
+import Home from '@/pages/Home';
 
 const HomeRoutes = (
   <>
-    <Route path="/" element={<Index />} />
+    <Route path="/" element={<Home />} />
   </>
 );
 

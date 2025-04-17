@@ -10,6 +10,7 @@ import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
 import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
+import Layout from '@/components/Layout';
 
 // Export all routes as an array for use in App.tsx
 const AppRoutes = (
