@@ -14,6 +14,7 @@ import QuickAccessButtons from '@/components/home/QuickAccessButtons';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
 import { motion } from 'framer-motion';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
 
 const Index = () => {
   const fadeIn = useFadeIn(300);
@@ -52,6 +53,10 @@ const Index = () => {
         
         <motion.div variants={itemVariants}>
           <FirstJobToolkit />
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <UserRecommendationsSection />
         </motion.div>
         
         <motion.div variants={itemVariants} className="container mx-auto px-4 py-8">

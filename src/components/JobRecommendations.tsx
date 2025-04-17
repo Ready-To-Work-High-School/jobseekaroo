@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getJobRecommendations, getJobById } from '@/lib/supabase';
+import { getJobRecommendations } from '@/lib/supabase/recommendations';
+import { getJobById } from '@/lib/supabase';
 import { Job } from '@/types/job';
 import { JobRecommendation } from '@/types/user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -126,7 +127,24 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
   }
 
   if (recommendations.length === 0) {
-    return null;
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-amber-500" />
+            Recommended Jobs
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-center py-6">
+          <p className="text-muted-foreground">No job recommendations found for your profile.</p>
+          <div className="mt-4">
+            <Link to="/jobs">
+              <Button variant="outline">Browse All Jobs</Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (

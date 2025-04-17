@@ -76,6 +76,13 @@ const Home = () => {
 
       <SectionSeparator />
 
+      {/* User Recommendations - Moved up to appear right after job listings */}
+      <ErrorBoundary>
+        <UserRecommendationsSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
       {/* How It Works - Make the process clear */}
       <ErrorBoundary>
         <HowItWorksSection />
@@ -141,13 +148,6 @@ const Home = () => {
           <AdminToggle />
         </div>
       )}
-
-      <SectionSeparator />
-
-      {/* User Recommendations */}
-      <ErrorBoundary>
-        <UserRecommendationsSection />
-      </ErrorBoundary>
 
       <SectionSeparator />
 

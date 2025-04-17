@@ -9,6 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Briefcase } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const FeaturedJobsSection = () => {
   const [featuredJobs, setFeaturedJobs] = useState<Job[]>([]);
@@ -125,6 +127,12 @@ const FeaturedJobsSection = () => {
             ))}
           </div>
         )}
+        
+        <div className="mt-8">
+          <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-amber-500 hover:from-blue-700 hover:to-amber-600">
+            <Link to="/jobs">View All Job Opportunities</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

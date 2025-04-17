@@ -76,22 +76,6 @@ const SkillDevelopment = () => {
               <p className="text-sm text-purple-700">Client interaction, problem-solving, and service excellence</p>
             </div>
           </div>
-          
-          <h2>Coming Soon</h2>
-          <div className="p-6 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg border border-amber-100 mb-6 student-section-bg">
-            <p className="mb-4">
-              We're currently expanding our skill development offerings with:
-            </p>
-            <ul>
-              <li>Virtual reality job simulations</li>
-              <li>Employer-endorsed skill assessments</li>
-              <li>Peer learning communities</li>
-              <li>Skill-based job matching</li>
-            </ul>
-            <p className="mt-4">
-              Check back soon for more updates and features!
-            </p>
-          </div>
         </div>
         
         <div className="mt-12 text-center">
