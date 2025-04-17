@@ -8,7 +8,6 @@ import SimulationLoadingSkeleton from './SimulationLoadingSkeleton';
 interface SimulationsGridProps {
   simulations: JobSimulation[] | undefined;
   isLoading: boolean;
-  useMockData: boolean;
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
 }
@@ -16,7 +15,6 @@ interface SimulationsGridProps {
 const SimulationsGrid = ({ 
   simulations, 
   isLoading, 
-  useMockData, 
   selectedCategory, 
   setSelectedCategory 
 }: SimulationsGridProps) => {
@@ -49,7 +47,6 @@ const SimulationsGrid = ({
         <SimulationCard 
           key={simulation.id} 
           simulation={simulation}
-          useMockData={useMockData}
         />
       ))}
     </div>

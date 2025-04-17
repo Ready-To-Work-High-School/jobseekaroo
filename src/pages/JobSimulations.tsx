@@ -18,7 +18,6 @@ const JobSimulations = () => {
   const { 
     simulations, 
     isLoading, 
-    useMockData, 
     selectedCategory, 
     setSelectedCategory,
     categories 
@@ -51,7 +50,6 @@ const JobSimulations = () => {
           <SimulationsGrid 
             simulations={simulations}
             isLoading={isLoading}
-            useMockData={useMockData}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />

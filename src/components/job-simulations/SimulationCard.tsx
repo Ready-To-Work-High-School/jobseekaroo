@@ -12,10 +12,9 @@ import { startSimulation } from '@/lib/supabase/simulations';
 
 interface SimulationCardProps {
   simulation: JobSimulation;
-  useMockData: boolean;
 }
 
-const SimulationCard = ({ simulation, useMockData }: SimulationCardProps) => {
+const SimulationCard = ({ simulation }: SimulationCardProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -29,19 +28,11 @@ const SimulationCard = ({ simulation, useMockData }: SimulationCardProps) => {
     }
     
     try {
-      if (useMockData) {
-        // For mock data, just navigate without actual DB interaction
-        toast.success(`Started: ${simulation.title}`, {
-          description: "Your progress will be saved automatically"
-        });
-        navigate(`/job-simulations/${simulation.id}`);
-      } else {
-        await startSimulation(user.id, simulation.id);
-        toast.success(`Started: ${simulation.title}`, {
-          description: "Your progress will be saved automatically"
-        });
-        navigate(`/job-simulations/${simulation.id}`);
-      }
+      await startSimulation(user.id, simulation.id);
+      toast.success(`Started: ${simulation.title}`, {
+        description: "Your progress will be saved automatically"
+      });
+      navigate(`/job-simulations/${simulation.id}`);
     } catch (error) {
       console.error("Error starting simulation:", error);
       toast.error("Failed to start simulation", {
