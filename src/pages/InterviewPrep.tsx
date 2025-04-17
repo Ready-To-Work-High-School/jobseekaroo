@@ -1,17 +1,10 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
 import InterviewPrepContent from '@/components/interview/InterviewPrepContent';
 
 const InterviewPrep = () => {
-  useEffect(() => {
-    console.log('InterviewPrep component mounted');
-    return () => console.log('InterviewPrep component unmounted');
-  }, []);
-
-  console.log('InterviewPrep rendering');
-
   return (
     <Layout>
       <Helmet>
@@ -22,7 +15,6 @@ const InterviewPrep = () => {
         />
       </Helmet>
       
-      {/* About to render InterviewPrepContent */}
       <InterviewPrepContent />
     </Layout>
   );

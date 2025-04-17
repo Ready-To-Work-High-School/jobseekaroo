@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Route } from 'react-router-dom';
 import HomeRoutes from './homeRoutes';
 import { PublicRoutes } from './publicRoutes';
@@ -10,10 +9,9 @@ import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
 import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
-import Layout from '@/components/Layout';
 
 // Export all routes as an array for use in App.tsx
-const AppRoutes = (
+export const AppRoutes = (
   <>
     {/* Home routes */}
     {HomeRoutes}

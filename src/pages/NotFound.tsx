@@ -1,19 +1,24 @@
 
 import React from 'react';
-import Layout from '@/components/Layout';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import Layout from '@/components/Layout';
+import { useFadeIn } from '@/utils/animations';
 
 const NotFound = () => {
+  const navigate = useNavigate();
+  const fadeIn = useFadeIn(300);
+
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
+      <div className={`container max-w-md mx-auto px-4 py-16 text-center ${fadeIn}`}>
+        <h1 className="text-6xl font-bold mb-4">404</h1>
+        <h2 className="text-2xl font-medium mb-4">Page Not Found</h2>
         <p className="text-muted-foreground mb-8">
-          The page you are looking for doesn't exist or has been moved.
+          Sorry, the page you're looking for doesn't exist or has been moved.
         </p>
-        <Button asChild>
-          <Link to="/">Back to Homepage</Link>
+        <Button onClick={() => navigate('/')}>
+          Back to Home
         </Button>
       </div>
     </Layout>

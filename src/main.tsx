@@ -1,10 +1,12 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './contexts/auth'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from '@/components/ui/toaster' 
 import { Toaster as SonnerToaster } from 'sonner'
 
 // Import styles
@@ -38,23 +40,26 @@ console.log(
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider>
-          <App />
-          {/* Modern toast notifications with animations */}
-          <SonnerToaster 
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'white',
-                color: 'black',
-                border: '1px solid #e2e8f0',
-              },
-              className: 'font-medium',
-            }}
-          />
-        </ThemeProvider>
-      </AuthProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <ThemeProvider>
+            <App />
+            {/* Modern toast notifications with animations */}
+            <SonnerToaster 
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: 'white',
+                  color: 'black',
+                  border: '1px solid #e2e8f0',
+                },
+                className: 'font-medium',
+              }}
+            />
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
 )

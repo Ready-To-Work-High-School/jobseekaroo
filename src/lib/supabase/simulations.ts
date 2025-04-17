@@ -100,16 +100,16 @@ export const getUserSimulationProgress = async (userId: string, simulationId?: s
       query = query.eq('simulation_id', simulationId);
     }
     
-    query = query.eq('user_id', userId);
+    query = query.eq('user_id', userId).single();
     
-    const { data, error } = await query.single();
+    const { data, error } = await query;
       
     if (error) {
       console.error('Error fetching user simulation progress:', error);
       return null;
     }
     
-    return data as unknown as UserSimulationProgress;
+    return data;
   } catch (error) {
     console.error('Exception fetching user simulation progress:', error);
     return null;

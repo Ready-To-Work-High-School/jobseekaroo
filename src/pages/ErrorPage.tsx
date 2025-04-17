@@ -1,26 +1,24 @@
 
 import React from 'react';
+import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { RefreshCcw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ErrorPage = () => {
-  const handleRefresh = () => {
-    window.location.reload();
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="text-center max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
-        <p className="text-muted-foreground mb-6">
-          We're sorry, but an unexpected error has occurred. Please try refreshing the page.
+    <Layout>
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-bold mb-4">Oops! Something went wrong</h1>
+        <p className="text-muted-foreground mb-8">
+          We're sorry, but there was an error processing your request.
         </p>
-        <Button onClick={handleRefresh}>
-          <RefreshCcw className="mr-2 h-4 w-4" />
-          Refresh Page
+        <Button onClick={() => navigate('/')}>
+          Return to Home
         </Button>
       </div>
-    </div>
+    </Layout>
   );
 };
 
