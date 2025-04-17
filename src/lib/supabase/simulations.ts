@@ -100,16 +100,29 @@ export const getUserSimulationProgress = async (userId: string, simulationId?: s
       query = query.eq('simulation_id', simulationId);
     }
     
-    query = query.eq('user_id', userId).single();
+    // Adding this filter before calling single() to fix the TypeScript error
+    query = query.eq('user_id', userId);
     
-    const { data, error } = await query;
+    const { data, error } = await query.single();
       
     if (error) {
       console.error('Error fetching user simulation progress:', error);
       return null;
     }
     
-    return data;
+    // Transform the data to match UserSimulationProgress type
+    const progress: UserSimulationProgress = {
+      id: data.id,
+      user_id: data.user_id,
+      simulation_id: data.simulation_id,
+      current_task_id: data.current_task_id || undefined,
+      progress_percentage: data.progress_percentage,
+      completed: data.completed,
+      started_at: data.started_at,
+      completed_at: data.completed_at || undefined
+    };
+    
+    return progress;
   } catch (error) {
     console.error('Exception fetching user simulation progress:', error);
     return null;
