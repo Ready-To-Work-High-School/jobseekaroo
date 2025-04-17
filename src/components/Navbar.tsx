@@ -1,167 +1,162 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import Layout from '../components/Layout';
+import { Helmet } from 'react-helmet';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useToast } from "@/components/ui/use-toast"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
-import { useIsMobile } from '@/hooks/use-mobile';
+import AdminToggle from '@/components/admin/AdminToggle';
+import SearchSection from '@/components/home/SearchSection';
+import EnhancedJobListings from '@/components/home/EnhancedJobListings';
+import HowItWorksSection from '@/components/home/HowItWorksSection';
+import FirstJobToolkit from '@/components/home/FirstJobToolkit';
+import MayoSummerFeature from '@/components/home/MayoSummerFeature';
+import FeeTeaser from '@/components/pricing/FeeTeaser';
+import Hero from '@/components/Hero';
+import SuccessStories from '@/components/home/SuccessStories';
+import JobPlacementsSection from '@/components/home/JobPlacementsSection';
+import CallToActionSection from '@/components/home/CallToActionSection';
+import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
+import Chatbot from '@/components/support/Chatbot';
+import JobSimulationsSection from '@/components/home/JobSimulationsSection';
+import InfoBanner from '@/components/home/InfoBanner';
+import SectionSeparator from '@/components/home/SectionSeparator';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import CompanyDirectory from '@/components/resources/CompanyDirectory';
 
-const NavbarBrand = () => (
-  <Link to="/" className="flex items-center font-bold text-xl md:text-2xl tracking-tight">
-    <img src="/logo.svg" alt="Job Seekers 4 HS Logo" className="mr-2 h-8 w-8" />
-    <span className="text-primary">Job Seekers</span> 4 HS
-  </Link>
-);
-
-const NavLink = ({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) => (
-  <Link
-    to={to}
-    className={`text-sm font-medium transition-colors hover:text-primary ${className || ''}`}
-  >
-    {children}
-  </Link>
-);
-
-const Navbar = () => {
-  const { user, signOut, userProfile } = useAuth();
-  const { theme, setTheme } = useTheme();
-  const { toast } = useToast()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isMobile = useIsMobile();
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      toast({
-        title: "Logged out",
-        description: "You have been successfully logged out.",
-      })
-    } catch (error) {
-      console.error("Logout failed:", error);
-      toast({
-        title: "Logout Failed",
-        description: "There was an error logging you out. Please try again.",
-        variant: "destructive",
-      })
-    }
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+const Home = () => {
+  const fadeIn = useFadeIn(300);
+  const { user } = useAuth();
 
   return (
-    <header className="border-b bg-background">
-      <div className="container-custom py-3 flex items-center justify-between">
-        <NavbarBrand />
-        
-        <div className="hidden md:flex items-center space-x-4">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/jobs">Jobs</NavLink>
-          <NavLink to="/demo">Demo Access</NavLink>
-          <NavLink to="/resources">Resources</NavLink>
-          <NavLink to="/job-help">AI Job Help</NavLink>
-          <NavLink to="/about">About</NavLink>
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage 
-                      src={userProfile?.avatar_url || undefined} 
-                      alt={user?.email || "Avatar"} 
-                    />
-                    <AvatarFallback>
-                      {userProfile?.first_name?.substring(0, 1).toUpperCase() || 
-                      userProfile?.last_name?.substring(0, 1).toUpperCase() || 
-                      user?.email?.substring(0, 2).toUpperCase() || "JS"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuItem onClick={() => window.location.href = '/profile'}>Profile</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>Dashboard</DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
-            </>
-          )}
-          <Button variant="outline" size="icon" onClick={toggleTheme}>
-            {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+    <Layout>
+      <Helmet>
+        <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
+        <meta 
+          name="description" 
+          content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." 
+        />
+        <link 
+          rel="preload" 
+          href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" 
+          as="image" 
+          fetchPriority="high" 
+          type="image/webp" 
+        />
+        <link rel="preconnect" href="https://cdn.gpteng.co" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.canva.com" crossOrigin="anonymous" />
+        <meta 
+          name="viewport" 
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
+        />
+      </Helmet>
+
+      {/* Info Banner */}
+      <ErrorBoundary>
+        <InfoBanner />
+      </ErrorBoundary>
+
+      {/* Hero Section - Updated for student focus */}
+      <ErrorBoundary>
+        <Hero />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Search Section - Keep it prominent for quick job search */}
+      <ErrorBoundary>
+        <SearchSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Enhanced Job Listings - Show available opportunities */}
+      <ErrorBoundary>
+        <EnhancedJobListings />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* User Recommendations - Moved up to appear right after job listings */}
+      <ErrorBoundary>
+        <UserRecommendationsSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* How It Works - Make the process clear */}
+      <ErrorBoundary>
+        <HowItWorksSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Top Jacksonville Employers with logos */}
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-6 text-center">Top Employers in Jacksonville</h2>
+          <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 6)} />
         </div>
-        
-        {isMobile && (
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-2/3 md:w-1/2">
-              <SheetHeader className="space-y-2">
-                <SheetTitle>Menu</SheetTitle>
-                <SheetDescription>
-                  Navigate the app and manage your account.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <Button variant="ghost" asChild><Link to="/" onClick={toggleMobileMenu}>Home</Link></Button>
-                <Button variant="ghost" asChild><Link to="/jobs" onClick={toggleMobileMenu}>Jobs</Link></Button>
-                <Button variant="ghost" asChild><Link to="/demo" onClick={toggleMobileMenu}>Demo Access</Link></Button>
-                <Button variant="ghost" asChild><Link to="/resources" onClick={toggleMobileMenu}>Resources</Link></Button>
-                <Button variant="ghost" asChild><Link to="/job-help" onClick={toggleMobileMenu}>AI Job Help</Link></Button>
-                <Button variant="ghost" asChild><Link to="/about" onClick={toggleMobileMenu}>About</Link></Button>
-                {user ? (
-                  <>
-                    <Button variant="ghost" asChild><Link to="/profile" onClick={toggleMobileMenu}>Profile</Link></Button>
-                    <Button variant="ghost" asChild><Link to="/dashboard" onClick={toggleMobileMenu}>Dashboard</Link></Button>
-                    <Button variant="ghost" onClick={() => { handleLogout(); toggleMobileMenu(); }}>Logout</Button>
-                  </>
-                ) : (
-                  <>
-                    <Button variant="ghost" asChild><Link to="/login" onClick={toggleMobileMenu}>Login</Link></Button>
-                    <Button variant="ghost" asChild><Link to="/register" onClick={toggleMobileMenu}>Register</Link></Button>
-                  </>
-                )}
-                <Button variant="outline" size="icon" onClick={toggleTheme}>
-                  {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-                  <span className="sr-only">Toggle theme</span>
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        )}
-      </div>
-    </header>
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Success Stories - Show real outcomes */}
+      <ErrorBoundary>
+        <SuccessStories />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* First Job Toolkit - Help students prepare */}
+      <ErrorBoundary>
+        <FirstJobToolkit />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Job Simulations Section */}
+      <ErrorBoundary>
+        <JobSimulationsSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Mayo Summer Program Feature */}
+      <ErrorBoundary>
+        <MayoSummerFeature />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Fee Teaser */}
+      <ErrorBoundary>
+        <FeeTeaser />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Call to Action */}
+      <ErrorBoundary>
+        <CallToActionSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Admin Toggle (if user is logged in) */}
+      {user && (
+        <div className="container mx-auto px-4 py-8">
+          <AdminToggle />
+        </div>
+      )}
+
+      <SectionSeparator />
+
+      {/* Chatbot for support */}
+      <ErrorBoundary>
+        <Chatbot />
+      </ErrorBoundary>
+    </Layout>
   );
 };
 
-export default Navbar;
+export default Home;

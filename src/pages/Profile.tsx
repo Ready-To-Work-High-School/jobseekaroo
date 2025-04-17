@@ -6,10 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Award, Briefcase, MapPin, Mail } from 'lucide-react';
+import { Award, Briefcase, MapPin, Mail, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import UserBadges from '@/components/badges/UserBadges';
 import { useUserBadges } from '@/hooks/use-user-badges';
+import JobRecommendations from '@/components/JobRecommendations';
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
@@ -88,46 +89,54 @@ const Profile = () => {
               </CardContent>
             </Card>
             
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="profile">Profile Information</TabsTrigger>
-                <TabsTrigger value="security">Account & Security</TabsTrigger>
-              </TabsList>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="profile">Profile Information</TabsTrigger>
+                    <TabsTrigger value="security">Account & Security</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="profile">
+                    <Card>
+                      <CardContent className="space-y-4 pt-6">
+                        {userProfile?.bio && (
+                          <div>
+                            <h3 className="font-medium">Bio</h3>
+                            <p className="mt-1 text-muted-foreground">{userProfile.bio}</p>
+                          </div>
+                        )}
+                        
+                        {userProfile?.skills && userProfile.skills.length > 0 && (
+                          <div>
+                            <h3 className="font-medium">Skills</h3>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {userProfile.skills.map(skill => (
+                                <Badge 
+                                  key={skill} 
+                                  variant="outline" 
+                                  className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                                >
+                                  {skill}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="security">
+                    <AccountSecurityForm />
+                  </TabsContent>
+                </Tabs>
+              </div>
               
-              <TabsContent value="profile">
-                <Card>
-                  <CardContent className="space-y-4 pt-6">
-                    {userProfile?.bio && (
-                      <div>
-                        <h3 className="font-medium">Bio</h3>
-                        <p className="mt-1 text-muted-foreground">{userProfile.bio}</p>
-                      </div>
-                    )}
-                    
-                    {userProfile?.skills && userProfile.skills.length > 0 && (
-                      <div>
-                        <h3 className="font-medium">Skills</h3>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {userProfile.skills.map(skill => (
-                            <Badge 
-                              key={skill} 
-                              variant="outline" 
-                              className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
-                            >
-                              {skill}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="security">
-                <AccountSecurityForm />
-              </TabsContent>
-            </Tabs>
+              <div className="lg:col-span-1">
+                <JobRecommendations limit={5} showReason={true} />
+              </div>
+            </div>
           </>
         )}
       </div>
