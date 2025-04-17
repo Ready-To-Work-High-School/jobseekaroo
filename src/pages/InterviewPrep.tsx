@@ -14,7 +14,7 @@ const InterviewPrep = () => {
 
   return (
     <Layout>
-      {console.log('Layout rendering in InterviewPrep')}
+      {/* Using comments for logging instead of expressions */}
       <Helmet>
         <title>Interview Preparation | Job Seekers 4 HS</title>
         <meta 
@@ -23,7 +23,7 @@ const InterviewPrep = () => {
         />
       </Helmet>
       
-      {console.log('About to render InterviewPrepContent')}
+      {/* About to render InterviewPrepContent */}
       <InterviewPrepContent />
     </Layout>
   );

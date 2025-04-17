@@ -26,21 +26,22 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {console.log('Rendering Header')}
+      {/* Using comments for logging instead of expressions */}
+      {/* Header rendering */}
       <Header hideAuthLinks={hideAuthLinks} />
       <main className="flex-grow">
         {!isHomePage && (
           <div className="container mx-auto px-4 py-4">
-            {console.log('Rendering BackButton')}
+            {/* BackButton rendering */}
             <BackButton />
           </div>
         )}
-        {console.log('Rendering Layout children')}
+        {/* Children rendering */}
         {children}
       </main>
       {!user && <SignUpPrompt autoDismiss={true} dismissTime={3000} />}
       <UserOnboardingGuide />
-      {console.log('Rendering Footer')}
+      {/* Footer rendering */}
       <Footer />
     </div>
   );
