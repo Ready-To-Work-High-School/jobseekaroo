@@ -8,12 +8,10 @@ const HomeRoutes = (
   <>
     <Route path="/" element={
       <ErrorBoundary>
-        {console.log("Home route matched")}
         <Home />
       </ErrorBoundary>
     } />
   </>
 );
 
-console.log("HomeRoutes loaded");
 export default HomeRoutes;

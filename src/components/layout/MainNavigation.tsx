@@ -1,6 +1,6 @@
 
 import { cn } from '@/lib/utils';
-import { ModeToggle } from '../ModeToggle';
+import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
 import { NavLinks } from './navigation/NavLinks';
 import { JobSeekerDropdown } from './navigation/JobSeekerDropdown';
@@ -33,7 +33,7 @@ const MainNavigation = ({ className }: { className?: string }) => {
           signOut={signOut} 
         />
       ) : (
-        <ModeToggle />
+        <ThemeToggle />
       )}
     </nav>
   );

@@ -7,41 +7,23 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 const InterviewPrep = () => {
   console.log("Rendering InterviewPrep page");
 
+  // Create a basic fallback component
+  const FallbackComponent = () => (
+    <div className="text-center py-16">
+      <h1 className="text-3xl font-bold mb-4">Interview Preparation</h1>
+      <p className="text-lg text-muted-foreground mb-8">
+        Access interview tips, practice questions, and expert guidance to help you succeed in your job interviews.
+      </p>
+    </div>
+  );
+
   // Dynamic import of InterviewPrepContent component if it exists
   const InterviewPrepContent = React.lazy(() => {
-    return new Promise((resolve) => {
-      try {
-        // Try to import the component
-        import('@/components/interview/InterviewPrepContent').then(resolve)
-          .catch(error => {
-            console.error("Failed to load InterviewPrepContent:", error);
-            // Fallback to a minimal component if import fails
-            resolve({
-              default: () => (
-                <div className="text-center py-16">
-                  <h1 className="text-3xl font-bold mb-4">Interview Preparation</h1>
-                  <p className="text-lg text-muted-foreground mb-8">
-                    Access interview tips, practice questions, and expert guidance to help you succeed in your job interviews.
-                  </p>
-                </div>
-              )
-            });
-          });
-      } catch (error) {
-        console.error("Error in dynamic import:", error);
-        // Fallback component
-        resolve({
-          default: () => (
-            <div className="text-center py-16">
-              <h1 className="text-3xl font-bold mb-4">Interview Preparation</h1>
-              <p className="text-lg text-muted-foreground mb-8">
-                Access interview tips, practice questions, and expert guidance to help you succeed in your job interviews.
-              </p>
-            </div>
-          )
-        });
-      }
-    });
+    return import('@/components/interview/InterviewPrepContent')
+      .catch(() => {
+        console.error("Failed to load InterviewPrepContent");
+        return { default: FallbackComponent };
+      });
   });
 
   return (
