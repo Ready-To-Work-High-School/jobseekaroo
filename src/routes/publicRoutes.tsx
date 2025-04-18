@@ -1,4 +1,3 @@
-
 import { Route } from 'react-router-dom';
 import About from '../pages/About';
 import FAQ from '../pages/FAQ';
@@ -18,6 +17,7 @@ import ForEmployers from '../pages/ForEmployers';
 import ResumeAssistant from '../pages/ResumeAssistant';
 import JobSimulations from '../pages/JobSimulations';
 import SimulationDetail from '../pages/SimulationDetail';
+import CareerQuiz from '../pages/CareerQuiz';
 
 export const PublicRoutes = (
   <>
@@ -43,5 +43,6 @@ export const PublicRoutes = (
     <Route path="/credentials" element={<CredentialsPage />} />
     <Route path="/job-simulations" element={<JobSimulations />} />
     <Route path="/job-simulations/:id" element={<SimulationDetail />} />
+    <Route path="/career-quiz" element={<CareerQuiz />} />
   </>
 );
