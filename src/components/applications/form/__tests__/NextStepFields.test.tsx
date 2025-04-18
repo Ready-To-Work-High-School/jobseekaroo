@@ -4,13 +4,21 @@ import { NextStepFields } from '../NextStepFields';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { applicationFormSchema } from '../validation';
+import { ApplicationStatus } from '@/types/application';
 
 const TestWrapper = () => {
   const form = useForm({
     resolver: zodResolver(applicationFormSchema),
     defaultValues: {
       next_step: '',
-      next_step_date: ''
+      next_step_date: '',
+      job_title: '',
+      company: '',
+      applied_date: '',
+      status: 'applied' as ApplicationStatus,
+      notes: '',
+      contact_name: '',
+      contact_email: '',
     }
   });
 

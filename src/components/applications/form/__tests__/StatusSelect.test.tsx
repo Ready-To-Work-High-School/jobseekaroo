@@ -4,12 +4,21 @@ import { StatusSelect } from '../StatusSelect';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { applicationFormSchema } from '../validation';
+import { ApplicationStatus } from '@/types/application';
 
 const TestWrapper = () => {
   const form = useForm({
     resolver: zodResolver(applicationFormSchema),
     defaultValues: {
-      status: 'applied'
+      status: 'applied' as ApplicationStatus,
+      job_title: '',
+      company: '',
+      applied_date: '',
+      notes: '',
+      contact_name: '',
+      contact_email: '',
+      next_step: '',
+      next_step_date: '',
     }
   });
 
