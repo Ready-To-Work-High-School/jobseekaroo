@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -114,7 +113,7 @@ const FeeTeaser = () => {
             </ul>
             
             <Button asChild className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border-0">
-              <Link to="/employer-premium">Start Free Trial</Link>
+              <Link to="/employer/premium">Start Free Trial</Link>
             </Button>
           </motion.div>
         </div>
