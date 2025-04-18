@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -101,7 +100,7 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                   <FormItem className="flex flex-col">
                     <FormLabel>Date Range</FormLabel>
                     <DateRangePicker
-                      dateRange={field.value}
+                      dateRange={field.value as DateRange}
                       onSelect={(dateRange: DateRange | undefined) => {
                         field.onChange(dateRange);
                       }}
