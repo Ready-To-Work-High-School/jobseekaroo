@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Lightbulb, BriefcaseIcon, GraduationCap } from 'lucide-react';
 import { QuizQuestion } from './types';
 
@@ -12,7 +13,7 @@ export const quizQuestions: QuizQuestion[] = [
       "Creating and designing things",
       "Leading and organizing teams"
     ],
-    icon: <Lightbulb className="h-6 w-6 text-amber-500" />
+    icon: React.createElement(Lightbulb, { className: "h-6 w-6 text-amber-500" })
   },
   {
     id: 2,
@@ -23,7 +24,7 @@ export const quizQuestions: QuizQuestion[] = [
       "The mediator who keeps everyone happy",
       "The executor who gets things done"
     ],
-    icon: <BriefcaseIcon className="h-6 w-6 text-blue-500" />
+    icon: React.createElement(BriefcaseIcon, { className: "h-6 w-6 text-blue-500" })
   },
   {
     id: 3,
@@ -34,6 +35,6 @@ export const quizQuestions: QuizQuestion[] = [
       "Creative and flexible",
       "Collaborative and supportive"
     ],
-    icon: <GraduationCap className="h-6 w-6 text-purple-500" />
+    icon: React.createElement(GraduationCap, { className: "h-6 w-6 text-purple-500" })
   }
 ];
