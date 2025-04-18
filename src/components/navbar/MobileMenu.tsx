@@ -31,51 +31,45 @@ export const MobileMenu = () => {
   } = useMobileMenu();
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Menu">
-          <MenuIcon className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="p-0 pt-10 w-[280px]">
-        <SheetHeader className="px-4 pb-2">
-          <SheetTitle>Menu</SheetTitle>
-        </SheetHeader>
-        <nav className="flex flex-col border-t">
-          <MobileNavLink to="/">
-            <Home className="h-5 w-5" />
-            Home
-          </MobileNavLink>
-          
-          {/* Primary Navigation Links - Highlighted at top */}
-          <PrimaryNavigationLinks />
-          
-          {/* Job Seeker Section */}
-          <JobSeekersSection getPath={getPath} />
-          
-          {/* Resources Section */}
-          <ResourcesSection getPath={getPath} />
-          
-          {user ? (
-            <>
-              {/* Authenticated User Links */}
-              <AuthenticatedUserLinks onSignOut={handleSignOut} />
-              
-              {/* Admin Section - Only for admin users */}
-              {isAdmin && <AdminLink />}
-              
-              {/* Hidden CEO Portal link */}
-              <CeoLink />
-              
-              {/* Sign Out Button */}
-              <SignOutButton onSignOut={handleSignOut} />
-            </>
-          ) : (
-            <UnauthenticatedUserLinks />
-          )}
-        </nav>
-      </SheetContent>
-    </Sheet>
+    <>
+      <SheetHeader className="px-4 pb-2">
+        <SheetTitle>Menu</SheetTitle>
+      </SheetHeader>
+      
+      <nav className="flex flex-col border-t">
+        <MobileNavLink to="/">
+          <Home className="h-5 w-5" />
+          Home
+        </MobileNavLink>
+        
+        {/* Primary Navigation Links - Highlighted at top */}
+        <PrimaryNavigationLinks />
+        
+        {/* Job Seeker Section */}
+        <JobSeekersSection getPath={getPath} />
+        
+        {/* Resources Section */}
+        <ResourcesSection getPath={getPath} />
+        
+        {user ? (
+          <>
+            {/* Authenticated User Links */}
+            <AuthenticatedUserLinks onSignOut={handleSignOut} />
+            
+            {/* Admin Section - Only for admin users */}
+            {isAdmin && <AdminLink />}
+            
+            {/* Hidden CEO Portal link */}
+            <CeoLink />
+            
+            {/* Sign Out Button */}
+            <SignOutButton onSignOut={handleSignOut} />
+          </>
+        ) : (
+          <UnauthenticatedUserLinks />
+        )}
+      </nav>
+    </>
   );
 };
 

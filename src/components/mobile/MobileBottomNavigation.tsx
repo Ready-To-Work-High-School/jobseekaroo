@@ -1,17 +1,19 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Briefcase, Building2, GraduationCap, User } from 'lucide-react';
+import { Home, Briefcase, Building2, GraduationCap, User, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { useNavigation } from '../layout/navigation/useNavigation';
+import { useAuth } from '@/contexts/auth';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { MobileMenu } from '@/components/navbar/MobileMenu';
 
 const MobileBottomNavigation = () => {
   const location = useLocation();
-  const { isAdmin } = useNavigation();
+  const { user } = useAuth();
   
   // Skip rendering on auth paths
-  if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname)) {
+  if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname) || !user) {
     return null;
   }
   
@@ -20,7 +22,6 @@ const MobileBottomNavigation = () => {
     { icon: Briefcase, label: 'Jobs', path: '/jobs' },
     { icon: Building2, label: 'Employers', path: '/for-employers' },
     { icon: GraduationCap, label: 'Schools', path: '/school-integration' },
-    { icon: User, label: 'Profile', path: '/profile' },
   ];
   
   return (
@@ -57,6 +58,20 @@ const MobileBottomNavigation = () => {
             </NavLink>
           );
         })}
+        
+        {/* Menu button for additional navigation */}
+        <Sheet>
+          <SheetTrigger className={cn(
+            'flex flex-col items-center py-2 px-1',
+            'text-muted-foreground'
+          )}>
+            <Menu className="h-5 w-5" />
+            <span className="text-[10px] mt-1 font-medium">Menu</span>
+          </SheetTrigger>
+          <SheetContent side="right" className="p-0 pt-10 w-[280px]">
+            <MobileMenu />
+          </SheetContent>
+        </Sheet>
       </nav>
     </div>
   );

@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import AppRoutes from './routes/index';
 import NotFound from './pages/NotFound';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import MobileBottomNavigation from './components/mobile/MobileBottomNavigation';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ function App() {
               {AppRoutes}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <MobileBottomNavigation />
             <Toaster />
           </div>
         </TooltipProvider>

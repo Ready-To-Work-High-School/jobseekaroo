@@ -15,7 +15,7 @@ const MainNavigation = ({ className }: { className?: string }) => {
   const { user, userProfile, isAdmin, signOut } = useNavigation();
 
   return (
-    <nav className={cn("hidden lg:flex items-center space-x-6", className)}>
+    <nav className={cn("hidden lg:flex items-center space-x-6", className)} aria-label="Main Navigation">
       {/* Primary Navigation Links */}
       <Link 
         to="/" 

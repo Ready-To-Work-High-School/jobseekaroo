@@ -7,7 +7,7 @@ test.describe('Navigation', () => {
     await expect(page).toHaveURL(/\/sign-in/);
   });
 
-  test('navigation menu works correctly', async ({ authenticatedPage: page }) => {
+  test('desktop navigation works correctly', async ({ authenticatedPage: page }) => {
     await test.step('Navigate to Jobs', async () => {
       await page.click('a:has-text("Jobs")');
       await expect(page).toHaveURL('/jobs');
@@ -16,6 +16,17 @@ test.describe('Navigation', () => {
     await test.step('Navigate to Schools', async () => {
       await page.click('a:has-text("Schools")');
       await expect(page).toHaveURL('/school-integration');
+    });
+    
+    await test.step('Navigate to Employers', async () => {
+      await page.click('text=For Employers');
+      await expect(page).toHaveURL('/for-employers');
+    });
+    
+    await test.step('Navigate to Resources', async () => {
+      await page.click('text=Resources');
+      await page.click('a:has-text("Career Resources")');
+      await expect(page).toHaveURL('/resources');
     });
   });
 
@@ -40,6 +51,26 @@ test.describe('Navigation', () => {
       
       await page.click('a:has-text("Profile")');
       await expect(page).toHaveURL('/profile');
+      
+      // Test hamburger menu
+      await page.click('button:has-text("Menu")');
+      await page.click('a:has-text("Schools")');
+      await expect(page).toHaveURL('/school-integration');
     });
+  });
+  
+  test('navigation contains all primary links', async ({ page }) => {
+    await page.goto('/');
+    
+    // Check for essential navigation links
+    await expect(page.locator('a:has-text("Home")')).toBeVisible();
+    await expect(page.locator('a:has-text("Jobs"), a:has-text("For Job Seekers")')).toBeVisible();
+    await expect(page.locator('a:has-text("Schools")')).toBeVisible();
+    await expect(page.locator('a:has-text("For Employers"), a:has-text("Employers")')).toBeVisible();
+    await expect(page.locator('a:has-text("Resources"), a:has-text("Career Resources")')).toBeVisible();
+    
+    // Check auth links
+    await expect(page.locator('a:has-text("Sign In")')).toBeVisible();
+    await expect(page.locator('a:has-text("Sign Up")')).toBeVisible();
   });
 });
