@@ -1,75 +1,45 @@
 
 import Layout from '@/components/Layout';
-import { Building2, CheckCircle } from 'lucide-react';
+import { Building2 } from 'lucide-react';
+import AdminFeatures from '@/components/school/AdminFeatures';
+import TeacherFeatures from '@/components/school/TeacherFeatures';
+import { Button } from '@/components/ui/button';
 
 const SchoolIntegration = () => {
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-center gap-3 mb-6">
-          <Building2 className="h-8 w-8 text-orange-500" />
+          <Building2 className="h-8 w-8 text-primary" />
           <h1 className="text-4xl font-bold">School Integration</h1>
         </div>
         
-        <p className="text-lg mb-8">
-          Tools for schools to manage student accounts, track progress, and integrate with existing systems.
+        <p className="text-lg mb-12 text-muted-foreground max-w-2xl">
+          Empower your students with tools designed specifically for educational institutions. 
+          Our platform helps schools manage student career development effectively.
         </p>
         
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-muted p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">For School Administrators</h2>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Bulk student account management</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Progress tracking and reporting dashboards</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Customizable school-branded portal</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>API integration with school information systems</span>
-              </li>
-            </ul>
-          </div>
+        <div className="space-y-16">
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">For School Administrators</h2>
+            <AdminFeatures />
+          </section>
           
-          <div className="bg-muted p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">For Teachers & Counselors</h2>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Student activity monitoring tools</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Career pathway alignment resources</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Classroom assignment integration</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                <span>Guidance counselor toolkit</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="mt-8 p-6 bg-blue-50 border border-blue-100 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Ready to Integrate?</h2>
-          <p className="mb-4">
-            We work closely with schools to ensure a smooth integration process. Our team will guide you through 
-            each step of setting up your school's customized platform.
-          </p>
-          <p>
-            Contact our school partnerships team at <a href="mailto:schools@jobseekers4hs.org" className="text-blue-600 hover:underline">schools@jobseekers4hs.org</a>
-          </p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">For Teachers & Counselors</h2>
+            <TeacherFeatures />
+          </section>
+          
+          <section className="bg-muted p-8 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4">Ready to Get Started?</h2>
+            <p className="mb-6 text-muted-foreground">
+              Connect with our education team to set up your school's customized platform. 
+              We'll guide you through every step of the integration process.
+            </p>
+            <Button size="lg" className="font-semibold">
+              Schedule Integration Call
+            </Button>
+          </section>
         </div>
       </div>
     </Layout>
