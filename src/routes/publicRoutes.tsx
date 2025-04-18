@@ -1,3 +1,4 @@
+
 import { Route } from 'react-router-dom';
 import About from '../pages/About';
 import FAQ from '../pages/FAQ';
@@ -21,6 +22,10 @@ import CareerQuiz from '../pages/CareerQuiz';
 import PlatformGuide from '../pages/PlatformGuide';
 import SchoolIntegration from '../pages/SchoolIntegration';
 import SchoolDashboard from '../pages/SchoolDashboard';
+import SchoolStudents from '../pages/school/SchoolStudents';
+import SchoolAnalytics from '../pages/school/SchoolAnalytics';
+import SchoolEvents from '../pages/school/SchoolEvents';
+import SchoolResources from '../pages/school/SchoolResources';
 
 export const PublicRoutes = (
   <>
@@ -50,5 +55,11 @@ export const PublicRoutes = (
     <Route path="/platform-guide" element={<PlatformGuide />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/school-dashboard" element={<SchoolDashboard />} />
+    
+    {/* New School Routes */}
+    <Route path="/school/students" element={<SchoolStudents />} />
+    <Route path="/school/analytics" element={<SchoolAnalytics />} />
+    <Route path="/school/events" element={<SchoolEvents />} />
+    <Route path="/school/resources" element={<SchoolResources />} />
   </>
 );
