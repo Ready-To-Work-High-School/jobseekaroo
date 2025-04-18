@@ -1,6 +1,8 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
 import { ApplicationForm } from '../ApplicationForm';
+import { Job } from '@/types/job';
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
@@ -40,17 +42,34 @@ describe('ApplicationForm', () => {
   });
 
   it('pre-fills form when selectedJob is provided', () => {
-    const selectedJob = {
+    const selectedJob: Partial<Job> = {
       id: '1',
       title: 'Frontend Developer',
       company: {
         name: 'Tech Company',
       },
+      location: {
+        city: 'San Francisco',
+        state: 'CA',
+        zipCode: '94105',
+      },
+      type: 'full-time',
+      payRate: {
+        min: 50000,
+        max: 100000,
+        period: 'monthly',
+      },
+      description: 'Job description',
+      requirements: ['React', 'TypeScript'],
+      experienceLevel: 'entry-level',
+      postedDate: '2023-01-01',
+      isRemote: false,
+      isFlexible: true,
     };
 
     render(
       <ApplicationForm
-        selectedJob={selectedJob}
+        selectedJob={selectedJob as Job}
         isAdding={false}
         setIsAdding={mockSetIsAdding}
         onCancel={mockOnCancel}

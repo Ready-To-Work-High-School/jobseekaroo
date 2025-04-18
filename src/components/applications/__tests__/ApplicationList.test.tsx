@@ -1,9 +1,11 @@
 
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import { ApplicationList } from '../ApplicationList';
+import { JobApplication } from '@/types/application';
 
 describe('ApplicationList', () => {
-  const mockApplications = [
+  const mockApplications: JobApplication[] = [
     {
       id: '1',
       job_title: 'Software Engineer',

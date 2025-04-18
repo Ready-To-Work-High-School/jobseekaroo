@@ -1,5 +1,6 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { ApplicationFilters } from '../ApplicationFilters';
 
 describe('ApplicationFilters', () => {
