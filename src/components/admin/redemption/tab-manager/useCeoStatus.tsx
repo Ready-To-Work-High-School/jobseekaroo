@@ -8,9 +8,18 @@ export function useCeoStatus() {
 
   useEffect(() => {
     // In a real app, you would check if the user is a CEO from the user profile
-    // For now, we'll use admin as proxy for CEO
+    // For now, we'll use various indicators to determine CEO status
     const checkCeoStatus = () => {
-      if (userProfile?.user_type === 'admin' || userProfile?.role === 'ceo') {
+      // Check if user is admin
+      const isAdmin = userProfile?.user_type === 'admin';
+      
+      // Check if job title or company name contains CEO indicators
+      const isCeoByTitle = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
+                          userProfile?.job_title?.toLowerCase()?.includes('chief executive');
+      const isCeoByCompany = userProfile?.company_name?.toLowerCase()?.includes('ceo');
+      
+      // Set CEO status based on admin rights or CEO indicators in profile
+      if (isAdmin || isCeoByTitle || isCeoByCompany) {
         setIsCeo(true);
       } else {
         setIsCeo(false);
