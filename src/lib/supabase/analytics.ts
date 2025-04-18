@@ -1,4 +1,3 @@
-
 import { supabase } from './index';
 
 interface AnalyticsFilters {
@@ -156,4 +155,49 @@ function processTimelineData(applications: any[]): any[] {
     const monthB = new Date(Date.parse(`${b.month} 1, 2023`));
     return monthA.getTime() - monthB.getTime();
   });
+}
+
+// Get employer's detailed metrics
+export async function getEmployerMetrics(employerId: string): Promise<any> {
+  try {
+    // First try to get data from the application_metrics table
+    let { data: metricsData, error: metricsError } = await supabase
+      .from('application_metrics')
+      .select('*')
+      .eq('employer_id', employerId)
+      .single();
+    
+    // If no metrics exist yet or there was an error, trigger a calculation
+    if (!metricsData || metricsError) {
+      console.log('No metrics found or error occurred, triggering calculation...');
+      
+      // Trigger the calculation function using RPC
+      const { error: rpcError } = await supabase
+        .rpc('update_employer_metrics', { employer_id_param: employerId });
+      
+      if (rpcError) {
+        console.error('Error calculating metrics:', rpcError);
+        return null;
+      }
+      
+      // Try fetching metrics again after calculation
+      const { data: recalculatedData, error: recalculatedError } = await supabase
+        .from('application_metrics')
+        .select('*')
+        .eq('employer_id', employerId)
+        .single();
+      
+      if (recalculatedError) {
+        console.error('Error fetching recalculated metrics:', recalculatedError);
+        return null;
+      }
+      
+      metricsData = recalculatedData;
+    }
+    
+    return metricsData;
+  } catch (error) {
+    console.error('Exception fetching employer metrics:', error);
+    return null;
+  }
 }

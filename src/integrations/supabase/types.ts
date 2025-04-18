@@ -30,6 +30,48 @@ export type Database = {
         }
         Relationships: []
       }
+      application_metrics: {
+        Row: {
+          average_skill_match: number | null
+          cost_per_hire: number | null
+          created_at: string | null
+          diversity_change_percent: number | null
+          employer_id: string
+          id: string
+          industry_benchmark_diff: number | null
+          total_applications: number | null
+          total_hires: number | null
+          total_interviews: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          average_skill_match?: number | null
+          cost_per_hire?: number | null
+          created_at?: string | null
+          diversity_change_percent?: number | null
+          employer_id: string
+          id?: string
+          industry_benchmark_diff?: number | null
+          total_applications?: number | null
+          total_hires?: number | null
+          total_interviews?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          average_skill_match?: number | null
+          cost_per_hire?: number | null
+          created_at?: string | null
+          diversity_change_percent?: number | null
+          employer_id?: string
+          id?: string
+          industry_benchmark_diff?: number | null
+          total_applications?: number | null
+          total_hires?: number | null
+          total_interviews?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       badge_definitions: {
         Row: {
           created_at: string
@@ -1193,6 +1235,10 @@ export type Database = {
       }
       update_all_user_recommendations: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      update_employer_metrics: {
+        Args: { employer_id_param: string }
         Returns: undefined
       }
     }
