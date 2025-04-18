@@ -1,7 +1,8 @@
 
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
+import { Button } from '@/components/ui/button';
 
 interface AuthLinksProps {
   className?: string;
@@ -18,11 +19,13 @@ const AuthLinks = ({ className }: AuthLinksProps) => {
       <Link to="/sign-in" className="text-sm font-medium transition-colors hover:text-primary">
         Sign In
       </Link>
-      <Link to="/sign-up" className={cn(
-        "inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 text-sm font-medium transition-colors",
-      )}>
-        Sign Up
-      </Link>
+      <Button asChild size="sm" className="h-9 px-4 py-2 text-sm">
+        <Link to="/sign-up" className={cn(
+          "inline-flex items-center justify-center",
+        )}>
+          Sign Up
+        </Link>
+      </Button>
     </div>
   );
 };

@@ -23,9 +23,19 @@ import { MobileNavLink } from './MobileNavLink';
 // Primary Navigation Links
 export const PrimaryNavigationLinks = () => (
   <div className="px-4 py-2 my-1 bg-blue-50">
+    <MobileNavLink to="/">
+      <Home className="h-5 w-5" />
+      <span className="font-semibold">Home</span>
+    </MobileNavLink>
+    
     <MobileNavLink to="/entrepreneurship-academy">
-      <GraduationCap className="h-5 w-5" />
+      <Award className="h-5 w-5" />
       <span className="font-semibold">Our Program</span>
+    </MobileNavLink>
+    
+    <MobileNavLink to="/schools">
+      <GraduationCap className="h-5 w-5" />
+      <span className="font-semibold">Schools</span>
     </MobileNavLink>
     
     <MobileNavLink to="/first-job-toolkit">
@@ -36,11 +46,6 @@ export const PrimaryNavigationLinks = () => (
     <MobileNavLink to="/jobs">
       <Briefcase className="h-5 w-5" />
       <span className="font-semibold">Browse Jobs</span>
-    </MobileNavLink>
-    
-    <MobileNavLink to="/schools">
-      <GraduationCap className="h-5 w-5" />
-      <span className="font-semibold">Schools</span>
     </MobileNavLink>
     
     <MobileNavLink to="/for-employers">
@@ -56,11 +61,6 @@ export const PrimaryNavigationLinks = () => (
     <MobileNavLink to="/platform-guide">
       <BookOpen className="h-5 w-5" />
       <span className="font-semibold">Platform Guide</span>
-    </MobileNavLink>
-    
-    <MobileNavLink to="/resources">
-      <BookOpen className="h-5 w-5" />
-      <span className="font-semibold">Resources</span>
     </MobileNavLink>
   </div>
 );
@@ -162,9 +162,11 @@ export const UnauthenticatedUserLinks = () => (
   <>
     <div className="border-t border-border/60 my-2"></div>
     <MobileNavLink to="/sign-in">
+      <User className="h-5 w-5" />
       Sign In
     </MobileNavLink>
     <MobileNavLink to="/sign-up">
+      <User className="h-5 w-5" />
       Sign Up
     </MobileNavLink>
   </>

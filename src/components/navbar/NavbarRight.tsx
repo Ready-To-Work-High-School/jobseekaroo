@@ -1,5 +1,5 @@
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { SearchBar } from './SearchBar';
 import { NotificationCenter } from '@/components/notifications/NotificationCenter';
 import AuthStatus from '@/components/AuthStatus';
@@ -30,15 +30,18 @@ export const NavbarRight = () => {
       {user ? (
         <div className="flex items-center">
           <NotificationCenter />
+          <AuthStatus />
         </div>
       ) : (
-        // Add a prominent sign-in button for non-logged in users
-        <Button variant="default" size="sm" asChild className="hidden sm:flex">
-          <Link to="/sign-in">Sign In</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild className="font-medium">
+            <Link to="/sign-in">Sign In</Link>
+          </Button>
+          <Button variant="default" size="sm" asChild>
+            <Link to="/sign-up">Sign Up</Link>
+          </Button>
+        </div>
       )}
-      
-      <AuthStatus />
     </div>
   );
 };

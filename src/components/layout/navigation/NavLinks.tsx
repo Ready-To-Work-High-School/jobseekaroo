@@ -2,7 +2,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Circle, Shield, GraduationCap } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { isAdmin } from '@/utils/adminUtils';
 import AuthLinks from '../AuthLinks';
 
@@ -27,20 +27,20 @@ export const NavLinks = () => {
           location.pathname === "/for-employers" || location.pathname === "/employer-dashboard" 
             ? "text-primary" 
             : "text-muted-foreground hover:text-primary")}>
-          Fast lane to hire eager high schoolers
+          For Employers
         </Link>
         
-        <Link to={user ? "/about" : "/sign-in"} className={cn("text-sm font-medium transition-colors", 
-          location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-          Partnering with schools to boost career readiness
-        </Link>
-
         <Link to={user ? "/schools" : "/sign-in"} className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
           location.pathname === "/schools" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
           <GraduationCap className="w-4 h-4" />
           Schools
         </Link>
         
+        <Link to={user ? "/about" : "/sign-in"} className={cn("text-sm font-medium transition-colors", 
+          location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+          About
+        </Link>
+
         {isAdmin(userProfile) && (
           <Link to="/admin" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
             location.pathname.startsWith("/admin") ? "text-primary" : "text-muted-foreground hover:text-primary")}>
@@ -60,7 +60,7 @@ export const NavLinks = () => {
           aria-label="CEO Portal"
         >
           <Shield className="w-3 h-3" />
-          {/* Hidden CEO icon */}
+          <span className="sr-only">CEO Portal</span>
         </Link>
       </div>
 
