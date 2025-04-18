@@ -6,9 +6,10 @@ export const employerPlans = [
     period: 'Forever free',
     description: 'Get started with essential job posting features',
     features: [
-      'Basic job postings',
-      'Unlimited applications',
-      'Standard visibility'
+      'Up to 3 active job postings',
+      'Basic candidate search',
+      'Standard visibility',
+      'Basic company profile'
     ],
     buttonText: 'Get Started',
     popular: false,
@@ -18,12 +19,14 @@ export const employerPlans = [
     name: 'Standard',
     price: '$59',
     period: 'per month',
-    description: 'Perfect for small chains with moderate hiring needs',
+    description: 'Perfect for growing businesses with moderate hiring needs',
     features: [
-      '5 premium job posts per month',
-      'Custom branded profile',
+      '10 premium job posts per month',
+      'Enhanced candidate search',
       'Priority placement in search results',
-      'Basic analytics'
+      'Custom branded profile',
+      'Basic analytics dashboard',
+      'Candidate messaging'
     ],
     buttonText: 'Subscribe',
     popular: true,
@@ -36,10 +39,15 @@ export const employerPlans = [
     description: 'Complete solution for high-volume hiring',
     features: [
       'Unlimited premium job postings',
+      'Featured placement in search results',
+      'Advanced candidate search & filtering',
       'Full analytics dashboard',
+      'Unlimited candidate messaging',
+      'Featured employer badge',
       'Priority support',
-      'Featured Employer badge',
-      'Bulk posting capabilities'
+      'Bulk posting capabilities',
+      'AI-powered candidate matching',
+      'Custom recruitment workflows'
     ],
     buttonText: 'Subscribe Now',
     popular: false,

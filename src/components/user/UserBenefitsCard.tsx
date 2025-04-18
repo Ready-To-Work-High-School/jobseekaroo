@@ -44,24 +44,25 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       case 'employer':
         if (hasPremium) {
           return [
-            { name: 'Post unlimited job listings', active: true },
-            { name: 'Advanced candidate search', active: true },
-            { name: 'Premium analytics and reporting tools', active: true, premium: true },
-            { name: 'Featured company profile', active: true, premium: true },
+            { name: 'Unlimited premium job postings', active: true, premium: true },
+            { name: 'Featured placement in search results', active: true, premium: true },
+            { name: 'Advanced candidate search & filtering', active: true, premium: true },
+            { name: 'Full analytics dashboard', active: true, premium: true },
+            { name: 'Unlimited candidate messaging', active: true, premium: true },
             { name: 'AI-powered candidate matching', active: true, premium: true },
-            { name: 'Competitor benchmarking', active: true, premium: true },
-            { name: 'Custom report generation', active: true, premium: true },
-            { name: 'Priority support', active: true, premium: true }
+            { name: 'Featured employer badge', active: true, premium: true },
+            { name: 'Priority support', active: true, premium: true },
+            { name: 'Custom recruitment workflows', active: true, premium: true }
           ];
         } else {
           return [
-            { name: 'Post unlimited job listings', active: true },
+            { name: 'Up to 3 active job postings', active: true },
             { name: 'Basic candidate search', active: true },
-            { name: 'Basic analytics and reporting tools', active: true },
-            { name: 'Standard company profile', active: true },
-            { name: 'Premium analytics and reporting', active: false, locked: true },
-            { name: 'Featured company profile', active: false, locked: true },
-            { name: 'AI-powered candidate matching', active: false, locked: true }
+            { name: 'Standard visibility', active: true },
+            { name: 'Basic company profile', active: true },
+            { name: 'Unlimited premium job postings', active: false, locked: true },
+            { name: 'Advanced candidate search', active: false, locked: true },
+            { name: 'Analytics dashboard', active: false, locked: true }
           ];
         }
       case 'admin':

@@ -53,18 +53,19 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
   
   const features = {
     free: [
-      "Basic job postings with title & description",
-      "Standard search visibility",
-      "Simple candidate applications",
-      "View basic applicant information",
-      "Unlimited free job postings"
+      "Up to 3 active job postings",
+      "Basic candidate search",
+      "Standard visibility",
+      "Basic company profile",
+      "Limited candidate messaging"
     ],
     premium: [
-      "Featured placement in job listings",
-      "Highlighted with verification badge",
-      "Advanced candidate filtering",
-      "Detailed analytics dashboard",
-      "Priority support"
+      "Unlimited premium job postings",
+      "Featured placement in search results",
+      "Advanced candidate search & filtering",
+      "Full analytics dashboard",
+      "Unlimited candidate messaging",
+      "AI-powered candidate matching"
     ]
   };
   

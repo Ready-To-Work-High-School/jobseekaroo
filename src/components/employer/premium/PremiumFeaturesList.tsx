@@ -1,47 +1,47 @@
 
 import React from 'react';
-import { LineChart, Users, Award, BarChart2, Briefcase, Search, Star, Zap } from 'lucide-react';
+import { LineChart, Users, Award, BarChart2, Briefcase, Search, Star, Zap, MessageSquare, Infinity, Robot } from 'lucide-react';
 
 const features = [
   {
+    icon: Infinity,
+    title: 'Unlimited Job Postings',
+    description: 'Post as many jobs as you need with premium placement and enhanced visibility.'
+  },
+  {
+    icon: MessageSquare,
+    title: 'Unlimited Messaging',
+    description: 'Communicate directly with candidates through our built-in messaging system.'
+  },
+  {
+    icon: Robot,
+    title: 'AI-Powered Matching',
+    description: 'Let our AI find the perfect candidates based on skills and requirements.'
+  },
+  {
     icon: LineChart,
     title: 'Advanced Analytics',
-    description: 'Detailed insights into application performance and candidate engagement metrics.'
+    description: 'Comprehensive insights into application performance and candidate engagement.'
   },
   {
     icon: Users,
-    title: 'Demographic Analysis',
-    description: 'Understand the demographic breakdown of your applicant pool to improve diversity initiatives.'
+    title: 'Advanced Candidate Search',
+    description: 'Powerful search and filtering tools to find the perfect candidates quickly.'
   },
   {
     icon: Award,
-    title: 'Premium Company Profile',
-    description: 'Enhanced company profile with custom branding, videos, and testimonials to attract top talent.'
+    title: 'Featured Company Profile',
+    description: 'Stand out with enhanced branding and premium placement in search results.'
   },
   {
     icon: BarChart2,
-    title: 'Competitor Benchmarking',
-    description: 'Compare your job performance against industry standards and competitors.'
+    title: 'Custom Workflows',
+    description: 'Create and manage custom recruitment workflows for your hiring process.'
   },
   {
     icon: Star,
-    title: 'Featured Job Listings',
-    description: 'Prominent placement of your job postings on the homepage and search results.'
-  },
-  {
-    icon: Search,
-    title: 'Advanced Search Filters',
-    description: 'Access advanced filtering options to find the perfect candidates quickly.'
-  },
-  {
-    icon: Briefcase,
-    title: 'Candidate Insights',
-    description: 'In-depth profiles of candidates including skill assessments and behavioral analysis.'
-  },
-  {
-    icon: Zap,
     title: 'Priority Support',
-    description: '24/7 dedicated support team to assist with any issues or questions.'
+    description: '24/7 dedicated support team to assist with any questions or issues.'
   }
 ];
 
