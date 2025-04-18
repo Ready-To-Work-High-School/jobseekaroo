@@ -20,9 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DatePicker } from '@/components/ui/date-picker';
+import { DateRangePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
-import { CalendarRange, Filter, RefreshCw } from 'lucide-react';
+import { Filter, RefreshCw } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
 // Define the schema for our filter form
@@ -100,12 +100,9 @@ export default function AnalyticsFilterForm({ onFilterChange, isLoading = false 
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Date Range</FormLabel>
-                    <DatePicker
-                      selectsRange={true}
-                      startDate={field.value?.from}
-                      endDate={field.value?.to}
+                    <DateRangePicker
+                      dateRange={field.value}
                       onSelect={(dateRange: DateRange | undefined) => {
-                        // Only update when we have a proper DateRange object
                         field.onChange(dateRange);
                       }}
                       placeholder="Select date range"
