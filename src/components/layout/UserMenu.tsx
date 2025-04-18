@@ -116,7 +116,7 @@ const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to="/profile" className="cursor-pointer">
+            <Link to={userProfile?.user_type === 'student' ? "/student-profile" : "/profile"} className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </Link>
