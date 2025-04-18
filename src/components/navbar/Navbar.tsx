@@ -5,6 +5,7 @@ import { MobileMenu } from './MobileMenu';
 import DesktopNav from './DesktopNav';
 import { NavbarBrand } from './NavbarBrand';
 import { NavbarRight } from './NavbarRight';
+import { NavLinks } from '@/components/layout/navigation/NavLinks';
 
 const Navbar = () => {
   const isMobile = useIsMobile();
@@ -35,7 +36,10 @@ const Navbar = () => {
         <div className="flex items-center gap-2 md:gap-6">
           {isMobile && <MobileMenu />}
           <NavbarBrand />
-          <DesktopNav className="hidden md:flex" />
+          <div className="hidden lg:flex">
+            <NavLinks />
+          </div>
+          <DesktopNav className="hidden md:flex lg:hidden" />
         </div>
 
         <NavbarRight />

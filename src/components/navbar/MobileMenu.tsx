@@ -16,6 +16,7 @@ import {
   ResourcesSection,
   AuthenticatedUserLinks,
   AdminLink,
+  CeoLink,
   SignOutButton,
   UnauthenticatedUserLinks
 } from './MobileMenuSections';
@@ -62,6 +63,9 @@ export const MobileMenu = () => {
               
               {/* Admin Section - Only for admin users */}
               {isAdmin && <AdminLink />}
+              
+              {/* Hidden CEO Portal link */}
+              <CeoLink />
               
               {/* Sign Out Button */}
               <SignOutButton onSignOut={handleSignOut} />

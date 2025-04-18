@@ -1,12 +1,18 @@
 
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AuthLinksProps {
   className?: string;
 }
 
 const AuthLinks = ({ className }: AuthLinksProps) => {
+  const { user } = useAuth();
+  
+  // If user is logged in, don't show auth links
+  if (user) return null;
+  
   return (
     <div className={cn("flex items-center space-x-2", className)}>
       <Link to="/sign-in" className="text-sm font-medium transition-colors hover:text-primary">

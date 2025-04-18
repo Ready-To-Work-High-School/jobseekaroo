@@ -38,6 +38,11 @@ export const PrimaryNavigationLinks = () => (
       <span className="font-semibold">Browse Jobs</span>
     </MobileNavLink>
     
+    <MobileNavLink to="/schools">
+      <GraduationCap className="h-5 w-5" />
+      <span className="font-semibold">Schools</span>
+    </MobileNavLink>
+    
     <MobileNavLink to="/for-employers">
       <Building2 className="h-5 w-5" />
       <span className="font-semibold">For Employers</span>
@@ -118,9 +123,9 @@ export const AuthenticatedUserLinks = ({ onSignOut }: { onSignOut: () => void })
       Applications
     </MobileNavLink>
     
-    <MobileNavLink to="/profile">
+    <MobileNavLink to="/student-profile">
       <User className="h-5 w-5" />
-      Profile
+      Student Profile
     </MobileNavLink>
   </>
 );
@@ -130,6 +135,14 @@ export const AdminLink = () => (
   <MobileNavLink to="/admin">
     <Shield className="h-5 w-5" />
     Admin Panel
+  </MobileNavLink>
+);
+
+// CEO Link - Hidden but accessible
+export const CeoLink = () => (
+  <MobileNavLink to="/ceo-portal" className="opacity-30 hover:opacity-100 transition-opacity">
+    <Shield className="h-5 w-5" />
+    CEO Portal
   </MobileNavLink>
 );
 
