@@ -32,6 +32,9 @@ export const usePremiumManagement = () => {
         // Type assertion to ensure user_type is of the correct type
         const userType = profile.user_type as 'student' | 'employer' | 'admin' | 'teacher' | null;
         
+        // Type assertion for employer_verification_status
+        const verificationStatus = profile.employer_verification_status as 'pending' | 'approved' | 'rejected' | null;
+        
         // Transform profile data to match UserProfile type
         const userProfile: UserProfile = {
           ...profile,
@@ -49,6 +52,8 @@ export const usePremiumManagement = () => {
             : [],
           // Set user_type with the correctly typed value
           user_type: userType,
+          // Set employer_verification_status with the correctly typed value
+          employer_verification_status: verificationStatus,
           // Add premium status based on subscription data
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
         };
