@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 export const useNavigation = () => {
   const { user, userProfile, signOut } = useAuth();
