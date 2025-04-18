@@ -5,9 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { applicationFormSchema } from '../validation';
 import { ApplicationStatus } from '@/types/application';
+import { ApplicationFormValues } from '../validation';
 
 const TestWrapper = () => {
-  const form = useForm({
+  const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationFormSchema),
     defaultValues: {
       contact_name: '',
