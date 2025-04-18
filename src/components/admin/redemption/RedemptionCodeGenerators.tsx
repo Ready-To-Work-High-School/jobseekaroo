@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
-import AutomatedCodeGenerator from './AutomatedCodeGenerator';
+import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
 import CodeDistributionPanel from './CodeDistributionPanel';
 
 interface RedemptionCodeGeneratorsProps {
@@ -39,7 +39,7 @@ const RedemptionCodeGenerators: React.FC<RedemptionCodeGeneratorsProps> = ({
           setExpireDays={setExpireDays}
         />
         <AutomatedCodeGenerator
-          onAutomatedGeneration={onAutomatedGeneration}
+          onGenerateCodes={onAutomatedGeneration}
           isGenerating={isGenerating}
         />
       </div>
