@@ -52,8 +52,8 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
               Post a Job
             </Link>
           )}
-          <Link to="/JobHelp" className="text-sm font-medium transition-colors hover:text-primary">
-            Job Help
+          <Link to="/for-employers" className="text-sm font-medium transition-colors hover:text-primary">
+            For Employers
           </Link>
         </nav>
         <div className="ml-auto flex items-center space-x-2">

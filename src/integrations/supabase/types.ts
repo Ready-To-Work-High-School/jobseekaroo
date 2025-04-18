@@ -72,6 +72,51 @@ export type Database = {
         }
         Relationships: []
       }
+      apprenticeship_programs: {
+        Row: {
+          compensation: string | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          employer_id: string
+          id: string
+          is_active: boolean | null
+          requirements: string[] | null
+          skills_taught: string[] | null
+          start_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          compensation?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          employer_id: string
+          id?: string
+          is_active?: boolean | null
+          requirements?: string[] | null
+          skills_taught?: string[] | null
+          start_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          compensation?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          employer_id?: string
+          id?: string
+          is_active?: boolean | null
+          requirements?: string[] | null
+          skills_taught?: string[] | null
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       badge_definitions: {
         Row: {
           created_at: string
@@ -96,6 +141,131 @@ export type Database = {
           id?: string
           name?: string
           type?: string
+        }
+        Relationships: []
+      }
+      candidate_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          job_id: string | null
+          read: boolean | null
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          read?: boolean | null
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          read?: boolean | null
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_messages_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_events: {
+        Row: {
+          created_at: string
+          description: string | null
+          employer_id: string
+          event_date: string
+          id: string
+          is_virtual: boolean | null
+          location: string | null
+          max_participants: number | null
+          meeting_link: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          employer_id: string
+          event_date: string
+          id?: string
+          is_virtual?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          employer_id?: string
+          event_date?: string
+          id?: string
+          is_virtual?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_profiles: {
+        Row: {
+          benefits: string[] | null
+          company_name: string
+          company_size: string | null
+          created_at: string
+          culture_description: string | null
+          description: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          updated_at: string
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          benefits?: string[] | null
+          company_name: string
+          company_size?: string | null
+          created_at?: string
+          culture_description?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          benefits?: string[] | null
+          company_name?: string
+          company_size?: string | null
+          created_at?: string
+          culture_description?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -238,6 +408,56 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interviews: {
+        Row: {
+          candidate_id: string
+          created_at: string
+          duration: number | null
+          employer_id: string
+          id: string
+          job_id: string
+          meeting_link: string | null
+          notes: string | null
+          scheduled_time: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string
+          duration?: number | null
+          employer_id: string
+          id?: string
+          job_id: string
+          meeting_link?: string | null
+          notes?: string | null
+          scheduled_time: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string
+          duration?: number | null
+          employer_id?: string
+          id?: string
+          job_id?: string
+          meeting_link?: string | null
+          notes?: string | null
+          scheduled_time?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interviews_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
             referencedColumns: ["id"]
           },
         ]
