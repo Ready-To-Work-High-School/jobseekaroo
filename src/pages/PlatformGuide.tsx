@@ -1,8 +1,9 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GraduationCap, Briefcase, School, ShieldCheck, BookOpen, Users } from 'lucide-react';
+import { GraduationCap, Briefcase, School, ShieldCheck, BookOpen, Users, 
+         Building2, BadgeCheck, Code2, FileText, Laptop, MessageSquare, 
+         BookMarked, PieChart, ShieldAlert, Rocket } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import PlatformFeatures from '@/components/guide/PlatformFeatures';
@@ -26,17 +27,17 @@ const PlatformGuide = () => {
         >
           <h1 className="text-4xl font-bold mb-4">Platform Guide</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Comprehensive information about our platform's features and how different users can make the most of it
+            Discover how our platform connects high school students with opportunities while providing powerful tools for employers, schools, and administrators
           </p>
         </motion.div>
 
         <Tabs 
-          defaultValue="features" 
+          defaultValue={activeTab} 
           value={activeTab}
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="mb-8 flex flex-wrap justify-center gap-2">
+          <TabsList className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-2 mb-8">
             <TabsTrigger value="features" className="flex gap-2 items-center">
               <BookOpen className="h-4 w-4" />
               <span>Features</span>
