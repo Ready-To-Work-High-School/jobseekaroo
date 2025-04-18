@@ -1,4 +1,3 @@
-
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
@@ -45,15 +44,14 @@ const MainNavigation = ({ className }: { className?: string }) => {
       {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
       
-      {/* Hidden CEO Portal Link with refined gradient glow shield */}
+      {/* Hidden CEO Portal Link with round purple-blue gradient shield */}
       <div className="relative group">
-        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-lavender-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
+        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-purple-600/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
         <Link 
           to="/ceo-portal" 
-          className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 text-sm font-medium flex items-center gap-1 rounded-full px-2 py-1"
+          className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 text-sm font-medium flex items-center justify-center w-8 h-8 rounded-full"
         >
-          <Shield className="h-4 w-4" />
-          CEO Portal
+          <Shield className="h-4 w-4 text-purple-600" />
         </Link>
       </div>
 
