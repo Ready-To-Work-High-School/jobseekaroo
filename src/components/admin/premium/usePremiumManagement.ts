@@ -29,6 +29,9 @@ export const usePremiumManagement = () => {
       const usersWithPremium = profiles.map(profile => {
         const premiumSub = premiumData?.find(sub => sub.user_id === profile.id);
         
+        // Type assertion to ensure user_type is of the correct type
+        const userType = profile.user_type as 'student' | 'employer' | 'admin' | 'teacher' | null;
+        
         // Transform profile data to match UserProfile type
         const userProfile: UserProfile = {
           ...profile,
@@ -44,6 +47,8 @@ export const usePremiumManagement = () => {
                 earned_at: badge.earned_at
               })) as UserBadge[]
             : [],
+          // Set user_type with the correctly typed value
+          user_type: userType,
           // Add premium status based on subscription data
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
         };
