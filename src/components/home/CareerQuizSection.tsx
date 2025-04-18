@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { SparkleGroup } from '@/components/animations/Sparkle';
@@ -19,13 +18,19 @@ interface QuizQuestion {
   icon: React.ReactNode;
 }
 
+interface CareerPath {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
 const quizQuestions: QuizQuestion[] = [
   {
     id: 1,
     question: "What energizes you the most?",
     options: [
       "Solving complex problems",
-      "Helping and supporting others",
+      "Helping and supporting others", 
       "Creating and designing things",
       "Leading and organizing teams"
     ],
@@ -55,10 +60,34 @@ const quizQuestions: QuizQuestion[] = [
   }
 ];
 
+const careerPaths: Record<string, CareerPath> = {
+  "tech": {
+    title: "Tech & Innovation",
+    description: "Your problem-solving skills and love for complex challenges make you perfect for technology careers like software engineering, data science, and cybersecurity.",
+    icon: <RocketIcon className="h-8 w-8 text-blue-500" />
+  },
+  "healthcare": {
+    title: "Healthcare & Support",
+    description: "Your passion for helping others and collaborative nature suggests careers in nursing, counseling, social work, and healthcare administration.",
+    icon: <Star className="h-8 w-8 text-emerald-500" />
+  },
+  "creative": {
+    title: "Creative & Design",
+    description: "Your innovative thinking and creative approach point towards careers in graphic design, marketing, UX/UI design, and digital media.",
+    icon: <Lightbulb className="h-8 w-8 text-purple-500" />
+  },
+  "leadership": {
+    title: "Business & Leadership",
+    description: "Your organizational skills and ability to execute make you well-suited for project management, business consulting, and entrepreneurial roles.",
+    icon: <BriefcaseIcon className="h-8 w-8 text-amber-500" />
+  }
+};
+
 const CareerQuizSection = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [careerRecommendation, setCareerRecommendation] = useState<CareerPath | null>(null);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
@@ -67,14 +96,46 @@ const CareerQuizSection = () => {
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
+      determineCareerPath(newAnswers);
       setIsSubmitted(true);
     }
+  };
+
+  const determineCareerPath = (quizAnswers: string[]) => {
+    const careerPathScores = {
+      "tech": 0,
+      "healthcare": 0,
+      "creative": 0,
+      "leadership": 0
+    };
+
+    quizAnswers.forEach(answer => {
+      if (answer.includes("complex problems") || answer.includes("executor")) {
+        careerPathScores["tech"]++;
+      }
+      if (answer.includes("supporting others") || answer.includes("collaborative")) {
+        careerPathScores["healthcare"]++;
+      }
+      if (answer.includes("creating") || answer.includes("creative")) {
+        careerPathScores["creative"]++;
+      }
+      if (answer.includes("organizing") || answer.includes("leading")) {
+        careerPathScores["leadership"]++;
+      }
+    });
+
+    const topCareerPath = Object.entries(careerPathScores).reduce(
+      (a, b) => (b[1] > a[1] ? b : a)
+    )[0] as keyof typeof careerPaths;
+
+    setCareerRecommendation(careerPaths[topCareerPath]);
   };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
     setIsSubmitted(false);
+    setCareerRecommendation(null);
   };
 
   const questionVariants = {
@@ -85,7 +146,6 @@ const CareerQuizSection = () => {
 
   return (
     <section className="py-16 relative overflow-hidden">
-      {/* Gradient accent label */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-b-lg bg-gradient-to-r from-purple-600 via-amber-500 to-blue-600 text-white font-semibold tracking-wide shadow-lg animate-pulse-slow">
         Discover Your Dream Career
       </div>
@@ -152,11 +212,15 @@ const CareerQuizSection = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center bg-white/80 backdrop-blur-sm shadow-lg rounded-lg p-8 border border-purple-100 dark:bg-purple-950/30 dark:border-purple-900/50"
           >
-            <RocketIcon className="h-12 w-12 text-purple-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-semibold mb-4">Your Results Are Ready!</h3>
-            <p className="text-muted-foreground mb-6">
-              Based on your answers, we've identified some potential career paths that might be a great fit for you.
-            </p>
+            {careerRecommendation && (
+              <>
+                {careerRecommendation.icon}
+                <h3 className="text-2xl font-semibold mb-4">{careerRecommendation.title}</h3>
+                <p className="text-muted-foreground mb-6">
+                  {careerRecommendation.description}
+                </p>
+              </>
+            )}
             <Button 
               onClick={restartQuiz}
               className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
