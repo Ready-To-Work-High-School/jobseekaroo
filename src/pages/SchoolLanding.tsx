@@ -9,6 +9,7 @@ import Layout from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { useFadeIn } from '@/utils/animations';
 import { School } from '@/types/school';
+import { sanitizeHtml, escapeHtml } from '@/utils/sanitization';
 
 const SchoolLanding = () => {
   const [schoolData, setSchoolData] = useState<School | null>(null);
@@ -62,9 +63,25 @@ const SchoolLanding = () => {
           }
           
           if (schoolData) {
-            // Use type assertion to handle the type safely
-            console.log('School data found:', schoolData);
-            setSchoolData(schoolData as unknown as School);
+            // Sanitize school data before setting it to state
+            const sanitizedData = {
+              ...schoolData,
+              name: sanitizeHtml(schoolData.name || ''),
+              description: sanitizeHtml(schoolData.description || ''),
+              logo_url: sanitizeHtml(schoolData.logo_url || ''),
+              // Ensure any other fields that might contain HTML are sanitized
+              featured_jobs: schoolData.featured_jobs 
+                ? schoolData.featured_jobs.map((job: any) => ({
+                    ...job,
+                    title: sanitizeHtml(job.title || ''),
+                    description: sanitizeHtml(job.description || ''),
+                    company: sanitizeHtml(job.company || '')
+                  }))
+                : []
+            };
+            
+            console.log('School data found and sanitized');
+            setSchoolData(sanitizedData as unknown as School);
           } else {
             console.log(`No school found with slug: ${schoolName}`);
             // School not found in database, but we're on a subdomain - show generic not found
@@ -112,14 +129,21 @@ const SchoolLanding = () => {
     );
   }
   
+  // Sanitized school name and data for meta tags
+  const sanitizedSchoolName = escapeHtml(schoolData.name || '');
+  const sanitizedLogoUrl = escapeHtml(schoolData.logo_url || '');
+  
   // Render the school-branded landing page with the school data
   return (
     <Layout>
       <Helmet>
-        <title>{schoolData.name} Job Portal | Jobseekers4HS</title>
-        <meta name="description" content={`Find student jobs through ${schoolData.name}'s partnership with Jobseekers4HS`} />
-        <meta property="og:title" content={`${schoolData.name} Job Portal`} />
-        <meta property="og:image" content={schoolData.logo_url || ''} />
+        {/* Use sanitized values in Helmet to prevent XSS */}
+        <title>{sanitizedSchoolName} Job Portal | Jobseekers4HS</title>
+        <meta name="description" content={`Find student jobs through ${sanitizedSchoolName}'s partnership with Jobseekers4HS`} />
+        <meta property="og:title" content={`${sanitizedSchoolName} Job Portal`} />
+        {sanitizedLogoUrl && <meta property="og:image" content={sanitizedLogoUrl} />}
+        {/* Prevent any script injection */}
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://cdn.gpteng.co" />
       </Helmet>
       
       <div className={`container mx-auto py-8 ${fadeIn}`}>
@@ -127,18 +151,23 @@ const SchoolLanding = () => {
           <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
             {schoolData.logo_url && (
               <img 
-                src={schoolData.logo_url} 
-                alt={`${schoolData.name} logo`} 
+                src={sanitizedLogoUrl} 
+                alt={`${sanitizedSchoolName} logo`} 
                 className="h-20 lg:h-32 object-contain"
+                onError={(e) => {
+                  // Fallback for failed image loads
+                  (e.target as HTMLImageElement).src = '/placeholder.svg';
+                  (e.target as HTMLImageElement).alt = 'Logo placeholder';
+                }}
               />
             )}
             
             <div className="text-center lg:text-left">
               <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-                {schoolData.name} Student Job Portal
+                {sanitizedSchoolName} Student Job Portal
               </h1>
               <p className="text-lg text-muted-foreground">
-                Exclusive job opportunities for {schoolData.name} students
+                Exclusive job opportunities for {sanitizedSchoolName} students
               </p>
             </div>
           </div>
@@ -149,7 +178,7 @@ const SchoolLanding = () => {
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold mb-4">For Students</h2>
               <p className="mb-6">
-                Access exclusive job opportunities tailored for {schoolData.name} students. 
+                Access exclusive job opportunities tailored for {sanitizedSchoolName} students. 
                 Create a profile to showcase your skills and experience.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -167,7 +196,7 @@ const SchoolLanding = () => {
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold mb-4">For Employers</h2>
               <p className="mb-6">
-                Post job opportunities specifically for {schoolData.name} students and alumni.
+                Post job opportunities specifically for {sanitizedSchoolName} students and alumni.
                 Get a free trial of premium features for your first posting.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -186,7 +215,18 @@ const SchoolLanding = () => {
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6">Featured Opportunities</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Featured jobs would be rendered here */}
+              {/* 
+                Featured jobs would be rendered here with sanitized content
+                Example: 
+                {schoolData.featured_jobs.map((job) => (
+                  <JobCard 
+                    key={job.id}
+                    title={job.title} // Already sanitized in the data processing stage
+                    company={job.company}
+                    description={job.description}
+                  />
+                ))}
+              */}
             </div>
           </div>
         )}
