@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search, Link, } from 'lucide-react';
+import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search, Link, Link2Off } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -62,15 +62,16 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
       ]
     },
     {
-      id: 'links',
-      title: 'Missing Links or Components',
-      icon: Link,
-      description: 'Problems with navigation links or critical page components',
+      id: 'broken-links',
+      title: 'Broken or Missing Links',
+      icon: Link2Off,
+      description: 'Issues with non-functioning navigation links or inaccessible components',
       solutions: [
         'Verify your routes configuration',
         'Check for correct import statements',
         'Ensure all necessary components are registered',
-        'Refresh the page or clear browser cache'
+        'Clear browser cache and refresh the page',
+        'Check network connectivity'
       ]
     }
   ];
