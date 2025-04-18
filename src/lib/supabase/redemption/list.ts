@@ -72,12 +72,14 @@ export async function listRedemptionCodes(
       return {
         id: itemAny.id,
         code: itemAny.code,
-        type: itemAny.type,
+        type: itemAny.type as 'student' | 'employer' | 'admin',
         used: itemAny.used,
         usedBy: itemAny.used_by,
         usedAt: itemAny.used_at ? new Date(itemAny.used_at) : undefined,
         createdAt: new Date(itemAny.created_at),
-        expiresAt: itemAny.expires_at ? new Date(itemAny.expires_at) : undefined
+        expiresAt: itemAny.expires_at ? new Date(itemAny.expires_at) : undefined,
+        schoolId: itemAny.school_id || '',
+        isReusable: itemAny.is_reusable || false
       };
     });
 

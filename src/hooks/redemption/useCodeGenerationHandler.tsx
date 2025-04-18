@@ -1,11 +1,12 @@
 
 import { RedemptionCode } from '@/types/redemption';
 import { useCallback } from 'react';
+import { School } from '@/types/school';
 
 interface CodeGenerationHandlerProps {
-  handleGenerateCode: (type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode | null>;
-  handleBulkGenerate: (amount: number, type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode[]>;
-  handleAutomatedCodeGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<RedemptionCode[]>;
+  handleGenerateCode: (type: 'student' | 'employer', school: School, expireDays: number) => Promise<RedemptionCode | null>;
+  handleBulkGenerate: (amount: number, type: 'student' | 'employer', school: School, expireDays: number) => Promise<RedemptionCode[]>;
+  handleAutomatedCodeGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<RedemptionCode[]>;
   codeType: 'student' | 'employer';
   expireDays: number;
   updateCodes: (codes: RedemptionCode[]) => void;
@@ -22,16 +23,16 @@ export function useCodeGenerationHandler({
   fetchCodes
 }: CodeGenerationHandlerProps) {
   
-  const handleCodeGeneration = useCallback(async () => {
-    const newCode = await handleGenerateCode(codeType, expireDays);
+  const handleCodeGeneration = useCallback(async (school: School) => {
+    const newCode = await handleGenerateCode(codeType, school, expireDays);
     if (newCode) {
       updateCodes([newCode]);
       await fetchCodes();
     }
   }, [handleGenerateCode, codeType, expireDays, updateCodes, fetchCodes]);
 
-  const handleBulkGeneration = useCallback(async (amount: number) => {
-    const newCodes = await handleBulkGenerate(amount, codeType, expireDays);
+  const handleBulkGeneration = useCallback(async (amount: number, school: School) => {
+    const newCodes = await handleBulkGenerate(amount, codeType, school, expireDays);
     if (newCodes.length > 0) {
       updateCodes(newCodes);
       await fetchCodes();
@@ -42,9 +43,10 @@ export function useCodeGenerationHandler({
     userType: string, 
     amount: number, 
     expiresInDays: number,
-    emailDomain: string
+    emailDomain: string,
+    school: School
   ) => {
-    const newCodes = await handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain);
+    const newCodes = await handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain, school);
     if (newCodes.length > 0) {
       updateCodes(newCodes);
       await fetchCodes();
@@ -57,16 +59,18 @@ export function useCodeGenerationHandler({
     expiresInDays: number;
     emailDomain: string;
     sendEmail: boolean;
+    school: School;
   }) => {
     if (params.sendEmail) {
       return handleAutomatedGeneration(
         params.codeType, 
         params.amount, 
         params.expiresInDays, 
-        params.emailDomain
+        params.emailDomain,
+        params.school
       );
     } else {
-      return handleBulkGeneration(params.amount);
+      return handleBulkGeneration(params.amount, params.school);
     }
   }, [handleAutomatedGeneration, handleBulkGeneration]);
 

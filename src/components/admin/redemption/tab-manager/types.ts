@@ -1,6 +1,7 @@
 
 import { RedemptionCode } from '@/types/redemption';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
+import { School } from '@/types/school';
 
 export interface RedemptionTabManagerProps {
   activeTab: string;
@@ -39,9 +40,9 @@ export interface RedemptionTabManagerProps {
     onEmailCode: (code: RedemptionCode) => void;
     onViewDetails: (code: RedemptionCode) => void;
     onViewQRCode: (code: RedemptionCode) => void;
-    onCodeGeneration: () => Promise<void>;
-    onBulkGeneration: (amount: number) => Promise<void>;
-    onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
+    onCodeGeneration: (school: School) => Promise<void>;
+    onBulkGeneration: (amount: number, school: School) => Promise<void>;
+    onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<void>;
     onWizardGeneration: (params: any) => Promise<void>;
     onScheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
     onRefresh: () => Promise<void>;

@@ -3,15 +3,16 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { RedemptionCode } from '@/types/redemption';
 import { generateRedemptionCode, sendRedemptionCodeEmail } from '@/lib/supabase/redemption';
+import { School } from '@/types/school';
 
 export function useCodeGeneration() {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
-  const handleGenerateCode = async (codeType: 'student' | 'employer', expireDays: number) => {
+  const handleGenerateCode = async (codeType: 'student' | 'employer', school: School, expireDays: number) => {
     setIsGenerating(true);
     try {
-      const newCode = await generateRedemptionCode(codeType, expireDays);
+      const newCode = await generateRedemptionCode(codeType, school, expireDays);
       
       if (newCode) {
         toast({
@@ -40,14 +41,14 @@ export function useCodeGeneration() {
     }
   };
 
-  const handleBulkGenerate = async (amount: number, codeType: 'student' | 'employer', expireDays: number) => {
+  const handleBulkGenerate = async (amount: number, codeType: 'student' | 'employer', school: School, expireDays: number) => {
     setIsGenerating(true);
     
     try {
       const newCodes: RedemptionCode[] = [];
       
       for (let i = 0; i < amount; i++) {
-        const code = await generateRedemptionCode(codeType, expireDays);
+        const code = await generateRedemptionCode(codeType, school, expireDays);
         if (code) newCodes.push(code);
         await new Promise(resolve => setTimeout(resolve, 100));
       }
@@ -83,7 +84,8 @@ export function useCodeGeneration() {
     userType: string, 
     amount: number, 
     expiresInDays: number,
-    emailDomain: string
+    emailDomain: string,
+    school: School
   ) => {
     setIsGenerating(true);
     
@@ -93,7 +95,7 @@ export function useCodeGeneration() {
         userType : 'student';
       
       for (let i = 0; i < amount; i++) {
-        const code = await generateRedemptionCode(validType as 'student' | 'employer', expiresInDays);
+        const code = await generateRedemptionCode(validType as 'student' | 'employer', school, expiresInDays);
         if (code) newCodes.push(code);
         await new Promise(resolve => setTimeout(resolve, 100));
       }

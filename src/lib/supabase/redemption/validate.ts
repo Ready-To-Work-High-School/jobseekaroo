@@ -66,7 +66,9 @@ export async function validateRedemptionCode(
       usedBy: data.used_by,
       usedAt: data.used_at ? new Date(data.used_at) : undefined,
       createdAt: new Date(data.created_at),
-      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined,
+      schoolId: data.school_id || '',
+      isReusable: data.is_reusable || false
     };
     
     return {

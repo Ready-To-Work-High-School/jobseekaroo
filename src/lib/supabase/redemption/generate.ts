@@ -39,7 +39,7 @@ export async function generateRedemptionCode(
     const redemptionCode: RedemptionCode = {
       id: data.id,
       code: data.code,
-      type: data.type,
+      type: data.type as 'student' | 'employer' | 'admin',
       used: data.used,
       usedBy: data.used_by,
       usedAt: data.used_at ? new Date(data.used_at) : undefined,

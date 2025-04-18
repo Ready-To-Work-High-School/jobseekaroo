@@ -1,3 +1,4 @@
+
 import React from 'react';
 import CodeGenerationPanel from '../code-generation/CodeGenerationPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +10,7 @@ import StudentCodesTab from './StudentCodesTab';
 import EmployerCodesTab from './EmployerCodesTab';
 import RedemptionCodeStats from '../RedemptionCodeStats';
 import { RedemptionCode } from '@/types/redemption';
+import { School } from '@/types/school';
 
 interface CodesTabProps {
   stats: {
@@ -42,9 +44,9 @@ interface CodesTabProps {
   onEmailCode: (code: RedemptionCode) => void;
   onViewDetails: (code: RedemptionCode) => void;
   onViewQRCode: (code: RedemptionCode) => void;
-  onCodeGeneration?: () => Promise<void>;
-  onBulkGeneration?: (amount: number) => Promise<void>;
-  onAutomatedGeneration?: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
+  onCodeGeneration?: (school: School) => Promise<void>;
+  onBulkGeneration?: (amount: number, school: School) => Promise<void>;
+  onAutomatedGeneration?: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<void>;
   onRefresh: () => Promise<void>;
   onExport: () => void;
   onPrint: () => void;
@@ -52,6 +54,7 @@ interface CodesTabProps {
   onDeleteSelected: () => void;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
+  school: School;
 }
 
 const CodesTab: React.FC<CodesTabProps> = ({
@@ -89,7 +92,8 @@ const CodesTab: React.FC<CodesTabProps> = ({
   onEmailSelected,
   onDeleteSelected,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
+  school
 }) => {
   return (
     <div className="space-y-6">
@@ -107,6 +111,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
       
       {isCeo && onCodeGeneration && onBulkGeneration && onAutomatedGeneration && (
         <CodeGenerationPanel
+          school={school}
           onGenerateCode={onCodeGeneration}
           onBulkGenerate={onBulkGeneration}
           onAutomatedGeneration={onAutomatedGeneration}

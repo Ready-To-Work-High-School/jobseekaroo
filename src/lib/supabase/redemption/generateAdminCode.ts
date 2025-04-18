@@ -30,6 +30,8 @@ export async function generateAdminRedemptionCode(
         used: false,
         created_at: new Date().toISOString(),
         expires_at: expiresAt,
+        is_reusable: false,
+        school_id: null // Admin codes don't necessarily belong to a school
       })
       .select()
       .single();
@@ -48,7 +50,9 @@ export async function generateAdminRedemptionCode(
       usedBy: data.used_by,
       usedAt: data.used_at ? new Date(data.used_at) : undefined,
       createdAt: new Date(data.created_at),
-      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined
+      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined,
+      schoolId: data.school_id || '', // Ensure we have a string value even if null
+      isReusable: data.is_reusable || false
     };
 
     return redemptionCode;
