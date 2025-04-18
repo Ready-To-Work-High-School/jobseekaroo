@@ -6,6 +6,8 @@ const { generateNonce, setupSecurityHeaders } = require('./src/server/middleware
 const corsOptions = require('./src/server/config/cors');
 const staticOptions = require('./src/server/config/static');
 const schoolSubdomainMiddleware = require('./src/server/middleware/schoolSubdomain');
+const { rateLimiter } = require('./src/server/middleware/rateLimit');
+const { cacheMiddleware } = require('./src/server/middleware/cacheMiddleware');
 
 // Create Express app
 const app = express();
@@ -47,6 +49,12 @@ app.get('/:path', (req, res, next) => {
     next();
   }
 });
+
+// Apply rate limiting to all API routes
+app.use('/api', rateLimiter);
+
+// Apply caching to API routes where appropriate
+app.use('/api', cacheMiddleware(300)); // 5 minutes default cache
 
 // API routes
 const userRoutes = require('./src/server/routes/users');
