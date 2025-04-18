@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Check, Infinity, MessageSquare, Zap, BarChart2, Search, Star, Workflow, Life } from 'lucide-react';
+import { Check, Infinity, MessageSquare, Zap, BarChart2, Search, Star, Workflow, HeadphonesIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -77,7 +78,7 @@ const PlanCard = ({
       description: 'Create personalized recruitment processes.'
     },
     {
-      icon: Life,
+      icon: HeadphonesIcon,
       title: 'Priority Support',
       description: 'Dedicated support team always ready to help.'
     }
