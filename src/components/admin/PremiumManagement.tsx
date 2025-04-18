@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useCeoStatus } from '@/components/admin/redemption/tab-manager/useCeoStatus';
 import PremiumManagementHeader from './premium/PremiumManagementHeader';

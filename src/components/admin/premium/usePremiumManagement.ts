@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
-import { UserProfile } from '@/types/user';
+import { UserProfile, UserBadge } from '@/types/user';
 
 export const usePremiumManagement = () => {
   const { toast } = useToast();
@@ -28,10 +28,20 @@ export const usePremiumManagement = () => {
       
       const usersWithPremium = profiles.map(profile => {
         const premiumSub = premiumData?.find(sub => sub.user_id === profile.id);
-        return {
+        
+        // Transform profile data to match UserProfile type
+        const userProfile: UserProfile = {
           ...profile,
+          badges: Array.isArray(profile.badges) ? 
+            profile.badges.map((badge: any) => ({ 
+              id: badge.id || '', 
+              name: badge.name || '',
+              earned_at: badge.earned_at
+            })) : [],
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
-        } as UserProfile;
+        };
+        
+        return userProfile;
       });
       
       setUsers(usersWithPremium);
