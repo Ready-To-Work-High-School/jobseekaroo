@@ -20,6 +20,7 @@ import SimulationDetail from '../pages/SimulationDetail';
 import CareerQuiz from '../pages/CareerQuiz';
 import PlatformGuide from '../pages/PlatformGuide';
 import SchoolIntegration from '../pages/SchoolIntegration';
+import SchoolDashboard from '../pages/SchoolDashboard';
 
 export const PublicRoutes = (
   <>
@@ -48,5 +49,6 @@ export const PublicRoutes = (
     <Route path="/career-quiz" element={<CareerQuiz />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
+    <Route path="/school-dashboard" element={<SchoolDashboard />} />
   </>
 );

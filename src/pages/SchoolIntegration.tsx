@@ -4,8 +4,12 @@ import { Building2 } from 'lucide-react';
 import AdminFeatures from '@/components/school/AdminFeatures';
 import TeacherFeatures from '@/components/school/TeacherFeatures';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth';
 
 const SchoolIntegration = () => {
+  const { user } = useAuth();
+  
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-12">
@@ -36,9 +40,15 @@ const SchoolIntegration = () => {
               Connect with our education team to set up your school's customized platform. 
               We'll guide you through every step of the integration process.
             </p>
-            <Button size="lg" className="font-semibold">
-              Schedule Integration Call
-            </Button>
+            {user ? (
+              <Button size="lg" className="font-semibold" asChild>
+                <Link to="/school-dashboard">Access School Dashboard</Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="font-semibold" asChild>
+                <Link to="/sign-in">Schedule Integration Call</Link>
+              </Button>
+            )}
           </section>
         </div>
       </div>
