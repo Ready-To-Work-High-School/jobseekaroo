@@ -19,13 +19,15 @@ export const NavbarRight = () => {
       <ThemeToggle />
       
       {/* Admin Secret Shield Access */}
-      <div className="relative mr-1">
-        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
-        <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-        <div className="relative z-10">
-          <AdminTestLink variant="navbar" />
+      {user && (
+        <div className="relative mr-1">
+          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+          <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
+          <div className="relative z-10">
+            <AdminTestLink variant="navbar" />
+          </div>
         </div>
-      </div>
+      )}
       
       {user ? (
         <div className="flex items-center">

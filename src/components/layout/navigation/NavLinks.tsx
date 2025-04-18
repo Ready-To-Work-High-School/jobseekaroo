@@ -30,8 +30,8 @@ export const NavLinks = () => {
           For Employers
         </Link>
         
-        <Link to={user ? "/schools" : "/sign-in"} className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
-          location.pathname === "/schools" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Link to="/school-integration" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+          location.pathname === "/school-integration" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
           <GraduationCap className="w-4 h-4" />
           Schools
         </Link>
