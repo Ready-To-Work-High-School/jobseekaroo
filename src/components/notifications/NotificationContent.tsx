@@ -35,7 +35,7 @@ export const NotificationContent = ({
   errorMessage
 }: NotificationContentProps) => {
   const handleNotificationClick = (link?: string) => {
-    if (!link) return;
+    if (!link) return false;
     
     if (link.startsWith('/')) {
       return true;
