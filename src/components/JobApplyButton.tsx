@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -28,7 +29,7 @@ interface JobApplyButtonProps {
 export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { user, createApplication } = useAuth();
+  const { user, userProfile, createApplication } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { matchClass } = useQualificationMatch(job);
@@ -56,7 +57,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         status: 'applied',
         applied_date: new Date().toISOString().substring(0, 10),
         notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
-        resume_url: user?.resume_url || undefined
+        resume_url: userProfile?.resume_url || undefined
       });
       
       setShowSuccessDialog(true);
