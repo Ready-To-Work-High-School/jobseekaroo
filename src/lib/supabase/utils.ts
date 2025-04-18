@@ -5,9 +5,8 @@ import { ApplicationStatus } from '@/types/application';
 export const validateApplicationStatus = (status: string): ApplicationStatus => {
   const validStatuses: ApplicationStatus[] = [
     'applied',
-    'screening',
-    'interview',
-    'offer',
+    'interviewing',
+    'offered',
     'rejected',
     'accepted',
     'withdrawn'
@@ -16,6 +15,11 @@ export const validateApplicationStatus = (status: string): ApplicationStatus => 
   if (validStatuses.includes(status as ApplicationStatus)) {
     return status as ApplicationStatus;
   }
+  
+  // Special case mappings for backward compatibility
+  if (status === 'interview') return 'interviewing';
+  if (status === 'offer') return 'offered';
+  if (status === 'screening') return 'applied'; // Map screening to applied as fallback
   
   console.warn(`Invalid application status: ${status}, defaulting to 'applied'`);
   return 'applied';

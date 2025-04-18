@@ -12,13 +12,13 @@ interface ApplicationStatsProps {
 export const ApplicationStats = ({ statusCounts, totalApplications }: ApplicationStatsProps) => {
   const getActiveCount = () => {
     return statusCounts
-      .filter(item => ['applied', 'interview', 'offer'].includes(item.status))
+      .filter(item => ['applied', 'interviewing', 'offered'].includes(item.status))
       .reduce((acc, item) => acc + item.count, 0);
   };
 
   const getInterviewRate = () => {
     const appliedCount = statusCounts.find(s => s.status === 'applied')?.count || 0;
-    const interviewingCount = statusCounts.find(s => s.status === 'interview')?.count || 0;
+    const interviewingCount = statusCounts.find(s => s.status === 'interviewing')?.count || 0;
     
     if (appliedCount + interviewingCount === 0) return 0;
     return Math.round((interviewingCount / (appliedCount + interviewingCount)) * 100);

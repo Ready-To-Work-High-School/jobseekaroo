@@ -14,4 +14,13 @@ export interface JobApplication {
   notes?: string;
   created_at: string;
   updated_at: string;
+  contact_name?: string;
+  contact_email?: string;
+  next_step?: string;
+  next_step_date?: string;
+}
+
+export interface StatusCount {
+  status: ApplicationStatus;
+  count: number;
 }
