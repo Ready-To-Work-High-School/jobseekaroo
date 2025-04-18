@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search, Link, BrokenLink } from 'lucide-react';
+import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search, Link, } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
