@@ -64,7 +64,7 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
     {
       id: 'links',
       title: 'Missing Links or Components',
-      icon: BrokenLink,
+      icon: Link,
       description: 'Problems with navigation links or critical page components',
       solutions: [
         'Verify your routes configuration',
