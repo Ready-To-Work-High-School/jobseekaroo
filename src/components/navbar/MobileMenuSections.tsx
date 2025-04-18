@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { 
   Home, 
@@ -18,7 +19,8 @@ import {
   Info,
   LogIn,
   UserPlus,
-  Heart
+  Heart,
+  Crown
 } from 'lucide-react';
 import { MobileNavLink } from './MobileNavLink';
 import { Separator } from '@/components/ui/separator';
@@ -143,19 +145,22 @@ export const AdminLink = () => (
   </MobileNavLink>
 );
 
-// Updated CEO Link with heart shield that redirects to admin
+// CEO Link with heart shield that redirects to CEO Portal
 export const CeoLink = () => (
-  <MobileNavLink to="/admin" className="relative group">
-    <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
-    <div className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 flex items-center gap-3">
-      <Shield className="h-5 w-5 text-purple-600 mr-1" />
-      <Heart 
-        className="h-5 w-5" 
-        style={{
-          fill: "url(#ceoPortalMobileGradient)",
-          stroke: "none"
-        }}
-      />
+  <MobileNavLink to="/ceo-portal" className="relative group">
+    <div className="absolute -inset-0.5 rounded-md bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
+    <div className="relative z-10 opacity-70 group-hover:opacity-100 transition-all duration-300 flex items-center gap-3">
+      <div className="flex">
+        <Shield className="h-5 w-5 text-purple-600" />
+        <Heart 
+          className="h-5 w-5" 
+          style={{
+            fill: "url(#ceoPortalMobileGradient)",
+            stroke: "none"
+          }}
+        />
+        <Crown className="h-5 w-5 text-amber-500" />
+      </div>
       CEO Portal
     </div>
     <svg width="0" height="0">

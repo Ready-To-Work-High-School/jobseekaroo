@@ -8,6 +8,7 @@ import AdminUserManagement from '../pages/AdminUserManagement';
 import AdminRedemptionCodes from '../pages/AdminRedemptionCodes';
 import AdminMessageModeration from '../pages/AdminMessageModeration';
 import AdminPremiumManagement from '../pages/AdminPremiumManagement';
+import CeoPortal from '../pages/CeoPortal';
 
 export const AdminRoutes = (
   <>
@@ -50,6 +51,12 @@ export const AdminRoutes = (
         <Layout>
           <AdminPremiumManagement />
         </Layout>
+      </ProtectedRoute>
+    } />
+    {/* CEO Portal route */}
+    <Route path="/ceo-portal" element={
+      <ProtectedRoute adminOnly>
+        <CeoPortal />
       </ProtectedRoute>
     } />
   </>
