@@ -1,43 +1,18 @@
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Job } from '@/types/job';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ApplicationStatusBadge } from '@/components/ApplicationStatusBadge';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { DialogFooter } from '../ui/dialog';
-
-const formSchema = z.object({
-  job_title: z.string().min(2, "Job title is required"),
-  company: z.string().min(2, "Company name is required"),
-  applied_date: z.string().min(2, "Application date is required"),
-  status: z.enum(['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn']),
-  notes: z.string().optional(),
-  contact_name: z.string().optional(),
-  contact_email: z.string().email().optional().or(z.literal('')),
-  next_step: z.string().optional(),
-  next_step_date: z.string().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { applicationFormSchema, type ApplicationFormValues } from './form/validation';
+import { StatusSelect } from './form/StatusSelect';
+import { ContactFields } from './form/ContactFields';
+import { NextStepFields } from './form/NextStepFields';
 
 interface ApplicationFormProps {
   selectedJob: Job | null;
@@ -59,8 +34,8 @@ export const ApplicationForm = ({
   const { createApplication } = useAuth();
   const { toast } = useToast();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ApplicationFormValues>({
+    resolver: zodResolver(applicationFormSchema),
     defaultValues: {
       job_title: selectedJob?.title || '',
       company: selectedJob?.company.name || '',
@@ -74,7 +49,7 @@ export const ApplicationForm = ({
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: ApplicationFormValues) => {
     setIsAdding(true);
     
     try {
@@ -150,59 +125,9 @@ export const ApplicationForm = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="applied">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="applied" />
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="interviewing">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="interviewing" />
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="offered">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="offered" />
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="accepted">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="accepted" />
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="rejected">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="rejected" />
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="withdrawn">
-                        <div className="flex items-center gap-2">
-                          <ApplicationStatusBadge status="withdrawn" />
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <StatusSelect form={form} />
           </div>
+
           <FormField
             control={form.control}
             name="notes"
@@ -220,63 +145,11 @@ export const ApplicationForm = ({
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="contact_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. John Smith" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="contact_email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. john@company.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="next_step"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Next Step</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. Phone Interview" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="next_step_date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Next Step Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+
+          <ContactFields form={form} />
+          <NextStepFields form={form} />
         </div>
+
         <DialogFooter className="flex justify-between items-center pt-2">
           <Button 
             type="button" 
