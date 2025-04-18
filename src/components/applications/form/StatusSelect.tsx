@@ -4,12 +4,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ApplicationStatusBadge } from '@/components/ApplicationStatusBadge';
 import { UseFormReturn } from 'react-hook-form';
 import { ApplicationFormValues } from './validation';
+import { ApplicationStatus } from '@/types/application';
 
 interface StatusSelectProps {
   form: UseFormReturn<ApplicationFormValues>;
 }
 
 export const StatusSelect = ({ form }: StatusSelectProps) => {
+  // Define statuses as ApplicationStatus[] to ensure type safety
+  const statuses: ApplicationStatus[] = ['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'];
+
   return (
     <FormField
       control={form.control}
@@ -24,7 +28,7 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {['applied', 'interviewing', 'offered', 'accepted', 'rejected', 'withdrawn'].map((status) => (
+              {statuses.map((status) => (
                 <SelectItem key={status} value={status}>
                   <div className="flex items-center gap-2">
                     <ApplicationStatusBadge status={status} />
