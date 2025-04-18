@@ -1,7 +1,7 @@
+
 import React, { useEffect } from 'react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
-import BackButton from './navigation/BackButton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';

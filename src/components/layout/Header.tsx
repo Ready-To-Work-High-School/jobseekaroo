@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,10 +15,14 @@ import { LogOut, User, GraduationCap, Briefcase, Settings, HelpCircle } from 'lu
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from 'react-router-dom';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import NetworkStatusIndicator from '../NetworkStatusIndicator';
+import NetworkStatusIndicator from '@/components/NetworkStatusIndicator';
 import TroubleshootDialog from '../troubleshooting/TroubleshootDialog';
 
-const Header = () => {
+interface HeaderProps {
+  hideAuthLinks?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast()
   const navigate = useNavigate();
@@ -97,18 +102,20 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <>
-              <Link to="/sign-in">
-                <Button variant="ghost" size="sm" className="text-sm font-medium transition-colors hover:text-primary">
-                  Sign In
-                </Button>
-              </Link>
-              <Link to="/sign-up">
-                <Button variant="sm" className="text-sm font-medium transition-colors">
-                  Sign Up
-                </Button>
-              </Link>
-            </>
+            !hideAuthLinks && (
+              <>
+                <Link to="/sign-in">
+                  <Button variant="ghost" size="sm" className="text-sm font-medium transition-colors hover:text-primary">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/sign-up">
+                  <Button size="sm" className="text-sm font-medium transition-colors">
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )
           )}
         </div>
         
