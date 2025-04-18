@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import { sanitizeUrlParam } from '@/utils/sanitization';
 
 export const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,7 +13,8 @@ export const SearchBar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/jobs?q=${encodeURIComponent(searchQuery.trim())}`);
+      // Sanitize the search query before using it in the URL
+      navigate(`/jobs?q=${sanitizeUrlParam(searchQuery.trim())}`);
     }
   };
   
