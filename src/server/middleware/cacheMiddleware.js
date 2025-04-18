@@ -1,11 +1,30 @@
 
 const cache = require('memory-cache');
+const crypto = require('crypto');
 
 /**
- * Express middleware to cache API responses
+ * Generate secure cache key from request
+ * @param {Request} req - Express request object
+ * @returns {string} Secure cache key
+ */
+const generateCacheKey = (req) => {
+  // Combine URL and relevant headers for cache key
+  const data = `${req.originalUrl || req.url}|${req.get('accept')}|${req.get('accept-encoding')}`;
+  return crypto
+    .createHash('sha256')
+    .update(data)
+    .digest('hex');
+};
+
+/**
+ * Express middleware to cache API responses with security measures
  * @param {number} duration - Cache duration in seconds
  */
 const cacheMiddleware = (duration) => {
+  if (!Number.isInteger(duration) || duration < 0) {
+    throw new Error('Cache duration must be a positive integer');
+  }
+
   return (req, res, next) => {
     // Skip caching for non-GET requests
     if (req.method !== 'GET') {
@@ -17,37 +36,48 @@ const cacheMiddleware = (duration) => {
       return next();
     }
 
-    const key = `__express__${req.originalUrl || req.url}`;
+    // Skip caching for authenticated requests
+    if (req.headers.authorization) {
+      return next();
+    }
+
+    const key = generateCacheKey(req);
     const cachedBody = cache.get(key);
 
     if (cachedBody) {
-      // Add cache header
+      // Add security headers
       res.setHeader('X-Cache', 'HIT');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Cache-Control', 'private, no-store');
       
-      // Return cached response
       if (process.env.NODE_ENV !== 'production') {
         console.log(`Cache hit for ${key}`);
       }
       return res.send(cachedBody);
     }
     
-    // Add cache header
     res.setHeader('X-Cache', 'MISS');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
 
     // Override res.send to cache the response before sending
     const originalSend = res.send;
     res.send = function(body) {
       if (res.statusCode === 200) {
         // Only cache successful responses
-        const cacheDuration = duration * 1000;
-        cache.put(key, body, cacheDuration);
-        
-        // Add cache control headers with a long max-age
-        res.setHeader('Cache-Control', `public, max-age=${duration}, stale-while-revalidate=86400`);
-        res.setHeader('Expires', new Date(Date.now() + duration * 1000).toUTCString());
-        
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`Cache set for ${key} with duration ${duration}s`);
+        try {
+          const cacheDuration = duration * 1000;
+          cache.put(key, body, cacheDuration);
+          
+          // Add cache control headers
+          res.setHeader('Cache-Control', `private, max-age=${duration}, no-store`);
+          res.setHeader('Expires', new Date(Date.now() + duration * 1000).toUTCString());
+          
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`Cache set for ${key} with duration ${duration}s`);
+          }
+        } catch (error) {
+          console.error('Cache storage error:', error);
+          // Continue without caching on error
         }
       }
       originalSend.call(this, body);
@@ -58,13 +88,17 @@ const cacheMiddleware = (duration) => {
   };
 };
 
-// Clean up expired cache entries periodically (but less frequently)
+// Clean up expired cache entries periodically
 const cleanupInterval = 86400000; // 24 hours
 setInterval(() => {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('Performing cache cleanup');
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Performing cache cleanup');
+    }
+    cache.clear();
+  } catch (error) {
+    console.error('Cache cleanup error:', error);
   }
-  cache.clear();
 }, cleanupInterval);
 
 module.exports = { cacheMiddleware };
