@@ -139,11 +139,15 @@ export const AdminLink = () => (
   </MobileNavLink>
 );
 
-// CEO Link - Hidden but accessible
+// Update the CEO Link component
 export const CeoLink = () => (
-  <MobileNavLink to="/ceo-portal" className="opacity-30 hover:opacity-100 transition-opacity">
-    <Shield className="h-5 w-5" />
-    CEO Portal
+  <MobileNavLink to="/ceo-portal" className="relative">
+    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#9b87f5] via-[#7E69AB] to-[#1EAEDB] opacity-75 blur-sm animate-pulse"></div>
+    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#D6BCFA] to-[#33C3F0] opacity-30 blur-lg animate-glow-pulse"></div>
+    <div className="relative z-10 opacity-30 hover:opacity-100 transition-opacity flex items-center gap-3">
+      <Shield className="h-5 w-5" />
+      CEO Portal
+    </div>
   </MobileNavLink>
 );
 
