@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Job } from '@/types/job';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useQualificationMatch } from '@/hooks/useQualificationMatch';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
   const { user, createApplication } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { matchClass } = useQualificationMatch(job);
   
   const handleApplyAndTrack = async () => {
     if (!user) {
@@ -39,9 +41,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         variant: "destructive",
       });
       
-      // Store the current job path to redirect back after login
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-      
       navigate('/sign-in');
       return;
     }
@@ -49,7 +49,6 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     setIsLoading(true);
     
     try {
-      // Create a new application in the tracking system
       await createApplication({
         job_id: job.id,
         job_title: job.title,
@@ -57,9 +56,9 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         status: 'applied',
         applied_date: new Date().toISOString().substring(0, 10),
         notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
+        resume_url: user?.resume_url || undefined
       });
       
-      // Show success dialog
       setShowSuccessDialog(true);
       
     } catch (error) {
@@ -82,14 +81,11 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         variant: "destructive",
       });
       
-      // Store the current job path to redirect back after login
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-      
       navigate('/sign-in');
       return;
     }
     
-    // Simulate external application
     setShowSuccessDialog(true);
   };
   
@@ -97,7 +93,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="w-full md:w-auto px-6 py-3 gap-1">
+          <Button className={`w-full md:w-auto px-6 py-3 gap-1 ${matchClass}`}>
             Apply Now
             <ChevronDown className="h-4 w-4" />
           </Button>
@@ -114,7 +110,6 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         </DropdownMenuContent>
       </DropdownMenu>
       
-      {/* Success Dialog */}
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
