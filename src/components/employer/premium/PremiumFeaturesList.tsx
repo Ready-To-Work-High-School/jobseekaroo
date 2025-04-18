@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LineChart, Users, Award, BarChart2, Briefcase, Search, Star, Zap, MessageSquare, Infinity, Robot } from 'lucide-react';
+import { LineChart, Users, Award, BarChart2, Briefcase, Search, Star, Zap, MessageSquare, Infinity, Bot } from 'lucide-react';
 
 const features = [
   {
@@ -14,7 +14,7 @@ const features = [
     description: 'Communicate directly with candidates through our built-in messaging system.'
   },
   {
-    icon: Robot,
+    icon: Bot,
     title: 'AI-Powered Matching',
     description: 'Let our AI find the perfect candidates based on skills and requirements.'
   },
