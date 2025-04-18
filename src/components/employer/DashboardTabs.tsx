@@ -4,7 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import JobPostingsTab from './JobPostingsTab';
 import ApplicantsTab from './ApplicantsTab';
 import CreateJobTab from './CreateJobTab';
-import { PlusCircle } from 'lucide-react';
+import PremiumFeaturesBanner from './PremiumFeaturesBanner';
+import FreemiumInfoCard from './FreemiumInfoCard';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Placeholder job postings data
@@ -47,29 +48,38 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   const isMobile = useIsMobile();
   
   return (
-    <Tabs defaultValue="postings" value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid grid-cols-3">
-        <TabsTrigger value="postings">Postings</TabsTrigger>
-        <TabsTrigger value="applicants">Applicants</TabsTrigger>
-        <TabsTrigger value="create">Create Job</TabsTrigger>
-      </TabsList>
+    <>
+      {/* Premium Features Banner */}
+      <PremiumFeaturesBanner />
       
-      <TabsContent value="postings" className="space-y-4 mt-6">
-        <JobPostingsTab 
-          jobPostings={jobPostings} 
-          isMobile={isMobile} 
-          setActiveTab={setActiveTab} 
-        />
-      </TabsContent>
+      {/* New Freemium Model Info */}
+      <FreemiumInfoCard />
       
-      <TabsContent value="applicants" className="space-y-4 mt-6">
-        <ApplicantsTab />
-      </TabsContent>
-      
-      <TabsContent value="create" className="mt-6">
-        <CreateJobTab setActiveTab={setActiveTab} />
-      </TabsContent>
-    </Tabs>
+      {/* Standard Features Tabs */}
+      <Tabs defaultValue="postings" value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid grid-cols-3">
+          <TabsTrigger value="postings">Postings</TabsTrigger>
+          <TabsTrigger value="applicants">Applicants</TabsTrigger>
+          <TabsTrigger value="create">Create Job</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="postings" className="space-y-4 mt-6">
+          <JobPostingsTab 
+            jobPostings={jobPostings} 
+            isMobile={isMobile} 
+            setActiveTab={setActiveTab} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="applicants" className="space-y-4 mt-6">
+          <ApplicantsTab />
+        </TabsContent>
+        
+        <TabsContent value="create" className="mt-6">
+          <CreateJobTab setActiveTab={setActiveTab} />
+        </TabsContent>
+      </Tabs>
+    </>
   );
 };
 

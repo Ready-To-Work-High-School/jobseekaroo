@@ -8,6 +8,7 @@ import EmployerPremiumServices from '../pages/EmployerPremiumServices';
 import EmployerBadges from '../pages/EmployerBadges';
 import PremiumServices from '../pages/PremiumServices';
 import AnalyticsDashboard from '../pages/AnalyticsDashboard';
+import PremiumFeaturesPage from '../pages/employer/PremiumFeaturesPage';
 
 export const EmployerRoutes = (
   <>
@@ -32,6 +33,11 @@ export const EmployerRoutes = (
     <Route path="/employer/premium" element={
       <ProtectedRoute requiredRoles={['employer', 'admin']}>
         <EmployerPremiumServices />
+      </ProtectedRoute>
+    } />
+    <Route path="/employer/premium-features" element={
+      <ProtectedRoute requiredRoles={['employer', 'admin']}>
+        <PremiumFeaturesPage />
       </ProtectedRoute>
     } />
     <Route path="/premium-services" element={<PremiumServices />} />
