@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Star, Sparkles, BriefcaseIcon, ScrollText } from 'lucide-react';
@@ -137,27 +136,6 @@ const PremiumServices = () => {
           </motion.div>
         </div>
 
-        {/* Dream Job Quiz Button */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="text-center mb-12"
-        >
-          <Button 
-            asChild
-            variant="outline" 
-            size="lg"
-            className="bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200 border-amber-200 text-amber-900"
-          >
-            <Link to="/career-quiz">
-              <ScrollText className="mr-2 h-5 w-5" />
-              What's Your Dream Job? Take the Quiz!
-            </Link>
-          </Button>
-        </motion.div>
-
-        {/* Founding Member Badge Note */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
