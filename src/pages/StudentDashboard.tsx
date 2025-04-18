@@ -63,20 +63,41 @@ const StudentDashboard = () => {
     enabled: !!user,
   });
 
-  // Fetch upcoming interviews
+  // Fetch upcoming interviews and related job information
   const { data: upcomingInterviews, isLoading: interviewsLoading } = useQuery({
     queryKey: ['interviews', user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase
+      
+      // First get the interviews
+      const { data: interviewsData, error: interviewsError } = await supabase
         .from('interviews')
         .select('*')
         .eq('candidate_id', user.id)
         .gte('scheduled_time', new Date().toISOString())
         .order('scheduled_time', { ascending: true })
         .limit(5);
-      if (error) throw error;
-      return data;
+      
+      if (interviewsError) throw interviewsError;
+      if (!interviewsData || interviewsData.length === 0) return [];
+      
+      // For each interview, get the job information to display the job title
+      const interviewsWithJobDetails = await Promise.all(
+        interviewsData.map(async (interview) => {
+          const { data: jobData, error: jobError } = await supabase
+            .from('jobs')
+            .select('title')
+            .eq('id', interview.job_id)
+            .single();
+            
+          return {
+            ...interview,
+            job_title: jobData?.title || 'Upcoming Interview'
+          };
+        })
+      );
+      
+      return interviewsWithJobDetails;
     },
     enabled: !!user,
   });
