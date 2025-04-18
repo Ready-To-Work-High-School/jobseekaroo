@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { 
   Home, 
@@ -16,7 +15,9 @@ import {
   User,
   Shield,
   LogOut,
-  Info
+  Info,
+  LogIn,
+  UserPlus
 } from 'lucide-react';
 import { MobileNavLink } from './MobileNavLink';
 
@@ -33,7 +34,7 @@ export const PrimaryNavigationLinks = () => (
       <span className="font-semibold">Our Program</span>
     </MobileNavLink>
     
-    <MobileNavLink to="/schools">
+    <MobileNavLink to="/school-integration">
       <GraduationCap className="h-5 w-5" />
       <span className="font-semibold">Schools</span>
     </MobileNavLink>
@@ -162,11 +163,11 @@ export const UnauthenticatedUserLinks = () => (
   <>
     <div className="border-t border-border/60 my-2"></div>
     <MobileNavLink to="/sign-in">
-      <User className="h-5 w-5" />
+      <LogIn className="h-5 w-5" />
       Sign In
     </MobileNavLink>
     <MobileNavLink to="/sign-up">
-      <User className="h-5 w-5" />
+      <UserPlus className="h-5 w-5" />
       Sign Up
     </MobileNavLink>
   </>

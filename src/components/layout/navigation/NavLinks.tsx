@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Circle, Shield, GraduationCap } from 'lucide-react';
+import { Circle, Shield, GraduationCap, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '@/contexts/auth';
 import { isAdmin } from '@/utils/adminUtils';
 import AuthLinks from '../AuthLinks';
@@ -64,7 +64,24 @@ export const NavLinks = () => {
         </Link>
       </div>
 
-      <AuthLinks className="ml-auto" />
+      {!user && (
+        <div className="flex items-center space-x-2 ml-auto">
+          <Link 
+            to="/sign-in" 
+            className="text-sm font-medium transition-colors hover:text-primary flex items-center gap-1"
+          >
+            <LogIn className="w-4 h-4" />
+            Sign In
+          </Link>
+          <Link 
+            to="/sign-up" 
+            className="text-sm font-medium bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center gap-1"
+          >
+            <UserPlus className="w-4 h-4" />
+            Sign Up
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
