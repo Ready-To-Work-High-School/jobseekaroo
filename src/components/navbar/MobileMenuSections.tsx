@@ -143,9 +143,9 @@ export const AdminLink = () => (
   </MobileNavLink>
 );
 
-// Updated CEO Link with refined round purple-blue gradient shield
+// Updated CEO Link with heart shield that redirects to admin
 export const CeoLink = () => (
-  <MobileNavLink to="/ceo-portal" className="relative group">
+  <MobileNavLink to="/admin" className="relative group">
     <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
     <div className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 flex items-center gap-3">
       <Shield className="h-5 w-5 text-purple-600 mr-1" />

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
@@ -56,12 +57,13 @@ const MainNavigation = ({ className }: { className?: string }) => {
       {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
       
-      {/* Hidden CEO Portal Link with round purple-blue gradient shield and heart */}
+      {/* CEO Portal Link with heart shield overlay */}
       <div className="relative group">
         <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
         <Link 
-          to="/ceo-portal" 
+          to="/admin" 
           className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 text-sm font-medium flex items-center justify-center w-8 h-8 rounded-full"
+          aria-label="CEO Portal"
         >
           <div className="flex items-center">
             <Shield className="h-4 w-4 text-purple-600 mr-1" />
