@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CheckIcon, XIcon, Loader2, AlertCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ModerationMessage } from '@/lib/supabase/messaging/types';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
 interface ModerationMessageItemProps {
@@ -79,49 +79,53 @@ export const ModerationMessageItem = ({
       <CardContent>
         <p className="mb-4 whitespace-pre-wrap">{message.content}</p>
         <div className="flex justify-end space-x-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                onClick={handleReject} 
-                variant="outline"
-                size="sm"
-                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-                disabled={isRejecting || isApproving}
-              >
-                {isRejecting ? (
-                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                ) : (
-                  <XIcon className="h-4 w-4 mr-1" />
-                )}
-                Reject
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p>Reject this message. It will not be delivered to the recipient.</p>
-            </TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  onClick={handleReject} 
+                  variant="outline"
+                  size="sm"
+                  className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                  disabled={isRejecting || isApproving}
+                >
+                  {isRejecting ? (
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <XIcon className="h-4 w-4 mr-1" />
+                  )}
+                  Reject
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Reject this message. It will not be delivered to the recipient.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                onClick={handleApprove}
-                variant="default"
-                size="sm"
-                className="bg-green-600 hover:bg-green-700"
-                disabled={isApproving || isRejecting}
-              >
-                {isApproving ? (
-                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                ) : (
-                  <CheckIcon className="h-4 w-4 mr-1" />
-                )}
-                Approve
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p>Approve this message. It will be delivered to the recipient immediately.</p>
-            </TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  onClick={handleApprove}
+                  variant="default"
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700"
+                  disabled={isApproving || isRejecting}
+                >
+                  {isApproving ? (
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <CheckIcon className="h-4 w-4 mr-1" />
+                  )}
+                  Approve
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Approve this message. It will be delivered to the recipient immediately.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardContent>
     </Card>

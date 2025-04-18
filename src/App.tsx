@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorBoundary from './components/ErrorBoundary';
 import AppRoutes from './routes/index';
 import NotFound from './pages/NotFound';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -16,13 +17,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
-        <div className="min-h-screen flex flex-col">
-          <Routes>
-            {AppRoutes}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Toaster />
-        </div>
+        <TooltipProvider>
+          <div className="min-h-screen flex flex-col">
+            <Routes>
+              {AppRoutes}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Toaster />
+          </div>
+        </TooltipProvider>
       </ErrorBoundary>
     </QueryClientProvider>
   );
