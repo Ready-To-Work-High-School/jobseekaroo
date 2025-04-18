@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { SparkleGroup } from '@/components/animations/Sparkle';
@@ -9,7 +10,13 @@ import {
   GraduationCap,
   Star,
   RocketIcon,
-  ArrowRight
+  ArrowRight,
+  HeartPulse,
+  Palette,
+  Building,
+  Leaf,
+  Utensils,
+  Construction
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -72,17 +79,32 @@ const careerPaths: Record<string, CareerPath> = {
   "healthcare": {
     title: "Healthcare & Support",
     description: "Your passion for helping others and collaborative nature suggests careers in nursing, counseling, social work, and healthcare administration.",
-    icon: <Star className="h-8 w-8 text-emerald-500" />
+    icon: <HeartPulse className="h-8 w-8 text-emerald-500" />
   },
   "creative": {
     title: "Creative & Design",
     description: "Your innovative thinking and creative approach point towards careers in graphic design, marketing, UX/UI design, and digital media.",
-    icon: <Lightbulb className="h-8 w-8 text-purple-500" />
+    icon: <Palette className="h-8 w-8 text-purple-500" />
   },
   "leadership": {
     title: "Business & Leadership",
     description: "Your organizational skills and ability to execute make you well-suited for project management, business consulting, and entrepreneurial roles.",
-    icon: <BriefcaseIcon className="h-8 w-8 text-amber-500" />
+    icon: <Building className="h-8 w-8 text-amber-500" />
+  },
+  "environment": {
+    title: "Environmental Sciences",
+    description: "Your care for sustainability and analytical mindset suggest careers in environmental science, conservation, renewable energy, and urban planning.",
+    icon: <Leaf className="h-8 w-8 text-green-500" />
+  },
+  "hospitality": {
+    title: "Hospitality & Culinary Arts",
+    description: "Your people skills and attention to detail indicate potential in restaurant management, culinary arts, hotel administration, and event planning.",
+    icon: <Utensils className="h-8 w-8 text-orange-500" />
+  },
+  "trades": {
+    title: "Skilled Trades & Construction",
+    description: "Your hands-on approach and problem-solving abilities suggest careers in electrical work, plumbing, construction management, and manufacturing.",
+    icon: <Construction className="h-8 w-8 text-gray-500" />
   }
 };
 
@@ -110,21 +132,64 @@ const CareerQuizSection = () => {
       "tech": 0,
       "healthcare": 0,
       "creative": 0,
-      "leadership": 0
+      "leadership": 0,
+      "environment": 0,
+      "hospitality": 0,
+      "trades": 0
     };
 
     quizAnswers.forEach(answer => {
-      if (answer.includes("complex problems") || answer.includes("executor")) {
-        careerPathScores["tech"]++;
+      // First question scoring
+      if (answer.includes("complex problems")) {
+        careerPathScores["tech"] += 2;
+        careerPathScores["environment"] += 1;
       }
-      if (answer.includes("supporting others") || answer.includes("collaborative")) {
-        careerPathScores["healthcare"]++;
+      if (answer.includes("supporting others")) {
+        careerPathScores["healthcare"] += 2;
+        careerPathScores["hospitality"] += 1;
       }
-      if (answer.includes("creating") || answer.includes("creative")) {
-        careerPathScores["creative"]++;
+      if (answer.includes("creating")) {
+        careerPathScores["creative"] += 2;
+        careerPathScores["trades"] += 1;
       }
-      if (answer.includes("organizing") || answer.includes("leading")) {
-        careerPathScores["leadership"]++;
+      if (answer.includes("organizing")) {
+        careerPathScores["leadership"] += 2;
+        careerPathScores["hospitality"] += 1;
+      }
+
+      // Second question scoring
+      if (answer.includes("planner")) {
+        careerPathScores["leadership"] += 2;
+        careerPathScores["environment"] += 1;
+      }
+      if (answer.includes("creative")) {
+        careerPathScores["creative"] += 2;
+      }
+      if (answer.includes("mediator")) {
+        careerPathScores["healthcare"] += 2;
+        careerPathScores["hospitality"] += 1;
+      }
+      if (answer.includes("executor")) {
+        careerPathScores["tech"] += 1;
+        careerPathScores["trades"] += 2;
+      }
+
+      // Third question scoring
+      if (answer.includes("Fast-paced")) {
+        careerPathScores["tech"] += 1;
+        careerPathScores["hospitality"] += 2;
+      }
+      if (answer.includes("Structured")) {
+        careerPathScores["leadership"] += 1;
+        careerPathScores["trades"] += 1;
+        careerPathScores["environment"] += 1;
+      }
+      if (answer.includes("Creative")) {
+        careerPathScores["creative"] += 2;
+      }
+      if (answer.includes("Collaborative")) {
+        careerPathScores["healthcare"] += 2;
+        careerPathScores["leadership"] += 1;
       }
     });
 
