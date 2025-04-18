@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, Infinity, MessageSquare, Zap, BarChart2, Search, Star, Workflow, Life } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,13 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface PlanProps {
   name: string;
   price: string;
   period: string;
   description: string;
-  features: string[];
+  features: {
+    icon: React.ElementType;
+    title: string;
+    description: string;
+  }[];
   buttonText: string;
   popular: boolean;
   planId: string;
@@ -36,6 +40,49 @@ const PlanCard = ({
   onSubscribe,
   isLoading,
 }: PlanProps) => {
+  const premiumFeatures = [
+    {
+      icon: Infinity,
+      title: 'Unlimited Job Postings',
+      description: 'Post unlimited jobs without restrictions.'
+    },
+    {
+      icon: MessageSquare,
+      title: 'Unlimited Messaging',
+      description: 'Communicate freely with all candidates.'
+    },
+    {
+      icon: Zap,
+      title: 'AI-Powered Matching',
+      description: 'Advanced AI matches you with ideal candidates.'
+    },
+    {
+      icon: BarChart2,
+      title: 'Advanced Analytics',
+      description: 'Comprehensive insights into job performance.'
+    },
+    {
+      icon: Search,
+      title: 'Advanced Candidate Search',
+      description: 'Powerful filtering and search capabilities.'
+    },
+    {
+      icon: Star,
+      title: 'Featured Company Profile',
+      description: 'Stand out with a highlighted employer profile.'
+    },
+    {
+      icon: Workflow,
+      title: 'Custom Workflows',
+      description: 'Create personalized recruitment processes.'
+    },
+    {
+      icon: Life,
+      title: 'Priority Support',
+      description: 'Dedicated support team always ready to help.'
+    }
+  ];
+
   return (
     <Card className={`flex flex-col ${popular ? 'border-primary shadow-lg relative overflow-hidden' : ''}`}>
       {popular && (
@@ -52,14 +99,26 @@ const PlanCard = ({
         <CardDescription className="mt-2">{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <ul className="space-y-2">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-center">
-              <Check className="h-4 w-4 mr-2 text-green-500" />
-              <span className="text-sm">{feature}</span>
-            </li>
+        <h3 className="text-lg font-semibold mb-4">Premium Features:</h3>
+        <div className="space-y-3">
+          {premiumFeatures.map((feature, index) => (
+            <TooltipProvider key={index}>
+              <Tooltip>
+                <TooltipTrigger className="w-full">
+                  <div className="flex items-center hover:bg-muted/50 p-2 rounded-md transition-colors cursor-help">
+                    <feature.icon className="h-5 w-5 mr-3 text-primary" />
+                    <div className="text-left">
+                      <p className="font-medium">{feature.title}</p>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="max-w-xs">
+                  {feature.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ))}
-        </ul>
+        </div>
       </CardContent>
       <CardFooter>
         <Button 
