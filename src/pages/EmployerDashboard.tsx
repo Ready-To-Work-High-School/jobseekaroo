@@ -5,6 +5,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
 import UnauthenticatedEmployerView from '@/components/employer/dashboard/UnauthenticatedEmployerView';
+import EmployerKeyFeatures from '@/components/employer/dashboard/EmployerKeyFeatures';
+import EmployerDirectAccessSection from '@/components/employer/dashboard/EmployerDirectAccessSection';
+import EmployerPremiumServices from '@/components/employer/premium/EmployerPremiumServices';
 
 const EmployerDashboard = () => {
   const { user } = useAuth();
@@ -14,7 +17,11 @@ const EmployerDashboard = () => {
   if (!user) {
     return (
       <Layout>
-        <UnauthenticatedEmployerView />
+        <div className="container max-w-6xl mx-auto px-4 py-8 space-y-12">
+          <EmployerKeyFeatures />
+          <EmployerDirectAccessSection />
+          <EmployerPremiumServices />
+        </div>
       </Layout>
     );
   }
@@ -24,7 +31,6 @@ const EmployerDashboard = () => {
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-6">
         <DashboardHeader />
-        
         <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </Layout>
