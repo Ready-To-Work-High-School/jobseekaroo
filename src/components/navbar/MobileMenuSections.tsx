@@ -20,6 +20,7 @@ import {
   UserPlus
 } from 'lucide-react';
 import { MobileNavLink } from './MobileNavLink';
+import { Separator } from '@/components/ui/separator';
 
 // Primary Navigation Links
 export const PrimaryNavigationLinks = () => (
@@ -69,6 +70,7 @@ export const PrimaryNavigationLinks = () => (
 // Job Seekers Section
 export const JobSeekersSection = ({ getPath }: { getPath: (path: string) => string }) => (
   <>
+    <Separator className="my-2 bg-gradient-to-r from-blue-200/30 via-purple-300/30 to-blue-200/30" />
     <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
       For Job Seekers
     </div>
@@ -93,6 +95,7 @@ export const JobSeekersSection = ({ getPath }: { getPath: (path: string) => stri
 // Resources Section
 export const ResourcesSection = ({ getPath }: { getPath: (path: string) => string }) => (
   <>
+    <Separator className="my-2 bg-gradient-to-r from-purple-200/30 via-blue-300/30 to-purple-200/30" />
     <div className="px-4 py-2 text-sm font-semibold text-muted-foreground mt-2">
       Resources
     </div>
@@ -112,7 +115,7 @@ export const ResourcesSection = ({ getPath }: { getPath: (path: string) => strin
 // Authenticated User Links
 export const AuthenticatedUserLinks = ({ onSignOut }: { onSignOut: () => void }) => (
   <>
-    <div className="border-t border-border/60 my-2"></div>
+    <Separator className="my-2 bg-gradient-to-r from-blue-200/30 via-purple-300/30 to-blue-200/30" />
     
     <MobileNavLink to="/saved-jobs">
       <BookMarked className="h-5 w-5" />
@@ -164,7 +167,7 @@ export const SignOutButton = ({ onSignOut }: { onSignOut: () => void }) => (
 // Unauthenticated User Links
 export const UnauthenticatedUserLinks = () => (
   <>
-    <div className="border-t border-border/60 my-2"></div>
+    <Separator className="my-2 bg-gradient-to-r from-purple-200/30 via-blue-300/30 to-purple-200/30" />
     <MobileNavLink to="/sign-in">
       <LogIn className="h-5 w-5" />
       Sign In

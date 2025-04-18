@@ -9,6 +9,7 @@ import { JobSeekerDropdown } from './navigation/JobSeekerDropdown';
 import { EmployerDropdown } from './navigation/EmployerDropdown';
 import { ResourcesDropdown } from './navigation/ResourcesDropdown';
 import { AdminLink } from './navigation/AdminLink';
+import { Separator } from '../ui/separator';
 
 const MainNavigation = ({ className }: { className?: string }) => {
   const { user, userProfile, isAdmin, signOut } = useNavigation();
@@ -23,11 +24,17 @@ const MainNavigation = ({ className }: { className?: string }) => {
         Home
       </Link>
       
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-blue-200/30 via-purple-300/30 to-blue-200/30" />
+      
       {/* Job Seekers Section */}
       <JobSeekerDropdown />
       
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-purple-200/30 via-blue-300/30 to-purple-200/30" />
+      
       {/* Employers Section */}
       <EmployerDropdown />
+      
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-blue-200/30 via-purple-300/30 to-blue-200/30" />
       
       {/* Schools Link */}
       <Link 
@@ -38,8 +45,12 @@ const MainNavigation = ({ className }: { className?: string }) => {
         Schools
       </Link>
       
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-purple-200/30 via-blue-300/30 to-purple-200/30" />
+      
       {/* Resources Section */}
       <ResourcesDropdown />
+      
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-blue-200/30 via-purple-300/30 to-blue-200/30" />
       
       {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
@@ -54,6 +65,8 @@ const MainNavigation = ({ className }: { className?: string }) => {
           <Shield className="h-4 w-4 text-purple-600" />
         </Link>
       </div>
+
+      <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-purple-200/30 via-blue-300/30 to-purple-200/30" />
 
       {/* Auth Links or User Menu */}
       {user ? (
