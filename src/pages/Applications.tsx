@@ -8,7 +8,7 @@ import { ApplicationList } from '@/components/applications/ApplicationList';
 import { ApplicationHeader } from '@/components/applications/ApplicationHeader';
 import { ApplicationFilters } from '@/components/applications/ApplicationFilters';
 import { useToast } from '@/hooks/use-toast';
-import { ApplicationStatus } from '@/types/application';
+import { ApplicationStatus, StatusCount } from '@/types/application';
 import { ApplicationStats } from '@/components/ApplicationStats';
 
 const Applications = () => {
@@ -18,7 +18,7 @@ const Applications = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<ApplicationStatus | 'all'>('all');
-  const [statusCounts, setStatusCounts] = useState([]);
+  const [statusCounts, setStatusCounts] = useState<StatusCount[]>([]);
   const [showSavedJobs, setShowSavedJobs] = useState(false);
   
   const { user, getApplications } = useAuth();
