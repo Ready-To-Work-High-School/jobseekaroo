@@ -5,6 +5,7 @@ import { useRedemptionCodeData } from './redemption/useRedemptionCodeData';
 import { useRedemptionCodeOperations } from './redemption/useRedemptionCodeOperations';
 import { useRedemptionCodeSelection } from './redemption/useRedemptionCodeSelection';
 import { useRedemptionCodeUtils } from './redemption/useRedemptionCodeUtils';
+import { School } from '@/types/school';
 
 /**
  * @deprecated Use the individual hooks from the redemption directory instead. 
@@ -13,6 +14,15 @@ import { useRedemptionCodeUtils } from './redemption/useRedemptionCodeUtils';
 export function useRedemptionCodes() {
   const [codeType, setCodeType] = useState<'student' | 'employer'>('student');
   const [expireDays, setExpireDays] = useState<number>(30);
+
+  // Create a dummy school for now
+  const dummySchool: School = {
+    id: "default-school-id",
+    name: "Default School",
+    slug: "default-school",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
 
   // Import functionalities from separate hooks
   const {
@@ -53,7 +63,7 @@ export function useRedemptionCodes() {
 
   // Wrapper functions to integrate the different hooks
   const handleGenerateCode = async () => {
-    const newCode = await generateCode(codeType, expireDays);
+    const newCode = await generateCode(codeType, dummySchool, expireDays);
     if (newCode) {
       updateCodes([newCode]);
       await fetchCodes();
@@ -61,7 +71,7 @@ export function useRedemptionCodes() {
   };
 
   const handleBulkGenerate = async (amount: number) => {
-    const newCodes = await bulkGenerate(amount, codeType, expireDays);
+    const newCodes = await bulkGenerate(amount, codeType, dummySchool, expireDays);
     if (newCodes.length > 0) {
       updateCodes(newCodes);
       await fetchCodes();
@@ -74,7 +84,7 @@ export function useRedemptionCodes() {
     expiresInDays: number,
     emailDomain: string
   ) => {
-    const newCodes = await automatedGenerate(userType, amount, expiresInDays, emailDomain);
+    const newCodes = await automatedGenerate(userType, amount, expiresInDays, emailDomain, dummySchool);
     if (newCodes.length > 0) {
       updateCodes(newCodes);
       await fetchCodes();

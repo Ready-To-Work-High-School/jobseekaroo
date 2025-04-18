@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,8 +50,11 @@ const EmailScheduler: React.FC<EmailSchedulerProps> = ({ onSchedule, isSchedulin
     }
     
     try {
+      // Convert comma-separated string to array of strings
+      const recipientsArray = recipients.split(',').map(email => email.trim());
+      
       const success = await onSchedule({
-        recipients,
+        recipients: recipientsArray,
         subject,
         message,
         codeType,

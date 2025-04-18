@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CodesTab from '../tabs/CodesTab';
@@ -36,6 +35,14 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   handlers,
   isCeo
 }) => {
+  const dummySchool = {
+    id: "default-school-id",
+    name: "Default School",
+    slug: "default-school",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
   return (
     <>
       {isCeo && <CeoHeader />}
@@ -87,6 +94,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
             onPageChange={handlers.onPageChange}
             onPageSizeChange={handlers.onPageSizeChange}
             isCeo={isCeo}
+            school={dummySchool}
           />
         </TabsContent>
         

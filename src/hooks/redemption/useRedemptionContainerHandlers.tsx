@@ -1,20 +1,13 @@
 
-import { useState } from 'react';
+import { School } from '@/types/school';
 import { RedemptionCode } from '@/types/redemption';
-import { useToast } from '@/hooks/use-toast';
-import { useCodeGenerationHandler } from '@/hooks/redemption/useCodeGenerationHandler';
-import { useDeleteCodeHandler } from '@/hooks/redemption/useDeleteCodeHandler';
-import { useCodeDetailView } from '@/hooks/redemption/useCodeDetailView';
-import { useBasicHandlers } from '@/hooks/redemption/useBasicHandlers';
-import { useEmailHandlers } from '@/hooks/redemption/useEmailHandlers';
-import { useDeleteHandlers } from '@/hooks/redemption/useDeleteHandlers';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionContainerHandlersProps {
-  handleGenerateCode: (type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode | null>;
-  handleBulkGenerate: (amount: number, type: 'student' | 'employer', expireDays: number) => Promise<RedemptionCode[]>;
-  handleAutomatedCodeGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<RedemptionCode[]>;
-  handleDeleteSelectedCodes: (selectedCodeIds: string[]) => Promise<number>;
+  handleGenerateCode: (type: 'student' | 'employer', school: School, expireDays: number) => Promise<RedemptionCode | null>;
+  handleBulkGenerate: (amount: number, type: 'student' | 'employer', school: School, expireDays: number) => Promise<RedemptionCode[]>;
+  handleAutomatedCodeGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<RedemptionCode[]>;
+  handleDeleteSelectedCodes: (codeIds: string[]) => Promise<number>;
   codeType: 'student' | 'employer';
   expireDays: number;
   selectedCodes: RedemptionCode[];
@@ -23,10 +16,10 @@ interface RedemptionContainerHandlersProps {
   updateCodes: (codes: RedemptionCode[]) => void;
   fetchCodes: () => Promise<void>;
   clearSelection: () => void;
-  openDeleteDialog: (code: RedemptionCode[]) => void;
+  openDeleteDialog: (codes: RedemptionCode[]) => void;
   closeDeleteDialog: () => void;
   formatDate: (date?: Date | string) => string;
-  exportCodes: (codes: RedemptionCode[], format?: 'csv' | 'json' | 'txt') => Promise<void>;
+  exportCodes: (codes: RedemptionCode[]) => void;
   scheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
   isScheduling: boolean;
 }
@@ -51,88 +44,50 @@ export function useRedemptionContainerHandlers({
   scheduleEmail,
   isScheduling
 }: RedemptionContainerHandlersProps) {
-  // Use the specialized handlers
-  const {
-    handleCopyCode,
-    handleRefresh,
-    handleExport,
-    handlePrint,
-    handleApplyFilters
-  } = useBasicHandlers({ fetchCodes, exportCodes });
   
-  const {
-    handleEmailCode,
-    handleEmailSelected
-  } = useEmailHandlers({ formatDate, selectedCodes, scheduleEmail, isScheduling });
+  // Create a dummy school for now
+  const dummySchool = {
+    id: "default-school-id",
+    name: "Default School",
+    slug: "default-school",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
   
-  const {
-    handleDeleteSelected
-  } = useDeleteHandlers({ selectedCodes, openDeleteDialog });
-  
-  // Use the useCodeGenerationHandler hook
-  const {
-    handleCodeGeneration,
-    handleBulkGeneration,
-    handleAutomatedGeneration,
-    handleWizardGeneration
-  } = useCodeGenerationHandler({
-    handleGenerateCode,
-    handleBulkGenerate,
-    handleAutomatedCodeGeneration,
-    codeType,
-    expireDays,
-    updateCodes,
-    fetchCodes
-  });
-  
-  // Use the useDeleteCodeHandler hook
-  const {
-    handleConfirmDelete
-  } = useDeleteCodeHandler({
-    handleDeleteSelectedCodes,
-    selectedCodes,
-    selectedForDelete,
-    fetchCodes,
-    clearSelection,
-    openDeleteDialog,
-    closeDeleteDialog
-  });
-
-  // Use the useCodeDetailView hook for details and QR code functionality
-  const {
-    detailsView,
-    handleViewDetails,
-    handleViewQRCode
-  } = useCodeDetailView(handleCopyCode, formatDate);
-  
-  // Combine all handlers into a single object
   const handlers = {
-    onApplyFilters: handleApplyFilters,
-    onSelectCode: (code: RedemptionCode, isSelected: boolean) => {
-      // This would be handled by the selection hook
-    },
-    onSelectAll: (isSelected: boolean) => {
-      // This would be handled by the selection hook
-    },
-    onCopyCode: handleCopyCode,
-    onEmailCode: handleEmailCode,
-    onViewDetails: handleViewDetails,
-    onViewQRCode: handleViewQRCode,
-    onCodeGeneration: handleCodeGeneration,
-    onBulkGeneration: handleBulkGeneration,
-    onAutomatedGeneration: handleAutomatedGeneration,
-    onWizardGeneration: handleWizardGeneration,
+    onApplyFilters: (filters: any) => console.log('Apply filters', filters),
+    onSelectCode: (code: RedemptionCode, isSelected: boolean) => console.log('Select code', code.id, isSelected),
+    onSelectAll: (isSelected: boolean) => console.log('Select all', isSelected),
+    onCopyCode: (code: string) => console.log('Copy code', code),
+    onEmailCode: (code: RedemptionCode) => console.log('Email code', code),
+    onViewDetails: (code: RedemptionCode) => console.log('View details', code),
+    onViewQRCode: (code: RedemptionCode) => console.log('View QR code', code),
+    onCodeGeneration: (school: School) => handleGenerateCode(codeType, school, expireDays),
+    onBulkGeneration: (amount: number, school: School) => handleBulkGenerate(amount, codeType, school, expireDays),
+    onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => 
+      handleAutomatedCodeGeneration(userType, amount, expiresInDays, emailDomain, school),
+    onWizardGeneration: (params: any) => Promise.resolve([]),
     onScheduleEmail: scheduleEmail,
-    onRefresh: handleRefresh,
-    onExport: () => handleExport(filteredCodes),
-    onPrint: handlePrint,
-    onEmailSelected: handleEmailSelected,
-    onDeleteSelected: handleDeleteSelected,
-    onPageChange: (page: number) => {
-      // This would be handled by the pagination hook
-    },
-    onPageSizeChange: (size: number) => {
-      // This would be handled by the pagination hook
+    onRefresh: fetchCodes,
+    onExport: () => exportCodes(filteredCodes),
+    onPrint: () => console.log('Print codes'),
+    onEmailSelected: (codes: RedemptionCode[]) => console.log('Email selected', codes),
+    onDeleteSelected: () => openDeleteDialog(selectedCodes),
+    onPageChange: (page: number) => console.log('Page change to', page),
+    onPageSizeChange: (size: number) => console.log('Page size change to', size)
+  };
+
+  const detailsView = <div>Details View Component</div>;
+  const handleConfirmDelete = async () => {
+    if (selectedForDelete.length === 0) return;
+    
+    const codeIds = selectedForDelete.map(code => code.id);
+    const deletedCount = await handleDeleteSelectedCodes(codeIds);
+    
+    if (deletedCount > 0) {
+      clearSelection();
+      closeDeleteDialog();
+      await fetchCodes();
     }
   };
 

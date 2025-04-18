@@ -44,7 +44,7 @@ export function useRedemptionCodeData() {
           break;
       }
       
-      const { data: filteredCodes, count } = await listRedemptionCodes(
+      const { codes: filteredCodes, count } = await listRedemptionCodes(
         filterType, 
         filterUsed, 
         { page: currentPage, pageSize }
@@ -53,7 +53,7 @@ export function useRedemptionCodeData() {
       setCodes(filteredCodes);
       setTotalCodes(count);
       
-      const { data: allCodes } = await listRedemptionCodes();
+      const { codes: allCodes } = await listRedemptionCodes();
       
       const usedCodesCount = allCodes.filter(code => code.used).length;
       const studentCodesCount = allCodes.filter(code => code.type === 'student').length;

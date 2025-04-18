@@ -40,3 +40,18 @@ export function prepareDefaultGenerationData() {
   
   return generationOverTime;
 }
+
+// Add the missing distribution data preparation functions
+export function prepareUsageDistributionData(usedCodes: number, totalCodes: number) {
+  return [
+    { name: 'Used', value: usedCodes },
+    { name: 'Unused', value: totalCodes - usedCodes }
+  ];
+}
+
+export function prepareTypeDistributionData(studentCodes: number, employerCodes: number) {
+  return [
+    { name: 'Student', value: studentCodes },
+    { name: 'Employer', value: employerCodes }
+  ];
+}
