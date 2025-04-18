@@ -56,7 +56,9 @@ export const AdminRoutes = (
     {/* CEO Portal route */}
     <Route path="/ceo-portal" element={
       <ProtectedRoute adminOnly>
-        <CeoPortal />
+        <Layout>
+          <CeoPortal />
+        </Layout>
       </ProtectedRoute>
     } />
   </>
