@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
+import { Card } from '@/components/ui/card';
 import RedemptionCodeGenerator from '../RedemptionCodeGenerator';
-import AutomatedCodeGenerator from '../AutomatedCodeGenerator';
-import AdminCodeGenerator from './AdminCodeGenerator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AutomatedCodeGenerator from './AutomatedCodeGenerator';
+import CodeDistributionPanel from './CodeDistributionPanel';
 
 interface RedemptionCodeGeneratorsProps {
   onGenerateCode: () => Promise<void>;
@@ -26,40 +26,28 @@ const RedemptionCodeGenerators: React.FC<RedemptionCodeGeneratorsProps> = ({
   expireDays,
   setExpireDays
 }) => {
-  const [activeTab, setActiveTab] = useState('single');
-
   return (
-    <div className="space-y-4 mb-6">
-      <Tabs defaultValue="single" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-4">
-          <TabsTrigger value="single">Single Code</TabsTrigger>
-          <TabsTrigger value="automatic">Automated Distribution</TabsTrigger>
-          <TabsTrigger value="admin">Admin Codes</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="single">
-          <RedemptionCodeGenerator
-            onGenerateCode={onGenerateCode}
-            onBulkGenerate={onBulkGenerate}
-            isGenerating={isGenerating}
-            codeType={codeType}
-            setCodeType={setCodeType}
-            expireDays={expireDays}
-            setExpireDays={setExpireDays}
-          />
-        </TabsContent>
-        
-        <TabsContent value="automatic">
-          <AutomatedCodeGenerator
-            onGenerateCodes={onAutomatedGeneration}
-            isGenerating={isGenerating}
-          />
-        </TabsContent>
-        
-        <TabsContent value="admin">
-          <AdminCodeGenerator />
-        </TabsContent>
-      </Tabs>
+    <div className="space-y-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <RedemptionCodeGenerator
+          onGenerateCode={onGenerateCode}
+          onBulkGenerate={onBulkGenerate}
+          isGenerating={isGenerating}
+          codeType={codeType}
+          setCodeType={setCodeType}
+          expireDays={expireDays}
+          setExpireDays={setExpireDays}
+        />
+        <AutomatedCodeGenerator
+          onAutomatedGeneration={onAutomatedGeneration}
+          isGenerating={isGenerating}
+        />
+      </div>
+      
+      <CodeDistributionPanel
+        onAutomatedGeneration={onAutomatedGeneration}
+        isGenerating={isGenerating}
+      />
     </div>
   );
 };
