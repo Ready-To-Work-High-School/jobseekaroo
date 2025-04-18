@@ -1,4 +1,3 @@
-
 /**
  * Comprehensive sanitization utilities to prevent XSS attacks
  */
@@ -169,4 +168,50 @@ export const sanitizeSqlValue = (value: string): string => {
     .replace(/\\/g, "\\\\") // Escape backslashes
     .replace(/\0/g, "") // Remove null bytes
     .replace(/\x1a/g, ""); // Remove ASCII 26 (Substitute) character
+};
+
+/**
+ * Validates if a URL is safe to navigate to
+ * @param url The URL to validate
+ * @returns Boolean indicating if the URL is safe
+ */
+export const validateUrl = (url: string): boolean => {
+  if (!url) return false;
+  
+  try {
+    const urlObj = new URL(url);
+    
+    // List of allowed domains and protocols
+    const allowedDomains = [
+      'jobseekaroo.com',
+      'jobseekers4hs.org',
+      'jobseeker4hs.org',
+      'localhost',
+      '127.0.0.1',
+      // Add other trusted domains here
+    ];
+    
+    const allowedProtocols = ['https:', 'http:'];
+    
+    // Check protocol
+    if (!allowedProtocols.includes(urlObj.protocol)) {
+      console.warn(`Blocked navigation to URL with unsafe protocol: ${urlObj.protocol}`);
+      return false;
+    }
+    
+    // Check domain
+    const isAllowedDomain = allowedDomains.some(domain => 
+      urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`)
+    );
+    
+    if (!isAllowedDomain) {
+      console.warn(`Blocked navigation to untrusted domain: ${urlObj.hostname}`);
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error validating URL:', error);
+    return false;
+  }
 };

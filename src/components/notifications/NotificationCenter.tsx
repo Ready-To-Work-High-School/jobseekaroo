@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Bell, X, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import { NotificationFilters } from './NotificationFilters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
+import { validateUrl } from '@/utils/sanitization';
 
 export const NotificationCenter = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,6 @@ export const NotificationCenter = () => {
     errorMessage
   } = useNotifications();
 
-  // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -44,6 +43,16 @@ export const NotificationCenter = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const handleNotificationClick = (link?: string) => {
+    if (!link) return;
+    
+    if (link.startsWith('/')) {
+      return true;
+    }
+    
+    return validateUrl(link);
+  };
 
   if (!user) return null;
 
@@ -142,7 +151,8 @@ export const NotificationCenter = () => {
                       <NotificationItem 
                         key={notification.id} 
                         notification={notification} 
-                        onClose={() => setIsOpen(false)} 
+                        onClose={() => setIsOpen(false)}
+                        urlValidator={handleNotificationClick}
                       />
                     ))}
                   </div>

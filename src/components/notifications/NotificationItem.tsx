@@ -1,40 +1,24 @@
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
 import { Notification } from '@/types/notification';
 import { useNotifications } from '@/contexts/NotificationsContext';
-import { Button } from '@/components/ui/button';
-import { 
-  Bell, 
-  BriefcaseIcon, 
-  CheckCircle2, 
-  GraduationCap, 
-  Mail, 
-  MessageSquare, 
-  Award,
-  Trash2,
-  MoreHorizontal
-} from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useNavigate } from 'react-router-dom';
 
 interface NotificationItemProps {
   notification: Notification;
   onClose: () => void;
+  urlValidator: (url?: string) => boolean;
 }
 
 export const NotificationItem: React.FC<NotificationItemProps> = ({ 
   notification, 
-  onClose 
+  onClose,
+  urlValidator
 }) => {
+  const { markAsRead } = useNotifications();
   const navigate = useNavigate();
-  const { markAsRead, removeNotification } = useNotifications();
-  const [isHovering, setIsHovering] = useState(false);
   
   const handleClick = () => {
     if (!notification.read) {
@@ -42,98 +26,51 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     }
     
     if (notification.link) {
-      navigate(notification.link);
-      onClose();
+      // Check if the URL is safe before navigating
+      const isUrlSafe = urlValidator(notification.link);
+      
+      if (isUrlSafe) {
+        // If it's an internal link (starts with /)
+        if (notification.link.startsWith('/')) {
+          navigate(notification.link);
+        } else {
+          // For external links, open in new tab with security attributes
+          window.open(
+            notification.link, 
+            '_blank', 
+            'noopener,noreferrer'
+          );
+        }
+      } else {
+        console.error('Potentially unsafe URL blocked:', notification.link);
+        // Optionally show a toast or other user feedback
+      }
     }
+    
+    onClose();
   };
   
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    removeNotification(notification.id);
-  };
-  
-  const getIcon = () => {
-    switch (notification.type) {
-      case 'job':
-        return <BriefcaseIcon className="h-5 w-5 text-blue-500" />;
-      case 'application':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'message':
-        return <MessageSquare className="h-5 w-5 text-purple-500" />;
-      case 'email':
-        return <Mail className="h-5 w-5 text-red-500" />;
-      case 'account':
-        return <GraduationCap className="h-5 w-5 text-amber-500" />;
-      case 'achievement':
-        return <Award className="h-5 w-5 text-amber-500" />;
-      default:
-        return <Bell className="h-5 w-5 text-gray-500" />;
-    }
-  };
-  
+  const formattedDate = notification.createdAt
+    ? formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })
+    : '';
+    
   return (
     <div 
-      className={`p-4 relative transition-colors ${
-        notification.read ? 'bg-transparent' : 'bg-blue-50/50 dark:bg-blue-950/20'
-      } ${isHovering ? 'bg-gray-50 dark:bg-gray-800/50' : ''}`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      className={`p-4 cursor-pointer hover:bg-muted/50 transition-colors ${!notification.read ? 'bg-primary/5' : ''}`}
+      onClick={handleClick}
     >
-      <div className="absolute top-3 right-3">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-6 w-6 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {!notification.read && (
-              <DropdownMenuItem onClick={(e) => {
-                e.stopPropagation();
-                markAsRead(notification.id);
-              }}>
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                Mark as read
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem 
-              onClick={handleDelete}
-              className="text-red-500 focus:text-red-500"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="flex justify-between items-start mb-1">
+        <h4 className={`font-medium ${!notification.read ? 'text-primary' : ''}`}>
+          {notification.title}
+        </h4>
+        <span className="text-xs text-muted-foreground">{formattedDate}</span>
       </div>
-      
-      <div 
-        className="flex items-start gap-3 cursor-pointer" 
-        onClick={handleClick}
-      >
-        <div className="mt-1 rounded-full bg-background p-1">
-          {getIcon()}
+      <p className="text-sm text-muted-foreground">{notification.message}</p>
+      {!notification.read && (
+        <div className="mt-1">
+          <Badge variant="secondary" className="text-xs px-1.5 py-0">New</Badge>
         </div>
-        
-        <div className="flex-1 space-y-1 text-sm pr-6">
-          <p className={`${!notification.read ? 'font-medium' : 'font-normal'}`}>
-            {notification.title}
-          </p>
-          
-          <p className="text-muted-foreground line-clamp-2">
-            {notification.message}
-          </p>
-          
-          <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

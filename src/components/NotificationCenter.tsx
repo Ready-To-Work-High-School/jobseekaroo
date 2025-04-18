@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase';
 import { UserProfile, SavedSearch } from '@/types/user';
 import { Job } from '@/types/job';
 import { getJobs } from '@/lib/mock-data';
+import { validateUrl } from '@/utils/sanitization';
 
 interface Notification {
   id: string;
@@ -112,7 +113,21 @@ export const NotificationCenter = () => {
     
     // Navigate to link if it exists
     if (notification.link) {
-      window.location.href = notification.link;
+      // Validate the URL before navigating
+      if (notification.link.startsWith('/')) {
+        // Internal links are safe
+        window.location.href = notification.link;
+      } else if (validateUrl(notification.link)) {
+        // External links need validation
+        window.open(notification.link, '_blank', 'noopener,noreferrer');
+      } else {
+        console.error('Potentially unsafe URL blocked:', notification.link);
+        toast({
+          title: "Navigation blocked",
+          description: "The link destination appears to be unsafe.",
+          variant: "destructive"
+        });
+      }
     }
     
     // Close notification center
