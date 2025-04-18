@@ -32,12 +32,19 @@ export const usePremiumManagement = () => {
         // Transform profile data to match UserProfile type
         const userProfile: UserProfile = {
           ...profile,
-          badges: Array.isArray(profile.badges) ? 
-            profile.badges.map((badge: any) => ({ 
-              id: badge.id || '', 
-              name: badge.name || '',
-              earned_at: badge.earned_at
-            })) : [],
+          // Parse preferences JSON to become Record<string, any>
+          preferences: typeof profile.preferences === 'string' 
+            ? JSON.parse(profile.preferences) 
+            : (profile.preferences as Record<string, any> || {}),
+          // Transform badges to match UserBadge[] type
+          badges: Array.isArray(profile.badges) 
+            ? profile.badges.map((badge: any) => ({ 
+                id: badge.id || '', 
+                name: badge.name || '',
+                earned_at: badge.earned_at
+              })) as UserBadge[]
+            : [],
+          // Add premium status based on subscription data
           premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
         };
         
