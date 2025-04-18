@@ -23,13 +23,15 @@ export function useRedemptionCodeGeneration(
       const expDate = new Date();
       expDate.setDate(expDate.getDate() + parseInt(newCodeExpiry));
       
-      const newCode = {
+      const newCode: RedemptionCode = {
         id: `mock-${Date.now()}`,
         code,
         type: newCodeType as 'admin' | 'student' | 'employer',
         used: false,
         createdAt: new Date(),
-        expiresAt: expDate
+        expiresAt: expDate,
+        schoolId: '',
+        isReusable: false
       };
       
       setCodes([newCode, ...codes]);
@@ -61,7 +63,7 @@ export function useRedemptionCodeGeneration(
         return;
       }
       
-      const newCodes = Array(amount).fill(0).map((_, i) => {
+      const newCodes: RedemptionCode[] = Array(amount).fill(0).map((_, i) => {
         const codePrefix = newCodeType.toUpperCase();
         const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
         const code = `${codePrefix}-${randomPart}`;
@@ -75,7 +77,9 @@ export function useRedemptionCodeGeneration(
           type: newCodeType as 'admin' | 'student' | 'employer',
           used: false,
           createdAt: new Date(),
-          expiresAt: expDate
+          expiresAt: expDate,
+          schoolId: '',
+          isReusable: false
         };
       });
       
