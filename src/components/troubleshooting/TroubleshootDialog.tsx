@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search } from 'lucide-react';
+import { AlertTriangle, Bug, RefreshCcw, WifiOff, Globe, Search, Link, BrokenLink } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -61,38 +60,91 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         'Try signing out and back in',
         'Check if you have the necessary permissions'
       ]
+    },
+    {
+      id: 'links',
+      title: 'Missing Links or Components',
+      icon: BrokenLink,
+      description: 'Problems with navigation links or critical page components',
+      solutions: [
+        'Verify your routes configuration',
+        'Check for correct import statements',
+        'Ensure all necessary components are registered',
+        'Refresh the page or clear browser cache'
+      ]
     }
   ];
+
+  const checkMissingLinksAndComponents = () => {
+    const missingItems = [];
+
+    const expectedLinks = [
+      '/jobs', 
+      '/student-dashboard', 
+      '/profile', 
+      '/saved-jobs', 
+      '/interview-prep'
+    ];
+
+    expectedLinks.forEach(link => {
+      try {
+        const element = document.querySelector(`a[href="${link}"]`);
+        if (!element) {
+          missingItems.push(`Missing link: ${link}`);
+        }
+      } catch (error) {
+        console.error(`Error checking link ${link}:`, error);
+      }
+    });
+
+    const criticalComponents = [
+      '#job-listings', 
+      '.user-profile', 
+      '.application-form'
+    ];
+
+    criticalComponents.forEach(selector => {
+      try {
+        const element = document.querySelector(selector);
+        if (!element) {
+          missingItems.push(`Missing component: ${selector}`);
+        }
+      } catch (error) {
+        console.error(`Error checking component ${selector}:`, error);
+      }
+    });
+
+    return missingItems;
+  };
 
   const handleDiagnostics = async () => {
     setIsChecking(true);
     try {
-      // Network connectivity check
       const networkStatus = await checkConnectivity();
-      
-      // Authentication check
       const authStatus = await checkAuthStatus();
-      
-      // Data access check
       const dataStatus = await checkDataAccess();
-      
-      // Show diagnostic results
+      const missingItems = checkMissingLinksAndComponents();
+
       toast({
         title: "Diagnostic Results",
-        description: `Network: ${networkStatus ? "✅" : "❌"}\nAuth: ${authStatus ? "✅" : "❌"}\nData: ${dataStatus ? "✅" : "❌"}`,
+        description: `
+          Network: ${networkStatus ? "✅" : "❌"}
+          Auth: ${authStatus ? "✅" : "❌"}
+          Data: ${dataStatus ? "✅" : "❌"}
+          Missing Items: ${missingItems.length > 0 ? missingItems.join(", ") : "None"}
+        `,
       });
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Diagnostic Failed",
-        description: "Could not complete the system check. Please try again.",
+        description: "Could not complete the system check. Please try again later.",
       });
     } finally {
       setIsChecking(false);
     }
   };
 
-  // Simulate diagnostic checks (replace with real implementations)
   const checkConnectivity = async () => {
     return isOnline;
   };
