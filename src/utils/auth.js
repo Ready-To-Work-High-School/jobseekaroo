@@ -11,8 +11,9 @@ const JWT_SECRET = process.env.JWT_SECRET || (() => {
 })();
 
 class AuthError extends Error {
-  constructor() {
-    super('Not authorized');
+  constructor(message = 'Not authorized') {
+    super(message);
+    this.name = 'AuthError';
   }
 }
 
@@ -24,10 +25,10 @@ const getUserId = (context) => {
       const { userId } = jwt.verify(token, JWT_SECRET);
       return userId;
     } catch (error) {
-      throw new AuthError();
+      throw new AuthError(`Invalid or expired token: ${error.message}`);
     }
   }
-  throw new AuthError();
+  throw new AuthError('No authentication token provided');
 };
 
 module.exports = {
