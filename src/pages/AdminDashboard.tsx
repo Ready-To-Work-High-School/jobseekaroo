@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import QuickOverview from '@/components/admin/dashboard/QuickOverview';
 import ReportGenerator from '@/components/admin/dashboard/ReportGenerator';
