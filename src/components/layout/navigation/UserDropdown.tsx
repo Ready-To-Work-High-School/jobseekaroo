@@ -1,4 +1,3 @@
-
 import { User } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { UserProfile } from '@/types/user';
@@ -64,7 +63,7 @@ export const UserDropdown = ({ user, userProfile, signOut }: UserDropdownProps) 
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/profile">
+          <Link to={userProfile?.user_type === 'student' ? "/student-profile" : "/profile"}>
             Profile
           </Link>
         </DropdownMenuItem>
@@ -78,6 +77,13 @@ export const UserDropdown = ({ user, userProfile, signOut }: UserDropdownProps) 
             Saved Jobs
           </Link>
         </DropdownMenuItem>
+        {userProfile?.user_type === 'employer' && (
+          <DropdownMenuItem asChild>
+            <Link to="/employer-dashboard">
+              Employer Dashboard
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />

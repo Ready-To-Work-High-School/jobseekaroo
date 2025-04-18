@@ -11,7 +11,6 @@ export const NavLinks = () => {
   const { userProfile } = useAuth();
   
   const handleCeoPortalClick = () => {
-    // Only log click for analytics, no visible feedback
     console.log('CEO portal accessed');
   };
   
@@ -23,8 +22,11 @@ export const NavLinks = () => {
           Your First Job, Made Simple
         </Link>
         
-        <Link to="/for-employers" className={cn("text-sm font-medium transition-colors", 
-          location.pathname === "/for-employers" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+        <Link to={userProfile?.user_type === 'employer' ? "/employer-dashboard" : "/for-employers"} 
+          className={cn("text-sm font-medium transition-colors", 
+          location.pathname === "/for-employers" || location.pathname === "/employer-dashboard" 
+            ? "text-primary" 
+            : "text-muted-foreground hover:text-primary")}>
           Fast lane to hire eager high schoolers
         </Link>
         
@@ -41,7 +43,6 @@ export const NavLinks = () => {
           </Link>
         )}
         
-        {/* Hidden CEO Portal Link */}
         <Link 
           to="/ceo-portal" 
           onClick={handleCeoPortalClick}
