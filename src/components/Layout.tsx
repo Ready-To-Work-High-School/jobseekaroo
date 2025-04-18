@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
@@ -6,6 +5,7 @@ import BackButton from './navigation/BackButton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
+import FloatingBackButton from './common/FloatingBackButton';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,9 +32,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
       <main className="flex-grow">
         <ErrorBoundary>
           {!isHomePage && (
-            <div className="container mx-auto px-4 py-4">
-              <BackButton />
-            </div>
+            <FloatingBackButton />
           )}
         </ErrorBoundary>
         

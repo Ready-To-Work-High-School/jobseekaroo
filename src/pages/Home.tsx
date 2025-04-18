@@ -11,6 +11,7 @@ import FirstJobToolkit from '@/components/home/FirstJobToolkit';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import SuccessStories from '@/components/home/SuccessStories';
 import CallToActionSection from '@/components/home/CallToActionSection';
+import { SparkleGroup } from '@/components/animations/Sparkle';
 
 const Home = () => {
   console.log("Home component rendering");
@@ -26,33 +27,46 @@ const Home = () => {
         />
       </Helmet>
 
-      <ErrorBoundary>
-        <Hero />
-      </ErrorBoundary>
+      <div className="relative overflow-hidden">
+        {/* Add multiple SparkleGroup components in different positions */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <SparkleGroup count={3} />
+        </div>
+        <div className="absolute top-1/4 right-0 w-full h-full pointer-events-none">
+          <SparkleGroup count={2} />
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none">
+          <SparkleGroup count={3} />
+        </div>
 
-      <ErrorBoundary>
-        <SearchSection />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <Hero />
+        </ErrorBoundary>
 
-      <ErrorBoundary>
-        <HowItWorksSection />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <SearchSection />
+        </ErrorBoundary>
 
-      <ErrorBoundary>
-        <FirstJobToolkit />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <HowItWorksSection />
+        </ErrorBoundary>
 
-      <ErrorBoundary>
-        <FeeTeaser />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <FirstJobToolkit />
+        </ErrorBoundary>
 
-      <ErrorBoundary>
-        <SuccessStories />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <FeeTeaser />
+        </ErrorBoundary>
 
-      <ErrorBoundary>
-        <CallToActionSection />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <SuccessStories />
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <CallToActionSection />
+        </ErrorBoundary>
+      </div>
     </Layout>
   );
 };
