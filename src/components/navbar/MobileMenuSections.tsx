@@ -139,12 +139,11 @@ export const AdminLink = () => (
   </MobileNavLink>
 );
 
-// Update the CEO Link component
+// Updated CEO Link with refined gradient glow shield
 export const CeoLink = () => (
-  <MobileNavLink to="/ceo-portal" className="relative">
-    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#9b87f5] via-[#7E69AB] to-[#1EAEDB] opacity-75 blur-sm animate-pulse"></div>
-    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#D6BCFA] to-[#33C3F0] opacity-30 blur-lg animate-glow-pulse"></div>
-    <div className="relative z-10 opacity-30 hover:opacity-100 transition-opacity flex items-center gap-3">
+  <MobileNavLink to="/ceo-portal" className="relative group">
+    <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-lavender-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
+    <div className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 flex items-center gap-3">
       <Shield className="h-5 w-5" />
       CEO Portal
     </div>

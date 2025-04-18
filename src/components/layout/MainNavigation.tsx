@@ -1,3 +1,4 @@
+
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
@@ -44,13 +45,12 @@ const MainNavigation = ({ className }: { className?: string }) => {
       {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
       
-      {/* Hidden CEO Portal Link with gradient glow effect */}
-      <div className="relative">
-        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#9b87f5] via-[#7E69AB] to-[#1EAEDB] opacity-75 blur-sm animate-pulse"></div>
-        <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#D6BCFA] to-[#33C3F0] opacity-30 blur-lg animate-glow-pulse"></div>
+      {/* Hidden CEO Portal Link with refined gradient glow shield */}
+      <div className="relative group">
+        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-lavender-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
         <Link 
           to="/ceo-portal" 
-          className="relative z-10 opacity-0 hover:opacity-100 transition-opacity duration-300 text-sm font-medium flex items-center gap-1"
+          className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 text-sm font-medium flex items-center gap-1 rounded-full px-2 py-1"
         >
           <Shield className="h-4 w-4" />
           CEO Portal
