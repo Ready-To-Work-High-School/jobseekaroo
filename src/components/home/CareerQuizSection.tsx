@@ -2,117 +2,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { SparkleGroup } from '@/components/animations/Sparkle';
-import { Link } from 'react-router-dom';
+import { Star } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  Lightbulb, 
-  BriefcaseIcon, 
-  GraduationCap,
-  Star,
-  RocketIcon,
-  ArrowRight,
-  HeartPulse,
-  Palette,
-  Building,
-  Leaf,
-  Utensils,
-  Construction
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-
-interface QuizQuestion {
-  id: number;
-  question: string;
-  options: string[];
-  icon: React.ReactNode;
-}
-
-interface CareerPath {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
-const quizQuestions: QuizQuestion[] = [
-  {
-    id: 1,
-    question: "What energizes you the most?",
-    options: [
-      "Solving complex problems",
-      "Helping and supporting others", 
-      "Creating and designing things",
-      "Leading and organizing teams"
-    ],
-    icon: <Lightbulb className="h-6 w-6 text-amber-500" />
-  },
-  {
-    id: 2,
-    question: "In a group project, what role do you naturally take?",
-    options: [
-      "The planner who organizes everything",
-      "The creative who brings new ideas",
-      "The mediator who keeps everyone happy",
-      "The executor who gets things done"
-    ],
-    icon: <BriefcaseIcon className="h-6 w-6 text-blue-500" />
-  },
-  {
-    id: 3,
-    question: "What type of environment do you thrive in?",
-    options: [
-      "Fast-paced and dynamic",
-      "Structured and organized",
-      "Creative and flexible",
-      "Collaborative and supportive"
-    ],
-    icon: <GraduationCap className="h-6 w-6 text-purple-500" />
-  }
-];
-
-const careerPaths: Record<string, CareerPath> = {
-  "tech": {
-    title: "Tech & Innovation",
-    description: "Your problem-solving skills and love for complex challenges make you perfect for technology careers like software engineering, data science, and cybersecurity.",
-    icon: <RocketIcon className="h-8 w-8 text-blue-500" />
-  },
-  "healthcare": {
-    title: "Healthcare & Support",
-    description: "Your passion for helping others and collaborative nature suggests careers in nursing, counseling, social work, and healthcare administration.",
-    icon: <HeartPulse className="h-8 w-8 text-emerald-500" />
-  },
-  "creative": {
-    title: "Creative & Design",
-    description: "Your innovative thinking and creative approach point towards careers in graphic design, marketing, UX/UI design, and digital media.",
-    icon: <Palette className="h-8 w-8 text-purple-500" />
-  },
-  "leadership": {
-    title: "Business & Leadership",
-    description: "Your organizational skills and ability to execute make you well-suited for project management, business consulting, and entrepreneurial roles.",
-    icon: <Building className="h-8 w-8 text-amber-500" />
-  },
-  "environment": {
-    title: "Environmental Sciences",
-    description: "Your care for sustainability and analytical mindset suggest careers in environmental science, conservation, renewable energy, and urban planning.",
-    icon: <Leaf className="h-8 w-8 text-green-500" />
-  },
-  "hospitality": {
-    title: "Hospitality & Culinary Arts",
-    description: "Your people skills and attention to detail indicate potential in restaurant management, culinary arts, hotel administration, and event planning.",
-    icon: <Utensils className="h-8 w-8 text-orange-500" />
-  },
-  "trades": {
-    title: "Skilled Trades & Construction",
-    description: "Your hands-on approach and problem-solving abilities suggest careers in electrical work, plumbing, construction management, and manufacturing.",
-    icon: <Construction className="h-8 w-8 text-gray-500" />
-  }
-};
+import { quizQuestions } from './quiz/quizQuestions';
+import { careerPaths } from './quiz/careerPaths';
+import { determineCareerPath } from './quiz/quizUtils';
+import QuizQuestion from './quiz/QuizQuestion';
+import QuizResult from './quiz/QuizResult';
 
 const CareerQuizSection = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [careerRecommendation, setCareerRecommendation] = useState<CareerPath | null>(null);
+  const [careerPathKey, setCareerPathKey] = useState<string | null>(null);
   const { user } = useAuth();
 
   const handleAnswer = (answer: string) => {
@@ -122,95 +24,17 @@ const CareerQuizSection = () => {
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      determineCareerPath(newAnswers);
+      const recommendedPath = determineCareerPath(newAnswers);
+      setCareerPathKey(recommendedPath);
       setIsSubmitted(true);
     }
-  };
-
-  const determineCareerPath = (quizAnswers: string[]) => {
-    const careerPathScores = {
-      "tech": 0,
-      "healthcare": 0,
-      "creative": 0,
-      "leadership": 0,
-      "environment": 0,
-      "hospitality": 0,
-      "trades": 0
-    };
-
-    quizAnswers.forEach(answer => {
-      // First question scoring
-      if (answer.includes("complex problems")) {
-        careerPathScores["tech"] += 2;
-        careerPathScores["environment"] += 1;
-      }
-      if (answer.includes("supporting others")) {
-        careerPathScores["healthcare"] += 2;
-        careerPathScores["hospitality"] += 1;
-      }
-      if (answer.includes("creating")) {
-        careerPathScores["creative"] += 2;
-        careerPathScores["trades"] += 1;
-      }
-      if (answer.includes("organizing")) {
-        careerPathScores["leadership"] += 2;
-        careerPathScores["hospitality"] += 1;
-      }
-
-      // Second question scoring
-      if (answer.includes("planner")) {
-        careerPathScores["leadership"] += 2;
-        careerPathScores["environment"] += 1;
-      }
-      if (answer.includes("creative")) {
-        careerPathScores["creative"] += 2;
-      }
-      if (answer.includes("mediator")) {
-        careerPathScores["healthcare"] += 2;
-        careerPathScores["hospitality"] += 1;
-      }
-      if (answer.includes("executor")) {
-        careerPathScores["tech"] += 1;
-        careerPathScores["trades"] += 2;
-      }
-
-      // Third question scoring
-      if (answer.includes("Fast-paced")) {
-        careerPathScores["tech"] += 1;
-        careerPathScores["hospitality"] += 2;
-      }
-      if (answer.includes("Structured")) {
-        careerPathScores["leadership"] += 1;
-        careerPathScores["trades"] += 1;
-        careerPathScores["environment"] += 1;
-      }
-      if (answer.includes("Creative")) {
-        careerPathScores["creative"] += 2;
-      }
-      if (answer.includes("Collaborative")) {
-        careerPathScores["healthcare"] += 2;
-        careerPathScores["leadership"] += 1;
-      }
-    });
-
-    const topCareerPath = Object.entries(careerPathScores).reduce(
-      (a, b) => (b[1] > a[1] ? b : a)
-    )[0] as keyof typeof careerPaths;
-
-    setCareerRecommendation(careerPaths[topCareerPath]);
   };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
     setIsSubmitted(false);
-    setCareerRecommendation(null);
-  };
-
-  const questionVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 }
+    setCareerPathKey(null);
   };
 
   return (
@@ -235,88 +59,18 @@ const CareerQuizSection = () => {
         </motion.div>
 
         {!isSubmitted ? (
-          <motion.div
-            key={currentQuestion}
-            variants={questionVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="bg-white/80 backdrop-blur-sm shadow-lg rounded-lg p-8 border border-purple-100 dark:bg-purple-950/30 dark:border-purple-900/50"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              {quizQuestions[currentQuestion].icon}
-              <h3 className="text-2xl font-semibold">
-                {quizQuestions[currentQuestion].question}
-              </h3>
-            </div>
-
-            <div className="grid gap-4">
-              {quizQuestions[currentQuestion].options.map((option, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full text-left justify-start p-6 h-auto font-normal hover:bg-purple-50 dark:hover:bg-purple-950/50",
-                      "border-purple-100 dark:border-purple-900/50"
-                    )}
-                    onClick={() => handleAnswer(option)}
-                  >
-                    {option}
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-6 text-sm text-muted-foreground text-center">
-              Question {currentQuestion + 1} of {quizQuestions.length}
-            </div>
-          </motion.div>
+          <QuizQuestion
+            question={quizQuestions[currentQuestion]}
+            onAnswer={handleAnswer}
+            currentQuestion={currentQuestion}
+            totalQuestions={quizQuestions.length}
+          />
         ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center bg-white/80 backdrop-blur-sm shadow-lg rounded-lg p-8 border border-purple-100 dark:bg-purple-950/30 dark:border-purple-900/50"
-          >
-            <RocketIcon className="h-12 w-12 text-purple-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-semibold mb-4">Your Results Are Ready!</h3>
-            {user ? (
-              careerRecommendation && (
-                <>
-                  {careerRecommendation.icon}
-                  <h3 className="text-2xl font-semibold mb-4">{careerRecommendation.title}</h3>
-                  <p className="text-muted-foreground mb-6">
-                    {careerRecommendation.description}
-                  </p>
-                </>
-              )
-            ) : (
-              <div className="space-y-4">
-                <p className="text-muted-foreground mb-6">
-                  Sign in to view your personalized career path recommendation
-                </p>
-                <div className="flex items-center justify-center gap-4">
-                  <Link 
-                    to="/sign-in" 
-                    className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium"
-                  >
-                    Get Results <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            )}
-            <div className="mt-6">
-              <Button 
-                onClick={restartQuiz}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
-              >
-                Take Quiz Again
-              </Button>
-            </div>
-          </motion.div>
+          <QuizResult
+            careerRecommendation={careerPathKey ? careerPaths[careerPathKey] : null}
+            isAuthenticated={!!user}
+            onRestartQuiz={restartQuiz}
+          />
         )}
       </div>
     </section>
