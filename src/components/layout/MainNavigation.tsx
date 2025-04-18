@@ -1,8 +1,9 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
 import { Link } from 'react-router-dom';
-import { GraduationCap, LogIn, UserPlus, Building2, Briefcase, Shield, Users, BookOpen } from 'lucide-react';
+import { GraduationCap, LogIn, UserPlus, Building2, Briefcase, Shield, Users, BookOpen, Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import { UserDropdown } from './navigation/UserDropdown';
 import { JobSeekerDropdown } from './navigation/JobSeekerDropdown';
@@ -55,15 +56,33 @@ const MainNavigation = ({ className }: { className?: string }) => {
       {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
       
-      {/* Hidden CEO Portal Link with round purple-blue gradient shield */}
+      {/* Hidden CEO Portal Link with round purple-blue gradient shield and heart */}
       <div className="relative group">
-        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-purple-600/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
+        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
         <Link 
           to="/ceo-portal" 
           className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 text-sm font-medium flex items-center justify-center w-8 h-8 rounded-full"
         >
-          <Shield className="h-4 w-4 text-purple-600" />
+          <div className="flex items-center">
+            <Shield className="h-4 w-4 text-purple-600 mr-1" />
+            <Heart 
+              className="h-4 w-4" 
+              style={{
+                fill: "url(#ceoPortalGradient)",
+                stroke: "none"
+              }}
+            />
+          </div>
         </Link>
+        <svg width="0" height="0">
+          <defs>
+            <linearGradient id="ceoPortalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style={{ stopColor: '#9333EA' }} />
+              <stop offset="50%" style={{ stopColor: '#3B82F6' }} />
+              <stop offset="100%" style={{ stopColor: '#F59E0B' }} />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
 
       <Separator orientation="vertical" className="h-6 bg-gradient-to-b from-purple-200/30 via-blue-300/30 to-purple-200/30" />

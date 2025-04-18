@@ -17,7 +17,8 @@ import {
   LogOut,
   Info,
   LogIn,
-  UserPlus
+  UserPlus,
+  Heart
 } from 'lucide-react';
 import { MobileNavLink } from './MobileNavLink';
 import { Separator } from '@/components/ui/separator';
@@ -145,11 +146,27 @@ export const AdminLink = () => (
 // Updated CEO Link with refined round purple-blue gradient shield
 export const CeoLink = () => (
   <MobileNavLink to="/ceo-portal" className="relative group">
-    <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-purple-600/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
+    <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-500/50 via-blue-500/50 to-gold-500/50 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"></div>
     <div className="relative z-10 opacity-30 group-hover:opacity-100 transition-all duration-300 flex items-center gap-3">
-      <Shield className="h-5 w-5 text-purple-600" />
+      <Shield className="h-5 w-5 text-purple-600 mr-1" />
+      <Heart 
+        className="h-5 w-5" 
+        style={{
+          fill: "url(#ceoPortalMobileGradient)",
+          stroke: "none"
+        }}
+      />
       CEO Portal
     </div>
+    <svg width="0" height="0">
+      <defs>
+        <linearGradient id="ceoPortalMobileGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#9333EA' }} />
+          <stop offset="50%" style={{ stopColor: '#3B82F6' }} />
+          <stop offset="100%" style={{ stopColor: '#F59E0B' }} />
+        </linearGradient>
+      </defs>
+    </svg>
   </MobileNavLink>
 );
 
