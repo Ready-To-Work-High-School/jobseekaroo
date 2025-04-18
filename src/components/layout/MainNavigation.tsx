@@ -2,15 +2,14 @@
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
-import { NavLinks } from './navigation/NavLinks';
+import { Link } from 'react-router-dom';
+import { GraduationCap, LogIn, UserPlus, Building2, Briefcase, Shield, Users, BookOpen } from 'lucide-react';
+import { Button } from '../ui/button';
+import { UserDropdown } from './navigation/UserDropdown';
 import { JobSeekerDropdown } from './navigation/JobSeekerDropdown';
 import { EmployerDropdown } from './navigation/EmployerDropdown';
 import { ResourcesDropdown } from './navigation/ResourcesDropdown';
 import { AdminLink } from './navigation/AdminLink';
-import { UserDropdown } from './navigation/UserDropdown';
-import { Link } from 'react-router-dom';
-import { GraduationCap, LogIn, UserPlus } from 'lucide-react';
-import { Button } from '../ui/button';
 
 const MainNavigation = ({ className }: { className?: string }) => {
   const { user, userProfile, isAdmin, signOut } = useNavigation();
@@ -18,14 +17,20 @@ const MainNavigation = ({ className }: { className?: string }) => {
   return (
     <nav className={cn("hidden lg:flex items-center space-x-6", className)}>
       {/* Primary Navigation Links */}
-      <NavLinks />
+      <Link 
+        to="/" 
+        className="text-sm font-medium transition-colors hover:text-primary"
+      >
+        Home
+      </Link>
       
-      {/* Dropdown Menus */}
+      {/* Job Seekers Section */}
       <JobSeekerDropdown />
-      <EmployerDropdown />
-      <ResourcesDropdown />
       
-      {/* School Link */}
+      {/* Employers Section */}
+      <EmployerDropdown />
+      
+      {/* Schools Link */}
       <Link 
         to="/school-integration" 
         className="text-sm font-medium transition-colors hover:text-primary flex items-center gap-1.5"
@@ -34,8 +39,20 @@ const MainNavigation = ({ className }: { className?: string }) => {
         Schools
       </Link>
       
-      {/* Admin Link */}
+      {/* Resources Section */}
+      <ResourcesDropdown />
+      
+      {/* Admin Link - Only shown if user is admin */}
       <AdminLink isAdmin={isAdmin} />
+      
+      {/* Hidden CEO Portal Link */}
+      <Link 
+        to="/ceo-portal" 
+        className="opacity-0 hover:opacity-100 transition-opacity duration-300 text-sm font-medium flex items-center gap-1"
+      >
+        <Shield className="h-4 w-4" />
+        CEO Portal
+      </Link>
 
       {/* Auth Links or User Menu */}
       {user ? (

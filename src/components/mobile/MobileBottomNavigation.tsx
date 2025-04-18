@@ -1,23 +1,25 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Search, Briefcase, User, Book, GraduationCap } from 'lucide-react';
+import { Home, Briefcase, Building2, GraduationCap, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { useNavigation } from '../layout/navigation/useNavigation';
 
 const MobileBottomNavigation = () => {
   const location = useLocation();
+  const { isAdmin } = useNavigation();
   
-  // Skip rendering on certain paths
+  // Skip rendering on auth paths
   if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname)) {
     return null;
   }
   
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
-    { icon: Search, label: 'Jobs', path: '/jobs' },
+    { icon: Briefcase, label: 'Jobs', path: '/jobs' },
+    { icon: Building2, label: 'Employers', path: '/for-employers' },
     { icon: GraduationCap, label: 'Schools', path: '/school-integration' },
-    { icon: Briefcase, label: 'Toolkit', path: '/first-job-toolkit' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
   
