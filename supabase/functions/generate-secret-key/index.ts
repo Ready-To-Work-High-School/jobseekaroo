@@ -22,12 +22,20 @@ serve(async (req) => {
       .map(b => b.toString(16).padStart(2, "0"))
       .join("");
     
-    console.log("Successfully generated a new encryption key");
+    // Generate a JWT secret as well
+    const jwtKeyBuffer = new Uint8Array(32);
+    crypto.getRandomValues(jwtKeyBuffer);
+    const jwtSecret = Array.from(jwtKeyBuffer)
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+    
+    console.log("Successfully generated new encryption keys");
     
     return new Response(
       JSON.stringify({ 
         encryptionKey,
-        message: "Copy this key and store it securely as an environment variable named ENCRYPTION_KEY" 
+        jwtSecret,
+        message: "Copy these keys and store them securely as environment variables named ENCRYPTION_KEY and JWT_SECRET" 
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -38,7 +46,7 @@ serve(async (req) => {
     console.error("Error generating encryption key:", error.message);
     
     return new Response(
-      JSON.stringify({ error: `Failed to generate key: ${error.message}` }),
+      JSON.stringify({ error: `Failed to generate keys: ${error.message}` }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
