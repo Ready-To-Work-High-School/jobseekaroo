@@ -1,7 +1,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/Layout';
-import { StudentProfileGrid } from '@/components/students/StudentProfileGrid';
+import StudentProfileGrid from '@/components/students/StudentProfileGrid';
 import ProfileForm from '@/components/profile/ProfileForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
