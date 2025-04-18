@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Hero from '@/components/Hero';
 import SearchSection from '@/components/home/SearchSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import CareerQuizSection from '@/components/home/CareerQuizSection';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import SuccessStories from '@/components/home/SuccessStories';
@@ -49,6 +50,10 @@ const Home = () => {
 
         <ErrorBoundary>
           <HowItWorksSection />
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <CareerQuizSection />
         </ErrorBoundary>
 
         <ErrorBoundary>
