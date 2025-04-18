@@ -15,6 +15,7 @@ import { Award, Calendar, Check, ChevronDown, Edit, GraduationCap, Plus, Search,
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { Checkbox } from '@/components/ui/checkbox';
+import { DatePicker } from '@/components/ui/date-picker';
 
 interface ApprenticeshipProgram {
   id: string;
@@ -204,22 +205,11 @@ const ApprenticeshipProgramsTab = () => {
                   
                   <div className="grid gap-2">
                     <Label>Start Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start text-left font-normal">
-                          <Calendar className="mr-2 h-4 w-4" />
-                          {selectedDate ? format(selectedDate, 'PPP') : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={selectedDate}
-                          onSelect={setSelectedDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <DatePicker 
+                      selected={selectedDate} 
+                      onSelect={setSelectedDate} 
+                      placeholder="Pick a date"
+                    />
                   </div>
                 </div>
                 
