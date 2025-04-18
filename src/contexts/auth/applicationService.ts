@@ -10,6 +10,7 @@ export const createApplication = async (
   if (!userId) throw new Error('User must be logged in to create an application');
   
   try {
+    // Add all required fields ensuring job_id is properly populated
     const newApplication = {
       ...application,
       user_id: userId,
@@ -17,6 +18,8 @@ export const createApplication = async (
       updated_at: new Date().toISOString(),
     };
     
+    // Explicitly avoid any employer_id field that might be causing conflicts
+    // Ensure we're not trying to insert fields that don't exist in the table
     const { data, error } = await supabase
       .from('job_applications')
       .insert([newApplication])

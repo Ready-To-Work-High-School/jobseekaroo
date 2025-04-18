@@ -1,5 +1,5 @@
 
-export type ApplicationStatus = 'applied' | 'screening' | 'interview' | 'offer' | 'rejected' | 'accepted' | 'withdrawn';
+export type ApplicationStatus = 'applied' | 'interviewing' | 'offered' | 'accepted' | 'rejected' | 'withdrawn';
 
 export interface JobApplication {
   id: string;
@@ -9,17 +9,9 @@ export interface JobApplication {
   company: string;
   status: ApplicationStatus;
   applied_date: string;
-  next_step_date?: string;
-  next_step?: string;
-  contact_name?: string;
-  contact_email?: string;
+  interview_date?: string;
+  offer_date?: string;
   notes?: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
 }
-
-export interface StatusCount {
-  status: ApplicationStatus;
-  count: number;
-}
-

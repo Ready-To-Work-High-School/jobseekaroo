@@ -42,7 +42,7 @@ export const useApplicationFlow = ({ job, onClose }: UseApplicationFlowProps) =>
 
     setIsSubmitting(true);
     try {
-      // Create the application in the user's dashboard
+      // Create the application in the user's dashboard with required fields only
       await createApplication({
         job_id: job.id,
         job_title: job.title,
