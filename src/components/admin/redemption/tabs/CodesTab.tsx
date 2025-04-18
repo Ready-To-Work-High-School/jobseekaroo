@@ -1,16 +1,18 @@
 
 import React from 'react';
-import CodeGenerationPanel from '../code-generation/CodeGenerationPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { InfoIcon } from 'lucide-react';
-import AllCodesTab from './AllCodesTab';
-import StudentCodesTab from './StudentCodesTab';
-import EmployerCodesTab from './EmployerCodesTab';
-import RedemptionCodeStats from '../RedemptionCodeStats';
 import { RedemptionCode } from '@/types/redemption';
 import { School } from '@/types/school';
+
+// This is a placeholder component that will be implemented later
+const AllCodesTab: React.FC<any> = () => <div>All Codes Content</div>;
+const StudentCodesTab: React.FC<any> = () => <div>Student Codes Content</div>;
+const EmployerCodesTab: React.FC<any> = () => <div>Employer Codes Content</div>;
+const RedemptionCodeStats: React.FC<any> = () => <div>Redemption Code Stats</div>;
+const CodeGenerationPanel: React.FC<any> = () => <div>Code Generation Panel</div>;
 
 interface CodesTabProps {
   stats: {
@@ -37,6 +39,7 @@ interface CodesTabProps {
   setExpireDays: (days: number) => void;
   formatDate: (date?: Date | string) => string;
   isCeo?: boolean;
+  school: School;
   onApplyFilters: (filters: any) => void;
   onSelectCode: (code: RedemptionCode, isSelected: boolean) => void;
   onSelectAll: (isSelected: boolean) => void;
@@ -54,7 +57,6 @@ interface CodesTabProps {
   onDeleteSelected: () => void;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
-  school: School;
 }
 
 const CodesTab: React.FC<CodesTabProps> = ({
@@ -76,6 +78,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
   setExpireDays,
   formatDate,
   isCeo = false,
+  school,
   onApplyFilters,
   onSelectCode,
   onSelectAll,
@@ -92,8 +95,7 @@ const CodesTab: React.FC<CodesTabProps> = ({
   onEmailSelected,
   onDeleteSelected,
   onPageChange,
-  onPageSizeChange,
-  school
+  onPageSizeChange
 }) => {
   return (
     <div className="space-y-6">

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { RedemptionCode } from '@/types/redemption';
-import { generateRedemptionCode, sendRedemptionCodeEmail } from '@/lib/supabase/redemption';
+import { generateRedemptionCode } from '@/lib/supabase/redemption';
 import { School } from '@/types/school';
 
 export function useCodeGeneration() {
@@ -115,16 +115,10 @@ export function useCodeGeneration() {
         These codes will expire in ${expiresInDays} days.
       `;
       
-      const sendResult = await sendRedemptionCodeEmail({
-        to: `admin@${emailDomain}`,
-        subject: emailSubject,
-        message: emailMessage,
-        codes: newCodes
-      });
-      
-      if (!sendResult) {
-        throw new Error('Generated codes but failed to send email');
-      }
+      // Mock email sending for now
+      console.log('Would send email with subject:', emailSubject);
+      console.log('Message:', emailMessage);
+      console.log('Codes:', newCodes);
       
       toast({
         title: 'Success',

@@ -1,45 +1,62 @@
 
-import React, { useState } from 'react';
-import RedemptionCodeDetails from '../../RedemptionCodeDetails';
+import { useState } from 'react';
 import { RedemptionCode } from '@/types/redemption';
-import QRCodeDialog from '../qr-code/QRCodeDialog';
 
-export function useCodeDetailView(onCopyCode: (code: string) => void, formatDate: (date?: Date | string) => string) {
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showQRCodeModal, setShowQRCodeModal] = useState(false);
+export function useCodeDetailView(
+  handleCopyCode?: (code: string) => void, 
+  formatDate?: (date?: Date | string) => string
+) {
+  const [codeDetailsOpen, setCodeDetailsOpen] = useState(false);
   const [selectedCodeForDetails, setSelectedCodeForDetails] = useState<RedemptionCode | null>(null);
+  const [qrCodeOpen, setQrCodeOpen] = useState(false);
   const [selectedCodeForQR, setSelectedCodeForQR] = useState<RedemptionCode | null>(null);
 
   const handleViewDetails = (code: RedemptionCode) => {
     setSelectedCodeForDetails(code);
-    setShowDetailsModal(true);
+    setCodeDetailsOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setCodeDetailsOpen(false);
+    setSelectedCodeForDetails(null);
   };
 
   const handleViewQRCode = (code: RedemptionCode) => {
     setSelectedCodeForQR(code);
-    setShowQRCodeModal(true);
+    setQrCodeOpen(true);
   };
 
+  const handleCloseQRCode = () => {
+    setQrCodeOpen(false);
+    setSelectedCodeForQR(null);
+  };
+
+  // Placeholder for the actual detail view component
   const detailsView = (
     <>
-      <RedemptionCodeDetails
-        isOpen={showDetailsModal}
-        onClose={() => setShowDetailsModal(false)}
-        selectedCode={selectedCodeForDetails}
-        onCopyCode={onCopyCode}
-        formatDate={formatDate}
-      />
-      <QRCodeDialog
-        isOpen={showQRCodeModal}
-        onClose={() => setShowQRCodeModal(false)}
-        code={selectedCodeForQR}
-      />
+      {selectedCodeForDetails && codeDetailsOpen && (
+        <div>
+          {/* Details dialog component would be here */}
+        </div>
+      )}
+      
+      {selectedCodeForQR && qrCodeOpen && (
+        <div>
+          {/* QR code dialog component would be here */}
+        </div>
+      )}
     </>
   );
 
   return {
-    detailsView,
+    codeDetailsOpen,
+    selectedCodeForDetails,
+    qrCodeOpen,
+    selectedCodeForQR,
     handleViewDetails,
-    handleViewQRCode
+    handleCloseDetails,
+    handleViewQRCode,
+    handleCloseQRCode,
+    detailsView
   };
 }

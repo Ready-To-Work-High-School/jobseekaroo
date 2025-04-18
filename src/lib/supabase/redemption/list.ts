@@ -2,90 +2,81 @@
 import { supabase } from '../index';
 import { RedemptionCode } from '@/types/redemption';
 
-interface PaginationOptions {
-  page?: number;
-  pageSize?: number;
-}
-
-/**
- * List redemption codes with optional filters and pagination
- */
 export async function listRedemptionCodes(
-  type?: 'student' | 'employer',
-  usedOnly?: boolean,
-  paginationOptions?: PaginationOptions
-): Promise<{ data: RedemptionCode[], count: number }> {
+  options: {
+    type?: 'student' | 'employer' | 'admin';
+    used?: boolean;
+    schoolId?: string;
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    sortDirection?: 'asc' | 'desc';
+  } = {}
+): Promise<{ codes: RedemptionCode[]; count: number }> {
   try {
-    // Set default pagination values
-    const page = paginationOptions?.page || 1;
-    const pageSize = paginationOptions?.pageSize || 10;
-    const startRange = (page - 1) * pageSize;
-    const endRange = startRange + pageSize - 1;
+    const {
+      type,
+      used,
+      schoolId,
+      page = 1,
+      limit = 50,
+      sortBy = 'created_at',
+      sortDirection = 'desc'
+    } = options;
 
-    // First get the total count for pagination
-    let countQuery = supabase
-      .from('redemption_codes' as any)
-      .select('id', { count: 'exact' });
-    
-    if (type) {
-      countQuery = countQuery.eq('type', type);
-    }
+    // Calculate pagination
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
 
-    if (usedOnly !== undefined) {
-      countQuery = countQuery.eq('used', usedOnly);
-    }
-
-    const { count: totalCount, error: countError } = await countQuery;
-
-    if (countError) {
-      console.error('Error counting redemption codes:', countError);
-      return { data: [], count: 0 };
-    }
-
-    // Then get the paginated data
+    // Start building the query
     let query = supabase
-      .from('redemption_codes' as any)
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(startRange, endRange);
+      .from('redemption_codes')
+      .select('*', { count: 'exact' });
 
+    // Apply filters if provided
     if (type) {
       query = query.eq('type', type);
     }
-
-    if (usedOnly !== undefined) {
-      query = query.eq('used', usedOnly);
+    if (used !== undefined) {
+      query = query.eq('used', used);
+    }
+    if (schoolId) {
+      query = query.eq('school_id', schoolId);
     }
 
-    const { data, error } = await query;
+    // Apply sorting and pagination
+    query = query
+      .order(sortBy, { ascending: sortDirection === 'asc' })
+      .range(from, to);
 
-    if (error || !data) {
-      console.error('Error listing redemption codes:', error);
-      return { data: [], count: 0 };
+    // Execute the query
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('Error fetching redemption codes:', error);
+      return { codes: [], count: 0 };
     }
 
     // Transform the database records to match our interface
-    const redemptionCodes: RedemptionCode[] = data.map(item => {
-      // Cast item to any since TypeScript doesn't know the shape
-      const itemAny = item as any;
-      
-      return {
-        id: itemAny.id,
-        code: itemAny.code,
-        type: itemAny.type as 'student' | 'employer' | 'admin',
-        used: itemAny.used,
-        usedBy: itemAny.used_by,
-        usedAt: itemAny.used_at ? new Date(itemAny.used_at) : undefined,
-        createdAt: new Date(itemAny.created_at),
-        expiresAt: itemAny.expires_at ? new Date(itemAny.expires_at) : undefined,
-        schoolId: itemAny.school_id || '',
-        isReusable: itemAny.is_reusable || false
-      };
-    });
+    const codes: RedemptionCode[] = data.map(record => ({
+      id: record.id,
+      code: record.code,
+      type: record.type as 'student' | 'employer' | 'admin',
+      used: record.used,
+      usedBy: record.used_by,
+      usedAt: record.used_at ? new Date(record.used_at) : undefined,
+      createdAt: new Date(record.created_at),
+      expiresAt: record.expires_at ? new Date(record.expires_at) : undefined,
+      schoolId: record.school_id || '',
+      isReusable: record.is_reusable || false
+    }));
 
-    return { data: redemptionCodes, count: totalCount || 0 };
+    return { 
+      codes, 
+      count: count || 0 
+    };
   } catch (error) {
     console.error('Error listing redemption codes:', error);
-    return { data: [], count: 0 };
+    return { codes: [], count: 0 };
   }
 }

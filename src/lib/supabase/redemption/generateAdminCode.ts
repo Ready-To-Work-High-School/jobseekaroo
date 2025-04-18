@@ -51,7 +51,7 @@ export async function generateAdminRedemptionCode(
       usedAt: data.used_at ? new Date(data.used_at) : undefined,
       createdAt: new Date(data.created_at),
       expiresAt: data.expires_at ? new Date(data.expires_at) : undefined,
-      schoolId: data.school_id || '', // Ensure we have a string value even if null
+      schoolId: data.school_id || '',
       isReusable: data.is_reusable || false
     };
 

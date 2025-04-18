@@ -5,6 +5,8 @@ import { useCodeOperationHandlers } from './useCodeOperationHandlers';
 import { useCodeDetailView } from './useCodeDetailView';
 import { useBasicHandlers } from './useBasicHandlers';
 import { useEmailHandlers } from './useEmailHandlers';
+import { useDeleteHandlers } from './useDeleteHandlers';
+import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface RedemptionContainerHandlersProps {
   handleGenerateCode: (type: 'student' | 'employer', school: School, expireDays: number) => Promise<RedemptionCode | null>;
@@ -23,7 +25,7 @@ interface RedemptionContainerHandlersProps {
   closeDeleteDialog: () => void;
   formatDate: (date?: Date | string) => string;
   exportCodes: (codes: RedemptionCode[]) => void;
-  scheduleEmail: (params: any) => Promise<boolean>;
+  scheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
   isScheduling: boolean;
 }
 
@@ -72,26 +74,23 @@ export function useRedemptionContainerHandlers({
   });
   
   const {
-    codeDetailsOpen, 
-    selectedCodeForDetails, 
-    qrCodeOpen,
-    selectedCodeForQR,
     handleViewDetails,
-    handleCloseDetails,
     handleViewQRCode,
-    handleCloseQRCode
-  } = useCodeDetailView();
+    detailsView
+  } = useCodeDetailView(undefined, formatDate);
 
   const {
     handleCopyCode,
-    handleExportCodes,
-    handlePrintCodes,
+    handleRefresh,
+    handleExport,
+    handlePrint,
+    handleApplyFilters,
     handleSelectCode,
     handleSelectAll,
-    handleApplyFilters
   } = useBasicHandlers({
     filteredCodes,
-    exportCodes
+    exportCodes: async (codes) => exportCodes(codes),
+    fetchCodes
   });
 
   const {
@@ -99,54 +98,43 @@ export function useRedemptionContainerHandlers({
     handleEmailSelected,
     handleScheduleEmail
   } = useEmailHandlers({
+    formatDate,
+    selectedCodes,
     scheduleEmail,
     isScheduling
   });
-
-  const detailsView = (
-    <>
-      {/* Code details dialog */}
-      {selectedCodeForDetails && codeDetailsOpen && (
-        <div>
-          {/* Details dialog component would be here */}
-        </div>
-      )}
-      
-      {/* QR code dialog */}
-      {selectedCodeForQR && qrCodeOpen && (
-        <div>
-          {/* QR code dialog component would be here */}
-        </div>
-      )}
-    </>
-  );
-
-  const handleRefresh = async () => {
-    await fetchCodes();
-  };
   
+  const {
+    handleDeleteSelected
+  } = useDeleteHandlers({
+    selectedCodes,
+    openDeleteDialog
+  });
+
+  const handlers = {
+    onApplyFilters: handleApplyFilters,
+    onSelectCode: handleSelectCode,
+    onSelectAll: handleSelectAll,
+    onCopyCode: handleCopyCode,
+    onEmailCode: handleEmailCode,
+    onViewDetails: handleViewDetails,
+    onViewQRCode: handleViewQRCode,
+    onCodeGeneration: handleCodeGeneration,
+    onBulkGeneration: handleBulkGeneration,
+    onAutomatedGeneration: handleAutomatedGeneration,
+    onWizardGeneration: handleWizardGeneration,
+    onScheduleEmail: handleScheduleEmail,
+    onRefresh: handleRefresh,
+    onExport: () => handleExport(filteredCodes),
+    onPrint: handlePrint,
+    onEmailSelected: handleEmailSelected,
+    onDeleteSelected: handleDeleteSelected,
+    onPageChange: (page: number) => console.log('Page change to', page),
+    onPageSizeChange: (size: number) => console.log('Page size change to', size)
+  };
+
   return {
-    handlers: {
-      onApplyFilters: handleApplyFilters,
-      onSelectCode: handleSelectCode,
-      onSelectAll: handleSelectAll,
-      onCopyCode: handleCopyCode,
-      onEmailCode: handleEmailCode,
-      onViewDetails: handleViewDetails,
-      onViewQRCode: handleViewQRCode,
-      onCodeGeneration: handleCodeGeneration,
-      onBulkGeneration: handleBulkGeneration,
-      onAutomatedGeneration: handleAutomatedGeneration,
-      onWizardGeneration: handleWizardGeneration,
-      onScheduleEmail: handleScheduleEmail,
-      onRefresh: handleRefresh,
-      onExport: handleExportCodes,
-      onPrint: handlePrintCodes,
-      onEmailSelected: handleEmailSelected,
-      onDeleteSelected: handleShowDeleteDialog,
-      onPageChange: (page: number) => console.log('Page change to', page),
-      onPageSizeChange: (size: number) => console.log('Page size change to', size)
-    },
+    handlers,
     detailsView,
     handleConfirmDelete
   };

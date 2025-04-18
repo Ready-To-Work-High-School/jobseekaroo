@@ -1,45 +1,18 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Briefcase, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { ShieldCheck } from 'lucide-react';
 
 const CeoHeader: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleManageJobs = () => {
-    navigate('/employer-dashboard');
-  };
-
-  const handleManagePremium = () => {
-    navigate('/admin/premium');
-  };
-
   return (
-    <div className="flex justify-between items-center mb-6">
-      <div>
-        <h2 className="text-xl font-semibold">CEO Dashboard</h2>
-        <p className="text-sm text-muted-foreground">Manage codes, job postings, and premium privileges</p>
-      </div>
-      <div className="flex gap-2">
-        <Button 
-          onClick={handleManagePremium} 
-          variant="default" 
-          className="flex items-center gap-2"
-        >
-          <Sparkles className="h-4 w-4" />
-          Premium Privileges
-        </Button>
-        <Button 
-          onClick={handleManageJobs} 
-          variant="outline" 
-          className="flex items-center gap-2"
-        >
-          <Briefcase className="h-4 w-4" />
-          Manage Job Postings
-        </Button>
-      </div>
-    </div>
+    <Alert className="mb-6 bg-amber-50 text-amber-900 border-amber-200">
+      <ShieldCheck className="h-5 w-5 text-amber-600" />
+      <AlertTitle className="text-amber-800">Executive Access</AlertTitle>
+      <AlertDescription className="text-amber-700">
+        You have executive-level access to the redemption code management system. 
+        You can generate, distribute, and manage all redemption codes.
+      </AlertDescription>
+    </Alert>
   );
 };
 

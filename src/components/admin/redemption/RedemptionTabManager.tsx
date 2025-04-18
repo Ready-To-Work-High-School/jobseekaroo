@@ -1,13 +1,14 @@
+
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CodesTab from '../tabs/CodesTab';
-import AnalyticsTab from '../tabs/AnalyticsTab';
-import ReportsTab from '../tabs/ReportsTab';
-import WizardTab from '../tabs/WizardTab';
-import SchedulerTab from '../tabs/SchedulerTab';
-import RequestsTab from '../tabs/RequestsTab';
-import { RedemptionTabManagerProps } from './types';
-import CeoHeader from './CeoHeader';
+import CodesTab from '../redemption/tabs/CodesTab';
+import AnalyticsTab from '../redemption/tabs/AnalyticsTab';
+import ReportsTab from '../redemption/tabs/ReportsTab';
+import WizardTab from '../redemption/tabs/WizardTab';
+import SchedulerTab from '../redemption/tabs/SchedulerTab';
+import RequestsTab from '../redemption/tabs/RequestsTab';
+import { RedemptionTabManagerProps } from './tab-manager/types';
+import CeoHeader from './tab-manager/CeoHeader';
 
 const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   activeTab,
@@ -136,6 +137,6 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
       </Tabs>
     </>
   );
-};
+}
 
 export default RedemptionTabManager;

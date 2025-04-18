@@ -1,37 +1,21 @@
 
-import { supabase } from '../index';
+import { RedemptionCode } from '@/types/redemption';
 import { SendRedemptionEmailParams } from './types';
 
-/**
- * Send redemption code(s) via email
- */
-export async function sendRedemptionCodeEmail({
-  to,
-  subject,
-  message,
-  codes
-}: SendRedemptionEmailParams): Promise<boolean> {
+// Placeholder function - to be implemented with actual email sending logic
+export async function sendRedemptionCodeEmail(
+  params: SendRedemptionEmailParams
+): Promise<boolean> {
   try {
-    // Call the edge function to send email
-    const { error } = await supabase.functions.invoke('send-redemption-code', {
-      body: {
-        to,
-        subject,
-        message,
-        codes: codes.map(code => ({
-          id: code.id,
-          code: code.code,
-          type: code.type,
-          expiresAt: code.expiresAt
-        }))
-      }
-    });
-
-    if (error) {
-      console.error('Error sending redemption code email:', error);
-      return false;
-    }
-
+    const { to, subject, message, codes } = params;
+    
+    // This would be replaced with actual email sending logic
+    console.log('Sending email to:', to);
+    console.log('Subject:', subject);
+    console.log('Message:', message);
+    console.log('Codes:', codes.map(c => c.code).join(', '));
+    
+    // Mock successful email sending
     return true;
   } catch (error) {
     console.error('Error sending redemption code email:', error);

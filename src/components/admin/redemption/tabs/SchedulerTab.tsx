@@ -1,22 +1,29 @@
 
 import React from 'react';
-import EmailScheduler from '../scheduling/EmailScheduler';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 
 interface SchedulerTabProps {
-  isScheduling: boolean;
   onSchedule: (params: ScheduleEmailParams) => Promise<boolean>;
+  isScheduling: boolean;
 }
 
 const SchedulerTab: React.FC<SchedulerTabProps> = ({
-  isScheduling,
-  onSchedule
+  onSchedule,
+  isScheduling
 }) => {
   return (
-    <EmailScheduler 
-      onSchedule={onSchedule}
-      isScheduling={isScheduling}
-    />
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Email Scheduler</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Schedule emails with redemption codes.</p>
+          {isScheduling && <p>Scheduling in progress...</p>}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

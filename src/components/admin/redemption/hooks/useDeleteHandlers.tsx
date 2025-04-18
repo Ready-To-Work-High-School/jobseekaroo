@@ -1,23 +1,20 @@
 
 import { RedemptionCode } from '@/types/redemption';
-import { useToast } from '@/hooks/use-toast';
 
 interface DeleteHandlersProps {
   selectedCodes: RedemptionCode[];
-  openDeleteDialog: (code: RedemptionCode[]) => void;
+  openDeleteDialog: (codes: RedemptionCode[]) => void;
 }
 
-export function useDeleteHandlers({ selectedCodes, openDeleteDialog }: DeleteHandlersProps) {
-  const { toast } = useToast();
+export function useDeleteHandlers({
+  selectedCodes,
+  openDeleteDialog
+}: DeleteHandlersProps) {
   
-  // Handle delete selected
   const handleDeleteSelected = () => {
     if (selectedCodes.length === 0) {
-      toast({
-        title: 'No Codes Selected',
-        description: 'Please select at least one code to delete.',
-        variant: 'destructive',
-      });
+      // In a real implementation, you would show a toast notification
+      console.log('No codes selected');
       return;
     }
     

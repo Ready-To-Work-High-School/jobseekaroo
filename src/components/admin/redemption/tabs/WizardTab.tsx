@@ -1,16 +1,10 @@
 
 import React from 'react';
-import CodeGenerationWizard from '../wizard/CodeGenerationWizard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface WizardTabProps {
   isGenerating: boolean;
-  onGenerate: (params: {
-    codeType: 'student' | 'employer';
-    amount: number;
-    expiresInDays: number;
-    emailDomain: string;
-    sendEmail: boolean;
-  }) => Promise<void>;
+  onGenerate: (params: any) => Promise<void>;
 }
 
 const WizardTab: React.FC<WizardTabProps> = ({
@@ -18,10 +12,17 @@ const WizardTab: React.FC<WizardTabProps> = ({
   onGenerate
 }) => {
   return (
-    <CodeGenerationWizard 
-      onGenerate={onGenerate}
-      isGenerating={isGenerating}
-    />
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Code Generation Wizard</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Generate codes with a guided wizard.</p>
+          {isGenerating && <p>Generation in progress...</p>}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

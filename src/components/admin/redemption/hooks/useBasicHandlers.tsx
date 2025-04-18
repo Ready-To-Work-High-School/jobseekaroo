@@ -1,49 +1,58 @@
 
 import { RedemptionCode } from '@/types/redemption';
-import { useToast } from '@/hooks/use-toast';
-import { useClipboard } from '@/hooks/useClipboard';
+import { useState } from 'react';
 
 interface BasicHandlersProps {
-  fetchCodes: () => Promise<void>;
-  exportCodes: (codes: RedemptionCode[], format?: 'csv' | 'json' | 'txt') => Promise<void>;
+  filteredCodes?: RedemptionCode[];
+  exportCodes?: (codes: RedemptionCode[], format?: 'csv' | 'json' | 'txt') => Promise<void>;
+  fetchCodes?: () => Promise<void>;
 }
 
-export function useBasicHandlers({ fetchCodes, exportCodes }: BasicHandlersProps) {
-  const { toast } = useToast();
-  const { copyToClipboard } = useClipboard();
-  
-  // Handle copying code to clipboard
+export function useBasicHandlers({
+  filteredCodes = [],
+  exportCodes = async () => {},
+  fetchCodes = async () => {}
+}: BasicHandlersProps) {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const handleCopyCode = (code: string) => {
-    copyToClipboard(code);
-    toast({
-      title: 'Copied to clipboard',
-      description: `Code ${code} copied to clipboard.`,
-    });
+    navigator.clipboard.writeText(code);
+    // In a real implementation, you would show a toast notification
+    console.log('Code copied to clipboard:', code);
   };
-  
-  // Handle refresh
+
   const handleRefresh = async () => {
-    await fetchCodes();
-    toast({
-      title: 'Refreshed',
-      description: 'The code list has been refreshed.',
-    });
+    setIsRefreshing(true);
+    try {
+      await fetchCodes();
+    } finally {
+      setIsRefreshing(false);
+    }
   };
-  
-  // Handle export
-  const handleExport = (filteredCodes: RedemptionCode[]) => {
-    exportCodes(filteredCodes, 'csv');
+
+  const handleExport = async (codes: RedemptionCode[]) => {
+    await exportCodes(codes, 'csv');
+    // In a real implementation, you would show a toast notification
+    console.log('Exported codes:', codes.length);
   };
-  
-  // Handle print
+
   const handlePrint = () => {
     window.print();
   };
-  
-  // Handle apply filters
+
   const handleApplyFilters = (filters: any) => {
     console.log('Applying filters:', filters);
-    // Logic to apply filters would go here
+    // In a real implementation, you would apply the filters
+  };
+
+  const handleSelectCode = (code: RedemptionCode, isSelected: boolean) => {
+    // This would be handled by the selection hook
+    console.log('Select code:', code.id, isSelected);
+  };
+
+  const handleSelectAll = (isSelected: boolean) => {
+    // This would be handled by the selection hook
+    console.log('Select all:', isSelected);
   };
 
   return {
@@ -51,6 +60,9 @@ export function useBasicHandlers({ fetchCodes, exportCodes }: BasicHandlersProps
     handleRefresh,
     handleExport,
     handlePrint,
-    handleApplyFilters
+    handleApplyFilters,
+    handleSelectCode,
+    handleSelectAll,
+    isRefreshing
   };
 }

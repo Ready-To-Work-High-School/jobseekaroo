@@ -1,8 +1,7 @@
 
 import React from 'react';
-import AnalyticsDashboard from '../analytics/dashboard/AnalyticsDashboard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RedemptionCode } from '@/types/redemption';
-import { prepareUsageHistoricalData } from '../analytics/utils/predictionUtils';
 
 interface AnalyticsTabProps {
   stats: {
@@ -12,35 +11,30 @@ interface AnalyticsTabProps {
     employerCodes: number;
     expiringThisMonth: number;
   };
-  usageOverTime?: {
-    date: string;
-    count: number;
-  }[];
-  generationOverTime?: {
-    date: string;
-    count: number;
-  }[];
-  codes?: RedemptionCode[];
+  usageOverTime?: { date: string; count: number; }[];
+  generationOverTime?: { date: string; count: number; }[];
+  codes: RedemptionCode[];
 }
 
-const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ 
-  stats, 
-  usageOverTime = [], 
-  generationOverTime = [],
-  codes = []
+const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
+  stats,
+  usageOverTime,
+  generationOverTime,
+  codes
 }) => {
-  // If we don't have usage data but have codes, generate usage data from them
-  const usageData = usageOverTime.length > 0 
-    ? usageOverTime 
-    : prepareUsageHistoricalData(codes);
-
   return (
-    <AnalyticsDashboard 
-      stats={stats} 
-      usageOverTime={usageData}
-      generationOverTime={generationOverTime}
-      codes={codes}
-    />
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Redemption Code Analytics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Analytics dashboard will be implemented here.</p>
+          <p>Total Codes: {stats.totalCodes}</p>
+          <p>Used Codes: {stats.usedCodes}</p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
