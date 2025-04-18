@@ -1,33 +1,31 @@
 
 import { supabase } from '../index';
 import { RedemptionCode } from '@/types/redemption';
+import { School } from '@/types/school';
 
-/**
- * Generate a new redemption code
- */
 export async function generateRedemptionCode(
   type: 'student' | 'employer',
-  expiresInDays?: number
+  school: School,
+  expiresInDays: number = 365
 ): Promise<RedemptionCode | null> {
   try {
     // Generate a random alphanumeric code
     const code = Math.random().toString(36).substring(2, 10).toUpperCase();
     
-    let expiresAt = null;
-    if (expiresInDays) {
-      const expDate = new Date();
-      expDate.setDate(expDate.getDate() + expiresInDays);
-      expiresAt = expDate.toISOString();
-    }
+    // Set expiration to exactly one year from now
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
     const { data, error } = await supabase
-      .from('redemption_codes' as any)
+      .from('redemption_codes')
       .insert({
         code,
         type,
         used: false,
+        school_id: school.id,
+        is_reusable: false,
         created_at: new Date().toISOString(),
-        expires_at: expiresAt,
+        expires_at: expiresAt.toISOString(),
       })
       .select()
       .single();
@@ -37,19 +35,17 @@ export async function generateRedemptionCode(
       return null;
     }
 
-    // Cast data to any since TypeScript doesn't know the shape
-    const dataAny = data as any;
-
     // Transform the database record to match our interface
     const redemptionCode: RedemptionCode = {
-      id: dataAny.id,
-      code: dataAny.code,
-      type: dataAny.type,
-      used: dataAny.used,
-      usedBy: dataAny.used_by,
-      usedAt: dataAny.used_at ? new Date(dataAny.used_at) : undefined,
-      createdAt: new Date(dataAny.created_at),
-      expiresAt: dataAny.expires_at ? new Date(dataAny.expires_at) : undefined
+      id: data.id,
+      code: data.code,
+      type: data.type,
+      used: data.used,
+      usedBy: data.used_by,
+      usedAt: data.used_at ? new Date(data.used_at) : undefined,
+      createdAt: new Date(data.created_at),
+      expiresAt: data.expires_at ? new Date(data.expires_at) : undefined,
+      schoolId: data.school_id
     };
 
     return redemptionCode;
