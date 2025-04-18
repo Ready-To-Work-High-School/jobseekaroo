@@ -13,10 +13,16 @@ import { useScheduledEmails } from '@/hooks/redemption/useScheduledEmails';
 import DeleteRedemptionCodeDialog from './DeleteRedemptionCodeDialog';
 import RedemptionTabManager from './tab-manager/RedemptionTabManager';
 import { useRedemptionContainerHandlers } from './hooks/useRedemptionContainerHandlers';
-import { prepareDefaultUsageData, prepareDefaultGenerationData } from './analytics/utils/chartData';
+import { 
+  prepareDefaultUsageData,
+  prepareDefaultGenerationData 
+} from './analytics/utils/chartData';
+import { SchoolProvider, getDefaultSchool } from '@/contexts/SchoolContext';
+import { useCeoStatus } from './tab-manager/useCeoStatus';
 
 const RedemptionCodeContainer: React.FC = () => {
   const [activeTab, setActiveTab] = useState('codes');
+  const { isCeo } = useCeoStatus();
   
   const {
     codes,
@@ -97,42 +103,45 @@ const RedemptionCodeContainer: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <RedemptionTabManager
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        stats={stats}
-        filteredCodes={filteredCodes}
-        selectedCodes={selectedCodes}
-        allSelected={allSelected}
-        isLoading={isLoading}
-        isGenerating={isGenerating}
-        isDeleting={isDeleting}
-        isScheduling={isScheduling}
-        codesTab={codesTab}
-        setCodesTab={setCodesTab}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalCodes={totalCodes}
-        codeType={codeType}
-        setCodeType={setCodeType}
-        expireDays={expireDays}
-        setExpireDays={setExpireDays}
-        formatDate={formatDate}
-        usageOverTime={usageOverTime}
-        generationOverTime={generationOverTime}
-        handlers={handlers}
-      />
+    <SchoolProvider school={getDefaultSchool()}>
+      <div className="space-y-6">
+        <RedemptionTabManager
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          stats={stats}
+          filteredCodes={filteredCodes}
+          selectedCodes={selectedCodes}
+          allSelected={allSelected}
+          isLoading={isLoading}
+          isGenerating={isGenerating}
+          isDeleting={isDeleting}
+          isScheduling={isScheduling}
+          codesTab={codesTab}
+          setCodesTab={setCodesTab}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalCodes={totalCodes}
+          codeType={codeType}
+          setCodeType={setCodeType}
+          expireDays={expireDays}
+          setExpireDays={setExpireDays}
+          formatDate={formatDate}
+          usageOverTime={usageOverTime}
+          generationOverTime={generationOverTime}
+          handlers={handlers}
+          isCeo={isCeo}
+        />
 
-      {detailsView}
+        {detailsView}
 
-      <DeleteRedemptionCodeDialog
-        isOpen={showDeleteDialog}
-        onClose={closeDeleteDialog}
-        onConfirm={handleConfirmDelete}
-        selectedCodes={selectedForDelete}
-      />
-    </div>
+        <DeleteRedemptionCodeDialog
+          isOpen={showDeleteDialog}
+          onClose={closeDeleteDialog}
+          onConfirm={handleConfirmDelete}
+          selectedCodes={selectedForDelete}
+        />
+      </div>
+    </SchoolProvider>
   );
 };
 

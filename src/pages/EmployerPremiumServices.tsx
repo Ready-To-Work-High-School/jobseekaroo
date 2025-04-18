@@ -10,9 +10,10 @@ import { Separator } from '@/components/ui/separator';
 import ValueProposition from '@/components/employer/premium/ValueProposition';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import PurchaseConfirmation from '@/components/employer/premium/PurchaseConfirmation';
+import { Button } from '@/components/ui/button';
 
 const EmployerPremiumServices = () => {
   const fadeIn = useFadeIn(300);
@@ -90,6 +91,15 @@ const EmployerPremiumServices = () => {
             <PremiumFeaturesList />
             <Separator className="my-12" />
             <PricingPlans />
+            
+            {/* Additional Action Button for clearer navigation */}
+            <div className="mt-8 text-center">
+              <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 px-8 py-6 text-lg">
+                <Link to="/employer-dashboard">
+                  Return to Employer Dashboard
+                </Link>
+              </Button>
+            </div>
           </>
         )}
       </div>

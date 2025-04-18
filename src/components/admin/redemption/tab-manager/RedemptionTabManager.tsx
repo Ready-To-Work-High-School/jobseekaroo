@@ -8,6 +8,7 @@ import SchedulerTab from '../tabs/SchedulerTab';
 import RequestsTab from '../tabs/RequestsTab';
 import { RedemptionTabManagerProps } from './types';
 import CeoHeader from './CeoHeader';
+import { useSchool } from '@/contexts/SchoolContext';
 
 const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   activeTab,
@@ -35,13 +36,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   handlers,
   isCeo
 }) => {
-  const dummySchool = {
-    id: "default-school-id",
-    name: "Default School",
-    slug: "default-school",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
+  const { school } = useSchool();
 
   return (
     <>
@@ -94,7 +89,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
             onPageChange={handlers.onPageChange}
             onPageSizeChange={handlers.onPageSizeChange}
             isCeo={isCeo}
-            school={dummySchool}
+            school={school}
           />
         </TabsContent>
         

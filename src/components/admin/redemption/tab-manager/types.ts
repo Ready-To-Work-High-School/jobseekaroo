@@ -1,6 +1,5 @@
 
 import { RedemptionCode } from '@/types/redemption';
-import { ScheduleEmailParams } from '@/hooks/redemption/useScheduledEmails';
 import { School } from '@/types/school';
 
 export interface RedemptionTabManagerProps {
@@ -30,8 +29,8 @@ export interface RedemptionTabManagerProps {
   expireDays: number;
   setExpireDays: (days: number) => void;
   formatDate: (date?: Date | string) => string;
-  usageOverTime?: { date: string; count: number; }[];
-  generationOverTime?: { date: string; count: number; }[];
+  usageOverTime: { date: string; count: number }[];
+  generationOverTime: { date: string; count: number }[];
   handlers: {
     onApplyFilters: (filters: any) => void;
     onSelectCode: (code: RedemptionCode, isSelected: boolean) => void;
@@ -43,8 +42,8 @@ export interface RedemptionTabManagerProps {
     onCodeGeneration: (school: School) => Promise<void>;
     onBulkGeneration: (amount: number, school: School) => Promise<void>;
     onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<void>;
-    onWizardGeneration: (params: any) => Promise<void>;
-    onScheduleEmail: (params: ScheduleEmailParams) => Promise<boolean>;
+    onWizardGeneration: (params: any) => Promise<any>;
+    onScheduleEmail: (params: any) => Promise<boolean>;
     onRefresh: () => Promise<void>;
     onExport: () => void;
     onPrint: () => void;
