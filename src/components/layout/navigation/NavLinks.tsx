@@ -1,14 +1,14 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Circle, Shield } from 'lucide-react';
+import { Circle, Shield, GraduationCap } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { isAdmin } from '@/utils/adminUtils';
 import AuthLinks from '../AuthLinks';
 
 export const NavLinks = () => {
   const location = useLocation();
-  const { userProfile } = useAuth();
+  const { userProfile, user } = useAuth();
   
   const handleCeoPortalClick = () => {
     console.log('CEO portal accessed');
@@ -17,7 +17,7 @@ export const NavLinks = () => {
   return (
     <div className="flex items-center gap-6">
       <div className="flex items-center gap-6 flex-1">
-        <Link to="/" className={cn("text-sm font-medium transition-colors", 
+        <Link to={user ? "/" : "/sign-in"} className={cn("text-sm font-medium transition-colors", 
           location.pathname === "/" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
           Your First Job, Made Simple
         </Link>
@@ -30,9 +30,15 @@ export const NavLinks = () => {
           Fast lane to hire eager high schoolers
         </Link>
         
-        <Link to="/about" className={cn("text-sm font-medium transition-colors", 
+        <Link to={user ? "/about" : "/sign-in"} className={cn("text-sm font-medium transition-colors", 
           location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
           Partnering with schools to boost career readiness
+        </Link>
+
+        <Link to={user ? "/schools" : "/sign-in"} className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
+          location.pathname === "/schools" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
+          <GraduationCap className="w-4 h-4" />
+          Schools
         </Link>
         
         {isAdmin(userProfile) && (
@@ -47,13 +53,14 @@ export const NavLinks = () => {
           to="/ceo-portal" 
           onClick={handleCeoPortalClick}
           className={cn(
-            "opacity-0 hover:opacity-100 transition-opacity duration-300",
-            "text-sm font-medium flex items-center gap-1",
+            "opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center gap-1",
+            "text-sm font-medium",
             location.pathname === "/ceo-portal" ? "text-primary" : "text-muted-foreground hover:text-primary"
           )}
           aria-label="CEO Portal"
         >
-          <Circle className="w-3 h-3" />
+          <Shield className="w-3 h-3" />
+          {/* Hidden CEO icon */}
         </Link>
       </div>
 
