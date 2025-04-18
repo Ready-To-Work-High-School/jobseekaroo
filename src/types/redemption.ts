@@ -8,5 +8,12 @@ export interface RedemptionCode {
   usedAt?: Date;
   createdAt: Date;
   expiresAt?: Date;
-  schoolId?: string; // New field for school association
+  schoolId: string;
+  isReusable: boolean;
+}
+
+export interface RedemptionCodeValidation {
+  isValid: boolean;
+  message: string;
+  code?: RedemptionCode;
 }

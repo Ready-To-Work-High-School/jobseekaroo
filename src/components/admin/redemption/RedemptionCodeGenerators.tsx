@@ -7,7 +7,7 @@ import CodeDistributionPanel from './CodeDistributionPanel';
 import { School } from '@/types/school';
 
 interface RedemptionCodeGeneratorsProps {
-  school: School; // Added school prop
+  school: School;
   onGenerateCode: (school: School) => Promise<void>;
   onBulkGenerate: (amount: number, school: School) => Promise<void>;
   onAutomatedGeneration: (

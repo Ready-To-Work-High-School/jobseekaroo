@@ -795,6 +795,8 @@ export type Database = {
           created_at: string
           expires_at: string | null
           id: string
+          is_reusable: boolean | null
+          school_id: string | null
           type: string
           used: boolean
           used_at: string | null
@@ -805,6 +807,8 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          is_reusable?: boolean | null
+          school_id?: string | null
           type: string
           used?: boolean
           used_at?: string | null
@@ -815,12 +819,22 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          is_reusable?: boolean | null
+          school_id?: string | null
           type?: string
           used?: boolean
           used_at?: string | null
           used_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "redemption_codes_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_jobs: {
         Row: {

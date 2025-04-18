@@ -1,11 +1,13 @@
 
 import React from 'react';
 import RedemptionCodeGenerators from '../RedemptionCodeGenerators';
+import { School } from '@/types/school';
 
 interface CodeGenerationPanelProps {
-  onGenerateCode: () => Promise<void>;
-  onBulkGenerate: (amount: number) => Promise<void>;
-  onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string) => Promise<void>;
+  school: School;
+  onGenerateCode: (school: School) => Promise<void>;
+  onBulkGenerate: (amount: number, school: School) => Promise<void>;
+  onAutomatedGeneration: (userType: string, amount: number, expiresInDays: number, emailDomain: string, school: School) => Promise<void>;
   isGenerating: boolean;
   codeType: 'student' | 'employer';
   setCodeType: (type: 'student' | 'employer') => void;
@@ -14,6 +16,7 @@ interface CodeGenerationPanelProps {
 }
 
 const CodeGenerationPanel: React.FC<CodeGenerationPanelProps> = ({
+  school,
   onGenerateCode,
   onBulkGenerate,
   onAutomatedGeneration,
@@ -25,6 +28,7 @@ const CodeGenerationPanel: React.FC<CodeGenerationPanelProps> = ({
 }) => {
   return (
     <RedemptionCodeGenerators
+      school={school}
       onGenerateCode={onGenerateCode}
       onBulkGenerate={onBulkGenerate}
       onAutomatedGeneration={onAutomatedGeneration}
