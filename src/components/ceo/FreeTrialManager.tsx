@@ -2,35 +2,14 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Award, 
-  Calendar, 
-  Clock, 
-  PlusCircle, 
-  Check, 
-  X, 
-  Search,
-  RefreshCw,
-  UserPlus,
-  CalendarClock,
-  Sparkles,
-} from 'lucide-react';
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import { Award, Search, PlusCircle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import TrialStatsCard from './free-trial/TrialStatsCard';
+import TrialTable from './free-trial/TrialTable';
+import CreateTrialDialog from './free-trial/CreateTrialDialog';
 
-// Mock data for free trials
+// Mock data for free trials (keep existing mock data)
 const mockTrials = [
   { 
     id: '1', 
@@ -64,37 +43,9 @@ const mockTrials = [
   }
 ];
 
-// Mock pricing plans
-const pricingPlans = [
-  {
-    id: 'basic',
-    name: 'Basic',
-    description: 'Essential features for new users',
-    trial_days: 14,
-    features: ['Limited job postings', 'Basic analytics', 'Email support']
-  },
-  {
-    id: 'premium',
-    name: 'Premium',
-    description: 'Advanced features for power users',
-    trial_days: 30,
-    features: ['Unlimited job postings', 'Advanced analytics', 'Priority support', 'Featured listings']
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    description: 'Custom solutions for organizations',
-    trial_days: 30,
-    features: ['Custom branding', 'API access', 'Dedicated support', 'All premium features']
-  }
-];
-
 const FreeTrialManager = () => {
   const [trials, setTrials] = useState(mockTrials);
-  const [plans, setPlans] = useState(pricingPlans);
   const [showNewTrialDialog, setShowNewTrialDialog] = useState(false);
-  const [showEditPlanDialog, setShowEditPlanDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [trialEmail, setTrialEmail] = useState('');
@@ -118,7 +69,6 @@ const FreeTrialManager = () => {
     return matchesSearch && matchesTab;
   });
 
-  // Create a new free trial
   const handleCreateTrial = () => {
     if (!trialEmail || !trialName || !trialPlan) {
       toast({
@@ -156,7 +106,6 @@ const FreeTrialManager = () => {
     });
   };
 
-  // Cancel a trial
   const handleCancelTrial = (id: string) => {
     setTrials(trials.map(trial => 
       trial.id === id 
@@ -170,7 +119,6 @@ const FreeTrialManager = () => {
     });
   };
 
-  // Mark trial as converted
   const handleConvertTrial = (id: string) => {
     setTrials(trials.map(trial => 
       trial.id === id 
@@ -184,7 +132,6 @@ const FreeTrialManager = () => {
     });
   };
 
-  // Extend trial period
   const handleExtendTrial = (id: string, days: number) => {
     setTrials(trials.map(trial => {
       if (trial.id === id) {
@@ -199,41 +146,6 @@ const FreeTrialManager = () => {
       title: "Trial extended",
       description: `Trial period extended by ${days} days`,
     });
-  };
-
-  // Update plan settings
-  const handleUpdatePlan = () => {
-    if (!selectedPlan) return;
-    
-    setPlans(plans.map(plan => 
-      plan.id === selectedPlan.id 
-        ? selectedPlan 
-        : plan
-    ));
-    
-    setShowEditPlanDialog(false);
-    
-    toast({
-      title: "Plan updated",
-      description: `The ${selectedPlan.name} plan has been updated`,
-    });
-  };
-
-  // Format date for display
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    }).format(date);
-  };
-  
-  // Calculate remaining days
-  const getRemainingDays = (endDate: Date) => {
-    const now = new Date();
-    const diffTime = endDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
   };
 
   return (
@@ -276,7 +188,9 @@ const FreeTrialManager = () => {
           </CardHeader>
           
           <CardContent>
-            <div className="border rounded-md overflow-x-auto">
+            <TrialStatsCard trials={trials} />
+            
+            <div className="mt-6 border rounded-md overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-muted/50">
@@ -289,325 +203,32 @@ const FreeTrialManager = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTrials.map((trial) => (
-                    <tr key={trial.id} className="border-t hover:bg-muted/50">
-                      <td className="px-4 py-3 text-sm">
-                        <div>
-                          <div className="font-medium">{trial.user_name}</div>
-                          <div className="text-xs text-muted-foreground">{trial.user_email}</div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm capitalize">
-                        {trial.plan_type}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        {formatDate(trial.start_date)}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        {formatDate(trial.end_date)}
-                        {trial.is_active && (
-                          <div className="text-xs text-muted-foreground">
-                            ({getRemainingDays(trial.end_date)} days left)
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        {trial.converted ? (
-                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">
-                            <Sparkles className="h-3 w-3 mr-1" />
-                            Converted
-                          </span>
-                        ) : trial.is_active ? (
-                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800">
-                            <CalendarClock className="h-3 w-3 mr-1" />
-                            Active
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-800">
-                            <X className="h-3 w-3 mr-1" />
-                            Expired
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <div className="flex gap-2">
-                          {trial.is_active && !trial.converted && (
-                            <>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleExtendTrial(trial.id, 7)}
-                                title="Extend by 7 days"
-                              >
-                                +7d
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleConvertTrial(trial.id)}
-                              >
-                                Convert
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleCancelTrial(trial.id)}
-                              >
-                                Cancel
-                              </Button>
-                            </>
-                          )}
-                          {!trial.is_active && !trial.converted && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleExtendTrial(trial.id, 30)}
-                            >
-                              Reactivate
-                            </Button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  
-                  {filteredTrials.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
-                        No free trials found matching your criteria
-                      </td>
-                    </tr>
-                  )}
+                  <TrialTable 
+                    trials={filteredTrials}
+                    onExtendTrial={handleExtendTrial}
+                    onCancelTrial={handleCancelTrial}
+                    onConvertTrial={handleConvertTrial}
+                  />
                 </tbody>
               </table>
             </div>
           </CardContent>
         </Card>
       </Tabs>
-      
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-xl flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary" />
-            Trial Plan Configuration
-          </CardTitle>
-          <CardDescription>
-            Manage trial period settings and features for each plan
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            {plans.map((plan) => (
-              <div key={plan.id} className="border rounded-md p-4 relative">
-                <h3 className="text-lg font-medium mb-1">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{plan.description}</p>
-                
-                <div className="flex items-center text-sm mb-4">
-                  <Clock className="h-4 w-4 mr-1.5 text-muted-foreground" />
-                  <span>{plan.trial_days} day trial</span>
-                </div>
-                
-                <ul className="space-y-2 mb-4">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="text-sm flex">
-                      <Check className="h-4 w-4 mr-2 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => {
-                    setSelectedPlan(plan);
-                    setShowEditPlanDialog(true);
-                  }}
-                >
-                  Edit Plan
-                </Button>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* New Trial Dialog */}
-      <Dialog open={showNewTrialDialog} onOpenChange={setShowNewTrialDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create Free Trial</DialogTitle>
-            <DialogDescription>
-              Grant a free trial to a user
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="trial-name">User Name</Label>
-              <Input
-                id="trial-name"
-                value={trialName}
-                onChange={(e) => setTrialName(e.target.value)}
-                placeholder="Enter user name"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="trial-email">Email Address</Label>
-              <Input
-                id="trial-email"
-                type="email"
-                value={trialEmail}
-                onChange={(e) => setTrialEmail(e.target.value)}
-                placeholder="Enter email address"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="trial-plan">Trial Plan</Label>
-              <Select value={trialPlan} onValueChange={setTrialPlan}>
-                <SelectTrigger id="trial-plan">
-                  <SelectValue placeholder="Select plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="basic">Basic</SelectItem>
-                  <SelectItem value="premium">Premium</SelectItem>
-                  <SelectItem value="enterprise">Enterprise</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="trial-duration">Trial Duration (Days)</Label>
-              <Select value={trialDuration} onValueChange={setTrialDuration}>
-                <SelectTrigger id="trial-duration">
-                  <SelectValue placeholder="Select duration" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7">7 days</SelectItem>
-                  <SelectItem value="14">14 days</SelectItem>
-                  <SelectItem value="30">30 days</SelectItem>
-                  <SelectItem value="60">60 days</SelectItem>
-                  <SelectItem value="90">90 days</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Switch id="send-email" />
-              <Label htmlFor="send-email">Send welcome email</Label>
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewTrialDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleCreateTrial}>
-              Create Trial
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Plan Dialog */}
-      {selectedPlan && (
-        <Dialog open={showEditPlanDialog} onOpenChange={setShowEditPlanDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit {selectedPlan.name} Plan</DialogTitle>
-              <DialogDescription>
-                Modify trial settings for this pricing plan
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="plan-name">Plan Name</Label>
-                <Input
-                  id="plan-name"
-                  value={selectedPlan.name}
-                  onChange={(e) => setSelectedPlan({...selectedPlan, name: e.target.value})}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="plan-description">Description</Label>
-                <Input
-                  id="plan-description"
-                  value={selectedPlan.description}
-                  onChange={(e) => setSelectedPlan({...selectedPlan, description: e.target.value})}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="plan-trial-days">Trial Period (Days)</Label>
-                <Input
-                  id="plan-trial-days"
-                  type="number"
-                  min="1"
-                  max="90"
-                  value={selectedPlan.trial_days}
-                  onChange={(e) => setSelectedPlan({...selectedPlan, trial_days: parseInt(e.target.value) || selectedPlan.trial_days})}
-                />
-              </div>
-              
-              <Separator />
-              
-              <div className="space-y-2">
-                <Label>Plan Features</Label>
-                {selectedPlan.features.map((feature: string, idx: number) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <Input
-                      value={feature}
-                      onChange={(e) => {
-                        const updatedFeatures = [...selectedPlan.features];
-                        updatedFeatures[idx] = e.target.value;
-                        setSelectedPlan({...selectedPlan, features: updatedFeatures});
-                      }}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        const updatedFeatures = selectedPlan.features.filter((_: any, i: number) => i !== idx);
-                        setSelectedPlan({...selectedPlan, features: updatedFeatures});
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                
-                <Button
-                  variant="outline"
-                  className="mt-2 w-full"
-                  onClick={() => {
-                    setSelectedPlan({
-                      ...selectedPlan, 
-                      features: [...selectedPlan.features, "New feature"]
-                    });
-                  }}
-                >
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Add Feature
-                </Button>
-              </div>
-            </div>
-            
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowEditPlanDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleUpdatePlan}>
-                Update Plan
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+      <CreateTrialDialog
+        open={showNewTrialDialog}
+        onOpenChange={setShowNewTrialDialog}
+        trialEmail={trialEmail}
+        setTrialEmail={setTrialEmail}
+        trialName={trialName}
+        setTrialName={setTrialName}
+        trialPlan={trialPlan}
+        setTrialPlan={setTrialPlan}
+        trialDuration={trialDuration}
+        setTrialDuration={setTrialDuration}
+        onCreateTrial={handleCreateTrial}
+      />
     </div>
   );
 };
