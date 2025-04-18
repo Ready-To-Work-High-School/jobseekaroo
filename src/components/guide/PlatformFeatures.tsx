@@ -1,8 +1,7 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, BadgeCheck, Code2, FileText, Laptop, MessageSquare, 
          BookMarked, PieChart, ShieldAlert, Rocket, GraduationCap, Users,
-         Search, BriefcaseSearch, Award, Brain, BookOpen, Sparkles } from 'lucide-react';
+         Search, BriefcaseBusiness, Award, Brain, BookOpen, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const features = [
@@ -37,7 +36,7 @@ const features = [
     link: "/credentials"
   },
   {
-    icon: <BriefcaseSearch className="h-6 w-6 text-red-500" />,
+    icon: <BriefcaseBusiness className="h-6 w-6 text-red-500" />,
     title: "Job Simulations",
     description: "Virtual job experiences across different industries to help students understand career paths.",
     link: "/job-simulations"
