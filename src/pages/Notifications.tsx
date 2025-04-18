@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { validateUrl } from '@/utils/sanitization';
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -39,6 +40,17 @@ const Notifications = () => {
   const handleClearAll = () => {
     clearAll();
     setIsDeleteDialogOpen(false);
+  };
+
+  // Add handler for URL validation
+  const handleNotificationClick = (url?: string) => {
+    if (!url) return false;
+    
+    if (url.startsWith('/')) {
+      return true;
+    }
+    
+    return validateUrl(url);
   };
 
   return (
@@ -133,6 +145,7 @@ const Notifications = () => {
                         key={notification.id} 
                         notification={notification} 
                         onClose={() => {}} 
+                        urlValidator={handleNotificationClick}
                       />
                     ))}
                   </div>
