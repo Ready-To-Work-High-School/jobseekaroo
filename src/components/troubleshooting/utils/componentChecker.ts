@@ -18,6 +18,7 @@ export const checkMissingLinks = () => {
       }
     } catch (error) {
       console.error(`Error checking link ${link}:`, error);
+      // Don't add to missing items on error to avoid false positives
     }
   });
 
@@ -40,6 +41,7 @@ export const checkCriticalComponents = () => {
       }
     } catch (error) {
       console.error(`Error checking component ${selector}:`, error);
+      // Don't add to missing items on error to avoid false positives
     }
   });
 

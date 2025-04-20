@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -100,7 +101,7 @@ const Applications = () => {
   return (
     <Layout>
       <div className={`container max-w-5xl py-8 ${animation}`}>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 application-form">
           <ApplicationHeader 
             onAddClick={() => setShowAddDialog(true)} 
             onRefreshClick={loadApplications}

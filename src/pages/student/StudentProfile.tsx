@@ -30,7 +30,7 @@ const StudentProfile = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 space-y-8">
-        <div className="animate-fade-in">
+        <div className="animate-fade-in user-profile">
           <Card className="overflow-hidden">
             <div className="relative h-32 bg-gradient-to-r from-purple-500 via-blue-500 to-blue-600">
               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />

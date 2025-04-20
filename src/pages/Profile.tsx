@@ -29,7 +29,7 @@ const Profile = () => {
         
         {user && (
           <>
-            <Card className="mb-6 overflow-hidden">
+            <Card className="mb-6 overflow-hidden user-profile">
               <CardHeader className="relative border-b bg-gradient-to-r from-blue-50 to-white dark:from-blue-950/30 dark:to-background pb-6">
                 {/* Profile background accent */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -mr-20 -mt-20"></div>

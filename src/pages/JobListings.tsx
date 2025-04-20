@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchForm from '@/components/SearchForm';
@@ -37,7 +36,6 @@ const JobListings = () => {
       radius: radiusParam > 0 ? radiusParam : undefined
     };
     
-    // Calculate how many filters are applied for the badge
     let count = 0;
     if (filters.type && filters.type !== 'all') count++;
     if (filters.experienceLevel && filters.experienceLevel !== 'all') count++;
@@ -61,7 +59,6 @@ const JobListings = () => {
       const success = await syncMockJobsToSupabase();
       if (success) {
         toast.success('Mock job data synchronized successfully');
-        // Refresh job listings
         await fetchJobs();
       } else {
         toast.error('Failed to synchronize mock job data');
@@ -119,7 +116,6 @@ const JobListings = () => {
         searchFilters.keywords = [keywordParam];
       }
       
-      // Count applied filters for the badge
       let count = 0;
       if (jobTypeParam && jobTypeParam !== 'all') count++;
       if (expLevelParam && expLevelParam !== 'all') count++;
@@ -149,7 +145,6 @@ const JobListings = () => {
     fetchJobs();
   }, [searchParams, zipCodeParam, radiusParam]);
 
-  // Reset filters
   const resetFilters = () => {
     setSearchParams(new URLSearchParams({ zipCode: zipCodeParam }));
     setAppliedFiltersCount(0);
@@ -157,7 +152,6 @@ const JobListings = () => {
 
   return (
     <>
-      {/* Add the TopEmployersSection component before the JobListingsLayout */}
       <TopEmployersSection />
       
       <JobListingsLayout
@@ -173,7 +167,6 @@ const JobListings = () => {
           />
         }
       >
-        {/* Mobile filters for better small screen experience */}
         {isMobile && (
           <div className="sticky top-0 z-30 bg-background pt-4 pb-3 -mx-4 px-4 border-b">
             <MobileJobFilters 
@@ -184,7 +177,6 @@ const JobListings = () => {
         )}
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Desktop sidebar filters */}
           <JobFilterSidebar 
             onFilterChange={applyFilters}
             onSyncMockData={handleSyncMockData}
@@ -192,7 +184,7 @@ const JobListings = () => {
             className="hidden md:block"
           />
           
-          <div className="md:col-span-3">
+          <div className="md:col-span-3" id="job-listings">
             <JobListContent
               jobs={jobs}
               loading={loading}
