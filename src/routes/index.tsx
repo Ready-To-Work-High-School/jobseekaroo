@@ -9,6 +9,7 @@ import { EmployerRoutes } from './employerRoutes';
 import { AdminRoutes } from './adminRoutes';
 import SharedRoutes from './sharedRoutes';
 import NotFound from '../pages/NotFound';
+import CeoPortal from '../pages/CeoPortal';
 
 // Export all routes as a JSX fragment for use in App.tsx
 const AppRoutes = (
@@ -36,6 +37,12 @@ const AppRoutes = (
     
     {/* Shared routes */}
     {SharedRoutes}
+    
+    {/* CEO Portal */}
+    <Route path="/ceo" element={<CeoPortal />} />
+    
+    {/* 404 catch-all */}
+    <Route path="*" element={<NotFound />} />
   </>
 );
 
