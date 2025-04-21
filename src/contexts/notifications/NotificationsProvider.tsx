@@ -1,40 +1,27 @@
 
-import { useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { useAuth } from '@/contexts/auth';
 import { NotificationsContext } from '@/contexts/notifications/NotificationsContext';
-import { Notification } from '@/types/notification';
 import { Toaster } from 'sonner';
 import { useNotificationsRealtime } from './useNotificationsRealtime';
 import { useNotificationsState } from './useNotificationsState';
 
-// Change to import the context directly and create the provider locally
-export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
+export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
+  // Get ALL notification state/hooks from here
   const notificationsState = useNotificationsState();
 
-  // Use the new hook for realtime logic
+  // This passes setters & user to the realtime hook
   useNotificationsRealtime({
     user,
-    setNotifications,
-    setIsLoading,
-    setErrorMessage
+    setNotifications: notificationsState.setNotifications,
+    setIsLoading: notificationsState.setIsLoading,
+    setErrorMessage: notificationsState.setErrorMessage
   });
 
-  // Create the provider directly with the NotificationsContext
+  // Clean and type-safe Provider
   return (
-    <NotificationsContext.Provider
-      value={{
-        ...notificationsState,
-        notifications,
-        isLoading,
-        errorMessage,
-        setNotifications
-      }}
-    >
+    <NotificationsContext.Provider value={notificationsState}>
       {children}
       <Toaster />
     </NotificationsContext.Provider>
