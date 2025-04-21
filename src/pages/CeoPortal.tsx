@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -6,14 +7,10 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Bell, ShieldCheck, LayoutList } from "lucide-react";
+import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users } from "lucide-react";
 import { useState } from "react";
-import { BadgeCheck, Award, Brain, CalendarClock, BadgeCheck } from 'lucide-react';
 import CeoFeatureCard from '@/components/ceo/CeoFeatureCard';
-import Card from '@/components/ui/card';
-import CardHeader from '@/components/ui/card-header';
-import CardTitle from '@/components/ui/card-title';
-import CardContent from '@/components/ui/card-content';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const CeoPortal = () => {
   const fadeIn = useFadeIn(300);
