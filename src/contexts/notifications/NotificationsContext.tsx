@@ -2,9 +2,9 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { NotificationsContextType } from './types';
 import { useNotificationsState } from './useNotificationsState';
-import { useNotificationsData } from './useNotificationsData';
 import { NotificationFilterOptions } from '@/types/notification';
 
+// NotificationsContext provides notification state to any consumer
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
@@ -17,33 +17,29 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     markAllAsRead,
     removeNotification,
     clearAll,
-    setNotifications,
+    setNotifications, // this will now just update with new lists provided by the central provider
     isLoading,
     filters,
     setFilters,
     errorMessage
   } = useNotificationsState();
 
-  // Handle data fetching and persistence
-  useNotificationsData(setNotifications);
-
-  const value: NotificationsContextType = {
-    notifications,
-    filteredNotifications,
-    unreadCount,
-    addNotification,
-    markAsRead,
-    markAllAsRead,
-    removeNotification,
-    clearAll,
-    isLoading,
-    filters,
-    setFilters,
-    errorMessage
-  };
-
+  // This provider ONLY manages local filtering, counts, etc. (all state injected by main provider)
   return (
-    <NotificationsContext.Provider value={value}>
+    <NotificationsContext.Provider value={{
+      notifications,
+      filteredNotifications,
+      unreadCount,
+      addNotification,
+      markAsRead,
+      markAllAsRead,
+      removeNotification,
+      clearAll,
+      isLoading,
+      filters,
+      setFilters,
+      errorMessage
+    }}>
       {children}
     </NotificationsContext.Provider>
   );

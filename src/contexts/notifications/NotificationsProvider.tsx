@@ -12,83 +12,75 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
-  // Helper function to transform database response to Notification type
-  const transformNotification = (dbNotification: any): Notification => {
-    return {
-      id: dbNotification.id,
-      user_id: dbNotification.user_id,
-      title: dbNotification.title,
-      message: dbNotification.message,
-      type: dbNotification.type,
-      link: dbNotification.link,
-      read: dbNotification.read,
-      createdAt: dbNotification.created_at, // Converting snake_case to camelCase
-      metadata: dbNotification.metadata
-    };
-  };
-  
+
+  // Helper function to convert db notification to app notification
+  const transformNotification = (dbNotification: any): Notification => ({
+    id: dbNotification.id,
+    user_id: dbNotification.user_id,
+    title: dbNotification.title,
+    message: dbNotification.message,
+    type: dbNotification.type,
+    link: dbNotification.link,
+    read: dbNotification.read,
+    createdAt: dbNotification.created_at,
+    metadata: dbNotification.metadata
+  });
+
   useEffect(() => {
     if (!user) return;
 
-    // Subscribe to real-time notifications
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    // Initial fetch
+    supabase
+      .from('notifications')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (error) {
+          setErrorMessage('Failed to fetch notifications');
+          setNotifications([]);
+        } else {
+          setNotifications(data.map(transformNotification));
+        }
+        setIsLoading(false);
+      });
+
+    // Subscribe to real-time notifications for this user
     const channel = supabase
       .channel('notification-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          // Show toast for new notifications
-          const newNotification = transformNotification(payload.new);
-          toast({
-            title: newNotification.title,
-            description: newNotification.message,
-          });
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'notifications',
+        filter: `user_id=eq.${user.id}`,
+      }, (payload) => {
+        const newNotification = transformNotification(payload.new);
 
-          // Update local notifications state
-          setNotifications(prev => [newNotification, ...prev]);
-        }
-      )
+        setNotifications(prev => {
+          // Avoid double-adding if there are repeated events
+          if (prev.length > 0 && prev[0].id === newNotification.id) return prev;
+          return [newNotification, ...prev];
+        });
+
+        // Show toast on new notification (immediate feedback)
+        toast({
+          title: newNotification.title,
+          description: newNotification.message,
+        });
+      })
       .subscribe();
-
-    // Initial fetch of existing notifications
-    const fetchNotifications = async () => {
-      try {
-        setIsLoading(true);
-        
-        const { data, error } = await supabase
-          .from('notifications')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        
-        // Transform the data to match our Notification type
-        const transformedData = data.map(transformNotification);
-        setNotifications(transformedData);
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-        setErrorMessage('Failed to load notifications');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNotifications();
 
     return () => {
       supabase.removeChannel(channel);
     };
   }, [user]);
 
+  // ContextProvider lives here, and will inject current state to all consumers
   return (
-    <ContextProvider>
+    <ContextProvider /* legacy, an alias for NotificationsContext.Provider */>
       {children}
       <Toaster />
     </ContextProvider>
