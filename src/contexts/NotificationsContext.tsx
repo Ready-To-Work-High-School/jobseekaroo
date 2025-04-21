@@ -1,3 +1,4 @@
 
 // Re-export from the refactored directory
-export { NotificationsProvider, useNotifications } from './notifications/NotificationsContext';
+export { NotificationsProvider } from './notifications/NotificationsProvider';
+export { useNotifications } from './notifications/NotificationsContext';

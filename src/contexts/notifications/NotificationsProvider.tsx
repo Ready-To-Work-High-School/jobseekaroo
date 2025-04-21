@@ -1,11 +1,12 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/auth';
-import { NotificationsProvider as ContextProvider } from '@/contexts/NotificationsContext';
+import { NotificationsContext } from '@/contexts/notifications/NotificationsContext';
 import { Notification } from '@/types/notification';
 import { Toaster } from 'sonner';
 import { useNotificationsRealtime } from './useNotificationsRealtime';
 
+// Change to import the context directly and create the provider locally
 export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -20,9 +21,9 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     setErrorMessage
   });
 
-  // Provide notification state/context to children
+  // Create the provider directly with the NotificationsContext
   return (
-    <ContextProvider
+    <NotificationsContext.Provider
       value={{
         notifications,
         isLoading,
@@ -32,6 +33,6 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     >
       {children}
       <Toaster />
-    </ContextProvider>
+    </NotificationsContext.Provider>
   );
 };

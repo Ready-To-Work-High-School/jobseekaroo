@@ -1,50 +1,12 @@
 
-import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { NotificationsContextType } from './types';
 import { useNotificationsState } from './useNotificationsState';
-import { NotificationFilterOptions } from '@/types/notification';
 
 // NotificationsContext provides notification state to any consumer
-const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
+export const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
-export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
-  const {
-    notifications,
-    filteredNotifications,
-    unreadCount,
-    addNotification,
-    markAsRead,
-    markAllAsRead,
-    removeNotification,
-    clearAll,
-    setNotifications, // this will now just update with new lists provided by the central provider
-    isLoading,
-    filters,
-    setFilters,
-    errorMessage
-  } = useNotificationsState();
-
-  // This provider ONLY manages local filtering, counts, etc. (all state injected by main provider)
-  return (
-    <NotificationsContext.Provider value={{
-      notifications,
-      filteredNotifications,
-      unreadCount,
-      addNotification,
-      markAsRead,
-      markAllAsRead,
-      removeNotification,
-      clearAll,
-      isLoading,
-      filters,
-      setFilters,
-      errorMessage
-    }}>
-      {children}
-    </NotificationsContext.Provider>
-  );
-};
-
+// Update the export structure to match what NotificationsProvider is importing
 export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (context === undefined) {
