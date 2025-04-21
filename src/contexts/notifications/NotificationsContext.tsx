@@ -1,7 +1,6 @@
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext } from 'react';
 import { NotificationsContextType } from './types';
-import { useNotificationsState } from './useNotificationsState';
 
 // NotificationsContext provides notification state to any consumer
 export const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);

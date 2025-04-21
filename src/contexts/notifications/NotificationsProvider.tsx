@@ -5,6 +5,7 @@ import { NotificationsContext } from '@/contexts/notifications/NotificationsCont
 import { Notification } from '@/types/notification';
 import { Toaster } from 'sonner';
 import { useNotificationsRealtime } from './useNotificationsRealtime';
+import { useNotificationsState } from './useNotificationsState';
 
 // Change to import the context directly and create the provider locally
 export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -12,6 +13,8 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const notificationsState = useNotificationsState();
 
   // Use the new hook for realtime logic
   useNotificationsRealtime({
@@ -25,6 +28,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   return (
     <NotificationsContext.Provider
       value={{
+        ...notificationsState,
         notifications,
         isLoading,
         errorMessage,

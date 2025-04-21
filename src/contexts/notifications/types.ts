@@ -1,5 +1,6 @@
 
 import { Notification, NotificationFilterOptions } from '@/types/notification';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface NotificationsContextType {
   notifications: Notification[];
@@ -14,4 +15,5 @@ export interface NotificationsContextType {
   filters: NotificationFilterOptions;
   setFilters: (filters: Partial<NotificationFilterOptions>) => void;
   errorMessage: string | null;
+  setNotifications: Dispatch<SetStateAction<Notification[]>>;
 }
