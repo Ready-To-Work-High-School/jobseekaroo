@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -6,17 +5,45 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
-import { Shield, Users, Brain, Award, CalendarClock, BadgeCheck } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Bell, ShieldCheck, LayoutList } from "lucide-react";
+import { useState } from "react";
+import { BadgeCheck, Award, Brain, CalendarClock, BadgeCheck } from 'lucide-react';
 import CeoFeatureCard from '@/components/ceo/CeoFeatureCard';
+import Card from '@/components/ui/card';
+import CardHeader from '@/components/ui/card-header';
+import CardTitle from '@/components/ui/card-title';
+import CardContent from '@/components/ui/card-content';
 
 const CeoPortal = () => {
   const fadeIn = useFadeIn(300);
   const navigate = useNavigate();
+  const [newEmployerAlert, setNewEmployerAlert] = useState(true);
 
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
+        {newEmployerAlert && (
+          <div className="mb-8">
+            <Alert>
+              <Bell className="h-5 w-5 text-amber-500" />
+              <AlertTitle className="font-bold">Attention: New Employer Sign-up!</AlertTitle>
+              <AlertDescription>
+                A new employer has registered. Please review their company info and approve or deny their job posting(s) as needed.<br />
+                <Button
+                  className="mt-2 bg-gradient-to-r from-purple-500 to-blue-500"
+                  onClick={() => {
+                    setNewEmployerAlert(false);
+                    navigate('/admin/employer-verification');
+                  }}
+                >
+                  Go to Employer Approvals
+                </Button>
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
+
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center p-2 bg-amber-100 rounded-full mb-4">
             <Shield className="h-6 w-6 text-amber-600" />
@@ -123,6 +150,28 @@ const CeoPortal = () => {
           </TabsContent>
         </Tabs>
 
+        <div className="my-12">
+          <Card className="shadow-md border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50 mb-8 mx-auto max-w-xl">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <LayoutList className="h-5 w-5 text-purple-600" />
+                <CardTitle>Employer Job Posting Approvals</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-muted-foreground">
+                CEOs/Admins: Easily review and approve or deny all pending employer job postings in one place.
+              </p>
+              <Button
+                className="bg-gradient-to-r from-purple-600 to-blue-600"
+                onClick={() => navigate('/admin/employer-verification')}
+              >
+                Go to Approvals
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
         <Separator className="my-12" />
 
         <div className="text-center">
@@ -151,4 +200,3 @@ const CeoPortal = () => {
 };
 
 export default CeoPortal;
-

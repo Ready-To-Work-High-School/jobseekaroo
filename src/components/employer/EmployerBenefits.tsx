@@ -2,7 +2,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import BenefitItem from './BenefitItem';
 import { 
-  Building, 
   FileText,
   Users,
   Calendar,
@@ -13,12 +12,8 @@ import {
 } from 'lucide-react';
 
 const EmployerBenefits = () => {
+  // Removed "Branded job listings..." from features
   const employerBenefits = [
-    {
-      title: "Company Profile",
-      description: "Create and customize your company profile to showcase your brand and culture to students.",
-      icon: Building
-    },
     {
       title: "Job Listings",
       description: "Post unlimited job listings with detailed descriptions and requirements.",
@@ -57,15 +52,15 @@ const EmployerBenefits = () => {
   ];
 
   return (
-    <Card className="mb-6 border-blue-300 shadow-md">
+    <Card className="mb-6 border-blue-300 shadow-lg bg-gradient-to-b from-blue-50 to-white">
       <CardHeader className="bg-blue-50 border-b border-blue-200">
-        <CardTitle className="text-xl text-blue-800">What You'll Get Access To</CardTitle>
+        <CardTitle className="text-2xl text-blue-800">What You'll Get Access To</CardTitle>
         <CardDescription>
           Our employer portal provides powerful tools to find and hire qualified students
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {employerBenefits.map((benefit, index) => (
             <BenefitItem 
               key={index}
