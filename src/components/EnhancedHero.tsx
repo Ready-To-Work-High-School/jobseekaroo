@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import HeroSection from '@/components/home/HeroSection';
 import { TrendingUp, Briefcase, GraduationCap, CodeXml, Shield, Sparkles } from 'lucide-react';
@@ -306,7 +305,16 @@ const EnhancedHero = () => {
           </motion.div>
         </div>
       </motion.div>
-      
+
+      {/* Top Employers in Jacksonville Section */}
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold mb-6 text-center">Top Ten Employers in Jacksonville, FL</h2>
+        <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 10)} />
+      </div>
+
+      {/* Section separator line */}
+      <SectionSeparator />
+
       {/* Hero section is critical for initial render */}
       <HeroSection />
       

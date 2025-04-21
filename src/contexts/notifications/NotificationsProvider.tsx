@@ -20,9 +20,16 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     setErrorMessage
   });
 
-  // ContextProvider lives here, and will inject current state to all consumers
+  // Provide notification state/context to children
   return (
-    <ContextProvider>
+    <ContextProvider
+      value={{
+        notifications,
+        isLoading,
+        errorMessage,
+        setNotifications
+      }}
+    >
       {children}
       <Toaster />
     </ContextProvider>
