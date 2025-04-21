@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -13,6 +12,8 @@ import FeeTeaser from '@/components/pricing/FeeTeaser';
 import SuccessStories from '@/components/home/SuccessStories';
 import CallToActionSection from '@/components/home/CallToActionSection';
 import { SparkleGroup } from '@/components/animations/Sparkle';
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import CompanyDirectory from '@/components/resources/CompanyDirectory';
 
 const Home = () => {
   console.log("Home component rendering");
@@ -29,7 +30,6 @@ const Home = () => {
       </Helmet>
 
       <div className="relative overflow-hidden">
-        {/* Add multiple SparkleGroup components in different positions */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <SparkleGroup count={3} />
         </div>
@@ -43,6 +43,11 @@ const Home = () => {
         <ErrorBoundary>
           <Hero />
         </ErrorBoundary>
+
+        <section className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-6 text-center">Top Ten Employers in Jacksonville, FL</h2>
+          <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 10)} />
+        </section>
 
         <ErrorBoundary>
           <SearchSection />
