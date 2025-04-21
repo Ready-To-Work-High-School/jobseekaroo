@@ -23,8 +23,8 @@ const CeoPortal = () => {
           </div>
           <h1 className="text-4xl font-bold mb-4">High School Student Career Platform</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Our integrated platform bridges the gap between high school students and employers, 
-            offering unique features designed specifically for the Jacksonville market.
+            Our integrated platform is uniquely customized for Jacksonville's high school students, connecting them directly with verified employers.
+            Unlike typical job boards, we ensure verified student credentials, industry-recognized skill badges, and academy partnerships that empower student success.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ const CeoPortal = () => {
                 title="Verified Students"
                 description=""
               >
-                <p>All students are verified through their schools and must complete mandatory training before accessing the platform.</p>
+                <p>Every student is verified through official school channels and must complete mandatory compliance training before job access.</p>
               </CeoFeatureCard>
               <CeoFeatureCard
                 icon={<Award className="h-5 w-5 text-purple-600" />}
@@ -50,7 +50,7 @@ const CeoPortal = () => {
                 description=""
               >
                 <p>
-                  Direct integration with Westside High School's Entrepreneurship and Nursing Academies, providing certified talent.
+                  Seamless integration with Westside High School's Entrepreneurship and Nursing Academies, delivering certified and career-ready talent to employers.
                 </p>
               </CeoFeatureCard>
               <CeoFeatureCard
@@ -59,7 +59,7 @@ const CeoPortal = () => {
                 description=""
               >
                 <p>
-                  Students earn verified digital badges through academic achievements and industry certifications.
+                  Digital badges verify students' academic and industry achievements, ensuring transparency and quality for employers.
                 </p>
               </CeoFeatureCard>
             </div>
@@ -76,21 +76,21 @@ const CeoPortal = () => {
                   <Shield className="h-5 w-5 text-green-600 mt-1" />
                   <div>
                     <p className="font-medium">School Verification</p>
-                    <p className="text-muted-foreground">Every student account is verified through official school channels</p>
+                    <p className="text-muted-foreground">All student accounts verified through trusted school systems</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <Shield className="h-5 w-5 text-blue-600 mt-1" />
                   <div>
                     <p className="font-medium">Employer Background Checks</p>
-                    <p className="text-muted-foreground">Mandatory verification for all employer accounts</p>
+                    <p className="text-muted-foreground">Mandatory checks ensure trustworthy employer profiles</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <Shield className="h-5 w-5 text-purple-600 mt-1" />
                   <div>
                     <p className="font-medium">Protected Communication</p>
-                    <p className="text-muted-foreground">All messaging is monitored and filtered for inappropriate content</p>
+                    <p className="text-muted-foreground">Monitored messaging system with content filtering to keep interactions safe</p>
                   </div>
                 </li>
               </ul>
@@ -106,7 +106,7 @@ const CeoPortal = () => {
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Active Students:</span>
+                    <span className="text-muted-foreground">Active Verified Students:</span>
                     <span className="font-medium">50+</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -126,7 +126,7 @@ const CeoPortal = () => {
         <Separator className="my-12" />
 
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-6">Ready to Get Started?</h2>
+          <h2 className="text-2xl font-bold mb-6">Join Us Now</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => navigate('/sign-up')}
@@ -151,3 +151,4 @@ const CeoPortal = () => {
 };
 
 export default CeoPortal;
+
