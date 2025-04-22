@@ -11,15 +11,48 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { TroubleshootProps } from './types';
 import { commonIssues } from './troubleshootingData';
-import { DiagnosticsButton } from './DiagnosticsButton';
-import { IssueItem } from './IssueItem';
-import { useDiagnostics } from './useDiagnostics';
+
+// Define minimal types needed for the component
+interface TroubleshootProps {
+  trigger?: React.ReactNode;
+  initialIssue?: string;
+}
+
+interface Issue {
+  id: string;
+  title: string;
+  description: string;
+  solution: string;
+}
 
 const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
-  const [selectedIssue, setSelectedIssue] = useState(initialIssue);
-  const { isChecking, handleDiagnostics } = useDiagnostics();
+  const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
+  const [isChecking, setIsChecking] = useState(false);
+  
+  const handleDiagnostics = async () => {
+    setIsChecking(true);
+    // Simulate diagnostics check
+    setTimeout(() => {
+      setIsChecking(false);
+    }, 1500);
+  };
+
+  // Fallback data if commonIssues is not defined
+  const issues: Issue[] = commonIssues || [
+    {
+      id: 'login',
+      title: 'Login Issues',
+      description: 'Having trouble signing in to your account?',
+      solution: 'Check your email and password, or try resetting your password.'
+    },
+    {
+      id: 'jobs',
+      title: 'Jobs Not Loading',
+      description: 'Issues with viewing or applying to jobs?',
+      solution: 'Try refreshing the page or clearing your browser cache.'
+    }
+  ];
 
   return (
     <Dialog>
@@ -43,21 +76,35 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         </DialogHeader>
 
         <div className="space-y-4">
-          <DiagnosticsButton 
-            onRun={handleDiagnostics}
-            isChecking={isChecking}
-          />
+          <Button 
+            onClick={handleDiagnostics}
+            disabled={isChecking}
+            className="w-full"
+          >
+            {isChecking ? 'Running Diagnostics...' : 'Run System Check'}
+          </Button>
 
           <Separator />
 
           <div className="space-y-4">
-            {commonIssues.map((issue) => (
-              <IssueItem
+            {issues.map((issue) => (
+              <div 
                 key={issue.id}
-                issue={issue}
-                isSelected={selectedIssue === issue.id}
-                onSelect={setSelectedIssue}
-              />
+                className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                  selectedIssue === issue.id ? 'bg-muted border-primary' : 'hover:bg-muted/50'
+                }`}
+                onClick={() => setSelectedIssue(issue.id)}
+              >
+                <h3 className="font-medium">{issue.title}</h3>
+                <p className="text-sm text-muted-foreground">{issue.description}</p>
+                
+                {selectedIssue === issue.id && (
+                  <div className="mt-4 p-3 bg-muted/70 rounded-md">
+                    <p className="text-sm font-medium">Solution:</p>
+                    <p className="text-sm">{issue.solution}</p>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

@@ -16,7 +16,8 @@ export const FloatingQuickAccess = () => {
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 200, opacity: 0 }}
-            className="bg-white shadow-lg rounded-l-lg p-4 space-y-2"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="bg-white dark:bg-gray-950 shadow-lg rounded-l-lg p-4 space-y-2"
           >
             <Button asChild variant="ghost" className="w-full justify-start gap-2">
               <Link to="/profile">
@@ -49,7 +50,7 @@ export const FloatingQuickAccess = () => {
       <Button
         variant="default"
         size="sm"
-        className="rounded-l-lg rounded-r-none h-32 writing-vertical"
+        className="rounded-l-lg rounded-r-none h-32 writing-vertical shadow-lg"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="rotate-180">Quick Access</span>

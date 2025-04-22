@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
+import MobileBottomNav from './mobile/MobileBottomNav';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,8 +18,6 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   
-  console.log("Layout rendering, isHomePage:", isHomePage);
-  
   useEffect(() => {
     console.log("Layout mounted with pathname:", location.pathname);
   }, [location.pathname]);
@@ -29,7 +28,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
         <Header hideAuthLinks={hideAuthLinks} />
       </ErrorBoundary>
       
-      <main className="flex-grow">
+      <main className="flex-grow pb-16 md:pb-0">
         <ErrorBoundary>
           {!isHomePage && (
             <FloatingBackButton />
@@ -43,6 +42,10 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
       
       <ErrorBoundary>
         <Footer />
+      </ErrorBoundary>
+      
+      <ErrorBoundary>
+        <MobileBottomNav />
       </ErrorBoundary>
     </div>
   );

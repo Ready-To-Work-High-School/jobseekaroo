@@ -1,54 +1,33 @@
 
-import { WifiOff, Globe, Search, Link2Off } from 'lucide-react';
-import { CommonIssue } from './types';
-
-export const commonIssues: CommonIssue[] = [
+export const commonIssues = [
   {
-    id: 'network',
-    title: 'Connection Issues',
-    icon: WifiOff,
-    description: 'Problems with loading data or connecting to services',
-    solutions: [
-      'Check your internet connection',
-      'Ensure you\'re not in airplane mode',
-      'Try refreshing the page'
-    ]
+    id: 'login',
+    title: 'Login Issues',
+    description: 'Having trouble signing in to your account?',
+    solution: 'Check your email and password. If you\'re still having trouble, use the "Forgot Password" option to reset your password. Make sure you\'re using the email address you registered with.'
   },
   {
-    id: 'auth',
-    title: 'Sign In Problems',
-    icon: Globe,
-    description: 'Issues with logging in or accessing your account',
-    solutions: [
-      'Clear your browser cookies',
-      'Try using a different browser',
-      'Check if third-party cookies are enabled',
-      'Ensure you\'re using the correct email'
-    ]
+    id: 'jobs',
+    title: 'Jobs Not Loading',
+    description: 'Issues viewing job listings or details?',
+    solution: 'Check your internet connection, refresh the page, or try clearing your browser cache. If you\'re still experiencing issues, try signing out and back in.'
   },
   {
-    id: 'data',
-    title: 'Missing Data',
-    icon: Search,
-    description: 'Content not appearing or loading correctly',
-    solutions: [
-      'Refresh the page',
-      'Clear your browser cache',
-      'Try signing out and back in',
-      'Check if you have the necessary permissions'
-    ]
+    id: 'application',
+    title: 'Application Not Submitting',
+    description: 'Having trouble submitting your job application?',
+    solution: 'Make sure all required fields are completed. Check that your profile information is complete and that any uploaded documents meet the size and format requirements.'
   },
   {
-    id: 'broken-links',
-    title: 'Broken or Missing Links',
-    icon: Link2Off,
-    description: 'Issues with non-functioning navigation links or inaccessible components',
-    solutions: [
-      'Verify your routes configuration',
-      'Check for correct import statements',
-      'Ensure all necessary components are registered',
-      'Clear browser cache and refresh the page',
-      'Check network connectivity'
-    ]
+    id: 'profile',
+    title: 'Profile Updates Not Saving',
+    description: 'Changes to your profile aren\'t being saved?',
+    solution: 'Ensure all fields meet the required format. Try refreshing the page before making changes, and make sure you click the "Save" button after making changes.'
+  },
+  {
+    id: 'notifications',
+    title: 'Not Receiving Notifications',
+    description: 'Not getting alerts about job matches or applications?',
+    solution: 'Check your notification settings in your profile. Ensure your email is correct and that emails from our domain aren\'t being filtered to spam.'
   }
 ];
