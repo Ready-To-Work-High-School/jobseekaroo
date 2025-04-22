@@ -10,22 +10,22 @@ import MainNavigation from '@/components/layout/MainNavigation';
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [atTop, setAtTop] = useState(true);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 10);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial check
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
+
   return (
-    <header 
+    <header
       className={`sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md ${
         atTop ? 'border-b border-border/40' : 'border-b border-border shadow-sm'
       }`}
@@ -35,6 +35,7 @@ const Navbar = () => {
       <div className="container-custom flex h-16 items-center justify-between py-2">
         <div className="flex items-center gap-2 md:gap-6">
           {isMobile && <MobileMenu />}
+          {/* Show just the logo instead of the full brand name */}
           <NavbarBrand />
           <MainNavigation className="hidden lg:flex" />
           <DesktopNav className="hidden md:flex lg:hidden" />
@@ -47,3 +48,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
