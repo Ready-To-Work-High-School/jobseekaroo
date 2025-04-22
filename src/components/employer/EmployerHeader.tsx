@@ -6,8 +6,15 @@ import { Shield, Users, ChartBar, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const EmployerHeader = () => {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4">
+    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background py-16 px-4" id="employer-top">
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">For Employers</h1>
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
@@ -38,7 +45,7 @@ const EmployerHeader = () => {
         </div>
         
         <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild size="lg">
+          <Button asChild size="lg" onClick={scrollToTop}>
             <Link to="/employer-dashboard">Post a Job</Link>
           </Button>
           

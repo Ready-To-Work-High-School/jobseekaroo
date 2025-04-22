@@ -14,36 +14,18 @@ export const EmployerRoutes = (
   <>
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
-    <Route path="/employer/dashboard" element={
-      <ProtectedRoute requiredRoles={['employer', 'admin']}>
-        <EmployerDashboard />
-      </ProtectedRoute>
-    } />
-    <Route path="/employer-dashboard" element={
-      <ProtectedRoute requiredRoles={['employer', 'admin']}>
-        <EmployerDashboard />
-      </ProtectedRoute>
-    } />
-    <Route path="/employer/analytics" element={
-      <ProtectedRoute requiredRoles={['employer', 'admin']}>
-        <EmployerAnalytics />
-      </ProtectedRoute>
-    } />
+    <Route path="/employer/dashboard" element={<EmployerDashboard />} />
+    <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+    <Route path="/employer/analytics" element={<EmployerAnalytics />} />
     <Route path="/analytics" element={<AnalyticsDashboard />} />
-    <Route path="/employer/premium" element={
-      <ProtectedRoute requiredRoles={['employer', 'admin']}>
-        <EmployerPremiumServices />
-      </ProtectedRoute>
-    } />
-    <Route path="/employer/premium-features" element={
-      <ProtectedRoute requiredRoles={['employer', 'admin']}>
-        <PremiumFeaturesPage />
-      </ProtectedRoute>
-    } />
+    <Route path="/employer/premium" element={<EmployerPremiumServices />} />
+    <Route path="/employer/premium-features" element={<PremiumFeaturesPage />} />
     <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/employer/badges" element={<EmployerBadges />} />
     <Route path="/employer-badges" element={<EmployerBadges />} />
     <Route path="/resume-assistant" element={<ForEmployers />} />
+    <Route path="/post-job" element={<EmployerDashboard />} />
+    <Route path="/applicants" element={<EmployerDashboard />} />
   </>
 );
 

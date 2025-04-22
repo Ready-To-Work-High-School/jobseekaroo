@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import FreemiumFeatures from './FreemiumFeatures';
 
+// interfaces for form data and props
 interface FormData {
   title: string;
   company: string;
