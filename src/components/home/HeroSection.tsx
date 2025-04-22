@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -10,11 +9,6 @@ import { motion } from 'framer-motion';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
 
 const HeroSection = () => {
-  const logoAnimation = useFadeIn(100);
-  const titleAnimation = useSlideIn(300, 'right');
-  const subtitleAnimation = useFadeIn(500);
-  const buttonAnimation = useFadeIn(700);
-  
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
