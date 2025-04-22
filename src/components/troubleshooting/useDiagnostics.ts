@@ -1,33 +1,49 @@
 
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { runSystemDiagnostics } from './services/diagnosticsService';
-import { useDiagnosticState } from './hooks/useDiagnosticState';
+import { useState } from 'react';
 import { getSystemStatus, formatDiagnosticMessage } from './utils/statusChecks';
 
 export const useDiagnostics = () => {
   const { toast } = useToast();
   const isOnline = useNetworkStatus();
-  const { isChecking, startChecking, stopChecking } = useDiagnosticState();
+  const [isChecking, setIsChecking] = useState(false);
 
   const handleDiagnostics = async () => {
-    startChecking();
+    setIsChecking(true);
+    
     try {
       const systemStatus = getSystemStatus();
-      const missingItems = runSystemDiagnostics();
+      
+      // Define some basic checks
+      const missingItems = [];
+      
+      if (!systemStatus.networkStatus) {
+        missingItems.push("Network connection");
+      }
+      
+      if (!systemStatus.authStatus) {
+        missingItems.push("Authentication");
+      }
+      
+      if (!systemStatus.dataStatus) {
+        missingItems.push("Data access");
+      }
 
       toast({
         title: "Diagnostic Results",
         description: formatDiagnosticMessage(systemStatus, missingItems)
       });
     } catch (error) {
+      console.error("Diagnostic error:", error);
       toast({
         variant: "destructive",
         title: "Diagnostic Failed",
         description: "Could not complete the system check. Please try again later.",
       });
     } finally {
-      stopChecking();
+      // Always stop checking, even if there was an error
+      setTimeout(() => setIsChecking(false), 1000);
     }
   };
 
