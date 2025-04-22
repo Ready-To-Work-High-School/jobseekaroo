@@ -1,48 +1,16 @@
 
-import { Route } from 'react-router-dom';
-import HomeRoutes from './homeRoutes';
-import { PublicRoutes } from './publicRoutes';
-import AuthRoutes from './authRoutes';
+import { SchoolRoutes } from './schoolRoutes';
 import { ProtectedRoutes } from './protectedRoutes';
-import { JobSeekerRoutes } from './jobSeekerRoutes';
-import { EmployerRoutes } from './employerRoutes';
+import { PublicRoutes } from './publicRoutes';
 import { AdminRoutes } from './adminRoutes';
-import SharedRoutes from './sharedRoutes';
-import NotFound from '../pages/NotFound';
-import CeoPortal from '../pages/CeoPortal';
 
-// Export all routes as a JSX fragment for use in App.tsx
+// Combine all routes
 const AppRoutes = (
   <>
-    {/* Home routes */}
-    {HomeRoutes}
-    
-    {/* Public routes */}
     {PublicRoutes}
-    
-    {/* Auth routes */}
-    {AuthRoutes}
-    
-    {/* Protected routes - requires authentication */}
     {ProtectedRoutes}
-    
-    {/* Job Seeker routes */}
-    {JobSeekerRoutes}
-    
-    {/* Employer routes */}
-    {EmployerRoutes}
-    
-    {/* Admin routes */}
+    {SchoolRoutes}
     {AdminRoutes}
-    
-    {/* Shared routes */}
-    {SharedRoutes}
-    
-    {/* CEO Portal */}
-    <Route path="/ceo" element={<CeoPortal />} />
-    
-    {/* 404 catch-all */}
-    <Route path="*" element={<NotFound />} />
   </>
 );
 
