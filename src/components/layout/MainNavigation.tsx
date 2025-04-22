@@ -17,7 +17,7 @@ import { SchoolDropdown } from './navigation/SchoolDropdown';
 import { Separator } from '../ui/separator';
 
 const MainNavigation = ({ className }: { className?: string }) => {
-  const { user, userProfile, isAdmin } = useNavigation();
+  const { user, userProfile, signOut, isAdmin } = useNavigation();
 
   return (
     <nav className={cn("flex items-center space-x-6", className)}>
@@ -31,7 +31,7 @@ const MainNavigation = ({ className }: { className?: string }) => {
       <div className="flex items-center space-x-4">
         <ThemeToggle />
         {user ? (
-          <UserDropdown />
+          <UserDropdown user={user} userProfile={userProfile} signOut={signOut} />
         ) : (
           <div className="flex items-center space-x-2">
             <Button asChild variant="ghost">
