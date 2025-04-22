@@ -6,7 +6,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -14,9 +13,10 @@ import {
 export const SchoolDropdown = () => {
   const { userProfile } = useAuth();
 
+  // Check if the user is a school staff member (teacher or admin)
+  // Note: 'counselor' is not in the UserProfile type, so we're checking for admin or teacher
   const isSchoolStaff = userProfile?.user_type === 'teacher' || 
-                       userProfile?.user_type === 'admin' || 
-                       userProfile?.user_type === 'counselor';
+                       userProfile?.user_type === 'admin';
 
   return (
     <NavigationMenu>
