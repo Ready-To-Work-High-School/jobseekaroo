@@ -171,3 +171,8 @@
 .badge-highlight:hover::after {
   opacity: 1;
 }
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
