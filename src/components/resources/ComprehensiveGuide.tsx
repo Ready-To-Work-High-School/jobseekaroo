@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -69,11 +68,15 @@ const ComprehensiveGuide = () => {
       content: [
         { 
           question: 'How do I post a job?',
-          answer: 'From your Employer Dashboard, click on "Post a New Job." Fill out the job details form including title, description, requirements, location, and other relevant information. Review and publish your listing to make it visible to students.'
+          answer: 'From your Employer Dashboard, click "Post a New Job". Fill out the required fields including title, description, requirements, location, wage (minimum $12/hour), and hours (maximum 40/week). Our form validates all fields to ensure compliance with youth employment standards.'
         },
         { 
           question: 'How do I get verified as an employer?',
-          answer: 'After creating an employer account, you\'ll need to complete the verification process. Provide your company details, business documentation, and contact information for review. Verification helps ensure a safe environment for students.'
+          answer: 'During signup, complete the employer verification form with your company details and EIN. Our automated system will verify your business information, followed by a manual review if needed. Once approved, you\'ll receive login credentials via email.'
+        },
+        { 
+          question: 'What information is required for job postings?',
+          answer: 'Essential fields include job title, description, hourly wage (minimum $12/hour), weekly hours (maximum 40), location, and requirements. The system flags any missing required fields and ensures all postings meet teen employment standards.'
         },
         { 
           question: 'How do I view applicants?',
@@ -175,7 +178,6 @@ const ComprehensiveGuide = () => {
     }
   ];
   
-  // Filter sections and content based on search term
   const filteredSections = searchTerm.length > 0 
     ? sections.map(section => ({
         ...section,
