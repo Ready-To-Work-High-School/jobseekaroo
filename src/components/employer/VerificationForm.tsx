@@ -29,9 +29,10 @@ export function VerificationForm() {
 
   const onSubmit = async (data: EmployerVerificationFormData) => {
     try {
+      // Ensure all required fields are present before submitting
       const { error } = await supabase
         .from('employer_verifications')
-        .insert([data]);
+        .insert(data); // Pass a single object, not an array
 
       if (error) throw error;
 
