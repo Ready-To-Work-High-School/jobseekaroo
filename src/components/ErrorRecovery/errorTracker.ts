@@ -1,6 +1,5 @@
 
 import { ErrorInfo } from 'react';
-import { supabase } from '@/lib/supabase';
 
 interface ErrorRecord {
   message: string;
@@ -39,16 +38,13 @@ export const trackError = async (error: Error, errorInfo: ErrorInfo) => {
   console.info('Component stack:', errorInfo.componentStack);
   console.groupEnd();
 
-  // If we're in production and have supabase connected, log to database
+  // If we're in production, we would log to a database
+  // But since we don't have the error_logs table, we'll just
+  // log to console for now
   if (process.env.NODE_ENV === 'production') {
     try {
-      const { error: dbError } = await supabase
-        .from('error_logs')
-        .insert([errorRecord]);
-
-      if (dbError) {
-        console.error('Failed to save error log:', dbError);
-      }
+      console.log('Would save error to database:', errorRecord);
+      // Original code removed as error_logs table doesn't exist
     } catch (logError) {
       console.error('Error while logging error:', logError);
     }

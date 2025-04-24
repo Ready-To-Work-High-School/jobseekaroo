@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { commonIssues } from './troubleshootingData';
-import { DiagnosticButton } from './DiagnosticsButton';
+import { DiagnosticsButton } from './DiagnosticsButton';
 import { useDiagnostics } from './useDiagnostics';
 import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 
@@ -52,7 +52,7 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
     <Dialog>
       <DialogTrigger asChild>
         {trigger || (
-          <DiagnosticButton
+          <DiagnosticsButton
             onRun={handleDiagnostics}
             isChecking={isChecking}
           />
