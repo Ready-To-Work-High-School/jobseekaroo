@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { AlertCircle, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { usePremiumPostings } from '@/hooks/usePremiumPostings';

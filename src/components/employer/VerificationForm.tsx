@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { employerVerificationSchema, type EmployerVerificationFormData } from "@/types/employer";
@@ -28,11 +29,32 @@ export function VerificationForm() {
 
   const onSubmit = async (data: EmployerVerificationFormData) => {
     try {
+      // Convert the form data to match the expected DB schema
+      const submissionData = {
+        ...data,
+        // Format the date properly before sending to Supabase
+        workers_comp_expiry_date: new Date(data.workers_comp_expiry_date).toISOString().split('T')[0]
+      };
+
+      // Make all fields explicitly defined to match DB schema requirements
       const { error } = await supabase
         .from('employer_verifications')
         .insert({
-          ...data,
-          workers_comp_expiry_date: new Date(data.workers_comp_expiry_date).toISOString()
+          company_name: submissionData.company_name,
+          ein: submissionData.ein,
+          address: submissionData.address,
+          website: submissionData.website || null,
+          contact_name: submissionData.contact_name,
+          contact_email: submissionData.contact_email,
+          contact_phone: submissionData.contact_phone || null,
+          job_description: submissionData.job_description,
+          wage_range_min: submissionData.wage_range_min,
+          wage_range_max: submissionData.wage_range_max,
+          hours_per_week: submissionData.hours_per_week,
+          workers_comp_policy_number: submissionData.workers_comp_policy_number,
+          workers_comp_provider: submissionData.workers_comp_provider,
+          workers_comp_expiry_date: submissionData.workers_comp_expiry_date,
+          safety_pledge_accepted: submissionData.safety_pledge_accepted
         });
 
       if (error) throw error;

@@ -1,6 +1,4 @@
 
-import { prohibited_job_type } from '@/types/database';
-
 export interface JobFormData {
   title: string;
   company: string;
@@ -13,7 +11,7 @@ export interface JobFormData {
   pay_rate_max: number;
   contactEmail: string;
   isPremium: boolean;
-  prohibited_types: prohibited_job_type[];
+  prohibited_types: string[];
 }
 
 export interface JobSubmitData {
@@ -32,5 +30,5 @@ export interface JobSubmitData {
   hours_per_week: number;
   is_featured: boolean;
   is_premium: boolean;
-  prohibited_types: prohibited_job_type[];
+  prohibited_types: string[];
 }
