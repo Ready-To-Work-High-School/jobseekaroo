@@ -8,6 +8,7 @@ import { useApplications } from './hooks/useApplications';
 import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
 import { useToast } from '@/hooks/use-toast';
+import { signIn, signUp, signOut, signInWithGoogle, signInWithApple, verifyEmployerStatus } from './authService';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const {
@@ -177,9 +178,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw error;
     }
   };
-
-  // Import missing imports
-  const { signIn, signUp, signOut, signInWithGoogle, signInWithApple } = require('./authService');
 
   const makeAdmin = async () => {
     console.log('makeAdmin method called but not implemented');
