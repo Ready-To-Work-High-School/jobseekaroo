@@ -1,6 +1,6 @@
 
 export * from './authTypes';
 export * from './authEmailService';
-export * from './authSocialService';
+export { signInWithGoogle, signInWithApple } from './authSocialService';
 export * from './userService';
 export * from './authCore';
