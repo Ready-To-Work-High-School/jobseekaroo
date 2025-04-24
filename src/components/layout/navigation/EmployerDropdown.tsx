@@ -25,7 +25,7 @@ export const EmployerDropdown = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="start" className="bg-background">
         <DropdownMenuItem asChild>
           <Link to="/for-employers" className="flex items-center gap-2">
             <Briefcase className="h-4 w-4" />
@@ -39,7 +39,7 @@ export const EmployerDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/analytics" className="flex items-center gap-2">
+          <Link to="/employer-analytics" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Analytics Dashboard
           </Link>

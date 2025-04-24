@@ -4,10 +4,6 @@ import { cn } from '@/lib/utils';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useNavigation } from './navigation/useNavigation';
 import { Link } from 'react-router-dom';
-import { 
-  GraduationCap, Building2, Shield, Users, 
-  BookOpen, ChevronDown, School 
-} from 'lucide-react';
 import { Button } from '../ui/button';
 import { UserDropdown } from './navigation/UserDropdown';
 import { JobSeekerDropdown } from './navigation/JobSeekerDropdown';
@@ -18,6 +14,8 @@ import { Separator } from '../ui/separator';
 
 const MainNavigation = ({ className }: { className?: string }) => {
   const { user, userProfile, signOut, isAdmin } = useNavigation();
+  
+  console.info("MainNavigation - user type:", userProfile?.user_type);
 
   return (
     <nav className={cn("flex items-center space-x-6", className)}>

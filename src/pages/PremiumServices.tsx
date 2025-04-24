@@ -1,156 +1,181 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
-import { Star, Sparkles, BriefcaseIcon, ScrollText } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useFadeIn } from '@/utils/animations';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { useInView } from 'framer-motion';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useRef } from 'react';
+import { ArrowLeft, Check, Sparkles, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const PremiumServices = () => {
-  const employerSectionRef = useRef(null);
-  const schoolSectionRef = useRef(null);
-  const isEmployerVisible = useInView(employerSectionRef, { once: true });
-  const isSchoolVisible = useInView(schoolSectionRef, { once: true });
+  const fadeIn = useFadeIn(300);
+
+  const features = {
+    standard: [
+      "Job listings",
+      "Basic applicant tracking",
+      "Standard company profile",
+      "Email notifications",
+      "Basic analytics"
+    ],
+    premium: [
+      "All Standard features",
+      "Featured job listings",
+      "Advanced applicant tracking",
+      "Enhanced company profile",
+      "Priority support",
+      "Advanced analytics dashboard",
+      "Custom branding",
+      "Candidate skill matching",
+      "Bulk job posting",
+      "API access"
+    ],
+    enterprise: [
+      "All Premium features",
+      "Dedicated account manager",
+      "Custom integrations",
+      "White-label solutions",
+      "Advanced reporting",
+      "Unlimited job postings",
+      "Custom analytics",
+      "SLA guarantees",
+      "On-site training"
+    ]
+  };
 
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-12">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-3 mb-6"
-        >
-          <Star className="h-8 w-8 text-yellow-500" />
-          <h1 className="text-4xl font-bold">Premium Services</h1>
-        </motion.div>
-
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-lg mb-8"
-        >
-          Enhanced features for employers and schools, including priority job listings and advanced analytics.
-        </motion.p>
-
-        <div className="flex flex-col md:flex-row gap-8 mb-12">
-          <motion.div 
-            ref={employerSectionRef}
-            initial={{ opacity: 0, x: -50 }}
-            animate={isEmployerVisible ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="bg-white p-6 rounded-lg shadow-lg border border-blue-100 flex-1 hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <BriefcaseIcon className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-semibold">For Employers</h2>
-              <Badge variant="premium" className="ml-2">MEMBER PERKS</Badge>
-            </div>
-            <ul className="space-y-4 text-sm mb-6">
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-blue-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
+      <div className={`container max-w-6xl mx-auto px-4 py-8 ${fadeIn}`}>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" asChild className="p-0 mr-2">
+              <Link to="/">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back
+              </Link>
+            </Button>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              Premium Services
+              <motion.div
+                animate={{ 
+                  rotate: [0, 10, -10, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 3
+                }}
               >
-                <Sparkles className="h-5 w-5 text-amber-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">Priority Job Listings</h3>
-                  <p className="text-muted-foreground">Get your job postings featured at the top of search results</p>
-                </div>
-              </motion.li>
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-blue-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
-              >
-                <Sparkles className="h-5 w-5 text-amber-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">Advanced Applicant Filtering</h3>
-                  <p className="text-muted-foreground">Use sophisticated filters to find the perfect candidates</p>
-                </div>
-              </motion.li>
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-blue-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
-              >
-                <Sparkles className="h-5 w-5 text-amber-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">Detailed Analytics</h3>
-                  <p className="text-muted-foreground">Access comprehensive insights about your job postings and applicants</p>
-                </div>
-              </motion.li>
-            </ul>
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-blue-700">
-                <Link to="/employer-premium">Upgrade Now</Link>
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          <motion.div 
-            ref={schoolSectionRef}
-            initial={{ opacity: 0, x: 50 }}
-            animate={isSchoolVisible ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="bg-white p-6 rounded-lg shadow-lg border border-purple-100 flex-1 hover:shadow-xl transition-shadow duration-300"
-          >
-            <h2 className="text-xl font-semibold mb-4">For Schools</h2>
-            <ul className="space-y-4 text-sm mb-6">
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-purple-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
-              >
-                <Sparkles className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">Custom Branding</h3>
-                  <p className="text-muted-foreground">Personalize the platform with your school's colors and logo</p>
-                </div>
-              </motion.li>
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-purple-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
-              >
-                <Sparkles className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">Advanced Reporting</h3>
-                  <p className="text-muted-foreground">Generate detailed reports on student engagement and outcomes</p>
-                </div>
-              </motion.li>
-              <motion.li 
-                className="flex items-start gap-2 p-2 hover:bg-purple-50 rounded-md transition-colors"
-                whileHover={{ x: 5 }}
-              >
-                <Sparkles className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium">API Integration</h3>
-                  <p className="text-muted-foreground">Connect with your existing school systems and databases</p>
-                </div>
-              </motion.li>
-            </ul>
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-purple-700">
-                <Link to="/school-premium">Get Started</Link>
-              </Button>
-            </motion.div>
-          </motion.div>
+                <Sparkles className="h-6 w-6 text-amber-500" />
+              </motion.div>
+            </h1>
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-gradient-to-r from-amber-50 to-amber-100 p-6 rounded-lg border border-amber-200"
-        >
-          <h3 className="text-lg font-semibold text-amber-900 mb-2 flex items-center gap-2">
-            <Star className="h-5 w-5" />
-            Founding Member Opportunity
-          </h3>
-          <p className="text-amber-800">
-            The first 50 employers who create an account and post a job will receive an exclusive "Founding Member" badge, 
-            showcasing their early support and commitment to student career development.
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Unlock premium features and take your experience to the next level with our subscription plans.
           </p>
-        </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Standard Plan */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Standard</CardTitle>
+              <CardDescription>Basic features for individuals</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-4xl font-bold">Free</div>
+              <ul className="space-y-2">
+                {features.standard.map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="h-4 w-4 mr-2 text-green-500" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button className="w-full" variant="outline">Current Plan</Button>
+            </CardFooter>
+          </Card>
+
+          {/* Premium Plan */}
+          <Card className="border-2 border-amber-500 shadow-lg relative">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-amber-500 hover:bg-amber-600">Popular</Badge>
+            </div>
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center">
+                Premium <Star className="h-4 w-4 ml-2 text-amber-500" />
+              </CardTitle>
+              <CardDescription>Advanced features for professionals</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-4xl font-bold">$49<span className="text-lg font-normal">/mo</span></div>
+              <ul className="space-y-2">
+                {features.premium.map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="h-4 w-4 mr-2 text-green-500" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
+                Upgrade Now
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Enterprise Plan */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Enterprise</CardTitle>
+              <CardDescription>Custom solutions for organizations</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-4xl font-bold">Contact Us</div>
+              <ul className="space-y-2">
+                {features.enterprise.map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="h-4 w-4 mr-2 text-green-500" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button className="w-full" variant="outline">
+                Contact Sales
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-bold mb-4">Frequently Asked Questions</h3>
+          <div className="max-w-3xl mx-auto text-left space-y-6">
+            <div>
+              <h4 className="font-medium mb-2">How do I upgrade my account?</h4>
+              <p className="text-muted-foreground">You can upgrade your account by clicking on the "Upgrade Now" button and following the payment process.</p>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Can I downgrade my subscription?</h4>
+              <p className="text-muted-foreground">Yes, you can downgrade your subscription at any time from your account settings.</p>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Do you offer refunds?</h4>
+              <p className="text-muted-foreground">We offer a 14-day money-back guarantee for all premium subscriptions.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </Layout>
   );

@@ -25,7 +25,7 @@ export const ResourcesDropdown = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="start" className="bg-background">
         <DropdownMenuItem asChild>
           <Link to="/resources" className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />

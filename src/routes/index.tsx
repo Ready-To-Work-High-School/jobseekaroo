@@ -17,6 +17,20 @@ import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
 import NotFound from '@/pages/NotFound';
 import SkillDevelopment from '@/pages/SkillDevelopment';
 import InterviewPrep from '@/pages/InterviewPrep';
+import EmployerAnalytics from '@/pages/EmployerAnalytics';
+import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
+import PremiumServices from '@/pages/PremiumServices';
+import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
+import SchoolGuide from '@/pages/SchoolGuide';
+import SchoolIntegration from '@/pages/SchoolIntegration';
+import Resources from '@/pages/Resources';
+import PlatformGuide from '@/pages/PlatformGuide';
+import ForEmployers from '@/pages/ForEmployers';
+
+// Import routes from other route files
+import { PublicRoutes } from './publicRoutes';
+import { SchoolRoutes } from './schoolRoutes';
+import { EmployerRoutes } from './employerRoutes';
 
 // Complete routes array with all necessary routes
 const AppRoutes = [
@@ -37,6 +51,15 @@ const AppRoutes = [
   <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} key="system-diagnostics" />,
   <Route path="/skill-development" element={<SkillDevelopment />} key="skill-development" />,
   <Route path="/interview-prep" element={<InterviewPrep />} key="interview-prep" />,
+  <Route path="/employer-analytics" element={<EmployerAnalytics />} key="employer-analytics" />,
+  <Route path="/premium-services" element={<PremiumServices />} key="premium-services" />,
+  <Route path="/employer-premium" element={<EmployerPremiumServices />} key="employer-premium" />,
+  <Route path="/analytics" element={<AnalyticsDashboard />} key="analytics" />,
+  <Route path="/school-guide" element={<SchoolGuide />} key="school-guide" />,
+  <Route path="/resources" element={<Resources />} key="resources" />,
+  <Route path="/platform-guide" element={<PlatformGuide />} key="platform-guide" />,
+  <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
+  <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
 ];
 
 export default AppRoutes;

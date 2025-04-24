@@ -1,16 +1,16 @@
 
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppRoutes from './routes/index';
-import NotFound from './pages/NotFound';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import MobileBottomNavigation from './components/mobile/MobileBottomNavigation';
 import AutoRecoveryErrorBoundary from './components/ErrorRecovery/AutoRecoveryErrorBoundary';
-import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import DiagnosticMenuButton from './components/ErrorRecovery/DiagnosticMenuButton';
 import { PublicRoutes } from './routes/publicRoutes';
+import { SchoolRoutes } from './routes/schoolRoutes';
+import { EmployerRoutes } from './routes/employerRoutes';
 import ScrollToTop from './components/navigation/ScrollToTop';
 
 // Create a new QueryClient instance
@@ -32,8 +32,8 @@ function App() {
             <Routes>
               {AppRoutes}
               {PublicRoutes}
-              <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
-              <Route path="*" element={<NotFound />} />
+              {SchoolRoutes}
+              {EmployerRoutes}
             </Routes>
             <MobileBottomNavigation />
             <Toaster />

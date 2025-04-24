@@ -1,97 +1,133 @@
 
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import { BarChart3, TrendingUp, Activity, Users, Clock } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { BarChart, LineChart, PieChart, Users, Calendar, TrendingUp, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useFadeIn } from '@/utils/animations';
 
 const AnalyticsDashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const fadeIn = useFadeIn(300);
+
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="h-8 w-8 text-cyan-500" />
-            <h1 className="text-4xl font-bold">Analytics Dashboard</h1>
+      <div className={`container mx-auto px-4 py-6 ${fadeIn}`}>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" asChild className="p-0 mr-2">
+              <Link to="/">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back
+              </Link>
+            </Button>
+            <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
           </div>
-          <FreeForStudentsBadge variant="default" />
-        </div>
-        
-        <p className="text-lg mb-8">
-          Comprehensive analytics for tracking job applications, skill development, and student engagement.
-        </p>
-        
-        <div className="bg-muted p-6 rounded-lg mb-8">
-          <h2 className="text-xl font-semibold mb-4">Dashboard Features</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-4 bg-background rounded shadow-sm student-card-hover">
-              <div className="flex items-center mb-2">
-                <TrendingUp className="h-5 w-5 text-blue-600 mr-2" />
-                <h3 className="font-medium">Application Tracking</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Monitor application status, response rates, and interview invitations across all jobs.
-              </p>
-            </div>
-            <div className="p-4 bg-background rounded shadow-sm student-card-hover">
-              <div className="flex items-center mb-2">
-                <Activity className="h-5 w-5 text-green-600 mr-2" />
-                <h3 className="font-medium">Skill Growth</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Visualize skill development progress and identify areas for improvement.
-              </p>
-            </div>
-            <div className="p-4 bg-background rounded shadow-sm student-card-hover">
-              <div className="flex items-center mb-2">
-                <Users className="h-5 w-5 text-amber-600 mr-2" />
-                <h3 className="font-medium">Engagement Metrics</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Track platform usage, profile completion, and activity patterns.
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="p-6 student-card-hover">
-            <h3 className="text-xl font-medium mb-4">Your Application Stats</h3>
-            <div className="h-64 bg-gray-100 rounded flex items-center justify-center">
-              <p className="text-muted-foreground">Application statistics visualization coming soon</p>
-            </div>
-          </Card>
           
-          <Card className="p-6 student-card-hover">
-            <h3 className="text-xl font-medium mb-4">Skill Development Progress</h3>
-            <div className="h-64 bg-gray-100 rounded flex items-center justify-center">
-              <p className="text-muted-foreground">Skill progress visualization coming soon</p>
-            </div>
-          </Card>
-        </div>
-        
-        <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
-            <Clock className="h-4 w-4 text-amber-600 mr-2" />
-            <p className="text-sm text-amber-800">
-              Analytics are updated daily at midnight
-            </p>
+          <div className="flex items-center gap-2">
+            <Button variant="outline">Export Report</Button>
+            <Button variant="outline">Print View</Button>
           </div>
         </div>
-        
-        <div className="text-center mb-8">
-          <p className="mb-4">
-            Our analytics dashboard is currently being enhanced with more features. Please check back soon for the full experience.
-          </p>
+
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="applications">Applications</TabsTrigger>
+            <TabsTrigger value="engagement">Engagement</TabsTrigger>
+            <TabsTrigger value="trends">Trends</TabsTrigger>
+          </TabsList>
           
-          <div className="inline-block p-4 bg-amber-50 rounded-lg border border-amber-200">
-            <div className="flex items-center mb-2 justify-center">
-              <FreeForStudentsBadge variant="small" />
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">142</div>
+                  <p className="text-xs text-muted-foreground">+12% from last month</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Active Jobs</CardTitle>
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">24</div>
+                  <p className="text-xs text-muted-foreground">6 closing soon</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">24.3%</div>
+                  <p className="text-xs text-muted-foreground">+2.1% from last week</p>
+                </CardContent>
+              </Card>
             </div>
-            <p className="text-sm text-amber-800">
-              All analytics features are completely free for Westside High School students
-            </p>
-          </div>
-        </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Applications by Department</CardTitle>
+                </CardHeader>
+                <CardContent className="h-80 flex items-center justify-center">
+                  <PieChart className="h-48 w-48 text-muted-foreground/60" />
+                </CardContent>
+              </Card>
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Monthly Activity</CardTitle>
+                </CardHeader>
+                <CardContent className="h-80 flex items-center justify-center">
+                  <BarChart className="h-48 w-48 text-muted-foreground/60" />
+                </CardContent>
+              </Card>
+            </div>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Applications Over Time</CardTitle>
+                <CardDescription>Daily application submissions for the past 30 days</CardDescription>
+              </CardHeader>
+              <CardContent className="h-96 flex items-center justify-center">
+                <LineChart className="h-72 w-72 text-muted-foreground/60" />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="applications" className="h-96 flex items-center justify-center text-muted-foreground">
+            <div className="text-center">
+              <BarChart className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-lg font-medium">Application Data</h3>
+              <p>Detailed application statistics will appear here.</p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="engagement" className="h-96 flex items-center justify-center text-muted-foreground">
+            <div className="text-center">
+              <Users className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-lg font-medium">User Engagement</h3>
+              <p>User engagement metrics will appear here.</p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="trends" className="h-96 flex items-center justify-center text-muted-foreground">
+            <div className="text-center">
+              <TrendingUp className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-lg font-medium">Market Trends</h3>
+              <p>Industry and hiring trends will appear here.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
