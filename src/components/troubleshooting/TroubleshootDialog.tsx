@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { commonIssues } from './troubleshootingData';
-import { DiagnosticsButton } from './DiagnosticsButton';
+import { DiagnosticButton } from './DiagnosticsButton';
 import { useDiagnostics } from './useDiagnostics';
+import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 
 // Define minimal types needed for the component
 interface TroubleshootProps {
@@ -51,7 +52,7 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
     <Dialog>
       <DialogTrigger asChild>
         {trigger || (
-          <DiagnosticsButton
+          <DiagnosticButton
             onRun={handleDiagnostics}
             isChecking={isChecking}
           />
@@ -69,10 +70,8 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         </DialogHeader>
 
         <div className="space-y-4">
-          <DiagnosticsButton
-            onRun={handleDiagnostics}
-            isChecking={isChecking}
-          />
+          {/* Upgraded to use our new DiagnosticPanel */}
+          <DiagnosticPanel showDetails={false} />
 
           <Separator />
 
