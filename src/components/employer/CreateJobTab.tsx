@@ -11,7 +11,7 @@ import { usePremiumPostings } from '@/hooks/usePremiumPostings';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { type JobFormData, type JobSubmitData } from '@/types/jobs';
+import { type JobFormData, type JobSubmitData, type ProhibitedJobType } from '@/types/jobs';
 import BasicJobDetails from './job/BasicJobDetails';
 import CompensationDetails from './job/CompensationDetails';
 import JobRequirementsSection from './job/JobRequirementsSection';
@@ -40,7 +40,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
     pay_rate_max: 15,
     contactEmail: '',
     isPremium: false,
-    prohibited_types: []
+    prohibited_types: [] // Initialize as empty array of ProhibitedJobType
   });
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -92,7 +92,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
         hours_per_week: formData.hours_per_week,
         is_featured: formData.isPremium,
         is_premium: formData.isPremium,
-        prohibited_types: formData.prohibited_types
+        prohibited_types: formData.prohibited_types as ProhibitedJobType[] // Explicitly cast to the correct type
       };
 
       const { data, error } = await supabase

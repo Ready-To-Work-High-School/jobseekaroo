@@ -1,4 +1,12 @@
 
+export type ProhibitedJobType = 
+  | "commission_only" 
+  | "door_to_door_sales" 
+  | "hazardous_materials" 
+  | "heavy_machinery" 
+  | "construction" 
+  | "driving";
+
 export interface JobFormData {
   title: string;
   company: string;
@@ -11,7 +19,7 @@ export interface JobFormData {
   pay_rate_max: number;
   contactEmail: string;
   isPremium: boolean;
-  prohibited_types: string[];
+  prohibited_types: ProhibitedJobType[];
 }
 
 export interface JobSubmitData {
@@ -30,5 +38,5 @@ export interface JobSubmitData {
   hours_per_week: number;
   is_featured: boolean;
   is_premium: boolean;
-  prohibited_types: string[];
+  prohibited_types: ProhibitedJobType[];
 }
