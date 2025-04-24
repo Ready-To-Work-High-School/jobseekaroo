@@ -15,7 +15,14 @@ export const EmployerRoutes = (
   <>
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
-    <Route path="/employer/dashboard" element={<EmployerDashboard />} />
+    <Route 
+      path="/employer/dashboard" 
+      element={
+        <ProtectedRoute>
+          <EmployerDashboard />
+        </ProtectedRoute>
+      } 
+    />
     <Route path="/employer-dashboard" element={<EmployerDashboard />} />
     <Route path="/employer/analytics" element={<EmployerAnalytics />} />
     <Route path="/analytics" element={<AnalyticsDashboard />} />
@@ -27,8 +34,22 @@ export const EmployerRoutes = (
     <Route path="/resume-assistant" element={<ForEmployers />} />
     <Route path="/post-job" element={<EmployerDashboard />} />
     <Route path="/applicants" element={<EmployerDashboard />} />
-    <Route path="/employer/verify" element={<VerificationForm />} />
-    <Route path="/employer/verifications" element={<EmployerVerifications />} />
+    <Route 
+      path="/employer/verify" 
+      element={
+        <ProtectedRoute>
+          <VerificationForm />
+        </ProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/employer/verifications" 
+      element={
+        <ProtectedRoute>
+          <EmployerVerifications />
+        </ProtectedRoute>
+      } 
+    />
   </>
 );
 

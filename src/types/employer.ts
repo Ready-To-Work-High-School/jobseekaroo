@@ -13,6 +13,9 @@ export const employerVerificationSchema = z.object({
   wage_range_min: z.number().min(1, "Minimum wage is required"),
   wage_range_max: z.number().min(1, "Maximum wage is required"),
   hours_per_week: z.number().min(1, "Hours per week is required"),
+  workers_comp_policy_number: z.string().min(1, "Workers compensation policy number is required"),
+  workers_comp_provider: z.string().min(1, "Workers compensation provider is required"),
+  workers_comp_expiry_date: z.string().min(1, "Workers compensation expiry date is required"),
   safety_pledge_accepted: z.boolean().refine(val => val === true, "You must accept the safety pledge")
 });
 

@@ -420,6 +420,9 @@ export type Database = {
           wage_range_max: number
           wage_range_min: number
           website: string | null
+          workers_comp_expiry_date: string
+          workers_comp_policy_number: string
+          workers_comp_provider: string
         }
         Insert: {
           address: string
@@ -442,6 +445,9 @@ export type Database = {
           wage_range_max: number
           wage_range_min: number
           website?: string | null
+          workers_comp_expiry_date: string
+          workers_comp_policy_number: string
+          workers_comp_provider: string
         }
         Update: {
           address?: string
@@ -464,6 +470,9 @@ export type Database = {
           wage_range_max?: number
           wage_range_min?: number
           website?: string | null
+          workers_comp_expiry_date?: string
+          workers_comp_policy_number?: string
+          workers_comp_provider?: string
         }
         Relationships: []
       }
@@ -1110,6 +1119,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      safety_reports: {
+        Row: {
+          created_at: string
+          description: string
+          employer_id: string | null
+          id: string
+          job_id: string | null
+          report_type: string
+          reporter_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          employer_id?: string | null
+          id?: string
+          job_id?: string | null
+          report_type: string
+          reporter_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          employer_id?: string | null
+          id?: string
+          job_id?: string | null
+          report_type?: string
+          reporter_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       saved_jobs: {
         Row: {

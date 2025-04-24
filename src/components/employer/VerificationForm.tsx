@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { employerVerificationSchema, type EmployerVerificationFormData } from "@/types/employer";
@@ -29,10 +28,12 @@ export function VerificationForm() {
 
   const onSubmit = async (data: EmployerVerificationFormData) => {
     try {
-      // Ensure all required fields are present before submitting
       const { error } = await supabase
         .from('employer_verifications')
-        .insert(data); // Pass a single object, not an array
+        .insert({
+          ...data,
+          workers_comp_expiry_date: new Date(data.workers_comp_expiry_date).toISOString()
+        });
 
       if (error) throw error;
 
@@ -226,6 +227,50 @@ export function VerificationForm() {
                       type="number"
                       onChange={e => field.onChange(parseInt(e.target.value))}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <FormField
+              control={form.control}
+              name="workers_comp_policy_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Workers Comp Policy Number</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="workers_comp_provider"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Workers Comp Provider</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="workers_comp_expiry_date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Policy Expiry Date</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
