@@ -13,6 +13,7 @@ import JobRequirementsSection from './JobRequirementsSection';
 import JobDescriptionSection from './JobDescriptionSection';
 import JobFieldValidator from './JobFieldValidator';
 import PremiumJobToggle from './PremiumJobToggle';
+import { supabase } from '@/lib/supabase';
 
 interface JobPostFormProps {
   onSuccess: (jobId: string) => void;
