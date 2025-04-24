@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -16,6 +15,7 @@ import SectionSeparator from '@/components/home/SectionSeparator';
 import { EmployerSection } from '@/components/hero/EmployerSection';
 import { CompanySpotlight } from '@/components/company/CompanySpotlight';
 import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess';
+import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
 
 const Home = () => {
   const { user } = useAuth();
@@ -87,6 +87,10 @@ const Home = () => {
           <AdminToggle />
         </div>
       )}
+
+      <div className="container mx-auto px-4 pb-12">
+        <TroubleshootDialog />
+      </div>
 
       <FloatingQuickAccess />
     </Layout>
