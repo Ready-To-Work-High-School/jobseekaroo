@@ -66,21 +66,16 @@ export const signInWithEmail = async (
   }
 };
 
-export const signUpWithEmail = async ({
-  email,
-  password,
-  firstName,
-  lastName,
-  userType = 'student',
-  additionalData = {}
-}: SignUpData): Promise<AuthResponse> => {
+export const signUpWithEmail = async (data: SignUpData): Promise<AuthResponse> => {
   try {
+    const { email, password, firstName, lastName, userType = 'student', additionalData = {} } = data;
+    
     const { isValid, errorMessage } = validatePasswordStrength(password);
     if (!isValid) {
       throw new Error(errorMessage);
     }
 
-    const { error, data } = await supabase.auth.signUp({
+    const { error, data: authData } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -102,8 +97,8 @@ export const signUpWithEmail = async ({
       return { user: null, error };
     }
     
-    if (data?.user?.id) {
-      await createUserProfile(data.user.id, {
+    if (authData?.user?.id) {
+      await createUserProfile(authData.user.id, {
         first_name: firstName,
         last_name: lastName,
         user_type: userType,
@@ -111,13 +106,13 @@ export const signUpWithEmail = async ({
       });
 
       await logAuthEvent('user_signup', {
-        user_id: data.user.id,
+        user_id: authData.user.id,
         user_type: userType,
         requires_verification: userType === 'employer'
       });
     }
     
-    return { user: data.user, error: null };
+    return { user: authData.user, error: null };
   } catch (error: any) {
     return { user: null, error };
   }

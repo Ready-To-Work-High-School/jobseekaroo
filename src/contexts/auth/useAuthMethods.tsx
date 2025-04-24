@@ -54,7 +54,13 @@ export function useAuthMethods(setUser: (user: User | null) => void) {
     setError(null);
     
     try {
-      const { user, error: signUpError } = await signUp(email, password, firstName, lastName, userType);
+      const { user, error: signUpError } = await signUp({
+        email, 
+        password, 
+        firstName, 
+        lastName, 
+        userType
+      });
       
       if (signUpError) {
         throw signUpError;

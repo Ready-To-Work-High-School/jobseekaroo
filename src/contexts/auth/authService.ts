@@ -5,12 +5,14 @@ import {
   signUpWithEmail,
   signInWithGoogle,
   signInWithApple,
+  signOut as authSignOut,
   AuthResponse,
   SignUpData
 } from './services';
 
 export const signIn = signInWithEmail;
 export const signUp = signUpWithEmail;
+export const signOut = authSignOut;
 
 export const verifyEmployerStatus = async (userId: string) => {
   try {
