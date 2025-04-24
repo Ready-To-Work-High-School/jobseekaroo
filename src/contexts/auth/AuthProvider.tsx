@@ -1,10 +1,12 @@
+
 import { ReactNode, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
 import { useAuthState } from './hooks/useAuthState';
 import { useJobActions } from './hooks/useJobActions';
 import { useApplications } from './hooks/useApplications';
-import { signIn, signUp, signOut, signInWithGoogle, signInWithApple } from './authService';
+import { User } from '@supabase/supabase-js';
+import { UserProfile, UserProfileUpdate } from '@/types/user';
 import { useToast } from '@/hooks/use-toast';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -63,15 +65,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [setUser, setUserProfile, setIsLoading, refreshProfile]);
 
-  const handleSignIn = async (email: string, password: string) => {
+  const handleSignIn = async (email: string, password: string): Promise<User | null> => {
     try {
-      const user = await signIn(email, password);
+      const { user, error } = await signIn(email, password);
+      
+      if (error) {
+        console.error('Error signing in:', error);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to sign in",
+          variant: "destructive",
+        });
+        throw error;
+      }
+      
       if (user) {
         toast({
           title: "Success",
           description: "You have successfully signed in",
         });
       }
+      
       return user;
     } catch (error: any) {
       console.error('Error signing in:', error);
@@ -85,20 +99,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleSignUp = async (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
     userType: 'student' | 'employer' = 'student'
-  ) => {
+  ): Promise<User | null> => {
     try {
-      const user = await signUp(email, password, firstName, lastName, userType);
+      const { user, error } = await signUp(email, password, firstName, lastName, userType);
+      
+      if (error) {
+        console.error('Error signing up:', error);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to create account",
+          variant: "destructive",
+        });
+        throw error;
+      }
+      
       if (user) {
         toast({
           title: "Success",
           description: "Your account has been created successfully",
         });
       }
+      
       return user;
     } catch (error: any) {
       console.error('Error signing up:', error);
@@ -111,7 +137,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateProfile = async (profileData: any) => {
+  const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
     try {
@@ -142,7 +168,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       console.log('Profile updated successfully:', data);
       
-      const formattedProfile = data; // You might need to format this based on your existing code
+      const formattedProfile = data as unknown as UserProfile;
       setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
       
       return formattedProfile;
@@ -151,6 +177,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw error;
     }
   };
+
+  // Import missing imports
+  const { signIn, signUp, signOut, signInWithGoogle, signInWithApple } = require('./authService');
 
   const makeAdmin = async () => {
     console.log('makeAdmin method called but not implemented');
@@ -164,6 +193,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('redeemCode method called but not implemented');
   };
 
+  // Convert AuthResponse to User type where necessary
+  const handleSignInWithGoogle = async (): Promise<User | null> => {
+    const { user, error } = await signInWithGoogle();
+    if (error) throw error;
+    return user;
+  };
+
+  const handleSignInWithApple = async (): Promise<User | null> => {
+    const { user, error } = await signInWithApple();
+    if (error) throw error;
+    return user;
+  };
+
+  const handleSignOut = async (): Promise<void> => {
+    const { error } = await signOut();
+    if (error) throw error;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -173,9 +220,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error,
         signIn: handleSignIn,
         signUp: handleSignUp,
-        signOut,
-        signInWithApple,
-        signInWithGoogle,
+        signOut: handleSignOut,
+        signInWithApple: handleSignInWithApple,
+        signInWithGoogle: handleSignInWithGoogle,
         ...jobActions,
         ...applicationActions,
         updateProfile,

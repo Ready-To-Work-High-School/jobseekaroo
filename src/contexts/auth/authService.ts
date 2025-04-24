@@ -3,16 +3,18 @@ import { checkEmployerVerification } from '@/lib/supabase/encryption/file-securi
 import { 
   signInWithEmail,
   signUpWithEmail,
-  signInWithGoogle,
-  signInWithApple,
+  signInWithGoogle as socialSignInWithGoogle,
+  signInWithApple as socialSignInWithApple,
   signOut as authSignOut,
-  AuthResponse,
-  SignUpData
+  AuthResponse
 } from './services';
 
+// Re-export functions with properly typed signatures
 export const signIn = signInWithEmail;
 export const signUp = signUpWithEmail;
 export const signOut = authSignOut;
+export const signInWithGoogle = socialSignInWithGoogle;
+export const signInWithApple = socialSignInWithApple;
 
 export const verifyEmployerStatus = async (userId: string) => {
   try {
@@ -29,5 +31,3 @@ export const verifyEmployerStatus = async (userId: string) => {
     };
   }
 };
-
-export { signInWithGoogle, signInWithApple };
