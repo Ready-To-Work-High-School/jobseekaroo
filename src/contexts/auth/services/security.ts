@@ -1,37 +1,52 @@
-
 import { supabase } from '@/lib/supabase';
 import { encryptData } from '@/lib/supabase/encryption';
 
 // Maximum failed login attempts before temporary lockout
-const MAX_FAILED_ATTEMPTS = 5;
+const MAX_LOGIN_ATTEMPTS = 5;
 // Lockout duration in milliseconds (15 minutes)
 const LOCKOUT_DURATION = 15 * 60 * 1000;
 
-// Track failed login attempts
-const failedAttempts: Record<string, { count: number; lastAttempt: number; ipAddress?: string }> = {};
+// Track failed login attempts with IP tracking
+const failedAttempts: Record<string, { 
+  count: number; 
+  lastAttempt: number;
+  ipAddresses: Set<string>;
+}> = {};
 
 /**
  * Check for account lockout
  * @param email User's email
  * @returns Object containing lockout status and minutes left if locked
  */
-export const checkAccountLockout = (email: string): { isLocked: boolean; minutesLeft?: number } => {
-  const userAttempts = failedAttempts[email] || { count: 0, lastAttempt: 0 };
-  const currentTime = Date.now();
+export const checkAccountLockout = (email: string): { 
+  isLocked: boolean; 
+  minutesLeft?: number;
+  suspiciousActivity?: boolean;
+} => {
+  const userAttempts = failedAttempts[email];
+  if (!userAttempts) return { isLocked: false };
   
-  if (userAttempts.count >= MAX_FAILED_ATTEMPTS) {
-    const timeSinceLast = currentTime - userAttempts.lastAttempt;
-    if (timeSinceLast < LOCKOUT_DURATION) {
-      const minutesLeft = Math.ceil((LOCKOUT_DURATION - timeSinceLast) / 60000);
-      return { isLocked: true, minutesLeft };
+  const currentTime = Date.now();
+  const timeSinceLastAttempt = currentTime - userAttempts.lastAttempt;
+  
+  if (userAttempts.count >= MAX_LOGIN_ATTEMPTS) {
+    if (timeSinceLastAttempt < LOCKOUT_DURATION) {
+      const minutesLeft = Math.ceil((LOCKOUT_DURATION - timeSinceLastAttempt) / 60000);
+      return { 
+        isLocked: true, 
+        minutesLeft,
+        suspiciousActivity: userAttempts.ipAddresses.size > 2
+      };
     } else {
-      // Reset counter if lockout period has passed
-      userAttempts.count = 0;
-      return { isLocked: false };
+      // Reset if lockout period has passed
+      delete failedAttempts[email];
     }
   }
   
-  return { isLocked: false };
+  return { 
+    isLocked: false,
+    suspiciousActivity: userAttempts.ipAddresses.size > 2
+  };
 };
 
 /**
@@ -40,13 +55,25 @@ export const checkAccountLockout = (email: string): { isLocked: boolean; minutes
  * @param ipAddress Optional IP address for tracking
  */
 export const trackFailedLoginAttempt = (email: string, ipAddress?: string): void => {
-  const userAttempts = failedAttempts[email] || { count: 0, lastAttempt: 0 };
+  const userAttempts = failedAttempts[email] || { 
+    count: 0, 
+    lastAttempt: 0,
+    ipAddresses: new Set()
+  };
+  
   userAttempts.count += 1;
   userAttempts.lastAttempt = Date.now();
   if (ipAddress) {
-    userAttempts.ipAddress = ipAddress;
+    userAttempts.ipAddresses.add(ipAddress);
   }
+  
   failedAttempts[email] = userAttempts;
+  
+  // Log suspicious activity (multiple IPs)
+  if (userAttempts.ipAddresses.size > 2) {
+    console.warn(`Suspicious login activity detected for ${email} from multiple IPs:`, 
+      Array.from(userAttempts.ipAddresses));
+  }
 };
 
 /**
@@ -63,21 +90,39 @@ export const resetFailedLoginAttempts = (email: string): void => {
  * @returns Object containing validation result and error message
  */
 export const validatePasswordStrength = (password: string): { isValid: boolean; errorMessage?: string } => {
-  if (password.length < 8) {
-    return { isValid: false, errorMessage: "Password must be at least 8 characters" };
-  }
-  
-  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+  if (password.length < 12) {
     return { 
       isValid: false, 
-      errorMessage: "Password must contain at least one uppercase letter, one lowercase letter, and one number" 
+      errorMessage: "Password must be at least 12 characters long" 
     };
   }
   
-  // Check against common passwords
-  const commonPasswords = ['password', 'password123', '123456', 'qwerty', 'letmein'];
-  if (commonPasswords.includes(password.toLowerCase())) {
-    return { isValid: false, errorMessage: "Password is too common. Please choose a stronger password" };
+  // Check for complexity requirements
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+  if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+    return { 
+      isValid: false, 
+      errorMessage: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" 
+    };
+  }
+  
+  // Check for common patterns
+  const commonPatterns = [
+    /^(?=.*password)/i,
+    /^12345/,
+    /^qwerty/i,
+    /^admin/i,
+  ];
+  
+  if (commonPatterns.some(pattern => pattern.test(password))) {
+    return { 
+      isValid: false, 
+      errorMessage: "Password contains common patterns that are easily guessable" 
+    };
   }
   
   return { isValid: true };
@@ -101,3 +146,13 @@ export const storeEncryptedUserMetadata = async (userId: string, data: any): Pro
     // Non-blocking error, don't throw
   }
 };
+
+// Clean up old lockout entries periodically
+setInterval(() => {
+  const currentTime = Date.now();
+  Object.keys(failedAttempts).forEach(email => {
+    if (currentTime - failedAttempts[email].lastAttempt > LOCKOUT_DURATION) {
+      delete failedAttempts[email];
+    }
+  });
+}, LOCKOUT_DURATION);

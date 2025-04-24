@@ -1,4 +1,3 @@
-
 import { supabase } from '@/lib/supabase';
 import { 
   checkRateLimit 
@@ -31,23 +30,24 @@ export const signIn = async (email: string, password: string, ipAddress?: string
     
     throw new Error("Too many requests. Please try again later.");
   }
-  
+
   if (!email || !password) {
     throw new Error("Email and password are required");
   }
-  
+
   email = email.trim().toLowerCase();
   
-  const { isLocked, minutesLeft } = checkAccountLockout(email);
+  const { isLocked, minutesLeft, suspiciousActivity } = checkAccountLockout(email);
   if (isLocked && minutesLeft) {
     await logSecurityEvent('account_lockout', undefined, {
       email: email,
-      minutes_left: minutesLeft
+      minutes_left: minutesLeft,
+      suspicious_activity: suspiciousActivity
     });
     
-    throw new Error(`Too many failed login attempts. Please try again in ${minutesLeft} minutes.`);
+    throw new Error(`Account temporarily locked. Please try again in ${minutesLeft} minutes.`);
   }
-  
+
   try {
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
@@ -62,26 +62,17 @@ export const signIn = async (email: string, password: string, ipAddress?: string
         ip_address: ipAddress
       });
       
-      // Enhanced error messages for better user experience
       let enhancedErrorMessage = error.message;
       
       if (error.message.includes("Invalid login credentials")) {
-        enhancedErrorMessage = "Incorrect email or password. Please try again or reset your password.";
+        enhancedErrorMessage = "Incorrect email or password. Please note that multiple failed attempts will temporarily lock your account.";
       } else if (error.message.includes("Email not confirmed")) {
-        enhancedErrorMessage = "Please check your email to confirm your account before signing in.";
+        enhancedErrorMessage = "Please verify your email address before signing in. Check your inbox for a confirmation link.";
       } else if (error.message.includes("User not found")) {
-        enhancedErrorMessage = "No account found with this email. Please check your email or sign up.";
-      } else if (error.message.includes("rate limit")) {
-        enhancedErrorMessage = "Too many sign-in attempts. Please wait a few minutes and try again.";
+        enhancedErrorMessage = "No account found with this email. Please check your email or create a new account.";
       }
       
-      return { 
-        user: null, 
-        error: {
-          ...error,
-          message: enhancedErrorMessage
-        } 
-      };
+      return { user: null, error: { ...error, message: enhancedErrorMessage } };
     }
     
     resetFailedLoginAttempts(email);
@@ -94,15 +85,11 @@ export const signIn = async (email: string, password: string, ipAddress?: string
     
     return { user: data.user, error: null };
   } catch (error: any) {
-    console.error(`Failed login attempt for ${email} from IP ${ipAddress || 'unknown'}`);
-    
-    if (error.message?.includes("Invalid login credentials")) {
-      return { 
-        user: null, 
-        error: new Error("Incorrect email or password. Please check your credentials and try again.")
-      };
-    }
-    return { user: null, error };
+    console.error(`Failed login attempt for ${email}:`, error);
+    return { 
+      user: null, 
+      error: new Error("An unexpected error occurred. Please try again later.") 
+    };
   }
 };
 
@@ -132,13 +119,12 @@ export const signUp = async (
   lastName = lastName.trim();
   
   const { isValid, errorMessage } = validatePasswordStrength(password);
-  if (!isValid && errorMessage) {
+  if (!isValid) {
     throw new Error(errorMessage);
   }
   
   const requiresVerification = userType === 'employer';
 
-  // Use Supabase authentication directly instead of the Express server
   try {
     const { error, data } = await supabase.auth.signUp({
       email,

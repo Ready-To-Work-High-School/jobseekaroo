@@ -386,22 +386,8 @@ export type Database = {
             foreignKeyName: "employer_endorsements_employer_id_fkey"
             columns: ["employer_id"]
             isOneToOne: false
-            referencedRelation: "conversations_with_participants_view"
-            referencedColumns: ["participant_id"]
-          },
-          {
-            foreignKeyName: "employer_endorsements_employer_id_fkey"
-            columns: ["employer_id"]
-            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_endorsements_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "conversations_with_participants_view"
-            referencedColumns: ["participant_id"]
           },
           {
             foreignKeyName: "employer_endorsements_student_id_fkey"
@@ -1428,6 +1414,7 @@ export type Database = {
           created_at: string | null
           id: string | null
           is_approved: boolean | null
+          is_read: boolean | null
           needs_moderation: boolean | null
           receiver_avatar: string | null
           receiver_id: string | null
