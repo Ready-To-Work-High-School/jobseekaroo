@@ -1,65 +1,50 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Shield, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle2 } from "lucide-react";
 
 const EmployerAdditionalFeatures = () => {
+  const additionalFeatures = [
+    {
+      title: "Candidate Matching",
+      description: "Our AI system matches candidates to job requirements based on skills, experience, and preferences."
+    },
+    {
+      title: "Interview Scheduling",
+      description: "Streamline your hiring process with our integrated interview scheduling system."
+    },
+    {
+      title: "Compliance Assistance",
+      description: "Tools to ensure compliance with youth labor laws and regulations when hiring students."
+    },
+    {
+      title: "Analytics Dashboard",
+      description: "Track application metrics and optimize your recruitment strategy with data-driven insights."
+    },
+    {
+      title: "School Partnerships",
+      description: "Connect directly with local schools to establish recruitment pipelines and internship programs."
+    }
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-      <Card className="h-full">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" />
-            <CardTitle>Analytics Dashboard</CardTitle>
-          </div>
-          <CardDescription>Measure recruitment performance</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>Gain valuable insights into your recruitment efforts:</p>
-          <ul className="space-y-2">
-            {["View job posting performance metrics",
-              "Track applicant sources and conversion rates",
-              "Compare hiring efficiency over time",
-              "Premium reports and insights"].map((item, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link to="/employer/analytics">View Analytics</Link>
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="max-w-3xl mx-auto my-12">
+      <h3 className="text-2xl font-bold mb-6">Additional Platform Features</h3>
       
-      <Card className="h-full">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <Shield className="h-5 w-5 text-blue-500" />
-            <CardTitle>Compliance & Best Practices</CardTitle>
-          </div>
-          <CardDescription>Ensuring proper youth employment</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>We help you navigate the requirements of employing young workers:</p>
-          <ul className="space-y-2">
-            {["Guidance on youth labor laws",
-              "Work permit requirements by location",
-              "Best practices for managing young employees",
-              "Mentorship program guidance"].map((item, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link to="/resources">Compliance Resources</Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {additionalFeatures.map((feature, index) => (
+          <Card key={index} className="overflow-hidden">
+            <CardContent className="p-5">
+              <div className="flex gap-3">
+                <CheckCircle2 className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="text-lg font-semibold mb-1">{feature.title}</h4>
+                  <p className="text-muted-foreground">{feature.description}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };

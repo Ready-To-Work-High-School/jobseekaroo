@@ -1,65 +1,47 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Shield, Users, BarChart3, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Database, Search, Users, Shield } from "lucide-react";
 
 const EmployerFeatureCards = () => {
+  const features = [
+    {
+      icon: <Database className="h-10 w-10 text-blue-500" />,
+      title: "Talent Database",
+      description: "Access our growing database of motivated high-school students ready to join the workforce with diverse skill sets."
+    },
+    {
+      icon: <Search className="h-10 w-10 text-indigo-500" />,
+      title: "AI Matching",
+      description: "Our intelligent system matches your job requirements with the most suitable candidates based on skills and preferences."
+    },
+    {
+      icon: <Users className="h-10 w-10 text-purple-500" />,
+      title: "Streamlined Hiring",
+      description: "Post jobs, review applications, schedule interviews, and manage the entire hiring process all in one platform."
+    },
+    {
+      icon: <Shield className="h-10 w-10 text-green-500" />,
+      title: "Safety & Compliance",
+      description: "Built-in tools to ensure your job postings comply with all youth labor laws and regulations."
+    }
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <Card className="h-full">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <Briefcase className="h-5 w-5 text-blue-500" />
-            <CardTitle>Job Postings</CardTitle>
-          </div>
-          <CardDescription>Create effective listings</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>Our platform makes it easy to post jobs appropriate for high school students:</p>
-          <ul className="space-y-2">
-            {["Templates designed for entry-level positions", 
-              "Guidance on youth labor compliance",
-              "Premium placement options for increased visibility",
-              "Set required skills and qualifications"].map((item, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link to="/employer-dashboard">Create Job Posting</Link>
-          </Button>
-        </CardContent>
-      </Card>
-      
-      <Card className="h-full">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="h-5 w-5 text-blue-500" />
-            <CardTitle>Candidate Management</CardTitle>
-          </div>
-          <CardDescription>Find the right talent</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>Efficiently review and manage applicants:</p>
-          <ul className="space-y-2">
-            {["AI-powered skill matching technology",
-              "Verified skills and credentials",
-              "Streamlined communication with candidates",
-              "Application status tracking"].map((item, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link to="/employer-dashboard">Manage Candidates</Link>
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="max-w-4xl mx-auto my-12">
+      <h3 className="text-2xl font-bold text-center mb-8">Key Platform Features</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {features.map((feature, index) => (
+          <Card key={index} className="overflow-hidden">
+            <CardHeader className="flex flex-row items-center gap-4 pb-2">
+              {feature.icon}
+              <CardTitle>{feature.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-base">{feature.description}</CardDescription>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
