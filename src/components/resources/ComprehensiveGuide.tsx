@@ -21,7 +21,7 @@ const ComprehensiveGuide = () => {
         },
         { 
           question: 'How do I create an account?',
-          answer: 'To create an account, click on the "Sign Up" button in the navigation bar. You'll need to provide your email address, create a password, and specify whether you're a student, employer, teacher, or school administrator. Follow the verification steps to complete your registration.'
+          answer: 'To create an account, click on the "Sign Up" button in the navigation bar. You\'ll need to provide your email address, create a password, and specify whether you\'re a student, employer, teacher, or school administrator. Follow the verification steps to complete your registration.'
         },
         { 
           question: 'What user types are available?',
@@ -55,7 +55,7 @@ const ComprehensiveGuide = () => {
         },
         { 
           question: 'How do I prepare for interviews?',
-          answer: 'Access the Interview Preparation resources in the Resources section. You'll find practice questions, video tutorials on interview techniques, and interactive mock interview simulations to help you prepare confidently.'
+          answer: 'Access the Interview Preparation resources in the Resources section. You\'ll find practice questions, video tutorials on interview techniques, and interactive mock interview simulations to help you prepare confidently.'
         },
         { 
           question: 'How do I get career guidance?',
@@ -73,7 +73,7 @@ const ComprehensiveGuide = () => {
         },
         { 
           question: 'How do I get verified as an employer?',
-          answer: 'After creating an employer account, you'll need to complete the verification process. Provide your company details, business documentation, and contact information for review. Verification helps ensure a safe environment for students.'
+          answer: 'After creating an employer account, you\'ll need to complete the verification process. Provide your company details, business documentation, and contact information for review. Verification helps ensure a safe environment for students.'
         },
         { 
           question: 'How do I view applicants?',
@@ -169,7 +169,7 @@ const ComprehensiveGuide = () => {
         },
         { 
           question: 'How do I upgrade to a premium account?',
-          answer: 'Navigate to the Premium Services page and select the appropriate plan for your needs. You'll be guided through the payment process and can immediately access premium features once the upgrade is complete.'
+          answer: 'Navigate to the Premium Services page and select the appropriate plan for your needs. You\'ll be guided through the payment process and can immediately access premium features once the upgrade is complete.'
         }
       ]
     }
