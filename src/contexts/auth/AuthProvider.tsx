@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleSignIn = async (email: string, password: string): Promise<User | null> => {
     try {
+      // Fix for error TS2554: Expected 1 arguments, but got 5
       const { user, error } = await signIn(email, password);
       
       if (error) {
@@ -107,7 +108,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userType: 'student' | 'employer' = 'student'
   ): Promise<User | null> => {
     try {
-      const { user, error } = await signUp(email, password, firstName, lastName, userType);
+      // Fix the structure to match authService.ts expectations
+      const { user, error } = await signUp({
+        email, 
+        password, 
+        firstName, 
+        lastName, 
+        userType
+      });
       
       if (error) {
         console.error('Error signing up:', error);
@@ -205,8 +213,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleSignOut = async (): Promise<void> => {
-    const { error } = await signOut();
-    if (error) throw error;
+    // Fix for error TS2339: Property 'error' does not exist on type 'void'
+    try {
+      await signOut();
+      // No error property to check since signOut returns void
+    } catch (error) {
+      console.error('Error signing out:', error);
+      throw error;
+    }
   };
 
   return (
