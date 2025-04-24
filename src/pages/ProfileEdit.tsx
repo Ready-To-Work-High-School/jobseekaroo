@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MfaSettings } from '@/components/auth/MfaSettings';
 import { useAuth } from '@/contexts/auth';
@@ -10,7 +11,7 @@ const ProfileEdit: React.FC = () => {
   const { userProfile } = useAuth();
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 space-y-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
