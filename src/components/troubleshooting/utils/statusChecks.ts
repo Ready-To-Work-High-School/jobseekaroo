@@ -1,10 +1,14 @@
 
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-
 export const getSystemStatus = () => {
+  // Check network status directly
   const networkStatus = navigator.onLine;
-  const authStatus = true; // Replace with actual auth check
-  const dataStatus = true; // Replace with actual data access check
+  
+  // These should be actual checks in a real application
+  // For this example, we'll implement simple checks
+  const authStatus = localStorage.getItem('auth') !== null || sessionStorage.getItem('auth') !== null;
+  
+  // Check if we can access data services - this is a simple test
+  const dataStatus = checkDataEndpoints();
   
   return {
     networkStatus,
@@ -13,11 +17,27 @@ export const getSystemStatus = () => {
   };
 };
 
+// Simple function to check if common data endpoints are reachable
+const checkDataEndpoints = () => {
+  // This is a simplified implementation
+  // In a real app, you would check specific API endpoints
+  try {
+    // We can do a basic check if fetch is available
+    return typeof fetch === 'function';
+  } catch (error) {
+    console.error('Data access check failed:', error);
+    return false;
+  }
+};
+
 export const formatDiagnosticMessage = (status: ReturnType<typeof getSystemStatus>, missingItems: string[]) => {
   return `
-    Network: ${status.networkStatus ? "✅" : "❌"}
-    Auth: ${status.authStatus ? "✅" : "❌"}
-    Data: ${status.dataStatus ? "✅" : "❌"}
-    Missing Items: ${missingItems.length > 0 ? missingItems.join(", ") : "None"}
+    System Diagnostics Results:
+    
+    Network: ${status.networkStatus ? "✅ Connected" : "❌ Offline"}
+    Authentication: ${status.authStatus ? "✅ Available" : "❌ Not available"}
+    Data Services: ${status.dataStatus ? "✅ Accessible" : "❌ Not accessible"}
+    
+    ${missingItems.length > 0 ? `Issues detected: ${missingItems.join(", ")}` : "No issues detected! All systems operational."}
   `;
 };

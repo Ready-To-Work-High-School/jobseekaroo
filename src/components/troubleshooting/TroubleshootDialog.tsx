@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AlertTriangle, Bug } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { commonIssues } from './troubleshootingData';
+import { DiagnosticsButton } from './DiagnosticsButton';
+import { useDiagnostics } from './useDiagnostics';
 
 // Define minimal types needed for the component
 interface TroubleshootProps {
@@ -28,16 +29,8 @@ interface Issue {
 
 const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
-  const [isChecking, setIsChecking] = useState(false);
+  const { isChecking, handleDiagnostics } = useDiagnostics();
   
-  const handleDiagnostics = async () => {
-    setIsChecking(true);
-    // Simulate diagnostics check
-    setTimeout(() => {
-      setIsChecking(false);
-    }, 1500);
-  };
-
   // Fallback data if commonIssues is not defined
   const issues: Issue[] = commonIssues || [
     {
@@ -58,10 +51,10 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
     <Dialog>
       <DialogTrigger asChild>
         {trigger || (
-          <Button variant="outline" className="gap-2">
-            <Bug className="h-4 w-4" />
-            Troubleshoot
-          </Button>
+          <DiagnosticsButton
+            onRun={handleDiagnostics}
+            isChecking={isChecking}
+          />
         )}
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
@@ -76,13 +69,10 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         </DialogHeader>
 
         <div className="space-y-4">
-          <Button 
-            onClick={handleDiagnostics}
-            disabled={isChecking}
-            className="w-full"
-          >
-            {isChecking ? 'Running Diagnostics...' : 'Run System Check'}
-          </Button>
+          <DiagnosticsButton
+            onRun={handleDiagnostics}
+            isChecking={isChecking}
+          />
 
           <Separator />
 

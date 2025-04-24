@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useState } from 'react';
 import { getSystemStatus, formatDiagnosticMessage } from './utils/statusChecks';
+import { runSystemDiagnostics } from './services/diagnosticsService';
 
 export const useDiagnostics = () => {
   const { toast } = useToast();
@@ -13,9 +14,10 @@ export const useDiagnostics = () => {
     setIsChecking(true);
     
     try {
+      // Get basic system status
       const systemStatus = getSystemStatus();
       
-      // Define some basic checks
+      // Define missing items based on system status
       const missingItems = [];
       
       if (!systemStatus.networkStatus) {
@@ -30,10 +32,22 @@ export const useDiagnostics = () => {
         missingItems.push("Data access");
       }
 
+      // Run additional diagnostic checks from service
+      const additionalIssues = runSystemDiagnostics();
+      
+      // Combine all detected issues
+      const allIssues = [...missingItems, ...additionalIssues];
+      
+      // Show diagnostic results in toast
       toast({
         title: "Diagnostic Results",
-        description: formatDiagnosticMessage(systemStatus, missingItems)
+        description: formatDiagnosticMessage(systemStatus, allIssues),
+        duration: 5000, // Show for 5 seconds
       });
+      
+      // Log results for debugging
+      console.log("Diagnostic completed:", { systemStatus, issues: allIssues });
+      
     } catch (error) {
       console.error("Diagnostic error:", error);
       toast({
@@ -49,6 +63,7 @@ export const useDiagnostics = () => {
 
   return {
     isChecking,
-    handleDiagnostics
+    handleDiagnostics,
+    isOnline
   };
 };

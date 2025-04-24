@@ -2,7 +2,6 @@
 import React from 'react';
 import { Bug, RefreshCcw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
 interface DiagnosticsButtonProps {
   onRun: () => Promise<void>;
@@ -15,6 +14,7 @@ export const DiagnosticsButton = ({ onRun, isChecking }: DiagnosticsButtonProps)
       onClick={onRun}
       disabled={isChecking}
       className="w-full"
+      variant={isChecking ? "outline" : "default"}
     >
       {isChecking ? (
         <>
