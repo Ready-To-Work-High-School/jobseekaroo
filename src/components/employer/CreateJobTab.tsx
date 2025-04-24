@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/tooltip";
 import FreemiumFeatures from './FreemiumFeatures';
 
-// interfaces for form data and props
 interface FormData {
   title: string;
   company: string;
@@ -46,7 +45,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
   const [isEligibleForTrial, setIsEligibleForTrial] = useState(false);
   const [createdJobId, setCreatedJobId] = useState<string | null>(null);
   
-  // Form state for new job posting
   const [formData, setFormData] = useState<FormData>({
     title: '',
     company: '',
@@ -62,7 +60,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
     prohibited_types: []
   });
   
-  // Check if the user is eligible for a free premium trial
   useEffect(() => {
     const checkEligibility = async () => {
       const eligible = await checkTrialEligibility();
@@ -100,7 +97,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
     }
 
     try {
-      // Convert requirements to an array
       const requirementsArray = formData.requirements
         .split('\n')
         .map(item => item.trim())
@@ -142,7 +138,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
         description: "Your job has been successfully posted.",
       });
       
-      // Reset form data
       setFormData({
         title: '',
         company: '',
@@ -171,7 +166,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
   return (
     <>
       {createdJobId ? (
-        // Show Freemium Features after job is created
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -197,7 +191,6 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
           </div>
         </div>
       ) : (
-        // Show Job Form
         <Card>
           <CardHeader>
             <CardTitle>Post a New Job</CardTitle>
@@ -389,7 +382,8 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
                             <TooltipContent>
                               <p>Feature your job posting for greater visibility</p>
                             </TooltipContent>
-                          </TooltipProvider>
+                          </Tooltip>
+                        </TooltipProvider>
                       </div>
                       <ul className="text-sm text-amber-800 list-disc pl-5 space-y-1">
                         <li>Featured placement on job listings</li>
