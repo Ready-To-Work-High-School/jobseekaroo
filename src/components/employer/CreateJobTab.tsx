@@ -27,9 +27,12 @@ interface FormData {
   type: string;
   requirements: string;
   description: string;
-  salary: string;
+  hours_per_week: number;
+  pay_rate_min: number;
+  pay_rate_max: number;
   contactEmail: string;
   isPremium: boolean;
+  prohibited_types: string[];
 }
 
 interface CreateJobTabProps {
@@ -48,12 +51,15 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
     title: '',
     company: '',
     location: '',
-    type: 'full-time',
+    type: 'part-time',
     requirements: '',
     description: '',
-    salary: '',
+    hours_per_week: 20,
+    pay_rate_min: 12,
+    pay_rate_max: 15,
     contactEmail: '',
     isPremium: false,
+    prohibited_types: []
   });
   
   // Check if the user is eligible for a free premium trial
@@ -92,36 +98,41 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
       });
       return;
     }
-    
+
     try {
       // Convert requirements to an array
       const requirementsArray = formData.requirements
         .split('\n')
         .map(item => item.trim())
         .filter(item => item.length > 0);
+
+      const [city, state] = formData.location.split(',').map(s => s.trim());
       
-      // Insert job into Supabase
+      const jobData = {
+        title: formData.title,
+        company_name: formData.company,
+        location_city: city || formData.location,
+        location_state: state || '',
+        location_zip: '00000',
+        job_type: formData.type,
+        pay_rate_min: formData.pay_rate_min,
+        pay_rate_max: formData.pay_rate_max,
+        pay_rate_period: 'hourly',
+        description: formData.description,
+        requirements: requirementsArray,
+        experience_level: 'entry-level',
+        hours_per_week: formData.hours_per_week,
+        is_featured: formData.isPremium,
+        is_premium: formData.isPremium,
+        prohibited_types: formData.prohibited_types
+      };
+
       const { data: jobData, error: jobError } = await supabase
         .from('jobs')
-        .insert({
-          title: formData.title,
-          company_name: formData.company,
-          location_city: formData.location.split(',')[0]?.trim() || formData.location,
-          location_state: formData.location.split(',')[1]?.trim() || '',
-          location_zip: '00000', // Default value, could be updated later
-          job_type: formData.type,
-          pay_rate_min: parseInt(formData.salary.split('-')[0]?.replace(/[^0-9]/g, '') || '0'),
-          pay_rate_max: parseInt(formData.salary.split('-')[1]?.replace(/[^0-9]/g, '') || '0'),
-          pay_rate_period: 'hourly',
-          description: formData.description,
-          requirements: requirementsArray,
-          experience_level: 'entry-level',
-          is_featured: formData.isPremium,
-          is_premium: formData.isPremium
-        })
+        .insert(jobData)
         .select()
         .single();
-        
+
       if (jobError) throw jobError;
 
       setCreatedJobId(jobData.id);
@@ -131,20 +142,21 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
         description: "Your job has been successfully posted.",
       });
       
-      // Reset form data except for the job ID
+      // Reset form data
       setFormData({
         title: '',
         company: '',
         location: '',
-        type: 'full-time',
+        type: 'part-time',
         requirements: '',
         description: '',
-        salary: '',
+        hours_per_week: 20,
+        pay_rate_min: 12,
+        pay_rate_max: 15,
         contactEmail: '',
         isPremium: false,
+        prohibited_types: []
       });
-      
-      // Show the FreemiumFeatures component with the newly created job ID
       
     } catch (error: any) {
       console.error('Error posting job:', error);
@@ -189,8 +201,17 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
         <Card>
           <CardHeader>
             <CardTitle>Post a New Job</CardTitle>
-            <CardDescription>
-              Fill out the form below to create a new job posting for students
+            <CardDescription className="space-y-2">
+              <p>Fill out the form below to create a new job posting for students.</p>
+              <div className="bg-amber-50 border border-amber-200 rounded-md p-4 text-sm text-amber-800">
+                <h4 className="font-medium mb-2">Teen Job Requirements:</h4>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Jobs must be entry-level (e.g., cashier, retail associate, food service)</li>
+                  <li>Minimum wage must be at least $12/hour</li>
+                  <li>Maximum 40 hours per week</li>
+                  <li>No commission-only, door-to-door sales, or hazardous roles</li>
+                </ul>
+              </div>
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -200,82 +221,123 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
                   <Label htmlFor="title">Job Title</Label>
                   <Input 
                     id="title" 
-                    name="title" 
-                    placeholder="e.g. Retail Associate"
+                    name="title"
+                    placeholder="e.g. Retail Associate at Target"
                     value={formData.title}
                     onChange={handleInputChange}
                     required
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Be specific - include role and company name
+                  </p>
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="company">Company Name</Label>
                   <Input 
                     id="company" 
-                    name="company" 
-                    placeholder="e.g. Westside Retail"
+                    name="company"
                     value={formData.company}
                     onChange={handleInputChange}
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
                   <Input 
                     id="location" 
-                    name="location" 
+                    name="location"
                     placeholder="e.g. Jacksonville, FL"
                     value={formData.location}
                     onChange={handleInputChange}
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="type">Job Type</Label>
                   <Select 
-                    value={formData.type} 
+                    value={formData.type}
                     onValueChange={(value) => handleSelectChange('type', value)}
                   >
                     <SelectTrigger id="type">
                       <SelectValue placeholder="Select job type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="full-time">Full-Time</SelectItem>
                       <SelectItem value="part-time">Part-Time</SelectItem>
-                      <SelectItem value="internship">Internship</SelectItem>
+                      <SelectItem value="full-time">Full-Time</SelectItem>
                       <SelectItem value="temporary">Temporary</SelectItem>
+                      <SelectItem value="summer">Summer</SelectItem>
+                      <SelectItem value="internship">Internship</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="salary">Salary/Pay Rate</Label>
+                  <Label htmlFor="hours_per_week">Hours per Week</Label>
                   <Input 
-                    id="salary" 
-                    name="salary" 
-                    placeholder="e.g. $15-18/hour"
-                    value={formData.salary}
-                    onChange={handleInputChange}
+                    id="hours_per_week"
+                    name="hours_per_week"
+                    type="number"
+                    min="1"
+                    max="40"
+                    value={formData.hours_per_week}
+                    onChange={(e) => handleInputChange({
+                      target: {
+                        name: 'hours_per_week',
+                        value: parseInt(e.target.value)
+                      }
+                    } as React.ChangeEvent<HTMLInputElement>)}
                     required
                   />
+                  <p className="text-xs text-muted-foreground">Maximum 40 hours per week for teen jobs</p>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="contactEmail">Contact Email</Label>
-                  <Input 
-                    id="contactEmail" 
-                    name="contactEmail" 
-                    type="email"
-                    placeholder="e.g. hiring@company.com"
-                    value={formData.contactEmail}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Label>Pay Rate (per hour)</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Input 
+                        id="pay_rate_min"
+                        name="pay_rate_min"
+                        type="number"
+                        min="12"
+                        step="0.50"
+                        placeholder="Min"
+                        value={formData.pay_rate_min}
+                        onChange={(e) => handleInputChange({
+                          target: {
+                            name: 'pay_rate_min',
+                            value: parseFloat(e.target.value)
+                          }
+                        } as React.ChangeEvent<HTMLInputElement>)}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Input 
+                        id="pay_rate_max"
+                        name="pay_rate_max"
+                        type="number"
+                        min="12"
+                        step="0.50"
+                        placeholder="Max"
+                        value={formData.pay_rate_max}
+                        onChange={(e) => handleInputChange({
+                          target: {
+                            name: 'pay_rate_max',
+                            value: parseFloat(e.target.value)
+                          }
+                        } as React.ChangeEvent<HTMLInputElement>)}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Minimum wage must be at least $12/hour</p>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="requirements">Requirements/Qualifications</Label>
                 <Textarea 
@@ -327,8 +389,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
                             <TooltipContent>
                               <p>Feature your job posting for greater visibility</p>
                             </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                          </TooltipProvider>
                       </div>
                       <ul className="text-sm text-amber-800 list-disc pl-5 space-y-1">
                         <li>Featured placement on job listings</li>
@@ -344,7 +405,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
                 <AlertCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                 <div className="text-sm text-blue-800">
                   <p className="font-medium">Important</p>
-                  <p>Job postings will be reviewed by our team before being made visible to students. This typically takes 1-2 business days.</p>
+                  <p>Job postings will be reviewed to ensure they meet our teen employment standards before being made visible.</p>
                 </div>
               </div>
             </form>
@@ -354,7 +415,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
               Cancel
             </Button>
             <Button 
-              type="submit" 
+              type="submit"
               onClick={handleSubmit}
               disabled={isPremiumLoading}
             >

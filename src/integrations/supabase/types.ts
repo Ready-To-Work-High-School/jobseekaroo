@@ -652,11 +652,13 @@ export type Database = {
           created_at: string
           description: string
           experience_level: string
+          hours_per_week: number | null
           id: string
           is_featured: boolean | null
           is_flexible: boolean | null
           is_premium: boolean | null
           is_remote: boolean | null
+          is_teen_appropriate: boolean | null
           job_type: string
           location_city: string
           location_state: string
@@ -666,6 +668,9 @@ export type Database = {
           pay_rate_min: number
           pay_rate_period: string
           posted_date: string
+          prohibited_types:
+            | Database["public"]["Enums"]["prohibited_job_type"][]
+            | null
           requirements: string[]
           title: string
           updated_at: string
@@ -675,11 +680,13 @@ export type Database = {
           created_at?: string
           description: string
           experience_level: string
+          hours_per_week?: number | null
           id?: string
           is_featured?: boolean | null
           is_flexible?: boolean | null
           is_premium?: boolean | null
           is_remote?: boolean | null
+          is_teen_appropriate?: boolean | null
           job_type: string
           location_city: string
           location_state: string
@@ -689,6 +696,9 @@ export type Database = {
           pay_rate_min: number
           pay_rate_period: string
           posted_date?: string
+          prohibited_types?:
+            | Database["public"]["Enums"]["prohibited_job_type"][]
+            | null
           requirements: string[]
           title: string
           updated_at?: string
@@ -698,11 +708,13 @@ export type Database = {
           created_at?: string
           description?: string
           experience_level?: string
+          hours_per_week?: number | null
           id?: string
           is_featured?: boolean | null
           is_flexible?: boolean | null
           is_premium?: boolean | null
           is_remote?: boolean | null
+          is_teen_appropriate?: boolean | null
           job_type?: string
           location_city?: string
           location_state?: string
@@ -712,6 +724,9 @@ export type Database = {
           pay_rate_min?: number
           pay_rate_period?: string
           posted_date?: string
+          prohibited_types?:
+            | Database["public"]["Enums"]["prohibited_job_type"][]
+            | null
           requirements?: string[]
           title?: string
           updated_at?: string
@@ -1587,7 +1602,13 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      prohibited_job_type:
+        | "commission_only"
+        | "door_to_door_sales"
+        | "hazardous_materials"
+        | "heavy_machinery"
+        | "construction"
+        | "driving"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1702,6 +1723,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      prohibited_job_type: [
+        "commission_only",
+        "door_to_door_sales",
+        "hazardous_materials",
+        "heavy_machinery",
+        "construction",
+        "driving",
+      ],
+    },
   },
 } as const
