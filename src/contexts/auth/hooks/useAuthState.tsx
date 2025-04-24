@@ -3,10 +3,11 @@ import { useState, useCallback } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { UserProfile } from '@/types/user';
 
 export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const { toast } = useToast();
@@ -24,8 +25,13 @@ export const useAuthState = () => {
       setUserProfile(data);
     } catch (error) {
       console.error('Error refreshing profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to refresh profile",
+        variant: "destructive",
+      });
     }
-  }, [user]);
+  }, [user, toast]);
 
   return {
     user,

@@ -1,11 +1,9 @@
 
 import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useToast } from '@/hooks/use-toast';
+import { User } from '@supabase/supabase-js';
 
-export const useJobActions = (user: any) => {
-  const { toast } = useToast();
-
+export const useJobActions = (user: User | null) => {
   const saveJob = useCallback(async (jobId: string) => {
     if (!user) throw new Error('User must be logged in to save jobs');
     
@@ -50,7 +48,6 @@ export const useJobActions = (user: any) => {
         .single();
         
       if (error && error.code !== 'PGRST116') throw error;
-      
       return !!data;
     } catch (error) {
       console.error('Error checking if job is saved:', error);
@@ -68,7 +65,6 @@ export const useJobActions = (user: any) => {
         .eq('user_id', user.id);
         
       if (error) throw error;
-      
       return data.map(item => item.job_id);
     } catch (error) {
       console.error('Error getting saved jobs:', error);
@@ -76,10 +72,5 @@ export const useJobActions = (user: any) => {
     }
   }, [user]);
 
-  return {
-    saveJob,
-    unsaveJob,
-    isSavedJob,
-    getSavedJobs
-  };
+  return { saveJob, unsaveJob, isSavedJob, getSavedJobs };
 };

@@ -1,9 +1,10 @@
 
 import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { User } from '@supabase/supabase-js';
 import { ApplicationStatus } from '@/types/application';
 
-export const useApplications = (user: any) => {
+export const useApplications = (user: User | null) => {
   const createApplication = useCallback(async (application: any) => {
     if (!user) throw new Error('User must be logged in to create an application');
     
@@ -15,7 +16,6 @@ export const useApplications = (user: any) => {
         .single();
         
       if (error) throw error;
-      
       return data.id;
     } catch (error) {
       console.error('Error creating application:', error);
@@ -51,7 +51,6 @@ export const useApplications = (user: any) => {
         .order('applied_date', { ascending: false });
         
       if (error) throw error;
-      
       return data;
     } catch (error) {
       console.error('Error getting applications:', error);
@@ -76,10 +75,5 @@ export const useApplications = (user: any) => {
     }
   }, [user]);
 
-  return {
-    createApplication,
-    updateApplicationStatus,
-    getApplications,
-    deleteApplication
-  };
+  return { createApplication, updateApplicationStatus, getApplications, deleteApplication };
 };
