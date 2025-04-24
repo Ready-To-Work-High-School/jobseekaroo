@@ -398,6 +398,75 @@ export type Database = {
           },
         ]
       }
+      employer_verifications: {
+        Row: {
+          address: string
+          auto_verification_status: Json | null
+          company_name: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          ein: string
+          hours_per_week: number
+          id: string
+          job_description: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          safety_pledge_accepted: boolean
+          status: string
+          updated_at: string
+          wage_range_max: number
+          wage_range_min: number
+          website: string | null
+        }
+        Insert: {
+          address: string
+          auto_verification_status?: Json | null
+          company_name: string
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          ein: string
+          hours_per_week: number
+          id?: string
+          job_description: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          safety_pledge_accepted?: boolean
+          status?: string
+          updated_at?: string
+          wage_range_max: number
+          wage_range_min: number
+          website?: string | null
+        }
+        Update: {
+          address?: string
+          auto_verification_status?: Json | null
+          company_name?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          ein?: string
+          hours_per_week?: number
+          id?: string
+          job_description?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          safety_pledge_accepted?: boolean
+          status?: string
+          updated_at?: string
+          wage_range_max?: number
+          wage_range_min?: number
+          website?: string | null
+        }
+        Relationships: []
+      }
       interviews: {
         Row: {
           candidate_id: string

@@ -1,4 +1,3 @@
-
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import ForEmployers from '../pages/ForEmployers';
@@ -9,6 +8,8 @@ import EmployerBadges from '../pages/EmployerBadges';
 import PremiumServices from '../pages/PremiumServices';
 import AnalyticsDashboard from '../pages/AnalyticsDashboard';
 import PremiumFeaturesPage from '../pages/employer/PremiumFeaturesPage';
+import { VerificationForm } from '@/components/employer/VerificationForm';
+import EmployerVerifications from '@/pages/employer/EmployerVerifications';
 
 export const EmployerRoutes = (
   <>
@@ -26,6 +27,8 @@ export const EmployerRoutes = (
     <Route path="/resume-assistant" element={<ForEmployers />} />
     <Route path="/post-job" element={<EmployerDashboard />} />
     <Route path="/applicants" element={<EmployerDashboard />} />
+    <Route path="/employer/verify" element={<VerificationForm />} />
+    <Route path="/employer/verifications" element={<EmployerVerifications />} />
   </>
 );
 
