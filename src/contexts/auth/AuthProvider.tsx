@@ -126,9 +126,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) throw error;
       
-      const formattedProfile = data as UserProfile;
-      setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
-      return formattedProfile;
+      if (data) {
+        // Format the profile data to match UserProfile type
+        const formattedProfile: UserProfile = {
+          id: data.id,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          bio: data.bio,
+          location: data.location,
+          resume_url: data.resume_url,
+          skills: data.skills || [],
+          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
+          user_type: data.user_type,
+          redeemed_at: data.redeemed_at,
+          redeemed_code: data.redeemed_code,
+          avatar_url: data.avatar_url,
+          email: data.email,
+          company_name: data.company_name,
+          company_website: data.company_website,
+          job_title: data.job_title,
+          employer_verification_status: data.employer_verification_status,
+          verification_notes: data.verification_notes,
+          resume_data_encrypted: data.resume_data_encrypted,
+          contact_details_encrypted: data.contact_details_encrypted,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          badges: Array.isArray(data.badges)
+            ? data.badges.map(badge => ({
+                id: (badge as any).id || '',
+                name: (badge as any).name || '',
+                earned_at: (badge as any).earned_at
+              }))
+            : []
+        };
+        
+        setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
+        return formattedProfile;
+      }
+      return null;
     } catch (error) {
       console.error('Failed to update profile:', error);
       throw error;
@@ -144,9 +179,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error,
         signIn: handleSignIn,
         signUp: handleSignUp,
-        signOut,
-        signInWithGoogle,
-        signInWithApple,
+        signOut: async () => {
+          const { error } = await signOut();
+          if (error) throw error;
+          return;
+        },
+        signInWithGoogle: async () => {
+          const { user, error } = await signInWithGoogle();
+          if (error) throw error;
+          return user;
+        },
+        signInWithApple: async () => {
+          const { user, error } = await signInWithApple();
+          if (error) throw error;
+          return user;
+        },
         ...jobActions,
         ...applicationActions,
         updateProfile,
