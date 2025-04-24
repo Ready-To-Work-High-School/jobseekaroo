@@ -1,4 +1,3 @@
-
 import { ReactNode, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
@@ -68,7 +67,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleSignIn = async (email: string, password: string): Promise<User | null> => {
     try {
-      // Fix for error TS2554: Expected 1 arguments, but got 5
       const { user, error } = await signIn(email, password);
       
       if (error) {
@@ -108,7 +106,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userType: 'student' | 'employer' = 'student'
   ): Promise<User | null> => {
     try {
-      // Fix the structure to match authService.ts expectations
       const { user, error } = await signUp({
         email, 
         password, 
@@ -199,7 +196,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('redeemCode method called but not implemented');
   };
 
-  // Convert AuthResponse to User type where necessary
   const handleSignInWithGoogle = async (): Promise<User | null> => {
     const { user, error } = await signInWithGoogle();
     if (error) throw error;
@@ -213,10 +209,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleSignOut = async (): Promise<void> => {
-    // Fix for error TS2339: Property 'error' does not exist on type 'void'
     try {
       await signOut();
-      // No error property to check since signOut returns void
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
