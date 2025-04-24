@@ -50,21 +50,46 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
     setError(null);
     
     try {
-      // Get token from URL hash
+      // Get token from URL hash with security checks
       const searchParams = new URLSearchParams(location.hash.substring(1));
       const accessToken = searchParams.get("access_token");
+      const type = searchParams.get("type");
       
+      // Additional security validations
       if (!accessToken) {
         throw new Error("No access token found in URL. Please request a new password reset link.");
       }
       
-      console.log("Attempting to update password using token");
+      // Validate token type for password recovery
+      if (type !== "recovery") {
+        throw new Error("Invalid token type. Please request a new password reset link.");
+      }
       
-      // First set the session with the access token
-      await supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: "",
+      // Validate token structure (basic checks)
+      if (!accessToken.match(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)) {
+        throw new Error("Invalid token format. Please request a new password reset link.");
+      }
+      
+      console.log("Attempting to update password using verified token");
+      
+      // Set the session with the access token, with timeout for security
+      const sessionPromise = new Promise(async (resolve, reject) => {
+        const timeoutId = setTimeout(() => reject(new Error("Session update timed out")), 5000);
+        try {
+          const result = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: "",
+          });
+          clearTimeout(timeoutId);
+          resolve(result);
+        } catch (err) {
+          clearTimeout(timeoutId);
+          reject(err);
+        }
       });
+      
+      const { error: sessionError } = await sessionPromise as any;
+      if (sessionError) throw sessionError;
       
       // Then update the password
       const { error } = await supabase.auth.updateUser({
@@ -115,6 +140,7 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
                   type="password"
                   placeholder="••••••••" 
                   {...field} 
+                  autoComplete="new-password"
                 />
               </FormControl>
               <FormMessage />
@@ -133,6 +159,7 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
                   type="password"
                   placeholder="••••••••" 
                   {...field} 
+                  autoComplete="new-password"
                 />
               </FormControl>
               <FormMessage />

@@ -871,6 +871,7 @@ export type Database = {
           payment_status: string
           redemption_code_id: string | null
           updated_at: string
+          user_id: string
         }
         Insert: {
           amount: number
@@ -883,6 +884,7 @@ export type Database = {
           payment_status?: string
           redemption_code_id?: string | null
           updated_at?: string
+          user_id: string
         }
         Update: {
           amount?: number
@@ -895,6 +897,7 @@ export type Database = {
           payment_status?: string
           redemption_code_id?: string | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {

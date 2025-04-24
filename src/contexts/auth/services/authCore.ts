@@ -4,10 +4,20 @@ import { sendEmail } from '@/lib/supabase/email';
 import { signInWithOAuth } from '@/lib/supabase/oauth';
 import { User } from '@supabase/supabase-js';
 
-// OAuth sign-in methods
+// OAuth sign-in methods with enhanced security
 export const signInWithApple = async () => {
   try {
-    const result = await signInWithOAuth('apple');
+    // Generate and store state parameter to prevent CSRF attacks
+    const stateParam = crypto.randomUUID();
+    sessionStorage.setItem('apple_oauth_state', stateParam);
+    
+    const result = await signInWithOAuth('apple', {
+      redirectTo: `${window.location.origin}/auth/callback`,
+      scopes: 'name email',
+      queryParams: {
+        state: stateParam
+      }
+    });
     return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Apple:', error);
@@ -17,7 +27,18 @@ export const signInWithApple = async () => {
 
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithOAuth('google');
+    // Generate and store state parameter to prevent CSRF attacks
+    const stateParam = crypto.randomUUID();
+    sessionStorage.setItem('google_oauth_state', stateParam);
+    
+    const result = await signInWithOAuth('google', {
+      redirectTo: `${window.location.origin}/auth/callback`,
+      queryParams: {
+        prompt: 'select_account',
+        access_type: 'offline',
+        state: stateParam
+      }
+    });
     return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Google:', error);
@@ -28,19 +49,25 @@ export const signInWithGoogle = async () => {
 export const signOut = async () => {
   // Clear any local auth state before signing out
   try {
+    // Log the sign-out attempt for security auditing
+    console.log('User initiated sign out at', new Date().toISOString());
+    
     // First try to invalidate the session
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     
-    // Clear any stored auth data from localStorage and sessionStorage
-    localStorage.removeItem('csrfToken');
-    localStorage.removeItem('redirectAfterLogin');
-    sessionStorage.removeItem('csrfState');
+    // Clear any stored auth data from sessionStorage
+    sessionStorage.removeItem('csrfToken');
+    sessionStorage.removeItem('csrfTokenExpires');
+    sessionStorage.removeItem('google_oauth_state');
+    sessionStorage.removeItem('apple_oauth_state');
+    sessionStorage.removeItem('redirectAfterLogin');
     sessionStorage.removeItem('authSession');
+    sessionStorage.removeItem(AUTH_ATTEMPT_KEY);
+    sessionStorage.removeItem(AUTH_COOLDOWN_KEY);
     
-    // Clear any session cookies by overwriting them with expired ones
-    document.cookie = 'sb-access-token=; Max-Age=0; path=/; domain=' + window.location.hostname;
-    document.cookie = 'sb-refresh-token=; Max-Age=0; path=/; domain=' + window.location.hostname;
+    // Clear auth-related localStorage items
+    localStorage.removeItem('supabase.auth.token');
     
     // Perform a security audit log
     try {
@@ -54,8 +81,15 @@ export const signOut = async () => {
       console.error('Error logging audit event:', auditError);
       // Non-blocking error
     }
+    
+    // Redirect to home page after logout for complete session termination
+    window.location.href = '/';
   } catch (error) {
     console.error('Error during sign out:', error);
     throw error;
   }
 };
+
+// Constants for rate limiting - shared with EmailPasswordForm
+const AUTH_ATTEMPT_KEY = 'auth_attempts';
+const AUTH_COOLDOWN_KEY = 'auth_cooldown_until';

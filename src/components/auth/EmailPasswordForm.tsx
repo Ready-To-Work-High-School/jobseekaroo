@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // More robust schema with strong validation
 const signInSchema = z.object({
@@ -34,46 +35,80 @@ interface EmailPasswordFormProps {
 
 // Generate a cryptographically secure random token
 function generateCSRFToken(): string {
-  const array = new Uint8Array(32);
-  window.crypto.getRandomValues(array);
-  return Array.from(array)
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  try {
+    const array = new Uint8Array(32);
+    window.crypto.getRandomValues(array);
+    return Array.from(array)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  } catch (e) {
+    console.error("Failed to generate secure CSRF token:", e);
+    throw new Error("Security error: Cannot generate secure token");
+  }
 }
 
 // Sanitize email to prevent XSS
 function sanitizeEmail(email: string): string {
+  if (!email) return '';
   return email
     .trim()
     .toLowerCase()
     .replace(/[^\w@.-]/gi, '');
 }
 
+// Rate limiting for auth attempts
+const AUTH_ATTEMPT_THRESHOLD = 5;
+const AUTH_COOLDOWN_MS = 60000; // 1 minute
+const AUTH_ATTEMPT_KEY = 'auth_attempts';
+const AUTH_COOLDOWN_KEY = 'auth_cooldown_until';
+
 const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
   const [csrfToken, setCsrfToken] = useState<string>("");
   const [authError, setAuthError] = useState<string | null>(null);
+  const [rateLimited, setRateLimited] = useState(false);
   
   // Generate CSRF token when component mounts
   useEffect(() => {
-    const newToken = generateCSRFToken();
-    setCsrfToken(newToken);
-    
-    // Store in localStorage and sessionStorage for cross-check validation
-    localStorage.setItem('csrfToken', newToken);
-    sessionStorage.setItem('csrfState', newToken);
-    
-    // Set token expiration (10 minutes)
-    const expirationTime = Date.now() + (10 * 60 * 1000);
-    localStorage.setItem('csrfTokenExpires', expirationTime.toString());
-    
-    // Clean up expired token on unmount
-    return () => {
-      if (Date.now() > parseInt(localStorage.getItem('csrfTokenExpires') || '0')) {
-        localStorage.removeItem('csrfToken');
-        localStorage.removeItem('csrfTokenExpires');
-        sessionStorage.removeItem('csrfState');
+    try {
+      // Check for rate limiting
+      const cooldownUntil = parseInt(sessionStorage.getItem(AUTH_COOLDOWN_KEY) || '0');
+      if (cooldownUntil > Date.now()) {
+        const secondsLeft = Math.ceil((cooldownUntil - Date.now()) / 1000);
+        setRateLimited(true);
+        setAuthError(`Too many attempts. Please try again in ${secondsLeft} seconds.`);
+        
+        // Set timer to clear rate limit message
+        const timerId = setTimeout(() => {
+          setRateLimited(false);
+          setAuthError(null);
+          sessionStorage.removeItem(AUTH_COOLDOWN_KEY);
+        }, cooldownUntil - Date.now());
+        
+        return () => clearTimeout(timerId);
       }
-    };
+      
+      // Generate new token
+      const newToken = generateCSRFToken();
+      setCsrfToken(newToken);
+      
+      // Store in sessionStorage only - more secure than localStorage for auth
+      sessionStorage.setItem('csrfToken', newToken);
+      
+      // Set token expiration (10 minutes)
+      const expirationTime = Date.now() + (10 * 60 * 1000);
+      sessionStorage.setItem('csrfTokenExpires', expirationTime.toString());
+      
+      // Clean up expired token on unmount
+      return () => {
+        if (Date.now() > parseInt(sessionStorage.getItem('csrfTokenExpires') || '0')) {
+          sessionStorage.removeItem('csrfToken');
+          sessionStorage.removeItem('csrfTokenExpires');
+        }
+      };
+    } catch (e) {
+      console.error("Security setup error:", e);
+      setAuthError("Security initialization failed. Please refresh the page.");
+    }
   }, []);
   
   const form = useForm<SignInValues>({
@@ -86,26 +121,42 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
 
   const handleSubmit = async (values: SignInValues) => {
     try {
+      // Block submission if rate limited
+      if (rateLimited) {
+        return;
+      }
+      
       // Clear any previous error
       setAuthError(null);
       
+      // Check auth attempts for rate limiting
+      const attempts = parseInt(sessionStorage.getItem(AUTH_ATTEMPT_KEY) || '0');
+      if (attempts >= AUTH_ATTEMPT_THRESHOLD) {
+        // Set cooldown period
+        const cooldownUntil = Date.now() + AUTH_COOLDOWN_MS;
+        sessionStorage.setItem(AUTH_COOLDOWN_KEY, cooldownUntil.toString());
+        sessionStorage.removeItem(AUTH_ATTEMPT_KEY); // Reset counter
+        
+        setRateLimited(true);
+        setAuthError(`Too many login attempts. Please try again in 60 seconds.`);
+        return;
+      }
+      
       // Validate CSRF token before submission
-      const storedToken = localStorage.getItem('csrfToken');
-      const sessionToken = sessionStorage.getItem('csrfState');
-      const tokenExpiration = parseInt(localStorage.getItem('csrfTokenExpires') || '0');
+      const storedToken = sessionStorage.getItem('csrfToken');
+      const tokenExpiration = parseInt(sessionStorage.getItem('csrfTokenExpires') || '0');
       
       // Check if token is valid and not expired
-      if (storedToken !== csrfToken || sessionToken !== csrfToken || Date.now() > tokenExpiration) {
+      if (storedToken !== csrfToken || Date.now() > tokenExpiration) {
         throw new Error("Security validation failed. Please refresh the page and try again.");
       }
       
       // Regenerate token on each submission for extra security
       const newToken = generateCSRFToken();
       setCsrfToken(newToken);
-      localStorage.setItem('csrfToken', newToken);
-      sessionStorage.setItem('csrfState', newToken);
+      sessionStorage.setItem('csrfToken', newToken);
       const newExpiration = Date.now() + (10 * 60 * 1000);
-      localStorage.setItem('csrfTokenExpires', newExpiration.toString());
+      sessionStorage.setItem('csrfTokenExpires', newExpiration.toString());
       
       // Sanitize email input
       const sanitizedValues = {
@@ -113,20 +164,19 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
         email: sanitizeEmail(values.email),
       };
       
-      // Pass client IP if available (for rate limiting)
-      try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        if (ipData.ip) {
-          localStorage.setItem('lastClientIP', ipData.ip);
-        }
-      } catch (ipError) {
-        console.warn('Could not determine client IP for security monitoring:', ipError);
-      }
-      
+      // Attempt login
       await onSubmit(sanitizedValues);
+      
+      // Clear attempts on success
+      sessionStorage.removeItem(AUTH_ATTEMPT_KEY);
+      
     } catch (error) {
       console.error("Form submission error:", error);
+      
+      // Increment failed attempts
+      const attempts = parseInt(sessionStorage.getItem(AUTH_ATTEMPT_KEY) || '0') + 1;
+      sessionStorage.setItem(AUTH_ATTEMPT_KEY, attempts.toString());
+      
       setAuthError(error instanceof Error ? error.message : "An unexpected error occurred");
       form.setError("root", { 
         message: error instanceof Error ? error.message : "An unexpected error occurred" 
@@ -142,9 +192,11 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
         
         {/* Display root error */}
         {(form.formState.errors.root || authError) && (
-          <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded">
-            {form.formState.errors.root?.message || authError}
-          </div>
+          <Alert variant="destructive">
+            <AlertDescription>
+              {form.formState.errors.root?.message || authError}
+            </AlertDescription>
+          </Alert>
         )}
         
         <FormField
@@ -157,7 +209,7 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
                 <Input 
                   placeholder="Enter your email" 
                   type="email" 
-                  disabled={isLoading} 
+                  disabled={isLoading || rateLimited} 
                   className="focus:border-primary focus:ring-1 focus:ring-primary"
                   autoComplete="email"
                   inputMode="email"
@@ -178,7 +230,7 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
                 <Input 
                   placeholder="Enter your password" 
                   type="password" 
-                  disabled={isLoading} 
+                  disabled={isLoading || rateLimited}
                   className="focus:border-primary focus:ring-1 focus:ring-primary"
                   autoComplete="current-password"
                   {...field} 
@@ -191,7 +243,7 @@ const EmailPasswordForm = ({ onSubmit, isLoading }: EmailPasswordFormProps) => {
         <Button 
           type="submit" 
           className="w-full transition-all" 
-          disabled={isLoading}
+          disabled={isLoading || rateLimited}
         >
           {isLoading ? (
             <span className="flex items-center gap-2">
