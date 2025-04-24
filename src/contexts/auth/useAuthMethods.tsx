@@ -7,7 +7,7 @@ import {
   signOut as authSignOut,
   signInWithGoogle,
   signInWithApple,
-  verifyEmployerStatus
+  verifyEmployerStatus // Now properly importing the function we added
 } from './authService';
 import { useProfileManagement } from './useProfileManagement';
 

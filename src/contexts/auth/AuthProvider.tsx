@@ -136,8 +136,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           location: data.location,
           resume_url: data.resume_url,
           skills: data.skills || [],
+          // Explicitly cast preferences to Record<string, any>
           preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
-          user_type: data.user_type,
+          // Cast user_type to the appropriate union type
+          user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
           redeemed_at: data.redeemed_at,
           redeemed_code: data.redeemed_code,
           avatar_url: data.avatar_url,
@@ -145,7 +147,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           company_name: data.company_name,
           company_website: data.company_website,
           job_title: data.job_title,
-          employer_verification_status: data.employer_verification_status,
+          // Cast employer_verification_status to the appropriate union type
+          employer_verification_status: data.employer_verification_status as "pending" | "approved" | "rejected" | null,
           verification_notes: data.verification_notes,
           resume_data_encrypted: data.resume_data_encrypted,
           contact_details_encrypted: data.contact_details_encrypted,
@@ -184,6 +187,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           if (error) throw error;
           return;
         },
+        // Fix the return type mismatch for signInWithGoogle and signInWithApple
+        // These functions return AuthResponse but we cast to User | null
         signInWithGoogle: async () => {
           const { user, error } = await signInWithGoogle();
           if (error) throw error;
