@@ -19,7 +19,12 @@ import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 
-export function VerificationForm() {
+interface VerificationFormProps {
+  userId?: string | null;
+  onSuccess?: () => void;
+}
+
+export function VerificationForm({ userId, onSuccess }: VerificationFormProps) {
   const form = useForm<EmployerVerificationFormData>({
     resolver: zodResolver(employerVerificationSchema),
     defaultValues: {
@@ -29,40 +34,56 @@ export function VerificationForm() {
 
   const onSubmit = async (data: EmployerVerificationFormData) => {
     try {
-      // Convert the form data to match the expected DB schema
-      const submissionData = {
-        ...data,
-        // Format the date properly before sending to Supabase
-        workers_comp_expiry_date: new Date(data.workers_comp_expiry_date).toISOString().split('T')[0]
+      // Format the date properly before sending to Supabase
+      const formattedExpiryDate = new Date(data.workers_comp_expiry_date).toISOString().split('T')[0];
+      
+      // Create the record to insert, explicitly defining all required fields
+      const recordToInsert = {
+        company_name: data.company_name,
+        ein: data.ein,
+        address: data.address,
+        website: data.website || null,
+        contact_name: data.contact_name,
+        contact_email: data.contact_email,
+        contact_phone: data.contact_phone || null,
+        job_description: data.job_description,
+        wage_range_min: data.wage_range_min,
+        wage_range_max: data.wage_range_max,
+        hours_per_week: data.hours_per_week,
+        workers_comp_policy_number: data.workers_comp_policy_number,
+        workers_comp_provider: data.workers_comp_provider,
+        workers_comp_expiry_date: formattedExpiryDate,
+        safety_pledge_accepted: data.safety_pledge_accepted
       };
 
-      // Make all fields explicitly defined to match DB schema requirements
       const { error } = await supabase
         .from('employer_verifications')
-        .insert({
-          company_name: submissionData.company_name,
-          ein: submissionData.ein,
-          address: submissionData.address,
-          website: submissionData.website || null,
-          contact_name: submissionData.contact_name,
-          contact_email: submissionData.contact_email,
-          contact_phone: submissionData.contact_phone || null,
-          job_description: submissionData.job_description,
-          wage_range_min: submissionData.wage_range_min,
-          wage_range_max: submissionData.wage_range_max,
-          hours_per_week: submissionData.hours_per_week,
-          workers_comp_policy_number: submissionData.workers_comp_policy_number,
-          workers_comp_provider: submissionData.workers_comp_provider,
-          workers_comp_expiry_date: submissionData.workers_comp_expiry_date,
-          safety_pledge_accepted: submissionData.safety_pledge_accepted
-        });
+        .insert(recordToInsert);
 
       if (error) throw error;
+
+      // If userId is provided, update the profile to link to this verification
+      if (userId) {
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            employer_verification_status: 'pending',
+            company_name: data.company_name
+          })
+          .eq('id', userId);
+
+        if (updateError) console.error('Error updating profile:', updateError);
+      }
 
       toast({
         title: "Application Submitted",
         description: "Your employer verification application has been received. We'll review it within 48 hours.",
       });
+
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess();
+      }
 
       form.reset();
     } catch (error) {

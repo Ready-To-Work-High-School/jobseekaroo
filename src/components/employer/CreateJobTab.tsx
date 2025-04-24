@@ -16,6 +16,7 @@ import BasicJobDetails from './job/BasicJobDetails';
 import CompensationDetails from './job/CompensationDetails';
 import JobRequirementsSection from './job/JobRequirementsSection';
 import JobPostSuccess from './job/JobPostSuccess';
+import JobFieldValidator from './job/JobFieldValidator';
 
 interface CreateJobTabProps {
   setActiveTab: (tab: string) => void;
@@ -27,6 +28,7 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
   const { checkTrialEligibility, isLoading: isPremiumLoading } = usePremiumPostings();
   const [isEligibleForTrial, setIsEligibleForTrial] = useState(false);
   const [createdJobId, setCreatedJobId] = useState<string | null>(null);
+  const [showValidation, setShowValidation] = useState(false);
   
   const [formData, setFormData] = useState<JobFormData>({
     title: '',
@@ -58,6 +60,23 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShowValidation(true);
+    
+    // Check if key fields are missing
+    if (!formData.hours_per_week || 
+        !formData.pay_rate_min ||
+        !formData.pay_rate_max ||
+        formData.pay_rate_min < 12 ||
+        formData.pay_rate_max < formData.pay_rate_min ||
+        formData.hours_per_week > 40) {
+      // The validation alert will show due to showValidation being true
+      toast({
+        title: "Missing or Invalid Fields",
+        description: "Please check the highlighted fields and ensure all requirements are met.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     if (!user) {
       toast({
@@ -166,6 +185,8 @@ const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
+          <JobFieldValidator formData={formData} showValidation={showValidation} />
+          
           <BasicJobDetails 
             title={formData.title}
             company={formData.company}

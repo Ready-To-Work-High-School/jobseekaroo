@@ -11,7 +11,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface EmployerSignUpFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (userId: string) => void;
   isLoading?: boolean;
   isAppleLoading?: boolean;
   handleAppleSignIn?: () => Promise<void>;
@@ -48,7 +48,7 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
     
     try {
       // Create the user account
-      await signUp(
+      const user = await signUp(
         data.email,
         data.password,
         data.firstName,
@@ -57,22 +57,28 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
       );
       
       // If sign-up is successful, update the profile with employer-specific details
-      await updateProfile({
-        company_name: data.companyName,
-        company_website: data.companyWebsite,
-        job_title: data.jobTitle,
-        employer_verification_status: 'pending'
-      });
-      
-      // Display success message
-      toast({
-        title: "Account created",
-        description: "Your employer account has been created. Your account will be reviewed by our team.",
-      });
-      
-      // Redirect or callback
-      onSuccess?.();
-      navigate('/dashboard');
+      if (user) {
+        await updateProfile({
+          company_name: data.companyName,
+          company_website: data.companyWebsite,
+          job_title: data.jobTitle,
+          employer_verification_status: 'pending'
+        });
+        
+        // Display success message
+        toast({
+          title: "Account created",
+          description: "Your employer account registration is complete. Please continue with the verification process.",
+        });
+        
+        // Call onSuccess with the user ID
+        if (onSuccess && user.id) {
+          onSuccess(user.id);
+        } else {
+          // If no onSuccess callback, navigate to dashboard
+          navigate('/dashboard');
+        }
+      }
     } catch (error: any) {
       console.error('Signup error:', error);
       setError(error.message || 'Failed to create account. Please try again.');
