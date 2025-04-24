@@ -1,4 +1,3 @@
-
 import { ReactNode, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
@@ -34,28 +33,68 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
+    let isFirstLoad = true;
+    let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null);
+        
         if (session?.user) {
-          setTimeout(() => refreshProfile(), 0);
+          // Clear any existing timeouts to prevent multiple refreshes
+          if (refreshTimeout) {
+            clearTimeout(refreshTimeout);
+          }
+          
+          // Use timeout to avoid blocking render
+          refreshTimeout = setTimeout(() => {
+            refreshProfile().catch(err => {
+              console.error('Background profile refresh failed:', err);
+              // Only show toast on initial load, not on subsequent refreshes
+              if (isFirstLoad) {
+                toast({
+                  title: "Profile loading issue",
+                  description: "Some profile information might not be available",
+                  variant: "destructive",
+                });
+                isFirstLoad = false;
+              }
+            });
+          }, 0);
         } else {
           setUserProfile(null);
         }
+        
         setIsLoading(false);
       }
     );
     
+    // Initial session check
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      
       if (session?.user) {
-        refreshProfile();
+        refreshProfile().catch(err => {
+          console.error('Initial profile refresh failed:', err);
+          toast({
+            title: "Profile loading issue",
+            description: "Some profile information might not be available",
+            variant: "destructive",
+          });
+        });
       }
+      
       setIsLoading(false);
+      isFirstLoad = false;
     });
     
-    return () => subscription.unsubscribe();
-  }, [setUser, setUserProfile, setIsLoading, refreshProfile]);
+    return () => {
+      subscription.unsubscribe();
+      if (refreshTimeout) {
+        clearTimeout(refreshTimeout);
+      }
+    };
+  }, [setUser, setUserProfile, setIsLoading, refreshProfile, toast]);
 
   const handleSignIn = async (email: string, password: string): Promise<User | null> => {
     try {

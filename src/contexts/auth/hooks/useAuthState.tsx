@@ -14,6 +14,7 @@ export const useAuthState = () => {
 
   const refreshProfile = useCallback(async () => {
     if (!user) return;
+    
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -64,13 +65,11 @@ export const useAuthState = () => {
       }
     } catch (error) {
       console.error('Error refreshing profile:', error);
-      toast({
-        title: "Error",
-        description: "Failed to refresh profile",
-        variant: "destructive",
-      });
+      // Don't show toast on every refresh attempt, only log to console
+      // This prevents multiple toast notifications
+      setError(error instanceof Error ? error : new Error('Failed to refresh profile'));
     }
-  }, [user, toast]);
+  }, [user]);
 
   return {
     user,
