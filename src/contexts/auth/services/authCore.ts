@@ -1,4 +1,3 @@
-
 import { supabase } from '@/lib/supabase';
 import { sendEmail } from '@/lib/supabase/email';
 import { signInWithOAuth } from '@/lib/supabase/oauth';
@@ -11,13 +10,8 @@ export const signInWithApple = async () => {
     const stateParam = crypto.randomUUID();
     sessionStorage.setItem('apple_oauth_state', stateParam);
     
-    const result = await signInWithOAuth('apple', {
-      redirectTo: `${window.location.origin}/auth/callback`,
-      scopes: 'name email',
-      queryParams: {
-        state: stateParam
-      }
-    });
+    // Fixing the function call to match the expected parameters in oauth.ts
+    const result = await signInWithOAuth('apple');
     return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Apple:', error);
@@ -31,14 +25,8 @@ export const signInWithGoogle = async () => {
     const stateParam = crypto.randomUUID();
     sessionStorage.setItem('google_oauth_state', stateParam);
     
-    const result = await signInWithOAuth('google', {
-      redirectTo: `${window.location.origin}/auth/callback`,
-      queryParams: {
-        prompt: 'select_account',
-        access_type: 'offline',
-        state: stateParam
-      }
-    });
+    // Fixing the function call to match the expected parameters in oauth.ts
+    const result = await signInWithOAuth('google');
     return { user: result?.user || null, error: result?.error || null };
   } catch (error) {
     console.error('Error signing in with Google:', error);
