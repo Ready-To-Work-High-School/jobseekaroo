@@ -10,6 +10,8 @@ import MobileBottomNavigation from './components/mobile/MobileBottomNavigation';
 import AutoRecoveryErrorBoundary from './components/ErrorRecovery/AutoRecoveryErrorBoundary';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import DiagnosticMenuButton from './components/ErrorRecovery/DiagnosticMenuButton';
+import { PublicRoutes } from './routes/publicRoutes';
+import ScrollToTop from './components/navigation/ScrollToTop';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -22,12 +24,14 @@ function App() {
       <AutoRecoveryErrorBoundary maxAutoRecoveryAttempts={2}>
         <TooltipProvider>
           <div className="min-h-screen flex flex-col">
+            <ScrollToTop />
             <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
               <DiagnosticMenuButton />
             </div>
             
             <Routes>
               {AppRoutes}
+              {PublicRoutes}
               <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, Briefcase, Book, User } from 'lucide-react';
+import { Home, Search, Book, Briefcase, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +17,7 @@ const MobileBottomNav = () => {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Jobs', path: '/jobs' },
     { icon: Book, label: 'Interview', path: '/interview-prep' },
-    { icon: Briefcase, label: 'Toolkit', path: '/first-job-toolkit' },
+    { icon: Briefcase, label: 'Skills', path: '/skill-development' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
 

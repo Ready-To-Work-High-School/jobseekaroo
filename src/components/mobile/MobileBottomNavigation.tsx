@@ -12,16 +12,17 @@ const MobileBottomNavigation = () => {
   const location = useLocation();
   const { user } = useAuth();
   
-  // Skip rendering on auth paths
-  if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname) || !user) {
+  // Skip rendering on certain paths
+  if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname)) {
     return null;
   }
   
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Briefcase, label: 'Jobs', path: '/jobs' },
-    { icon: Building2, label: 'Employers', path: '/for-employers' },
-    { icon: GraduationCap, label: 'Schools', path: '/school-integration' },
+    { icon: Building2, label: 'Interview', path: '/interview-prep' },
+    { icon: GraduationCap, label: 'Skills', path: '/skill-development' },
+    { icon: User, label: 'Profile', path: '/profile' },
   ];
   
   return (
@@ -58,20 +59,6 @@ const MobileBottomNavigation = () => {
             </NavLink>
           );
         })}
-        
-        {/* Menu button for additional navigation */}
-        <Sheet>
-          <SheetTrigger className={cn(
-            'flex flex-col items-center py-2 px-1',
-            'text-muted-foreground'
-          )}>
-            <Menu className="h-5 w-5" />
-            <span className="text-[10px] mt-1 font-medium">Menu</span>
-          </SheetTrigger>
-          <SheetContent side="right" className="p-0 pt-10 w-[280px]">
-            <MobileMenu />
-          </SheetContent>
-        </Sheet>
       </nav>
     </div>
   );

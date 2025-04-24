@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from '@/pages/Home';
@@ -13,14 +14,19 @@ import EmployerDashboard from '@/pages/EmployerDashboard';
 import AdminDashboard from '@/pages/AdminDashboard';
 import TeacherDashboard from '@/pages/TeacherDashboard';
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
+import NotFound from '@/pages/NotFound';
+import SkillDevelopment from '@/pages/SkillDevelopment';
+import InterviewPrep from '@/pages/InterviewPrep';
 
-// Add the system diagnostics route to the routes array
+// Complete routes array with all necessary routes
 const AppRoutes = [
   <Route path="/" element={<Home />} key="home" />,
   <Route path="/jobs" element={<Jobs />} key="jobs" />,
   <Route path="/jobs/:id" element={<JobDetail />} key="jobDetail" />,
   <Route path="/signin" element={<SignIn />} key="signin" />,
+  <Route path="/sign-in" element={<SignIn />} key="sign-in" />,
   <Route path="/signup" element={<SignUp />} key="signup" />,
+  <Route path="/sign-up" element={<SignUp />} key="sign-up" />,
   <Route path="/dashboard" element={<Dashboard />} key="dashboard" />,
   <Route path="/profile" element={<Profile />} key="profile" />,
   <Route path="/applications" element={<Applications />} key="applications" />,
@@ -29,6 +35,8 @@ const AppRoutes = [
   <Route path="/admin-dashboard" element={<AdminDashboard />} key="admin-dashboard" />,
   <Route path="/teacher-dashboard" element={<TeacherDashboard />} key="teacher-dashboard" />,
   <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} key="system-diagnostics" />,
+  <Route path="/skill-development" element={<SkillDevelopment />} key="skill-development" />,
+  <Route path="/interview-prep" element={<InterviewPrep />} key="interview-prep" />,
 ];
 
 export default AppRoutes;
