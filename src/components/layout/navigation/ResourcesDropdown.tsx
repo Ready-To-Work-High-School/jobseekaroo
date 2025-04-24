@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
-import { BookOpen, BarChart } from 'lucide-react';
+import { BookOpen, BarChart, BookMarked } from 'lucide-react';
 
 export const ResourcesDropdown = () => {
   const location = useLocation();
@@ -19,7 +19,7 @@ export const ResourcesDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="p-0 h-auto">
           <span className={cn("text-sm font-medium transition-colors", 
-          location.pathname.includes("/resources") || location.pathname.includes("/analytics") ? 
+          location.pathname.includes("/resources") || location.pathname.includes("/analytics") || location.pathname.includes("/platform-guide") ? 
           "text-primary" : "text-muted-foreground hover:text-primary")}>
             Resources
           </span>
@@ -30,6 +30,12 @@ export const ResourcesDropdown = () => {
           <Link to="/resources" className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
             Career Resources
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/platform-guide" className="flex items-center gap-2">
+            <BookMarked className="h-4 w-4" />
+            Platform Guide
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

@@ -1,8 +1,9 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FileText, Briefcase, User, Award, Heart, Video, MessageSquare } from 'lucide-react';
+import { BookOpen, FileText, Briefcase, User, Award, Heart, Video, MessageSquare, BookMarked } from 'lucide-react';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
 
 const Resources = () => {
@@ -16,6 +17,22 @@ const Resources = () => {
           </p>
           <FreeForStudentsBadge variant="large" className="mt-2" />
         </div>
+        
+        {/* New prominent Platform Guide card */}
+        <Card className="mb-8 border-primary/20 bg-primary/5 hover:shadow-md transition-shadow">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <BookMarked className="h-5 w-5 mr-2 text-primary" />
+              Complete Platform Guide
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">A comprehensive A-Z guide covering all features and functionalities of our platform</p>
+            <Link to="/platform-guide" className="text-primary hover:underline font-semibold">
+              View Complete Guide →
+            </Link>
+          </CardContent>
+        </Card>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Resume Building */}
