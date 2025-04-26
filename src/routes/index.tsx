@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from '@/pages/Home';
@@ -26,6 +25,7 @@ import SchoolIntegration from '@/pages/SchoolIntegration';
 import Resources from '@/pages/Resources';
 import PlatformGuide from '@/pages/PlatformGuide';
 import ForEmployers from '@/pages/ForEmployers';
+import SchedulePage from '@/pages/SchedulePage';
 
 // Import routes from other route files
 import { PublicRoutes } from './publicRoutes';
@@ -60,6 +60,7 @@ const AppRoutes = [
   <Route path="/platform-guide" element={<PlatformGuide />} key="platform-guide" />,
   <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
   <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
+  <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
 ];
 
 export default AppRoutes;

@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Route } from 'react-router-dom';
 import About from '../pages/About';
 import FAQ from '../pages/FAQ';
@@ -27,6 +27,7 @@ import SchoolAnalytics from '../pages/school/SchoolAnalytics';
 import SchoolEvents from '../pages/school/SchoolEvents';
 import SchoolResources from '../pages/school/SchoolResources';
 import InterviewPrep from '../pages/InterviewPrep';
+import SchedulePage from '@/pages/SchedulePage';
 
 export const PublicRoutes = (
   <>
@@ -59,10 +60,10 @@ export const PublicRoutes = (
     <Route path="/interview-questions" element={<InterviewPrep />} />
     <Route path="/interview-prep" element={<InterviewPrep />} />
     
-    {/* New School Routes */}
     <Route path="/school/students" element={<SchoolStudents />} />
     <Route path="/school/analytics" element={<SchoolAnalytics />} />
     <Route path="/school/events" element={<SchoolEvents />} />
     <Route path="/school/resources" element={<SchoolResources />} />
+    <Route path="/schedule" element={<SchedulePage />} />
   </>
 );
