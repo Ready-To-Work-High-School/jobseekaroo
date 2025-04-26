@@ -1,19 +1,36 @@
-
 import { useState, useEffect } from 'react';
 import { mockStudentProfiles } from '@/lib/mock-data/students';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import { KanbanItem, KanbanStage } from '@/components/employer/kanban/types';
 
 export const useKanbanBoard = () => {
   const { toast } = useToast();
+  const { userProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [newStageTitle, setNewStageTitle] = useState('');
-  const [stages, setStages] = useState<KanbanStage[]>([
-    { id: '1', title: 'Applied', items: [] },
-    { id: '2', title: 'Screening', items: [] },
-    { id: '3', title: 'Interview', items: [] },
-    { id: '4', title: 'Hired', items: [] },
-  ]);
+
+  // Check if user has premium access
+  const hasPremium = userProfile?.preferences?.hasPremium === true;
+
+  // Define initial stages based on plan type
+  const getInitialStages = () => {
+    if (hasPremium) {
+      return [
+        { id: '1', title: 'Applied', items: [] },
+        { id: '2', title: 'Screening', items: [] },
+        { id: '3', title: 'Interview', items: [] },
+        { id: '4', title: 'Hired', items: [] },
+      ];
+    }
+    return [
+      { id: '1', title: 'Applied', items: [] },
+      { id: '2', title: 'Interview', items: [] },
+      { id: '3', title: 'Hired', items: [] },
+    ];
+  };
+
+  const [stages, setStages] = useState<KanbanStage[]>(getInitialStages());
 
   useEffect(() => {
     const initialItems: KanbanItem[] = mockStudentProfiles.map(student => ({
@@ -38,6 +55,15 @@ export const useKanbanBoard = () => {
   }, []);
 
   const handleAddStage = () => {
+    if (!hasPremium) {
+      toast({
+        title: "Premium Feature",
+        description: "Custom pipeline stages are available with our premium plan.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!newStageTitle.trim()) {
       toast({
         title: "Stage name required",
@@ -58,6 +84,15 @@ export const useKanbanBoard = () => {
   };
 
   const handleRemoveStage = (stageId: string) => {
+    if (!hasPremium) {
+      toast({
+        title: "Premium Feature",
+        description: "Custom pipeline stages are available with our premium plan.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const stageToRemove = stages.find(stage => stage.id === stageId);
     if (!stageToRemove) return;
 
@@ -122,6 +157,7 @@ export const useKanbanBoard = () => {
     stages,
     isEditing,
     newStageTitle,
+    hasPremium,
     setIsEditing,
     setNewStageTitle,
     handleAddStage,
