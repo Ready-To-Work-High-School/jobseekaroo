@@ -63,7 +63,7 @@ export const SchoolDropdown = () => {
                 {isSchoolStaff && (
                   <>
                     <Link
-                      to="/admin-dashboard"  {/* Changed from /school-dashboard to /admin-dashboard */}
+                      to="/admin-dashboard" 
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
                         "justify-start flex items-center gap-2 p-2 hover:bg-accent rounded-md"
