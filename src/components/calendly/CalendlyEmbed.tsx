@@ -26,7 +26,10 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
 
   if (scriptStatus === 'loading') {
     return (
-      <div className="min-h-[650px] w-full flex items-center justify-center bg-muted/5">
+      <div 
+        className="min-h-[650px] w-full flex items-center justify-center bg-muted/5"
+        data-testid="calendly-loading"
+      >
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -34,7 +37,10 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
 
   if (scriptStatus === 'error') {
     return (
-      <div className="min-h-[650px] w-full flex items-center justify-center bg-destructive/5 text-destructive">
+      <div 
+        className="min-h-[650px] w-full flex items-center justify-center bg-destructive/5 text-destructive"
+        data-testid="calendly-error"
+      >
         Failed to load scheduling widget. Please try again later.
       </div>
     );
@@ -45,7 +51,8 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
       className={cn(
         "calendly-inline-widget min-h-[650px] w-full",
         className
-      )} 
+      )}
+      data-testid="calendly-widget"
     />
   );
 };
