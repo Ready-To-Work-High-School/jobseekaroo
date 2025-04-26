@@ -10,19 +10,21 @@ interface CalendlyEmbedProps {
 }
 
 const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({ 
-  url = `https://calendly.com/d/${process.env.CALENDLY_CLIENT_ID}`,
+  url,
   className 
 }) => {
+  // Use default URL only if url prop is not provided
+  const calendlyUrl = url || `https://calendly.com/d/${process.env.CALENDLY_CLIENT_ID}`;
   const scriptStatus = useScript('https://assets.calendly.com/assets/external/widget.js');
 
   useEffect(() => {
     if (scriptStatus === 'ready' && window.Calendly) {
       window.Calendly.initInlineWidget({
-        url,
+        url: calendlyUrl,
         parentElement: document.querySelector('.calendly-inline-widget'),
       });
     }
-  }, [scriptStatus, url]);
+  }, [scriptStatus, calendlyUrl]);
 
   if (scriptStatus === 'loading') {
     return (
