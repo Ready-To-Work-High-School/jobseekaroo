@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import CalendlyEmbed from "@/components/calendly/CalendlyEmbed";
 
 const MeetingRequestCard = () => {
   return (
@@ -13,15 +13,7 @@ const MeetingRequestCard = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="mb-4">
-            Schedule a one-on-one meeting with Ms. Coleman, our Entrepreneurship Academy director,
-            for personalized guidance on your career path.
-          </p>
-          <Button variant="default" asChild>
-            <a href="mailto:Colemanp3@duvalschools.org">
-              Request a Meeting
-            </a>
-          </Button>
+          <CalendlyEmbed className="rounded-lg shadow-sm" />
         </CardContent>
       </Card>
     </div>
