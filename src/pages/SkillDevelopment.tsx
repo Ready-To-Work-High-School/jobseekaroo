@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import AdaptiveLearning from '@/components/job-simulations/AdaptiveLearning';
+import { SkillsProvider } from '@/contexts/SkillsContext';
 
 const SkillDevelopment = () => {
   return (
@@ -42,7 +43,9 @@ const SkillDevelopment = () => {
           </p>
           
           <ErrorBoundary>
-            <SkillsTabs />
+            <SkillsProvider>
+              <SkillsTabs />
+            </SkillsProvider>
           </ErrorBoundary>
         </div>
 
