@@ -5,6 +5,7 @@ import InterviewPrep from '@/pages/InterviewPrep';
 import Pricing from '@/components/Pricing';
 import FirstJobToolkit from '@/pages/FirstJobToolkit';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import SkillDevelopment from '@/pages/SkillDevelopment';
 
 const SharedRoutes = (
   <>
@@ -26,6 +27,11 @@ const SharedRoutes = (
     <Route path="/first-job-toolkit" element={
       <ErrorBoundary>
         <FirstJobToolkit />
+      </ErrorBoundary>
+    } />
+    <Route path="/skill-development" element={
+      <ErrorBoundary>
+        <SkillDevelopment />
       </ErrorBoundary>
     } />
   </>

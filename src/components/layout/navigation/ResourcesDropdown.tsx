@@ -19,7 +19,7 @@ export const ResourcesDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="p-0 h-auto">
           <span className={cn("text-sm font-medium transition-colors", 
-          location.pathname.includes("/resources") || location.pathname.includes("/analytics") || location.pathname.includes("/platform-guide") ? 
+          location.pathname.includes("/resources") || location.pathname.includes("/analytics") || location.pathname.includes("/platform-guide") || location.pathname.includes("/skill-development") ? 
           "text-primary" : "text-muted-foreground hover:text-primary")}>
             Resources
           </span>
@@ -39,9 +39,9 @@ export const ResourcesDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/analytics" className="flex items-center gap-2">
-            <BarChart className="h-4 w-4" />
-            Analytics Dashboard
+          <Link to="/skill-development" className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4" />
+            Skill Development
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

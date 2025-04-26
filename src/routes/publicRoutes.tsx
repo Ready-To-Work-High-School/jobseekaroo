@@ -26,6 +26,7 @@ import SchoolStudents from '../pages/school/SchoolStudents';
 import SchoolAnalytics from '../pages/school/SchoolAnalytics';
 import SchoolEvents from '../pages/school/SchoolEvents';
 import SchoolResources from '../pages/school/SchoolResources';
+import InterviewPrep from '../pages/InterviewPrep';
 
 export const PublicRoutes = (
   <>
@@ -39,7 +40,7 @@ export const PublicRoutes = (
     <Route path="/nursing-academy" element={<NursingAcademy />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
-    <Route path="/skills-build" element={<EnhancedJobListings />} />
+    <Route path="/skills-build" element={<SkillDevelopment />} />
     <Route path="/skill-development" element={<SkillDevelopment />} />
     <Route path="/resources" element={<Resources />} />
     <Route path="/resume-assistant" element={<ResumeAssistant />} />
@@ -55,6 +56,8 @@ export const PublicRoutes = (
     <Route path="/platform-guide" element={<PlatformGuide />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/school-dashboard" element={<SchoolDashboard />} />
+    <Route path="/interview-questions" element={<InterviewPrep />} />
+    <Route path="/interview-prep" element={<InterviewPrep />} />
     
     {/* New School Routes */}
     <Route path="/school/students" element={<SchoolStudents />} />

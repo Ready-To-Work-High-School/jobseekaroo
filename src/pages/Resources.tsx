@@ -61,8 +61,8 @@ const Resources = () => {
             </CardHeader>
             <CardContent>
               <p className="mb-4">Tips and guidance for submitting successful job applications</p>
-              <Link to="/job-help" className="text-blue-600 hover:underline">
-                Application Resources →
+              <Link to="/jobs" className="text-blue-600 hover:underline">
+                Job Resources →
               </Link>
             </CardContent>
           </Card>
@@ -109,7 +109,7 @@ const Resources = () => {
             </CardHeader>
             <CardContent>
               <p className="mb-4">Discover opportunities in the healthcare industry</p>
-              <Link to="/healthcare-pathways" className="text-blue-600 hover:underline">
+              <Link to="/nursing-academy" className="text-blue-600 hover:underline">
                 Healthcare Resources →
               </Link>
             </CardContent>
@@ -125,7 +125,7 @@ const Resources = () => {
             </CardHeader>
             <CardContent>
               <p className="mb-4">Learn how to communicate effectively in professional settings</p>
-              <Link to="/communication" className="text-blue-600 hover:underline">
+              <Link to="/first-job-toolkit" className="text-blue-600 hover:underline">
                 Communication Resources →
               </Link>
             </CardContent>

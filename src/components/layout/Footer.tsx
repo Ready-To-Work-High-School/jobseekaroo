@@ -34,8 +34,8 @@ const Footer = () => {
       path: "/faq"
     },
     {
-      title: "License",
-      path: "/license"
+      title: "About",
+      path: "/about"
     }
   ];
   
@@ -100,21 +100,21 @@ const Footer = () => {
                   <Book className="h-4 w-4 text-primary/60" />
                   <Link to={getPath("/interview-prep")} className="text-sm text-muted-foreground hover:text-foreground">Interview Prep</Link>
                 </li>
-                <li><Link to={getPath("/skills")} className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
+                <li><Link to={getPath("/skill-development")} className="text-sm text-muted-foreground hover:text-foreground">Skills Development</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-medium mb-3">For Employers</h4>
               <ul className="space-y-2">
                 <li><Link to="/for-employers" className="text-sm text-muted-foreground hover:text-foreground">Employer Overview</Link></li>
-                <li><Link to={getPath("/employer-dashboard")} className="text-sm text-muted-foreground hover:text-foreground">Employer Dashboard</Link></li>
+                <li><Link to={getPath("/employer/dashboard")} className="text-sm text-muted-foreground hover:text-foreground">Employer Dashboard</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-medium mb-3">Resources</h4>
               <ul className="space-y-2">
                 <li><Link to="/resources" className="text-sm text-muted-foreground hover:text-foreground">Career Resources</Link></li>
-                <li><Link to={getPath("/analytics")} className="text-sm text-muted-foreground hover:text-foreground">Analytics Dashboard</Link></li>
+                <li><Link to={getPath("/platform-guide")} className="text-sm text-muted-foreground hover:text-foreground">Platform Guide</Link></li>
               </ul>
             </div>
           </div>
