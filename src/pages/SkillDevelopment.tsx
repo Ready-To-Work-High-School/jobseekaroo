@@ -16,10 +16,11 @@ const SkillDevelopment = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set a small timeout to prevent rapid mounting/unmounting
+    // Use a longer timeout to prevent rapid mounting/unmounting
+    // This helps reduce flickering while still showing a loading state for data fetching
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 100);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 

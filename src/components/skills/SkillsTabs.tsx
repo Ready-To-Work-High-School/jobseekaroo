@@ -56,7 +56,7 @@ const SkillsTabs = () => {
         </TabsTrigger>
       </TabsList>
       
-      <TabsContent value="my-skills" className="mt-6">
+      <div className="mt-6">
         <Suspense fallback={<TabLoader />}>
           {activeTab === 'my-skills' && (
             <SkillList 
@@ -71,11 +71,7 @@ const SkillsTabs = () => {
               }}
             />
           )}
-        </Suspense>
-      </TabsContent>
-      
-      <TabsContent value="progress" className="mt-6">
-        <Suspense fallback={<TabLoader />}>
+          
           {activeTab === 'progress' && (
             <SkillProgressTracker
               userSkills={skills}
@@ -87,22 +83,14 @@ const SkillsTabs = () => {
               }}
             />
           )}
-        </Suspense>
-      </TabsContent>
-      
-      <TabsContent value="skill-gaps" className="mt-6">
-        <Suspense fallback={<TabLoader />}>
+          
           {activeTab === 'skill-gaps' && (
             <SkillGapAnalysis 
               userSkills={skills}
               onAddSkill={handleAddSkill}
             />
           )}
-        </Suspense>
-      </TabsContent>
-      
-      <TabsContent value="resources" className="mt-6">
-        <Suspense fallback={<TabLoader />}>
+          
           {activeTab === 'resources' && (
             <SkillResourcesList 
               resources={resources} 
@@ -112,7 +100,7 @@ const SkillsTabs = () => {
             />
           )}
         </Suspense>
-      </TabsContent>
+      </div>
     </Tabs>
   );
 };
