@@ -17,7 +17,8 @@ describe('CalendlyEmbed', () => {
 
   it('renders loading state correctly', () => {
     // Mock script loading state
-    vi.mocked(vi.importActual('@/hooks/useScript')).useScript.mockReturnValue('loading');
+    const { useScript } = require('@/hooks/useScript');
+    vi.mocked(useScript).mockReturnValue('loading');
 
     render(<CalendlyEmbed />);
     
@@ -27,7 +28,8 @@ describe('CalendlyEmbed', () => {
 
   it('renders error state correctly', () => {
     // Mock script error state
-    vi.mocked(vi.importActual('@/hooks/useScript')).useScript.mockReturnValue('error');
+    const { useScript } = require('@/hooks/useScript');
+    vi.mocked(useScript).mockReturnValue('error');
 
     render(<CalendlyEmbed />);
     
@@ -42,7 +44,8 @@ describe('CalendlyEmbed', () => {
     };
 
     // Mock script ready state
-    vi.mocked(vi.importActual('@/hooks/useScript')).useScript.mockReturnValue('ready');
+    const { useScript } = require('@/hooks/useScript');
+    vi.mocked(useScript).mockReturnValue('ready');
 
     render(<CalendlyEmbed />);
     
@@ -59,7 +62,8 @@ describe('CalendlyEmbed', () => {
     };
 
     // Mock script ready state
-    vi.mocked(vi.importActual('@/hooks/useScript')).useScript.mockReturnValue('ready');
+    const { useScript } = require('@/hooks/useScript');
+    vi.mocked(useScript).mockReturnValue('ready');
 
     render(<CalendlyEmbed url={customUrl} />);
     
