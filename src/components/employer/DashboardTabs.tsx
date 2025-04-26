@@ -1,43 +1,13 @@
 
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JobPostingsTab from './JobPostingsTab';
-import ApplicantsTab from './ApplicantsTab';
-import CreateJobTab from './CreateJobTab';
-import PremiumFeaturesBanner from './PremiumFeaturesBanner';
-import FreemiumInfoCard from './FreemiumInfoCard';
-import { useIsMobile } from '@/hooks/use-mobile';
-
-// Placeholder job postings data
-const jobPostings = [
-  {
-    id: '1',
-    title: 'Retail Associate',
-    company: 'Westside Retail',
-    location: 'Jacksonville, FL',
-    posted: '2023-10-15',
-    status: 'active',
-    applicants: 12
-  },
-  {
-    id: '2',
-    title: 'Administrative Assistant',
-    company: 'Westside Retail',
-    location: 'Jacksonville, FL',
-    posted: '2023-09-28',
-    status: 'active',
-    applicants: 8
-  },
-  {
-    id: '3',
-    title: 'Customer Service Rep',
-    company: 'Westside Retail',
-    location: 'Jacksonville, FL',
-    posted: '2023-08-10',
-    status: 'closed',
-    applicants: 15
-  }
-];
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Briefcase, MessageCircle, Users, Calendar, BarChart } from "lucide-react";
+import JobPostingsTab from "./tabs/JobPostingsTab";
+import ApplicantManagementTab from "./tabs/ApplicantManagementTab";
+import CandidateMessagingTab from "./tabs/CandidateMessagingTab";
+import InterviewSchedulingTab from "./tabs/InterviewSchedulingTab";
+import PerformanceAnalyticsTab from "./tabs/PerformanceAnalyticsTab";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardTabsProps {
   activeTab: string;
@@ -45,41 +15,67 @@ interface DashboardTabsProps {
 }
 
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
-  const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
   return (
-    <>
-      {/* Premium Features Banner */}
-      <PremiumFeaturesBanner />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Employer Dashboard</h2>
+        <Button
+          onClick={() => navigate('/employer/candidates')}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <Users className="h-4 w-4" />
+          Candidate Pipeline
+        </Button>
+      </div>
       
-      {/* New Freemium Model Info */}
-      <FreemiumInfoCard />
-      
-      {/* Standard Features Tabs */}
-      <Tabs defaultValue="postings" value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3">
-          <TabsTrigger value="postings">Postings</TabsTrigger>
-          <TabsTrigger value="applicants">Applicants</TabsTrigger>
-          <TabsTrigger value="create">Create Job</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
+          <TabsTrigger value="postings" className="flex items-center gap-2">
+            <Briefcase className="h-4 w-4" />
+            <span>Job Postings</span>
+          </TabsTrigger>
+          <TabsTrigger value="applicants" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span>Applicants</span>
+          </TabsTrigger>
+          <TabsTrigger value="messaging" className="flex items-center gap-2">
+            <MessageCircle className="h-4 w-4" />
+            <span>Messaging</span>
+          </TabsTrigger>
+          <TabsTrigger value="interviews" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <span>Interviews</span>
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <BarChart className="h-4 w-4" />
+            <span>Analytics</span>
+          </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="postings" className="space-y-4 mt-6">
-          <JobPostingsTab 
-            jobPostings={jobPostings} 
-            isMobile={isMobile} 
-            setActiveTab={setActiveTab} 
-          />
+        <TabsContent value="postings">
+          <JobPostingsTab />
         </TabsContent>
         
-        <TabsContent value="applicants" className="space-y-4 mt-6">
-          <ApplicantsTab />
+        <TabsContent value="applicants">
+          <ApplicantManagementTab />
         </TabsContent>
         
-        <TabsContent value="create" className="mt-6">
-          <CreateJobTab setActiveTab={setActiveTab} />
+        <TabsContent value="messaging">
+          <CandidateMessagingTab />
+        </TabsContent>
+        
+        <TabsContent value="interviews">
+          <InterviewSchedulingTab />
+        </TabsContent>
+        
+        <TabsContent value="analytics">
+          <PerformanceAnalyticsTab />
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 

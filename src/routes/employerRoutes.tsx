@@ -12,6 +12,7 @@ import PremiumFeaturesPage from '../pages/employer/PremiumFeaturesPage';
 import { VerificationForm } from '@/components/employer/VerificationForm';
 import EmployerVerifications from '@/pages/employer/EmployerVerifications';
 import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
+import EmployerKanban from '@/pages/EmployerKanban';
 
 export const EmployerRoutes = (
   <>
@@ -50,6 +51,14 @@ export const EmployerRoutes = (
       element={
         <ProtectedRoute>
           <EmployerVerifications />
+        </ProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/employer/candidates" 
+      element={
+        <ProtectedRoute>
+          <EmployerKanban />
         </ProtectedRoute>
       } 
     />
