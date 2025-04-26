@@ -13,6 +13,7 @@ import { VerificationForm } from '@/components/employer/VerificationForm';
 import EmployerVerifications from '@/pages/employer/EmployerVerifications';
 import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
 import EmployerKanban from '@/pages/EmployerKanban';
+import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
 
 export const EmployerRoutes = (
   <>
@@ -59,6 +60,14 @@ export const EmployerRoutes = (
       element={
         <ProtectedRoute>
           <EmployerKanban />
+        </ProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/employer/tools" 
+      element={
+        <ProtectedRoute>
+          <EmployerToolsPage />
         </ProtectedRoute>
       } 
     />
