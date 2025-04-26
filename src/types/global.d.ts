@@ -1,3 +1,4 @@
+
 interface Window {
   Calendly?: {
     initInlineWidget: (options: {
@@ -5,4 +6,5 @@ interface Window {
       parentElement: Element | null;
     }) => void;
   };
+  gtag?: (command: string, action: string, params?: Record<string, any>) => void;
 }
