@@ -133,7 +133,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
       case 'move_to_stage':
         return (
           <Select 
-            value={rule.action.value} 
+            value={rule.action.value || ''} 
             onValueChange={handleActionValueChange}
           >
             <SelectTrigger className="w-full">
@@ -151,7 +151,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
         return (
           <Input 
             type="text" 
-            value={rule.action.value}
+            value={rule.action.value || ''}
             onChange={(e) => handleActionValueChange(e.target.value)}
             placeholder="Enter message text"
           />
@@ -160,7 +160,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
         return (
           <Input 
             type="text" 
-            value={rule.action.value}
+            value={rule.action.value || ''}
             onChange={(e) => handleActionValueChange(e.target.value)}
             placeholder="Enter tag name"
           />
@@ -168,7 +168,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
       case 'schedule_interview':
         return (
           <Select 
-            value={rule.action.value} 
+            value={rule.action.value || ''} 
             onValueChange={handleActionValueChange}
           >
             <SelectTrigger className="w-full">
@@ -210,7 +210,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
             <div className="space-y-2">
               <Label>When</Label>
               <Select 
-                value={rule.condition.type} 
+                value={rule.condition.type || 'application_received'} 
                 onValueChange={handleConditionTypeChange}
               >
                 <SelectTrigger className="w-full">
@@ -234,7 +234,7 @@ const WorkflowRuleItem: React.FC<WorkflowRuleItemProps> = ({ rule, updateRule, r
             <div className="space-y-2">
               <Label>Then</Label>
               <Select 
-                value={rule.action.type} 
+                value={rule.action.type || 'move_to_stage'} 
                 onValueChange={handleActionTypeChange}
               >
                 <SelectTrigger className="w-full">

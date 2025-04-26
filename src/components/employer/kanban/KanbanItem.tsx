@@ -90,7 +90,7 @@ export const KanbanItem: React.FC<KanbanItemProps> = ({ item, stageId, onUpdate 
 
           <div className="mb-2">
             <Select 
-              value={item.status || ""}
+              value={item.status || "pending"}
               onValueChange={handleStatusChange}
             >
               <SelectTrigger className="h-7 text-xs">

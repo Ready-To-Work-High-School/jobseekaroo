@@ -63,7 +63,7 @@ const BasicJobDetails = ({
       <div className="space-y-2">
         <Label htmlFor="type">Job Type</Label>
         <Select 
-          value={type}
+          value={type || "part-time"}
           onValueChange={(value) => onSelectChange('type', value)}
         >
           <SelectTrigger id="type">

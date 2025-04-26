@@ -21,7 +21,7 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Status</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange} defaultValue={field.value || 'applied'}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
