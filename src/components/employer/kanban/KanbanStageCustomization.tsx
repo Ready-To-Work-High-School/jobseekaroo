@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Plus, X } from 'lucide-react';
-import { KanbanStage } from './KanbanItem';
+import { KanbanStage } from './types';
 
 interface KanbanStageCustomizationProps {
   stages: KanbanStage[];

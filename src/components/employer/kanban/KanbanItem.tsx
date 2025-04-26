@@ -6,22 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-export interface KanbanItem {
-  id: string;
-  studentId: string;
-  name: string;
-  grade: number;
-  academy: string;
-  avatar?: string;
-  status: 'pending' | 'interviewing' | 'selected' | 'rejected' | 'hired' | null;
-  notes: string;
-}
+import { KanbanItem as KanbanItemType } from './types';
 
 interface KanbanItemProps {
-  item: KanbanItem;
+  item: KanbanItemType;
   stageId: string;
-  onUpdate: (updates: Partial<KanbanItem>) => void;
+  onUpdate: (updates: Partial<KanbanItemType>) => void;
 }
 
 export const KanbanItem: React.FC<KanbanItemProps> = ({ item, stageId, onUpdate }) => {

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { mockStudentProfiles } from '@/lib/mock-data/students';
 import { useToast } from '@/hooks/use-toast';
-import { KanbanStage, KanbanItem } from '@/components/employer/kanban/KanbanItem';
+import { KanbanItem, KanbanStage } from '@/components/employer/kanban/types';
 
 export const useKanbanBoard = () => {
   const { toast } = useToast();

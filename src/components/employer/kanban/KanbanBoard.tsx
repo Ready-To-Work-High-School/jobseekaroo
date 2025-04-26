@@ -2,28 +2,12 @@
 import React from 'react';
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanItem } from './KanbanItem';
-
-interface KanbanStage {
-  id: string;
-  title: string;
-  items: KanbanItem[];
-}
-
-interface KanbanItem {
-  id: string;
-  studentId: string;
-  name: string;
-  grade: number;
-  academy: string;
-  avatar?: string;
-  status: 'pending' | 'interviewing' | 'selected' | 'rejected' | 'hired' | null;
-  notes: string;
-}
+import { KanbanItem as KanbanItemType, KanbanStage } from './types';
 
 interface KanbanBoardProps {
   stages: KanbanStage[];
   onMoveItem: (itemId: string, fromStageId: string, toStageId: string) => void;
-  onUpdateItem: (itemId: string, stageId: string, updates: Partial<KanbanItem>) => void;
+  onUpdateItem: (itemId: string, stageId: string, updates: Partial<KanbanItemType>) => void;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ stages, onMoveItem, onUpdateItem }) => {
