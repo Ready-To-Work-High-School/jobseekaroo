@@ -55,10 +55,10 @@ const JobRecommendations = ({ limit = 3, showReason = false }: JobRecommendation
                 reason: rec.reason || "Based on your profile"
               };
             }
-            console.warning(`Skipping incomplete job data for job_id: ${rec.job_id}`);
+            console.warn(`Skipping incomplete job data for job_id: ${rec.job_id}`);
             return null;
           } catch (error) {
-            console.error(`Error fetching job by id: ${error}`);
+            console.warn(`Error fetching job by id: ${error}`);
             return null;
           }
         });
@@ -67,7 +67,7 @@ const JobRecommendations = ({ limit = 3, showReason = false }: JobRecommendation
         const jobResults = (await Promise.all(jobDetailsPromises)).filter(Boolean) as Array<Job & { reason?: string }>;
         
         if (jobResults.length === 0) {
-          console.warning('Could not find job details for any recommendations');
+          console.warn('Could not find job details for any recommendations');
           setError('Unable to load job recommendations at this time.');
         } else {
           setJobs(jobResults);
