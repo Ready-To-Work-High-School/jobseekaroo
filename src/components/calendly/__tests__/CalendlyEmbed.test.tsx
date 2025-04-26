@@ -9,10 +9,22 @@ vi.mock('@/hooks/useScript', () => ({
   useScript: vi.fn()
 }));
 
+// Define the global Calendly type
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (options: { url: string; parentElement: Element | null }) => void;
+    };
+  }
+}
+
 describe('CalendlyEmbed', () => {
   beforeEach(() => {
-    // Reset the mock before each test
+    // Reset all mocks before each test
     vi.resetAllMocks();
+    
+    // Clear any mock implementations
+    vi.clearAllMocks();
   });
 
   it('renders loading state correctly', () => {
@@ -37,6 +49,24 @@ describe('CalendlyEmbed', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
+  it('renders missing configuration state when no URL and no environment variable', () => {
+    // Mock script ready state but no URL
+    const { useScript } = require('@/hooks/useScript');
+    vi.mocked(useScript).mockReturnValue('ready');
+    
+    // Mock empty environment variable
+    const originalEnv = process.env;
+    process.env = { ...originalEnv, CALENDLY_CLIENT_ID: undefined };
+    
+    render(<CalendlyEmbed />);
+    
+    const missingConfig = screen.getByTestId('calendly-missing-config');
+    expect(missingConfig).toBeInTheDocument();
+    
+    // Restore environment
+    process.env = originalEnv;
+  });
+
   it('renders Calendly widget when script is ready', () => {
     // Mock global Calendly object
     global.window.Calendly = {
@@ -46,11 +76,18 @@ describe('CalendlyEmbed', () => {
     // Mock script ready state
     const { useScript } = require('@/hooks/useScript');
     vi.mocked(useScript).mockReturnValue('ready');
+    
+    // Mock environment variable
+    const originalEnv = process.env;
+    process.env = { ...originalEnv, CALENDLY_CLIENT_ID: 'test-id' };
 
     render(<CalendlyEmbed />);
     
     const calendlyWidget = screen.getByTestId('calendly-widget');
     expect(calendlyWidget).toBeInTheDocument();
+    
+    // Restore environment
+    process.env = originalEnv;
   });
 
   it('uses custom URL when provided', () => {

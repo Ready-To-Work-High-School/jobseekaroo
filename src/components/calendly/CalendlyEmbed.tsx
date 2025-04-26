@@ -13,12 +13,17 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
   url,
   className 
 }) => {
-  // Use default URL only if url prop is not provided
-  const calendlyUrl = url || `https://calendly.com/d/${process.env.CALENDLY_CLIENT_ID}`;
+  // Safely access environment variables and format URL correctly
+  const defaultUrl = process.env.CALENDLY_CLIENT_ID ? 
+    `https://calendly.com/d/${process.env.CALENDLY_CLIENT_ID}` : 
+    '';
+    
+  // Use provided URL or fallback to default
+  const calendlyUrl = url || defaultUrl;
   const scriptStatus = useScript('https://assets.calendly.com/assets/external/widget.js');
 
   useEffect(() => {
-    if (scriptStatus === 'ready' && window.Calendly) {
+    if (scriptStatus === 'ready' && window.Calendly && calendlyUrl) {
       window.Calendly.initInlineWidget({
         url: calendlyUrl,
         parentElement: document.querySelector('.calendly-inline-widget'),
@@ -44,6 +49,17 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
         data-testid="calendly-error"
       >
         Failed to load scheduling widget. Please try again later.
+      </div>
+    );
+  }
+
+  if (!calendlyUrl) {
+    return (
+      <div 
+        className="min-h-[650px] w-full flex items-center justify-center bg-amber-50 text-amber-600 border border-amber-200"
+        data-testid="calendly-missing-config"
+      >
+        Calendly configuration is missing. Please check your environment variables.
       </div>
     );
   }
