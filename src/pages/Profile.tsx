@@ -134,7 +134,7 @@ const Profile = () => {
               </div>
               
               <div className="lg:col-span-1">
-                <JobRecommendations limit={5} showReason={true} />
+                <JobRecommendations limit={3} showReason={true} />
               </div>
             </div>
           </>

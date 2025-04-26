@@ -1,107 +1,102 @@
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { getJobRecommendations } from '@/lib/supabase/recommendations';
-import { getJobById } from '@/lib/supabase';
-import { Job } from '@/types/job';
-import { JobRecommendation } from '@/types/user';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ExternalLink } from 'lucide-react';
+import { useAuth } from '@/contexts/auth';
+import { getJobRecommendations } from '@/lib/supabase/recommendations';
+import { getJobById } from '@/lib/supabase/jobs';
 import { Link } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { Job } from '@/types/job';
+import { Badge } from '@/components/ui/badge';
 
 interface JobRecommendationsProps {
   limit?: number;
   showReason?: boolean;
 }
 
-export default function JobRecommendations({ limit = 3, showReason = true }: JobRecommendationsProps) {
-  const [recommendations, setRecommendations] = useState<(JobRecommendation & { job?: Job })[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const JobRecommendations = ({ limit = 3, showReason = false }: JobRecommendationsProps) => {
   const { user } = useAuth();
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
+  const [jobs, setJobs] = useState<Array<Job & { reason?: string }>>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      if (!user) return;
-      
-      setLoading(true);
-      setError(null);
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
       
       try {
-        // Fetch recommendations from Supabase
-        const recommendationsData = await getJobRecommendations(user.id);
+        setIsLoading(true);
+        setError(null);
         
-        if (recommendationsData.length === 0) {
-          console.log('No recommendations found for user:', user.id);
-        } else {
-          console.log(`Found ${recommendationsData.length} recommendations for user:`, user.id);
+        const recommendations = await getJobRecommendations(user.id);
+        console.info(`Found ${recommendations.length} recommendations for user: ${user.id}`);
+        
+        if (recommendations.length === 0) {
+          setJobs([]);
+          setIsLoading(false);
+          return;
         }
         
-        // Get the job details for each recommendation
-        const recommendationsWithJobs = await Promise.all(
-          recommendationsData.slice(0, limit).map(async (rec) => {
-            try {
-              const job = await getJobById(rec.job_id);
-              // Validate that the job object has the required properties
-              if (job && job.company && job.company.name) {
-                return { ...rec, job };
-              } else {
-                console.warn(`Skipping incomplete job data for job_id: ${rec.job_id}`);
-                return { ...rec, job: undefined };
-              }
-            } catch (err) {
-              console.error(`Error fetching job ${rec.job_id}:`, err);
-              return { ...rec, job: undefined };
+        // Limit the number of recommendations to process
+        const limitedRecommendations = recommendations.slice(0, limit);
+        
+        // Fetch job details for each recommendation
+        const jobDetailsPromises = limitedRecommendations.map(async (rec) => {
+          try {
+            const jobDetails = await getJobById(rec.job_id);
+            if (jobDetails) {
+              return {
+                ...jobDetails,
+                reason: rec.reason || "Based on your profile"
+              };
             }
-          })
-        );
-        
-        // Filter out any recommendations where we couldn't find the job
-        const validRecommendations = recommendationsWithJobs.filter(rec => rec.job) as (JobRecommendation & { job: Job })[];
-        
-        if (validRecommendations.length === 0 && recommendationsData.length > 0) {
-          console.warn('Could not find job details for any recommendations');
-          toast({
-            title: "Job data issue",
-            description: "Could not load job details for your recommendations",
-            variant: "destructive",
-          });
-        }
-        
-        setRecommendations(validRecommendations);
-      } catch (error) {
-        console.error('Error fetching job recommendations:', error);
-        setError('Failed to load job recommendations');
-        toast({
-          title: "Error",
-          description: "Failed to load job recommendations",
-          variant: "destructive",
+            console.warning(`Skipping incomplete job data for job_id: ${rec.job_id}`);
+            return null;
+          } catch (error) {
+            console.error(`Error fetching job by id: ${error}`);
+            return null;
+          }
         });
+        
+        // Filter out null results
+        const jobResults = (await Promise.all(jobDetailsPromises)).filter(Boolean) as Array<Job & { reason?: string }>;
+        
+        if (jobResults.length === 0) {
+          console.warning('Could not find job details for any recommendations');
+          setError('Unable to load job recommendations at this time.');
+        } else {
+          setJobs(jobResults);
+        }
+      } catch (err) {
+        console.error('Error fetching recommendations:', err);
+        setError('Unable to load recommendations. Please try again later.');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
-    
-    fetchRecommendations();
-  }, [user, limit, toast]);
 
-  if (loading) {
+    fetchRecommendations();
+  }, [user, limit]);
+
+  if (isLoading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500" />
-            Recommended Jobs
-          </CardTitle>
+          <CardTitle className="text-xl">Recommended Jobs</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex justify-center py-6">
-            <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-          </div>
+        <CardContent className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="flex flex-col space-y-2">
+              <Skeleton className="h-5 w-3/4" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          ))}
         </CardContent>
       </Card>
     );
@@ -111,37 +106,48 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500" />
-            Recommended Jobs
-          </CardTitle>
+          <CardTitle className="text-xl">Recommended Jobs</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center py-6 text-destructive gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            <span>{error}</span>
-          </div>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <Button asChild variant="outline">
+            <Link to="/jobs">Browse All Jobs</Link>
+          </Button>
         </CardContent>
       </Card>
     );
   }
 
-  if (recommendations.length === 0) {
+  if (!user) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500" />
-            Recommended Jobs
-          </CardTitle>
+          <CardTitle className="text-xl">Job Recommendations</CardTitle>
         </CardHeader>
-        <CardContent className="text-center py-6">
-          <p className="text-muted-foreground">No job recommendations found for your profile.</p>
-          <div className="mt-4">
-            <Link to="/jobs">
-              <Button variant="outline">Browse All Jobs</Button>
-            </Link>
-          </div>
+        <CardContent>
+          <p className="text-muted-foreground mb-4">Sign in to see personalized job recommendations.</p>
+          <Button asChild>
+            <Link to="/sign-in">Sign In</Link>
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (jobs.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Recommended Jobs</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground mb-4">
+            We don't have any job recommendations for you yet. 
+            Complete your profile to get personalized recommendations.
+          </p>
+          <Button asChild variant="outline">
+            <Link to="/jobs">Browse Jobs</Link>
+          </Button>
         </CardContent>
       </Card>
     );
@@ -150,44 +156,39 @@ export default function JobRecommendations({ limit = 3, showReason = true }: Job
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-amber-500" />
-          Recommended Jobs
-        </CardTitle>
+        <CardTitle className="text-xl">Recommended Jobs</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {recommendations.map((rec) => (
-          rec.job && (
-            <div key={rec.id} className="border rounded-lg p-4 hover:border-primary/50 transition-colors">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium">{rec.job.title}</h3>
-                  <p className="text-sm text-muted-foreground">{rec.job.company.name}</p>
-                  {showReason && rec.reason && (
-                    <p className="text-sm mt-2 text-muted-foreground">
-                      <Badge variant="secondary" className="mr-2">Match</Badge>
-                      {rec.reason}
-                    </p>
-                  )}
-                </div>
-                <Link to={`/jobs/${rec.job.id}`}>
-                  <Button variant="ghost" size="sm">
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
+        {jobs.map((job) => (
+          <div key={job.id} className="border-b pb-3 last:border-0">
+            <Link to={`/jobs/${job.id}`} className="text-lg font-medium hover:underline">
+              {job.title}
+            </Link>
+            <div className="flex items-center text-sm text-muted-foreground mt-1">
+              <span>{job.company.name}</span>
+              {job.location?.city && (
+                <>
+                  <span className="mx-1">•</span>
+                  <span>{job.location.city}, {job.location.state}</span>
+                </>
+              )}
             </div>
-          )
+            {showReason && job.reason && (
+              <Badge variant="outline" className="mt-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200">
+                {job.reason}
+              </Badge>
+            )}
+          </div>
         ))}
-        
-        <div className="pt-2">
-          <Link to="/jobs">
-            <Button variant="outline" className="w-full">
-              See All Recommended Jobs
-            </Button>
+        <Button asChild className="w-full" variant="outline">
+          <Link to="/jobs" className="flex items-center justify-center">
+            View More Jobs
+            <ExternalLink className="h-4 w-4 ml-2" />
           </Link>
-        </div>
+        </Button>
       </CardContent>
     </Card>
   );
-}
+};
+
+export default JobRecommendations;
