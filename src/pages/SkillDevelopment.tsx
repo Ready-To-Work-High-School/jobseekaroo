@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -9,8 +9,20 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import AdaptiveLearning from '@/components/job-simulations/AdaptiveLearning';
 import { SkillsProvider } from '@/contexts/SkillsContext';
+import { useAuth } from '@/contexts/auth';
 
 const SkillDevelopment = () => {
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Set a small timeout to prevent rapid mounting/unmounting
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Layout>
       <Helmet>
@@ -43,9 +55,17 @@ const SkillDevelopment = () => {
           </p>
           
           <ErrorBoundary>
-            <SkillsProvider>
-              <SkillsTabs />
-            </SkillsProvider>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+              </div>
+            ) : (
+              <SkillsProvider>
+                <ErrorBoundary>
+                  <SkillsTabs />
+                </ErrorBoundary>
+              </SkillsProvider>
+            )}
           </ErrorBoundary>
         </div>
 
