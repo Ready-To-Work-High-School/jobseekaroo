@@ -1,17 +1,27 @@
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, FileText, Clock } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Briefcase, FileText, Clock, KanbanSquare } from 'lucide-react';
 
 const ApplicantsTab = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Applicants</CardTitle>
-        <CardDescription>
-          View and respond to candidates who have applied to your job postings
-        </CardDescription>
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle>Recent Applicants</CardTitle>
+            <CardDescription>
+              View and respond to candidates who have applied to your job postings
+            </CardDescription>
+          </div>
+          <Button asChild variant="outline">
+            <Link to="/employer/candidates" className="flex items-center gap-2">
+              <KanbanSquare className="h-4 w-4" /> Kanban Board
+            </Link>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -77,6 +87,14 @@ const ApplicantsTab = () => {
           </div>
         </div>
       </CardContent>
+      <CardFooter>
+        <Button asChild variant="secondary" className="w-full">
+          <Link to="/employer/candidates">
+            <KanbanSquare className="mr-2 h-4 w-4" />
+            Manage Candidates in Kanban Board
+          </Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

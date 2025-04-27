@@ -7,12 +7,14 @@ import KanbanBoard from '@/components/employer/kanban/KanbanBoard';
 import { KanbanHeader } from '@/components/employer/kanban/KanbanHeader';
 import { KanbanStageCustomization } from '@/components/employer/kanban/KanbanStageCustomization';
 import { useKanbanBoard } from '@/hooks/employer/useKanbanBoard';
+import { Helmet } from 'react-helmet';
 
 const EmployerKanban = () => {
   const {
     stages,
     isEditing,
     newStageTitle,
+    hasPremium,
     setIsEditing,
     setNewStageTitle,
     handleAddStage,
@@ -23,7 +25,15 @@ const EmployerKanban = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Candidate Pipeline | Employer Dashboard</title>
+      </Helmet>
       <div className="container max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold">Candidate Pipeline</h1>
+          <p className="text-muted-foreground">Manage candidates through your hiring stages</p>
+        </div>
+        
         <KanbanHeader 
           isEditing={isEditing}
           onEditingToggle={() => setIsEditing(!isEditing)}
@@ -36,6 +46,7 @@ const EmployerKanban = () => {
             onNewStageTitleChange={setNewStageTitle}
             onAddStage={handleAddStage}
             onRemoveStage={handleRemoveStage}
+            hasPremium={hasPremium}
           />
         )}
 

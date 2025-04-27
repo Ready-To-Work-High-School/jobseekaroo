@@ -3,10 +3,10 @@ export interface KanbanItem {
   id: string;
   studentId: string;
   name: string;
-  grade: number;
-  academy: string;
-  avatar?: string;
-  status: 'pending' | 'interviewing' | 'selected' | 'rejected' | 'hired' | null;
+  grade: string | number;
+  academy?: string;
+  avatar?: string | null;
+  status: string | null;
   notes: string;
 }
 

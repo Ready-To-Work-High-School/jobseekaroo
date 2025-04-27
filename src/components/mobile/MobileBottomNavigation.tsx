@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Briefcase, Building2, GraduationCap, User, Menu } from 'lucide-react';
+import { Home, Briefcase, Building2, GraduationCap, User, Menu, KanbanSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/auth';
@@ -10,20 +10,31 @@ import { MobileMenu } from '@/components/navbar/MobileMenu';
 
 const MobileBottomNavigation = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   
   // Skip rendering on certain paths
   if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname)) {
     return null;
   }
   
-  const navItems = [
-    { icon: Home, label: 'Home', path: '/' },
-    { icon: Briefcase, label: 'Jobs', path: '/jobs' },
-    { icon: Building2, label: 'Interview', path: '/interview-prep' },
-    { icon: GraduationCap, label: 'Skills', path: '/skill-development' },
-    { icon: User, label: 'Profile', path: '/profile' },
-  ];
+  // Define navigation items based on user type
+  const isEmployer = userProfile?.user_type === 'employer';
+  
+  const navItems = isEmployer 
+    ? [
+        { icon: Home, label: 'Home', path: '/' },
+        { icon: Briefcase, label: 'Jobs', path: '/employer-dashboard' },
+        { icon: KanbanSquare, label: 'Kanban', path: '/employer/candidates' },
+        { icon: Building2, label: 'Company', path: '/employer/company' },
+        { icon: User, label: 'Profile', path: '/profile' },
+      ]
+    : [
+        { icon: Home, label: 'Home', path: '/' },
+        { icon: Briefcase, label: 'Jobs', path: '/jobs' },
+        { icon: Building2, label: 'Interview', path: '/interview-prep' },
+        { icon: GraduationCap, label: 'Skills', path: '/skill-development' },
+        { icon: User, label: 'Profile', path: '/profile' },
+      ];
   
   return (
     <div className="fixed bottom-0 left-0 right-0 border-t bg-background z-50 md:hidden">
