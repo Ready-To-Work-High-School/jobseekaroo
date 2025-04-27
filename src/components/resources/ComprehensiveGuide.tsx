@@ -4,10 +4,12 @@ import { Tabs } from "@/components/ui/tabs";
 import GuideHeader from './guide/GuideHeader';
 import GuideTabs from './guide/GuideTabs';
 import GuideContent from './guide/GuideContent';
+import DirectoryList from './guide/DirectoryList';
 import { guideSections } from './guide/guideData';
 
 const ComprehensiveGuide = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showDirectory, setShowDirectory] = useState(false);
   
   const filteredSections = searchTerm.length > 0 
     ? guideSections.map(section => ({
@@ -24,7 +26,11 @@ const ComprehensiveGuide = () => {
       <GuideHeader 
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
+        showDirectory={showDirectory}
+        onToggleDirectory={() => setShowDirectory(!showDirectory)}
       />
+      
+      {showDirectory && <DirectoryList sections={guideSections} />}
       
       <Tabs defaultValue="getting-started" className="mb-8">
         <GuideTabs sections={filteredSections} />
