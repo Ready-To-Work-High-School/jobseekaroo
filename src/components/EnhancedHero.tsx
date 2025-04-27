@@ -64,17 +64,17 @@ const EnhancedHero = () => {
       
       {/* JS4HS Logo at the top with glow - NEW */}
       <motion.div 
-        className="bg-gradient-to-r from-blue-50 via-white to-blue-50 py-6 px-4 text-center border-b border-blue-100 relative"
+        className="bg-gradient-to-r from-amber-50 via-white to-amber-50 py-6 px-4 text-center border-b border-amber-100 relative"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
         <div className="container mx-auto">
           <motion.div className="flex justify-center relative" variants={itemVariants}>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-amber-400/30 to-blue-400/20 blur-2xl opacity-70"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 via-amber-400/30 to-amber-400/20 blur-2xl opacity-70"></div>
             <div className="relative logo-glow logo-accent">
               <img 
-                src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png" 
+                src="/lovable-uploads/8fb94441-6c69-4725-b90f-401afaf2f5cc.png" 
                 alt="Job Seekers 4 High Schools Logo" 
                 className="h-24 md:h-32 w-auto object-contain logo-shadow logo-3d-effect"
                 width="256"
@@ -83,13 +83,13 @@ const EnhancedHero = () => {
             </div>
           </motion.div>
           <motion.h2 
-            className="text-xl md:text-2xl font-semibold mt-3 text-blue-800"
+            className="text-xl md:text-2xl font-semibold mt-3 text-amber-800"
             variants={itemVariants}
           >
             Job Seekers 4 High Schools
           </motion.h2>
           <motion.p 
-            className="text-sm text-blue-700 max-w-xl mx-auto mt-1"
+            className="text-sm text-amber-700 max-w-xl mx-auto mt-1"
             variants={itemVariants}
           >
             Connecting students with credential-ready opportunities at Westside High School
