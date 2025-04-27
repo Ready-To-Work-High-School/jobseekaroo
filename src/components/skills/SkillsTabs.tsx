@@ -1,5 +1,5 @@
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import {
   Tabs,
   TabsContent,
@@ -14,12 +14,10 @@ import {
 } from 'lucide-react';
 import { useSkills } from '@/contexts/SkillsContext';
 import TabLoader from './TabLoader';
-
-// Lazy load individual tab contents
-const SkillList = lazy(() => import('@/components/skills/SkillList'));
-const SkillGapAnalysis = lazy(() => import('@/components/skills/SkillGapAnalysis'));
-const SkillResourcesList = lazy(() => import('@/components/skills/SkillResourcesList'));
-const SkillProgressTracker = lazy(() => import('@/components/skills/SkillProgressTracker'));
+import SkillList from '@/components/skills/SkillList';
+import SkillGapAnalysis from '@/components/skills/SkillGapAnalysis';
+import SkillResourcesList from '@/components/skills/SkillResourcesList';
+import SkillProgressTracker from '@/components/skills/SkillProgressTracker';
 
 const SkillsTabs = () => {
   const {

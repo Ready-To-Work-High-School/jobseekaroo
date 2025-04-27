@@ -10,6 +10,7 @@ import { ArrowLeft, BookOpen } from 'lucide-react';
 import AdaptiveLearning from '@/components/job-simulations/AdaptiveLearning';
 import { SkillsProvider } from '@/contexts/SkillsContext';
 import { useAuth } from '@/contexts/auth';
+import { AutoRecoveryErrorBoundary } from '@/components/ErrorRecovery/AutoRecoveryErrorBoundary';
 
 const SkillDevelopment = () => {
   const { user } = useAuth();
@@ -62,9 +63,9 @@ const SkillDevelopment = () => {
               </div>
             ) : (
               <SkillsProvider>
-                <ErrorBoundary>
+                <AutoRecoveryErrorBoundary maxAutoRecoveryAttempts={2}>
                   <SkillsTabs />
-                </ErrorBoundary>
+                </AutoRecoveryErrorBoundary>
               </SkillsProvider>
             )}
           </ErrorBoundary>
