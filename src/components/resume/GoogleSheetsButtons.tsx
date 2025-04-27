@@ -43,20 +43,23 @@ const GoogleSheetsButtons = ({ onImport, resumeData }: GoogleSheetsButtonsProps)
 
     try {
       setIsImporting(true);
-      console.log(`Importing from spreadsheet: ${spreadsheetId}, range: ${importMethod === 'specific' ? sheetRange : undefined}`);
+      console.log(`[Debug] Importing from spreadsheet: ${spreadsheetId}, range: ${importMethod === 'specific' ? sheetRange : 'All'}`);
       
       const data = await importResumeFromGoogleSheets(
         spreadsheetId, 
         importMethod === 'specific' ? sheetRange : undefined
       );
       
-      console.log("Import response:", data);
+      console.log("[Debug] Import response:", data);
       
+      // Add more detailed logging
       if (!data.success) {
+        console.error("[Error] Import was not successful", data);
         throw new Error("Import was not successful");
       }
       
       if (data.resumeData) {
+        console.log("[Debug] Resume data found, importing...");
         onImport(data.resumeData);
         setImportDialogOpen(false);
         
@@ -65,7 +68,7 @@ const GoogleSheetsButtons = ({ onImport, resumeData }: GoogleSheetsButtonsProps)
           description: "Resume data imported from Google Sheets",
         });
       } else if (data.values && data.values.length) {
-        // Try to convert simple table data to resume format
+        console.log("[Debug] Raw sheet data found, processing...");
         const resumeData = processSimpleSheetData(data.values);
         onImport(resumeData);
         setImportDialogOpen(false);
@@ -75,12 +78,13 @@ const GoogleSheetsButtons = ({ onImport, resumeData }: GoogleSheetsButtonsProps)
           description: "Resume data imported from Google Sheets",
         });
       } else {
+        console.warn("[Warning] No usable data found in spreadsheet");
         throw new Error("No usable data found in the spreadsheet");
       }
     } catch (error) {
-      console.error("Import error:", error);
+      console.error("[Error] Import error:", error);
       toast({
-        title: "Error",
+        title: "Import Error",
         description: error instanceof Error ? error.message : "Failed to import from Google Sheets",
         variant: "destructive",
       });
