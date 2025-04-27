@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { google } from "npm:googleapis";
 
@@ -16,7 +15,11 @@ serve(async (req) => {
     const { spreadsheetId, range } = await req.json();
     
     if (!spreadsheetId) {
-      return new Response(JSON.stringify({ error: "Spreadsheet ID is required" }), {
+      console.error('[Debug] No spreadsheet ID provided');
+      return new Response(JSON.stringify({ 
+        error: "Spreadsheet ID is required", 
+        details: "Please provide a valid Google Sheets spreadsheet ID" 
+      }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -31,8 +34,39 @@ serve(async (req) => {
     });
 
     const sheets = google.sheets({ version: 'v4', auth });
-    console.log(`Attempting to fetch data from spreadsheet: ${spreadsheetId}, range: ${range || 'All'}`);
+    console.log(`[Debug] Attempting to fetch data from spreadsheet: ${spreadsheetId}, range: ${range || 'All'}`);
     
+    // Detailed error handling for authentication and API calls
+    try {
+      const spreadsheetData = await sheets.spreadsheets.get({
+        spreadsheetId,
+      });
+
+      console.log('[Debug] Successfully retrieved spreadsheet metadata');
+      
+      if (!spreadsheetData.data.sheets || spreadsheetData.data.sheets.length === 0) {
+        console.warn('[Warning] No sheets found in the spreadsheet');
+        return new Response(JSON.stringify({ 
+          error: "No sheets found", 
+          details: "The provided spreadsheet appears to be empty",
+          success: false 
+        }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    } catch (authError) {
+      console.error('[Error] Authentication or spreadsheet retrieval failed:', authError);
+      return new Response(JSON.stringify({ 
+        error: "Authentication Failed", 
+        details: "Check your service account credentials and spreadsheet sharing settings",
+        success: false 
+      }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // If no specific range is provided, fetch all sheets in the spreadsheet
     if (!range) {
       // First get the sheet names
@@ -101,11 +135,11 @@ serve(async (req) => {
       });
     }
   } catch (error) {
-    console.error('Error importing from Google Sheets:', error);
+    console.error('[Critical Error] Unexpected error in Google Sheets import:', error);
     return new Response(JSON.stringify({ 
-      error: error.message,
-      stack: error.stack,
-      success: false
+      error: "Unexpected Error", 
+      details: error.message || "An unknown error occurred during import",
+      success: false 
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
