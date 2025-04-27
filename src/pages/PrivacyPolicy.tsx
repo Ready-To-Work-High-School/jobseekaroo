@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 
@@ -102,8 +101,8 @@ const PrivacyPolicy = () => {
           </p>
           <div className="bg-muted p-4 rounded-lg">
             <p>Email: privacy@js4hs.com</p>
-            <p>Phone: (555) 123-4567</p>
-            <p>Address: 123 Privacy Street, San Francisco, CA 94105</p>
+            <p>Phone: (917) 794-7422</p>
+            <p>Address: 5533 Firestone Rd. Jacksonville, FL 32244</p>
           </div>
         </div>
       </div>
