@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
@@ -10,15 +9,13 @@ import { ArrowLeft, BookOpen } from 'lucide-react';
 import AdaptiveLearning from '@/components/job-simulations/AdaptiveLearning';
 import { SkillsProvider } from '@/contexts/SkillsContext';
 import { useAuth } from '@/contexts/auth';
-import { AutoRecoveryErrorBoundary } from '@/components/ErrorRecovery/AutoRecoveryErrorBoundary';
+import AutoRecoveryErrorBoundary from '@/components/ErrorRecovery/AutoRecoveryErrorBoundary';
 
 const SkillDevelopment = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Use a longer timeout to prevent rapid mounting/unmounting
-    // This helps reduce flickering while still showing a loading state for data fetching
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
