@@ -1,7 +1,7 @@
-
 import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 import PlatformGuide from '@/pages/PlatformGuide';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -27,6 +27,7 @@ const HomeRoutes = (
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/resources" element={<Resources />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
+    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
     <Route path="/employer-verification" element={<EmployerVerification />} />
     <Route path="/resources-catalog" element={<ResourcesCatalog />} />
     <Route path="/safety-compliance" element={<SafetyCompliancePage />} />

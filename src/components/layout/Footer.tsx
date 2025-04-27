@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield, FileText, Briefcase, Book } from 'lucide-react';
@@ -44,6 +43,17 @@ const Footer = () => {
     href: category.path,
     label: category.title
   }));
+
+  const legalLinks = [
+    {
+      title: "Privacy Policy",
+      path: "/privacy-policy"
+    },
+    {
+      title: "Terms of Use",
+      path: "/terms"
+    }
+  ];
 
   return (
     <>
@@ -119,6 +129,17 @@ const Footer = () => {
             </div>
           </div>
           <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
+            <div className="flex justify-center gap-4 mb-4">
+              {legalLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {link.title}
+                </Link>
+              ))}
+            </div>
             <p>
               &copy; {new Date().getFullYear()} Job Seekers 4 High Schools. All rights reserved.
             </p>
