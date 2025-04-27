@@ -15,9 +15,9 @@ export const NavbarBrand = () => {
         {!imageError ? (
           <span className="relative flex items-center">
             {/* Glow effect behind the logo */}
-            <span className="absolute -inset-2 rounded-full bg-gradient-to-tr from-blue-400 via-amber-300 to-purple-500 opacity-50 blur-[6px] pointer-events-none animate-pulse"></span>
+            <span className="absolute -inset-2 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-500 opacity-50 blur-[6px] pointer-events-none animate-pulse"></span>
             <img
-              src="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp"
+              src="/lovable-uploads/8fb94441-6c69-4725-b90f-401afaf2f5cc.png"
               alt="JS4HS Logo"
               width={42}
               height={42}
@@ -35,4 +35,3 @@ export const NavbarBrand = () => {
     </div>
   );
 };
-

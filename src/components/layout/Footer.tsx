@@ -76,9 +76,9 @@ const Footer = () => {
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="relative">
-                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
-                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
-                  <img src="/lovable-uploads/8587ce26-fbc1-463b-a0ef-e63f5fda9889.png" alt="JS4HS Logo" className="h-6 w-6 relative z-10 w-full h-full object-contain rounded-md" />
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-600 via-amber-400 to-amber-500 opacity-75 blur-sm animate-pulse"></div>
+                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-amber-700 to-amber-400 opacity-30 blur-lg glow-pulse"></div>
+                  <img src="/lovable-uploads/8fb94441-6c69-4725-b90f-401afaf2f5cc.png" alt="JS4HS Logo" className="h-6 w-6 relative z-10 w-full h-full object-contain rounded-md" />
                 </div>
                 <h3 className="font-bold text-lg">Job Seekers 4 High Schools</h3>
               </div>
