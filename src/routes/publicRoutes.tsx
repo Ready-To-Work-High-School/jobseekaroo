@@ -48,6 +48,7 @@ export const PublicRoutes = (
     <Route path="/contact" element={<ContactUs />} />
     <Route path="/waiting-list" element={<EnhancedJobListings />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+    <Route path="/terms" element={<TermsOfService />} />
     <Route path="/terms-of-service" element={<TermsOfService />} />
     <Route path="/sample-candidates" element={<SampleCandidates />} />
     <Route path="/credentials" element={<CredentialsPage />} />

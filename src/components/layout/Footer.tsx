@@ -5,12 +5,10 @@ import { Shield, FileText, Briefcase, Book } from 'lucide-react';
 const Footer = () => {
   const { user } = useAuth();
 
-  // Function to get the redirect path based on auth status
   const getPath = (authenticatedPath: string) => {
     return user ? authenticatedPath : "/sign-in";
   };
 
-  // Main navigation categories for the footer
   const mainCategories = [
     {
       title: "Our Program",
@@ -38,7 +36,6 @@ const Footer = () => {
     }
   ];
   
-  // Bottom navigation links with simplified design
   const bottomNavLinks = mainCategories.map(category => ({
     href: category.path,
     label: category.title
@@ -50,7 +47,7 @@ const Footer = () => {
       path: "/privacy-policy"
     },
     {
-      title: "Terms of Use",
+      title: "Terms of Service",
       path: "/terms"
     }
   ];
