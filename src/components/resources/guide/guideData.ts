@@ -76,7 +76,7 @@ export const guideSections: GuideSection[] = [
       },
       { 
         question: 'How do I view applicants?',
-        answer: 'Step 1: Log in to your Employer Dashboard.\nStep 2: Click on the "Applicants" tab to view all applications.\nStep 3: Filter applications by job listing, date, or status.\nStep 4: Sort candidates by qualification metrics or application date.\nStep 5: Click on an applicant's name to view their complete profile, resume, and application responses.\nStep 6: Use the review tools to rate applicants and add notes.\nStep 7: Change applicant status (Reviewing, Interview, Hired, Not Selected) as they progress.\nStep 8: Contact promising candidates directly through the messaging system.'
+        answer: 'Step 1: Log in to your Employer Dashboard.\nStep 2: Click on the "Applicants" tab to view all applications.\nStep 3: Filter applications by job listing, date, or status.\nStep 4: Sort candidates by qualification metrics or application date.\nStep 5: Click on an applicant\'s name to view their complete profile, resume, and application responses.\nStep 6: Use the review tools to rate applicants and add notes.\nStep 7: Change applicant status (Reviewing, Interview, Hired, Not Selected) as they progress.\nStep 8: Contact promising candidates directly through the messaging system.'
       },
       { 
         question: 'How to use the Kanban board for hiring?',
