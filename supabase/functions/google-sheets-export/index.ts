@@ -1,6 +1,6 @@
 
-import { serve } from 'https://deno.fresh.dev/std@v1.1/http/server.ts';
-import { google } from 'npm:googleapis';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { google } from "npm:googleapis";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -45,7 +45,7 @@ serve(async (req) => {
       ['Summary', resumeData.summary || ''],
       ['Skills', resumeData.skills?.join(', ') || ''],
       ['Experience', ''],
-      ...((resumeData.experience || []).map((exp: any) => [
+      ...((resumeData.experience || []).map((exp) => [
         exp.title,
         exp.company,
         exp.startDate + ' - ' + exp.endDate,
