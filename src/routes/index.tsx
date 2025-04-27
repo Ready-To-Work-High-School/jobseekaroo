@@ -26,13 +26,12 @@ import Resources from '@/pages/Resources';
 import PlatformGuide from '@/pages/PlatformGuide';
 import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
+import TestPage from '@/pages/TestPage';
 
-// Import routes from other route files
 import { PublicRoutes } from './publicRoutes';
 import { SchoolRoutes } from './schoolRoutes';
 import { EmployerRoutes } from './employerRoutes';
 
-// Complete routes array with all necessary routes
 const AppRoutes = [
   <Route path="/" element={<Home />} key="home" />,
   <Route path="/jobs" element={<Jobs />} key="jobs" />,
@@ -61,6 +60,7 @@ const AppRoutes = [
   <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
   <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
   <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
+  <Route path="/test" element={<TestPage />} key="test" />,
 ];
 
 export default AppRoutes;
