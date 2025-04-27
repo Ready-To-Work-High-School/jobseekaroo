@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Award, Calendar, CheckCircle, Download, ExternalLink } from 'lucide-react';
 import { getUserCredentials } from '@/lib/supabase/simulations';
-import { jobSimulationsPath } from '@/lib/utils';
 import { SimulationCredential } from '@/types/jobSimulation';
 
 const UserCredentials = () => {
