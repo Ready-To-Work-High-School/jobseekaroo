@@ -13,9 +13,9 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
   url,
   className 
 }) => {
-  // Safely access environment variables and format URL correctly
-  const defaultUrl = process.env.CALENDLY_CLIENT_ID ? 
-    `https://calendly.com/d/${process.env.CALENDLY_CLIENT_ID}` : 
+  // In Vite, we need to use import.meta.env instead of process.env
+  const defaultUrl = import.meta.env.VITE_CALENDLY_CLIENT_ID ? 
+    `https://calendly.com/d/${import.meta.env.VITE_CALENDLY_CLIENT_ID}` : 
     '';
     
   // Use provided URL or fallback to default
