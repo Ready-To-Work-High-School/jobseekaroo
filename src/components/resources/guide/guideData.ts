@@ -1,4 +1,3 @@
-
 import { GuideSection } from "./types";
 
 export const guideSections: GuideSection[] = [
@@ -89,6 +88,36 @@ export const guideSections: GuideSection[] = [
       { 
         question: 'How do I communicate with applicants?',
         answer: 'Step 1: Access the secure messaging system from your Employer Dashboard.\nStep 2: Select the applicant you wish to contact from your applicants list.\nStep 3: Compose your message in the messaging interface.\nStep 4: Use templates for common communications like interview requests or status updates.\nStep 5: Schedule interviews by proposing available times through the calendar integration.\nStep 6: Attach any relevant documents or information.\nStep 7: Send the message, which will be delivered to the applicant\'s inbox and email.\nStep 8: Track all communications in the conversation history for each applicant.'
+      }
+    ]
+  },
+  {
+    id: 'internships-programs',
+    title: 'Internships & Programs',
+    content: [
+      { 
+        question: 'What are the differences between internships, apprenticeships, and externships?',
+        answer: 'These work-based learning programs each offer different benefits and structures:\n\n• Internships: Typically short-term (1-3 months) work experiences that provide exposure to an industry or field. Usually unpaid or with modest compensation, focusing on learning and skill development.\n\n• Apprenticeships: Longer-term programs (1-4 years) that combine on-the-job training with classroom instruction. Apprentices earn while they learn, gaining industry-recognized credentials and direct mentorship in skilled trades or technical fields.\n\n• Externships: Brief job shadowing experiences (1 day to 2 weeks) where students observe professionals in their work environment. Externships focus on exploration rather than hands-on work, helping students determine career interests.'
+      },
+      { 
+        question: 'Mayo Clinic Healthcare Career Immersion Program',
+        answer: 'The Mayo Clinic Healthcare Career Immersion Program offers high school students a unique opportunity to explore careers in healthcare:\n\nProgram Details:\n• Duration: 3-day immersive experience\n• Location: Mayo Clinic Campus, Jacksonville, FL\n• Dates: July 10-12, 2025\n• Cost: Free (competitive application required)\n• Eligibility: High school students grades 10-12\n\nActivities Include:\n• Shadowing healthcare professionals\n• Hands-on clinical skill workshops\n• Medical simulation experiences\n• Networking with healthcare professionals\n• Career pathway exploration sessions\n• College preparation guidance\n\nApplication process opens January 2025. Students must submit academic transcripts, a personal statement, and a teacher recommendation. Visit the Mayo Clinic website or contact your school counselor for application details.'
+      },
+      { 
+        question: 'Macquarie Leads Externship Program',
+        answer: 'The Macquarie Leads Externship Program provides students with exposure to the financial services industry:\n\nProgram Overview:\n• Host Organization: Macquarie Group, a global financial services provider\n• Format: 1-week virtual or in-person shadowing experience\n• Focus Areas: Investment Banking, Asset Management, and Financial Advisory\n• Eligibility: High school seniors and college freshmen\n\nProgram Benefits:\n• Gain insight into day-to-day operations of a global financial firm\n• Connect with industry professionals and potential mentors\n• Learn about career paths in finance and investment banking\n• Develop foundational knowledge of financial markets\n• Enhance your resume with prestigious work experience\n\nFor more details and to apply, visit https://www.extern.com/externships/macquarie-leads'
+      },
+      { 
+        question: 'How to find and apply for internships',
+        answer: 'Step 1: Define your career interests and goals to focus your search.\nStep 2: Start your search 3-6 months before you want to begin the internship.\nStep 3: Use multiple search methods including our platform\'s internship section, school career centers, and professional websites like LinkedIn.\nStep 4: Prepare your application materials including resume, cover letter, and references.\nStep 5: Customize each application to highlight relevant skills and experiences for specific positions.\nStep 6: Follow application instructions carefully, noting deadlines and required documents.\nStep 7: Prepare for interviews by researching the organization and practicing common questions.\nStep 8: After applying, follow up appropriately if you don\'t hear back within 2 weeks.'
+      },
+      { 
+        question: 'Building skills through work-based learning',
+        answer: 'Work-based learning programs help you develop crucial skills through real-world experience:\n\n• Technical Skills: Learn industry-specific tools, technologies and techniques used in your field of interest.\n\n• Soft Skills: Develop communication, teamwork, problem-solving and time management abilities essential for any workplace.\n\n• Career Exploration: Test different career paths before committing to a specific educational or career track.\n\n• Professional Network: Build connections with mentors and industry professionals who can provide guidance and references.\n\n• Resume Enhancement: Add valuable experience that distinguishes you from other candidates when applying to colleges or jobs.\n\n• Workplace Etiquette: Learn professional norms and expectations in real business environments.'
+      },
+      {
+        question: 'Available credentials and certifications',
+        answer: 'Through work-based learning programs, you can earn various industry-recognized credentials:\n\n• OSHA Safety Certification: Basic workplace safety awareness credential recognized across industries.\n\n• Microsoft Office Specialist: Certification in Excel, Word, and other productivity tools.\n\n• ServSafe Food Handler: Entry-level food safety certification for hospitality internships.\n\n• Adobe Certified Professional: Digital media skills certification for creative fields.\n\n• Google Career Certificates: Entry-level certifications in IT support, data analytics, and project management.\n\n• CPR/First Aid Certification: Basic emergency response training for healthcare settings.\n\nMany programs include credential preparation as part of their curriculum. Ask program coordinators which certifications are included or recommended.'
       }
     ]
   },

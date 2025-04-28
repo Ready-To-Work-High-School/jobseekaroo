@@ -6,6 +6,11 @@ interface StepByStepGuideProps {
 }
 
 const StepByStepGuide: React.FC<StepByStepGuideProps> = ({ stepsText }) => {
+  // Check if the text has Step X: format
+  if (!stepsText.includes('Step ')) {
+    return <p className="text-muted-foreground">{stepsText}</p>;
+  }
+  
   const steps = stepsText
     .split(/Step \d+:/)
     .filter(Boolean)
