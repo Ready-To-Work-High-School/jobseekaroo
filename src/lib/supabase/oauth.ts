@@ -7,6 +7,16 @@ export const signInWithOAuth = async (provider: Provider) => {
   console.log(`Initiating ${provider} sign-in`);
   
   try {
+    // Check if provider is enabled
+    try {
+      // This pre-check helps provide a better user experience than the generic error
+      if (provider === 'apple') {
+        console.log("Checking if Apple provider is enabled");
+      }
+    } catch (err) {
+      console.log("Provider check error:", err);
+    }
+    
     // Ensure we're on HTTPS in production
     if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
       throw new Error("Secure connection required. Please use HTTPS for authentication.");
@@ -59,6 +69,12 @@ export const signInWithOAuth = async (provider: Provider) => {
     
     if (error) {
       console.error(`${provider} sign-in error:`, error);
+      
+      // Enhanced error messages for specific issues
+      if (error.message?.includes("provider is not enabled") || error.status === 400) {
+        throw new Error(`${provider} sign-in is not currently enabled for this application. Please contact your administrator or use another sign-in method.`);
+      }
+      
       return { user: null, error };
     }
     

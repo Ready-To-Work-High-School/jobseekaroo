@@ -7,6 +7,8 @@ import DiagnosticPanel from "./diagnostic/DiagnosticPanel";
 import NetworkOfflineState from "./diagnostic/NetworkOfflineState";
 import { useDiagnosticInfo } from "./diagnostic/useDiagnosticInfo";
 import { useNetworkStatus } from "./hooks/useNetworkStatus";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface SocialAuthButtonsProps {
   onAppleSignIn: () => Promise<void>;
@@ -28,6 +30,7 @@ const SocialAuthButtons = ({
   const [appleError, setAppleError] = useState<string | null>(null);
   const [showGoogleDebugInfo, setShowGoogleDebugInfo] = useState(false);
   const [showAppleDebugInfo, setShowAppleDebugInfo] = useState(false);
+  const [isAppleDisabled, setIsAppleDisabled] = useState(false);
   
   const isOnline = useNetworkStatus();
   const diagnosticInfo = useDiagnosticInfo();
@@ -107,18 +110,23 @@ const SocialAuthButtons = ({
       console.error('Apple sign-in error in component:', error);
       
       let errorMessage = error?.message || "Sign-in failed";
-      if (errorMessage.includes("network") || errorMessage.includes("connection") || 
+      
+      // Handle specific apple provider not enabled error
+      if (errorMessage.includes("provider is not enabled") || 
+          errorMessage.includes("validation_failed")) {
+        errorMessage = "Apple Sign-In is not enabled for this application. Please use another sign-in method.";
+        setIsAppleDisabled(true);
+      } else if (errorMessage.includes("network") || errorMessage.includes("connection") || 
           errorMessage.includes("refused")) {
         errorMessage = "Connection to Apple failed. This could be due to network issues or browser settings:";
-        setAppleError(errorMessage);
         setShowAppleDebugInfo(true);
-      } else {
-        setAppleError(errorMessage);
       }
+      
+      setAppleError(errorMessage);
       
       toast({
         title: "Apple Sign-In Error",
-        description: error?.message || "Could not sign in with Apple. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -146,13 +154,22 @@ const SocialAuthButtons = ({
         />
       )}
       
-      <AppleSignInButton 
-        onClick={handleAppleSignIn}
-        isLoading={isAppleLoading}
-        disabled={isFormLoading}
-      />
+      {isAppleDisabled ? (
+        <Alert variant="destructive" className="mt-3">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Apple Sign-In is not currently enabled for this application.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <AppleSignInButton 
+          onClick={handleAppleSignIn}
+          isLoading={isAppleLoading}
+          disabled={isFormLoading || isAppleDisabled}
+        />
+      )}
       
-      {appleError && (
+      {appleError && !isAppleDisabled && (
         <DiagnosticPanel 
           errorMessage={appleError}
           diagnosticInfo={diagnosticInfo}

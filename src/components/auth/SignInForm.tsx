@@ -9,7 +9,6 @@ import SocialAuthButtons from "./SocialAuthButtons";
 import SignInLinks from "./SignInLinks";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 
 const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -79,22 +78,33 @@ const SignInForm = () => {
 
   const handleAppleSignIn = async () => {
     setIsAppleLoading(true);
+    setAuthError(null);
     try {
       console.log("Initiating Apple sign-in from SignInForm");
       await signInWithApple();
     } catch (error: any) {
       console.error("Apple sign-in error:", error);
+      
+      let errorMessage = error.message || "Could not sign in with Apple";
+      
+      if (errorMessage.includes("provider is not enabled") || 
+          errorMessage.includes("validation_failed")) {
+        errorMessage = "Apple Sign-In is not configured for this application. Please use another sign-in method or contact support.";
+      }
+      
       toast({
         title: "Error",
-        description: error.message || "Could not sign in with Apple",
+        description: errorMessage,
         variant: "destructive",
       });
+      setAuthError(errorMessage);
       setIsAppleLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
+    setAuthError(null);
     try {
       console.log("Initiating Google sign-in from SignInForm");
       const currentPath = window.location.pathname;
@@ -108,6 +118,7 @@ const SignInForm = () => {
         description: error.message || "Could not sign in with Google",
         variant: "destructive",
       });
+      setAuthError(error.message || "Could not sign in with Google");
       setIsGoogleLoading(false);
     }
   };
