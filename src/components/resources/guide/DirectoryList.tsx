@@ -28,10 +28,15 @@ const DirectoryList = ({ sections }: DirectoryListProps) => {
                         e.preventDefault();
                         const element = document.getElementById(`${section.id}-item-${idx}`);
                         if (element) {
+                          // Scroll to the element
                           element.scrollIntoView({ behavior: 'smooth' });
+                          // Add a delay to allow for scrolling before expanding
                           setTimeout(() => {
-                            const button = element.querySelector('[data-state="closed"]');
-                            if (button) (button as HTMLElement).click();
+                            // Find the accordion trigger and click it if it's closed
+                            const accordionTrigger = element.querySelector('[data-state]');
+                            if (accordionTrigger && accordionTrigger.getAttribute('data-state') === 'closed') {
+                              (accordionTrigger as HTMLElement).click();
+                            }
                           }, 500);
                         }
                       }}

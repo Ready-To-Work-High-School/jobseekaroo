@@ -20,7 +20,11 @@ const GuideContent = ({ sections }: GuideContentProps) => {
           ) : (
             <Accordion type="single" collapsible className="w-full">
               {section.content.map((item, idx) => (
-                <AccordionItem key={idx} value={`${section.id}-item-${idx}`} id={`${section.id}-item-${idx}`}>
+                <AccordionItem 
+                  key={idx} 
+                  value={`${section.id}-item-${idx}`} 
+                  id={`${section.id}-item-${idx}`}
+                >
                   <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
                   <AccordionContent>
                     <StepByStepGuide stepsText={item.answer} />

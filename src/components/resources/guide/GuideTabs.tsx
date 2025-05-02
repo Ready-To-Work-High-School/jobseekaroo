@@ -10,7 +10,11 @@ const GuideTabs = ({ sections }: GuideTabsProps) => {
   return (
     <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
       {sections.map((section) => (
-        <TabsTrigger key={section.id} value={section.id} disabled={section.content.length === 0}>
+        <TabsTrigger 
+          key={section.id} 
+          value={section.id} 
+          disabled={section.content.length === 0}
+        >
           {section.title}
         </TabsTrigger>
       ))}
