@@ -6,9 +6,11 @@ import { ChevronRight } from "lucide-react";
 
 interface DirectoryListProps {
   sections: GuideSection[];
+  activeTabId: string;
+  setActiveTabId: (id: string) => void;
 }
 
-const DirectoryList = ({ sections }: DirectoryListProps) => {
+const DirectoryList = ({ sections, activeTabId, setActiveTabId }: DirectoryListProps) => {
   return (
     <Card className="p-6 mb-8">
       <h2 className="text-xl font-bold mb-4">Guide Directory</h2>
@@ -26,19 +28,26 @@ const DirectoryList = ({ sections }: DirectoryListProps) => {
                       className="hover:text-primary hover:underline"
                       onClick={(e) => {
                         e.preventDefault();
-                        const element = document.getElementById(`${section.id}-item-${idx}`);
-                        if (element) {
-                          // Scroll to the element
-                          element.scrollIntoView({ behavior: 'smooth' });
-                          // Add a delay to allow for scrolling before expanding
-                          setTimeout(() => {
-                            // Find the accordion trigger and click it if it's closed
-                            const accordionTrigger = element.querySelector('[data-state]');
-                            if (accordionTrigger && accordionTrigger.getAttribute('data-state') === 'closed') {
-                              (accordionTrigger as HTMLElement).click();
-                            }
-                          }, 500);
-                        }
+                        // First set the active tab to ensure we're on the right section
+                        setActiveTabId(section.id);
+                        
+                        // Use setTimeout to allow tab change to complete
+                        setTimeout(() => {
+                          const element = document.getElementById(`${section.id}-item-${idx}`);
+                          if (element) {
+                            // Scroll to the element
+                            element.scrollIntoView({ behavior: 'smooth' });
+                            
+                            // Add a delay to allow for scrolling before expanding
+                            setTimeout(() => {
+                              // Find the accordion trigger and click it if it's closed
+                              const accordionTrigger = element.querySelector('[data-state]');
+                              if (accordionTrigger && accordionTrigger.getAttribute('data-state') === 'closed') {
+                                (accordionTrigger as HTMLElement).click();
+                              }
+                            }, 500);
+                          }
+                        }, 100); // Short delay for tab switching
                       }}
                     >
                       {item.question}

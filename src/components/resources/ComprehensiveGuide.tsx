@@ -10,6 +10,7 @@ import { guideSections } from './guide/guideData';
 const ComprehensiveGuide = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDirectory, setShowDirectory] = useState(false);
+  const [activeTabId, setActiveTabId] = useState('getting-started');
   
   const filteredSections = searchTerm.length > 0 
     ? guideSections.map(section => ({
@@ -30,9 +31,15 @@ const ComprehensiveGuide = () => {
         onToggleDirectory={() => setShowDirectory(!showDirectory)}
       />
       
-      {showDirectory && <DirectoryList sections={guideSections} />}
+      {showDirectory && (
+        <DirectoryList 
+          sections={guideSections} 
+          activeTabId={activeTabId} 
+          setActiveTabId={setActiveTabId}
+        />
+      )}
       
-      <Tabs defaultValue="getting-started" className="mb-8">
+      <Tabs value={activeTabId} onValueChange={setActiveTabId} className="mb-8">
         <GuideTabs sections={filteredSections} />
         <GuideContent sections={filteredSections} />
       </Tabs>
