@@ -35,7 +35,7 @@ export const getFallbackEmployerData = (): Employer[] => {
       avg_min_wage: 20.50, 
       job_count: 15,
       last_updated: new Date().toISOString(),
-      logoUrl: '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png'
+      logoUrl: '/lovable-uploads/2f5babe6-5aa1-4d84-936a-f459a5c19b6b.png'
     },
     { 
       company_name: 'Florida Blue', 
@@ -62,12 +62,12 @@ export const getFallbackEmployerData = (): Employer[] => {
       logoUrl: '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png'
     },
     { 
-      company_name: 'Fidelity National Financial', 
-      industry: 'Financial Services', 
-      avg_min_wage: 18.00, 
-      job_count: 9,
+      company_name: 'Acosta', 
+      industry: 'Sales & Marketing', 
+      avg_min_wage: 18.75, 
+      job_count: 10,
       last_updated: new Date().toISOString(),
-      logoUrl: '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png'
+      logoUrl: '/lovable-uploads/f233431e-c20a-4a9d-b278-c43c97d3c645.png'
     },
     { 
       company_name: 'Web.com', 

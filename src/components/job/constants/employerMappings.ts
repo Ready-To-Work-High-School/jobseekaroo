@@ -16,7 +16,8 @@ export const INDUSTRY_MAP: Record<string, string> = {
   'Baptist Health': 'Healthcare',
   'American Express': 'Finance',
   'UnitedHealthcare': 'Healthcare',
-  'Web.com': 'Technology'
+  'Web.com': 'Technology',
+  'Acosta': 'Sales & Marketing'
 };
 
 /**
@@ -36,5 +37,6 @@ export const LOGO_MAP: Record<string, string> = {
   'Baptist Health': '/lovable-uploads/fa5d62af-3190-44aa-b88c-55ebbc363b88.png',
   'American Express': '/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png',
   'UnitedHealthcare': '/lovable-uploads/84397b4a-da78-47d9-9ed4-daa193847fd7.png',
-  'Web.com': '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png'
+  'Web.com': '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png',
+  'Acosta': '/lovable-uploads/f233431e-c20a-4a9d-b278-c43c97d3c645.png'
 };

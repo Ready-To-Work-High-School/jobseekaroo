@@ -69,7 +69,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Acosta",
     industry: "Sales & Marketing",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/acosta.com",
+    logoUrl: "/lovable-uploads/f233431e-c20a-4a9d-b278-c43c97d3c645.png",
     website: "https://www.acosta.com",
     salaryRange: "$45,000 - $85,000"
   },
