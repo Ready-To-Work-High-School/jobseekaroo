@@ -13,6 +13,20 @@
   z-index: 10;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   animation: pulse 2s infinite;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.csx-label {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.externship-logo {
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  border-radius: 2px;
 }
 
 @keyframes pulse {
