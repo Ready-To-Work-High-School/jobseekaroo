@@ -3,7 +3,7 @@ import { useEmployerData } from './hooks/useEmployerData';
 import { EmployerCard } from './EmployerCard';
 import { EmployerSectionHeader } from './EmployerSectionHeader';
 import { EmployerSectionLoading } from './EmployerSectionLoading';
-import { AlertCircle, Building2 } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 const TopEmployersSection = () => {
   const { employers, loading } = useEmployerData();
@@ -23,7 +23,7 @@ const TopEmployersSection = () => {
   
   // If we detect issues with logo URLs, add console warning
   if (checkForMissingLogos) {
-    console.warn('Some employer logos may have invalid URLs. Check LOGO_MAP in useEmployerData.ts');
+    console.warn('Some employer logos may have invalid URLs. Check LOGO_MAP in employerMappings.ts');
   }
 
   return (
