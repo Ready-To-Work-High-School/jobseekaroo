@@ -18,10 +18,14 @@ const GuideHeader = ({
 }: GuideHeaderProps) => {
   return (
     <div className="max-w-4xl mx-auto mb-8">
-      <h1 className="text-3xl font-bold mb-6">Complete Platform Guide</h1>
-      <p className="text-muted-foreground mb-8">
+      <h1 className="text-3xl font-bold mb-4">Complete Platform Guide</h1>
+      <p className="text-muted-foreground mb-4">
         This comprehensive guide covers all features and functionalities of our platform, 
-        designed to help you navigate and make the most of the available tools.
+        designed to help high school students, employers, and schools navigate and make the most of our tools.
+      </p>
+      <p className="text-sm text-muted-foreground mb-6">
+        Whether you're looking for your first job, seeking to hire motivated students, or integrating our platform 
+        with your school's career readiness program, you'll find detailed information and step-by-step instructions below.
       </p>
       
       <div className="flex gap-4 items-center mb-4">
