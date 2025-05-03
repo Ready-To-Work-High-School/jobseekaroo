@@ -1,17 +1,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import ExternshipProgramLabel from './externship-program/ExternshipProgramLabel';
 import UrgencyBadge from './externship-program/UrgencyBadge';
-import ProgramLogo from './externship-program/ProgramLogo';
-import ProgramHeader from './externship-program/ProgramHeader';
-import ProgramDescription from './externship-program/ProgramDescription';
-import ProgramDetails from './externship-program/ProgramDetails';
-import ProgramFeatures from './externship-program/ProgramFeatures';
-import ApplyButton from './externship-program/ApplyButton';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 const VystarFeature = () => {
-  // Animation variants
+  // Animation variants for container
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -23,6 +18,15 @@ const VystarFeature = () => {
     }
   };
   
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+  
   return (
     <motion.div 
       className="relative my-12 mx-4 md:mx-auto max-w-5xl bg-gradient-to-r from-blue-50 via-white to-blue-50 rounded-xl overflow-hidden shadow-lg border border-blue-200"
@@ -31,142 +35,83 @@ const VystarFeature = () => {
       viewport={{ once: true }}
       variants={containerVariants}
     >
-      {/* Program label */}
+      {/* VyStar program label */}
       <div className="vystar-program-label">
-        VyStar Financial Internship
+        <span>VyStar Internship Program</span>
+        <img 
+          src="/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png" 
+          className="vystar-logo" 
+          alt="VyStar Logo"
+        />
       </div>
       
       {/* Urgency badge */}
-      <UrgencyBadge daysLeft={21} />
+      <UrgencyBadge daysLeft={45} />
       
       <div className="flex flex-col md:flex-row items-center p-6 z-10 relative">
-        {/* VyStar Logo */}
-        <ProgramLogo 
-          logoSrc="/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png" 
-          alt="VyStar Credit Union Logo" 
-          isCSX={false}
-        />
+        <div className="w-full md:w-1/3 lg:w-1/4 flex justify-center mb-6 md:mb-0">
+          <img 
+            src="/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png"
+            alt="VyStar Credit Union Logo" 
+            className="w-48 h-auto object-contain md:mr-6"
+          />
+        </div>
         
         <div className="md:w-2/3 lg:w-3/4 space-y-4">
-          {/* Program Header */}
-          <motion.div
-            variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 }
-            }}
-          >
-            <h2 className="text-xl md:text-2xl font-bold text-blue-800">
-              VyStar Credit Union Financial Services Internship
-            </h2>
-            <p className="text-sm md:text-base text-blue-600 font-medium">
-              Develop professional skills with Jacksonville's leading credit union
+          <motion.div variants={itemVariants}>
+            <h3 className="text-xl md:text-2xl font-bold text-blue-900">VyStar Credit Union Internship Program</h3>
+            <p className="text-sm text-blue-700">Financial Services Career Development</p>
+          </motion.div>
+          
+          <motion.div variants={itemVariants}>
+            <p className="text-sm md:text-base text-gray-700">
+              Gain hands-on experience in financial services at one of Florida's largest credit unions. 
+              VyStar's internship program offers rotations through multiple departments including member services, 
+              lending, and financial education.
             </p>
           </motion.div>
           
-          {/* Program Description */}
-          <motion.p 
-            className="text-gray-700"
-            variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { 
-                y: 0, 
-                opacity: 1,
-                transition: { type: "spring", stiffness: 100 }
-              }
-            }}
-          >
-            Premium opportunity for Westside High School students to gain hands-on experience in banking, 
-            financial services, and customer support. Learn from industry professionals and build valuable 
-            connections at one of Jacksonville's top financial institutions.
-          </motion.p>
-          
-          {/* Program Details */}
-          <motion.div
-            className="flex flex-wrap gap-3 md:gap-6"
-            variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { 
-                y: 0, 
-                opacity: 1,
-                transition: { type: "spring", stiffness: 100 }
-              }
-            }}
-          >
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700 mr-1">Duration:</span>
-              <span>8 Weeks (Summer)</span>
-            </div>
-            
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700 mr-1">Format:</span>
-              <span>In-person, 15-20 hrs/week</span>
-            </div>
-            
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700 mr-1">Compensation:</span>
-              <span>$15/hour stipend</span>
+          <motion.div variants={itemVariants} className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                  <span className="text-sm font-medium">Duration: 8-10 weeks (Summer 2025)</span>
+                </div>
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                  <span className="text-sm font-medium">Location: Jacksonville, FL</span>
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                  <span className="text-sm font-medium">Paid Position: $15-17/hour</span>
+                </div>
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                  <span className="text-sm font-medium">Open to: Business & Finance Students</span>
+                </div>
+              </div>
             </div>
           </motion.div>
           
-          {/* Program Features */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-3"
-            variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { 
-                y: 0, 
-                opacity: 1,
-                transition: { type: "spring", stiffness: 100 }
-              }
-            }}
-          >
-            <div className="flex items-start gap-2">
-              <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-blue-600 text-sm">✓</span>
-              </div>
-              <span className="text-sm">Customer service training</span>
-            </div>
-            
-            <div className="flex items-start gap-2">
-              <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-blue-600 text-sm">✓</span>
-              </div>
-              <span className="text-sm">Financial literacy education</span>
-            </div>
-            
-            <div className="flex items-start gap-2">
-              <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-blue-600 text-sm">✓</span>
-              </div>
-              <span className="text-sm">Banking operations exposure</span>
-            </div>
-            
-            <div className="flex items-start gap-2">
-              <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-blue-600 text-sm">✓</span>
-              </div>
-              <span className="text-sm">Professional mentorship</span>
+          <motion.div variants={itemVariants}>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 my-3">
+              <div className="bg-white border border-blue-100 rounded p-2 text-xs text-center font-medium text-blue-800">Financial Literacy</div>
+              <div className="bg-white border border-blue-100 rounded p-2 text-xs text-center font-medium text-blue-800">Customer Service</div>
+              <div className="bg-white border border-blue-100 rounded p-2 text-xs text-center font-medium text-blue-800">Banking Operations</div>
             </div>
           </motion.div>
           
-          {/* Apply Button */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { 
-                opacity: 1,
-                transition: { delay: 0.3, duration: 0.5 }
-              }
-            }}
-            className="pt-2"
-          >
-            <a 
-              href="/programs/vystar-internship"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors"
+          <motion.div variants={itemVariants} className="pt-2">
+            <Link 
+              to="/programs/vystar-internship" 
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
             >
-              Apply Now
-            </a>
-            <span className="text-xs text-gray-500 block mt-1">Application deadline: June 15, 2025</span>
+              Learn More & Apply
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
           </motion.div>
         </div>
       </div>

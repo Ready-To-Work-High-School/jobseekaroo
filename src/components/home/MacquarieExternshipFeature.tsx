@@ -35,7 +35,7 @@ const MacquarieExternshipFeature = () => {
       <ExternshipProgramLabel />
       
       {/* Urgency badge */}
-      <UrgencyBadge />
+      <UrgencyBadge daysLeft={14} />
       
       <div className="flex flex-col md:flex-row items-center p-6 z-10 relative">
         {/* Macquarie Group Logo */}
