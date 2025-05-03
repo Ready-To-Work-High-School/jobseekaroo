@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users } from "lucide-react";
+import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users, Briefcase, Search } from "lucide-react";
 import { useState } from "react";
 import CeoFeatureCard from '@/components/ceo/CeoFeatureCard';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -147,8 +147,8 @@ const CeoPortal = () => {
           </TabsContent>
         </Tabs>
 
-        <div className="my-12">
-          <Card className="shadow-md border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50 mb-8 mx-auto max-w-xl">
+        <div className="my-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="shadow-md border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50">
             <CardHeader>
               <div className="flex items-center gap-2 mb-2">
                 <LayoutList className="h-5 w-5 text-purple-600" />
@@ -164,6 +164,26 @@ const CeoPortal = () => {
                 onClick={() => navigate('/admin/employer-verification')}
               >
                 Go to Approvals
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <Briefcase className="h-5 w-5 text-amber-600" />
+                <CardTitle>Job Management</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-muted-foreground">
+                Create new job listings or use our automatic internship scraper to find opportunities in Jacksonville.
+              </p>
+              <Button
+                className="bg-gradient-to-r from-amber-600 to-orange-500 text-white"
+                onClick={() => navigate('/admin/job-management')}
+              >
+                Manage Jobs
               </Button>
             </CardContent>
           </Card>
