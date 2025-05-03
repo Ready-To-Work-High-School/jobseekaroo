@@ -16,7 +16,7 @@ export const useDiagnostics = () => {
     
     try {
       // Get basic system status
-      const systemStatus = getSystemStatus();
+      const systemStatus = await getSystemStatus();
       
       // Define missing items based on system status
       const missingItems = [];
@@ -34,7 +34,7 @@ export const useDiagnostics = () => {
       }
 
       // Run additional diagnostic checks from service
-      const additionalIssues = runSystemDiagnostics();
+      const additionalIssues = await runSystemDiagnostics();
       
       // Combine all detected issues
       const allIssues = [...missingItems, ...additionalIssues];

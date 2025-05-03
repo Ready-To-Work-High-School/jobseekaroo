@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { getSystemStatus, formatDiagnosticMessage } from '../utils/statusChecks';
+import { getSystemStatus, formatDiagnosticMessage, SystemStatus } from '../utils/statusChecks';
 import { runSystemDiagnostics } from '../services/diagnosticsService';
 
 /**
