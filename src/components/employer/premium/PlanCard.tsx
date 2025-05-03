@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
 
 interface PlanProps {
   name: string;
@@ -41,48 +42,8 @@ const PlanCard = ({
   onSubscribe,
   isLoading,
 }: PlanProps) => {
-  const premiumFeatures = [
-    {
-      icon: Infinity,
-      title: 'Unlimited Job Postings',
-      description: 'Post unlimited jobs without restrictions.'
-    },
-    {
-      icon: MessageSquare,
-      title: 'Unlimited Messaging',
-      description: 'Communicate freely with all candidates.'
-    },
-    {
-      icon: Zap,
-      title: 'AI-Powered Matching',
-      description: 'Advanced AI matches you with ideal candidates.'
-    },
-    {
-      icon: BarChart2,
-      title: 'Advanced Analytics',
-      description: 'Comprehensive insights into job performance.'
-    },
-    {
-      icon: Search,
-      title: 'Advanced Candidate Search',
-      description: 'Powerful filtering and search capabilities.'
-    },
-    {
-      icon: Star,
-      title: 'Featured Company Profile',
-      description: 'Stand out with a highlighted employer profile.'
-    },
-    {
-      icon: Workflow,
-      title: 'Custom Workflows',
-      description: 'Create personalized recruitment processes.'
-    },
-    {
-      icon: HeadphonesIcon,
-      title: 'Priority Support',
-      description: 'Dedicated support team always ready to help.'
-    }
-  ];
+  // Show a free trial badge for premium plans only
+  const showFreeTrial = planId === 'standard_monthly';
 
   return (
     <Card className={`flex flex-col ${popular ? 'border-primary shadow-lg relative overflow-hidden' : ''}`}>
@@ -97,29 +58,23 @@ const PlanCard = ({
           <span className="text-3xl font-extrabold">{price}</span>
           <span className="ml-1 text-sm text-muted-foreground">{period}</span>
         </div>
+        {showFreeTrial && (
+          <Badge variant="outline" className="mt-2 bg-green-50 text-green-700 border-green-200">
+            30-day free trial
+          </Badge>
+        )}
         <CardDescription className="mt-2">{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <h3 className="text-lg font-semibold mb-4">Premium Features:</h3>
-        <div className="space-y-3">
-          {premiumFeatures.map((feature, index) => (
-            <TooltipProvider key={index}>
-              <Tooltip>
-                <TooltipTrigger className="w-full">
-                  <div className="flex items-center hover:bg-muted/50 p-2 rounded-md transition-colors cursor-help">
-                    <feature.icon className="h-5 w-5 mr-3 text-primary" />
-                    <div className="text-left">
-                      <p className="font-medium">{feature.title}</p>
-                    </div>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-xs">
-                  {feature.description}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        <h3 className="text-lg font-semibold mb-4">Features:</h3>
+        <ul className="space-y-2">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start">
+              <Check className="h-4 w-4 mr-2 text-green-500 mt-1" />
+              <span>{feature}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </CardContent>
       <CardFooter>
         <Button 

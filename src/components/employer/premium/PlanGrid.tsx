@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PlanCard from './PlanCard';
-import { Infinity, MessageSquare, Zap, BarChart2, Search, Star, Workflow, HeadphonesIcon, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface PlanGridProps {
   plans: {

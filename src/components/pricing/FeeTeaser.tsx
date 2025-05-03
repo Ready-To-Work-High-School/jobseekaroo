@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sparkles, Check, DollarSign, Award } from 'lucide-react';
+import { Sparkles, Check, DollarSign, Award, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -88,9 +88,9 @@ const FeeTeaser = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            {/* Diagonal ribbon */}
-            <div className="absolute -right-8 top-6 bg-amber-500 text-white text-xs font-bold px-10 py-1 rotate-45">
-              FREE TRIAL
+            {/* Trial badge */}
+            <div className="absolute -right-8 top-6 bg-green-500 text-white text-xs font-bold px-10 py-1 rotate-45">
+              FREE 30-DAY TRIAL
             </div>
             
             <div className="flex justify-between items-start mb-4">
@@ -112,6 +112,11 @@ const FeeTeaser = () => {
                 </li>
               ))}
             </ul>
+            
+            <div className="flex items-center gap-2 mb-4 text-green-300 text-sm">
+              <Clock className="h-4 w-4" />
+              <span>Start with a 30-day free trial</span>
+            </div>
             
             <Button asChild className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border-0">
               <Link to="/employer/premium">Start Free Trial</Link>
