@@ -92,28 +92,39 @@ export function requestConsent(
     title,
     description,
     action: {
-      component: (
-        <div className="flex gap-2 mt-2">
-          <button 
-            onClick={() => {
-              recordConsent(dataType, true);
-              onConsent();
-            }}
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-          >
-            Allow
-          </button>
-          <button
-            onClick={() => {
-              recordConsent(dataType, false);
-              onDecline();
-            }}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
-          >
-            Decline
-          </button>
-        </div>
-      )
+      component: {
+        type: 'custom',
+        render: () => ({
+          type: 'div',
+          props: {
+            className: "flex gap-2 mt-2",
+            children: [
+              {
+                type: 'button',
+                props: {
+                  onClick: () => {
+                    recordConsent(dataType, true);
+                    onConsent();
+                  },
+                  className: "bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded",
+                  children: "Allow"
+                }
+              },
+              {
+                type: 'button',
+                props: {
+                  onClick: () => {
+                    recordConsent(dataType, false);
+                    onDecline();
+                  },
+                  className: "bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded",
+                  children: "Decline"
+                }
+              }
+            ]
+          }
+        })
+      }
     },
     duration: 10000, // 10 seconds
   });
