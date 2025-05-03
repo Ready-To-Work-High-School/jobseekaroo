@@ -106,17 +106,11 @@ const MayoSummerFeature = () => {
             ></motion.div>
             
             <div className="flex flex-col items-center bg-white rounded-lg shadow-md p-4 relative z-10">
-              {/* New Mayo Clinic Logo */}
+              {/* Mayo Clinic Logo - Using only one logo */}
               <img 
                 src="/lovable-uploads/e55c32f3-210d-417c-944a-dbdc67106fa5.png" 
                 alt="Mayo Clinic Logo" 
                 className="w-full h-auto" 
-              />
-              {/* Original logo for backup */}
-              <img 
-                src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
-                alt="Mayo Clinic Text Logo" 
-                className="w-full h-auto mt-2" 
               />
             </div>
           </div>
