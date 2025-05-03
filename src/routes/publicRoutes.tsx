@@ -71,3 +71,4 @@ export const PublicRoutes = (
     <Route path="/schedule" element={<SchedulePage />} />
   </>
 );
+
