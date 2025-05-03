@@ -85,7 +85,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Southeastern Grocers",
     industry: "Retail",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/segrocers.com",
+    logoUrl: "/lovable-uploads/37f7380b-7738-4513-b280-4ceaa5f043fb.png",
     website: "https://www.segrocers.com",
     salaryRange: "$35,000 - $75,000"
   }

@@ -78,12 +78,12 @@ export const getFallbackEmployerData = (): Employer[] => {
       logoUrl: '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png'
     },
     { 
-      company_name: 'Bank of America', 
-      industry: 'Finance', 
-      avg_min_wage: 17.25, 
-      job_count: 7,
+      company_name: 'Southeastern Grocers', 
+      industry: 'Retail', 
+      avg_min_wage: 17.00, 
+      job_count: 14,
       last_updated: new Date().toISOString(),
-      logoUrl: '/lovable-uploads/7518f1a5-62ad-490c-9c24-0bbc649ab7ff.png'
+      logoUrl: '/lovable-uploads/37f7380b-7738-4513-b280-4ceaa5f043fb.png'
     },
   ];
 };
