@@ -5,6 +5,8 @@
 
 import { toast } from '@/hooks/use-toast';
 import { SensitiveDataType } from './constants';
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
 
 /**
  * Get privacy consent status for a specific data type
@@ -70,36 +72,34 @@ export function requestConsent(
       description = `We need your permission to ${purpose}.`;
   }
   
-  // Using toast for consent UI - with proper JSX syntax handling
+  // Using toast with JSX content correctly typed
   toast({
     title,
     description,
-    action: {
-      label: "Actions",
-      altText: "Privacy consent actions",
-      content: (
-        <div className="flex gap-2 mt-2">
-          <button 
-            onClick={() => {
-              recordConsent(dataType, true);
-              onConsent();
-            }}
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-          >
-            Allow
-          </button>
-          <button 
-            onClick={() => {
-              recordConsent(dataType, false);
-              onDecline();
-            }}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
-          >
-            Decline
-          </button>
-        </div>
-      )
-    },
+    action: (
+      <div className="flex gap-2 mt-2">
+        <Button 
+          onClick={() => {
+            recordConsent(dataType, true);
+            onConsent();
+          }}
+          variant="default"
+          size="sm"
+        >
+          Allow
+        </Button>
+        <Button 
+          onClick={() => {
+            recordConsent(dataType, false);
+            onDecline();
+          }}
+          variant="secondary"
+          size="sm"
+        >
+          Decline
+        </Button>
+      </div>
+    ),
     duration: 10000, // 10 seconds
   });
 }
