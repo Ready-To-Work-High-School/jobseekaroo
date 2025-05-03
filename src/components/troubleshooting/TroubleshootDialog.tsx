@@ -15,7 +15,7 @@ import { useDiagnostics } from './hooks/useDiagnostics';
 import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 import { IssueItem } from './IssueItem';
 
-// Let's create a troubleshooting data file to avoid hardcoding
+// Import from consolidated data file
 import { commonIssues } from './data/troubleshootingData';
 
 // Define minimal types needed for the component

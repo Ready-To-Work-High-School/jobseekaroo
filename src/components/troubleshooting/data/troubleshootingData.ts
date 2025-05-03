@@ -7,7 +7,10 @@ import {
   FileWarning, 
   Bug, 
   Cpu,
-  AlertCircle
+  AlertCircle,
+  Lock,
+  Mail,
+  User
 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 
@@ -17,6 +20,7 @@ export interface CommonIssue {
   description: string;
   icon: LucideIcon;
   solutions: string[];
+  solution?: string; // For backward compatibility
 }
 
 export const commonIssues: CommonIssue[] = [
@@ -114,6 +118,54 @@ export const commonIssues: CommonIssue[] = [
       "Try connecting to a different network",
       "Restart your router or modem",
       "Contact your internet service provider if issues persist"
+    ]
+  },
+  {
+    id: "login",
+    title: "Login Issues",
+    description: "Having trouble signing in to your account?",
+    icon: Lock,
+    solutions: [
+      "Verify your email address and password are correct",
+      "Try resetting your password through the 'Forgot Password' link",
+      "Clear your browser cache and cookies",
+      "Try using an incognito/private browser window"
+    ]
+  },
+  {
+    id: "jobs",
+    title: "Jobs Not Loading",
+    description: "Issues with viewing or applying to jobs?",
+    icon: Bug,
+    solutions: [
+      "Refresh the page to reload job listings",
+      "Check your internet connection",
+      "Clear your browser cache and cookies",
+      "Try using a different browser or device"
+    ]
+  },
+  {
+    id: "application",
+    title: "Application Submission Errors",
+    description: "Problems submitting your job application?",
+    icon: Mail,
+    solutions: [
+      "Ensure all required fields are completed correctly",
+      "Check for any error messages on the form",
+      "Try submitting your application from a different device",
+      "Contact support if the problem continues"
+    ]
+  },
+  {
+    id: "profile",
+    title: "Profile Updates Not Saving",
+    description: "Changes to your profile not being saved?",
+    icon: User,
+    solutions: [
+      "Make sure to click the Save button after making changes",
+      "Try uploading smaller image files (under 2MB) for profile pictures",
+      "Check your internet connection",
+      "Clear your browser cache and try again"
     ]
   }
 ];
