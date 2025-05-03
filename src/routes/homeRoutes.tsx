@@ -10,6 +10,7 @@ import About from '@/pages/Index'; // Using Index as a fallback for AboutPage
 import Resources from '@/pages/Resources';
 import MacquarieExternship from '@/pages/MacquarieExternship';
 import HealthcarePathways from '@/pages/HealthcarePathways';
+import VystarInternship from '@/pages/VystarInternship';
 
 // Use lazy imports for larger components
 const Jobs = lazy(() => import('@/pages/Jobs'));
@@ -36,6 +37,7 @@ const HomeRoutes = (
     <Route path="/safety-compliance" element={<SafetyCompliancePage />} />
     <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
     <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
+    <Route path="/programs/vystar-internship" element={<VystarInternship />} />
   </>
 );
 

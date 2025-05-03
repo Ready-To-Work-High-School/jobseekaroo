@@ -37,7 +37,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "CSX Corporation",
     industry: "Transportation",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/csx.com",
+    logoUrl: "/lovable-uploads/2f5babe6-5aa1-4d84-936a-f459a5c19b6b.png",
     website: "https://www.csx.com",
     salaryRange: "$60,000 - $100,000"
   },
@@ -45,7 +45,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Vystar Credit Union",
     industry: "Financial Services",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/vystarcu.org",
+    logoUrl: "/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png",
     website: "https://www.vystarcu.org",
     salaryRange: "$40,000 - $80,000"
   },
@@ -53,7 +53,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Web.com",
     industry: "Technology",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/web.com",
+    logoUrl: "/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png",
     website: "https://www.web.com",
     salaryRange: "$65,000 - $105,000"
   },
@@ -61,7 +61,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Fidelity National Financial",
     industry: "Financial Services",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/fnf.com",
+    logoUrl: "/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png",
     website: "https://www.fnf.com",
     salaryRange: "$55,000 - $95,000"
   },
@@ -77,7 +77,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Johnson & Johnson Vision",
     industry: "Healthcare",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/jnjvisioncare.com",
+    logoUrl: "/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png",
     website: "https://www.jjvision.com",
     salaryRange: "$50,000 - $90,000"
   },

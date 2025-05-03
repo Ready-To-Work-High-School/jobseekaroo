@@ -26,7 +26,8 @@ const INDUSTRY_MAP: Record<string, string> = {
   'Baptist Health': 'Healthcare',
   'American Express': 'Finance',
   'UnitedHealthcare': 'Healthcare',
-  'Web.com': 'Technology'
+  'Web.com': 'Technology',
+  'Vystar Credit Union': 'Financial Services'
 };
 
 const LOGO_MAP: Record<string, string> = {
@@ -35,7 +36,7 @@ const LOGO_MAP: Record<string, string> = {
   'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
   'Bank of America': '/lovable-uploads/54acecfe-3f54-4241-8982-478d64bba06e.png',
-  'CSX Transportation': '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png',
+  'CSX Transportation': '/lovable-uploads/2f5babe6-5aa1-4d84-936a-f459a5c19b6b.png',
   'Florida Blue': '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png',
   'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',
   'Fidelity National Financial': '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png',
@@ -43,7 +44,8 @@ const LOGO_MAP: Record<string, string> = {
   'Baptist Health': '/lovable-uploads/fa5d62af-3190-44aa-b88c-55ebbc363b88.png',
   'American Express': '/lovable-uploads/b9f50947-0157-4677-9394-07c6b589cf6e.png',
   'UnitedHealthcare': '/lovable-uploads/84397b4a-da78-47d9-9ed4-daa193847fd7.png',
-  'Web.com': '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png'
+  'Web.com': '/lovable-uploads/611a1a85-1d8c-4650-a5f2-aafb8e3b2cb1.png',
+  'Vystar Credit Union': '/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png'
 };
 
 export const useEmployerData = () => {
@@ -119,7 +121,7 @@ export const useEmployerData = () => {
             avg_min_wage: 20.50, 
             job_count: 15,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png'
+            logoUrl: '/lovable-uploads/2f5babe6-5aa1-4d84-936a-f459a5c19b6b.png'
           },
           { 
             company_name: 'Florida Blue', 
@@ -146,12 +148,12 @@ export const useEmployerData = () => {
             logoUrl: '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png'
           },
           { 
-            company_name: 'Fidelity National Financial', 
+            company_name: 'Vystar Credit Union', 
             industry: 'Financial Services', 
-            avg_min_wage: 18.00, 
-            job_count: 9,
+            avg_min_wage: 19.25, 
+            job_count: 8,
             last_updated: new Date().toISOString(),
-            logoUrl: '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png'
+            logoUrl: '/lovable-uploads/d84f89c0-eba4-4ea0-a757-0f58a4e079ff.png'
           },
           { 
             company_name: 'Web.com', 

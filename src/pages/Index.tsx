@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import MacquarieExternshipFeature from '@/components/home/MacquarieExternshipFeature';
 import BaptistHealthFeature from '@/components/home/BaptistHealthFeature';
+import VystarFeature from '@/components/home/VystarFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import InfoBanner from '@/components/home/InfoBanner';
 import CredentialsDropdown from '@/components/home/CredentialsDropdown';
@@ -61,6 +62,11 @@ const Index = () => {
         {/* Macquarie Externship Feature */}
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
           <MacquarieExternshipFeature />
+        </motion.div>
+        
+        {/* VyStar Feature */}
+        <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
+          <VystarFeature />
         </motion.div>
         
         <motion.div variants={itemVariants}>
