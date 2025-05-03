@@ -1,4 +1,3 @@
-
 import { GuideSection } from './types';
 
 export const guideSections: GuideSection[] = [
@@ -8,15 +7,27 @@ export const guideSections: GuideSection[] = [
     content: [
       {
         question: "How do I create an account?",
-        answer: "To create an account, click on the 'Sign Up' button on the top right corner of the homepage. Fill in your details including name, email, and create a password. Verify your email address by clicking on the link sent to your inbox, and you're all set!"
+        answer: "To create an account, click on the 'Sign Up' button on the top right corner of the homepage. Fill in your details including name, email, and create a password. Verify your email address by clicking on the link sent to your inbox, and you're all set! Visit our <a href='/sign-up' class='text-blue-600 hover:underline'>Sign Up page</a> to get started."
       },
       {
         question: "What information do I need to complete my profile?",
-        answer: "For a complete profile, include your basic information (name, contact details), educational background, skills, work experience, and career preferences. Uploading a professional photo and adding your credentials will make your profile more attractive to employers."
+        answer: "For a complete profile, include your basic information (name, contact details), educational background, skills, work experience, and career preferences. Uploading a professional photo and adding your credentials will make your profile more attractive to employers. Visit your <a href='/profile' class='text-blue-600 hover:underline'>Profile page</a> to add or update your information."
       },
       {
         question: "How do I reset my password?",
-        answer: "Click on the 'Sign In' page and then select 'Forgot Password'. Enter your registered email address, and we'll send you a link to reset your password. Follow the instructions in the email to create a new password."
+        answer: "Click on the 'Sign In' page and then select 'Forgot Password'. Enter your registered email address, and we'll send you a link to reset your password. Follow the instructions in the email to create a new password. Access the <a href='/reset-password' class='text-blue-600 hover:underline'>Password Reset page</a> directly if needed."
+      },
+      {
+        question: "How do I navigate the platform?",
+        answer: "Our platform has a user-friendly navigation system. The main menu at the top of the page provides access to key sections including Jobs, Resources, Dashboard, and Profile. On mobile devices, tap the menu icon to reveal navigation options. Your personalized dashboard at <a href='/student-dashboard' class='text-blue-600 hover:underline'>Dashboard</a> shows recommended jobs, application status, and upcoming interviews."
+      },
+      {
+        question: "How do I set up notifications?",
+        answer: "To customize your notification preferences, go to your <a href='/profile#settings' class='text-blue-600 hover:underline'>Profile Settings</a> and select the 'Notifications' tab. You can choose to receive alerts for new job matches, application status updates, messages from employers, and platform announcements via email, mobile push notifications, or directly on the platform."
+      },
+      {
+        question: "What should I do after creating my account?",
+        answer: "After creating your account, we recommend these steps for the best experience:<ul class='list-disc pl-5 space-y-1 mt-2'><li>Complete your <a href='/profile' class='text-blue-600 hover:underline'>profile</a> with education, skills, and work preferences</li><li>Upload or create a <a href='/resume-assistant' class='text-blue-600 hover:underline'>resume</a> using our Resume Assistant tool</li><li>Take the <a href='/career-quiz' class='text-blue-600 hover:underline'>Career Quiz</a> to discover suitable career paths</li><li>Browse <a href='/job-search' class='text-blue-600 hover:underline'>job listings</a> tailored to high school students</li><li>Explore <a href='/credentials' class='text-blue-600 hover:underline'>credentials</a> you can earn to enhance your profile</li></ul>"
       }
     ]
   },
