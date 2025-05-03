@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Scanner, Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 
 interface DiagnosticsButtonProps {
   onRun: () => void;
@@ -25,7 +25,7 @@ export const DiagnosticsButton = React.forwardRef<HTMLButtonElement, Diagnostics
         {isChecking ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <Scanner className="h-4 w-4" />
+          <Search className="h-4 w-4" />
         )}
         Run System Diagnostics
       </Button>
