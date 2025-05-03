@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.0772863e2eac4b3cb10aaec607ec1185',
+  appId: 'com.jobsforhs.app',
   appName: 'JobsForHS',
   webDir: 'dist',
   server: {
