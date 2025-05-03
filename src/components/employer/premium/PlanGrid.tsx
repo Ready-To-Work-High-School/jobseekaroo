@@ -31,7 +31,7 @@ const PlanGrid = ({ plans, isEmployer, handleSubscribe, isLoading }: PlanGridPro
   };
   
   return (
-    <div className={`grid ${isEmployer ? 'md:grid-cols-3' : 'md:grid-cols-2 md:max-w-4xl mx-auto'} gap-6`}>
+    <div className={`grid ${isEmployer ? 'md:grid-cols-2 max-w-4xl mx-auto' : 'md:grid-cols-2 md:max-w-4xl mx-auto'} gap-6`}>
       {plans.map((plan) => (
         <PlanCard 
           key={plan.planId}

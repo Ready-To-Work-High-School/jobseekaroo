@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -13,18 +14,18 @@ const FeeTeaser = () => {
 
   const features = {
     free: [
-      "Basic job posting",
-      "Standard visibility",
-      "Job title & description",
-      "Easy application button",
-      "Access to student candidates"
+      "Up to 3 job postings",
+      "Basic company profile",
+      "Simple candidate search",
+      "Connect with candidates",
+      "Interview calendar"
     ],
     premium: [
+      "Unlimited job postings",
       "Featured placement in search",
-      "Highlighted in job listings",
-      "Verified employer badge",
-      "30-day free trial available",
-      "Analytics dashboard"
+      "Enhanced candidate search",
+      "Analytics dashboard",
+      "Verified employer badge"
     ]
   };
 
@@ -100,7 +101,7 @@ const FeeTeaser = () => {
                 </h3>
                 <p className="text-slate-300">Enhanced visibility</p>
               </div>
-              <div className="text-2xl font-bold">$59</div>
+              <div className="text-2xl font-bold">$30</div>
             </div>
             
             <ul className="space-y-3 my-6">

@@ -22,15 +22,6 @@ const PricingPlans = () => {
       return;
     }
     
-    // For enterprise plan, show contact message
-    if (planId === 'enterprise_analytics') {
-      toast({
-        title: "Contact Sales",
-        description: "Our sales team will contact you shortly to discuss enterprise options.",
-      });
-      return;
-    }
-    
     try {
       // For demo purposes, we'll use the first job in the jobs table
       // In a real implementation, you would select the specific job to upgrade
@@ -51,7 +42,7 @@ const PricingPlans = () => {
       
       await purchasePremiumPost({
         jobId: jobs.id,
-        includeAnalytics: planId === 'premium_analytics_post'
+        includeAnalytics: true
       });
       
     } catch (error: any) {

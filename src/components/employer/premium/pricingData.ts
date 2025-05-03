@@ -1,4 +1,3 @@
-
 export const employerPlans = [
   {
     name: 'Basic',
@@ -7,51 +6,35 @@ export const employerPlans = [
     description: 'Get started with essential job posting features',
     features: [
       'Up to 3 active job postings',
-      'Basic candidate search',
-      'Standard visibility',
-      'Basic company profile'
+      'Basic company profile',
+      'Simple candidate search',
+      'Connect with candidates',
+      'Interview calendar'
     ],
     buttonText: 'Get Started',
     popular: false,
     planId: 'free'
   },
   {
-    name: 'Standard',
-    price: '$59',
+    name: 'Premium',
+    price: '$30',
     period: 'per month',
-    description: 'Perfect for growing businesses with moderate hiring needs',
+    description: 'Complete solution for growing businesses with moderate hiring needs',
     features: [
-      '10 premium job posts per month',
+      'Unlimited premium job posts',
       'Enhanced candidate search',
       'Priority placement in search results',
       'Custom branded profile',
-      'Basic analytics dashboard',
-      'Candidate messaging'
+      'Analytics dashboard',
+      'Unlimited candidate messaging',
+      'Featured employer badge',
+      'AI-powered candidate matching',
+      'Custom recruitment workflows',
+      'Priority support'
     ],
     buttonText: 'Subscribe',
     popular: true,
     planId: 'standard_monthly'
-  },
-  {
-    name: 'Pro',
-    price: '$149',
-    period: 'per month',
-    description: 'Complete solution for high-volume hiring',
-    features: [
-      'Unlimited premium job postings',
-      'Featured placement in search results',
-      'Advanced candidate search & filtering',
-      'Full analytics dashboard',
-      'Unlimited candidate messaging',
-      'Featured employer badge',
-      'Priority support',
-      'Bulk posting capabilities',
-      'AI-powered candidate matching',
-      'Custom recruitment workflows'
-    ],
-    buttonText: 'Subscribe Now',
-    popular: false,
-    planId: 'enterprise_analytics'
   }
 ];
 

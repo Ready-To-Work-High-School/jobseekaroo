@@ -44,25 +44,24 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
       case 'employer':
         if (hasPremium) {
           return [
-            { name: 'Unlimited premium job postings', active: true, premium: true },
+            { name: 'Unlimited premium job posts', active: true, premium: true },
             { name: 'Featured placement in search results', active: true, premium: true },
-            { name: 'Custom recruitment pipeline stages', active: true, premium: true },
-            { name: 'Advanced candidate tracking board', active: true, premium: true },
-            { name: 'Full analytics dashboard', active: true, premium: true },
+            { name: 'Enhanced candidate search', active: true, premium: true },
+            { name: 'Analytics dashboard', active: true, premium: true },
             { name: 'Unlimited candidate messaging', active: true, premium: true },
-            { name: 'AI-powered candidate matching', active: true, premium: true },
             { name: 'Featured employer badge', active: true, premium: true },
-            { name: 'Custom recruitment workflows', active: true, premium: true }
+            { name: 'AI-powered candidate matching', active: true, premium: true },
+            { name: 'Custom recruitment workflows', active: true, premium: true },
+            { name: 'Priority support', active: true, premium: true }
           ];
         } else {
           return [
             { name: 'Up to 3 active job postings', active: true },
-            { name: 'Basic candidate search', active: true },
-            { name: 'Standard visibility', active: true },
-            { name: '3-stage recruitment pipeline', active: true },
             { name: 'Basic company profile', active: true },
-            { name: 'Custom pipeline stages', active: false, locked: true },
-            { name: 'Advanced candidate tracking', active: false, locked: true },
+            { name: 'Simple candidate search', active: true },
+            { name: 'Connect with candidates', active: true },
+            { name: 'Interview calendar', active: true },
+            { name: 'Enhanced candidate search', active: false, locked: true },
             { name: 'Analytics dashboard', active: false, locked: true }
           ];
         }
