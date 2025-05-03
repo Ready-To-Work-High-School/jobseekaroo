@@ -92,7 +92,7 @@ const MayoSummerFeature = () => {
       
       <div className="flex flex-col md:flex-row items-center p-6 z-10 relative">
         <motion.div
-          className="md:w-1/3 lg:w-1/4 mb-6 md:mb-0 md:mr-6" /* Made logo smaller */
+          className="md:w-1/3 lg:w-1/4 mb-6 md:mb-0 md:mr-6"
           variants={itemVariants}
         >
           <div className="relative">
@@ -105,11 +105,20 @@ const MayoSummerFeature = () => {
               transition={{ duration: 3, repeat: Infinity }}
             ></motion.div>
             
-            <img 
-              src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
-              alt="Mayo Clinic Logo" 
-              className="rounded-lg shadow-md w-full h-auto relative z-10"
-            />
+            <div className="flex flex-col items-center bg-white rounded-lg shadow-md p-4 relative z-10">
+              {/* New Mayo Clinic Logo */}
+              <img 
+                src="/lovable-uploads/e55c32f3-210d-417c-944a-dbdc67106fa5.png" 
+                alt="Mayo Clinic Logo" 
+                className="w-full h-auto" 
+              />
+              {/* Original logo for backup */}
+              <img 
+                src="/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png" 
+                alt="Mayo Clinic Text Logo" 
+                className="w-full h-auto mt-2" 
+              />
+            </div>
           </div>
         </motion.div>
         

@@ -52,7 +52,7 @@ const Index = () => {
           <MayoSummerFeature />
         </motion.div>
         
-        {/* Add the new Macquarie Externship Feature component */}
+        {/* Macquarie Externship Feature */}
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
           <MacquarieExternshipFeature />
         </motion.div>
