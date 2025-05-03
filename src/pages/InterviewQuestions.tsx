@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Search, MessageSquare, Star, BookOpen, Check } from 'lucide-react';
+import { ArrowLeft, Search, MessageSquare, Star, BookOpen, Check, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import StepByStepGuide from '@/components/resources/guide/StepByStepGuide';
 
