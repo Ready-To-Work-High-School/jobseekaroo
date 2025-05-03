@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import {
   Dialog,
@@ -24,10 +24,18 @@ interface TroubleshootProps {
 
 const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
-  const { isChecking, handleDiagnostics } = useDiagnostics();
+  const [open, setOpen] = useState(false);
+  const { isChecking, handleDiagnostics, lastResults } = useDiagnostics();
+  
+  // Run diagnostics when dialog opens if there's no trigger
+  useEffect(() => {
+    if (open && !trigger) {
+      handleDiagnostics();
+    }
+  }, [open, trigger]);
   
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
           <DiagnosticsButton
@@ -48,10 +56,31 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Upgraded to use our DiagnosticPanel */}
+          {/* Run diagnostics button at the top */}
+          <div className="flex justify-end">
+            <DiagnosticsButton 
+              onRun={handleDiagnostics}
+              isChecking={isChecking}
+              variant="default"
+            />
+          </div>
+          
+          {/* Diagnostic panel shows results */}
           <DiagnosticPanel showDetails={false} />
 
           <Separator />
+
+          {/* If diagnostic found issues, show them first */}
+          {lastResults && lastResults.length > 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-md p-3 mb-4">
+              <h3 className="font-medium text-amber-800 mb-2">Diagnostic Results</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-amber-700">
+                {lastResults.map((result, idx) => (
+                  <li key={idx}>{result}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="space-y-4">
             {commonIssues.map((issue) => (

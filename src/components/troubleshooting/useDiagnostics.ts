@@ -9,6 +9,7 @@ export const useDiagnostics = () => {
   const { toast } = useToast();
   const isOnline = useNetworkStatus();
   const [isChecking, setIsChecking] = useState(false);
+  const [lastResults, setLastResults] = useState<string[]>([]);
 
   const handleDiagnostics = async () => {
     setIsChecking(true);
@@ -38,6 +39,9 @@ export const useDiagnostics = () => {
       // Combine all detected issues
       const allIssues = [...missingItems, ...additionalIssues];
       
+      // Save results for future reference
+      setLastResults(allIssues);
+      
       // Show diagnostic results in toast
       toast({
         title: "Diagnostic Results",
@@ -48,6 +52,10 @@ export const useDiagnostics = () => {
       // Log results for debugging
       console.log("Diagnostic completed:", { systemStatus, issues: allIssues });
       
+      return {
+        status: systemStatus,
+        issues: allIssues
+      };
     } catch (error) {
       console.error("Diagnostic error:", error);
       toast({
@@ -55,6 +63,10 @@ export const useDiagnostics = () => {
         title: "Diagnostic Failed",
         description: "Could not complete the system check. Please try again later.",
       });
+      return {
+        error: true,
+        message: error instanceof Error ? error.message : "Unknown error"
+      };
     } finally {
       // Always stop checking, even if there was an error
       setTimeout(() => setIsChecking(false), 1000);
@@ -64,6 +76,7 @@ export const useDiagnostics = () => {
   return {
     isChecking,
     handleDiagnostics,
-    isOnline
+    isOnline,
+    lastResults
   };
 };
