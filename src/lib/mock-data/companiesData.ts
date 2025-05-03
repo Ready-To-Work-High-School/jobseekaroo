@@ -13,7 +13,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Mayo Clinic",
     industry: "Healthcare",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/mayoclinic.org",
+    logoUrl: "/lovable-uploads/e55c32f3-210d-417c-944a-dbdc67106fa5.png",
     website: "https://www.mayoclinic.org",
     salaryRange: "$50,000 - $90,000"
   },
@@ -21,7 +21,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Baptist Health",
     industry: "Healthcare",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/baptistjax.com",
+    logoUrl: "/lovable-uploads/fa5d62af-3190-44aa-b88c-55ebbc363b88.png",
     website: "https://www.baptistjax.com",
     salaryRange: "$45,000 - $85,000"
   },

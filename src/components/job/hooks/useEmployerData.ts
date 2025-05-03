@@ -30,7 +30,7 @@ const INDUSTRY_MAP: Record<string, string> = {
 };
 
 const LOGO_MAP: Record<string, string> = {
-  'Mayo Clinic': '/lovable-uploads/da43ec61-9d66-4927-bf47-e3e785ac69a3.png',
+  'Mayo Clinic': '/lovable-uploads/e55c32f3-210d-417c-944a-dbdc67106fa5.png',
   'Advent Health': '/lovable-uploads/63532fbf-0320-4113-ae09-e054b4f4b3bf.png',
   'Amazon': '/lovable-uploads/b6ae4161-0869-4314-a485-c8275b17883e.png',
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
