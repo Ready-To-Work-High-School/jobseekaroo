@@ -85,9 +85,26 @@ export default function AdminJobForm() {
         return;
       }
       
+      // Create a properly typed object for database insertion
+      // Make sure all required fields are included and properly typed
       const jobData = {
-        ...values,
+        title: values.title,
+        company_name: values.company_name,
+        location_city: values.location_city,
+        location_state: values.location_state,
+        location_zip: values.location_zip,
+        job_type: values.job_type,
+        pay_rate_min: values.pay_rate_min,
+        pay_rate_max: values.pay_rate_max,
+        pay_rate_period: values.pay_rate_period,
+        description: values.description,
         requirements: requirementsArray,
+        experience_level: values.experience_level,
+        hours_per_week: values.hours_per_week,
+        is_featured: values.is_featured,
+        is_premium: values.is_premium,
+        is_remote: values.is_remote,
+        is_flexible: values.is_flexible,
         prohibited_types: [] as ProhibitedJobType[],
       };
       
