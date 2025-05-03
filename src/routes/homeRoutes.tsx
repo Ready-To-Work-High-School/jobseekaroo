@@ -1,3 +1,4 @@
+
 import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 import PlatformGuide from '@/pages/PlatformGuide';
@@ -7,6 +8,7 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import Home from '@/pages/Home';
 import About from '@/pages/Index'; // Using Index as a fallback for AboutPage
 import Resources from '@/pages/Resources';
+import MacquarieExternship from '@/pages/MacquarieExternship';
 
 // Use lazy imports for larger components
 const Jobs = lazy(() => import('@/pages/Jobs'));
@@ -31,6 +33,7 @@ const HomeRoutes = (
     <Route path="/employer-verification" element={<EmployerVerification />} />
     <Route path="/resources-catalog" element={<ResourcesCatalog />} />
     <Route path="/safety-compliance" element={<SafetyCompliancePage />} />
+    <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
   </>
 );
 

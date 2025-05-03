@@ -5,6 +5,7 @@ import { useFadeIn } from '@/utils/animations';
 import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
+import MacquarieExternshipFeature from '@/components/home/MacquarieExternshipFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import InfoBanner from '@/components/home/InfoBanner';
 import CredentialsDropdown from '@/components/home/CredentialsDropdown';
@@ -49,6 +50,11 @@ const Index = () => {
         
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
           <MayoSummerFeature />
+        </motion.div>
+        
+        {/* Add the new Macquarie Externship Feature component */}
+        <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
+          <MacquarieExternshipFeature />
         </motion.div>
         
         <motion.div variants={itemVariants}>
