@@ -8,14 +8,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, AlertTriangle, Check, RefreshCw } from 'lucide-react';
 
+// Define the ScrapedJob type to match our database schema
 type ScrapedJob = {
   id: string;
   title: string;
   company_name: string;
-  description: string;
-  source_url: string;
-  created_at: string;
+  description: string | null;
+  source_url: string | null;
+  job_type: string;
   is_verified: boolean;
+  created_at: string;
+  location_city: string;
+  location_state: string;
 };
 
 export default function InternshipScraper() {
@@ -43,7 +47,7 @@ export default function InternshipScraper() {
       // Fetch the newly scraped jobs
       await fetchScrapedJobs();
       setLastScraped(new Date().toISOString());
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during scraping:", error);
       toast({
         title: "Scraping failed",
@@ -65,8 +69,8 @@ export default function InternshipScraper() {
         
       if (error) throw error;
       
-      setScrapedJobs(data || []);
-    } catch (error) {
+      setScrapedJobs(data as ScrapedJob[]);
+    } catch (error: any) {
       console.error("Error fetching scraped jobs:", error);
       toast({
         title: "Error",
@@ -86,8 +90,8 @@ export default function InternshipScraper() {
           {
             title: job.title,
             company_name: job.company_name,
-            location_city: 'Jacksonville',
-            location_state: 'FL',
+            location_city: job.location_city || 'Jacksonville',
+            location_state: job.location_state || 'FL',
             location_zip: '32256', // Default zip for Jacksonville
             job_type: 'internship',
             pay_rate_min: 15, // Default values - can be updated later
@@ -119,7 +123,7 @@ export default function InternshipScraper() {
       
       // Refresh the list
       fetchScrapedJobs();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error approving job:", error);
       toast({
         title: "Error",
@@ -146,7 +150,7 @@ export default function InternshipScraper() {
       
       // Refresh the list
       fetchScrapedJobs();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting job:", error);
       toast({
         title: "Error",

@@ -94,7 +94,7 @@ export default function AdminJobForm() {
       // Insert the job into the database
       const { data, error } = await supabase
         .from('jobs')
-        .insert([jobData])
+        .insert(jobData)
         .select();
         
       if (error) throw error;
@@ -106,7 +106,7 @@ export default function AdminJobForm() {
       
       // Reset form
       form.reset();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating job:", error);
       toast({
         title: "Error",

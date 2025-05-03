@@ -1291,6 +1291,45 @@ export type Database = {
         }
         Relationships: []
       }
+      scraped_jobs: {
+        Row: {
+          company_name: string
+          created_at: string
+          description: string | null
+          id: string
+          is_verified: boolean
+          job_type: string
+          location_city: string
+          location_state: string
+          source_url: string | null
+          title: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_verified?: boolean
+          job_type?: string
+          location_city?: string
+          location_state?: string
+          source_url?: string | null
+          title: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_verified?: boolean
+          job_type?: string
+          location_city?: string
+          location_state?: string
+          source_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       simulation_credentials: {
         Row: {
           certificate_id: string

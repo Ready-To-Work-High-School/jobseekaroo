@@ -7,6 +7,18 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// ScrapedJob type to match our database schema
+type ScrapedJob = {
+  title: string;
+  company_name: string;
+  location_city: string;
+  location_state: string;
+  description: string | null;
+  source_url: string | null;
+  job_type: string;
+  is_verified: boolean;
+};
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -35,7 +47,7 @@ serve(async (req) => {
       "https://www.linkedin.com/jobs/search/?keywords=internship&location=Jacksonville%2C%20Florida"
     ];
     
-    const allJobs = [];
+    const allJobs: ScrapedJob[] = [];
     
     for (const site of sites) {
       try {
@@ -54,21 +66,15 @@ serve(async (req) => {
     
     // Store results in database
     if (allJobs.length > 0) {
-      // Insert scraped jobs into a temporary table for review
+      // Insert scraped jobs into our scraped_jobs table for review
       const { data, error } = await supabaseClient
         .from('scraped_jobs')
-        .insert(allJobs.map(job => ({
-          title: job.title,
-          company_name: job.company,
-          location_city: 'Jacksonville',
-          location_state: 'FL',
-          description: job.description,
-          source_url: job.url,
-          job_type: 'internship',
-          is_verified: false // Requires admin verification before publishing
-        })));
+        .insert(allJobs);
         
-      if (error) throw error;
+      if (error) {
+        console.error("Error inserting scraped jobs:", error);
+        throw error;
+      }
     }
 
     return new Response(
@@ -105,8 +111,8 @@ serve(async (req) => {
 });
 
 // Helper function to extract jobs from HTML - basic implementation
-function extractJobsFromHTML(html: string, sourceUrl: string): any[] {
-  const jobs = [];
+function extractJobsFromHTML(html: string, sourceUrl: string): ScrapedJob[] {
+  const jobs: ScrapedJob[] = [];
   
   // Different parsing logic based on source
   if (sourceUrl.includes("indeed.com")) {
@@ -114,7 +120,7 @@ function extractJobsFromHTML(html: string, sourceUrl: string): any[] {
     // In a real app, use a proper HTML parser like cheerio/DOMParser
     const jobCards = html.split('jobCard_mainContent');
     
-    for (let i = 1; i < jobCards.length; i++) {
+    for (let i = 1; i < Math.min(jobCards.length, 10); i++) {
       const card = jobCards[i];
       
       try {
@@ -125,9 +131,13 @@ function extractJobsFromHTML(html: string, sourceUrl: string): any[] {
         if (titleMatch && companyMatch) {
           jobs.push({
             title: titleMatch[1].replace(/<[^>]*>/g, '').trim(),
-            company: companyMatch[1].replace(/<[^>]*>/g, '').trim(),
+            company_name: companyMatch[1].replace(/<[^>]*>/g, '').trim(),
             description: "Internship opportunity in Jacksonville, FL", // Placeholder
-            url: `https://www.indeed.com/viewjob?jk=${card.match(/jk=([^"&]+)/)?.[1] || ''}`
+            location_city: "Jacksonville",
+            location_state: "FL",
+            job_type: "internship",
+            source_url: `https://www.indeed.com/viewjob?jk=${card.match(/jk=([^"&]+)/)?.[1] || ''}`,
+            is_verified: false
           });
         }
       } catch (err) {
@@ -139,7 +149,8 @@ function extractJobsFromHTML(html: string, sourceUrl: string): any[] {
     // Simplified for demonstration
     const listings = html.match(/JobCard_jobCard[^>]*>(.*?)<\/li>/gs) || [];
     
-    listings.forEach(listing => {
+    for (let i = 0; i < Math.min(listings.length, 10); i++) {
+      const listing = listings[i];
       try {
         const titleMatch = listing.match(/jobTitle">(.*?)<\/a>/);
         const companyMatch = listing.match(/employer">(.*?)<\/a>/);
@@ -147,17 +158,46 @@ function extractJobsFromHTML(html: string, sourceUrl: string): any[] {
         if (titleMatch && companyMatch) {
           jobs.push({
             title: titleMatch[1].replace(/<[^>]*>/g, '').trim(),
-            company: companyMatch[1].replace(/<[^>]*>/g, '').trim(),
+            company_name: companyMatch[1].replace(/<[^>]*>/g, '').trim(),
             description: "Glassdoor internship listing in Jacksonville, FL", // Placeholder
-            url: sourceUrl
+            location_city: "Jacksonville",
+            location_state: "FL",
+            job_type: "internship",
+            source_url: sourceUrl,
+            is_verified: false
           });
         }
       } catch (err) {
         console.log("Error parsing glassdoor listing:", err);
       }
-    });
+    }
+  } else if (sourceUrl.includes("linkedin.com")) {
+    // Basic LinkedIn extraction - this would need to be adjusted based on their current HTML structure
+    const listings = html.match(/<li class="jobs-search-results__list-item(.*?)<\/li>/gs) || [];
+    
+    for (let i = 0; i < Math.min(listings.length, 10); i++) {
+      const listing = listings[i];
+      try {
+        const titleMatch = listing.match(/job-card-list__title">(.*?)<\/h3>/);
+        const companyMatch = listing.match(/job-card-container__company-name">(.*?)<\/a>/);
+        
+        if (titleMatch && companyMatch) {
+          jobs.push({
+            title: titleMatch[1].replace(/<[^>]*>/g, '').trim(),
+            company_name: companyMatch[1].replace(/<[^>]*>/g, '').trim(),
+            description: "LinkedIn internship opportunity in Jacksonville", // Placeholder
+            location_city: "Jacksonville",
+            location_state: "FL",
+            job_type: "internship",
+            source_url: sourceUrl,
+            is_verified: false
+          });
+        }
+      } catch (err) {
+        console.log("Error parsing LinkedIn listing:", err);
+      }
+    }
   }
-  // Add more site-specific parsers
   
   console.log(`Extracted ${jobs.length} jobs from ${sourceUrl}`);
   return jobs;
