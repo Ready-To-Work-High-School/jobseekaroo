@@ -1,3 +1,4 @@
+
 /**
  * Functions for managing user privacy consents
  */
@@ -69,32 +70,36 @@ export function requestConsent(
       description = `We need your permission to ${purpose}.`;
   }
   
-  // Show toast with consent buttons - fixed to use the correct action structure
+  // Using toast for consent UI - with proper JSX syntax handling
   toast({
     title,
     description,
-    action: (
-      <div className="flex gap-2 mt-2">
-        <button 
-          onClick={() => {
-            recordConsent(dataType, true);
-            onConsent();
-          }}
-          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-        >
-          Allow
-        </button>
-        <button 
-          onClick={() => {
-            recordConsent(dataType, false);
-            onDecline();
-          }}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
-        >
-          Decline
-        </button>
-      </div>
-    ),
+    action: {
+      label: "Actions",
+      altText: "Privacy consent actions",
+      content: (
+        <div className="flex gap-2 mt-2">
+          <button 
+            onClick={() => {
+              recordConsent(dataType, true);
+              onConsent();
+            }}
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+          >
+            Allow
+          </button>
+          <button 
+            onClick={() => {
+              recordConsent(dataType, false);
+              onDecline();
+            }}
+            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
+          >
+            Decline
+          </button>
+        </div>
+      )
+    },
     duration: 10000, // 10 seconds
   });
 }
