@@ -9,7 +9,7 @@ interface PlanGridProps {
     price: string;
     period: string;
     description: string;
-    features: string[]; // We'll convert this to the required format
+    features: string[]; // This is already an array of strings in pricingData.ts
     buttonText: string;
     popular: boolean;
     planId: string;
@@ -20,16 +20,6 @@ interface PlanGridProps {
 }
 
 const PlanGrid = ({ plans, isEmployer, handleSubscribe, isLoading }: PlanGridProps) => {
-  // Function to convert string features to the required object format
-  const convertFeatures = (stringFeatures: string[]) => {
-    // Map string features to objects with default icon
-    return stringFeatures.map(feature => ({
-      icon: Check,
-      title: feature,
-      description: feature // Using the same string as description for now
-    }));
-  };
-  
   return (
     <div className={`grid ${isEmployer ? 'md:grid-cols-2 max-w-4xl mx-auto' : 'md:grid-cols-2 md:max-w-4xl mx-auto'} gap-6`}>
       {plans.map((plan) => (
@@ -39,7 +29,7 @@ const PlanGrid = ({ plans, isEmployer, handleSubscribe, isLoading }: PlanGridPro
           price={plan.price}
           period={plan.period}
           description={plan.description}
-          features={convertFeatures(plan.features)}
+          features={plan.features} // No conversion needed anymore
           buttonText={plan.buttonText}
           popular={plan.popular}
           planId={plan.planId}

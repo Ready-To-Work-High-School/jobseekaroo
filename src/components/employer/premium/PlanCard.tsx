@@ -13,16 +13,18 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 
+interface Feature {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}
+
 interface PlanProps {
   name: string;
   price: string;
   period: string;
   description: string;
-  features: {
-    icon: React.ElementType;
-    title: string;
-    description: string;
-  }[];
+  features: string[]; // Changed from complex objects to simple strings for now
   buttonText: string;
   popular: boolean;
   planId: string;
