@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +15,7 @@ import {
   DialogFooter,
   DialogClose
 } from '@/components/ui/dialog';
+import { SensitiveDataType, requestConsent } from '@/lib/privacy-compliance';
 
 interface LocationSelectorProps {
   value: string;
