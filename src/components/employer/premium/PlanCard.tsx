@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Infinity, MessageSquare, Zap, BarChart2, Search, Star, Workflow, HeadphonesIcon } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,21 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-
-interface Feature {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-}
 
 interface PlanProps {
   name: string;
   price: string;
   period: string;
   description: string;
-  features: string[]; // Changed from complex objects to simple strings for now
+  features: string[];
   buttonText: string;
   popular: boolean;
   planId: string;

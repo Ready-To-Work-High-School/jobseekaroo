@@ -70,7 +70,7 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Upgraded to use our new DiagnosticPanel */}
+          {/* Upgraded to use our DiagnosticPanel */}
           <DiagnosticPanel showDetails={false} />
 
           <Separator />

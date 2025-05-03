@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PlanCard from './PlanCard';
-import { Check } from 'lucide-react';
 
 interface PlanGridProps {
   plans: {
@@ -9,7 +8,7 @@ interface PlanGridProps {
     price: string;
     period: string;
     description: string;
-    features: string[]; // This is already an array of strings in pricingData.ts
+    features: string[];
     buttonText: string;
     popular: boolean;
     planId: string;
@@ -25,14 +24,7 @@ const PlanGrid = ({ plans, isEmployer, handleSubscribe, isLoading }: PlanGridPro
       {plans.map((plan) => (
         <PlanCard 
           key={plan.planId}
-          name={plan.name}
-          price={plan.price}
-          period={plan.period}
-          description={plan.description}
-          features={plan.features} // No conversion needed anymore
-          buttonText={plan.buttonText}
-          popular={plan.popular}
-          planId={plan.planId}
+          {...plan}
           onSubscribe={handleSubscribe}
           isLoading={isLoading}
         />
