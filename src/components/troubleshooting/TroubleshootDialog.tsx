@@ -10,11 +10,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { commonIssues } from './troubleshootingData';
 import { DiagnosticsButton } from './DiagnosticsButton';
-import { useDiagnostics } from './useDiagnostics';
+import { useDiagnostics } from './hooks/useDiagnostics';
 import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 import { IssueItem } from './IssueItem';
+
+// Let's create a troubleshooting data file to avoid hardcoding
+import { commonIssues } from './data/troubleshootingData';
 
 // Define minimal types needed for the component
 interface TroubleshootProps {
@@ -32,7 +34,7 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
     if (open && !trigger) {
       handleDiagnostics();
     }
-  }, [open, trigger]);
+  }, [open, trigger, handleDiagnostics]);
   
   return (
     <Dialog open={open} onOpenChange={setOpen}>

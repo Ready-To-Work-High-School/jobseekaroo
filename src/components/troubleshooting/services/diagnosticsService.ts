@@ -1,7 +1,12 @@
 
 import { checkMissingLinks, checkCriticalComponents } from '../utils/componentChecker';
 
+/**
+ * Run all system diagnostic checks
+ * @returns Array of detected issues
+ */
 export const runSystemDiagnostics = () => {
+  // Check for UI components and navigation issues
   const linkIssues = checkMissingLinks();
   const componentIssues = checkCriticalComponents();
   
@@ -15,12 +20,15 @@ export const runSystemDiagnostics = () => {
   return [...linkIssues, ...componentIssues, ...performanceIssues, ...compatibilityIssues];
 };
 
-// Check for potential performance issues
+/**
+ * Check for potential performance issues
+ * @returns Array of performance-related issues
+ */
 const checkPerformanceIssues = (): string[] => {
   const issues: string[] = [];
   
   try {
-    // Check if the page loaded slowly
+    // Check page load time
     if (window.performance) {
       const navData = window.performance.timing;
       if (navData) {
@@ -45,7 +53,10 @@ const checkPerformanceIssues = (): string[] => {
   return issues;
 };
 
-// Check for browser compatibility issues
+/**
+ * Check for browser compatibility issues
+ * @returns Array of compatibility-related issues
+ */
 const checkBrowserCompatibility = (): string[] => {
   const issues: string[] = [];
   

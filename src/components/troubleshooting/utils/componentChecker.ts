@@ -1,6 +1,12 @@
 
-// This file provides utility functions to check for missing components and links
+/**
+ * Utility functions to check for missing UI components and links
+ */
 
+/**
+ * Check for essential navigation links that should be present
+ * @returns Array of missing link descriptions
+ */
 export const checkMissingLinks = (): string[] => {
   try {
     // Define essential routes that should be accessible
@@ -31,6 +37,10 @@ export const checkMissingLinks = (): string[] => {
   }
 };
 
+/**
+ * Check for critical UI components that should be present
+ * @returns Array of missing component descriptions
+ */
 export const checkCriticalComponents = (): string[] => {
   try {
     // Define critical components that should be present

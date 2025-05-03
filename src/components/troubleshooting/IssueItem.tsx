@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CommonIssue } from './troubleshootingData';
+import { CommonIssue } from './data/troubleshootingData';
 
 interface IssueItemProps {
   issue: CommonIssue;
