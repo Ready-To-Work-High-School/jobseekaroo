@@ -14,6 +14,7 @@ import { commonIssues } from './troubleshootingData';
 import { DiagnosticsButton } from './DiagnosticsButton';
 import { useDiagnostics } from './useDiagnostics';
 import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
+import { IssueItem } from './IssueItem';
 
 // Define minimal types needed for the component
 interface TroubleshootProps {
@@ -21,33 +22,10 @@ interface TroubleshootProps {
   initialIssue?: string;
 }
 
-interface Issue {
-  id: string;
-  title: string;
-  description: string;
-  solution: string;
-}
-
 const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
   const { isChecking, handleDiagnostics } = useDiagnostics();
   
-  // Fallback data if commonIssues is not defined
-  const issues: Issue[] = commonIssues || [
-    {
-      id: 'login',
-      title: 'Login Issues',
-      description: 'Having trouble signing in to your account?',
-      solution: 'Check your email and password, or try resetting your password.'
-    },
-    {
-      id: 'jobs',
-      title: 'Jobs Not Loading',
-      description: 'Issues with viewing or applying to jobs?',
-      solution: 'Try refreshing the page or clearing your browser cache.'
-    }
-  ];
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -76,24 +54,13 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
           <Separator />
 
           <div className="space-y-4">
-            {issues.map((issue) => (
-              <div 
+            {commonIssues.map((issue) => (
+              <IssueItem
                 key={issue.id}
-                className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                  selectedIssue === issue.id ? 'bg-muted border-primary' : 'hover:bg-muted/50'
-                }`}
-                onClick={() => setSelectedIssue(issue.id)}
-              >
-                <h3 className="font-medium">{issue.title}</h3>
-                <p className="text-sm text-muted-foreground">{issue.description}</p>
-                
-                {selectedIssue === issue.id && (
-                  <div className="mt-4 p-3 bg-muted/70 rounded-md">
-                    <p className="text-sm font-medium">Solution:</p>
-                    <p className="text-sm">{issue.solution}</p>
-                  </div>
-                )}
-              </div>
+                issue={issue}
+                isSelected={selectedIssue === issue.id}
+                onSelect={setSelectedIssue}
+              />
             ))}
           </div>
         </div>

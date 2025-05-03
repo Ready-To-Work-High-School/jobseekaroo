@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CommonIssue } from './types';
+import { CommonIssue } from './troubleshootingData';
 
 interface IssueItemProps {
   issue: CommonIssue;
@@ -10,6 +10,8 @@ interface IssueItemProps {
 }
 
 export const IssueItem = ({ issue, isSelected, onSelect }: IssueItemProps) => {
+  const Icon = issue.icon;
+  
   return (
     <div
       className={`p-4 rounded-lg border transition-colors cursor-pointer hover:bg-accent ${
@@ -19,7 +21,7 @@ export const IssueItem = ({ issue, isSelected, onSelect }: IssueItemProps) => {
     >
       <div className="flex items-start gap-3">
         <div className="p-2 rounded-full bg-primary/10">
-          <issue.icon className="h-4 w-4 text-primary" />
+          <Icon className="h-4 w-4 text-primary" />
         </div>
         <div className="flex-1">
           <h3 className="font-medium mb-1">{issue.title}</h3>
