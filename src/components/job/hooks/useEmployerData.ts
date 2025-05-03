@@ -36,7 +36,7 @@ const LOGO_MAP: Record<string, string> = {
   'Publix': '/lovable-uploads/35d631dd-0044-4f2e-823c-4dc45510994f.png',
   'Bank of America': '/lovable-uploads/7518f1a5-62ad-490c-9c24-0bbc649ab7ff.png',
   'CSX Transportation': '/lovable-uploads/2d9d0a51-ca49-41ed-b782-afca86fd6cc0.png',
-  'Florida Blue': '/lovable-uploads/db565abc-8fe9-4ed1-833f-8ca8233a2e1c.png',
+  'Florida Blue': '/lovable-uploads/73c2c288-a239-474f-bf32-fe55902e3cbd.png', // Updated to new Florida Blue logo
   'Johnson & Johnson': '/lovable-uploads/d2b16034-eb1e-4b1f-a1e0-fb9e75e2318b.png',
   'Fidelity National Financial': '/lovable-uploads/b0e0a756-2e03-4cb7-a548-107746b37666.png',
   'Knight': '/lovable-uploads/500d4fef-f22b-43d5-84c4-3cdd2b22ddcf.png',

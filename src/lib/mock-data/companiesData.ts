@@ -29,7 +29,7 @@ export const topJacksonvilleCompanies: Company[] = [
     name: "Florida Blue",
     industry: "Insurance",
     location: "Jacksonville, FL",
-    logoUrl: "https://logo.clearbit.com/floridablue.com",
+    logoUrl: "/lovable-uploads/73c2c288-a239-474f-bf32-fe55902e3cbd.png",
     website: "https://www.floridablue.com",
     salaryRange: "$55,000 - $95,000"
   },
@@ -90,4 +90,3 @@ export const topJacksonvilleCompanies: Company[] = [
     salaryRange: "$35,000 - $75,000"
   }
 ];
-

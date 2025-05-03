@@ -202,7 +202,7 @@ const BaptistHealthFeature = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .healthcare-program-label {
           position: absolute;
           top: 0;
