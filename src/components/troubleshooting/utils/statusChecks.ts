@@ -7,13 +7,14 @@ export interface SystemStatus {
   networkStatus: boolean;
   authStatus: boolean;
   dataStatus: boolean;
+  latency?: number; // Add latency measurement
 }
 
 /**
  * Get the current system status
  * @returns SystemStatus object with network, auth, and data status
  */
-export const getSystemStatus = (): SystemStatus => {
+export const getSystemStatus = async (): Promise<SystemStatus> => {
   // Check network connectivity
   const networkStatus = navigator.onLine;
   
@@ -28,10 +29,29 @@ export const getSystemStatus = (): SystemStatus => {
   // Here we'll just assume it's available if network is available
   const dataStatus = networkStatus;
   
+  // Check network latency by pinging a reliable endpoint
+  let latency = undefined;
+  if (networkStatus) {
+    try {
+      const startTime = performance.now();
+      // Use a public endpoint that responds quickly
+      const response = await fetch('https://www.google.com/generate_204', { 
+        method: 'HEAD',
+        mode: 'no-cors',
+        cache: 'no-cache'
+      });
+      const endTime = performance.now();
+      latency = Math.round(endTime - startTime);
+    } catch (e) {
+      console.error('Error measuring latency:', e);
+    }
+  }
+  
   return {
     networkStatus,
     authStatus,
-    dataStatus
+    dataStatus,
+    latency
   };
 };
 
@@ -54,8 +74,9 @@ export const formatDiagnosticMessage = (
   const statusSummary = [
     `Network: ${status.networkStatus ? "✅ Online" : "❌ Offline"}`,
     `Auth: ${status.authStatus ? "✅ Available" : "❌ Unavailable"}`,
-    `Data: ${status.dataStatus ? "✅ Accessible" : "❌ Inaccessible"}`
-  ].join(", ");
+    `Data: ${status.dataStatus ? "✅ Accessible" : "❌ Inaccessible"}`,
+    status.latency !== undefined ? `Latency: ${status.latency}ms ${status.latency < 200 ? "✅" : status.latency < 500 ? "⚠️" : "❌"}` : ''
+  ].filter(Boolean).join(", ");
   
   // Return combined message with issue count and details
   return `${statusSummary}. Found ${issues.length} issue(s): ${issues.join("; ")}`;

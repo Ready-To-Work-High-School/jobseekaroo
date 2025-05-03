@@ -13,6 +13,7 @@ export const useDiagnostics = () => {
   const isOnline = useNetworkStatus();
   const [isChecking, setIsChecking] = useState(false);
   const [lastResults, setLastResults] = useState<string[]>([]);
+  const [latency, setLatency] = useState<number | null>(null);
 
   /**
    * Run all diagnostic checks and display results
@@ -22,7 +23,12 @@ export const useDiagnostics = () => {
     
     try {
       // Get basic system status
-      const systemStatus = getSystemStatus();
+      const systemStatus = await getSystemStatus();
+      
+      // Save latency information
+      if (systemStatus.latency !== undefined) {
+        setLatency(systemStatus.latency);
+      }
       
       // Define missing items based on system status
       const missingItems = [];
@@ -40,7 +46,7 @@ export const useDiagnostics = () => {
       }
 
       // Run additional diagnostic checks from service
-      const additionalIssues = runSystemDiagnostics();
+      const additionalIssues = await runSystemDiagnostics();
       
       // Combine all detected issues
       const allIssues = [...missingItems, ...additionalIssues];
@@ -83,6 +89,7 @@ export const useDiagnostics = () => {
     isChecking,
     handleDiagnostics,
     isOnline,
-    lastResults
+    lastResults,
+    latency
   };
 };

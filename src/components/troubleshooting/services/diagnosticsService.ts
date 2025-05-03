@@ -5,13 +5,13 @@ import { checkMissingLinks, checkCriticalComponents } from '../utils/componentCh
  * Run all system diagnostic checks
  * @returns Array of detected issues
  */
-export const runSystemDiagnostics = () => {
+export const runSystemDiagnostics = async () => {
   // Check for UI components and navigation issues
   const linkIssues = checkMissingLinks();
   const componentIssues = checkCriticalComponents();
   
   // Check for performance issues
-  const performanceIssues = checkPerformanceIssues();
+  const performanceIssues = await checkPerformanceIssues();
   
   // Check for browser compatibility issues
   const compatibilityIssues = checkBrowserCompatibility();
@@ -24,7 +24,7 @@ export const runSystemDiagnostics = () => {
  * Check for potential performance issues
  * @returns Array of performance-related issues
  */
-const checkPerformanceIssues = (): string[] => {
+const checkPerformanceIssues = async (): Promise<string[]> => {
   const issues: string[] = [];
   
   try {
@@ -46,8 +46,59 @@ const checkPerformanceIssues = (): string[] => {
         }
       }
     }
+
+    // Check for network latency
+    const latencyIssues = await checkNetworkLatency();
+    issues.push(...latencyIssues);
+    
   } catch (error) {
     console.error("Error checking performance:", error);
+  }
+  
+  return issues;
+};
+
+/**
+ * Check network latency to common endpoints
+ * @returns Array of latency-related issues
+ */
+const checkNetworkLatency = async (): Promise<string[]> => {
+  const issues: string[] = [];
+  
+  // Don't bother checking if we're offline
+  if (!navigator.onLine) {
+    return ["Network offline"];
+  }
+  
+  // Test endpoints to check - using common CDNs and APIs
+  const endpoints = [
+    { name: 'Google', url: 'https://www.google.com/generate_204' },
+    { name: 'Cloudflare', url: 'https://cloudflare.com/cdn-cgi/trace' }
+  ];
+  
+  for (const endpoint of endpoints) {
+    try {
+      const startTime = performance.now();
+      await fetch(endpoint.url, { 
+        method: 'HEAD',
+        mode: 'no-cors',
+        cache: 'no-cache'
+      });
+      const endTime = performance.now();
+      const latency = Math.round(endTime - startTime);
+      
+      // If latency is high, report an issue
+      if (latency > 500) {
+        issues.push(`High latency (${latency}ms) to ${endpoint.name}`);
+      } else if (latency > 200) {
+        issues.push(`Elevated latency (${latency}ms) to ${endpoint.name}`);
+      }
+      
+      console.log(`Latency to ${endpoint.name}: ${latency}ms`);
+    } catch (e) {
+      console.error(`Error checking latency to ${endpoint.name}:`, e);
+      issues.push(`Failed to check latency to ${endpoint.name}`);
+    }
   }
   
   return issues;

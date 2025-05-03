@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Wifi } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -27,7 +27,7 @@ interface TroubleshootProps {
 const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
   const [open, setOpen] = useState(false);
-  const { isChecking, handleDiagnostics, lastResults } = useDiagnostics();
+  const { isChecking, handleDiagnostics, lastResults, latency } = useDiagnostics();
   
   // Run diagnostics when dialog opens if there's no trigger
   useEffect(() => {
@@ -59,7 +59,17 @@ const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
 
         <div className="space-y-4">
           {/* Run diagnostics button at the top */}
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            <div className="text-sm">
+              {latency !== null && (
+                <div className="flex items-center gap-1 text-sm">
+                  <Wifi className={`h-4 w-4 ${latency < 200 ? 'text-green-500' : latency < 500 ? 'text-yellow-500' : 'text-red-500'}`} />
+                  <span className={`${latency < 200 ? 'text-green-600' : latency < 500 ? 'text-yellow-600' : 'text-red-600'}`}>
+                    Network latency: {latency}ms {latency < 200 ? '(good)' : latency < 500 ? '(moderate)' : '(slow)'}
+                  </span>
+                </div>
+              )}
+            </div>
             <DiagnosticsButton 
               onRun={handleDiagnostics}
               isChecking={isChecking}
