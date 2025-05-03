@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route } from 'react-router-dom';
 import About from '../pages/About';
@@ -28,6 +29,7 @@ import SchoolEvents from '../pages/school/SchoolEvents';
 import SchoolResources from '../pages/school/SchoolResources';
 import InterviewPrep from '../pages/InterviewPrep';
 import SchedulePage from '@/pages/SchedulePage';
+import SchoolGuide from '../pages/SchoolGuide';
 
 export const PublicRoutes = (
   <>
@@ -60,6 +62,7 @@ export const PublicRoutes = (
     <Route path="/school-dashboard" element={<SchoolDashboard />} />
     <Route path="/interview-questions" element={<InterviewPrep />} />
     <Route path="/interview-prep" element={<InterviewPrep />} />
+    <Route path="/school-guide" element={<SchoolGuide />} />
     
     <Route path="/school/students" element={<SchoolStudents />} />
     <Route path="/school/analytics" element={<SchoolAnalytics />} />
