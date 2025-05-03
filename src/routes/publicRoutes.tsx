@@ -30,6 +30,7 @@ import SchoolResources from '../pages/school/SchoolResources';
 import InterviewPrep from '../pages/InterviewPrep';
 import SchedulePage from '@/pages/SchedulePage';
 import SchoolGuide from '../pages/SchoolGuide';
+import SafetyCompliance from '../pages/SafetyCompliance';
 
 export const PublicRoutes = (
   <>
@@ -63,6 +64,7 @@ export const PublicRoutes = (
     <Route path="/interview-questions" element={<InterviewPrep />} />
     <Route path="/interview-prep" element={<InterviewPrep />} />
     <Route path="/school-guide" element={<SchoolGuide />} />
+    <Route path="/safety-compliance" element={<SafetyCompliance />} />
     
     <Route path="/school/students" element={<SchoolStudents />} />
     <Route path="/school/analytics" element={<SchoolAnalytics />} />
@@ -71,4 +73,3 @@ export const PublicRoutes = (
     <Route path="/schedule" element={<SchedulePage />} />
   </>
 );
-

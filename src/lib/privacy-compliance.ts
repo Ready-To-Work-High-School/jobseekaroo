@@ -91,28 +91,30 @@ export function requestConsent(
   toast({
     title,
     description,
-    action: (
-      <div className="flex gap-2 mt-2">
-        <button 
-          onClick={() => {
-            recordConsent(dataType, true);
-            onConsent();
-          }}
-          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-        >
-          Allow
-        </button>
-        <button
-          onClick={() => {
-            recordConsent(dataType, false);
-            onDecline();
-          }}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
-        >
-          Decline
-        </button>
-      </div>
-    ),
+    action: {
+      component: (
+        <div className="flex gap-2 mt-2">
+          <button 
+            onClick={() => {
+              recordConsent(dataType, true);
+              onConsent();
+            }}
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+          >
+            Allow
+          </button>
+          <button
+            onClick={() => {
+              recordConsent(dataType, false);
+              onDecline();
+            }}
+            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded"
+          >
+            Decline
+          </button>
+        </div>
+      )
+    },
     duration: 10000, // 10 seconds
   });
 }
@@ -143,7 +145,7 @@ export function sanitizeData(data: any, type: SensitiveDataType): any {
           result[key] = '***-**-****';
         } else if (['phoneNumber', 'phone', 'mobile'].includes(key) && result[key]) {
           // Keep only last 4 digits of phone numbers
-          const digits = result[key].replace(/\D/g, '');
+          const digits = String(result[key]).replace(/\D/g, '');
           if (digits.length >= 4) {
             result[key] = `***-***-${digits.substring(digits.length - 4)}`;
           }
