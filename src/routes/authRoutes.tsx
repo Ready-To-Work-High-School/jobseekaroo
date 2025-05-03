@@ -6,6 +6,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import AuthCallback from '../pages/AuthCallback';
 import ProfileEdit from '../pages/ProfileEdit';
+import Login from '../pages/Login';  // Import the Login component
 
 const AuthRoutes = (
   <>
@@ -15,6 +16,7 @@ const AuthRoutes = (
     <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="/auth/callback" element={<AuthCallback />} />
     <Route path="/profile/edit" element={<ProfileEdit />} />
+    <Route path="/auth/login" element={<Login />} /> {/* Add route for /auth/login */}
   </>
 );
 

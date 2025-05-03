@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Video, Mic, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const INTERVIEW_QUESTIONS = {
   entry: [
@@ -40,11 +41,17 @@ const MockInterview = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAnswers, setRecordedAnswers] = useState<{[key: number]: boolean}>({});
+  const { toast } = useToast();
   
   const questions = INTERVIEW_QUESTIONS[category];
   
   const handleStartRecording = () => {
     setIsRecording(true);
+    toast({
+      title: "Recording started",
+      description: "Answer the question as if you're in a real interview.",
+    });
+    
     // In a real app, this would start recording
     setTimeout(() => {
       setIsRecording(false);
@@ -52,12 +59,22 @@ const MockInterview = () => {
         ...recordedAnswers,
         [currentQuestionIndex]: true
       });
+      
+      toast({
+        title: "Recording complete",
+        description: "Your answer has been saved.",
+      });
     }, 3000); // Simulate a 3-second recording
   };
   
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      toast({
+        title: "Interview complete",
+        description: "You've completed all questions for this category.",
+      });
     }
   };
   
