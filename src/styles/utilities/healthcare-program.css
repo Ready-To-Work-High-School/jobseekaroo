@@ -1,0 +1,21 @@
+
+/* Healthcare program specific styles */
+.healthcare-program-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-bottom-right-radius: 0.5rem;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
