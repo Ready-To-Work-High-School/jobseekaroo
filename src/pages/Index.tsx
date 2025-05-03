@@ -6,6 +6,7 @@ import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import MacquarieExternshipFeature from '@/components/home/MacquarieExternshipFeature';
+import BaptistHealthFeature from '@/components/home/BaptistHealthFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import InfoBanner from '@/components/home/InfoBanner';
 import CredentialsDropdown from '@/components/home/CredentialsDropdown';
@@ -50,6 +51,11 @@ const Index = () => {
         
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
           <MayoSummerFeature />
+        </motion.div>
+        
+        {/* Baptist Health Feature */}
+        <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
+          <BaptistHealthFeature />
         </motion.div>
         
         {/* Macquarie Externship Feature */}
