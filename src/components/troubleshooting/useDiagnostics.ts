@@ -32,8 +32,7 @@ export const useDiagnostics = () => {
         missingItems.push("Data access");
       }
 
-      // Run additional diagnostic checks from service, but ensure we don't get false positives
-      // since we've fixed the component checker to return empty arrays
+      // Run additional diagnostic checks from service
       const additionalIssues = runSystemDiagnostics();
       
       // Combine all detected issues
@@ -68,4 +67,3 @@ export const useDiagnostics = () => {
     isOnline
   };
 };
-

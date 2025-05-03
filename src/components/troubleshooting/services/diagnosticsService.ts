@@ -7,4 +7,3 @@ export const runSystemDiagnostics = () => {
   
   return [...linkIssues, ...componentIssues];
 };
-
