@@ -1,34 +1,33 @@
 
-import React, { forwardRef } from 'react';
-import { Bug, RefreshCcw } from 'lucide-react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Scanner, Loader2 } from 'lucide-react';
 
 interface DiagnosticsButtonProps {
-  onRun: () => Promise<void>;
+  onRun: () => void;
   isChecking: boolean;
+  variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
 }
 
-export const DiagnosticsButton = forwardRef<HTMLButtonElement, DiagnosticsButtonProps>(
-  ({ onRun, isChecking }, ref) => {
+export const DiagnosticsButton = React.forwardRef<HTMLButtonElement, DiagnosticsButtonProps>(
+  ({ onRun, isChecking, variant = "outline" }, ref) => {
     return (
-      <Button
+      <Button 
         ref={ref}
-        onClick={onRun}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRun();
+        }} 
+        variant={variant}
         disabled={isChecking}
-        className="w-full"
-        variant={isChecking ? "outline" : "default"}
+        className="flex items-center gap-2"
       >
         {isChecking ? (
-          <>
-            <RefreshCcw className="mr-2 h-4 w-4 animate-spin" />
-            Running Diagnostics...
-          </>
+          <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <>
-            <Bug className="mr-2 h-4 w-4" />
-            Run System Check
-          </>
+          <Scanner className="h-4 w-4" />
         )}
+        Run System Diagnostics
       </Button>
     );
   }
