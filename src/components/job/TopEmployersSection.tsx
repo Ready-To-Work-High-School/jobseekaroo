@@ -3,7 +3,7 @@ import { useEmployerData } from './hooks/useEmployerData';
 import { EmployerCard } from './EmployerCard';
 import { EmployerSectionHeader } from './EmployerSectionHeader';
 import { EmployerSectionLoading } from './EmployerSectionLoading';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Building2 } from 'lucide-react';
 
 const TopEmployersSection = () => {
   const { employers, loading } = useEmployerData();
@@ -16,6 +16,14 @@ const TopEmployersSection = () => {
         </div>
       </div>
     );
+  }
+
+  // Check if there are any employers with broken/missing logo URLs
+  const checkForMissingLogos = employers.some(employer => employer.logoUrl && !employer.logoUrl.includes('lovable-uploads'));
+  
+  // If we detect issues with logo URLs, add console warning
+  if (checkForMissingLogos) {
+    console.warn('Some employer logos may have invalid URLs. Check LOGO_MAP in useEmployerData.ts');
   }
 
   return (

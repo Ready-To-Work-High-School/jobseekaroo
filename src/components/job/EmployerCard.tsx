@@ -26,6 +26,14 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
                   alt={`${employer.company_name} logo`} 
                   className="max-h-8 max-w-8 w-auto h-auto object-contain" 
                   loading="lazy"
+                  onError={(e) => {
+                    // If image fails to load, replace with fallback icon
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement?.classList.add('bg-blue-100');
+                    const iconElement = document.createElement('div');
+                    iconElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-blue-600"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>';
+                    e.currentTarget.parentElement?.appendChild(iconElement.firstChild as Node);
+                  }}
                 />
               </div>
             ) : (
@@ -38,7 +46,7 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
         </div>
       </CardHeader>
       <CardContent className="py-2">
-        <p className="text-xs text-muted-foreground mb-1">{employer.industry}</p>
+        <p className="text-xs text-muted-foreground mb-1">{employer.industry || 'Business'}</p>
         <div className="flex items-center justify-between mt-2">
           <Link 
             to={`/jobs?keyword=${encodeURIComponent(employer.company_name)}`}
