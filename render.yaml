@@ -58,3 +58,5 @@ services:
         source: http://*
         destination: https://$host$request_uri
         statusCode: 301
+        yarn deploy
+        
