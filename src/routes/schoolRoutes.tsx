@@ -16,27 +16,27 @@ export const SchoolRoutes = (
     } />
     
     <Route path="/school-dashboard" element={
-      <ProtectedRoute requiredRoles={['admin', 'teacher', 'counselor']}>
-        <Layout>
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'teacher', 'counselor']}>
           <SchoolDashboard />
-        </Layout>
-      </ProtectedRoute>
+        </ProtectedRoute>
+      </Layout>
     } />
     
     <Route path="/counselor-dashboard" element={
-      <ProtectedRoute requiredRoles={['admin', 'counselor']}>
-        <Layout>
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'counselor']}>
           <CounselorDashboard />
-        </Layout>
-      </ProtectedRoute>
+        </ProtectedRoute>
+      </Layout>
     } />
     
     <Route path="/teacher-dashboard" element={
-      <ProtectedRoute requiredRoles={['admin', 'teacher']}>
-        <Layout>
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'teacher']}>
           <TeacherDashboard />
-        </Layout>
-      </ProtectedRoute>
+        </ProtectedRoute>
+      </Layout>
     } />
   </>
 );

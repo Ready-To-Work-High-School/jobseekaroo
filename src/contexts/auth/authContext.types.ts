@@ -13,18 +13,17 @@ export interface AuthContextType {
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<User | null>;
   signInWithApple: () => Promise<User | null>;
-  saveJob: (jobId: string) => Promise<void>;
-  unsaveJob: (jobId: string) => Promise<void>;
-  isSavedJob: (jobId: string) => Promise<boolean>;
-  getSavedJobs: () => Promise<string[]>;
-  createApplication: (application: any) => Promise<string>;
-  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
-  getApplications: () => Promise<any[]>;
-  deleteApplication: (applicationId: string) => Promise<void>;
   updateProfile: (profileData: UserProfileUpdate) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
-  makeAdmin: () => Promise<void>;
-  verifyEmployer: (employerId: string) => Promise<void>;
-  redeemCode: (code: string) => Promise<void>;
+  makeAdmin: (userId: string) => Promise<void>;
+  verifyEmployer: (userId: string, status: 'approved' | 'rejected', notes?: string) => Promise<void>;
+  redeemCode: (code: string) => Promise<any>;
   submitApplication: (jobId: string, data: any) => Promise<void>;
+  // Add any additional job or application methods here
+  saveJob?: (jobId: string) => Promise<void>;
+  unsaveJob?: (jobId: string) => Promise<void>;
+  createJob?: (jobData: any) => Promise<any>;
+  updateJob?: (jobId: string, jobData: any) => Promise<any>;
+  createApplication?: (applicationData: any) => Promise<any>;
+  updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
 }

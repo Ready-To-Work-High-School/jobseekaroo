@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,27 +11,31 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, adminOnly, requiredRoles }: ProtectedRouteProps) => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
+  const { isAdmin } = useAdminStatus();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
-      navigate('/auth/login', { state: { from: window.location.pathname } });
+      navigate('/sign-in', { state: { from: window.location.pathname } });
       return;
     }
 
     // Check admin access if required
-    if (adminOnly && user.role !== 'admin') {
+    if (adminOnly && !isAdmin) {
       navigate('/');
       return;
     }
 
     // Check required roles if specified
-    if (requiredRoles && !requiredRoles.includes(user.role)) {
-      navigate('/');
-      return;
+    if (requiredRoles && userProfile) {
+      const userRole = userProfile.user_type;
+      if (!userRole || !requiredRoles.includes(userRole)) {
+        navigate('/');
+        return;
+      }
     }
-  }, [user, adminOnly, requiredRoles, navigate]);
+  }, [user, userProfile, adminOnly, requiredRoles, navigate, isAdmin]);
 
   if (!user) {
     return null;
