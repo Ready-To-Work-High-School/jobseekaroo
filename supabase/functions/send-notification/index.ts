@@ -34,16 +34,15 @@ serve(async (req) => {
     }
     
     console.log(`Sending email notification to ${recipientEmail}`);
-    console.log(`Subject: ${subject}`);
-    console.log(`Message: ${message}`);
     
-    // In a real implementation, you'd use a service like Resend, SendGrid, etc.
-    // For now, we'll simulate a successful send
+    // In a real implementation, you could use Resend API to actually send the email
+    // For demonstration, we'll just simulate a successful send
     
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: "Notification sent successfully" 
+        message: "Notification sent successfully",
+        to: recipientEmail,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

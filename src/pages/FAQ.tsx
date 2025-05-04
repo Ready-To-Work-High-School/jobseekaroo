@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -168,7 +167,7 @@ const FAQ = () => {
             </p>
             <div className="inline-flex gap-4">
               <Button size="lg" asChild>
-                <a href="mailto:Colemanp3@duvalschools.org" className="gap-2">
+                <a href="mailto:support@jobseeker4hs.org" className="gap-2">
                   <Mail className="h-4 w-4" />
                   Contact Us
                 </a>

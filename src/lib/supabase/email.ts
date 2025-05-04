@@ -30,9 +30,6 @@ export async function sendPasswordResetEmail(email: string) {
     });
 
     if (error) throw error;
-
-    // The Supabase auth service will send the reset email automatically,
-    // so we don't need to send a custom email that might fail
     
     console.log('Password reset email requested successfully via Supabase auth');
     return { success: true };

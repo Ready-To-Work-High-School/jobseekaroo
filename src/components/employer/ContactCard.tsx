@@ -27,8 +27,8 @@ const ContactCard = () => {
           </div>
           <div>
             <h4 className="font-medium">Email</h4>
-            <a href="mailto:Colemanp3@duvalschools.org" className="text-blue-600 hover:underline">
-              Colemanp3@duvalschools.org
+            <a href="mailto:school@jobseeker4hs.org" className="text-blue-600 hover:underline">
+              school@jobseeker4hs.org
             </a>
           </div>
         </div>

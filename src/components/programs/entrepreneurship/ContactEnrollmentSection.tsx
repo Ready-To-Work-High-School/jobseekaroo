@@ -4,7 +4,7 @@ import { sanitizeHtml } from '@/utils/sanitization';
 
 const ContactEnrollmentSection = () => {
   // Sanitize the email address for safe rendering in href
-  const safeEmail = sanitizeHtml('ColemanP3@duvalschools.org');
+  const safeEmail = sanitizeHtml('school@jobseeker4hs.org');
   
   return <section>
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 mb-12 border border-amber-800/30 bg-yellow-100">

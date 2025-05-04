@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -106,7 +105,7 @@ const License = () => {
                       </ul>
                       
                       <p className="text-sm">
-                        For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseekers4highschools.com" className="text-primary hover:underline">education@jobseekers4highschools.com</a>
+                        For more information or to apply for an educational license, please contact our licensing team at <a href="mailto:education@jobseeker4hs.org" className="text-primary hover:underline">education@jobseeker4hs.org</a>
                       </p>
                     </div>
                   </div>
@@ -134,7 +133,7 @@ const License = () => {
             <section>
               <h2 className="text-xl font-semibold mb-2">7. Contact Information</h2>
               <p>
-                For any questions or concerns regarding this license, please contact us at: legal@jobseekers4highschools.com
+                For any questions or concerns regarding this license, please contact us at: legal@jobseeker4hs.org
               </p>
             </section>
           </CardContent>

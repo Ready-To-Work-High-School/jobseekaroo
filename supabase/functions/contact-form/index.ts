@@ -118,6 +118,28 @@ serve(async (req: Request) => {
       });
     }
 
+    // Send a notification email to the support team
+    try {
+      const notificationResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-notification`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+        },
+        body: JSON.stringify({
+          recipientEmail: "support@jobseeker4hs.org",
+          subject: "New Contact Form Submission",
+          message: `New message from ${safeName} (${safeEmail}):\n\n${safeMessage}`
+        })
+      });
+      
+      if (!notificationResponse.ok) {
+        console.warn("Failed to send notification email:", await notificationResponse.text());
+      }
+    } catch (err) {
+      console.error("Error sending notification:", err);
+    }
+
     // Return success response with the inserted data
     return new Response(JSON.stringify({ 
       success: true,

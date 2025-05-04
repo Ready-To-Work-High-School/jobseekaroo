@@ -42,8 +42,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
     
-    // Use the default Resend domain instead of a custom domain
-    const fromAddress = "Career Platform <onboarding@resend.dev>";
+    // Use the official domain email instead of the default Resend domain
+    const fromAddress = "JS4HS <support@jobseeker4hs.org>";
     
     const { data, error } = await resend.emails.send({
       from: fromAddress,

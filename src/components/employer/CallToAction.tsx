@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +37,7 @@ const CallToAction = () => {
           </Link>
         </Button>
         <Button variant="outline" size="lg" asChild>
-          <a href="mailto:Colemanp3@duvalschools.org" className="gap-2">
+          <a href="mailto:hire@jobseeker4hs.org" className="gap-2">
             <Mail className="h-4 w-4" />
             Contact Us
           </a>

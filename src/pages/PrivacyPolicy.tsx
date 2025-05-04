@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 
@@ -100,7 +101,7 @@ const PrivacyPolicy = () => {
             If you have questions about this Privacy Policy or our privacy practices, please contact us at:
           </p>
           <div className="bg-muted p-4 rounded-lg">
-            <p>Email: privacy@js4hs.com</p>
+            <p>Email: legal@jobseeker4hs.org</p>
             <p>Phone: (917) 794-7422</p>
             <p>Address: 5533 Firestone Rd. Jacksonville, FL 32244</p>
           </div>
