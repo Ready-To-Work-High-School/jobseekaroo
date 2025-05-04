@@ -9,6 +9,7 @@ import {
 } from './security';
 import { logAuthEvent, logSecurityEvent } from './auditService';
 import { createUserProfile } from './userService';
+import { createAdminNotification } from './notificationService';
 
 export const signInWithEmail = async (
   email: string, 
@@ -109,6 +110,14 @@ export const signUpWithEmail = async (data: SignUpData): Promise<AuthResponse> =
         user_id: authData.user.id,
         user_type: userType,
         requires_verification: userType === 'employer'
+      });
+
+      // Create admin notification about new user registration
+      await createAdminNotification({
+        title: 'New User Registration',
+        message: `${firstName} ${lastName} (${email}) has registered as a ${userType}.`,
+        type: 'registration',
+        link: userType === 'employer' ? '/admin/employer-verifications' : '/admin/users'
       });
     }
     
