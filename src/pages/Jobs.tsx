@@ -55,7 +55,7 @@ const Jobs = () => {
             </div>
 
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
-              <Link to="/jobs/search">
+              <Link to="/jobs">
                 <Briefcase className="mr-2 h-5 w-5" />
                 Start Your Search
               </Link>

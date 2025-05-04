@@ -15,7 +15,7 @@ const QuickAccessButtons = () => {
           className="flex-none"
         >
           <Button className="bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300 whitespace-nowrap" asChild>
-            <Link to="/entrepreneurship-academy">
+            <Link to="/skill-development">
               <Award className="h-5 w-5" />
               Explore Our Program
             </Link>
@@ -28,7 +28,7 @@ const QuickAccessButtons = () => {
           className="flex-none"
         >
           <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300 whitespace-nowrap" asChild>
-            <Link to="/first-job-toolkit">
+            <Link to="/resources">
               <Compass className="h-5 w-5" />
               First Job Toolkit
             </Link>
@@ -54,7 +54,7 @@ const QuickAccessButtons = () => {
           className="flex-none"
         >
           <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white gap-2 shadow-md hover:shadow-lg transition-all duration-300 whitespace-nowrap" asChild>
-            <Link to="/resume-assistant">
+            <Link to="/resources">
               <FileText className="h-5 w-5" />
               Resume Assistant
             </Link>

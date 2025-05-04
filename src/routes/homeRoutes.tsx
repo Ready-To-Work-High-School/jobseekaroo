@@ -11,6 +11,7 @@ import Resources from '@/pages/Resources';
 import MacquarieExternship from '@/pages/MacquarieExternship';
 import HealthcarePathways from '@/pages/HealthcarePathways';
 import VystarInternship from '@/pages/VystarInternship';
+import SkillDevelopment from '@/pages/SkillDevelopment';
 
 // Use lazy imports for larger components
 const Jobs = lazy(() => import('@/pages/Jobs'));
@@ -21,6 +22,7 @@ const SchoolIntegration = lazy(() => import('@/pages/SchoolIntegration'));
 const EmployerVerification = () => <div>Employer Verification Page</div>;
 const ResourcesCatalog = () => <div>Resources Catalog Page</div>;
 const SafetyCompliancePage = () => <div>Safety & Compliance Page</div>;
+const BadgesPage = () => <div>Badges and Achievements</div>;
 
 const HomeRoutes = (
   <>
@@ -38,6 +40,8 @@ const HomeRoutes = (
     <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
     <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
     <Route path="/programs/vystar-internship" element={<VystarInternship />} />
+    <Route path="/skill-development" element={<SkillDevelopment />} />
+    <Route path="/badges" element={<BadgesPage />} />
   </>
 );
 
