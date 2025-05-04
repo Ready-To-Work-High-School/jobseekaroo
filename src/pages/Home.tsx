@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
@@ -17,7 +18,6 @@ import { CompanySpotlight } from '@/components/company/CompanySpotlight';
 import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess';
 import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
 import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
-import GeoJsonDownload from '@/components/geographic/GeoJsonDownload';
 import CareerExplorer from '@/components/home/CareerExplorer';
 
 // Create a wrapper component that doesn't render WhatYouGetCTA
@@ -116,7 +116,6 @@ const Home = () => {
       <div className="container mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TroubleshootDialog />
-          <GeoJsonDownload />
         </div>
       </div>
 
