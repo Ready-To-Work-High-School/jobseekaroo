@@ -1,4 +1,3 @@
-
 import { Home, Shield } from 'lucide-react';
 import {
   Sheet,
@@ -36,8 +35,15 @@ export const MobileMenu = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex md:hidden items-center justify-center w-8 h-8">
+        <button className="flex md:hidden items-center justify-center w-8 h-8 relative">
           <MenuIcon className="h-5 w-5" />
+          {/* Add visual indicator for admin/CEO status on the menu button */}
+          {isAdmin && (
+            <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-red-600 border border-background"></span>
+          )}
+          {isCeo && (
+            <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 border border-background"></span>
+          )}
           <span className="sr-only">Open menu</span>
         </button>
       </SheetTrigger>

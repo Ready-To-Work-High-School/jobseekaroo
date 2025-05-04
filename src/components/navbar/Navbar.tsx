@@ -45,14 +45,25 @@ const Navbar = () => {
           {isMobile && <MobileMenu />}
           <NavbarBrand />
           
-          {/* CEO Shield - visible only for CEOs with Admin status */}
+          {/* CEO Shield with improved visibility */}
           {isCeo && (
             <Link
               to="/ceo-portal"
-              className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 shadow-md hover:opacity-90 animate-pulse-slow"
+              className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 shadow-md hover:opacity-90 animate-pulse"
               aria-label="CEO Portal"
             >
-              <Shield className="h-4 w-4 text-white" />
+              <Shield className="h-5 w-5 text-white" />
+            </Link>
+          )}
+          
+          {/* Admin badge - visible for admins who aren't CEOs */}
+          {isAdmin && !isCeo && (
+            <Link
+              to="/admin"
+              className="flex items-center justify-center h-8 w-8 rounded-full bg-red-600 p-1.5 shadow-md hover:opacity-90"
+              aria-label="Admin Panel"
+            >
+              <Shield className="h-5 w-5 text-white" />
             </Link>
           )}
           

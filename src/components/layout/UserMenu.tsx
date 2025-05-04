@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -71,7 +70,8 @@ const UserMenu = () => {
             </div>
           )}
           
-          {isCeo && isAdmin && (
+          {/* Improved CEO indicator */}
+          {isCeo && (
             <div className="absolute top-0 right-0 -mt-1 -mr-1">
               <div className="flex items-center justify-center h-4 w-4 rounded-full bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 p-[2px] border border-white">
                 <Shield className="h-2 w-2 text-white" />
@@ -79,20 +79,25 @@ const UserMenu = () => {
             </div>
           )}
           
-          {hasPremium && (
-            <div className="absolute -bottom-1 -right-1">
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 ring-1 ring-white" aria-label="Premium user">
-                <Sparkles className="h-2 w-2 text-white" />
-              </span>
-            </div>
-          )}
-          
-          {hasBadges && (
-            <div className="absolute -bottom-1 -left-1">
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-blue-400 to-blue-500 ring-1 ring-white animate-pulse-slow" aria-label="Has achievements">
-                <Award className="h-2 w-2 text-white" />
-              </span>
-            </div>
+          {/* Only show these badges if not displaying the CEO badge */}
+          {!isCeo && (
+            <>
+              {hasPremium && (
+                <div className="absolute -bottom-1 -right-1">
+                  <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 ring-1 ring-white" aria-label="Premium user">
+                    <Sparkles className="h-2 w-2 text-white" />
+                  </span>
+                </div>
+              )}
+              
+              {hasBadges && (
+                <div className="absolute -bottom-1 -left-1">
+                  <span className="flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-r from-blue-400 to-blue-500 ring-1 ring-white animate-pulse-slow" aria-label="Has achievements">
+                    <Award className="h-2 w-2 text-white" />
+                  </span>
+                </div>
+              )}
+            </>
           )}
         </Button>
       </DropdownMenuTrigger>
