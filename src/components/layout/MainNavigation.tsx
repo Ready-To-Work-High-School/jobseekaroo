@@ -2,8 +2,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield, GraduationCap } from 'lucide-react';
+import { Shield, GraduationCap, Briefcase } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { EmployerDropdown } from './navigation/EmployerDropdown';
+import { SchoolDropdown } from './navigation/SchoolDropdown';
+import { ResourcesDropdown } from './navigation/ResourcesDropdown';
 
 interface MainNavigationProps {
   className?: string;
@@ -43,26 +46,11 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
         Find Jobs
       </Link>
       
-      <Link 
-        to="/for-employers" 
-        className={cn(
-          "text-sm font-medium transition-colors hover:text-primary", 
-          isActiveLink("/for-employers") && "text-primary"
-        )}
-      >
-        For Employers
-      </Link>
+      <EmployerDropdown />
       
-      <Link 
-        to="/school-integration" 
-        className={cn(
-          "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1", 
-          isActiveLink("/school-integration") && "text-primary"
-        )}
-      >
-        <GraduationCap className="h-4 w-4" />
-        <span>Schools</span>
-      </Link>
+      <SchoolDropdown />
+      
+      <ResourcesDropdown />
       
       {/* Show admin link if user is admin */}
       {isAdmin && (

@@ -7,12 +7,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Bell } from 'lucide-react';
 import { fetchUserNotifications } from '@/contexts/auth/services/notificationService';
 import NotificationsDropdown from './NotificationsDropdown';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 export function NavbarRight() {
   const { user, userProfile } = useAuth();
+  const { isAdmin } = useAdminStatus();
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
-  const isAdmin = userProfile?.user_type === 'admin';
   
   useEffect(() => {
     let isMounted = true;

@@ -12,6 +12,7 @@ import MacquarieExternship from '@/pages/MacquarieExternship';
 import HealthcarePathways from '@/pages/HealthcarePathways';
 import VystarInternship from '@/pages/VystarInternship';
 import SkillDevelopment from '@/pages/SkillDevelopment';
+import CeoPortal from '@/pages/CeoPortal';
 
 // Use lazy imports for larger components
 const Jobs = lazy(() => import('@/pages/Jobs'));
@@ -42,6 +43,7 @@ const HomeRoutes = (
     <Route path="/programs/vystar-internship" element={<VystarInternship />} />
     <Route path="/skill-development" element={<SkillDevelopment />} />
     <Route path="/badges" element={<BadgesPage />} />
+    <Route path="/ceo-portal" element={<CeoPortal />} />
   </>
 );
 
