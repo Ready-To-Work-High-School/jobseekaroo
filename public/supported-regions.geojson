@@ -1,0 +1,27 @@
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "United States",
+        "description": "Job Seekers 4 High Schools service area"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-124.733253, 48.166089],
+              [-124.733253, 25.106658],
+              [-66.949895, 25.106658],
+              [-66.949895, 48.166089],
+              [-124.733253, 48.166089]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
