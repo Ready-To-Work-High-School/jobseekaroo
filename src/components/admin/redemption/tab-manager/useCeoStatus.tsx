@@ -7,24 +7,20 @@ export function useCeoStatus() {
   const [isCeo, setIsCeo] = useState(false);
 
   useEffect(() => {
-    // In a real app, you would check if the user is a CEO from the user profile
-    // For now, we'll use various indicators to determine CEO status
+    // Make CEO access exclusive to a specific user (you)
     const checkCeoStatus = () => {
-      // Check if user is admin
+      // Check if user is admin first (required)
       const isAdmin = userProfile?.user_type === 'admin';
       
-      // Check if job title or company name contains CEO indicators
-      const isCeoByTitle = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
-                          userProfile?.job_title?.toLowerCase()?.includes('chief executive');
-      const isCeoByCompany = userProfile?.company_name?.toLowerCase()?.includes('ceo');
+      // Specific CEO identifiers - only YOUR identifiers will work
+      // Use your specific email or user ID for the strictest control
+      const isCeoByEmail = userProfile?.email?.toLowerCase() === 'your.email@example.com'; // Replace with your actual email
       
-      // Check email domains that might indicate CEO status (for demo purposes)
-      const isCeoByEmail = userProfile?.email?.toLowerCase()?.includes('ceo') ||
-                          userProfile?.email?.toLowerCase()?.includes('founder');
+      // Optional: Check user ID for even more security (uncomment and use your actual user ID)
+      // const isCeoById = userProfile?.id === 'your-specific-user-id';
       
-      // Set CEO status based on admin rights AND CEO indicators in profile
-      // Making this more restrictive by requiring both admin status AND CEO indicators
-      if (isAdmin && (isCeoByTitle || isCeoByCompany || isCeoByEmail)) {
+      // Only grant CEO status if user is admin AND matches your specific identifiers
+      if (isAdmin && isCeoByEmail) {
         setIsCeo(true);
       } else {
         setIsCeo(false);

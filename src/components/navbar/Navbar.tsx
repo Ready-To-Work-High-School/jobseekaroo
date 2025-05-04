@@ -15,14 +15,14 @@ const Navbar = () => {
   const [atTop, setAtTop] = useState(true);
   const { userProfile } = useAuth();
   
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
-               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase()?.includes('ceo');
-               
-  // Check if user is admin as well (for CEO portal access)
+  // Check if user is admin (required for CEO status)
   const isAdmin = userProfile?.user_type === 'admin';
-  const showCeoIcon = isCeo && isAdmin;
+  
+  // Specific CEO identifier - change to YOUR email only
+  const isCeoByEmail = userProfile?.email?.toLowerCase() === 'your.email@example.com'; // Replace with your actual email
+  
+  // Only show CEO icon if admin AND matches specific identifier
+  const showCeoIcon = isAdmin && isCeoByEmail;
 
   useEffect(() => {
     const handleScroll = () => {

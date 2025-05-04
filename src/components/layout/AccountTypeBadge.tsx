@@ -17,10 +17,10 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
 }) => {
   if (!userProfile || !userProfile.user_type) return null;
 
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
-               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase()?.includes('ceo');
+  // Strict CEO check - only for a specific user
+  const isAdmin = userProfile.user_type === 'admin';
+  const isCeoByEmail = userProfile.email?.toLowerCase() === 'your.email@example.com'; // Replace with your actual email
+  const isCeo = isAdmin && isCeoByEmail;
 
   const getBadgeContent = () => {
     switch (userProfile.user_type) {

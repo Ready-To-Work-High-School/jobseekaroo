@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -44,10 +45,9 @@ const UserMenu = () => {
   const isEmployer = userProfile?.user_type === 'employer';
   const isAdmin = userProfile?.user_type === 'admin';
   
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
-               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase()?.includes('ceo');
+  // Strict CEO check - only for a specific user
+  const isCeoByEmail = userProfile?.email?.toLowerCase() === 'your.email@example.com'; // Replace with your actual email
+  const isCeo = isAdmin && isCeoByEmail;
 
   // Check if user has premium subscription
   const hasPremium = userProfile?.preferences?.hasPremium === true;
