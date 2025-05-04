@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 import { blackA } from "@radix-ui/colors";
 
@@ -26,7 +25,7 @@ const config = {
       },
       colors: {
         ...blackA,
-        border: "hsl(var(--border))",
+        border: "hsl(342, 60%, 40%)", // Changed from blue to maroon
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

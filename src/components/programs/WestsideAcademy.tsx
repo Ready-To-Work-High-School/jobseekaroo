@@ -57,8 +57,8 @@ const WestsideAcademy = () => {
         </div>
       </div>
       
-      {/* Divider added above Nursing Academy */}
-      <Separator className="my-6 bg-gradient-to-r from-blue-300 via-red-300 to-blue-300 h-0.5" />
+      {/* Divider added above Nursing Academy - Changed from blue to maroon */}
+      <Separator className="my-6 bg-gradient-to-r from-red-900 via-red-800 to-red-900 h-0.5" />
       
       {/* Enhanced Nursing Academy Section with Video */}
       <div className="mt-6 p-6 md:p-8 rounded-lg bg-gradient-to-r from-blue-50 to-red-50 border border-blue-100">
