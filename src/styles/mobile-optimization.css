@@ -18,6 +18,19 @@
     height: auto !important;
   }
   
+  /* Fix horizontal scrolling issue */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* Make main content properly scroll horizontally when needed */
+  .main-content {
+    overflow-x: auto;
+    width: 100%;
+  }
+  
   /* Improve spacing for mobile */
   .container {
     padding-left: 1rem !important;
@@ -160,11 +173,12 @@
     }
   }
   
-  /* Horizontal scrolling containers */
+  /* Horizontal scrolling containers - Fix to ensure proper scrolling */
   .hide-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;     /* Firefox */
     -webkit-overflow-scrolling: touch;
+    overflow-x: auto;  /* Ensure horizontal scrolling works */
   }
   
   .hide-scrollbar::-webkit-scrollbar {
@@ -178,6 +192,7 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    width: 100%;  /* Ensure full width */
   }
   
   /* Snap points for smoother scrolling */
@@ -186,13 +201,15 @@
     flex-shrink: 0;
   }
   
-  /* Add horizontal padding for better visual appearance */
+  /* Fix for horizontal scrolling containers */
   .horizontal-scroll-container {
     padding-left: 1rem;
     padding-right: 1rem;
     margin-left: -1rem;
     margin-right: -1rem;
     width: calc(100% + 2rem);
+    overflow-x: auto;  /* Enable scrolling */
+    -webkit-overflow-scrolling: touch;
   }
   
   /* Horizontal scrolling indicator */

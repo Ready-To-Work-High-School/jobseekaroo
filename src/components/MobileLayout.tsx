@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MobileBottomNavigation from './mobile/MobileBottomNavigation';
@@ -22,8 +23,16 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
   useEffect(() => {
     document.body.classList.add('mobile-layout');
     
+    // Fix for horizontal scrolling
+    document.documentElement.style.overflowX = 'hidden';
+    document.body.style.overflowX = 'hidden';
+    document.body.style.width = '100%';
+    
     return () => {
       document.body.classList.remove('mobile-layout');
+      document.documentElement.style.overflowX = '';
+      document.body.style.overflowX = '';
+      document.body.style.width = '';
     };
   }, []);
   
@@ -94,7 +103,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       
       <AnimatePresence mode="wait">
         <motion.main 
-          className="flex-1 main-content"
+          className="flex-1 main-content overflow-x-auto"
           key={location.pathname}
           variants={pageVariants}
           initial="initial"
