@@ -1,6 +1,7 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield, FileText, Briefcase, Book } from 'lucide-react';
+import { Shield, FileText, Briefcase, Book, LifeBuoy } from 'lucide-react';
 
 const Footer = () => {
   const { user } = useAuth();
@@ -31,6 +32,10 @@ const Footer = () => {
       path: "/faq"
     },
     {
+      title: "Support",
+      path: "/support"
+    },
+    {
       title: "About",
       path: "/about"
     }
@@ -49,6 +54,10 @@ const Footer = () => {
     {
       title: "Terms of Service",
       path: "/terms"
+    },
+    {
+      title: "Support",
+      path: "/support"
     }
   ];
 
@@ -122,6 +131,10 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li><Link to="/resources" className="text-sm text-muted-foreground hover:text-foreground">Career Resources</Link></li>
                 <li><Link to={getPath("/platform-guide")} className="text-sm text-muted-foreground hover:text-foreground">Platform Guide</Link></li>
+                <li className="flex items-center gap-2">
+                  <LifeBuoy className="h-4 w-4 text-primary/60" />
+                  <Link to="/support" className="text-sm text-muted-foreground hover:text-foreground">Support Center</Link>
+                </li>
               </ul>
             </div>
           </div>

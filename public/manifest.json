@@ -36,6 +36,17 @@
       "description": "View student resources",
       "url": "/resources",
       "icons": [{ "src": "/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Support",
+      "short_name": "Support",
+      "description": "Get help with the app",
+      "url": "/support",
+      "icons": [{ "src": "/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.png", "sizes": "192x192" }]
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "support_email": "support@jobseeker4hs.org",
+  "support_url": "https://jobseeker4hs.org/support"
 }
