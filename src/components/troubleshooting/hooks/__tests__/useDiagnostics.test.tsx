@@ -1,6 +1,6 @@
 
 import { renderHook, act } from '@testing-library/react';
-import { useDiagnostics } from '../../useDiagnostics';
+import { useDiagnostics } from '../useDiagnostics';
 import { useToast } from '@/hooks/use-toast';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { runSystemDiagnostics } from '../../services/diagnosticsService';
