@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CodesTab from '../tabs/CodesTab';
@@ -37,6 +38,21 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
   isCeo
 }) => {
   const { school } = useSchool();
+
+  // Filter tabs to only show those that should be accessible based on CEO status
+  const getAvailableTabs = () => {
+    // Always show these tabs regardless of CEO status
+    const availableTabs = ['codes', 'analytics', 'reports', 'requests'];
+    
+    // Only add these tabs if user is CEO
+    if (isCeo) {
+      availableTabs.push('wizard', 'scheduler');
+    }
+    
+    return availableTabs;
+  };
+  
+  const availableTabs = getAvailableTabs();
 
   return (
     <>
@@ -85,7 +101,7 @@ const RedemptionTabManager: React.FC<RedemptionTabManagerProps> = ({
             onExport={handlers.onExport}
             onPrint={handlers.onPrint}
             onEmailSelected={() => handlers.onEmailSelected(selectedCodes)}
-            onDeleteSelected={handlers.onDeleteSelected}
+            onDeleteSelected={isCeo ? handlers.onDeleteSelected : undefined}
             onPageChange={handlers.onPageChange}
             onPageSizeChange={handlers.onPageSizeChange}
             isCeo={isCeo}

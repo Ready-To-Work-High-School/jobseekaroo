@@ -21,7 +21,7 @@ const PremiumManagement = () => {
         <CardContent>
           <div className="flex items-center justify-center py-6 text-muted-foreground">
             <AlertCircle className="mr-2 h-5 w-5" />
-            <p>You need CEO privileges to access this section.</p>
+            <p>Only the CEO can access this restricted area.</p>
           </div>
         </CardContent>
       </Card>

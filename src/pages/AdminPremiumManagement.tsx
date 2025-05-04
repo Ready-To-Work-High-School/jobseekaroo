@@ -32,7 +32,7 @@ const AdminPremiumManagement: React.FC = () => {
           {!isCeo ? (
             <Card>
               <CardContent className="flex items-center justify-center py-6 text-muted-foreground">
-                <p>You need CEO privileges to manage premium subscriptions.</p>
+                <p>This section is restricted to CEO access only. Please contact the platform administrator if you need access.</p>
               </CardContent>
             </Card>
           ) : (

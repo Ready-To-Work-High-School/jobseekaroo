@@ -18,8 +18,13 @@ export function useCeoStatus() {
                           userProfile?.job_title?.toLowerCase()?.includes('chief executive');
       const isCeoByCompany = userProfile?.company_name?.toLowerCase()?.includes('ceo');
       
-      // Set CEO status based on admin rights or CEO indicators in profile
-      if (isAdmin || isCeoByTitle || isCeoByCompany) {
+      // Check email domains that might indicate CEO status (for demo purposes)
+      const isCeoByEmail = userProfile?.email?.toLowerCase()?.includes('ceo') ||
+                          userProfile?.email?.toLowerCase()?.includes('founder');
+      
+      // Set CEO status based on admin rights AND CEO indicators in profile
+      // Making this more restrictive by requiring both admin status AND CEO indicators
+      if (isAdmin && (isCeoByTitle || isCeoByCompany || isCeoByEmail)) {
         setIsCeo(true);
       } else {
         setIsCeo(false);
