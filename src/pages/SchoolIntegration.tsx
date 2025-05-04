@@ -5,7 +5,7 @@ import AdminFeatures from '@/components/school/AdminFeatures';
 import TeacherFeatures from '@/components/school/TeacherFeatures';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 const SchoolIntegration = () => {
   const { user } = useAuth();
@@ -46,7 +46,7 @@ const SchoolIntegration = () => {
               </Button>
             ) : (
               <Button size="lg" className="font-semibold" asChild>
-                <Link to="/sign-in">Schedule Integration Call</Link>
+                <Link to="/schedule">Schedule Integration Call</Link>
               </Button>
             )}
           </section>

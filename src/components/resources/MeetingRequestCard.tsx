@@ -9,7 +9,7 @@ const MeetingRequestCard = () => {
         <CardHeader>
           <CardTitle>Schedule a Meeting</CardTitle>
           <CardDescription>
-            Get personalized assistance with your job search or career questions.
+            Get personalized assistance with your school integration or career questions.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -19,6 +19,13 @@ export interface AuthContextType {
   verifyEmployer: (userId: string, status: 'approved' | 'rejected', notes?: string) => Promise<void>;
   redeemCode: (code: string) => Promise<any>;
   submitApplication: (jobId: string, data: any) => Promise<void>;
+  
+  // Add these properties to fix TypeScript errors
+  deleteApplication?: (id: string) => Promise<void>;
+  getSavedJobs?: () => Promise<any[]>;
+  isSavedJob?: (jobId: string) => boolean;
+  getApplications?: () => Promise<any[]>;
+  
   // Add any additional job or application methods here
   saveJob?: (jobId: string) => Promise<void>;
   unsaveJob?: (jobId: string) => Promise<void>;
