@@ -353,3 +353,64 @@
     color: white;
   }
 }
+
+/* Horizontal scrolling enhancements */
+@media (max-width: 768px) {
+  .grid-cols-1 {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .grid-cols-1 > * {
+    flex: 0 0 auto;
+    width: 85%;
+    scroll-snap-align: start;
+  }
+  
+  /* Ensure cards have equal height in horizontal scroll */
+  .grid-cols-1 .card {
+    height: 100%;
+  }
+
+  /* Horizontal scrolling sections */
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .horizontal-scroll > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  /* Add padding to account for the feature cards in horizontal scroll */
+  .feature-cards-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    width: calc(100% + 2rem);
+  }
+  
+  /* Fun scroll effects for teens */
+  .teen-scroll-effect {
+    position: relative;
+  }
+  
+  .teen-scroll-effect::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
+    pointer-events: none;
+  }
+}
