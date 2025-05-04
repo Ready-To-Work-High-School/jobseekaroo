@@ -25,6 +25,54 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Canada",
+        "identifier": "ca",
+        "region": "North America",
+        "fullySupported": false,
+        "description": "Job Seekers 4 High Schools expanding service area"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-141.002701, 60.000864],
+              [-141.002701, 41.675105],
+              [-52.619913, 41.675105],
+              [-52.619913, 60.000864],
+              [-141.002701, 60.000864]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Florida",
+        "identifier": "fl",
+        "region": "Southeast US",
+        "fullySupported": true,
+        "description": "Priority service area with enhanced local support"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-87.634938, 31.000888],
+              [-87.634938, 24.523096],
+              [-80.031362, 24.523096],
+              [-80.031362, 31.000888],
+              [-87.634938, 31.000888]
+            ]
+          ]
+        ]
+      }
     }
   ]
 }
