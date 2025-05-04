@@ -1,39 +1,43 @@
 
-import { useAuth } from '@/contexts/auth';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 export const useMobileMenu = () => {
-  const { user, signOut, userProfile } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
+  
   const isAdmin = userProfile?.user_type === 'admin';
-  const isEmployer = userProfile?.user_type === 'employer';
   
-  // Debug logs
-  useEffect(() => {
-    console.log("MobileMenu (hook) - User profile:", userProfile);
-    console.log("MobileMenu (hook) - Is admin:", isAdmin);
-    console.log("MobileMenu (hook) - Current path:", location.pathname);
-  }, [userProfile, isAdmin, location.pathname]);
-
-  // Function to get the redirect path based on auth status
-  const getPath = (authenticatedPath: string) => {
-    return user ? authenticatedPath : "/sign-in";
+  const getPath = (path: string) => {
+    return user ? path : "/sign-in";
   };
   
-  // Function to handle sign out
-  const handleSignOut = () => {
-    signOut();
-    navigate('/');
-  };
-
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
+      });
+      navigate('/');
+    } catch (error: any) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [signOut, toast, navigate]);
+  
   return {
     user,
+    userProfile,
     isAdmin,
-    isEmployer,
-    location,
     getPath,
-    handleSignOut
+    handleSignOut,
   };
 };
