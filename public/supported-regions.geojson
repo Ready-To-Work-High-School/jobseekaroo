@@ -6,7 +6,10 @@
       "type": "Feature",
       "properties": {
         "name": "United States",
-        "description": "Job Seekers 4 High Schools service area"
+        "identifier": "us",
+        "region": "North America",
+        "fullySupported": true,
+        "description": "Job Seekers 4 High Schools service area with full support"
       },
       "geometry": {
         "type": "MultiPolygon",
