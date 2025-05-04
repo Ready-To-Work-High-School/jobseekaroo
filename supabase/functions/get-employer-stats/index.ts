@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
       supabaseAnonKey
     )
 
-    // Query the employer_job_counts view we created
+    // Query the employer_job_counts view - now with fixed security settings
     const { data, error } = await supabase
       .from('employer_job_counts')
       .select('*')
