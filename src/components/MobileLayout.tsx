@@ -1,10 +1,12 @@
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MobileBottomNavigation from './mobile/MobileBottomNavigation';
 import BackButton from './navigation/BackButton';
 import BackToTopButton from './navigation/BackToTopButton';
 import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
+import { motion, AnimatePresence } from 'framer-motion';
+import JobSeekers4HSBadge from './badges/JobSeekers4HSBadge';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -14,6 +16,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
+  const [scrollY, setScrollY] = useState(0);
   
   // Add body class for mobile layout
   useEffect(() => {
@@ -22,6 +25,16 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
     return () => {
       document.body.classList.remove('mobile-layout');
     };
+  }, []);
+  
+  // Handle scroll effects
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
   // Handle modals/sheets preventing body scroll
@@ -42,17 +55,46 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
     };
   }, []);
 
+  // Page transition variants
+  const pageVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-rose-50 to-white">
+      {/* Badge at the top */}
+      <motion.div
+        className="flex justify-center py-2"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, type: "spring" }}
+      >
+        <JobSeekers4HSBadge variant="default" className="badge-pop" />
+      </motion.div>
+      
       {!isHomePage && !isAuthPage && (
-        <div className="sticky top-0 z-40 bg-background px-4 pt-4 pb-2">
+        <div className={`sticky top-0 z-40 bg-white/80 backdrop-blur-md px-4 pt-4 pb-2 transition-shadow ${
+          scrollY > 10 ? 'shadow-md' : ''
+        }`}>
           <BackButton />
         </div>
       )}
       
-      <main className="flex-1 main-content">
-        {children}
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main 
+          className="flex-1 main-content"
+          key={location.pathname}
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
       
       <BackToTopButton />
       <MobileBottomNavigation />

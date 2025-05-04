@@ -1,3 +1,4 @@
+
 /* Basic animations */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(10px); }
@@ -33,10 +34,10 @@
 
 @keyframes badge-glow {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 5px rgba(142, 36, 70, 0.5); /* Maroon glow */
   }
   50% {
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+    box-shadow: 0 0 15px rgba(142, 36, 70, 0.8); /* Stronger maroon glow */
   }
 }
 
@@ -84,6 +85,23 @@
   }
 }
 
+/* Teen-friendly animations */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes slide-in-bottom {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 /* Add these classes for animation */
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
@@ -115,6 +133,18 @@
 
 .animate-float-around {
   animation: float-around 8s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.4s ease-out forwards;
 }
 
 /* Additional badge animations */
@@ -163,7 +193,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle, rgba(142, 36, 70, 0.4) 0%, rgba(142, 36, 70, 0) 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -175,4 +205,38 @@
 .writing-vertical {
   writing-mode: vertical-rl;
   text-orientation: mixed;
+}
+
+/* Teen-friendly animations */
+@keyframes color-shift {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(15deg); }
+  100% { filter: hue-rotate(0deg); }
+}
+
+.color-shift {
+  animation: color-shift 3s infinite;
+}
+
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+.tilt-animation {
+  animation: tilt 5s ease-in-out infinite;
+}
+
+/* Cool gradient animation for buttons */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-animation {
+  background: linear-gradient(90deg, #8E2446, #C13C67, #8E2446);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
 }

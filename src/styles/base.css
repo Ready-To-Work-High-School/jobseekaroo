@@ -5,33 +5,33 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 75% 98%;
+    --foreground: 342 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 342 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 342 84% 4.9%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 342 75% 40%; /* Changed from blue to maroon */
+    --primary-foreground: 342 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 342 40% 96.1%;
+    --secondary-foreground: 342 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 342 40% 96.1%;
+    --muted-foreground: 345 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 342 40% 96.1%;
+    --accent-foreground: 342 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 342 40% 98%;
 
     --border: 342 60% 40%; /* Changed from blue to maroon */
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --input: 344.3 31.8% 91.4%;
+    --ring: 342 84% 4.9%;
 
     --radius: 0.8rem;
   }
@@ -46,4 +46,51 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Animation classes for elements */
+  .animated-element {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .hover-scale {
+    @apply transform transition-transform hover:scale-105 duration-200;
+  }
+
+  .hover-lift {
+    @apply transform transition-transform hover:-translate-y-1 duration-200;
+  }
+
+  .pulse-effect {
+    @apply animate-pulse-slow;
+  }
+  
+  .float-animation {
+    @apply animate-float;
+  }
+  
+  /* Add mobile-friendly enhancements */
+  @media (max-width: 640px) {
+    .mobile-padding {
+      @apply px-4 py-3;
+    }
+    
+    .mobile-touch-target {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+}
+
+/* Additional animations for teen appeal */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.6) 50%, 
+    rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }

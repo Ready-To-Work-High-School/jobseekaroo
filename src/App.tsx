@@ -12,6 +12,7 @@ import { PublicRoutes } from './routes/publicRoutes';
 import { SchoolRoutes } from './routes/schoolRoutes';
 import { EmployerRoutes } from './routes/employerRoutes';
 import ScrollToTop from './components/navigation/ScrollToTop';
+import { motion, AnimatePresence } from 'framer-motion'; // Add framer-motion
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -23,21 +24,28 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AutoRecoveryErrorBoundary maxAutoRecoveryAttempts={2}>
         <TooltipProvider>
-          <div className="min-h-screen flex flex-col">
+          <motion.div 
+            className="min-h-screen flex flex-col"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <ScrollToTop />
             <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
               <DiagnosticMenuButton />
             </div>
             
-            <Routes>
-              {AppRoutes}
-              {PublicRoutes}
-              {SchoolRoutes}
-              {EmployerRoutes}
-            </Routes>
+            <AnimatePresence mode="wait">
+              <Routes>
+                {AppRoutes}
+                {PublicRoutes}
+                {SchoolRoutes}
+                {EmployerRoutes}
+              </Routes>
+            </AnimatePresence>
             <MobileBottomNavigation />
             <Toaster />
-          </div>
+          </motion.div>
         </TooltipProvider>
       </AutoRecoveryErrorBoundary>
     </QueryClientProvider>
