@@ -23,10 +23,14 @@ export const JobCardShareSave = ({
   const { toast } = useToast();
   
   useEffect(() => {
-    if (user) {
+    if (user && isSavedJob) {
       const checkSaved = async () => {
-        const saved = await isSavedJob(jobId);
-        setIsSaved(saved);
+        try {
+          const saved = await isSavedJob(jobId);
+          setIsSaved(saved);
+        } catch (error) {
+          console.error("Error checking if job is saved:", error);
+        }
       };
       checkSaved();
     } else {
@@ -49,14 +53,14 @@ export const JobCardShareSave = ({
     
     try {
       if (isSaved) {
-        await unsaveJob(jobId);
+        await unsaveJob?.(jobId);
         setIsSaved(false);
         toast({
           title: "Job removed",
           description: "Job removed from your saved jobs",
         });
       } else {
-        await saveJob(jobId);
+        await saveJob?.(jobId);
         setIsSaved(true);
         toast({
           title: "Job saved",

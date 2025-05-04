@@ -20,10 +20,10 @@ export interface AuthContextType {
   redeemCode: (code: string) => Promise<any>;
   submitApplication: (jobId: string, data: any) => Promise<void>;
   
-  // Add these properties to fix TypeScript errors
+  // Fix the return types to match the actual implementation
   deleteApplication?: (id: string) => Promise<void>;
   getSavedJobs?: () => Promise<any[]>;
-  isSavedJob?: (jobId: string) => boolean;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
   getApplications?: () => Promise<any[]>;
   
   // Add any additional job or application methods here

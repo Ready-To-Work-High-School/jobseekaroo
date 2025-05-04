@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -26,11 +25,13 @@ const SavedJobs = () => {
       
       setLoading(true);
       try {
-        const savedJobIds = await getSavedJobs();
-        
-        // Get job details for each saved job ID
-        const jobDetails = savedJobIds.map(id => getJobById(id)).filter(Boolean) as Job[];
-        setSavedJobs(jobDetails);
+        if (getSavedJobs) {
+          const savedJobIds = await getSavedJobs();
+          
+          // Get job details for each saved job ID
+          const jobDetails = savedJobIds.map(id => getJobById(id)).filter(Boolean) as Job[];
+          setSavedJobs(jobDetails);
+        }
       } catch (error) {
         console.error('Error fetching saved jobs:', error);
       } finally {
