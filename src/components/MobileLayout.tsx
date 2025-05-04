@@ -1,4 +1,3 @@
-
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MobileBottomNavigation from './mobile/MobileBottomNavigation';
@@ -7,6 +6,7 @@ import BackToTopButton from './navigation/BackToTopButton';
 import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
 import { motion, AnimatePresence } from 'framer-motion';
 import JobSeekers4HSBadge from './badges/JobSeekers4HSBadge';
+import FreeForStudentsBadge from './badges/FreeForStudentsBadge';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -72,6 +72,16 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
         transition={{ delay: 0.2, type: "spring" }}
       >
         <JobSeekers4HSBadge variant="default" className="badge-pop" />
+      </motion.div>
+      
+      {/* Free for students badge - NEW */}
+      <motion.div 
+        className="flex justify-center mb-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
+        <FreeForStudentsBadge variant="default" />
       </motion.div>
       
       {!isHomePage && !isAuthPage && (

@@ -97,7 +97,7 @@ const EnhancedHero = () => {
         </div>
       </motion.div>
       
-      {/* Free for students banner with animation */}
+      {/* Free for students banner with animation - UPDATED */}
       <motion.div 
         className="bg-amber-50 py-3 px-4 text-center border-b border-amber-100"
         initial={{ opacity: 0, y: -10 }}
