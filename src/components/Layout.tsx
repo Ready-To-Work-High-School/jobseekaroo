@@ -8,6 +8,7 @@ import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
 import MobileBottomNav from './mobile/MobileBottomNav';
 import { motion } from 'framer-motion';
+import WhatYouGetCTA from './auth/WhatYouGetCTA'; // Import the CTA component
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const { user } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
   
   useEffect(() => {
     console.log("Layout mounted with pathname:", location.pathname);
@@ -44,6 +46,13 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
+
+        {/* Add the What You Get CTA to all non-auth pages */}
+        {!isAuthPage && (
+          <div className="container mx-auto px-4 mb-8">
+            <WhatYouGetCTA />
+          </div>
+        )}
       </motion.main>
       
       <ErrorBoundary>

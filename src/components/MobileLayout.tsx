@@ -8,6 +8,7 @@ import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
 import { motion, AnimatePresence } from 'framer-motion';
 import JobSeekers4HSBadge from './badges/JobSeekers4HSBadge';
 import FreeForStudentsBadge from './badges/FreeForStudentsBadge';
+import WhatYouGetCTA from './auth/WhatYouGetCTA';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -112,6 +113,13 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
           transition={{ duration: 0.3 }}
         >
           {children}
+          
+          {/* Add the What You Get CTA to all non-auth pages */}
+          {!isAuthPage && (
+            <div className="px-4">
+              <WhatYouGetCTA />
+            </div>
+          )}
         </motion.main>
       </AnimatePresence>
       
