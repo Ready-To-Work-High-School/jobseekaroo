@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -18,11 +19,13 @@ import {
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
 import { useUserBadges } from '@/hooks/use-user-badges';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 const UserMenu = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
   const { badges } = useUserBadges();
+  const { isAdmin, isCeo } = useAdminStatus();
 
   const handleSignOut = async () => {
     try {
@@ -42,12 +45,7 @@ const UserMenu = () => {
   };
 
   const isEmployer = userProfile?.user_type === 'employer';
-  const isAdmin = userProfile?.user_type === 'admin';
   
-  // Strict CEO check - only for a specific user
-  const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL;
-  const isCeo = isAdmin && isCeoByEmail;
-
   // Check if user has premium subscription
   const hasPremium = userProfile?.preferences?.hasPremium === true;
   

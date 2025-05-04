@@ -12,14 +12,10 @@ export function useCeoStatus() {
       // Check if user is admin first (required)
       const isAdmin = userProfile?.user_type === 'admin';
       
-      // Specific CEO identifiers - only YOUR identifiers will work
-      // Use your specific email or user ID for the strictest control
-      const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL;
+      // CEO identifier - your specific email address
+      const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL?.toLowerCase();
       
-      // Optional: Check user ID for even more security (uncomment and use your actual user ID)
-      // const isCeoById = userProfile?.id === 'your-specific-user-id';
-      
-      // Only grant CEO status if user is admin AND matches your specific identifiers
+      // Only grant CEO status if user is admin AND matches the specific email
       if (isAdmin && isCeoByEmail) {
         setIsCeo(true);
       } else {

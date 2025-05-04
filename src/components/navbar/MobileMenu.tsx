@@ -8,8 +8,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { MobileNavLink } from './MobileNavLink';
-import { useMobileMenu } from './useMobileMenu';
-import {
+import { 
   PrimaryNavigationLinks,
   JobSeekersSection,
   ResourcesSection,
@@ -20,17 +19,16 @@ import {
   UnauthenticatedUserLinks
 } from './MobileMenuSections';
 import { MenuIcon } from 'lucide-react';
-import { useCeoStatus } from '@/components/admin/redemption/tab-manager/useCeoStatus';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 export const MobileMenu = () => {
   const {
     user,
-    isAdmin,
     getPath,
     handleSignOut
   } = useMobileMenu();
   
-  const { isCeo } = useCeoStatus();
+  const { isAdmin, isCeo } = useAdminStatus();
 
   return (
     <Sheet>

@@ -9,20 +9,13 @@ import MainNavigation from '@/components/layout/MainNavigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [atTop, setAtTop] = useState(true);
   const { userProfile } = useAuth();
-  
-  // Check if user is admin (required for CEO status)
-  const isAdmin = userProfile?.user_type === 'admin';
-  
-  // Specific CEO identifier - your email only
-  const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL;
-  
-  // Only show CEO icon if admin AND matches specific identifier
-  const showCeoIcon = isAdmin && isCeoByEmail;
+  const { isAdmin, isCeo } = useAdminStatus();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +44,7 @@ const Navbar = () => {
           <NavbarBrand />
           
           {/* CEO Shield - visible only for CEOs with Admin status */}
-          {showCeoIcon && (
+          {isCeo && (
             <Link
               to="/ceo-portal"
               className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 shadow-md hover:opacity-90 animate-pulse-slow"

@@ -3,8 +3,8 @@ import React from 'react';
 import NavLink from './NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Ticket, GraduationCap, Briefcase, Building2, BookOpen, User, Award, Info, Compass, Heart, FileText, Shield, LogIn, UserPlus } from 'lucide-react';
-import { isAdmin } from '@/utils/adminUtils';
+import { Ticket, GraduationCap, Briefcase, Building2, BookOpen, Award, Info, Compass, Heart, Shield, LogIn, UserPlus } from 'lucide-react';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 interface DesktopNavProps {
   className?: string;
@@ -12,7 +12,7 @@ interface DesktopNavProps {
 
 const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
   const { user, userProfile } = useAuth();
-  const userIsAdmin = isAdmin(userProfile);
+  const { isAdmin, isCeo } = useAdminStatus();
   
   const getAuthPath = (path: string) => {
     return user ? path : "/sign-in";
@@ -53,24 +53,23 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
           <span>Jobs</span>
         </NavLink>
         
-        {userIsAdmin && (
+        {isAdmin && (
           <NavLink to="/admin" className="flex items-center gap-1">
             <Shield className="h-4 w-4" />
             <span>Admin</span>
           </NavLink>
         )}
         
+        {isCeo && (
+          <NavLink to="/ceo-portal" className="flex items-center gap-1 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text text-transparent">
+            <Shield className="h-4 w-4 text-amber-500" />
+            <span>CEO</span>
+          </NavLink>
+        )}
+        
         <NavLink to="/about" className="flex items-center gap-1">
           <Info className="h-4 w-4" />
           <span>About</span>
-        </NavLink>
-        
-        {/* Hidden CEO Portal - Only visible on hover */}
-        <NavLink 
-          to="/ceo-portal" 
-          className="opacity-0 hover:opacity-100 transition-opacity duration-300"
-        >
-          <Shield className="h-4 w-4" />
         </NavLink>
         
         {!user && (

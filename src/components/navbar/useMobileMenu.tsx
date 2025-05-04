@@ -3,13 +3,13 @@ import { useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 export const useMobileMenu = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
-  const isAdmin = userProfile?.user_type === 'admin';
+  const { isAdmin, isCeo } = useAdminStatus();
   
   const getPath = (path: string) => {
     return user ? path : "/sign-in";
@@ -37,6 +37,7 @@ export const useMobileMenu = () => {
     user,
     userProfile,
     isAdmin,
+    isCeo,
     getPath,
     handleSignOut,
   };
