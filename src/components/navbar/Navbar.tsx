@@ -18,8 +18,8 @@ const Navbar = () => {
   // Check if user is admin (required for CEO status)
   const isAdmin = userProfile?.user_type === 'admin';
   
-  // Specific CEO identifier - change to YOUR email only
-  const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL || userProfile?.email?.toLowerCase() === 'your-actual-email@example.com'; // Replace with your actual email
+  // Specific CEO identifier - your email only
+  const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL;
   
   // Only show CEO icon if admin AND matches specific identifier
   const showCeoIcon = isAdmin && isCeoByEmail;

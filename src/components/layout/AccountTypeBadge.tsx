@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/types/user';
@@ -19,7 +18,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
 
   // Strict CEO check - only for a specific user
   const isAdmin = userProfile.user_type === 'admin';
-  const isCeoByEmail = userProfile.email?.toLowerCase() === process.env.CEO_EMAIL || userProfile?.email?.toLowerCase() === 'your-actual-email@example.com'; // Replace with your actual email
+  const isCeoByEmail = userProfile.email?.toLowerCase() === process.env.CEO_EMAIL;
   const isCeo = isAdmin && isCeoByEmail;
 
   const getBadgeContent = () => {
