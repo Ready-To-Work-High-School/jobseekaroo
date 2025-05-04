@@ -20,6 +20,7 @@ import {
 } from './MobileMenuSections';
 import { MenuIcon } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { useMobileMenu } from './useMobileMenu';
 
 export const MobileMenu = () => {
   const {
