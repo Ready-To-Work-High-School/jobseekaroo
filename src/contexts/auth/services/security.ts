@@ -1,3 +1,4 @@
+
 import { supabase } from '@/lib/supabase';
 import { encryptData } from '@/lib/supabase/encryption';
 
@@ -90,6 +91,7 @@ export const resetFailedLoginAttempts = (email: string): void => {
  * @returns Object containing validation result and error message
  */
 export const validatePasswordStrength = (password: string): { isValid: boolean; errorMessage?: string } => {
+  // Updated password validation for stronger security
   if (password.length < 12) {
     return { 
       isValid: false, 
@@ -97,16 +99,22 @@ export const validatePasswordStrength = (password: string): { isValid: boolean; 
     };
   }
   
-  // Check for complexity requirements
+  // Enhanced checks for complexity requirements
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasNumbers = /\d/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   
-  if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+  const missingRequirements = [];
+  if (!hasUpperCase) missingRequirements.push("uppercase letter");
+  if (!hasLowerCase) missingRequirements.push("lowercase letter");
+  if (!hasNumbers) missingRequirements.push("number");
+  if (!hasSpecialChar) missingRequirements.push("special character");
+  
+  if (missingRequirements.length > 0) {
     return { 
       isValid: false, 
-      errorMessage: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" 
+      errorMessage: `Password must contain at least one ${missingRequirements.join(', ')}` 
     };
   }
   
@@ -116,12 +124,38 @@ export const validatePasswordStrength = (password: string): { isValid: boolean; 
     /^12345/,
     /^qwerty/i,
     /^admin/i,
+    /password/i,
+    /letmein/i,
+    /welcome/i,
+    /123456/,
+    /abc123/i
   ];
   
   if (commonPatterns.some(pattern => pattern.test(password))) {
     return { 
       isValid: false, 
       errorMessage: "Password contains common patterns that are easily guessable" 
+    };
+  }
+  
+  // Check for sequential characters
+  const sequentialPatterns = [
+    /abc/i, /bcd/i, /cde/i, /def/i, /efg/i, /fgh/i, /ghi/i, /hij/i,
+    /123/, /234/, /345/, /456/, /567/, /678/, /789/
+  ];
+  
+  if (sequentialPatterns.some(pattern => pattern.test(password))) {
+    return {
+      isValid: false,
+      errorMessage: "Password contains sequential characters that are easily guessable"
+    };
+  }
+  
+  // Check for repeated characters
+  if (/(.)\1{2,}/.test(password)) {
+    return {
+      isValid: false,
+      errorMessage: "Password contains too many repeated characters"
     };
   }
   

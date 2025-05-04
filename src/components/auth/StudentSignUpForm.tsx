@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,6 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert } from '@/components/ui/alert';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
 interface StudentSignUpFormProps {
   onSuccess?: () => void;
@@ -37,13 +38,20 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
+  const password = watch('password', ''); // Watch password field for strength indicator
   
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     setError(null);
     
     try {
+      // Validate password strength before submission
+      const { isValid, errorMessage } = validatePasswordStrength(data.password);
+      if (!isValid) {
+        throw new Error(errorMessage || "Password is not strong enough");
+      }
+      
       // Create the user account with student user type
       await signUp(
         data.email, 
@@ -128,12 +136,12 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
           <Input
             id="password"
             type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder="••••••••••••"
             {...register('password', {
               required: 'Password is required',
               minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters',
+                value: 12,
+                message: 'Password must be at least 12 characters',
               },
             })}
           />
@@ -152,6 +160,8 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
+        
+        <PasswordStrengthIndicator password={password} />
       </div>
       
       <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading}>

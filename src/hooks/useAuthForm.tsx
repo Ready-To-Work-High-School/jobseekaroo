@@ -1,18 +1,26 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from './use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
-// Define form validation schema for sign up
+// Define form validation schema for sign up with enhanced password validation
 export const signUpSchema = z.object({
   firstName: z.string().min(2, { message: 'First name is required' }),
   lastName: z.string().min(2, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+  password: z.string()
+    .min(12, { message: 'Password must be at least 12 characters' })
+    .refine((password) => {
+      // Use our enhanced password validation
+      const { isValid } = validatePasswordStrength(password);
+      return isValid;
+    }, { 
+      message: 'Password is not strong enough. It must include uppercase, lowercase, numbers, and special characters.' 
+    }),
   agreeToTerms: z.literal(true, {
     errorMap: () => ({ message: 'You must agree to the terms and conditions' }),
   }),
@@ -36,7 +44,7 @@ export const useAuthForm = () => {
   const navigate = useNavigate();
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   
-  // Initialize react-hook-form with zod validation for sign up
+  // Initialize react-hook-form with enhanced zod validation for sign up
   const signUpForm = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -47,6 +55,7 @@ export const useAuthForm = () => {
       agreeToTerms: false as true, // Type assertion to bypass the TypeScript check
       userType: 'student',
     },
+    mode: 'onChange', // Validate on change for better user experience
   });
 
   // Initialize react-hook-form with zod validation for sign in
@@ -59,16 +68,22 @@ export const useAuthForm = () => {
     },
   });
 
-  // Sign up handler
+  // Sign up handler with password strength feedback
   const handleSignUp = async (data: SignUpFormValues) => {
     setIsSubmitting(true);
     
     try {
+      // Extra validation for password strength
+      const passwordCheck = validatePasswordStrength(data.password);
+      if (!passwordCheck.isValid) {
+        throw new Error(passwordCheck.errorMessage || 'Password is not strong enough');
+      }
+
       // Determine if parental consent is needed
       const requiresParentalConsent = data.userType === 'student' && 
         data.age && data.age < 18;
       
-      // Fix: Pass only the expected arguments to match the signUp function signature
+      // Pass only the expected arguments to match the signUp function signature
       const user = await signUp(
         data.email,
         data.password,
