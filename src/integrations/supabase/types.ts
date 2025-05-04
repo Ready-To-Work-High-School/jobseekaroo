@@ -1454,6 +1454,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_simulation_progress: {
         Row: {
           completed: boolean
@@ -1634,6 +1655,10 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: undefined
       }
+      has_role: {
+        Args: { role: Database["public"]["Enums"]["app_role"] }
+        Returns: boolean
+      }
       update_all_user_recommendations: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -1644,6 +1669,7 @@ export type Database = {
       }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       prohibited_job_type:
         | "commission_only"
         | "door_to_door_sales"
@@ -1766,6 +1792,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       prohibited_job_type: [
         "commission_only",
         "door_to_door_sales",
