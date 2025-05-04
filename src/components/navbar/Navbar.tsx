@@ -19,6 +19,10 @@ const Navbar = () => {
   const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
                userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
                userProfile?.company_name?.toLowerCase()?.includes('ceo');
+               
+  // Check if user is admin as well (for CEO portal access)
+  const isAdmin = userProfile?.user_type === 'admin';
+  const showCeoIcon = isCeo && isAdmin;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,15 +50,14 @@ const Navbar = () => {
           {isMobile && <MobileMenu />}
           <NavbarBrand />
           
-          {/* CEO Shield - visible only for CEOs */}
-          {isCeo && (
+          {/* CEO Shield - visible only for CEOs with Admin status */}
+          {showCeoIcon && (
             <Link
               to="/ceo-portal"
-              className="hidden md:flex items-center px-2 py-1 bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 text-white rounded-full font-semibold gap-1 shadow hover:opacity-90 mr-3"
+              className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 shadow-md hover:opacity-90 animate-pulse-slow"
               aria-label="CEO Portal"
             >
               <Shield className="h-4 w-4 text-white" />
-              <span className="text-xs">CEO</span>
             </Link>
           )}
           

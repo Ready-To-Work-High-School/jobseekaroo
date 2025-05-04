@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -46,9 +45,9 @@ const UserMenu = () => {
   const isAdmin = userProfile?.user_type === 'admin';
   
   // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
-               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase().includes('ceo');
+  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
+               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase()?.includes('ceo');
 
   // Check if user has premium subscription
   const hasPremium = userProfile?.preferences?.hasPremium === true;
@@ -72,6 +71,14 @@ const UserMenu = () => {
           {userProfile?.user_type && (
             <div className="absolute -top-2 -right-2">
               <AccountTypeBadge userProfile={userProfile} className="h-4 w-4 p-0" showText={false} />
+            </div>
+          )}
+          
+          {isCeo && isAdmin && (
+            <div className="absolute top-0 right-0 -mt-1 -mr-1">
+              <div className="flex items-center justify-center h-4 w-4 rounded-full bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 p-[2px] border border-white">
+                <Shield className="h-2 w-2 text-white" />
+              </div>
             </div>
           )}
           
@@ -103,7 +110,12 @@ const UserMenu = () => {
                 )}
               </div>
               <span className="text-xs text-muted-foreground">{user.email}</span>
-              {isCeo && <span className="text-xs font-semibold text-blue-600">CEO Access</span>}
+              {isCeo && (
+                <span className="text-xs font-semibold bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text text-transparent flex items-center gap-1">
+                  <Shield className="h-3 w-3 text-amber-500" />
+                  CEO Access
+                </span>
+              )}
               {hasPremium && <span className="text-xs font-semibold text-amber-600 flex items-center gap-1">
                 <Sparkles className="h-3 w-3 text-amber-500" />
                 Gold Status

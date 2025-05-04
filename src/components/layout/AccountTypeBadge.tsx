@@ -17,6 +17,11 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
 }) => {
   if (!userProfile || !userProfile.user_type) return null;
 
+  // Check if user is CEO based on job title or company name
+  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
+               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase()?.includes('ceo');
+
   const getBadgeContent = () => {
     switch (userProfile.user_type) {
       case 'student':
@@ -34,8 +39,16 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
           className: 'bg-green-700 text-white'
         };
       case 'admin':
+        if (isCeo) {
+          return {
+            text: 'Chief Executive Officer',
+            icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+            variant: 'outline',
+            className: 'bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white hover:bg-black/90'
+          };
+        }
         return {
-          text: 'Chief Executive Officer',
+          text: 'Admin',
           icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
           variant: 'outline',
           className: 'bg-black text-white hover:bg-black/90'

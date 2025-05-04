@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,11 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Award, Briefcase, MapPin, Mail, Sparkles } from 'lucide-react';
+import { Award, Briefcase, MapPin, Mail, Sparkles, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import UserBadges from '@/components/badges/UserBadges';
 import { useUserBadges } from '@/hooks/use-user-badges';
 import JobRecommendations from '@/components/JobRecommendations';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
@@ -18,9 +18,13 @@ const Profile = () => {
   const { badges, isLoading: badgesLoading } = useUserBadges();
   
   // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
-               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase().includes('ceo');
+  const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
+               userProfile?.job_title?.toLowerCase()?.includes('chief executive') ||
+               userProfile?.company_name?.toLowerCase()?.includes('ceo');
+  
+  // Check if user is admin as well (for CEO portal access)
+  const isAdmin = userProfile?.user_type === 'admin';
+  const showCeoIcon = isCeo && isAdmin;
   
   return (
     <Layout>
@@ -36,19 +40,34 @@ const Profile = () => {
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-100 rounded-full blur-2xl opacity-30 -ml-10 -mb-10"></div>
                 
                 <div className="flex items-center gap-4 relative">
-                  <Avatar className="h-16 w-16 border-2 border-blue-100 shadow-md">
-                    <AvatarImage src={userProfile?.avatar_url || ''} alt="Profile" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-                      {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar className="h-16 w-16 border-2 border-blue-100 shadow-md">
+                      <AvatarImage src={userProfile?.avatar_url || ''} alt="Profile" />
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                        {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    {/* CEO Shield badge on avatar */}
+                    {showCeoIcon && (
+                      <div className="absolute -bottom-1 -right-1">
+                        <Link to="/ceo-portal">
+                          <div className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 border-2 border-white shadow-md">
+                            <Shield className="h-3 w-3 text-white" />
+                          </div>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                  
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <CardTitle className="text-2xl">
                         {userProfile?.first_name} {userProfile?.last_name}
                       </CardTitle>
                       {isCeo && (
-                        <Badge variant="outline" className="bg-black text-white border-gray-700">
+                        <Badge variant="outline" className="bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white border-gray-700">
+                          <Shield className="h-3 w-3 mr-1" />
                           Chief Executive Officer
                         </Badge>
                       )}
