@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,20 +8,13 @@ import { useToast } from './use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
-// Define form validation schema for sign up with enhanced password validation
+// Define form validation schema for sign up with simplified password validation
 export const signUpSchema = z.object({
   firstName: z.string().min(2, { message: 'First name is required' }),
   lastName: z.string().min(2, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
   password: z.string()
-    .min(12, { message: 'Password must be at least 12 characters' })
-    .refine((password) => {
-      // Use our enhanced password validation
-      const { isValid } = validatePasswordStrength(password);
-      return isValid;
-    }, { 
-      message: 'Password is not strong enough. It must include uppercase, lowercase, numbers, and special characters.' 
-    }),
+    .min(6, { message: 'Password must be at least 6 characters' }),
   agreeToTerms: z.literal(true, {
     errorMap: () => ({ message: 'You must agree to the terms and conditions' }),
   }),
@@ -44,7 +38,7 @@ export const useAuthForm = () => {
   const navigate = useNavigate();
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   
-  // Initialize react-hook-form with enhanced zod validation for sign up
+  // Initialize react-hook-form with simplified zod validation for sign up
   const signUpForm = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -73,7 +67,7 @@ export const useAuthForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Extra validation for password strength
+      // Basic validation for password
       const passwordCheck = validatePasswordStrength(data.password);
       if (!passwordCheck.isValid) {
         throw new Error(passwordCheck.errorMessage || 'Password is not strong enough');

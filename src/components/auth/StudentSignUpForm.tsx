@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -136,12 +137,12 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
           <Input
             id="password"
             type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••••••"
+            placeholder="••••••"
             {...register('password', {
               required: 'Password is required',
               minLength: {
-                value: 12,
-                message: 'Password must be at least 12 characters',
+                value: 6,
+                message: 'Password must be at least 6 characters',
               },
             })}
           />
