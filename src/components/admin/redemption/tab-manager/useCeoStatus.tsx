@@ -14,7 +14,7 @@ export function useCeoStatus() {
       
       // Specific CEO identifiers - only YOUR identifiers will work
       // Use your specific email or user ID for the strictest control
-      const isCeoByEmail = userProfile?.email?.toLowerCase() === 'your.email@example.com'; // Replace with your actual email
+      const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL || userProfile?.email?.toLowerCase() === 'your-actual-email@example.com'; // Replace with your actual email
       
       // Optional: Check user ID for even more security (uncomment and use your actual user ID)
       // const isCeoById = userProfile?.id === 'your-specific-user-id';
