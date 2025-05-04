@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Employer } from './types';
+import { Employer } from '@/components/job/hooks/types';
 import { INDUSTRY_MAP, LOGO_MAP } from '@/components/job/constants/employerMappings';
 
 export const useEmployerData = () => {
