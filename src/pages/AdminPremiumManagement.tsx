@@ -6,12 +6,14 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Separator } from '@/components/ui/separator';
 import { Shield, Sparkles } from 'lucide-react';
 import PremiumManagement from '@/components/admin/PremiumManagement';
-import { useCeoStatus } from '@/components/admin/redemption/tab-manager/useCeoStatus';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { Card, CardContent } from '@/components/ui/card';
 
 const AdminPremiumManagement: React.FC = () => {
   const fadeIn = useFadeIn(300);
-  const { isCeo } = useCeoStatus();
+  const { isCeo } = useAdminStatus();
+  
+  console.log('AdminPremiumManagement render - isCeo:', isCeo);
   
   return (
     <Layout>

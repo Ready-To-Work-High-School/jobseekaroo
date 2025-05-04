@@ -17,6 +17,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
   // Debug logs - leave these for troubleshooting
   console.log('MainNavigation - user type:', isAdmin ? 'admin' : 'not-admin');
   console.log('MainNavigation - CEO status:', isCeo ? 'CEO' : 'not-CEO');
+  console.log('MainNavigation - user:', user);
   
   const isActiveLink = (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`);
   

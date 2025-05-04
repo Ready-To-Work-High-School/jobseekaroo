@@ -30,6 +30,8 @@ export const MobileMenu = () => {
   } = useMobileMenu();
   
   const { isAdmin, isCeo } = useAdminStatus();
+  
+  console.log('MobileMenu render - isAdmin:', isAdmin, 'isCeo:', isCeo);
 
   return (
     <Sheet>

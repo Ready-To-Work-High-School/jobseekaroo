@@ -14,6 +14,8 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
   const { user, userProfile } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
   
+  console.log('DesktopNav render - isAdmin:', isAdmin, 'isCeo:', isCeo);
+  
   const getAuthPath = (path: string) => {
     return user ? path : "/sign-in";
   };

@@ -3,6 +3,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/types/user';
 import { GraduationCap, Briefcase, ShieldCheck, BookOpen, User } from 'lucide-react';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 interface AccountTypeBadgeProps {
   userProfile: UserProfile | null;
@@ -17,7 +18,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
 }) => {
   if (!userProfile || !userProfile.user_type) return null;
 
-  // Strict CEO check - only for a specific user with admin rights
+  // Use proper CEO check
   const isAdmin = userProfile.user_type === 'admin';
   const isCeoByEmail = userProfile.email?.toLowerCase() === process.env.CEO_EMAIL?.toLowerCase();
   const isCeo = isAdmin && isCeoByEmail;
