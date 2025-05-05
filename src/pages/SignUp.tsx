@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,8 @@ import SignUpBenefitCard from '@/components/auth/SignUpBenefitCard';
 import StudentSignUpForm from '@/components/auth/StudentSignUpForm';
 import EmployerSignUpForm from '@/components/auth/EmployerSignUpForm';
 import AuthTroubleshooter from '@/components/troubleshooting/AuthTroubleshooter';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { CheckCircle2 } from 'lucide-react';
 
 const SignUp = () => {
   const location = useLocation();
@@ -21,8 +24,17 @@ const SignUp = () => {
   const defaultUserType = queryParams.get('type') === 'employer' ? 'employer' : 'student';
   
   const [userType, setUserType] = useState(defaultUserType);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { handleSocialSignIn, isSubmitting } = useAuthForm();
   const fadeIn = useFadeIn(200);
+  
+  const handleSignupSuccess = (userId: string) => {
+    setSuccessMessage(
+      userType === 'employer' 
+        ? "Your employer account has been created successfully. Verification may be required before you can post jobs."
+        : "Your student account has been created successfully. Welcome to Jobseekaroo!"
+    );
+  };
 
   return (
     <Layout hideAuthLinks>
@@ -43,74 +55,91 @@ const SignUp = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <RadioGroup 
-                  defaultValue={userType}
-                  onValueChange={(value) => setUserType(value as 'student' | 'employer')}
-                  className="grid grid-cols-2 gap-4 pb-2"
-                >
-                  <div>
-                    <RadioGroupItem
-                      value="student"
-                      id="student"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="student"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                      <School className="mb-3 h-6 w-6" />
-                      <p>Student</p>
-                    </Label>
-                  </div>
-                  
-                  <div>
-                    <RadioGroupItem
-                      value="employer"
-                      id="employer"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="employer"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                      <Briefcase className="mb-3 h-6 w-6" />
-                      <p>Employer</p>
-                    </Label>
-                  </div>
-                </RadioGroup>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => handleSocialSignIn('google')}
-                    disabled={isSubmitting}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <GoogleIcon className="h-4 w-4" />
-                    <span>Google</span>
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => handleSocialSignIn('apple')}
-                    disabled={isSubmitting}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <Apple className="h-4 w-4" />
-                    <span>Apple</span>
-                  </Button>
-                </div>
-
-                {userType === 'student' ? (
-                  <StudentSignUpForm
-                    isLoading={isSubmitting}
-                  />
+                {successMessage ? (
+                  <Alert className="bg-green-50 border-green-200 text-green-800">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <AlertTitle>Success!</AlertTitle>
+                    <AlertDescription>{successMessage}</AlertDescription>
+                    <div className="mt-4">
+                      <Button asChild variant="outline" className="text-green-600 border-green-300 hover:bg-green-100">
+                        <Link to="/sign-in">Continue to Sign In</Link>
+                      </Button>
+                    </div>
+                  </Alert>
                 ) : (
-                  <EmployerSignUpForm
-                    isLoading={isSubmitting}
-                  />
+                  <>
+                    <RadioGroup 
+                      defaultValue={userType}
+                      onValueChange={(value) => setUserType(value as 'student' | 'employer')}
+                      className="grid grid-cols-2 gap-4 pb-2"
+                    >
+                      <div>
+                        <RadioGroupItem
+                          value="student"
+                          id="student"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="student"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        >
+                          <School className="mb-3 h-6 w-6" />
+                          <p>Student</p>
+                        </Label>
+                      </div>
+                      
+                      <div>
+                        <RadioGroupItem
+                          value="employer"
+                          id="employer"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="employer"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        >
+                          <Briefcase className="mb-3 h-6 w-6" />
+                          <p>Employer</p>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => handleSocialSignIn('google')}
+                        disabled={isSubmitting}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <GoogleIcon className="h-4 w-4" />
+                        <span>Google</span>
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={() => handleSocialSignIn('apple')}
+                        disabled={isSubmitting}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <Apple className="h-4 w-4" />
+                        <span>Apple</span>
+                      </Button>
+                    </div>
+
+                    {userType === 'student' ? (
+                      <StudentSignUpForm
+                        isLoading={isSubmitting}
+                        onSuccess={handleSignupSuccess}
+                      />
+                    ) : (
+                      <EmployerSignUpForm
+                        isLoading={isSubmitting}
+                        onSuccess={handleSignupSuccess}
+                      />
+                    )}
+                    
+                    <AuthTroubleshooter initialIssue="Having trouble creating an account?" />
+                  </>
                 )}
-                
-                <AuthTroubleshooter initialIssue="Having trouble creating an account?" />
               </CardContent>
               
               <CardFooter className="flex flex-col">

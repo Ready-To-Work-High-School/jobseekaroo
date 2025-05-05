@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,7 +12,7 @@ import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
 interface StudentSignUpFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (userId: string) => void;
   isLoading?: boolean;
   isAppleLoading?: boolean;
   handleAppleSignIn?: () => Promise<void>;
@@ -54,7 +53,7 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       }
       
       // Create the user account with student user type
-      await signUp(
+      const user = await signUp(
         data.email, 
         data.password,
         data.firstName,
@@ -69,11 +68,25 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       });
       
       // Redirect or callback
-      onSuccess?.();
-      navigate('/dashboard');
+      if (onSuccess && user?.id) {
+        onSuccess(user.id);
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error: any) {
       console.error('Signup error:', error);
-      setError(error.message || 'Failed to create account. Please try again.');
+      let errorMessage = error.message || 'Failed to create account. Please try again.';
+      
+      // Enhance error messages for common issues
+      if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+      } else if (errorMessage.includes('already')) {
+        errorMessage = 'An account with this email already exists. Please sign in instead.';
+      } else if (errorMessage.includes('multiple') || errorMessage.includes('rows')) {
+        errorMessage = 'Account creation issue. Please try again or contact support if the problem persists.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Alert } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
@@ -88,24 +88,34 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
       
       // If sign-up is successful, update the profile with employer-specific details
       if (user) {
-        await updateProfile({
-          company_name: data.companyName,
-          company_website: data.companyWebsite,
-          job_title: data.jobTitle,
-          employer_verification_status: 'pending'
-        });
-        
-        // Display success message
-        toast({
-          title: "Account created",
-          description: "Your employer account registration is complete. Please continue with the verification process.",
-        });
-        
-        // Call onSuccess with the user ID
-        if (onSuccess && user.id) {
-          onSuccess(user.id);
-        } else {
-          // If no onSuccess callback, navigate to dashboard
+        try {
+          await updateProfile({
+            company_name: data.companyName,
+            company_website: data.companyWebsite,
+            job_title: data.jobTitle,
+            employer_verification_status: 'pending'
+          });
+          
+          // Display success message
+          toast({
+            title: "Account created",
+            description: "Your employer account registration is complete. Please continue with the verification process.",
+          });
+          
+          // Call onSuccess with the user ID
+          if (onSuccess && user.id) {
+            onSuccess(user.id);
+          } else {
+            // If no onSuccess callback, navigate to dashboard
+            navigate('/dashboard');
+          }
+        } catch (profileError: any) {
+          console.error('Profile update error:', profileError);
+          // Still consider signup successful even if profile update fails
+          toast({
+            title: "Account created",
+            description: "Your account was created, but we couldn't save all your profile details. You can update them later.",
+          });
           navigate('/dashboard');
         }
       }
@@ -119,6 +129,8 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
         setIsOffline(true);
       } else if (errorMessage.includes('already')) {
         errorMessage = 'An account with this email already exists. Please sign in instead.';
+      } else if (errorMessage.includes('multiple') || errorMessage.includes('rows')) {
+        errorMessage = 'Account creation issue. Please try again or contact support if the problem persists.';
       }
       
       setError(errorMessage);

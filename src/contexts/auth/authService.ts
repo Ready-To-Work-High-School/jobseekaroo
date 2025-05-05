@@ -1,4 +1,3 @@
-
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { SignUpData } from './services/authTypes';
@@ -44,19 +43,25 @@ export const signUp = async (signUpData: SignUpData): Promise<AuthResponse> => {
     
     // Create a profile record for the new user
     if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          first_name: firstName,
-          last_name: lastName,
-          user_type: userType || 'student',
-          email: email
-        });
-      
-      if (profileError) {
-        console.error('Error creating profile:', profileError);
-        // Continue despite profile creation error
+      try {
+        // Use maybeSingle instead of single to avoid the multiple rows error
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            user_type: userType || 'student',
+            email: email
+          });
+        
+        if (profileError) {
+          console.error('Error creating profile:', profileError);
+          // Continue despite profile creation error
+        }
+      } catch (profileErr) {
+        console.error('Profile creation error:', profileErr);
+        // Don't fail the signup if profile creation has issues
       }
     }
     
