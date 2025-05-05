@@ -1,137 +1,122 @@
 
-import { 
-  Wifi, AlertCircle, Database, Lock, Globe, BrainCircuit,
-  KeyRound, ZapOff, ShieldAlert, Cookie, MonitorSmartphone
-} from 'lucide-react';
-import { LucideIcon } from 'lucide-react';
+/**
+ * Common troubleshooting issues and solutions
+ */
 
-export interface CommonIssue {
+export interface TroubleshootingIssue {
   id: string;
   title: string;
   description: string;
+  symptoms: string[];
   solutions: string[];
-  icon: LucideIcon;
+  additionalResources?: string[];
 }
 
-export const commonIssues: CommonIssue[] = [
+export const commonIssues: TroubleshootingIssue[] = [
   {
-    id: 'network',
-    title: 'Network Connectivity',
-    description: 'Problems with internet connection or API access',
-    solutions: [
-      'Check your internet connection and refresh the page',
-      'Try disabling any VPN or proxy services',
-      'Clear browser cache and cookies',
-      'If on a restricted network, contact your IT administrator'
+    id: "network-connectivity",
+    title: "Network Connectivity Issues",
+    description: "Problems with your internet connection affecting application performance.",
+    symptoms: [
+      "Slow loading times",
+      "Timeout errors",
+      "Cannot connect to services",
+      "Error messages about network or connectivity"
     ],
-    icon: Wifi
+    solutions: [
+      "Check your internet connection",
+      "Try disabling VPN or proxy services",
+      "Clear browser cache and cookies",
+      "Try using a different browser or device"
+    ],
+    additionalResources: [
+      "Network Troubleshooting Guide"
+    ]
   },
   {
-    id: 'authentication',
-    title: 'Authentication Issues',
-    description: 'Problems with signing in or account access',
-    solutions: [
-      'Verify your email and password are correct',
-      'Clear browser cookies and try signing in again',
-      'Reset your password if you continue to have issues',
-      'Contact support if your account is locked'
+    id: "authentication-issues",
+    title: "Authentication Problems",
+    description: "Difficulties with signing in or maintaining your session.",
+    symptoms: [
+      "Cannot log in despite correct credentials",
+      "Frequent session timeouts",
+      "Being asked to log in repeatedly",
+      "'Unauthorized' error messages"
     ],
-    icon: KeyRound
+    solutions: [
+      "Clear browser cookies and try again",
+      "Check if you're using the correct email/username",
+      "Reset your password",
+      "Ensure third-party cookies are enabled"
+    ]
   },
   {
-    id: 'data-loading',
-    title: 'Data Not Loading',
-    description: 'Information is missing or failing to display',
-    solutions: [
-      'Refresh the page to reload your data',
-      'Check your internet connection',
-      'Sign out and sign back in to refresh your session',
-      'Clear browser cache and cookies'
+    id: "display-rendering",
+    title: "Display or Rendering Issues",
+    description: "Visual problems with how the application appears in your browser.",
+    symptoms: [
+      "Missing images or icons",
+      "Text formatting issues",
+      "Layout appears broken or misaligned",
+      "Content overflows or is cut off"
     ],
-    icon: Database
+    solutions: [
+      "Try zooming out (Ctrl/Cmd -) if content appears too large",
+      "Update your browser to the latest version",
+      "Disable browser extensions that might interfere",
+      "Try a different browser"
+    ]
   },
   {
-    id: 'permissions',
-    title: 'Permission Errors',
-    description: 'Access denied or missing permissions',
-    solutions: [
-      'Verify your account has the correct permissions',
-      'Sign out and sign back in to refresh your session',
-      'Contact your administrator to request access',
-      'Check if your subscription is active'
+    id: "performance-issues",
+    title: "Performance Problems",
+    description: "The application is running slowly or becoming unresponsive.",
+    symptoms: [
+      "Slow response times when clicking buttons",
+      "Pages take a long time to load",
+      "Animations are jerky or sluggish",
+      "Application freezes temporarily"
     ],
-    icon: Lock
+    solutions: [
+      "Close other browser tabs and applications",
+      "Clear your browser cache",
+      "Disable unnecessary browser extensions",
+      "Check your device's available memory and CPU usage"
+    ]
   },
   {
-    id: 'browser-compatibility',
-    title: 'Browser Compatibility',
-    description: 'Issues with how the site works in your browser',
-    solutions: [
-      'Update to the latest version of your browser',
-      'Try using Chrome, Firefox, or Edge',
-      'Disable browser extensions that might interfere',
-      'Enable JavaScript and cookies in your browser settings'
+    id: "data-loading",
+    title: "Data Loading Failures",
+    description: "Problems with loading or displaying your data.",
+    symptoms: [
+      "Empty sections where data should appear",
+      "Error messages about failed data retrieval",
+      "Partial or incomplete data displayed",
+      "'No results found' when you expect results"
     ],
-    icon: Globe
+    solutions: [
+      "Refresh the page to retry data loading",
+      "Check your internet connection",
+      "Clear browser cache",
+      "Contact support if specific data is consistently missing"
+    ]
   },
   {
-    id: 'performance',
-    title: 'Performance Issues',
-    description: 'Application is slow or unresponsive',
-    solutions: [
-      'Close unused tabs and applications to free up memory',
-      'Clear browser cache and cookies',
-      'Disable browser extensions that might slow things down',
-      'Try using a different browser'
+    id: "feature-access",
+    title: "Feature Access Problems",
+    description: "Unable to access certain features or functionality.",
+    symptoms: [
+      "Buttons or links that don't respond when clicked",
+      "Features mentioned in documentation but not visible",
+      "Access denied messages",
+      "Features that appear disabled"
     ],
-    icon: ZapOff
-  },
-  {
-    id: 'security',
-    title: 'Security Warnings',
-    description: 'Browser security alerts or blocked features',
     solutions: [
-      'Ensure you\'re using HTTPS in the URL',
-      'Check your browser security settings',
-      'Update your browser to the latest version',
-      'Contact your IT administrator if using a work computer'
-    ],
-    icon: ShieldAlert
-  },
-  {
-    id: 'cookies',
-    title: 'Cookie Settings',
-    description: 'Problems related to cookie permissions',
-    solutions: [
-      'Enable cookies in your browser settings',
-      'Allow third-party cookies if you\'re using SSO',
-      'Clear cookies and cache, then try again',
-      'Check if browser extensions are blocking cookies'
-    ],
-    icon: Cookie
-  },
-  {
-    id: 'mobile-issues',
-    title: 'Mobile Device Issues',
-    description: 'Problems specific to smartphones and tablets',
-    solutions: [
-      'Try using the desktop version of the site',
-      'Update your mobile browser to the latest version',
-      'Clear browser cache and data',
-      'Check for system updates on your device'
-    ],
-    icon: MonitorSmartphone
-  },
-  {
-    id: 'ai-features',
-    title: 'AI Features Not Working',
-    description: 'Issues with AI-powered functionality',
-    solutions: [
-      'Check your internet connection (AI features require good connectivity)',
-      'Try refreshing the page and trying again',
-      'Use shorter or clearer input text if AI seems confused',
-      'Contact support if AI features remain unavailable'
-    ],
-    icon: BrainCircuit
+      "Check if your account has the necessary permissions",
+      "Ensure your subscription is active (if applicable)",
+      "Try logging out and back in",
+      "Contact support to verify account privileges"
+    ]
   }
 ];
+

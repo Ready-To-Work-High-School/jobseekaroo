@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface DiagnosticPanelProps {
   showDetails?: boolean;
@@ -19,6 +20,7 @@ interface DiagnosticPanelProps {
 export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({ showDetails = false }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<{ issues: string[]; automaticallyFixed: number } | null>(null);
+  const [showAllIssues, setShowAllIssues] = useState(false);
   const { runDiagnostics, applyFixes } = useDiagnosticService();
 
   const handleRunDiagnostics = async () => {
@@ -26,6 +28,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({ showDetails = 
     try {
       const diagnosticResults = await runDiagnostics();
       setResults(diagnosticResults);
+      console.log("Diagnostic results:", diagnosticResults);
     } catch (error) {
       console.error("Failed to run diagnostics:", error);
     } finally {
@@ -72,21 +75,45 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({ showDetails = 
         {showDetails && results && (
           <div className="mb-4 space-y-2">
             {results.issues.length === 0 ? (
-              <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-md">
-                <Check className="h-5 w-5" />
-                <span>No issues detected</span>
-              </div>
+              <Alert className="bg-green-50 border-green-200">
+                <Check className="h-5 w-5 text-green-600" />
+                <AlertTitle className="text-green-800">All Systems Operational</AlertTitle>
+                <AlertDescription className="text-green-700">
+                  No issues were detected with your application.
+                </AlertDescription>
+              </Alert>
             ) : (
               <>
-                <p className="font-medium">Issues found ({results.issues.length}):</p>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  {results.issues.map((issue, index) => (
-                    <li key={index} className="text-red-600">{issue}</li>
-                  ))}
-                </ul>
+                <Alert variant="destructive" className="bg-red-50 border-red-200">
+                  <AlertCircle className="h-5 w-5 text-red-600" />
+                  <AlertTitle className="text-red-800">Issues Detected</AlertTitle>
+                  <AlertDescription className="text-red-700">
+                    Found {results.issues.length} issue(s) that may affect functionality.
+                  </AlertDescription>
+                </Alert>
+                
+                <div className="mt-4">
+                  <p className="font-medium mb-2">Issues found ({results.issues.length}):</p>
+                  <ul className="list-disc pl-5 space-y-1 text-sm">
+                    {(showAllIssues ? results.issues : results.issues.slice(0, 5)).map((issue, index) => (
+                      <li key={index} className="text-red-600">{issue}</li>
+                    ))}
+                  </ul>
+                  
+                  {results.issues.length > 5 && !showAllIssues && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setShowAllIssues(true)}
+                      className="mt-2 text-sm"
+                    >
+                      Show all {results.issues.length} issues
+                    </Button>
+                  )}
+                </div>
                 
                 {results.automaticallyFixed > 0 && (
-                  <div className="bg-green-50 p-3 rounded-md text-sm">
+                  <div className="bg-green-50 p-3 rounded-md text-sm mt-4">
                     {results.automaticallyFixed} issue(s) were automatically fixed
                   </div>
                 )}
