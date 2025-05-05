@@ -1,15 +1,12 @@
-
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useAuth } from '@/contexts/auth';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/contexts/auth';
+import { useQuery } from '@tanstack/react-query';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Award, Clock, Download, Share2, ExternalLink } from 'lucide-react';
-import { getUserCredentials } from '@/lib/supabase/simulations';
-import UserBadges from '@/components/badges/UserBadges';
+import { getUserSimulationCredentials } from '@/lib/supabase/simulations';
 
 const UserCredentials = () => {
   const fadeIn = useFadeIn(300);
@@ -18,7 +15,7 @@ const UserCredentials = () => {
   // Fetch user's simulation credentials
   const { data: credentials, isLoading } = useQuery({
     queryKey: ['userCredentials', user?.id],
-    queryFn: () => (user?.id ? getUserCredentials(user.id) : []),
+    queryFn: () => (user?.id ? getUserSimulationCredentials(user.id) : []),
     enabled: !!user?.id,
   });
 

@@ -1,19 +1,15 @@
-
-import React, { useState } from 'react';
-import { useAuth } from '@/contexts/auth';
+import React from 'react';
 import Layout from '@/components/Layout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Award, GraduationCap, Briefcase, MapPin, Camera, CheckCircle, PenLine, User, Clock } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
+import { useFadeIn } from '@/utils/animations';
 import { useQuery } from '@tanstack/react-query';
-import { getUserCredentials } from '@/lib/supabase/simulations';
+import { useAuth } from '@/contexts/auth';
+import StudentProfileCard from '@/components/students/StudentProfileCard';
+import { getUserProfile } from '@/lib/supabase/profile';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
+import StudentBadges from '@/components/students/badges/StudentBadges';
+import { getUserSimulationCredentials } from '@/lib/supabase/simulations';
 
 const StudentProfile = () => {
   const { user, userProfile, updateProfile } = useAuth();
@@ -29,7 +25,7 @@ const StudentProfile = () => {
   // Fetch user credentials/certificates
   const { data: credentials } = useQuery({
     queryKey: ['userCredentials', user?.id],
-    queryFn: () => user ? getUserCredentials(user.id) : Promise.resolve([]),
+    queryFn: () => user ? getUserSimulationCredentials(user.id) : Promise.resolve([]),
     enabled: !!user,
   });
 

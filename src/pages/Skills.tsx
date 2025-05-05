@@ -6,6 +6,7 @@ import { SkillsProvider } from '@/contexts/SkillsContext';
 import SkillsHeader from '@/components/skills/SkillsHeader';
 import SkillsTabs from '@/components/skills/SkillsTabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import TabLoader from '@/components/skills/TabLoader';
 
 const Skills = () => {
   const animation = useFadeIn(200);
@@ -16,7 +17,7 @@ const Skills = () => {
         <div className="flex flex-col gap-6">
           <SkillsHeader />
           
-          <Suspense fallback={<Skeleton className="w-full h-64" />}>
+          <Suspense fallback={<TabLoader />}>
             <SkillsProvider>
               <SkillsTabs />
             </SkillsProvider>

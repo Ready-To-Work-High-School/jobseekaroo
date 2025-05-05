@@ -5,7 +5,7 @@ import App from '@/App';
 import ErrorPage from '@/pages/ErrorPage';
 import Profile from '@/pages/Profile';
 import SharedRoutes from './sharedRoutes';
-import SkillDevelopment from '@/pages/SkillDevelopment';
+import Skills from '@/pages/Skills';
 import JobSimulations from '@/pages/JobSimulations';
 import SimulationDetail from '@/pages/SimulationDetail';
 import HealthcareSimulation from '@/pages/HealthcareSimulation';
@@ -22,15 +22,15 @@ const router = createBrowserRouter([
     children: [
       // Add only routes that we know exist
       {
-        path: '/skill-development',
-        element: <SkillDevelopment />,
+        path: '/skills',
+        element: <Skills />,
       },
       {
         path: '/job-simulations',
         element: <JobSimulations />,
       },
       {
-        path: '/simulations/:id',
+        path: '/job-simulations/:id',
         element: <SimulationDetail />,
       },
       {
