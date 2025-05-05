@@ -1,15 +1,14 @@
 
 import React from 'react';
-import { Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import AppRoutes from './routes/index';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import MobileBottomNavigation from './components/mobile/MobileBottomNavigation';
 import AutoRecoveryErrorBoundary from './components/ErrorRecovery/AutoRecoveryErrorBoundary';
 import DiagnosticMenuButton from './components/ErrorRecovery/DiagnosticMenuButton';
 import ScrollToTop from './components/navigation/ScrollToTop';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -32,11 +31,9 @@ function App() {
               <DiagnosticMenuButton />
             </div>
             
-            <AnimatePresence mode="wait">
-              <Routes>
-                {AppRoutes}
-              </Routes>
-            </AnimatePresence>
+            {/* Render current route */}
+            <Outlet />
+            
             <MobileBottomNavigation />
             <Toaster />
           </motion.div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Route, RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 import Resources from '@/pages/Resources';
 import InterviewPrep from '@/pages/InterviewPrep';
 import InterviewQuestions from '@/pages/InterviewQuestions';
@@ -12,7 +12,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import SkillDevelopment from '@/pages/SkillDevelopment';
 import ResumeAssistant from '@/pages/ResumeAssistant';
 
-// Convert JSX routes to RouteObject array for proper spreading in index.tsx
+// Define SharedRoutes as a proper RouteObject array
 const SharedRoutes: RouteObject[] = [
   {
     path: '/resources',
@@ -45,10 +45,6 @@ const SharedRoutes: RouteObject[] = [
   {
     path: '/first-job-toolkit',
     element: <ErrorBoundary><FirstJobToolkit /></ErrorBoundary>,
-  },
-  {
-    path: '/skill-development',
-    element: <ErrorBoundary><SkillDevelopment /></ErrorBoundary>,
   },
 ];
 
