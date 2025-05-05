@@ -1,15 +1,22 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useFadeIn } from '@/utils/animations';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/auth';
-import StudentProfileCard from '@/components/students/StudentProfileCard';
 import { getUserProfile } from '@/lib/supabase/profile';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
-import StudentBadges from '@/components/students/badges/StudentBadges';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { getUserSimulationCredentials } from '@/lib/supabase/simulations';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
+import { toast } from '@/components/ui/use-toast';
+import { Award, Clock, GraduationCap, MapPin, PenLine, Briefcase } from 'lucide-react';
 
 const StudentProfile = () => {
   const { user, userProfile, updateProfile } = useAuth();
@@ -56,10 +63,16 @@ const StudentProfile = () => {
       });
       
       setEditMode(false);
-      toast.success("Profile updated successfully!");
+      toast({
+        title: "Profile updated successfully!",
+        variant: "default",
+      });
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error("Failed to update profile. Please try again.");
+      toast({
+        title: "Failed to update profile. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -240,7 +253,7 @@ const StudentProfile = () => {
                               </div>
                             </div>
                             <Badge variant="outline">
-                              #{credential.certificate_id.split('-')[1]}
+                              #{credential.certificate_id?.split('-')[1] || ''}
                             </Badge>
                           </div>
                         </div>
