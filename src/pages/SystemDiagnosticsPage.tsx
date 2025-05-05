@@ -1,28 +1,121 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { DiagnosticPanel } from '@/components/ErrorRecovery/DiagnosticPanel';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
-import { RefreshCcw, ArrowLeft, Trash2 } from 'lucide-react';
-import { getSessionErrors, clearSessionErrors } from '@/components/ErrorRecovery/errorTracker';
+import { RefreshCcw, ArrowLeft, Trash2, BadgeHelp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useDiagnosticService } from '@/components/ErrorRecovery/diagnosticService';
+import { toast } from 'sonner';
+
+// Improved error tracking
+const getSessionErrors = () => {
+  try {
+    const errors = sessionStorage.getItem('app_errors');
+    return errors ? JSON.parse(errors) : [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const clearSessionErrors = () => {
+  try {
+    sessionStorage.setItem('app_errors', JSON.stringify([]));
+  } catch (e) {
+    console.error('Failed to clear session errors:', e);
+  }
+};
 
 const SystemDiagnosticsPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [refreshKey, setRefreshKey] = useState(0);
-  const errors = getSessionErrors();
+  const [errors, setErrors] = useState(getSessionErrors());
+  const { runDiagnostics, isRunning } = useDiagnosticService();
+  const [diagnosticResults, setDiagnosticResults] = useState<any>(null);
+  
+  // Run diagnostics when page loads
+  useEffect(() => {
+    const runInitialDiagnostics = async () => {
+      try {
+        const results = await runDiagnostics();
+        setDiagnosticResults(results);
+        
+        if (results.issues.length > 0) {
+          toast({
+            title: `${results.issues.length} issue(s) detected`,
+            description: "See details below for more information",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "All systems operational",
+            description: "No issues detected",
+            variant: "default",
+          });
+        }
+      } catch (error) {
+        console.error('Failed to run diagnostics:', error);
+      }
+    };
+    
+    runInitialDiagnostics();
+    
+    // Update errors from session storage
+    setErrors(getSessionErrors());
+  }, [refreshKey, runDiagnostics, toast]);
   
   const handleClearErrors = () => {
     clearSessionErrors();
+    setErrors([]);
     setRefreshKey(prev => prev + 1);
     toast({
       title: "Logs cleared",
       description: "All error logs have been cleared",
     });
+  };
+
+  const handleRunDiagnostics = async () => {
+    try {
+      const results = await runDiagnostics();
+      setDiagnosticResults(results);
+      
+      if (results.issues.length > 0) {
+        toast.error(`${results.issues.length} issue(s) detected`);
+      } else {
+        toast.success("All systems operational");
+      }
+    } catch (error) {
+      console.error('Failed to run diagnostics:', error);
+      toast.error("Failed to run diagnostics");
+    }
+  };
+
+  const handleFixProfile = async () => {
+    try {
+      const { data: profilesExist } = await fetch('/api/check-profile-table');
+      
+      if (!profilesExist) {
+        toast.error("Profile table doesn't exist or is inaccessible");
+        return;
+      }
+      
+      // Attempt to refresh the session and clear profile cache
+      localStorage.removeItem('supabase.auth.token');
+      sessionStorage.removeItem('supabase.auth.token');
+      
+      // Redirect to trigger reauthorization
+      toast.success("Profile cache cleared, refreshing authentication...");
+      setTimeout(() => {
+        window.location.href = '/profile';
+      }, 1500);
+    } catch (error) {
+      console.error('Error fixing profile:', error);
+      toast.error("Failed to fix profile issues");
+    }
   };
 
   return (
@@ -60,11 +153,21 @@ const SystemDiagnosticsPage: React.FC = () => {
                 <TabsTrigger value="errors">
                   Error Logs {errors.length > 0 && `(${errors.length})`}
                 </TabsTrigger>
-                <TabsTrigger value="performance">Performance</TabsTrigger>
+                <TabsTrigger value="fixes">Common Fixes</TabsTrigger>
               </TabsList>
               
               <TabsContent value="diagnostics">
                 <DiagnosticPanel showDetails key={refreshKey} />
+                
+                <div className="mt-6">
+                  <Button 
+                    onClick={handleRunDiagnostics}
+                    disabled={isRunning}
+                    className="w-full"
+                  >
+                    {isRunning ? 'Running Diagnostics...' : 'Run Full System Diagnostics'}
+                  </Button>
+                </div>
               </TabsContent>
               
               <TabsContent value="errors">
@@ -109,10 +212,74 @@ const SystemDiagnosticsPage: React.FC = () => {
                 </Card>
               </TabsContent>
               
-              <TabsContent value="performance">
+              <TabsContent value="fixes">
                 <Card className="p-4">
-                  <h3 className="font-medium mb-4">Performance Metrics</h3>
-                  <PerformanceMetrics />
+                  <h3 className="font-medium mb-4">Common Fixes</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="p-4 border rounded-md">
+                      <h4 className="font-medium flex items-center">
+                        <BadgeHelp className="h-4 w-4 mr-2 text-blue-500" />
+                        Profile Issues
+                      </h4>
+                      <p className="text-sm text-muted-foreground my-2">
+                        If you're experiencing issues with your profile not showing, or profile data not loading correctly.
+                      </p>
+                      <Button onClick={handleFixProfile} size="sm">
+                        Fix Profile Issues
+                      </Button>
+                    </div>
+                    
+                    <div className="p-4 border rounded-md">
+                      <h4 className="font-medium flex items-center">
+                        <BadgeHelp className="h-4 w-4 mr-2 text-blue-500" />
+                        Clear Local Data
+                      </h4>
+                      <p className="text-sm text-muted-foreground my-2">
+                        Clears all locally stored data, which can resolve various caching issues.
+                      </p>
+                      <Button 
+                        size="sm"
+                        onClick={() => {
+                          try {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            toast.success("Local data cleared successfully");
+                            setTimeout(() => window.location.reload(), 1000);
+                          } catch (e) {
+                            console.error('Error clearing data:', e);
+                            toast.error("Failed to clear local data");
+                          }
+                        }}
+                      >
+                        Clear All Local Data
+                      </Button>
+                    </div>
+                    
+                    <div className="p-4 border rounded-md">
+                      <h4 className="font-medium flex items-center">
+                        <BadgeHelp className="h-4 w-4 mr-2 text-blue-500" />
+                        Authentication Reset
+                      </h4>
+                      <p className="text-sm text-muted-foreground my-2">
+                        Signs you out and clears all authentication data.
+                      </p>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => {
+                          localStorage.removeItem('supabase.auth.token');
+                          sessionStorage.removeItem('supabase.auth.token');
+                          toast.success("Authentication reset, redirecting...");
+                          setTimeout(() => {
+                            window.location.href = '/sign-in';
+                          }, 1000);
+                        }}
+                      >
+                        Reset Authentication
+                      </Button>
+                    </div>
+                  </div>
                 </Card>
               </TabsContent>
             </Tabs>
@@ -127,65 +294,6 @@ const SystemDiagnosticsPage: React.FC = () => {
         </div>
       </div>
     </Layout>
-  );
-};
-
-// Simple performance metrics display
-const PerformanceMetrics: React.FC = () => {
-  const [metrics, setMetrics] = useState<{
-    pageLoad: number;
-    memory: string;
-    networkLatency: number;
-  }>({
-    pageLoad: 0,
-    memory: 'Unknown',
-    networkLatency: 0
-  });
-  
-  // Get basic performance metrics
-  React.useEffect(() => {
-    if (window.performance) {
-      // Page load time
-      const navData = window.performance.timing;
-      if (navData) {
-        const pageLoad = navData.loadEventEnd - navData.navigationStart;
-        
-        // Memory usage
-        let memory = 'Unknown';
-        if ('memory' in window.performance) {
-          const memoryInfo = (window.performance as any).memory;
-          if (memoryInfo?.usedJSHeapSize) {
-            memory = `${(memoryInfo.usedJSHeapSize / (1024 * 1024)).toFixed(1)} MB`;
-          }
-        }
-        
-        // Fake network latency for demonstration
-        const networkLatency = Math.floor(Math.random() * 100) + 20;
-        
-        setMetrics({
-          pageLoad,
-          memory,
-          networkLatency
-        });
-      }
-    }
-  }, []);
-  
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center border-b pb-2">
-        <span>Page load time</span>
-        <span className="font-mono">{metrics.pageLoad} ms</span>
-      </div>
-      <div className="flex justify-between items-center border-b pb-2">
-        <span>Memory usage</span>
-        <span className="font-mono">{metrics.memory}</span>
-      </div>
-      <div className="flex justify-between items-center border-b pb-2">
-        <span>Network latency</span>
-        <span className="font-mono">{metrics.networkLatency} ms</span>
-      </div>
-    </div>
   );
 };
 

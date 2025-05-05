@@ -2,7 +2,6 @@
 import { createContext } from 'react';
 import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
-import { ApplicationStatus } from '@/types/application';
 import { AuthContextType } from './authContext.types';
 
 // Create context with default undefined value
