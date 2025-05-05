@@ -16,13 +16,8 @@ import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 import { IssueItem } from './IssueItem';
 
 // Import from consolidated data file
-import { commonIssues } from './data/troubleshootingData';
-
-// Define minimal types needed for the component
-interface TroubleshootProps {
-  trigger?: React.ReactNode;
-  initialIssue?: string;
-}
+import { commonIssues, TroubleshootingIssue } from './data/troubleshootingData';
+import { TroubleshootProps } from './types';
 
 const TroubleshootDialog: React.FC<TroubleshootProps> = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');

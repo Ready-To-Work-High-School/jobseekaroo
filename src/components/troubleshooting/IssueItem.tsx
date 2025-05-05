@@ -1,16 +1,19 @@
 
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CommonIssue } from './data/troubleshootingData';
+import { TroubleshootingIssue } from './data/troubleshootingData';
+import { LucideIcon } from 'lucide-react';
 
 interface IssueItemProps {
-  issue: CommonIssue;
+  issue: TroubleshootingIssue;
   isSelected: boolean;
   onSelect: (id: string) => void;
 }
 
 export const IssueItem = ({ issue, isSelected, onSelect }: IssueItemProps) => {
-  const Icon = issue.icon;
+  // Create a placeholder icon if none is provided from the issue
+  // This will maintain compatibility with the existing component
+  const Icon: LucideIcon = issue.icon || (() => <div className="w-4 h-4" />);
   
   return (
     <div

@@ -1,4 +1,13 @@
 
+import { 
+  Wifi, 
+  UserX, 
+  Layout, 
+  Clock, 
+  Database, 
+  LockKeyhole 
+} from 'lucide-react';
+
 /**
  * Common troubleshooting issues and solutions
  */
@@ -10,6 +19,7 @@ export interface TroubleshootingIssue {
   symptoms: string[];
   solutions: string[];
   additionalResources?: string[];
+  icon?: any;
 }
 
 export const commonIssues: TroubleshootingIssue[] = [
@@ -31,7 +41,8 @@ export const commonIssues: TroubleshootingIssue[] = [
     ],
     additionalResources: [
       "Network Troubleshooting Guide"
-    ]
+    ],
+    icon: Wifi
   },
   {
     id: "authentication-issues",
@@ -48,7 +59,8 @@ export const commonIssues: TroubleshootingIssue[] = [
       "Check if you're using the correct email/username",
       "Reset your password",
       "Ensure third-party cookies are enabled"
-    ]
+    ],
+    icon: UserX
   },
   {
     id: "display-rendering",
@@ -65,7 +77,8 @@ export const commonIssues: TroubleshootingIssue[] = [
       "Update your browser to the latest version",
       "Disable browser extensions that might interfere",
       "Try a different browser"
-    ]
+    ],
+    icon: Layout
   },
   {
     id: "performance-issues",
@@ -82,7 +95,8 @@ export const commonIssues: TroubleshootingIssue[] = [
       "Clear your browser cache",
       "Disable unnecessary browser extensions",
       "Check your device's available memory and CPU usage"
-    ]
+    ],
+    icon: Clock
   },
   {
     id: "data-loading",
@@ -99,7 +113,8 @@ export const commonIssues: TroubleshootingIssue[] = [
       "Check your internet connection",
       "Clear browser cache",
       "Contact support if specific data is consistently missing"
-    ]
+    ],
+    icon: Database
   },
   {
     id: "feature-access",
@@ -116,7 +131,7 @@ export const commonIssues: TroubleshootingIssue[] = [
       "Ensure your subscription is active (if applicable)",
       "Try logging out and back in",
       "Contact support to verify account privileges"
-    ]
+    ],
+    icon: LockKeyhole
   }
 ];
-
