@@ -70,17 +70,17 @@ const AppRoutes = [
   <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
   <Route path="/test" element={<TestPage />} key="test" />,
   
-  {/* Job simulation routes */}
+  /* Job simulation routes */
   <Route path="/job-simulations" element={<JobSimulations />} key="job-simulations" />,
   <Route path="/job-simulations/:id" element={<SimulationDetail />} key="simulation-detail" />,
   <Route path="/credentials" element={<UserCredentials />} key="user-credentials" />,
   <Route path="/healthcare-simulation" element={<HealthcareSimulation />} key="healthcare-simulation" />,
   
-  {/* Student routes */}
+  /* Student routes */
   <Route path="/student-dashboard" element={<StudentDashboard />} key="student-dashboard" />,
   <Route path="/student-profile" element={<StudentProfile />} key="student-profile" />,
   
-  {/* Include routes defined in other files */}
+  /* Include routes defined in other files */
   ...PublicRoutes,
   ...SchoolRoutes,
   ...EmployerRoutes,
