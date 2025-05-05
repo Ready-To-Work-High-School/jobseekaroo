@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { UserProfile } from '@/types/user';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Shield, Briefcase, GraduationCap, BookOpen, Trash2 } from 'lucide-react';
+import { User, Shield, ShieldCheck, Briefcase, School, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 
@@ -207,7 +206,7 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
                 onClick={() => handleUpdateUserType('student')}
                 disabled={isLoading || user.user_type === 'student'}
               >
-                <GraduationCap className="w-4 h-4 mr-2" />
+                <User className="w-4 h-4 mr-2" />
                 Student
               </Button>
               
@@ -227,7 +226,7 @@ const UserDetailDialog: React.FC<UserDetailDialogProps> = ({
                 onClick={() => handleUpdateUserType('teacher')}
                 disabled={isLoading || user.user_type === 'teacher'}
               >
-                <BookOpen className="w-4 h-4 mr-2" />
+                <School className="w-4 h-4 mr-2" />
                 Teacher
               </Button>
             </div>

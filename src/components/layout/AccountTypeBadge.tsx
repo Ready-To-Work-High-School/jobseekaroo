@@ -2,7 +2,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/types/user';
-import { GraduationCap, Briefcase, ShieldCheck, BookOpen, User } from 'lucide-react';
+import { User, School, Briefcase, Shield, ShieldCheck } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 interface AccountTypeBadgeProps {
@@ -28,7 +28,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
       case 'student':
         return {
           text: 'Student',
-          icon: <GraduationCap className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+          icon: <User className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
           variant: userProfile.redeemed_at ? 'default' : 'outline',
           className: 'bg-blue-700 text-white'
         };
@@ -43,21 +43,21 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
         if (isCeo) {
           return {
             text: 'Chief Executive Officer',
-            icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+            icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'} text-amber-400`} />,
             variant: 'outline',
             className: 'bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white hover:bg-black/90'
           };
         }
         return {
           text: 'Admin',
-          icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+          icon: <Shield className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
           variant: 'outline',
           className: 'bg-black text-white hover:bg-black/90'
         };
       case 'teacher':
         return {
           text: 'Teacher',
-          icon: <BookOpen className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+          icon: <School className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
           variant: userProfile.redeemed_at ? 'default' : 'outline',
           className: 'bg-amber-700 text-white'
         };
