@@ -4,6 +4,20 @@ import { supabase } from '@/integrations/supabase/client';
 
 export const startSimulation = async (userId: string, simulationId: string): Promise<void> => {
   try {
+    // Check if the user already has progress for this simulation
+    const { data: existingProgress } = await supabase
+      .from('user_simulation_progress')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('simulation_id', simulationId)
+      .maybeSingle();
+    
+    // If progress exists, don't create a new record
+    if (existingProgress) {
+      console.log('User already has progress for this simulation');
+      return;
+    }
+    
     const { error: progressError } = await supabase
       .from('user_simulation_progress')
       .insert([
@@ -11,7 +25,8 @@ export const startSimulation = async (userId: string, simulationId: string): Pro
           user_id: userId,
           simulation_id: simulationId,
           progress_percentage: 0,
-          completed: false
+          completed: false,
+          started_at: new Date().toISOString()
         }
       ]);
       

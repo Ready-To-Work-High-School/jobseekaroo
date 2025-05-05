@@ -1,99 +1,169 @@
 
+import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import React from 'react';
-import { Route } from 'react-router-dom';
-import Home from '@/pages/Home';
+import App from '@/App';
+import LandingPage from '@/pages/LandingPage';
+import StudentDashboard from '@/pages/student/StudentDashboard';
+import EmployerDashboard from '@/pages/employer/EmployerDashboard';
+import JobPostingForm from '@/pages/employer/JobPostingForm';
 import Jobs from '@/pages/Jobs';
 import JobDetail from '@/pages/JobDetail';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
-import Dashboard from '@/pages/Dashboard';
-import Profile from '@/pages/Profile';
-import Applications from '@/pages/Applications';
+import FirstJobToolkit from '@/pages/FirstJobToolkit';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
 import ErrorPage from '@/pages/ErrorPage';
-import EmployerDashboard from '@/pages/EmployerDashboard';
-import AdminDashboard from '@/pages/AdminDashboard';
-import TeacherDashboard from '@/pages/TeacherDashboard';
-import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
-import NotFound from '@/pages/NotFound';
-import SkillDevelopment from '@/pages/SkillDevelopment';
-import InterviewPrep from '@/pages/InterviewPrep';
-import EmployerAnalytics from '@/pages/EmployerAnalytics';
-import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
-import PremiumServices from '@/pages/PremiumServices';
-import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
-import SchoolGuide from '@/pages/SchoolGuide';
-import SchoolIntegration from '@/pages/SchoolIntegration';
-import Resources from '@/pages/Resources';
-import PlatformGuide from '@/pages/PlatformGuide';
-import ForEmployers from '@/pages/ForEmployers';
-import SchedulePage from '@/pages/SchedulePage';
-import TestPage from '@/pages/TestPage';
+import AboutUs from '@/pages/AboutUs';
+import MissionPage from '@/pages/MissionPage';
+import AdminRoute from '@/components/admin/AdminRoute';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import StudentProfile from '@/pages/student/StudentProfile';
+import EmployerProfile from '@/pages/employer/EmployerProfile';
+import RedemptionCodePage from '@/pages/admin/RedemptionCodePage';
+import MessageModeration from '@/pages/admin/MessageModeration';
+import UserManagement from '@/pages/admin/UserManagement';
+import ApplicationPage from '@/pages/student/ApplicationPage';
+import StudentMessages from '@/pages/student/StudentMessages';
+import AdminVerification from '@/pages/admin/AdminVerification';
+import SharedRoutes from './sharedRoutes';
 import JobSimulations from '@/pages/JobSimulations';
 import SimulationDetail from '@/pages/SimulationDetail';
-import UserCredentials from '@/pages/UserCredentials';
-import StudentProfile from '@/pages/student/StudentProfile';
-import StudentDashboard from '@/pages/student/StudentDashboard';
 import HealthcareSimulation from '@/pages/HealthcareSimulation';
+import SkillDevelopment from '@/pages/SkillDevelopment';
+import UserCredentials from '@/pages/UserCredentials';
 
-import { PublicRoutes } from './publicRoutes';
-import { SchoolRoutes } from './schoolRoutes';
-import { EmployerRoutes } from './employerRoutes';
-import { JobSeekerRoutes } from './jobSeekerRoutes';
+// Checking for the correct types being returned from createBrowserRouter
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      // Public Routes
+      {
+        path: '/',
+        element: <LandingPage />,
+      },
+      {
+        path: '/sign-in',
+        element: <SignIn />,
+      },
+      {
+        path: '/sign-up',
+        element: <SignUp />,
+      },
+      {
+        path: '/jobs',
+        element: <Jobs />,
+      },
+      {
+        path: '/jobs/:id',
+        element: <JobDetail />,
+      },
+      {
+        path: '/privacy-policy',
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: '/terms-of-service',
+        element: <TermsOfService />,
+      },
+      {
+        path: '/about-us',
+        element: <AboutUs />,
+      },
+      {
+        path: '/mission',
+        element: <MissionPage />,
+      },
+      
+      // Student Routes
+      {
+        path: '/student/dashboard',
+        element: <StudentDashboard />,
+      },
+      {
+        path: '/student/profile',
+        element: <StudentProfile />,
+      },
+      {
+        path: '/student/applications',
+        element: <ApplicationPage />,
+      },
+      {
+        path: '/student/messages',
+        element: <StudentMessages />,
+      },
+      
+      // Employer Routes
+      {
+        path: '/employer/dashboard',
+        element: <EmployerDashboard />,
+      },
+      {
+        path: '/employer/post-job',
+        element: <JobPostingForm />,
+      },
+      {
+        path: '/employer/profile',
+        element: <EmployerProfile />,
+      },
+      
+      // Admin Routes
+      {
+        path: '/admin/*',
+        element: <AdminRoute />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <AdminDashboard />,
+          },
+          {
+            path: 'redemption-codes',
+            element: <RedemptionCodePage />,
+          },
+          {
+            path: 'message-moderation',
+            element: <MessageModeration />,
+          },
+          {
+            path: 'user-management',
+            element: <UserManagement />,
+          },
+          {
+            path: 'verification',
+            element: <AdminVerification />,
+          },
+        ],
+      },
+      
+      // Job Simulations and Skills Routes
+      {
+        path: '/job-simulations',
+        element: <JobSimulations />,
+      },
+      {
+        path: '/simulations/:id',
+        element: <SimulationDetail />,
+      },
+      {
+        path: '/healthcare-simulation',
+        element: <HealthcareSimulation />,
+      },
+      {
+        path: '/skill-development',
+        element: <SkillDevelopment />,
+      },
+      {
+        path: '/credentials',
+        element: <UserCredentials />,
+      },
+      
+      // Add SharedRoutes
+      ...React.Children.toArray(SharedRoutes) as RouteObject[],
+    ],
+  },
+]);
 
-const AppRoutes = [
-  <Route path="/" element={<Home />} key="home" />,
-  <Route path="/jobs" element={<Jobs />} key="jobs" />,
-  <Route path="/jobs/:id" element={<JobDetail />} key="jobDetail" />,
-  <Route path="/signin" element={<SignIn />} key="signin" />,
-  <Route path="/sign-in" element={<SignIn />} key="sign-in" />,
-  <Route path="/signup" element={<SignUp />} key="signup" />,
-  <Route path="/sign-up" element={<SignUp />} key="sign-up" />,
-  <Route path="/dashboard" element={<Dashboard />} key="dashboard" />,
-  <Route path="/profile" element={<Profile />} key="profile" />,
-  <Route path="/applications" element={<Applications />} key="applications" />,
-  <Route path="/error" element={<ErrorPage />} key="error" />,
-  <Route path="/employer-dashboard" element={<EmployerDashboard />} key="employer-dashboard" />,
-  <Route path="/admin-dashboard" element={<AdminDashboard />} key="admin-dashboard" />,
-  <Route path="/teacher-dashboard" element={<TeacherDashboard />} key="teacher-dashboard" />,
-  <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} key="system-diagnostics" />,
-  <Route path="/skill-development" element={<SkillDevelopment />} key="skill-development" />,
-  <Route path="/interview-prep" element={<InterviewPrep />} key="interview-prep" />,
-  <Route path="/employer-analytics" element={<EmployerAnalytics />} key="employer-analytics" />,
-  <Route path="/premium-services" element={<PremiumServices />} key="premium-services" />,
-  <Route path="/employer-premium" element={<EmployerPremiumServices />} key="employer-premium" />,
-  <Route path="/analytics" element={<AnalyticsDashboard />} key="analytics" />,
-  <Route path="/school-guide" element={<SchoolGuide />} key="school-guide" />,
-  <Route path="/resources" element={<Resources />} key="resources" />,
-  <Route path="/platform-guide" element={<PlatformGuide />} key="platform-guide" />,
-  <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
-  <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
-  <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
-  <Route path="/test" element={<TestPage />} key="test" />,
-  
-  // Job simulation routes
-  <Route path="/job-simulations" element={<JobSimulations />} key="job-simulations" />,
-  <Route path="/job-simulations/:id" element={<SimulationDetail />} key="simulation-detail" />,
-  <Route path="/credentials" element={<UserCredentials />} key="user-credentials" />,
-  <Route path="/healthcare-simulation" element={<HealthcareSimulation />} key="healthcare-simulation" />,
-  
-  // Student routes
-  <Route path="/student-dashboard" element={<StudentDashboard />} key="student-dashboard" />,
-  <Route path="/student-profile" element={<StudentProfile />} key="student-profile" />,
-];
-
-// Pull out the JSX elements from the route arrays
-const publicRoutesArray = React.Children.toArray(PublicRoutes.props.children);
-const schoolRoutesArray = React.Children.toArray(SchoolRoutes.props.children);
-const employerRoutesArray = React.Children.toArray(EmployerRoutes.props.children);
-const jobSeekerRoutesArray = React.Children.toArray(JobSeekerRoutes.props.children);
-
-// Concatenate all routes
-const allRoutes = [
-  ...AppRoutes,
-  ...publicRoutesArray,
-  ...schoolRoutesArray,
-  ...employerRoutesArray,
-  ...jobSeekerRoutesArray
-];
-
-export default allRoutes;
+export default router;

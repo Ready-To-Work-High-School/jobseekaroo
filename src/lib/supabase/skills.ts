@@ -1,6 +1,6 @@
 
 import { UserSkill, SkillResource, SkillGap } from '@/types/skills';
-import { supabase } from './index';
+import { supabase } from '@/integrations/supabase/client';
 
 // Skills management helpers
 export async function getUserSkills(userId: string): Promise<UserSkill[]> {

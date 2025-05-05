@@ -1,7 +1,8 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/auth';
+import { toast } from 'sonner';
 import { UserSkill, SkillResource } from '@/types/skills';
 import { 
   getUserSkills, 
@@ -9,7 +10,7 @@ import {
   updateUserSkill, 
   deleteUserSkill, 
   getSkillResources 
-} from '@/lib/supabase';
+} from '@/lib/supabase/skills';
 
 interface SkillsContextType {
   skills: UserSkill[];
@@ -35,7 +36,6 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
   
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   useEffect(() => {
     if (!user) {
@@ -56,18 +56,14 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
         setResources(skillResources);
       } catch (error) {
         console.error('Error loading skills data:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to load skills data',
-          variant: 'destructive',
-        });
+        toast.error('Failed to load skills data');
       } finally {
         setIsLoading(false);
       }
     };
     
     loadData();
-  }, [user, selectedSkill, toast]);
+  }, [user, selectedSkill]);
   
   const handleAddSkill = async (newSkill: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
     if (!user) return;
@@ -80,18 +76,11 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       
       if (skill) {
         setSkills(prev => [...prev, skill]);
-        toast({
-          title: 'Skill Added',
-          description: `${skill.skill_name} has been added to your skills`,
-        });
+        toast.success(`${skill.skill_name} has been added to your skills`);
       }
     } catch (error) {
       console.error('Error adding skill:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to add skill',
-        variant: 'destructive',
-      });
+      toast.error('Failed to add skill');
     }
   };
   
@@ -103,18 +92,11 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
         setSkills(prev => prev.map(skill => 
           skill.id === skillId ? updatedSkill : skill
         ));
-        toast({
-          title: 'Skill Updated',
-          description: `${updatedSkill.skill_name} has been updated`,
-        });
+        toast.success(`${updatedSkill.skill_name} has been updated`);
       }
     } catch (error) {
       console.error('Error updating skill:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to update skill',
-        variant: 'destructive',
-      });
+      toast.error('Failed to update skill');
     }
   };
   
@@ -122,17 +104,10 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     try {
       await deleteUserSkill(skillId);
       setSkills(prev => prev.filter(skill => skill.id !== skillId));
-      toast({
-        title: 'Skill Deleted',
-        description: `${skillName} has been removed from your skills`,
-      });
+      toast.success(`${skillName} has been removed from your skills`);
     } catch (error) {
       console.error('Error deleting skill:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete skill',
-        variant: 'destructive',
-      });
+      toast.error('Failed to delete skill');
     }
   };
   
