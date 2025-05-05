@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,8 +17,10 @@ import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import AuthTroubleshooter from '@/components/troubleshooting/AuthTroubleshooter';
+import ConnectionTroubleshooter from '@/components/auth/ConnectionTroubleshooter';
 
 const SignIn = () => {
+  const [searchParams] = useSearchParams();
   const { 
     signInForm, 
     handleSignIn, 
@@ -39,23 +41,78 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showTroubleshooter, setShowTroubleshooter] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [networkTestComplete, setNetworkTestComplete] = useState(false);
+  const [bypassNetworkCheck, setBypassNetworkCheck] = useState(
+    searchParams.get('bypass') === 'network'
+  );
   
-  // Check for network status on load
+  // Monitor network status
   useEffect(() => {
-    if (!navigator.onLine) {
+    const handleOnline = () => {
+      setIsOffline(false);
+      toast({
+        title: "Connection Restored",
+        description: "Your internet connection has been restored.",
+      });
+    };
+    
+    const handleOffline = () => {
+      setIsOffline(true);
       toast({
         variant: "destructive",
         title: "Network Error",
         description: "You appear to be offline. Please check your internet connection.",
       });
-    }
+    };
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [toast]);
   
+  // Check for network status on load
+  useEffect(() => {
+    if (!navigator.onLine && !bypassNetworkCheck) {
+      setIsOffline(true);
+      toast({
+        variant: "destructive",
+        title: "Network Error",
+        description: "You appear to be offline. Please check your internet connection.",
+      });
+    } else {
+      setNetworkTestComplete(true);
+    }
+  }, [toast, bypassNetworkCheck]);
+  
   const handleRetryConnection = () => {
-    window.location.reload();
+    // Test if we can reach the server
+    fetch('/api/health-check', { 
+      method: 'HEAD',
+      cache: 'no-cache'
+    })
+      .then(() => {
+        toast({
+          title: "Connection Successful",
+          description: "Connection to the server has been restored.",
+        });
+        window.location.reload();
+      })
+      .catch(err => {
+        console.error('Connection retry failed:', err);
+        toast({
+          variant: "destructive",
+          title: "Connection Failed",
+          description: "Still unable to connect. Please check your internet connection.",
+        });
+      });
   };
   
-  const isOffline = networkStatus === 'offline' || !navigator.onLine;
+  const shouldDisableForm = (isOffline && !bypassNetworkCheck) || isSubmitting;
   
   return (
     <Layout hideAuthLinks>
@@ -77,7 +134,7 @@ const SignIn = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                {isOffline && (
+                {isOffline && !bypassNetworkCheck ? (
                   <Alert variant="destructive" className="mb-4">
                     <WifiOff className="h-4 w-4" />
                     <AlertDescription>
@@ -92,6 +149,14 @@ const SignIn = () => {
                           Retry Connection
                         </Button>
                       </div>
+                    </AlertDescription>
+                  </Alert>
+                ) : null}
+                
+                {bypassNetworkCheck && (
+                  <Alert className="mb-4 bg-yellow-50 border-yellow-200">
+                    <AlertDescription>
+                      Network check bypassed. You can try signing in, but authentication might fail if you're offline.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -124,7 +189,7 @@ const SignIn = () => {
                       type="email"
                       {...register('email')}
                       className={errors.email ? 'border-red-500' : ''}
-                      disabled={isSubmitting || isOffline}
+                      disabled={shouldDisableForm}
                     />
                     {errors.email && (
                       <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -149,7 +214,7 @@ const SignIn = () => {
                       type="password" 
                       {...register('password')}
                       className={errors.password ? 'border-red-500' : ''}
-                      disabled={isSubmitting || isOffline}
+                      disabled={shouldDisableForm}
                     />
                     {errors.password && (
                       <p className="text-xs text-red-500">{errors.password.message}</p>
@@ -157,14 +222,14 @@ const SignIn = () => {
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <Checkbox id="remember" {...register('rememberMe')} />
+                    <Checkbox id="remember" {...register('rememberMe')} disabled={shouldDisableForm} />
                     <Label htmlFor="remember">Remember me</Label>
                   </div>
                   
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={isSubmitting || isOffline}
+                    disabled={shouldDisableForm}
                   >
                     {isSubmitting ? (
                       <>
@@ -188,9 +253,13 @@ const SignIn = () => {
                 
                 {/* Add Troubleshooter */}
                 <div className="w-full mt-4">
-                  <AuthTroubleshooter
-                    initialIssue="Having trouble signing in? We can help diagnose the issue."
-                  />
+                  {isOffline && !bypassNetworkCheck ? (
+                    <ConnectionTroubleshooter onRetryConnection={handleRetryConnection} />
+                  ) : (
+                    <AuthTroubleshooter
+                      initialIssue="Having trouble signing in? We can help diagnose the issue."
+                    />
+                  )}
                 </div>
               </CardFooter>
             </Card>
