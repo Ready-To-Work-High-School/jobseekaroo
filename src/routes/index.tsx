@@ -81,14 +81,19 @@ const AppRoutes = [
   <Route path="/student-profile" element={<StudentProfile />} key="student-profile" />,
 ];
 
-// Include routes defined in other files
-// We can't use spread operator directly on JSX elements, so we need to concatenate arrays
+// Pull out the JSX elements from the route arrays
+const publicRoutesArray = React.Children.toArray(PublicRoutes.props.children);
+const schoolRoutesArray = React.Children.toArray(SchoolRoutes.props.children);
+const employerRoutesArray = React.Children.toArray(EmployerRoutes.props.children);
+const jobSeekerRoutesArray = React.Children.toArray(JobSeekerRoutes.props.children);
+
+// Concatenate all routes
 const allRoutes = [
   ...AppRoutes,
-  ...PublicRoutes,
-  ...SchoolRoutes,
-  ...EmployerRoutes,
-  ...JobSeekerRoutes
+  ...publicRoutesArray,
+  ...schoolRoutesArray,
+  ...employerRoutesArray,
+  ...jobSeekerRoutesArray
 ];
 
 export default allRoutes;

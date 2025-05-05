@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Route } from 'react-router-dom';
 import JobListings from '@/pages/JobListings';
 import JobDetails from '@/pages/JobDetails';
