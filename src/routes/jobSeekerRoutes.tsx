@@ -1,3 +1,4 @@
+
 import { Route } from 'react-router-dom';
 import JobListings from '@/pages/JobListings';
 import JobDetails from '@/pages/JobDetails';
@@ -5,7 +6,7 @@ import SavedJobs from '@/pages/SavedJobs';
 import InterviewPrep from '@/pages/InterviewPrep';
 import JobSimulations from '@/pages/JobSimulations';
 import SimulationDetail from '@/pages/SimulationDetail';
-import StudentDashboard from '@/pages/StudentDashboard';
+import StudentDashboard from '@/pages/student/StudentDashboard';
 import StudentProfile from '@/pages/student/StudentProfile';
 import Profile from '@/pages/Profile';
 
