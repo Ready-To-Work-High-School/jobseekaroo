@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Video, X } from 'lucide-react';
+import { Check, Video, X, Play, Pause } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface RecordingCompleteProps {
   selectedQuestion: string;
@@ -9,6 +10,36 @@ interface RecordingCompleteProps {
 }
 
 const RecordingComplete = ({ selectedQuestion, onReset }: RecordingCompleteProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handlePlay = () => {
+    setIsLoading(true);
+    // Simulate loading the audio
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsPlaying(true);
+      toast({
+        title: "Playing your recording",
+        description: "Your recorded answer is now playing",
+      });
+      
+      // Simulate end of playback after 3 seconds
+      setTimeout(() => {
+        setIsPlaying(false);
+      }, 3000);
+    }, 1000);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+    toast({
+      title: "Paused",
+      description: "Recording paused",
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center p-6 bg-green-50 rounded-lg border border-green-200">
@@ -25,10 +56,26 @@ const RecordingComplete = ({ selectedQuestion, onReset }: RecordingCompleteProps
       
       <div className="flex flex-col sm:flex-row gap-2">
         <Button variant="secondary" className="flex-1" onClick={onReset}>
-          <X className="h-4 w-4 mr-2" /> Retry
+          <X className="h-4 w-4 mr-2" /> Record Again
         </Button>
-        <Button className="flex-1 bg-primary">
-          <Video className="h-4 w-4 mr-2" /> Review
+        <Button 
+          className="flex-1 bg-primary"
+          onClick={isPlaying ? handlePause : handlePlay}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Video className="h-4 w-4 mr-2 animate-spin" /> Loading...
+            </>
+          ) : isPlaying ? (
+            <>
+              <Pause className="h-4 w-4 mr-2" /> Pause
+            </>
+          ) : (
+            <>
+              <Play className="h-4 w-4 mr-2" /> Listen
+            </>
+          )}
         </Button>
       </div>
     </div>

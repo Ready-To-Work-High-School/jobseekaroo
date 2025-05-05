@@ -1,12 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Video, Mic, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Video, Mic, ArrowLeft, ArrowRight, Play, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useNetworkStatus } from '@/providers/NetworkStatusProvider';
+import ConnectivityError from '@/components/ErrorRecovery/ConnectivityError';
 
 const INTERVIEW_QUESTIONS = {
   entry: [
@@ -41,9 +43,17 @@ const MockInterview = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAnswers, setRecordedAnswers] = useState<{[key: number]: boolean}>({});
+  const [isPlaying, setIsPlaying] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { isOnline, checkConnection } = useNetworkStatus();
   
   const questions = INTERVIEW_QUESTIONS[category];
+
+  useEffect(() => {
+    // Check network connection when component mounts
+    checkConnection();
+  }, []);
   
   const handleStartRecording = () => {
     setIsRecording(true);
@@ -52,19 +62,37 @@ const MockInterview = () => {
       description: "Answer the question as if you're in a real interview.",
     });
     
-    // In a real app, this would start recording
-    setTimeout(() => {
-      setIsRecording(false);
-      setRecordedAnswers({
-        ...recordedAnswers,
-        [currentQuestionIndex]: true
-      });
-      
-      toast({
-        title: "Recording complete",
-        description: "Your answer has been saved.",
-      });
-    }, 3000); // Simulate a 3-second recording
+    // Simulate recording with progress updates
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 25;
+      if (progress >= 100) {
+        clearInterval(interval);
+        completeRecording();
+      }
+    }, 750);
+  };
+  
+  const completeRecording = () => {
+    setIsRecording(false);
+    setRecordedAnswers({
+      ...recordedAnswers,
+      [currentQuestionIndex]: true
+    });
+    
+    toast({
+      title: "Recording complete",
+      description: "Your answer has been saved and is available for review.",
+    });
+  };
+  
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    toast({
+      title: "Recording stopped",
+      description: "You can try recording again.",
+      variant: "destructive"
+    });
   };
   
   const handleNext = () => {
@@ -83,6 +111,60 @@ const MockInterview = () => {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
+
+  const handlePlayRecording = (index: number) => {
+    setIsLoading(true);
+    
+    // Simulate loading audio file
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsPlaying(index);
+      
+      toast({
+        title: "Playing recording",
+        description: `Playing your answer to question ${index + 1}`,
+      });
+      
+      // Simulate playback ending
+      setTimeout(() => {
+        setIsPlaying(null);
+      }, 3000);
+    }, 1000);
+  };
+  
+  const handlePausePlayback = () => {
+    setIsPlaying(null);
+    toast({
+      title: "Playback paused",
+      description: "You can resume playback anytime",
+    });
+  };
+
+  const handleRetry = async () => {
+    setIsLoading(true);
+    const isConnected = await checkConnection();
+    setIsLoading(false);
+    
+    if (!isConnected) {
+      toast({
+        title: "Still offline",
+        description: "Please check your internet connection",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  if (!isOnline) {
+    return (
+      <Layout>
+        <ConnectivityError 
+          onRetry={handleRetry} 
+          isRetrying={isLoading}
+          errorMessage="Unable to connect to the interview service. Please check your internet connection to continue with your mock interview."
+        />
+      </Layout>
+    );
+  }
   
   return (
     <Layout>
@@ -165,6 +247,39 @@ const MockInterview = () => {
                       style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
                     />
                   </div>
+                  
+                  {/* Show recorded questions summary */}
+                  {Object.keys(recordedAnswers).length > 0 && (
+                    <div className="mt-4 border-t pt-4">
+                      <h4 className="text-sm font-medium mb-2">Recordings:</h4>
+                      <div className="space-y-2">
+                        {Object.keys(recordedAnswers).map((indexStr) => {
+                          const index = parseInt(indexStr);
+                          return (
+                            <div key={index} className="flex items-center justify-between">
+                              <span className="text-xs truncate max-w-[70%]">
+                                Q{index + 1}: {questions[index].substring(0, 20)}...
+                              </span>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-7 w-7 p-0"
+                                onClick={() => isPlaying === index ? handlePausePlayback() : handlePlayRecording(index)}
+                              >
+                                {isLoading && parseInt(indexStr) === currentQuestionIndex ? (
+                                  <Video className="h-3 w-3 animate-spin" />
+                                ) : isPlaying === index ? (
+                                  <ArrowRight className="h-3 w-3" />
+                                ) : (
+                                  <Play className="h-3 w-3" />
+                                )}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -191,13 +306,47 @@ const MockInterview = () => {
                         <Mic className="h-12 w-12 text-red-500 mx-auto" />
                       </div>
                       <p className="text-red-500 font-medium mb-2">Recording...</p>
-                      <p className="text-sm text-muted-foreground">Speak clearly and remember to maintain good posture</p>
+                      <p className="text-sm text-muted-foreground mb-4">Speak clearly and remember to maintain good posture</p>
+                      <Button 
+                        variant="destructive" 
+                        onClick={handleStopRecording}
+                      >
+                        Stop Recording
+                      </Button>
                     </div>
                   ) : recordedAnswers[currentQuestionIndex] ? (
                     <div className="text-center">
                       <Video className="h-12 w-12 text-green-500 mx-auto mb-4" />
                       <p className="text-green-500 font-medium mb-2">Response Recorded</p>
-                      <Button variant="outline" onClick={handleStartRecording}>Record Again</Button>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        <Button 
+                          variant="outline" 
+                          onClick={handleStartRecording}
+                        >
+                          Record Again
+                        </Button>
+                        <Button 
+                          onClick={() => isPlaying === currentQuestionIndex ? handlePausePlayback() : handlePlayRecording(currentQuestionIndex)}
+                          className="gap-2"
+                        >
+                          {isLoading ? (
+                            <>
+                              <Video className="h-4 w-4 animate-spin" />
+                              Loading...
+                            </>
+                          ) : isPlaying === currentQuestionIndex ? (
+                            <>
+                              <ArrowRight className="h-4 w-4" />
+                              Playing...
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-4 w-4" />
+                              Listen to Response
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   ) : (
                     <div className="text-center">
@@ -224,7 +373,7 @@ const MockInterview = () => {
               
               <Button 
                 onClick={handleNext}
-                disabled={currentQuestionIndex === questions.length - 1 || !recordedAnswers[currentQuestionIndex]}
+                disabled={currentQuestionIndex === questions.length - 1 && !recordedAnswers[currentQuestionIndex]}
               >
                 Next Question
                 <ArrowRight className="h-4 w-4 ml-2" />
