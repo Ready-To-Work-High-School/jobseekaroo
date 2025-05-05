@@ -9,8 +9,9 @@ import JobSimulations from '@/pages/JobSimulations';
 import SimulationDetail from '@/pages/SimulationDetail';
 import HealthcareSimulation from '@/pages/HealthcareSimulation';
 import UserCredentials from '@/pages/UserCredentials';
+import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 
-// Create a simplified router with only the routes that we know exist
+// Create a router with routes that we know exist
 const router = createBrowserRouter([
   {
     path: '/',
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
         path: '/credentials',
         element: <UserCredentials />,
       },
+      {
+        path: '/personalized-assessment',
+        element: <PersonalizedAssessment />,
+      },
       
-      // Add SharedRoutes - use spread operator properly
+      // Add SharedRoutes
       ...SharedRoutes,
     ],
   },
