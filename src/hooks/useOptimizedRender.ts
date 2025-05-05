@@ -41,16 +41,26 @@ export function useOptimizedRender<T>(threshold = 20) {
           if (startIndex >= items.length) return;
           
           // Use requestIdleCallback if available, otherwise setTimeout
-          const scheduleNext = window.requestIdleCallback || window.setTimeout;
-          
-          scheduleNext(() => {
-            setVisibleItems(prev => [
-              ...prev,
-              ...items.slice(startIndex, startIndex + chunkSize)
-            ]);
-            
-            renderNextChunk(startIndex + chunkSize);
-          }, { timeout: 50 });
+          if (window.requestIdleCallback) {
+            window.requestIdleCallback(() => {
+              setVisibleItems(prev => [
+                ...prev,
+                ...items.slice(startIndex, startIndex + chunkSize)
+              ]);
+              
+              renderNextChunk(startIndex + chunkSize);
+            }, { timeout: 50 });
+          } else {
+            // Fallback for browsers without requestIdleCallback
+            setTimeout(() => {
+              setVisibleItems(prev => [
+                ...prev,
+                ...items.slice(startIndex, startIndex + chunkSize)
+              ]);
+              
+              renderNextChunk(startIndex + chunkSize);
+            }, 50);
+          }
         };
         
         // Start rendering the rest after first chunk

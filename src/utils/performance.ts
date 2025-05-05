@@ -65,8 +65,13 @@ export const useMeasurePageLoad = () => {
       
       // Get first input delay
       const fidObserver = new PerformanceObserver((entryList) => {
-        const fidEntry = entryList.getEntries()[0];
-        console.log(`First Input Delay: ${fidEntry.processingStart - fidEntry.startTime}ms`);
+        const entries = entryList.getEntries();
+        if (entries.length > 0) {
+          // Cast to the proper PerformanceEventTiming type for FID entries
+          const fidEntry = entries[0] as PerformanceEventTiming;
+          // Now we can access processingStart
+          console.log(`First Input Delay: ${fidEntry.processingStart - fidEntry.startTime}ms`);
+        }
       });
       
       fidObserver.observe({ type: 'first-input', buffered: true });

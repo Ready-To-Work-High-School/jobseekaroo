@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
       // Prevent excessive network requests
       networkMode: 'always',
       // Improve React re-render behavior when queries change
-      notifyOnChangeProps: 'tracked',
+      notifyOnChangeProps: ['tracked'], // Fixed: using array syntax instead of string
     },
   },
 });
