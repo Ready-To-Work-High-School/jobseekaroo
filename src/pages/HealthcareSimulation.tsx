@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Heart, Stethoscope, ArrowLeft, Activity, Users, CheckCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import HealthcareAssistantDemo from '@/components/healthcare/HealthcareAssistantDemo';
 
 const HealthcareSimulation = () => {
@@ -15,10 +17,16 @@ const HealthcareSimulation = () => {
 
   // Function to handle tab navigation
   const navigateToTab = (tabValue: string) => {
-    const tabElement = document.querySelector(`[data-value="${tabValue}"]`);
-    if (tabElement && tabElement instanceof HTMLElement) {
+    const tabElement = document.querySelector(`[data-value="${tabValue}"]`) as HTMLElement;
+    if (tabElement) {
       tabElement.click();
     }
+  };
+
+  // Handle start simulation button
+  const handleStartSimulation = () => {
+    // Navigate to tasks tab if on the current page
+    navigateToTab("tasks");
   };
 
   return (
@@ -39,7 +47,7 @@ const HealthcareSimulation = () => {
             <div className="flex gap-2">
               <Badge variant="outline" className="capitalize">Healthcare</Badge>
               <Badge variant="secondary">
-                2-3 Hours
+                75 Minutes
               </Badge>
               <Badge variant="outline">
                 Intermediate
@@ -164,7 +172,7 @@ const HealthcareSimulation = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full">Start Simulation</Button>
+                    <Button className="w-full" onClick={handleStartSimulation}>Start Simulation</Button>
                   </CardFooter>
                 </Card>
               </div>
@@ -233,7 +241,14 @@ const HealthcareSimulation = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">
+                <Button className="w-full" onClick={() => {
+                  toast.success("Task completed!", {
+                    description: "You've successfully completed the task"
+                  });
+                  // In a real implementation, this would trigger the simulation completion
+                  // For demonstration purposes, navigate to the credentials page
+                  setTimeout(() => navigate('/credentials'), 1500);
+                }}>
                   Submit & Continue
                 </Button>
               </CardFooter>

@@ -103,10 +103,14 @@ export const getUserSimulationProgress = async (userId: string, simulationId?: s
     // Adding this filter before calling single() to fix the TypeScript error
     query = query.eq('user_id', userId);
     
-    const { data, error } = await query.single();
+    const { data, error } = await query.maybeSingle();
       
     if (error) {
       console.error('Error fetching user simulation progress:', error);
+      return null;
+    }
+    
+    if (!data) {
       return null;
     }
     
@@ -162,6 +166,36 @@ export const updateSimulationProgress = async (
     }
   } catch (error) {
     console.error('Exception updating simulation progress:', error);
+    throw error;
+  }
+};
+
+export const createSimulationCredential = async (
+  userId: string,
+  simulationId: string,
+  certificateId: string
+): Promise<SimulationCredential | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('simulation_credentials')
+      .insert([
+        {
+          user_id: userId,
+          simulation_id: simulationId,
+          certificate_id: certificateId
+        }
+      ])
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error creating simulation credential:', error);
+      throw error;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Exception creating simulation credential:', error);
     throw error;
   }
 };

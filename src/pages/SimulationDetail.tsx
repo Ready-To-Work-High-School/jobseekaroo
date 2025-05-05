@@ -21,8 +21,10 @@ import {
   getSimulationTasks, 
   getUserSimulationProgress,
   updateSimulationProgress,
-  startSimulation
+  startSimulation,
+  createSimulationCredential
 } from '@/lib/supabase/simulations';
+import { awardBadge } from '@/utils/badge-utils';
 
 const SimulationDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -103,7 +105,7 @@ const SimulationDetail = () => {
       return;
     }
     
-    if (!progressId || !tasks || tasks.length === 0) {
+    if (!progressId || !tasks || tasks.length === 0 || !simulation) {
       toast.error("Unable to update progress");
       return;
     }
@@ -120,12 +122,25 @@ const SimulationDetail = () => {
         completed: isLastTask
       });
       
-      // Update UI
+      // If this is the last task, award a credential and badge
       if (isLastTask) {
+        // Generate a unique certificate ID
+        const certificateId = `CERT-${Date.now().toString(36).toUpperCase()}`;
+        
+        // Create a simulation credential
+        await createSimulationCredential(user.id, simulation.id, certificateId);
+        
+        // Award a badge for completing the simulation
+        const badgeId = `simulation_${simulation.id.split('-')[0]}`;
+        const badgeName = `${simulation.title} Specialist`;
+        await awardBadge(user.id, badgeId, badgeName);
+        
         toast.success("Congratulations! You've completed this simulation", {
-          description: "You've earned a certificate for your profile"
+          description: "You've earned a credential and badge for your profile"
         });
-        navigate('/simulations/completed');
+        
+        // Navigate to credentials page
+        navigate('/credentials');
       } else {
         setCurrentTaskIndex(nextIndex);
         toast.success(`Task ${currentTaskIndex + 1} completed!`, {
