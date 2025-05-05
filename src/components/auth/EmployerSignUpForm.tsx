@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,10 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Alert } from '@/components/ui/alert';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
+import NetworkOfflineState from './diagnostic/NetworkOfflineState';
 
 interface EmployerSignUpFormProps {
   onSuccess?: (userId: string) => void;
@@ -37,6 +39,7 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const { signUp, updateProfile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -44,7 +47,26 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
   const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
   const password = watch('password', ''); // Watch password for strength indicator
   
+  // Monitor online status
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const onSubmit = async (data: FormData) => {
+    if (isOffline) {
+      setError("You appear to be offline. Please check your internet connection.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     
@@ -89,17 +111,43 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
       }
     } catch (error: any) {
       console.error('Signup error:', error);
-      setError(error.message || 'Failed to create account. Please try again.');
+      let errorMessage = error.message || 'Failed to create account. Please try again.';
+      
+      // Enhance error messages for common issues
+      if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        setIsOffline(true);
+      } else if (errorMessage.includes('already')) {
+        errorMessage = 'An account with this email already exists. Please sign in instead.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
   
+  // If offline, show network error state
+  if (isOffline) {
+    return (
+      <div className="space-y-4">
+        <NetworkOfflineState onRetry={() => setIsOffline(!navigator.onLine)} />
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertCircle className="h-4 w-4" />
+            <span className="ml-2">{error}</span>
+          </Alert>
+        )}
+      </div>
+    );
+  }
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
         <Alert variant="destructive">
-          {error}
+          <AlertCircle className="h-4 w-4" />
+          <span className="ml-2">{error}</span>
         </Alert>
       )}
       

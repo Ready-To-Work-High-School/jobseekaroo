@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,7 @@ import GoogleIcon from '@/components/icons/GoogleIcon';
 import SignUpBenefitCard from '@/components/auth/SignUpBenefitCard';
 import StudentSignUpForm from '@/components/auth/StudentSignUpForm';
 import EmployerSignUpForm from '@/components/auth/EmployerSignUpForm';
+import AuthTroubleshooter from '@/components/troubleshooting/AuthTroubleshooter';
 
 const SignUp = () => {
   const location = useLocation();
@@ -109,6 +109,8 @@ const SignUp = () => {
                     isLoading={isSubmitting}
                   />
                 )}
+                
+                <AuthTroubleshooter initialIssue="Having trouble creating an account?" />
               </CardContent>
               
               <CardFooter className="flex flex-col">

@@ -9,6 +9,15 @@ interface NetworkOfflineStateProps {
 }
 
 const NetworkOfflineState: React.FC<NetworkOfflineStateProps> = ({ onRetry }) => {
+  const handleRetry = () => {
+    if (onRetry) {
+      onRetry();
+    } else {
+      // Default behavior if no callback provided
+      window.location.reload();
+    }
+  };
+
   return (
     <Card className="border-red-200 bg-red-50 dark:bg-red-950/10">
       <CardHeader className="pb-2">
@@ -29,7 +38,7 @@ const NetworkOfflineState: React.FC<NetworkOfflineStateProps> = ({ onRetry }) =>
         <Button 
           variant="outline" 
           className="gap-2 border-red-200 text-red-600 hover:bg-red-100 hover:text-red-700"
-          onClick={onRetry}
+          onClick={handleRetry}
         >
           <WifiOff className="h-4 w-4" />
           Retry Connection

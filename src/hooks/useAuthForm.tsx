@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,9 +35,26 @@ export const useAuthForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isAppleLoading, setIsAppleLoading] = useState(false);
+  const [networkStatus, setNetworkStatus] = useState<'online' | 'offline'>(
+    navigator.onLine ? 'online' : 'offline'
+  );
   const { toast } = useToast();
   const navigate = useNavigate();
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
+  
+  // Monitor network status
+  useEffect(() => {
+    const handleOnline = () => setNetworkStatus('online');
+    const handleOffline = () => setNetworkStatus('offline');
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
   
   // Initialize react-hook-form with simplified zod validation for sign up
   const signUpForm = useForm<SignUpFormValues>({
@@ -64,8 +80,17 @@ export const useAuthForm = () => {
     },
   });
 
-  // Sign up handler with password strength feedback
+  // Sign up handler with password strength feedback and network checks
   const handleSignUp = async (data: SignUpFormValues) => {
+    if (networkStatus === 'offline') {
+      toast({
+        variant: 'destructive',
+        title: 'Network Error',
+        description: 'You appear to be offline. Please check your internet connection.',
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -105,18 +130,38 @@ export const useAuthForm = () => {
       }
     } catch (error: any) {
       console.error('Sign up error:', error);
+      
+      // Enhanced error handling
+      let errorMessage = error.message || 'Failed to create account. Please try again.';
+      
+      if (!navigator.onLine || errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        setNetworkStatus('offline');
+      } else if (errorMessage.includes('already')) {
+        errorMessage = 'An account with this email already exists. Please sign in instead.';
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || 'Failed to create account. Please try again.',
+        description: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
     }
   };
   
-  // Sign in handler
+  // Sign in handler with network checks
   const handleSignIn = async (data: SignInFormValues) => {
+    if (networkStatus === 'offline') {
+      toast({
+        variant: 'destructive',
+        title: 'Network Error',
+        description: 'You appear to be offline. Please check your internet connection.',
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -141,18 +186,36 @@ export const useAuthForm = () => {
       }
     } catch (error: any) {
       console.error('Sign in error:', error);
+      
+      // Enhanced error handling
+      let errorMessage = error.message || 'Failed to sign in. Please check your credentials.';
+      
+      if (!navigator.onLine || errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        setNetworkStatus('offline');
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || 'Failed to sign in. Please check your credentials.',
+        description: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
     }
   };
   
-  // Social sign-in handler
+  // Social sign-in handler with network checks
   const handleSocialSignIn = async (provider: 'google' | 'apple') => {
+    if (networkStatus === 'offline') {
+      toast({
+        variant: 'destructive',
+        title: 'Network Error',
+        description: 'You appear to be offline. Social authentication requires an internet connection.',
+      });
+      return;
+    }
+    
     try {
       if (provider === 'google') {
         setIsGoogleLoading(true);
@@ -166,10 +229,19 @@ export const useAuthForm = () => {
       // The redirect is handled by the auth provider
     } catch (error: any) {
       console.error(`${provider} sign in error:`, error);
+      
+      // Enhanced error handling
+      let errorMessage = error.message || `Failed to sign in with ${provider}. Please try again.`;
+      
+      if (!navigator.onLine || errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        setNetworkStatus('offline');
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || `Failed to sign in with ${provider}. Please try again.`,
+        description: errorMessage,
       });
     } finally {
       if (provider === 'google') {
@@ -189,5 +261,6 @@ export const useAuthForm = () => {
     isSubmitting,
     isGoogleLoading,
     isAppleLoading,
+    networkStatus,
   };
 };
