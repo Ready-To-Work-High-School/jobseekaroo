@@ -14,6 +14,8 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import DiagnosticPanel from '@/components/ErrorRecovery/DiagnosticPanel';
+import ConnectivityError from '@/components/ErrorRecovery/ConnectivityError';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { 
   AlertTriangle, 
   CheckCircle, 
@@ -34,6 +36,9 @@ const SystemDiagnosticsPage: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [sessionData, setSessionData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [hasConnectionError, setHasConnectionError] = useState(false);
+  const isOnline = useNetworkStatus();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
 
@@ -50,6 +55,13 @@ const SystemDiagnosticsPage: React.FC = () => {
       clearInterval(networkInterval);
     };
   }, []);
+
+  useEffect(() => {
+    // Reset connection error state when we're back online
+    if (isOnline && hasConnectionError) {
+      checkDatabaseConnectivity();
+    }
+  }, [isOnline, hasConnectionError]);
 
   const checkNetworkStatus = async () => {
     if (!navigator.onLine) {
@@ -82,6 +94,7 @@ const SystemDiagnosticsPage: React.FC = () => {
   const checkDatabaseConnectivity = async () => {
     try {
       setIsLoading(true);
+      setHasConnectionError(false);
       const startTime = performance.now();
       
       // Simple query to check database connectivity
@@ -94,25 +107,50 @@ const SystemDiagnosticsPage: React.FC = () => {
       const responseTime = Math.round(endTime - startTime);
       
       if (error) {
+        console.error('Database connectivity error:', error);
         setDatabaseStatus(`Error: ${error.message}`);
-        toast(`Database connectivity issue: ${error.message}`);
+        toast.error(`Database connectivity issue: ${error.message}`);
+        
+        // If we get a fetch error, set the connection error state
+        if (error.message.includes('fetch') || error.message.includes('network')) {
+          setHasConnectionError(true);
+        }
       } else {
         setDatabaseStatus(`Connected (response time: ${responseTime}ms)`);
+        setHasConnectionError(false);
       }
     } catch (error) {
       console.error('Database check failed:', error);
       setDatabaseStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      toast(`Database connectivity issue: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Database connectivity issue: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setHasConnectionError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleRetryConnection = async () => {
+    setIsRetrying(true);
+    try {
+      await checkNetworkStatus();
+      await checkDatabaseConnectivity();
+      await fetchSessionData();
+    } finally {
+      setIsRetrying(false);
+    }
+  };
+
   const fetchSessionData = async () => {
+    if (!isOnline) {
+      toast.error("Cannot fetch session data while offline");
+      return;
+    }
+    
     try {
       const { data, error } = await supabase.auth.getSession();
       
       if (error) {
+        console.error('Session fetch error:', error);
         toast.error(`Session fetch error: ${error.message}`);
         return;
       }
@@ -163,6 +201,19 @@ const SystemDiagnosticsPage: React.FC = () => {
       toast.error(`Failed to sign out: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
+
+  // If we're detecting a connection error, show the connectivity error component
+  if (hasConnectionError) {
+    return (
+      <div className="container py-10">
+        <ConnectivityError 
+          onRetry={handleRetryConnection} 
+          isRetrying={isRetrying}
+          errorMessage="There was a problem connecting to the Supabase database. This could be due to network issues or server problems."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10 space-y-6">
@@ -269,15 +320,12 @@ const SystemDiagnosticsPage: React.FC = () => {
               {showDetails ? 'Hide Details' : 'Show Details'}
             </Button>
             <Button 
-              onClick={() => {
-                checkNetworkStatus();
-                checkDatabaseConnectivity();
-                fetchSessionData();
-              }}
+              onClick={handleRetryConnection}
               size="sm"
+              disabled={isRetrying}
             >
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Refresh Status
+              <RefreshCw className={`mr-2 h-4 w-4 ${isRetrying ? 'animate-spin' : ''}`} />
+              {isRetrying ? 'Refreshing...' : 'Refresh Status'}
             </Button>
           </CardFooter>
         </Card>

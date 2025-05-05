@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ScrollToTop from '@/components/navigation/ScrollToTop';
+import { NetworkStatusProvider } from '@/providers/NetworkStatusProvider';
 
 // Create a client with optimized configuration
 const queryClient = new QueryClient({
@@ -30,13 +31,15 @@ function App() {
   }, []);
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background">
-        <ScrollToTop /> {/* Add ScrollToTop component */}
-        <Outlet />
-        <Toaster />
-      </div>
-    </QueryClientProvider>
+    <NetworkStatusProvider>
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-background">
+          <ScrollToTop />
+          <Outlet />
+          <Toaster />
+        </div>
+      </QueryClientProvider>
+    </NetworkStatusProvider>
   );
 }
 
