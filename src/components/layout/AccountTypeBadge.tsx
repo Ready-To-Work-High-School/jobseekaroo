@@ -2,8 +2,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/types/user';
-import { User, School, Briefcase, Shield, ShieldCheck } from 'lucide-react';
-import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { User, School, Briefcase, Shield, ShieldCheck, Award } from 'lucide-react';
 
 interface AccountTypeBadgeProps {
   userProfile: UserProfile | null;
@@ -28,7 +27,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({
       case 'student':
         return {
           text: 'Student',
-          icon: <User className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
+          icon: <Award className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
           variant: userProfile.redeemed_at ? 'default' : 'outline',
           className: 'bg-blue-700 text-white'
         };
