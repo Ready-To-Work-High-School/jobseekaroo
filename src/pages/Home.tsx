@@ -6,10 +6,15 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import Hero from '@/components/Hero';
 import SearchSection from '@/components/home/SearchSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import EnhancedHero from '@/components/EnhancedHero';
 
 const Home = () => {
   useEffect(() => {
-    console.log('Home component mounted');
+    console.log('Home component mounted - checking render status');
+    
+    // Add additional debug logging
+    const homeElement = document.getElementById('home-root');
+    console.log('Home element found:', !!homeElement);
   }, []);
 
   return (
@@ -22,9 +27,9 @@ const Home = () => {
         />
       </Helmet>
 
-      <div className="container mx-auto">
+      <div id="home-root" className="container mx-auto">
         <ErrorBoundary>
-          <Hero />
+          <EnhancedHero />
         </ErrorBoundary>
 
         <ErrorBoundary>

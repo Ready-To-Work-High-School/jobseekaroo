@@ -24,81 +24,80 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Create a router with routes that we know exist
+// Create a router with routes configuration
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      // Add the home route explicitly
+      // Important: Home route must be at the top for immediate loading
       {
-        path: '/',
+        index: true,
         element: <Home />
       },
-      // Add only routes that we know exist
+      // Regular routes with lazy loading
       {
-        path: '/skills',
+        path: 'skills',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <Skills />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/job-simulations',
+        path: 'job-simulations',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <JobSimulations />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/job-simulations/:id',
+        path: 'job-simulations/:id',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <SimulationDetail />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/healthcare-simulation',
+        path: 'healthcare-simulation',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <HealthcareSimulation />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/credentials',
+        path: 'credentials',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <UserCredentials />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/personalized-assessment',
+        path: 'personalized-assessment',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <PersonalizedAssessment />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/profile',
+        path: 'profile',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <Profile />
           </Suspense>
-        ),
+        )
       },
       {
-        path: '/system-diagnostics',
-        element: <SystemDiagnosticsPage />,
+        path: 'system-diagnostics',
+        element: <SystemDiagnosticsPage />
       },
-      
-      // Add SharedRoutes
+      // Spread the shared routes
       ...SharedRoutes,
     ],
   },
