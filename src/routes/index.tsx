@@ -1,17 +1,27 @@
 
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import App from '@/App';
 import ErrorPage from '@/pages/ErrorPage';
-import Profile from '@/pages/Profile';
 import SharedRoutes from './sharedRoutes';
-import Skills from '@/pages/Skills';
-import JobSimulations from '@/pages/JobSimulations';
-import SimulationDetail from '@/pages/SimulationDetail';
-import HealthcareSimulation from '@/pages/HealthcareSimulation';
-import UserCredentials from '@/pages/UserCredentials';
-import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
+// Import only the components we need eagerly, lazy load the rest
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
+
+// Lazy load non-critical route components
+const Profile = lazy(() => import('@/pages/Profile'));
+const Skills = lazy(() => import('@/pages/Skills'));
+const JobSimulations = lazy(() => import('@/pages/JobSimulations'));
+const SimulationDetail = lazy(() => import('@/pages/SimulationDetail'));
+const HealthcareSimulation = lazy(() => import('@/pages/HealthcareSimulation'));
+const UserCredentials = lazy(() => import('@/pages/UserCredentials'));
+const PersonalizedAssessment = lazy(() => import('@/pages/PersonalizedAssessment'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[70vh]">
+    <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+  </div>
+);
 
 // Create a router with routes that we know exist
 const router = createBrowserRouter([
@@ -23,31 +33,59 @@ const router = createBrowserRouter([
       // Add only routes that we know exist
       {
         path: '/skills',
-        element: <Skills />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Skills />
+          </Suspense>
+        ),
       },
       {
         path: '/job-simulations',
-        element: <JobSimulations />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <JobSimulations />
+          </Suspense>
+        ),
       },
       {
         path: '/job-simulations/:id',
-        element: <SimulationDetail />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <SimulationDetail />
+          </Suspense>
+        ),
       },
       {
         path: '/healthcare-simulation',
-        element: <HealthcareSimulation />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <HealthcareSimulation />
+          </Suspense>
+        ),
       },
       {
         path: '/credentials',
-        element: <UserCredentials />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <UserCredentials />
+          </Suspense>
+        ),
       },
       {
         path: '/personalized-assessment',
-        element: <PersonalizedAssessment />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <PersonalizedAssessment />
+          </Suspense>
+        ),
       },
       {
         path: '/profile',
-        element: <Profile />,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Profile />
+          </Suspense>
+        ),
       },
       {
         path: '/system-diagnostics',
