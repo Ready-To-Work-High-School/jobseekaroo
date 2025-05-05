@@ -22,10 +22,13 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  console.log('App component rendering');
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <Toaster />
+      <div className="min-h-screen bg-background">
+        <Outlet />
+        <Toaster />
+      </div>
     </QueryClientProvider>
   );
 }

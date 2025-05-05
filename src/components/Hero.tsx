@@ -1,11 +1,8 @@
 
 import React from 'react';
 import { useFadeIn } from '@/utils/animations';
-import DeferredContent from '@/components/optimizations/DeferredContent';
-import { VideoSection } from '@/components/hero/VideoSection';
 import { HeroButtons } from '@/components/hero/HeroButtons';
-import { FeatureCards } from '@/components/hero/FeatureCards';
-import { EmployerSection } from '@/components/hero/EmployerSection';
+import { VideoSection } from '@/components/hero/VideoSection';
 
 const Hero = () => {
   const fadeIn = useFadeIn(300);
@@ -24,20 +21,8 @@ const Hero = () => {
         <HeroButtons />
       </div>
 
-      {/* Video section has medium priority - defer slightly */}
-      <DeferredContent delay={100} priority="medium">
-        <VideoSection />
-      </DeferredContent>
-
-      {/* Feature cards have medium priority - load after critical content */}
-      <DeferredContent delay={200} priority="medium">
-        <FeatureCards />
-      </DeferredContent>
-
-      {/* Employer section has lower priority - defer until idle */}
-      <DeferredContent delay={500} priority="low">
-        <EmployerSection />
-      </DeferredContent>
+      {/* Video section */}
+      <VideoSection />
     </div>
   );
 };

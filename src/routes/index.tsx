@@ -6,6 +6,7 @@ import ErrorPage from '@/pages/ErrorPage';
 import SharedRoutes from './sharedRoutes';
 // Import only the components we need eagerly, lazy load the rest
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
+import Home from '@/pages/Home';  // Eagerly import Home component for faster initial load
 
 // Lazy load non-critical route components
 const Profile = lazy(() => import('@/pages/Profile'));
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
+      // Add the home route explicitly
+      {
+        path: '/',
+        element: <Home />
+      },
       // Add only routes that we know exist
       {
         path: '/skills',
