@@ -4,6 +4,7 @@
 @import 'typography.css';
 @import 'layout.css';
 @import 'utilities/index.css';
+@import 'utilities/student-accents.css';
 @import 'accessibility.css';
 @import 'mobile.css';
 @import 'print.css';

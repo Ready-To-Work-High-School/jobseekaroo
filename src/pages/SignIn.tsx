@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,20 +7,23 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Apple, Github, Loader2 } from 'lucide-react';
-import { useAuthForm, SignInFormValues } from '@/hooks/useAuthForm';
+import { Loader2 } from 'lucide-react';
+import { useAuthForm } from '@/hooks/useAuthForm';
 import { useFadeIn } from '@/utils/animations';
 import { Helmet } from 'react-helmet';
 import Layout from '@/components/Layout';
-import GoogleIcon from '@/components/icons/GoogleIcon';
 import SignInBenefitsCard from '@/components/auth/SignInBenefitsCard';
+import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
+import { useToast } from '@/hooks/use-toast';
 
 const SignIn = () => {
   const { 
     signInForm, 
     handleSignIn, 
     handleSocialSignIn, 
-    isSubmitting 
+    isSubmitting,
+    isGoogleLoading,
+    isAppleLoading 
   } = useAuthForm();
   
   const {
@@ -31,6 +34,18 @@ const SignIn = () => {
 
   const fadeIn = useFadeIn(200);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // Check for network status on load
+  useEffect(() => {
+    if (!navigator.onLine) {
+      toast({
+        variant: "destructive",
+        title: "Network Error",
+        description: "You appear to be offline. Please check your internet connection.",
+      });
+    }
+  }, [toast]);
   
   return (
     <Layout hideAuthLinks>
@@ -53,26 +68,13 @@ const SignIn = () => {
               
               <CardContent className="space-y-4">
                 {/* Social Sign In Options */}
-                <div className="grid grid-cols-2 gap-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => handleSocialSignIn('google')}
-                    disabled={isSubmitting}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <GoogleIcon className="h-4 w-4" />
-                    <span>Google</span>
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => handleSocialSignIn('apple')}
-                    disabled={isSubmitting}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <Apple className="h-4 w-4" />
-                    <span>Apple</span>
-                  </Button>
-                </div>
+                <SocialAuthButtons 
+                  onGoogleSignIn={() => handleSocialSignIn('google')}
+                  onAppleSignIn={() => handleSocialSignIn('apple')}
+                  isGoogleLoading={isGoogleLoading}
+                  isAppleLoading={isAppleLoading}
+                  isFormLoading={isSubmitting}
+                />
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">

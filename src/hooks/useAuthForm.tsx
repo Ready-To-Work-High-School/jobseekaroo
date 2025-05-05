@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from './use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
 // Define form validation schema for sign up with simplified password validation
@@ -34,6 +34,8 @@ export type SignInFormValues = z.infer<typeof signInSchema>;
 
 export const useAuthForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isAppleLoading, setIsAppleLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
@@ -99,7 +101,7 @@ export const useAuthForm = () => {
       if (requiresParentalConsent) {
         navigate('/parental-consent');
       } else {
-        navigate('/dashboard');
+        navigate(data.userType === 'student' ? '/student-dashboard' : '/dashboard');
       }
     } catch (error: any) {
       console.error('Sign up error:', error);
@@ -129,7 +131,14 @@ export const useAuthForm = () => {
         description: 'You have been signed in successfully',
       });
       
-      navigate('/dashboard');
+      // Redirect based on user type
+      if (user.user_metadata?.user_type === 'student') {
+        navigate('/student-dashboard');
+      } else if (user.user_metadata?.user_type === 'employer') {
+        navigate('/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error: any) {
       console.error('Sign in error:', error);
       toast({
@@ -144,12 +153,14 @@ export const useAuthForm = () => {
   
   // Social sign-in handler
   const handleSocialSignIn = async (provider: 'google' | 'apple') => {
-    setIsSubmitting(true);
-    
     try {
       if (provider === 'google') {
+        setIsGoogleLoading(true);
+        console.log('Starting Google sign-in process...');
         await signInWithGoogle();
       } else {
+        setIsAppleLoading(true);
+        console.log('Starting Apple sign-in process...');
         await signInWithApple();
       }
       // The redirect is handled by the auth provider
@@ -160,7 +171,12 @@ export const useAuthForm = () => {
         title: 'Error',
         description: error.message || `Failed to sign in with ${provider}. Please try again.`,
       });
-      setIsSubmitting(false);
+    } finally {
+      if (provider === 'google') {
+        setIsGoogleLoading(false);
+      } else {
+        setIsAppleLoading(false);
+      }
     }
   };
   
@@ -171,5 +187,7 @@ export const useAuthForm = () => {
     handleSignIn,
     handleSocialSignIn,
     isSubmitting,
+    isGoogleLoading,
+    isAppleLoading,
   };
 };
