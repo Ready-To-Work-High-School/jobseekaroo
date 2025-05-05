@@ -23,6 +23,13 @@ export interface AuthContextType {
   saveJob?: (jobId: string) => Promise<void>;
   unsaveJob?: (jobId: string) => Promise<void>;
   getSavedJobs?: () => Promise<string[]>;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
+  
+  // Application methods
+  createApplication?: (applicationData: any) => Promise<string>;
+  updateApplicationStatus?: (applicationId: string, status: string) => Promise<void>;
+  deleteApplication?: (applicationId: string) => Promise<void>;
+  getApplications?: () => Promise<any[]>;
   submitApplication?: (jobId: string, data: any) => Promise<void>;
   
   // Admin methods

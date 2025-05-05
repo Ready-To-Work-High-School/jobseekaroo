@@ -244,7 +244,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refreshProfile,
         makeAdmin: async () => console.log('makeAdmin method called but not implemented'),
         verifyEmployer: async () => console.log('verifyEmployer method called but not implemented'),
-        redeemCode: async () => console.log('redeemCode method called but not implemented'),
+        redeemCode: async (code: string) => {
+          console.log('redeemCode method called:', code);
+          return false; // Fixed return type to match Promise<boolean>
+        },
         submitApplication: async (jobId: string, data: any) => {
           await applicationActions.createApplication({
             job_id: jobId,
