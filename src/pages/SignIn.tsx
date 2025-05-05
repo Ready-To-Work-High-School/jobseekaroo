@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Loader2, WifiOff } from 'lucide-react';
 import { useAuthForm } from '@/hooks/useAuthForm';
 import { useFadeIn } from '@/utils/animations';
 import { Helmet } from 'react-helmet';
@@ -15,6 +15,8 @@ import Layout from '@/components/Layout';
 import SignInBenefitsCard from '@/components/auth/SignInBenefitsCard';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import AuthTroubleshooter from '@/components/troubleshooting/AuthTroubleshooter';
 
 const SignIn = () => {
   const { 
@@ -23,7 +25,8 @@ const SignIn = () => {
     handleSocialSignIn, 
     isSubmitting,
     isGoogleLoading,
-    isAppleLoading 
+    isAppleLoading,
+    networkStatus 
   } = useAuthForm();
   
   const {
@@ -35,6 +38,7 @@ const SignIn = () => {
   const fadeIn = useFadeIn(200);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [showTroubleshooter, setShowTroubleshooter] = useState(false);
   
   // Check for network status on load
   useEffect(() => {
@@ -46,6 +50,12 @@ const SignIn = () => {
       });
     }
   }, [toast]);
+  
+  const handleRetryConnection = () => {
+    window.location.reload();
+  };
+  
+  const isOffline = networkStatus === 'offline' || !navigator.onLine;
   
   return (
     <Layout hideAuthLinks>
@@ -67,6 +77,25 @@ const SignIn = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
+                {isOffline && (
+                  <Alert variant="destructive" className="mb-4">
+                    <WifiOff className="h-4 w-4" />
+                    <AlertDescription>
+                      <div className="flex flex-col space-y-2">
+                        <span>You appear to be offline. Please check your internet connection.</span>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={handleRetryConnection}
+                          className="mt-2 w-fit"
+                        >
+                          Retry Connection
+                        </Button>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
                 {/* Social Sign In Options */}
                 <SocialAuthButtons 
                   onGoogleSignIn={() => handleSocialSignIn('google')}
@@ -95,7 +124,7 @@ const SignIn = () => {
                       type="email"
                       {...register('email')}
                       className={errors.email ? 'border-red-500' : ''}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isOffline}
                     />
                     {errors.email && (
                       <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -120,7 +149,7 @@ const SignIn = () => {
                       type="password" 
                       {...register('password')}
                       className={errors.password ? 'border-red-500' : ''}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isOffline}
                     />
                     {errors.password && (
                       <p className="text-xs text-red-500">{errors.password.message}</p>
@@ -132,7 +161,11 @@ const SignIn = () => {
                     <Label htmlFor="remember">Remember me</Label>
                   </div>
                   
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isSubmitting || isOffline}
+                  >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -152,6 +185,13 @@ const SignIn = () => {
                     <Link to="/sign-up">Sign up</Link>
                   </Button>
                 </p>
+                
+                {/* Add Troubleshooter */}
+                <div className="w-full mt-4">
+                  <AuthTroubleshooter
+                    initialIssue="Having trouble signing in? We can help diagnose the issue."
+                  />
+                </div>
               </CardFooter>
             </Card>
           </div>
