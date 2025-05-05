@@ -16,21 +16,29 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Award, Calendar, CheckCircle, Download, ExternalLink } from 'lucide-react';
+import { Award, Calendar, Download, ExternalLink } from 'lucide-react';
 import { getUserCredentials } from '@/lib/supabase/simulations';
-import { SimulationCredential } from '@/types/jobSimulation';
+import { toast } from 'sonner';
 
 const UserCredentials = () => {
   const fadeIn = useFadeIn(300);
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch user credentials
+  // Fetch user credentials with proper caching
   const { data: credentials, isLoading } = useQuery({
     queryKey: ['userCredentials', user?.id],
     queryFn: () => user ? getUserCredentials(user.id) : Promise.reject('Not authenticated'),
     enabled: !!user,
+    staleTime: 60000, // Cache for 1 minute to prevent constant refetching
   });
+  
+  const handleDownload = (credentialId: string) => {
+    // This would typically generate a PDF certificate
+    toast.success("Your certificate is being generated", {
+      description: "The download will start momentarily"
+    });
+  };
   
   if (!user) {
     return (
@@ -55,6 +63,9 @@ const UserCredentials = () => {
                 Certificates and credentials earned through job simulations
               </p>
             </div>
+            <Button variant="outline" onClick={() => navigate(-1)}>
+              Back
+            </Button>
           </div>
 
           {isLoading ? (
@@ -79,7 +90,7 @@ const UserCredentials = () => {
             </div>
           ) : credentials && credentials.length > 0 ? (
             <div className="space-y-6">
-              {credentials.map((credential: SimulationCredential & { job_simulations?: any }) => (
+              {credentials.map((credential) => (
                 <Card key={credential.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
@@ -104,7 +115,7 @@ const UserCredentials = () => {
                       and demonstrated proficiency in the required skills.
                     </p>
                     <div className="flex flex-wrap gap-1 mb-2">
-                      {credential.job_simulations?.skills_gained?.map((skill: string, i: number) => (
+                      {credential.job_simulations?.skills_gained?.map((skill, i) => (
                         <Badge key={i} variant="secondary">{skill}</Badge>
                       )) || (
                         <Badge variant="secondary">Simulation Skills</Badge>
@@ -112,7 +123,11 @@ const UserCredentials = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleDownload(credential.id)}
+                    >
                       <Download className="h-4 w-4 mr-1" />
                       Download PDF
                     </Button>

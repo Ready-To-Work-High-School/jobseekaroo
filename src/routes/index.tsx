@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from '@/pages/Home';
@@ -27,10 +28,16 @@ import PlatformGuide from '@/pages/PlatformGuide';
 import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
 import TestPage from '@/pages/TestPage';
+import JobSimulations from '@/pages/JobSimulations';
+import SimulationDetail from '@/pages/SimulationDetail';
+import UserCredentials from '@/pages/UserCredentials';
+import StudentProfile from '@/pages/student/StudentProfile';
+import StudentDashboard from '@/pages/student/StudentDashboard';
 
 import { PublicRoutes } from './publicRoutes';
 import { SchoolRoutes } from './schoolRoutes';
 import { EmployerRoutes } from './employerRoutes';
+import { JobSeekerRoutes } from './jobSeekerRoutes';
 
 const AppRoutes = [
   <Route path="/" element={<Home />} key="home" />,
@@ -61,6 +68,21 @@ const AppRoutes = [
   <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
   <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
   <Route path="/test" element={<TestPage />} key="test" />,
+  
+  {/* Job simulation routes */}
+  <Route path="/job-simulations" element={<JobSimulations />} key="job-simulations" />,
+  <Route path="/job-simulations/:id" element={<SimulationDetail />} key="simulation-detail" />,
+  <Route path="/credentials" element={<UserCredentials />} key="user-credentials" />,
+  
+  {/* Student routes */}
+  <Route path="/student-dashboard" element={<StudentDashboard />} key="student-dashboard" />,
+  <Route path="/student-profile" element={<StudentProfile />} key="student-profile" />,
+  
+  {/* Include routes defined in other files */}
+  PublicRoutes,
+  SchoolRoutes,
+  EmployerRoutes,
+  JobSeekerRoutes
 ];
 
 export default AppRoutes;
