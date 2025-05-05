@@ -1,171 +1,137 @@
 
 import { 
-  Wifi, 
-  WifiOff, 
-  UserX, 
-  Database, 
-  FileWarning, 
-  Bug, 
-  Cpu,
-  AlertCircle,
-  Lock,
-  Mail,
-  User
-} from "lucide-react";
-import { LucideIcon } from "lucide-react";
+  Wifi, AlertCircle, Database, Lock, Globe, BrainCircuit,
+  KeyRound, ZapOff, ShieldAlert, Cookie, MonitorSmartphone
+} from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 export interface CommonIssue {
   id: string;
   title: string;
   description: string;
-  icon: LucideIcon;
   solutions: string[];
-  solution?: string; // For backward compatibility
+  icon: LucideIcon;
 }
 
 export const commonIssues: CommonIssue[] = [
   {
-    id: "network",
-    title: "Network Connectivity Issues",
-    description: "Unable to connect to the internet or access server resources.",
-    icon: WifiOff,
+    id: 'network',
+    title: 'Network Connectivity',
+    description: 'Problems with internet connection or API access',
     solutions: [
-      "Check your internet connection",
-      "Try refreshing the page",
-      "Clear your browser cache and cookies",
-      "Try accessing the site from a different network"
-    ]
+      'Check your internet connection and refresh the page',
+      'Try disabling any VPN or proxy services',
+      'Clear browser cache and cookies',
+      'If on a restricted network, contact your IT administrator'
+    ],
+    icon: Wifi
   },
   {
-    id: "authentication",
-    title: "Authentication Problems",
-    description: "Issues with logging in or accessing your account.",
-    icon: UserX,
+    id: 'authentication',
+    title: 'Authentication Issues',
+    description: 'Problems with signing in or account access',
     solutions: [
-      "Verify your username and password",
-      "Reset your password if you can't remember it",
-      "Clear your browser cookies and try again",
-      "Contact support if you're still having issues"
-    ]
+      'Verify your email and password are correct',
+      'Clear browser cookies and try signing in again',
+      'Reset your password if you continue to have issues',
+      'Contact support if your account is locked'
+    ],
+    icon: KeyRound
   },
   {
-    id: "data",
-    title: "Data Loading Errors",
-    description: "Information or content isn't loading correctly.",
-    icon: Database,
+    id: 'data-loading',
+    title: 'Data Not Loading',
+    description: 'Information is missing or failing to display',
     solutions: [
-      "Refresh the page",
-      "Check your internet connection",
-      "Clear your browser cache",
-      "Try logging out and back in"
-    ]
+      'Refresh the page to reload your data',
+      'Check your internet connection',
+      'Sign out and sign back in to refresh your session',
+      'Clear browser cache and cookies'
+    ],
+    icon: Database
   },
   {
-    id: "display",
-    title: "Display and Layout Problems",
-    description: "Interface elements are missing or displayed incorrectly.",
-    icon: FileWarning,
+    id: 'permissions',
+    title: 'Permission Errors',
+    description: 'Access denied or missing permissions',
     solutions: [
-      "Try a different browser",
-      "Update your browser to the latest version",
-      "Disable browser extensions that might interfere",
-      "Try adjusting your zoom level"
-    ]
+      'Verify your account has the correct permissions',
+      'Sign out and sign back in to refresh your session',
+      'Contact your administrator to request access',
+      'Check if your subscription is active'
+    ],
+    icon: Lock
   },
   {
-    id: "performance",
-    title: "Performance Issues",
-    description: "The application is running slowly or freezing.",
-    icon: Cpu,
+    id: 'browser-compatibility',
+    title: 'Browser Compatibility',
+    description: 'Issues with how the site works in your browser',
     solutions: [
-      "Close other browser tabs and applications",
-      "Clear your browser cache",
-      "Try a different browser",
-      "Check your device's available storage"
-    ]
+      'Update to the latest version of your browser',
+      'Try using Chrome, Firefox, or Edge',
+      'Disable browser extensions that might interfere',
+      'Enable JavaScript and cookies in your browser settings'
+    ],
+    icon: Globe
   },
   {
-    id: "bugs",
-    title: "Feature Bugs",
-    description: "Specific features not working as expected.",
-    icon: Bug,
+    id: 'performance',
+    title: 'Performance Issues',
+    description: 'Application is slow or unresponsive',
     solutions: [
-      "Try refreshing the page",
-      "Clear your browser cache",
-      "Check for any browser console errors",
-      "Report the issue to support with specific details"
-    ]
+      'Close unused tabs and applications to free up memory',
+      'Clear browser cache and cookies',
+      'Disable browser extensions that might slow things down',
+      'Try using a different browser'
+    ],
+    icon: ZapOff
   },
   {
-    id: "compatibility",
-    title: "Browser Compatibility Issues",
-    description: "Problems with specific browsers or devices.",
-    icon: AlertCircle,
+    id: 'security',
+    title: 'Security Warnings',
+    description: 'Browser security alerts or blocked features',
     solutions: [
-      "Try a different browser (Chrome, Firefox, Safari)",
-      "Update your browser to the latest version",
-      "Disable browser extensions",
-      "Try accessing from a different device"
-    ]
+      'Ensure you\'re using HTTPS in the URL',
+      'Check your browser security settings',
+      'Update your browser to the latest version',
+      'Contact your IT administrator if using a work computer'
+    ],
+    icon: ShieldAlert
   },
   {
-    id: "connectivity",
-    title: "Connection Stability Issues",
-    description: "Intermittent connection problems affecting functionality.",
-    icon: Wifi,
+    id: 'cookies',
+    title: 'Cookie Settings',
+    description: 'Problems related to cookie permissions',
     solutions: [
-      "Check for a stable internet connection",
-      "Try connecting to a different network",
-      "Restart your router or modem",
-      "Contact your internet service provider if issues persist"
-    ]
+      'Enable cookies in your browser settings',
+      'Allow third-party cookies if you\'re using SSO',
+      'Clear cookies and cache, then try again',
+      'Check if browser extensions are blocking cookies'
+    ],
+    icon: Cookie
   },
   {
-    id: "login",
-    title: "Login Issues",
-    description: "Having trouble signing in to your account?",
-    icon: Lock,
+    id: 'mobile-issues',
+    title: 'Mobile Device Issues',
+    description: 'Problems specific to smartphones and tablets',
     solutions: [
-      "Verify your email address and password are correct",
-      "Try resetting your password through the 'Forgot Password' link",
-      "Clear your browser cache and cookies",
-      "Try using an incognito/private browser window"
-    ]
+      'Try using the desktop version of the site',
+      'Update your mobile browser to the latest version',
+      'Clear browser cache and data',
+      'Check for system updates on your device'
+    ],
+    icon: MonitorSmartphone
   },
   {
-    id: "jobs",
-    title: "Jobs Not Loading",
-    description: "Issues with viewing or applying to jobs?",
-    icon: Bug,
+    id: 'ai-features',
+    title: 'AI Features Not Working',
+    description: 'Issues with AI-powered functionality',
     solutions: [
-      "Refresh the page to reload job listings",
-      "Check your internet connection",
-      "Clear your browser cache and cookies",
-      "Try using a different browser or device"
-    ]
-  },
-  {
-    id: "application",
-    title: "Application Submission Errors",
-    description: "Problems submitting your job application?",
-    icon: Mail,
-    solutions: [
-      "Ensure all required fields are completed correctly",
-      "Check for any error messages on the form",
-      "Try submitting your application from a different device",
-      "Contact support if the problem continues"
-    ]
-  },
-  {
-    id: "profile",
-    title: "Profile Updates Not Saving",
-    description: "Changes to your profile not being saved?",
-    icon: User,
-    solutions: [
-      "Make sure to click the Save button after making changes",
-      "Try uploading smaller image files (under 2MB) for profile pictures",
-      "Check your internet connection",
-      "Clear your browser cache and try again"
-    ]
+      'Check your internet connection (AI features require good connectivity)',
+      'Try refreshing the page and trying again',
+      'Use shorter or clearer input text if AI seems confused',
+      'Contact support if AI features remain unavailable'
+    ],
+    icon: BrainCircuit
   }
 ];

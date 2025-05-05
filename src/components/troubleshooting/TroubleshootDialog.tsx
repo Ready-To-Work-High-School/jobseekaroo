@@ -24,14 +24,15 @@ interface TroubleshootProps {
   initialIssue?: string;
 }
 
-const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
+const TroubleshootDialog: React.FC<TroubleshootProps> = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
   const [open, setOpen] = useState(false);
   const { isChecking, handleDiagnostics, lastResults, latency } = useDiagnostics();
   
-  // Run diagnostics when dialog opens if there's no trigger
+  // Use a separate effect to avoid any conditional hook execution issues
   useEffect(() => {
     if (open && !trigger) {
+      // Only run diagnostics automatically if there's no custom trigger
       handleDiagnostics();
     }
   }, [open, trigger, handleDiagnostics]);

@@ -1,68 +1,60 @@
 
 /**
- * Utility functions to check for missing UI components and links
+ * Utility functions for checking UI components and navigation issues
  */
 
 /**
- * Check for essential navigation links that should be present
- * @returns Array of missing link descriptions
+ * Check for missing or broken navigation links
+ * @returns Array of detected issues
  */
 export const checkMissingLinks = (): string[] => {
+  const issues: string[] = [];
+  
   try {
-    // Define essential routes that should be accessible
-    const essentialRoutes = [
-      { path: '/jobs', name: 'Jobs listing' },
-      { path: '/student-dashboard', name: 'Student dashboard' },
-      { path: '/profile', name: 'User profile' },
-      { path: '/applications', name: 'Applications' },
-      { path: '/settings', name: 'Settings' }
-    ];
+    // Check if essential navigation links are present in the DOM
+    const essentialPaths = ['/', '/jobs', '/profile', '/sign-in', '/sign-up'];
+    const links = Array.from(document.querySelectorAll('a'))
+      .map(link => link.getAttribute('href'))
+      .filter(Boolean);
     
-    const missingLinks: string[] = [];
-    
-    // Check for the presence of navigation links in the DOM
-    essentialRoutes.forEach(route => {
-      const linkExists = document.querySelector(`a[href="${route.path}"]`) || 
-                        document.querySelector(`a[href="#${route.path}"]`);
-      
-      if (!linkExists) {
-        missingLinks.push(`Missing link: ${route.name}`);
+    essentialPaths.forEach(path => {
+      if (!links.some(link => link === path || link?.endsWith(path))) {
+        issues.push(`Navigation link to "${path}" may be missing`);
       }
     });
-    
-    return missingLinks;
   } catch (error) {
-    console.error("Error checking for missing links:", error);
-    return [];
+    console.error("Error checking navigation links:", error);
   }
+  
+  return issues;
 };
 
 /**
- * Check for critical UI components that should be present
- * @returns Array of missing component descriptions
+ * Check for critical component presence and errors
+ * @returns Array of detected issues
  */
 export const checkCriticalComponents = (): string[] => {
-  try {
-    // Define critical components that should be present
-    const criticalComponents = [
-      { selector: '#job-listings', name: 'Job listings component' },
-      { selector: '.user-profile', name: 'User profile component' },
-      { selector: '.navigation-menu', name: 'Navigation menu' }
-    ];
-    
-    const missingComponents: string[] = [];
-    
-    // Check if these components exist in the DOM
-    criticalComponents.forEach(component => {
-      const exists = document.querySelector(component.selector);
-      if (!exists) {
-        missingComponents.push(`Missing component: ${component.name}`);
-      }
-    });
-    
-    return missingComponents;
-  } catch (error) {
-    console.error("Error checking for critical components:", error);
-    return [];
+  const issues: string[] = [];
+  
+  // Check if critical components are present
+  const criticalComponents = [
+    { selector: 'nav', name: 'Navigation bar' },
+    { selector: 'main', name: 'Main content container' },
+    { selector: 'footer', name: 'Footer' }
+  ];
+  
+  criticalComponents.forEach(component => {
+    if (document.querySelector(component.selector) === null) {
+      issues.push(`Critical component "${component.name}" may be missing`);
+    }
+  });
+  
+  // Check for error boundaries without fallbacks
+  // This is just a heuristic check since we can't truly detect this at runtime
+  const errorBoundaries = Array.from(document.querySelectorAll('[data-error-boundary]'));
+  if (errorBoundaries.length === 0) {
+    issues.push('No error boundaries detected, application may crash on component errors');
   }
+  
+  return issues;
 };
