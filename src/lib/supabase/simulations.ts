@@ -21,7 +21,7 @@ export async function getJobSimulations(): Promise<JobSimulation[]> {
   }
 }
 
-export async function getSimulationById(id: string): Promise<JobSimulation | null> {
+export async function getJobSimulation(id: string): Promise<JobSimulation | null> {
   try {
     const { data, error } = await supabase
       .from('job_simulations')
@@ -131,23 +131,23 @@ export async function getUserSimulationProgress(
 }
 
 export async function updateSimulationProgress(
-  userId: string,
-  simulationId: string,
-  currentTaskId: string | null,
-  progressPercentage: number,
-  completed: boolean
+  progressId: string,
+  updates: {
+    current_task_id: string | null,
+    progress_percentage: number,
+    completed: boolean
+  }
 ): Promise<void> {
   try {
     const { error } = await supabase
       .from('user_simulation_progress')
       .update({
-        current_task_id: currentTaskId,
-        progress_percentage: progressPercentage,
-        completed: completed,
-        completed_at: completed ? new Date().toISOString() : null
+        current_task_id: updates.current_task_id,
+        progress_percentage: updates.progress_percentage,
+        completed: updates.completed,
+        completed_at: updates.completed ? new Date().toISOString() : null
       })
-      .eq('user_id', userId)
-      .eq('simulation_id', simulationId);
+      .eq('id', progressId);
 
     if (error) {
       console.error('Error updating simulation progress:', error);
@@ -175,5 +175,32 @@ export async function getUserSimulationCredentials(userId: string): Promise<any[
   } catch (error) {
     console.error('Error in getUserSimulationCredentials:', error);
     return [];
+  }
+}
+
+// Alias for getUserSimulationCredentials to match imports in other files
+export const getUserCredentials = getUserSimulationCredentials;
+
+export async function createSimulationCredential(
+  userId: string, 
+  simulationId: string, 
+  certificateId: string
+): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('simulation_credentials')
+      .insert({
+        user_id: userId,
+        simulation_id: simulationId,
+        certificate_id: certificateId
+      });
+
+    if (error) {
+      console.error('Error creating simulation credential:', error);
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error in createSimulationCredential:', error);
+    throw error;
   }
 }
