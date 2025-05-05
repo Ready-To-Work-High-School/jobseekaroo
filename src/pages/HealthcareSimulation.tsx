@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -13,6 +12,14 @@ import HealthcareAssistantDemo from '@/components/healthcare/HealthcareAssistant
 const HealthcareSimulation = () => {
   const fadeIn = useFadeIn(300);
   const navigate = useNavigate();
+
+  // Function to handle tab navigation
+  const navigateToTab = (tabValue: string) => {
+    const tabElement = document.querySelector(`[data-value="${tabValue}"]`);
+    if (tabElement && tabElement instanceof HTMLElement) {
+      tabElement.click();
+    }
+  };
 
   return (
     <Layout>
@@ -185,7 +192,7 @@ const HealthcareSimulation = () => {
                   <HealthcareAssistantDemo />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button onClick={() => document.querySelector('[data-value="tasks"]')?.click()}>
+                  <Button onClick={() => navigateToTab("tasks")}>
                     Continue to Tasks
                   </Button>
                 </CardFooter>
