@@ -33,6 +33,7 @@ import SimulationDetail from '@/pages/SimulationDetail';
 import UserCredentials from '@/pages/UserCredentials';
 import StudentProfile from '@/pages/student/StudentProfile';
 import StudentDashboard from '@/pages/student/StudentDashboard';
+import HealthcareSimulation from '@/pages/HealthcareSimulation';
 
 import { PublicRoutes } from './publicRoutes';
 import { SchoolRoutes } from './schoolRoutes';
@@ -73,16 +74,17 @@ const AppRoutes = [
   <Route path="/job-simulations" element={<JobSimulations />} key="job-simulations" />,
   <Route path="/job-simulations/:id" element={<SimulationDetail />} key="simulation-detail" />,
   <Route path="/credentials" element={<UserCredentials />} key="user-credentials" />,
+  <Route path="/healthcare-simulation" element={<HealthcareSimulation />} key="healthcare-simulation" />,
   
   {/* Student routes */}
   <Route path="/student-dashboard" element={<StudentDashboard />} key="student-dashboard" />,
   <Route path="/student-profile" element={<StudentProfile />} key="student-profile" />,
   
   {/* Include routes defined in other files */}
-  PublicRoutes,
-  SchoolRoutes,
-  EmployerRoutes,
-  JobSeekerRoutes
+  ...PublicRoutes,
+  ...SchoolRoutes,
+  ...EmployerRoutes,
+  ...JobSeekerRoutes
 ];
 
 export default AppRoutes;
