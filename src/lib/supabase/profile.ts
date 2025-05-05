@@ -18,12 +18,26 @@ export async function getUserProfile(userId: string) {
 }
 
 export async function updateUserProfile(userId: string, profileData: Partial<UserProfile>) {
+  // Create a new object with the profile data, handling badges specially
+  const updateData: Record<string, any> = {
+    ...profileData,
+    updated_at: new Date().toISOString()
+  };
+  
+  // If badges is included in the update, ensure it's in the correct format for Supabase
+  if (profileData.badges) {
+    // We're ensuring badges is stored in a format compatible with Supabase's Json type
+    // by converting it to a plain object array
+    updateData.badges = profileData.badges.map(badge => ({
+      id: badge.id,
+      name: badge.name,
+      earned_at: badge.earned_at
+    }));
+  }
+  
   const { data, error } = await supabase
     .from('profiles')
-    .update({
-      ...profileData,
-      updated_at: new Date().toISOString()
-    })
+    .update(updateData)
     .eq('id', userId)
     .select()
     .single();
