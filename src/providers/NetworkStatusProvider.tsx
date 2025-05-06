@@ -45,8 +45,11 @@ export const NetworkStatusProvider: React.FC<{ children: React.ReactNode }> = ({
   // Function to manually refresh data or trigger a global refresh
   const refreshData = useCallback(() => {
     console.log('Manual data refresh triggered');
+    if (isOnline) {
+      setLastOnlineAt(new Date());
+    }
     document.dispatchEvent(new CustomEvent('app:data-refresh'));
-  }, []);
+  }, [isOnline]);
 
   const contextValue = {
     isOnline,

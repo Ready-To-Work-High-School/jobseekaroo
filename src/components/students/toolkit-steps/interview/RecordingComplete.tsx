@@ -14,7 +14,7 @@ const RecordingComplete = ({ selectedQuestion, onReset }: RecordingCompleteProps
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
-  const isOnline = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
   const { toast } = useToast();
 
   // Simulate audio loading on component mount

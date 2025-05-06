@@ -6,7 +6,7 @@ import InterviewPracticeRecorder from './interview/InterviewPracticeRecorder';
 import RecordingComplete from './interview/RecordingComplete';
 import InterviewTips from './interview/InterviewTips';
 import { useToast } from '@/hooks/use-toast';
-import useNetworkStatus from '@/hooks/useNetworkStatus';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const StepFour = () => {
   const [recordedVideo, setRecordedVideo] = useState<string | null>(null);

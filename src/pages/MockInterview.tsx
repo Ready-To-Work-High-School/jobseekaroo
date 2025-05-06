@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import InterviewTips from '@/components/students/toolkit-steps/interview/InterviewTips';
 import RecordingComplete from '@/components/students/toolkit-steps/interview/RecordingComplete';
 import { useToast } from '@/hooks/use-toast';
-import useNetworkStatus from '@/hooks/useNetworkStatus';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import InterviewPracticeRecorder from '@/components/students/toolkit-steps/interview/InterviewPracticeRecorder';
 
 const MockInterview = () => {

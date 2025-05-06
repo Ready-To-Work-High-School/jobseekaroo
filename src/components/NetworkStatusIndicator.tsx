@@ -9,7 +9,7 @@ interface NetworkStatusIndicatorProps {
 }
 
 const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnline }) => {
-  const { refreshData, lastOnlineTime } = useNetworkStatus();
+  const { refreshData, lastOnlineAt } = useNetworkStatus();
   
   const handleRefreshClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -17,8 +17,8 @@ const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnlin
     refreshData();
   };
   
-  const lastUpdateTime = lastOnlineTime 
-    ? new Date(lastOnlineTime).toLocaleTimeString() 
+  const lastUpdateTime = lastOnlineAt 
+    ? new Date(lastOnlineAt).toLocaleTimeString() 
     : 'never';
   
   return (
