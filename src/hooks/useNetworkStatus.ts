@@ -6,12 +6,13 @@ import { useNetworkStatusContext } from '@/providers/NetworkStatusProvider';
  * @returns {Object} Network status information and utilities
  */
 export const useNetworkStatus = () => {
-  const { isOnline, lastOnlineTime, refreshData } = useNetworkStatusContext();
+  const { isOnline, lastOnlineTime, refreshData, checkConnection } = useNetworkStatusContext();
   
   return {
     isOnline,
     lastOnlineTime,
-    refreshData
+    refreshData,
+    checkConnection
   };
 };
 

@@ -20,9 +20,19 @@ const Home = () => {
     console.log('Home element found:', !!homeElement);
     
     // Refresh data when component mounts to ensure latest data
-    if (isOnline) {
-      refreshData();
-    }
+    refreshData();
+    
+    // Also set up a refresh interval while the component is mounted
+    const refreshInterval = setInterval(() => {
+      if (isOnline) {
+        console.log('Periodic data refresh triggered');
+        refreshData();
+      }
+    }, 60000); // Refresh every minute if online
+    
+    return () => {
+      clearInterval(refreshInterval);
+    };
   }, [isOnline, refreshData]);
 
   return (

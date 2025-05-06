@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 type NetworkStatusContextType = {
   isOnline: boolean;
@@ -29,12 +29,14 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
   // Check if we can actually reach any server
   const checkConnection = async (): Promise<boolean> => {
     try {
+      console.log('Checking connection status...');
       const response = await fetch('/favicon.ico', { 
         method: 'HEAD',
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' },
       });
       const online = response.ok;
+      console.log('Connection check result:', online);
       setIsOnline(online);
       
       // Update last online time if we're online
@@ -51,10 +53,10 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
   };
 
   // Function to trigger data refresh in components
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     setRefreshTrigger(prev => prev + 1);
-    console.log('Data refresh triggered at:', new Date().toISOString());
-  };
+    console.log('Data refresh triggered at:', new Date().toISOString(), 'Refresh count:', refreshTrigger + 1);
+  }, [refreshTrigger]);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -62,6 +64,7 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
       // When coming back online, we should refresh data
       checkConnection().then(isConnected => {
         if (isConnected) {
+          console.log('Connection restored - triggering data refresh');
           refreshData();
         }
       });
@@ -74,6 +77,7 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
     
     // Initial check
     checkConnection();
+    console.log('Initial network status:', isOnline ? 'Online' : 'Offline');
     
     // Set up listeners
     window.addEventListener('online', handleOnline);
@@ -84,6 +88,7 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
       checkConnection().then(isConnected => {
         // If we were offline and now we're online, trigger a refresh
         if (isConnected && !isOnline) {
+          console.log('Connection restored during periodic check - triggering refresh');
           refreshData();
         }
       });
@@ -95,6 +100,7 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
         console.log('Tab became visible, checking connection...');
         checkConnection().then(isConnected => {
           if (isConnected) {
+            console.log('Tab visible and connected - triggering refresh');
             refreshData();
           }
         });
@@ -109,7 +115,7 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(intervalId);
     };
-  }, [isOnline]);
+  }, [isOnline, refreshData]);
 
   return (
     <NetworkStatusContext.Provider value={{ 
