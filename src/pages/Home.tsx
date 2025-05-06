@@ -7,15 +7,23 @@ import Hero from '@/components/Hero';
 import SearchSection from '@/components/home/SearchSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import EnhancedHero from '@/components/EnhancedHero';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const Home = () => {
+  const { isOnline, refreshData } = useNetworkStatus();
+  
   useEffect(() => {
     console.log('Home component mounted - checking render status');
     
     // Add additional debug logging
     const homeElement = document.getElementById('home-root');
     console.log('Home element found:', !!homeElement);
-  }, []);
+    
+    // Refresh data when component mounts to ensure latest data
+    if (isOnline) {
+      refreshData();
+    }
+  }, [isOnline, refreshData]);
 
   return (
     <Layout>
@@ -29,7 +37,7 @@ const Home = () => {
 
       <div id="home-root" className="container mx-auto">
         <ErrorBoundary>
-          <EnhancedHero />
+          <EnhancedHero key={`hero-${Date.now()}`} />
         </ErrorBoundary>
 
         <ErrorBoundary>

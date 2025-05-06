@@ -2,12 +2,17 @@
 import { useNetworkStatusContext } from '@/providers/NetworkStatusProvider';
 
 /**
- * Hook to access the current network status
- * @returns {boolean} Current online status
+ * Hook to access the current network status and related utilities
+ * @returns {Object} Network status information and utilities
  */
-export const useNetworkStatus = (): boolean => {
-  const { isOnline } = useNetworkStatusContext();
-  return isOnline;
+export const useNetworkStatus = () => {
+  const { isOnline, lastOnlineTime, refreshData } = useNetworkStatusContext();
+  
+  return {
+    isOnline,
+    lastOnlineTime,
+    refreshData
+  };
 };
 
 export default useNetworkStatus;

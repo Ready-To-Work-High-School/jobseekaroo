@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import InterviewTips from '@/components/students/toolkit-steps/interview/InterviewTips';
 import RecordingComplete from '@/components/students/toolkit-steps/interview/RecordingComplete';
 import { useToast } from '@/hooks/use-toast';
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import useNetworkStatus from '@/hooks/useNetworkStatus';
 import InterviewPracticeRecorder from '@/components/students/toolkit-steps/interview/InterviewPracticeRecorder';
 
 const MockInterview = () => {
   const [recordedVideo, setRecordedVideo] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const { toast } = useToast();
-  const isOnline = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
   
   // Check network status on component mount
   useEffect(() => {

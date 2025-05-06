@@ -6,13 +6,13 @@ import InterviewPracticeRecorder from './interview/InterviewPracticeRecorder';
 import RecordingComplete from './interview/RecordingComplete';
 import InterviewTips from './interview/InterviewTips';
 import { useToast } from '@/hooks/use-toast';
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import useNetworkStatus from '@/hooks/useNetworkStatus';
 
 const StepFour = () => {
   const [recordedVideo, setRecordedVideo] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const { toast } = useToast();
-  const isOnline = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
   
   // Check network status on component mount
   useEffect(() => {
