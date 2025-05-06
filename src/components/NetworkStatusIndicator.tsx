@@ -13,6 +13,7 @@ const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnlin
   
   const handleRefreshClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log('Manual refresh triggered');
     refreshData();
   };
   

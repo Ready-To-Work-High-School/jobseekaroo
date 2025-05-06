@@ -37,6 +37,11 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
       });
       const online = response.ok;
       console.log('Connection check result:', online);
+      
+      if (online !== isOnline) {
+        console.log(`Network status changed: ${isOnline ? 'online → offline' : 'offline → online'}`);
+      }
+      
       setIsOnline(online);
       
       // Update last online time if we're online
@@ -54,8 +59,10 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
 
   // Function to trigger data refresh in components
   const refreshData = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1);
-    console.log('Data refresh triggered at:', new Date().toISOString(), 'Refresh count:', refreshTrigger + 1);
+    const now = Date.now();
+    setRefreshTrigger(now);
+    console.log('Data refresh triggered at:', new Date(now).toISOString(), 'Refresh count:', refreshTrigger + 1);
+    document.dispatchEvent(new CustomEvent('app:data-refresh', { detail: { timestamp: now } }));
   }, [refreshTrigger]);
 
   useEffect(() => {
