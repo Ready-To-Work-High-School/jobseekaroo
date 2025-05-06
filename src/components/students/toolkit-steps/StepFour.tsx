@@ -1,30 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Video } from 'lucide-react';
 import InterviewPracticeRecorder from './interview/InterviewPracticeRecorder';
 import RecordingComplete from './interview/RecordingComplete';
 import InterviewTips from './interview/InterviewTips';
-import { useToast } from '@/hooks/use-toast';
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const StepFour = () => {
   const [recordedVideo, setRecordedVideo] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
-  const { toast } = useToast();
-  const isOnline = useNetworkStatus();
-  
-  // Check network status on component mount
-  useEffect(() => {
-    if (!isOnline) {
-      toast({
-        title: "Network Connection Issue",
-        description: "You appear to be offline. Some features may not work properly.",
-        variant: "destructive",
-        duration: 5000
-      });
-    }
-  }, [isOnline, toast]);
   
   const commonQuestions = [
     "Tell me about yourself.",
@@ -34,19 +18,11 @@ const StepFour = () => {
   ];
   
   const handleRecordingComplete = (question: string) => {
-    console.log("Recording complete for question:", question);
     setRecordedVideo("mock-video-url");
     setSelectedQuestion(question);
-    
-    toast({
-      title: "Recording saved",
-      description: "Your interview response has been saved successfully.",
-      duration: 3000
-    });
   };
   
   const resetRecording = () => {
-    console.log("Resetting recording state");
     setRecordedVideo(null);
     setSelectedQuestion(null);
   };

@@ -1,34 +1,26 @@
 
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, WifiOff } from 'lucide-react';
-import { useAuthForm } from '@/hooks/useAuthForm';
+import { Apple, Github, Loader2 } from 'lucide-react';
+import { useAuthForm, SignInFormValues } from '@/hooks/useAuthForm';
 import { useFadeIn } from '@/utils/animations';
 import { Helmet } from 'react-helmet';
 import Layout from '@/components/Layout';
+import GoogleIcon from '@/components/icons/GoogleIcon';
 import SignInBenefitsCard from '@/components/auth/SignInBenefitsCard';
-import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
-import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import AuthTroubleshooter from '@/components/troubleshooting/AuthTroubleshooter';
-import ConnectionTroubleshooter from '@/components/auth/ConnectionTroubleshooter';
 
 const SignIn = () => {
-  const [searchParams] = useSearchParams();
   const { 
     signInForm, 
     handleSignIn, 
     handleSocialSignIn, 
-    isSubmitting,
-    isGoogleLoading,
-    isAppleLoading,
-    networkStatus 
+    isSubmitting 
   } = useAuthForm();
   
   const {
@@ -39,80 +31,6 @@ const SignIn = () => {
 
   const fadeIn = useFadeIn(200);
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [showTroubleshooter, setShowTroubleshooter] = useState(false);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  const [networkTestComplete, setNetworkTestComplete] = useState(false);
-  const [bypassNetworkCheck, setBypassNetworkCheck] = useState(
-    searchParams.get('bypass') === 'network'
-  );
-  
-  // Monitor network status
-  useEffect(() => {
-    const handleOnline = () => {
-      setIsOffline(false);
-      toast({
-        title: "Connection Restored",
-        description: "Your internet connection has been restored.",
-      });
-    };
-    
-    const handleOffline = () => {
-      setIsOffline(true);
-      toast({
-        variant: "destructive",
-        title: "Network Error",
-        description: "You appear to be offline. Please check your internet connection.",
-      });
-    };
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, [toast]);
-  
-  // Check for network status on load
-  useEffect(() => {
-    if (!navigator.onLine && !bypassNetworkCheck) {
-      setIsOffline(true);
-      toast({
-        variant: "destructive",
-        title: "Network Error",
-        description: "You appear to be offline. Please check your internet connection.",
-      });
-    } else {
-      setNetworkTestComplete(true);
-    }
-  }, [toast, bypassNetworkCheck]);
-  
-  const handleRetryConnection = () => {
-    // Test if we can reach the server
-    fetch('/api/health-check', { 
-      method: 'HEAD',
-      cache: 'no-cache'
-    })
-      .then(() => {
-        toast({
-          title: "Connection Successful",
-          description: "Connection to the server has been restored.",
-        });
-        window.location.reload();
-      })
-      .catch(err => {
-        console.error('Connection retry failed:', err);
-        toast({
-          variant: "destructive",
-          title: "Connection Failed",
-          description: "Still unable to connect. Please check your internet connection.",
-        });
-      });
-  };
-  
-  const shouldDisableForm = (isOffline && !bypassNetworkCheck) || isSubmitting;
   
   return (
     <Layout hideAuthLinks>
@@ -134,41 +52,27 @@ const SignIn = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                {isOffline && !bypassNetworkCheck ? (
-                  <Alert variant="destructive" className="mb-4">
-                    <WifiOff className="h-4 w-4" />
-                    <AlertDescription>
-                      <div className="flex flex-col space-y-2">
-                        <span>You appear to be offline. Please check your internet connection.</span>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={handleRetryConnection}
-                          className="mt-2 w-fit"
-                        >
-                          Retry Connection
-                        </Button>
-                      </div>
-                    </AlertDescription>
-                  </Alert>
-                ) : null}
-                
-                {bypassNetworkCheck && (
-                  <Alert className="mb-4 bg-yellow-50 border-yellow-200">
-                    <AlertDescription>
-                      Network check bypassed. You can try signing in, but authentication might fail if you're offline.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                
                 {/* Social Sign In Options */}
-                <SocialAuthButtons 
-                  onGoogleSignIn={() => handleSocialSignIn('google')}
-                  onAppleSignIn={() => handleSocialSignIn('apple')}
-                  isGoogleLoading={isGoogleLoading}
-                  isAppleLoading={isAppleLoading}
-                  isFormLoading={isSubmitting}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleSocialSignIn('google')}
+                    disabled={isSubmitting}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <GoogleIcon className="h-4 w-4" />
+                    <span>Google</span>
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => handleSocialSignIn('apple')}
+                    disabled={isSubmitting}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <Apple className="h-4 w-4" />
+                    <span>Apple</span>
+                  </Button>
+                </div>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -189,7 +93,7 @@ const SignIn = () => {
                       type="email"
                       {...register('email')}
                       className={errors.email ? 'border-red-500' : ''}
-                      disabled={shouldDisableForm}
+                      disabled={isSubmitting}
                     />
                     {errors.email && (
                       <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -214,7 +118,7 @@ const SignIn = () => {
                       type="password" 
                       {...register('password')}
                       className={errors.password ? 'border-red-500' : ''}
-                      disabled={shouldDisableForm}
+                      disabled={isSubmitting}
                     />
                     {errors.password && (
                       <p className="text-xs text-red-500">{errors.password.message}</p>
@@ -222,15 +126,11 @@ const SignIn = () => {
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <Checkbox id="remember" {...register('rememberMe')} disabled={shouldDisableForm} />
+                    <Checkbox id="remember" {...register('rememberMe')} />
                     <Label htmlFor="remember">Remember me</Label>
                   </div>
                   
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={shouldDisableForm}
-                  >
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -250,17 +150,6 @@ const SignIn = () => {
                     <Link to="/sign-up">Sign up</Link>
                   </Button>
                 </p>
-                
-                {/* Add Troubleshooter */}
-                <div className="w-full mt-4">
-                  {isOffline && !bypassNetworkCheck ? (
-                    <ConnectionTroubleshooter onRetryConnection={handleRetryConnection} />
-                  ) : (
-                    <AuthTroubleshooter
-                      initialIssue="Having trouble signing in? We can help diagnose the issue."
-                    />
-                  )}
-                </div>
               </CardFooter>
             </Card>
           </div>

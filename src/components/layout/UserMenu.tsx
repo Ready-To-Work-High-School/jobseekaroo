@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, Shield, Sparkles, ShieldCheck, School
+  BookmarkCheck, Award, Shield, Sparkles
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
@@ -75,7 +74,7 @@ const UserMenu = () => {
           {isCeo && (
             <div className="absolute top-0 right-0 -mt-1 -mr-1">
               <div className="flex items-center justify-center h-4 w-4 rounded-full bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 p-[2px] border border-white">
-                <ShieldCheck className="h-2 w-2 text-amber-400" />
+                <Shield className="h-2 w-2 text-white" />
               </div>
             </div>
           )}

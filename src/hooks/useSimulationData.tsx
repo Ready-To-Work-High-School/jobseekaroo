@@ -3,12 +3,15 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getJobSimulations } from '@/lib/supabase/simulations';
 import { JobSimulation } from '@/types/jobSimulation';
+import { supabase } from '@/integrations/supabase/client';
+
+// Mock data removed since we now have real data in the database
 
 export const useSimulationData = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   // Fetch all job simulations with more detailed logging
-  const { data: simulations, isLoading, error } = useQuery({
+  const { data: fetchedSimulations, isLoading, error } = useQuery({
     queryKey: ['jobSimulations'],
     queryFn: async () => {
       try {
@@ -18,18 +21,18 @@ export const useSimulationData = () => {
         return simulations;
       } catch (err) {
         console.error('Error fetching simulations:', err);
-        throw err;
+        return [];
       }
     }
   });
 
   // Get unique categories
-  const categories = simulations 
-    ? ['all', ...new Set(simulations.map(sim => sim.category))]
+  const categories = fetchedSimulations 
+    ? ['all', ...new Set(fetchedSimulations.map(sim => sim.category))]
     : ['all'];
 
   return { 
-    simulations: simulations || [], 
+    simulations: fetchedSimulations || [], 
     isLoading, 
     selectedCategory, 
     setSelectedCategory,

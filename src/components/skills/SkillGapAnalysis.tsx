@@ -1,18 +1,45 @@
-
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Search, Plus, ArrowUpRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { UserSkill, SkillGap } from '@/types/skills';
 import { Job } from '@/types/job';
-import { analyzeSkillGaps } from '@/lib/supabase/skills';
-import { getAllJobs } from '@/lib/supabase/jobs';
-import { useAuth } from '@/contexts/auth';
-import { toast } from 'sonner';
+import { analyzeSkillGaps, getAllJobs, getJobById } from '@/lib/supabase';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { TrendingUp, AlertTriangle, CheckCircle, Plus } from 'lucide-react';
+
+const skillFormSchema = z.object({
+  skill_name: z.string().min(2, {
+    message: "Skill name must be at least 2 characters.",
+  }),
+  proficiency_level: z.number().min(1).max(5),
+});
+
+type SkillFormValues = z.infer<typeof skillFormSchema>;
 
 interface SkillGapAnalysisProps {
   userSkills: UserSkill[];
@@ -20,210 +47,418 @@ interface SkillGapAnalysisProps {
 }
 
 const SkillGapAnalysis = ({ userSkills, onAddSkill }: SkillGapAnalysisProps) => {
-  const { user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [skillGaps, setSkillGaps] = useState<SkillGap[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [selectedSkillToAdd, setSelectedSkillToAdd] = useState('');
+  
+  const { user } = useAuth();
+  
+  const form = useForm<SkillFormValues>({
+    resolver: zodResolver(skillFormSchema),
+    defaultValues: {
+      skill_name: "",
+      proficiency_level: 1,
+    },
+  });
+  
   useEffect(() => {
-    const fetchJobs = async () => {
+    const loadJobs = async () => {
       setIsLoading(true);
       try {
-        const fetchedJobs = await getAllJobs();
-        console.log('Fetched jobs:', fetchedJobs);
-        setJobs(fetchedJobs);
+        const allJobs = await getAllJobs();
+        setJobs(allJobs);
+        
+        if (allJobs.length > 0 && !selectedJobId) {
+          setSelectedJobId(allJobs[0].id);
+        }
       } catch (error) {
-        console.error('Error fetching jobs:', error);
-        toast.error('Failed to load jobs');
+        console.error('Error loading jobs:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
-    fetchJobs();
-  }, []);
-
-  const handleJobSelect = async (job: Job) => {
-    setSelectedJob(job);
-    if (user && job.requirements) {
-      setIsAnalyzing(true);
-      try {
-        const gaps = await analyzeSkillGaps(user.id, job.requirements);
-        setSkillGaps(gaps);
-      } catch (error) {
-        console.error('Error analyzing skill gaps:', error);
-        toast.error('Failed to analyze skill gaps');
-      } finally {
-        setIsAnalyzing(false);
-      }
-    }
-  };
-
-  const handleAddSkillFromGap = async (skillName: string) => {
-    if (!user) return;
     
-    try {
-      await onAddSkill({
-        skill_name: skillName,
-        proficiency_level: 1,
-        is_learning: true,
-        target_level: 3
-      });
+    loadJobs();
+  }, [selectedJobId]);
+  
+  useEffect(() => {
+    const loadSelectedJob = async () => {
+      if (!selectedJobId) return;
       
-      // Refresh skill gaps after adding
-      if (selectedJob && selectedJob.requirements) {
-        const updatedGaps = await analyzeSkillGaps(user.id, selectedJob.requirements);
-        setSkillGaps(updatedGaps);
+      setIsLoading(true);
+      try {
+        const job = await getJobById(selectedJobId);
+        setSelectedJob(job);
+        
+        if (job && user) {
+          const gaps = await analyzeSkillGaps(user.id, job.requirements);
+          setSkillGaps(gaps);
+        }
+      } catch (error) {
+        console.error('Error loading selected job:', error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      toast.success(`Added ${skillName} to your learning list`);
-    } catch (error) {
-      console.error('Error adding skill from gap:', error);
-      toast.error('Failed to add skill');
+    };
+    
+    loadSelectedJob();
+  }, [selectedJobId, userSkills, user]);
+  
+  const handleJobSelect = (jobId: string) => {
+    setSelectedJobId(jobId);
+  };
+  
+  const handleAddSkillClick = (skillName: string) => {
+    setSelectedSkillToAdd(skillName);
+    form.setValue('skill_name', skillName);
+    setShowAddDialog(true);
+  };
+  
+  const onSubmit = async (values: SkillFormValues) => {
+    await onAddSkill({
+      skill_name: values.skill_name,
+      proficiency_level: values.proficiency_level,
+      is_learning: true,
+      target_level: 3,
+    });
+    
+    form.reset({
+      skill_name: "",
+      proficiency_level: 1,
+    });
+    
+    setShowAddDialog(false);
+  };
+  
+  const getProficiencyLabel = (level: number) => {
+    switch (level) {
+      case 1: return "Beginner";
+      case 2: return "Elementary";
+      case 3: return "Intermediate";
+      case 4: return "Advanced";
+      case 5: return "Expert";
+      default: return "Unknown";
     }
   };
-
-  const filteredJobs = jobs.filter(job => 
-    job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.company.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  
+  // Group skill gaps by severity
+  const criticalGaps = skillGaps.filter(gap => gap.gap >= 3);
+  const significantGaps = skillGaps.filter(gap => gap.gap === 2);
+  const minorGaps = skillGaps.filter(gap => gap.gap === 1);
+  const noGaps = selectedJob?.requirements.filter(req => 
+    !skillGaps.some(gap => gap.skill_name === req)
+  ) || [];
+  
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Skill Gap Analysis</h2>
-          <p className="text-muted-foreground">Compare your skills with job requirements</p>
-        </div>
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Skill Gap Analysis</h2>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Choose a Job to Analyze</CardTitle>
+            <CardDescription>
+              Compare your current skills with the requirements for a specific job
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Select value={selectedJobId} onValueChange={handleJobSelect}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a job" />
+              </SelectTrigger>
+              <SelectContent>
+                {jobs.map((job) => (
+                  <SelectItem key={job.id} value={job.id}>
+                    {job.title} at {job.company.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
       </div>
-
-      <Tabs defaultValue={selectedJob ? "analysis" : "jobs"}>
-        <TabsList>
-          <TabsTrigger value="jobs">Select Job</TabsTrigger>
-          <TabsTrigger value="analysis" disabled={!selectedJob}>Analysis</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="jobs" className="space-y-4 mt-4">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search jobs..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-            </div>
-          ) : filteredJobs.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4">
-              {filteredJobs.map((job) => (
-                <Card 
-                  key={job.id} 
-                  className="cursor-pointer hover:bg-accent/30 transition-colors"
-                  onClick={() => handleJobSelect(job)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-lg">{job.title}</h3>
-                        <p className="text-sm text-muted-foreground">{job.company.name}</p>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          <Badge variant="outline" className="text-xs">
-                            {job.type}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {job.location.city}, {job.location.state}
-                          </Badge>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">
-                        <ArrowUpRight className="h-4 w-4" />
-                      </Button>
+      
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+        </div>
+      ) : selectedJob ? (
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle>{selectedJob.title}</CardTitle>
+              <CardDescription>{selectedJob.company.name}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Skill Match Overview</h3>
+                  <div className="flex items-center gap-4">
+                    <div className="w-full">
+                      <Progress 
+                        value={((selectedJob.requirements.length - skillGaps.length) / selectedJob.requirements.length) * 100} 
+                        className="h-3"
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className="bg-muted/40">
-              <CardContent className="pt-6 flex flex-col items-center justify-center text-center p-8">
-                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                  <AlertCircle className="h-6 w-6 text-muted-foreground" />
+                    <span className="font-medium">
+                      {selectedJob.requirements.length - skillGaps.length}/{selectedJob.requirements.length} skills matched
+                    </span>
+                  </div>
                 </div>
-                <h3 className="text-lg font-medium mb-2">No jobs found</h3>
-                <p className="text-muted-foreground">
-                  Try adjusting your search terms.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-        
-        <TabsContent value="analysis" className="space-y-4 mt-4">
-          {selectedJob && (
-            <>
-              <div className="bg-accent/20 p-4 rounded-lg mb-4">
-                <h3 className="font-semibold text-lg">Selected Job</h3>
-                <p className="text-lg">{selectedJob.title} at {selectedJob.company.name}</p>
+                
+                {criticalGaps.length > 0 && (
+                  <Alert variant="destructive">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>Critical Skill Gaps</AlertTitle>
+                    <AlertDescription>
+                      You have {criticalGaps.length} critical skill {criticalGaps.length === 1 ? 'gap' : 'gaps'} for this position.
+                      Consider focusing on these skills first.
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
-              
-              {isAnalyzing ? (
-                <div className="flex items-center justify-center py-12">
-                  <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-                </div>
-              ) : skillGaps.length > 0 ? (
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-lg">Skills to Develop</h3>
-                  {skillGaps.map((gap, index) => (
-                    <Card key={index}>
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="font-medium">{gap.skill_name}</h4>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-sm text-muted-foreground">
-                                Current: Level {gap.current_level}
-                              </span>
-                              <span className="text-sm text-muted-foreground">
-                                Required: Level {gap.required_level}
-                              </span>
-                            </div>
-                          </div>
-                          {gap.current_level === 0 && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="ml-2"
-                              onClick={() => handleAddSkillFromGap(gap.skill_name)}
-                            >
-                              <Plus className="h-4 w-4 mr-1" />
-                              Add Skill
-                            </Button>
-                          )}
+            </CardContent>
+          </Card>
+          
+          <div className="space-y-4">
+            {criticalGaps.length > 0 && (
+              <Card className="border-destructive/50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-destructive">
+                    Critical Skill Gaps
+                  </CardTitle>
+                  <CardDescription>
+                    These skills have a significant gap and should be prioritized
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {criticalGaps.map((gap) => (
+                    <div key={gap.skill_name} className="mb-4 last:mb-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{gap.skill_name}</span>
+                          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-300">
+                            Gap: {gap.gap}
+                          </Badge>
                         </div>
-                      </CardContent>
-                    </Card>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleAddSkillClick(gap.skill_name)}
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Add Skill
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-full bg-secondary rounded-full h-2.5">
+                          <div 
+                            className="bg-destructive h-2.5 rounded-full" 
+                            style={{ width: `${(gap.current_level / 5) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm whitespace-nowrap">
+                          {getProficiencyLabel(gap.current_level)} → {getProficiencyLabel(gap.required_level)}
+                        </span>
+                      </div>
+                    </div>
                   ))}
-                </div>
-              ) : (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    No skill gaps found. Great job! You meet the requirements for this position.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </>
-          )}
-        </TabsContent>
-      </Tabs>
+                </CardContent>
+              </Card>
+            )}
+            
+            {significantGaps.length > 0 && (
+              <Card className="border-orange-300">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-orange-600">
+                    Significant Skill Gaps
+                  </CardTitle>
+                  <CardDescription>
+                    These skills need improvement but the gap is not as critical
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {significantGaps.map((gap) => (
+                    <div key={gap.skill_name} className="mb-4 last:mb-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{gap.skill_name}</span>
+                          <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-300">
+                            Gap: {gap.gap}
+                          </Badge>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleAddSkillClick(gap.skill_name)}
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Add Skill
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-full bg-secondary rounded-full h-2.5">
+                          <div 
+                            className="bg-orange-500 h-2.5 rounded-full" 
+                            style={{ width: `${(gap.current_level / 5) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm whitespace-nowrap">
+                          {getProficiencyLabel(gap.current_level)} → {getProficiencyLabel(gap.required_level)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+            
+            {minorGaps.length > 0 && (
+              <Card className="border-yellow-300">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-yellow-600">
+                    Minor Skill Gaps
+                  </CardTitle>
+                  <CardDescription>
+                    These skills need just a little improvement
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {minorGaps.map((gap) => (
+                    <div key={gap.skill_name} className="mb-4 last:mb-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{gap.skill_name}</span>
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+                            Gap: {gap.gap}
+                          </Badge>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleAddSkillClick(gap.skill_name)}
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Add Skill
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-full bg-secondary rounded-full h-2.5">
+                          <div 
+                            className="bg-yellow-500 h-2.5 rounded-full" 
+                            style={{ width: `${(gap.current_level / 5) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm whitespace-nowrap">
+                          {getProficiencyLabel(gap.current_level)} → {getProficiencyLabel(gap.required_level)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+            
+            {noGaps.length > 0 && (
+              <Card className="border-green-300">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-green-600">
+                    Matched Skills
+                  </CardTitle>
+                  <CardDescription>
+                    Your skills already meet these requirements
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {noGaps.map((skill) => (
+                      <Badge key={skill} className="bg-green-100 text-green-800 border-green-300">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </>
+      ) : (
+        <Card className="bg-muted/40">
+          <CardContent className="pt-6 flex flex-col items-center justify-center text-center p-8">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <TrendingUp className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-lg font-medium mb-2">Select a job to analyze</h3>
+            <p className="text-muted-foreground mb-4">
+              Choose a job from the dropdown to analyze the gap between your skills and job requirements.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+      
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Skill: {selectedSkillToAdd}</DialogTitle>
+            <DialogDescription>
+              Add this skill to your profile with your current proficiency level.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
+              <FormField
+                control={form.control}
+                name="skill_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Skill Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} disabled />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="proficiency_level"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Proficiency Level: {getProficiencyLabel(field.value)}</FormLabel>
+                    <FormControl>
+                      <Slider
+                        min={1}
+                        max={5}
+                        step={1}
+                        value={[field.value]}
+                        onValueChange={(values) => field.onChange(values[0])}
+                      />
+                    </FormControl>
+                    <FormDescription className="flex justify-between text-xs mt-1">
+                      <span>Beginner</span>
+                      <span>Expert</span>
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button type="submit">
+                  Add Skill
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -1,206 +1,190 @@
 
+import { JobSimulation, SimulationTask, UserSimulationProgress, SimulationCredential } from '@/types/jobSimulation';
 import { supabase } from '@/integrations/supabase/client';
-import { JobSimulation, SimulationTask, UserSimulationProgress } from '@/types/jobSimulation';
 
-export async function getJobSimulations(): Promise<JobSimulation[]> {
+export const startSimulation = async (userId: string, simulationId: string): Promise<void> => {
   try {
+    const { error: progressError } = await supabase
+      .from('user_simulation_progress')
+      .insert([
+        {
+          user_id: userId,
+          simulation_id: simulationId,
+          progress_percentage: 0,
+          completed: false
+        }
+      ]);
+      
+    if (progressError) {
+      console.error('Error starting simulation:', progressError);
+      throw progressError;
+    }
+  } catch (error) {
+    console.error('Exception starting simulation:', error);
+    throw error;
+  }
+};
+
+export const getJobSimulation = async (simulationId: string): Promise<JobSimulation | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('job_simulations')
+      .select('*')
+      .eq('id', simulationId)
+      .single();
+      
+    if (error) {
+      console.error('Error fetching job simulation:', error);
+      return null;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Exception fetching job simulation:', error);
+    return null;
+  }
+};
+
+export const getJobSimulations = async (): Promise<JobSimulation[]> => {
+  try {
+    console.log('Fetching job simulations from Supabase...');
     const { data, error } = await supabase
       .from('job_simulations')
       .select('*')
       .order('created_at', { ascending: false });
-
+      
     if (error) {
       console.error('Error fetching job simulations:', error);
-      throw error;
+      return [];
     }
-
+    
+    console.log(`Found ${data?.length} simulations`);
     return data || [];
   } catch (error) {
-    console.error('Error in getJobSimulations:', error);
+    console.error('Exception fetching job simulations:', error);
     return [];
   }
-}
+};
 
-export async function getJobSimulation(id: string): Promise<JobSimulation | null> {
+export const getSimulationTasks = async (simulationId: string): Promise<SimulationTask[]> => {
   try {
-    const { data, error } = await supabase
-      .from('job_simulations')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      console.error('Error fetching simulation by ID:', error);
-      throw error;
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Error in getSimulationById:', error);
-    return null;
-  }
-}
-
-export async function getSimulationTasks(simulationId: string): Promise<SimulationTask[]> {
-  try {
+    console.log(`Fetching tasks for simulation ${simulationId}`);
     const { data, error } = await supabase
       .from('simulation_tasks')
       .select('*')
       .eq('simulation_id', simulationId)
       .order('order_number', { ascending: true });
-
+      
     if (error) {
       console.error('Error fetching simulation tasks:', error);
-      throw error;
+      return [];
     }
-
+    
     return data || [];
   } catch (error) {
-    console.error('Error in getSimulationTasks:', error);
+    console.error('Exception fetching simulation tasks:', error);
     return [];
   }
-}
+};
 
-export async function startSimulation(userId: string, simulationId: string): Promise<void> {
+export const getUserSimulationProgress = async (userId: string, simulationId?: string): Promise<UserSimulationProgress | null> => {
   try {
-    // Check if the user already has a progress record for this simulation
-    const { data: existingProgress } = await supabase
+    let query = supabase
       .from('user_simulation_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('simulation_id', simulationId)
-      .single();
-
-    if (existingProgress) {
-      console.log('User already started this simulation, returning existing progress');
-      return;
+      .select(`
+        *,
+        job_simulations(*)
+      `);
+      
+    if (simulationId) {
+      query = query.eq('simulation_id', simulationId);
     }
-
-    // Get the first task of the simulation
-    const { data: firstTask } = await supabase
-      .from('simulation_tasks')
-      .select('*')
-      .eq('simulation_id', simulationId)
-      .order('order_number', { ascending: true })
-      .limit(1)
-      .single();
-
-    // Create a new progress record
-    const { error } = await supabase
-      .from('user_simulation_progress')
-      .insert({
-        user_id: userId,
-        simulation_id: simulationId,
-        current_task_id: firstTask?.id,
-        progress_percentage: 0,
-        completed: false
-      });
-
+    
+    // Adding this filter before calling single() to fix the TypeScript error
+    query = query.eq('user_id', userId);
+    
+    const { data, error } = await query.single();
+      
     if (error) {
-      console.error('Error starting simulation:', error);
-      throw error;
-    }
-  } catch (error) {
-    console.error('Error in startSimulation:', error);
-    throw error;
-  }
-}
-
-export async function getUserSimulationProgress(
-  userId: string,
-  simulationId: string
-): Promise<UserSimulationProgress | null> {
-  try {
-    const { data, error } = await supabase
-      .from('user_simulation_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('simulation_id', simulationId)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
       console.error('Error fetching user simulation progress:', error);
-      throw error;
+      return null;
     }
-
-    return data;
+    
+    // Transform the data to match UserSimulationProgress type
+    const progress: UserSimulationProgress = {
+      id: data.id,
+      user_id: data.user_id,
+      simulation_id: data.simulation_id,
+      current_task_id: data.current_task_id || undefined,
+      progress_percentage: data.progress_percentage,
+      completed: data.completed,
+      started_at: data.started_at,
+      completed_at: data.completed_at || undefined
+    };
+    
+    return progress;
   } catch (error) {
-    console.error('Error in getUserSimulationProgress:', error);
+    console.error('Exception fetching user simulation progress:', error);
     return null;
   }
-}
+};
 
-export async function updateSimulationProgress(
+export const updateSimulationProgress = async (
   progressId: string,
   updates: {
-    current_task_id: string | null,
-    progress_percentage: number,
-    completed: boolean
+    current_task_id?: string;
+    progress_percentage: number;
+    completed?: boolean;
   }
-): Promise<void> {
+) => {
   try {
+    const updateData: any = {
+      progress_percentage: updates.progress_percentage,
+    };
+    
+    if (updates.completed !== undefined) {
+      updateData.completed = updates.completed;
+      updateData.completed_at = updates.completed ? new Date().toISOString() : null;
+    }
+    
+    if (updates.current_task_id !== undefined) {
+      updateData.current_task_id = updates.current_task_id;
+    }
+    
     const { error } = await supabase
       .from('user_simulation_progress')
-      .update({
-        current_task_id: updates.current_task_id,
-        progress_percentage: updates.progress_percentage,
-        completed: updates.completed,
-        completed_at: updates.completed ? new Date().toISOString() : null
-      })
+      .update(updateData)
       .eq('id', progressId);
-
+      
     if (error) {
       console.error('Error updating simulation progress:', error);
       throw error;
     }
   } catch (error) {
-    console.error('Error in updateSimulationProgress:', error);
+    console.error('Exception updating simulation progress:', error);
     throw error;
   }
-}
+};
 
-export async function getUserSimulationCredentials(userId: string): Promise<any[]> {
+export const getUserCredentials = async (userId: string): Promise<SimulationCredential[]> => {
   try {
     const { data, error } = await supabase
       .from('simulation_credentials')
-      .select('*, job_simulations(*)')
-      .eq('user_id', userId);
-
+      .select(`
+        *,
+        job_simulations(*)
+      `)
+      .eq('user_id', userId)
+      .order('issue_date', { ascending: false });
+      
     if (error) {
-      console.error('Error fetching user simulation credentials:', error);
-      throw error;
+      console.error('Error fetching user credentials:', error);
+      return [];
     }
-
+    
     return data || [];
   } catch (error) {
-    console.error('Error in getUserSimulationCredentials:', error);
+    console.error('Exception fetching user credentials:', error);
     return [];
   }
-}
-
-// Alias for getUserSimulationCredentials to match imports in other files
-export const getUserCredentials = getUserSimulationCredentials;
-
-export async function createSimulationCredential(
-  userId: string, 
-  simulationId: string, 
-  certificateId: string
-): Promise<void> {
-  try {
-    const { error } = await supabase
-      .from('simulation_credentials')
-      .insert({
-        user_id: userId,
-        simulation_id: simulationId,
-        certificate_id: certificateId
-      });
-
-    if (error) {
-      console.error('Error creating simulation credential:', error);
-      throw error;
-    }
-  } catch (error) {
-    console.error('Error in createSimulationCredential:', error);
-    throw error;
-  }
-}
+};

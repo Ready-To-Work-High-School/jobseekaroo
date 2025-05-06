@@ -16,18 +16,22 @@ import { DiagnosticPanel } from '../ErrorRecovery/DiagnosticPanel';
 import { IssueItem } from './IssueItem';
 
 // Import from consolidated data file
-import { commonIssues, TroubleshootingIssue } from './data/troubleshootingData';
-import { TroubleshootProps } from './types';
+import { commonIssues } from './data/troubleshootingData';
 
-const TroubleshootDialog: React.FC<TroubleshootProps> = ({ trigger, initialIssue }: TroubleshootProps) => {
+// Define minimal types needed for the component
+interface TroubleshootProps {
+  trigger?: React.ReactNode;
+  initialIssue?: string;
+}
+
+const TroubleshootDialog = ({ trigger, initialIssue }: TroubleshootProps) => {
   const [selectedIssue, setSelectedIssue] = useState(initialIssue || '');
   const [open, setOpen] = useState(false);
   const { isChecking, handleDiagnostics, lastResults, latency } = useDiagnostics();
   
-  // Use a separate effect to avoid any conditional hook execution issues
+  // Run diagnostics when dialog opens if there's no trigger
   useEffect(() => {
     if (open && !trigger) {
-      // Only run diagnostics automatically if there's no custom trigger
       handleDiagnostics();
     }
   }, [open, trigger, handleDiagnostics]);

@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { getSystemStatus, formatDiagnosticMessage, SystemStatus } from '../utils/statusChecks';
@@ -14,15 +14,11 @@ export const useDiagnostics = () => {
   const [isChecking, setIsChecking] = useState(false);
   const [lastResults, setLastResults] = useState<string[]>([]);
   const [latency, setLatency] = useState<number | null>(null);
-  const [lastRunTime, setLastRunTime] = useState<Date | null>(null);
 
   /**
    * Run all diagnostic checks and display results
    */
-  const handleDiagnostics = useCallback(async () => {
-    // Prevent multiple simultaneous checks
-    if (isChecking) return;
-    
+  const handleDiagnostics = async () => {
     setIsChecking(true);
     
     try {
@@ -57,7 +53,6 @@ export const useDiagnostics = () => {
       
       // Save results for future reference
       setLastResults(allIssues);
-      setLastRunTime(new Date());
       
       // Show diagnostic results in toast
       toast({
@@ -85,25 +80,16 @@ export const useDiagnostics = () => {
         message: error instanceof Error ? error.message : "Unknown error"
       };
     } finally {
-      // Always stop checking after a short delay to show progress
+      // Always stop checking, even if there was an error
       setTimeout(() => setIsChecking(false), 1000);
     }
-  }, [isChecking, toast]);
-
-  /**
-   * Check if diagnostic issues include a specific issue type
-   */
-  const hasIssue = useCallback((type: string): boolean => {
-    return lastResults.some(issue => issue.toLowerCase().includes(type.toLowerCase()));
-  }, [lastResults]);
+  };
 
   return {
     isChecking,
     handleDiagnostics,
     isOnline,
     lastResults,
-    latency,
-    lastRunTime,
-    hasIssue
+    latency
   };
 };

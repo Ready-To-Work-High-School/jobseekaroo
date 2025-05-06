@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { RouteObject } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Resources from '@/pages/Resources';
 import InterviewPrep from '@/pages/InterviewPrep';
 import InterviewQuestions from '@/pages/InterviewQuestions';
@@ -12,40 +11,54 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import SkillDevelopment from '@/pages/SkillDevelopment';
 import ResumeAssistant from '@/pages/ResumeAssistant';
 
-// Define SharedRoutes as a proper RouteObject array
-const SharedRoutes: RouteObject[] = [
-  {
-    path: '/resources',
-    element: <ErrorBoundary><Resources /></ErrorBoundary>,
-  },
-  {
-    path: '/interview-prep',
-    element: <ErrorBoundary><InterviewPrep /></ErrorBoundary>,
-  },
-  {
-    path: '/interview-questions',
-    element: <ErrorBoundary><InterviewQuestions /></ErrorBoundary>,
-  },
-  {
-    path: '/mock-interview',
-    element: <ErrorBoundary><MockInterview /></ErrorBoundary>,
-  },
-  {
-    path: '/interview-checklist',
-    element: <ErrorBoundary><InterviewChecklist /></ErrorBoundary>,
-  },
-  {
-    path: '/resume-assistant',
-    element: <ErrorBoundary><ResumeAssistant /></ErrorBoundary>,
-  },
-  {
-    path: '/pricing',
-    element: <ErrorBoundary><Pricing /></ErrorBoundary>,
-  },
-  {
-    path: '/first-job-toolkit',
-    element: <ErrorBoundary><FirstJobToolkit /></ErrorBoundary>,
-  },
-];
+const SharedRoutes = (
+  <>
+    <Route path="/resources" element={
+      <ErrorBoundary>
+        <Resources />
+      </ErrorBoundary>
+    } />
+    <Route path="/interview-prep" element={
+      <ErrorBoundary>
+        <InterviewPrep />
+      </ErrorBoundary>
+    } />
+    <Route path="/interview-questions" element={
+      <ErrorBoundary>
+        <InterviewQuestions />
+      </ErrorBoundary>
+    } />
+    <Route path="/mock-interview" element={
+      <ErrorBoundary>
+        <MockInterview />
+      </ErrorBoundary>
+    } />
+    <Route path="/interview-checklist" element={
+      <ErrorBoundary>
+        <InterviewChecklist />
+      </ErrorBoundary>
+    } />
+    <Route path="/resume-assistant" element={
+      <ErrorBoundary>
+        <ResumeAssistant />
+      </ErrorBoundary>
+    } />
+    <Route path="/pricing" element={
+      <ErrorBoundary>
+        <Pricing />
+      </ErrorBoundary>
+    } />
+    <Route path="/first-job-toolkit" element={
+      <ErrorBoundary>
+        <FirstJobToolkit />
+      </ErrorBoundary>
+    } />
+    <Route path="/skill-development" element={
+      <ErrorBoundary>
+        <SkillDevelopment />
+      </ErrorBoundary>
+    } />
+  </>
+);
 
 export default SharedRoutes;

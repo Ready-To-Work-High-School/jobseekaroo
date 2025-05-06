@@ -1,15 +1,14 @@
 
-import { checkMissingLinks, checkCriticalComponents, checkAccessibilityIssues } from '../utils/componentChecker';
+import { checkMissingLinks, checkCriticalComponents } from '../utils/componentChecker';
 
 /**
  * Run all system diagnostic checks
  * @returns Array of detected issues
  */
-export const runSystemDiagnostics = async (): Promise<string[]> => {
+export const runSystemDiagnostics = async () => {
   // Check for UI components and navigation issues
   const linkIssues = checkMissingLinks();
   const componentIssues = checkCriticalComponents();
-  const accessibilityIssues = checkAccessibilityIssues();
   
   // Check for performance issues
   const performanceIssues = await checkPerformanceIssues();
@@ -18,7 +17,7 @@ export const runSystemDiagnostics = async (): Promise<string[]> => {
   const compatibilityIssues = checkBrowserCompatibility();
   
   // Combine all issues
-  return [...linkIssues, ...componentIssues, ...accessibilityIssues, ...performanceIssues, ...compatibilityIssues];
+  return [...linkIssues, ...componentIssues, ...performanceIssues, ...compatibilityIssues];
 };
 
 /**
@@ -52,47 +51,11 @@ const checkPerformanceIssues = async (): Promise<string[]> => {
     const latencyIssues = await checkNetworkLatency();
     issues.push(...latencyIssues);
     
-    // Check for long tasks
-    if ('PerformanceObserver' in window) {
-      const longTaskCount = await checkLongTasks();
-      if (longTaskCount > 0) {
-        issues.push(`Detected ${longTaskCount} long tasks that may cause UI jank`);
-      }
-    }
-    
   } catch (error) {
     console.error("Error checking performance:", error);
   }
   
   return issues;
-};
-
-/**
- * Check for long tasks that may cause jank
- * @returns Promise that resolves to the count of long tasks detected
- */
-const checkLongTasks = (): Promise<number> => {
-  return new Promise((resolve) => {
-    let longTaskCount = 0;
-    
-    try {
-      // Use PerformanceObserver to detect long tasks
-      const observer = new PerformanceObserver((list) => {
-        longTaskCount += list.getEntries().length;
-      });
-      
-      observer.observe({ entryTypes: ['longtask'] });
-      
-      // Stop observing after 2 seconds
-      setTimeout(() => {
-        observer.disconnect();
-        resolve(longTaskCount);
-      }, 2000);
-    } catch (error) {
-      console.error("Long task observation not supported:", error);
-      resolve(0);
-    }
-  });
 };
 
 /**
@@ -155,11 +118,6 @@ const checkBrowserCompatibility = (): string[] => {
       issues.push('Internet Explorer detected. Some features may not work correctly.');
     }
     
-    // Check for Safari with known issues
-    if (/^((?!chrome|android).)*safari/i.test(userAgent)) {
-      issues.push('Safari detected. Some advanced features may have compatibility issues.');
-    }
-    
     // Check if localStorage is available
     try {
       localStorage.setItem('test', 'test');
@@ -172,19 +130,9 @@ const checkBrowserCompatibility = (): string[] => {
     if (!navigator.cookieEnabled) {
       issues.push('Cookies are disabled. Authentication and preferences may not work correctly.');
     }
-    
-    // Check if important APIs are available
-    if (!window.fetch) {
-      issues.push('Fetch API is not supported in this browser. Network requests may fail.');
-    }
-    
-    if (!window.IntersectionObserver) {
-      issues.push('IntersectionObserver is not supported. Lazy loading and scroll animations may not work.');
-    }
   } catch (error) {
     console.error("Error checking browser compatibility:", error);
   }
   
   return issues;
 };
-

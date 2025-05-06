@@ -6,22 +6,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Users, Shield } from "lucide-react";
-import CeoAlertNotification from '@/components/ceo/CeoAlertNotification';
-import UniqueFeatures from '@/components/ceo/tabs/UniqueFeatures';
-import SafetyCompliance from '@/components/ceo/tabs/SafetyCompliance';
-import GeographicCoverage from '@/components/ceo/tabs/GeographicCoverage';
-import PlatformAnalytics from '@/components/ceo/tabs/PlatformAnalytics';
-import CeoActionCards from '@/components/ceo/CeoActionCards';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users, Briefcase, Search, Globe } from "lucide-react";
+import { useState } from "react";
+import CeoFeatureCard from '@/components/ceo/CeoFeatureCard';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import GeoJsonDownload from '@/components/geographic/GeoJsonDownload';
 
 const CeoPortal = () => {
   const fadeIn = useFadeIn(300);
   const navigate = useNavigate();
+  const [newEmployerAlert, setNewEmployerAlert] = useState(true);
 
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        <CeoAlertNotification />
+        {newEmployerAlert && (
+          <div className="mb-8">
+            <Alert>
+              <Bell className="h-5 w-5 text-amber-500" />
+              <AlertTitle className="font-bold">Attention: New Employer Sign-up!</AlertTitle>
+              <AlertDescription>
+                A new employer has registered. Please review their company info and approve or deny their job posting(s) as needed.<br />
+                <Button
+                  className="mt-2 bg-gradient-to-r from-purple-500 to-blue-500"
+                  onClick={() => {
+                    setNewEmployerAlert(false);
+                    navigate('/admin/employer-verification');
+                  }}
+                >
+                  Go to Employer Approvals
+                </Button>
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
 
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center p-2 bg-amber-100 rounded-full mb-4">
@@ -43,23 +62,162 @@ const CeoPortal = () => {
           </TabsList>
 
           <TabsContent value="features">
-            <UniqueFeatures />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <CeoFeatureCard
+                icon={<BadgeCheck className="h-5 w-5 text-blue-600" />}
+                title="Verified Students"
+                description=""
+              >
+                <p>Every student is verified through official school channels and must complete mandatory compliance training before job access.</p>
+              </CeoFeatureCard>
+              <CeoFeatureCard
+                icon={<Award className="h-5 w-5 text-purple-600" />}
+                title="Academy Integration"
+                description=""
+              >
+                <p>
+                  Seamless integration with Westside High School's Entrepreneurship and Nursing Academies, delivering certified and career-ready talent to employers.
+                </p>
+              </CeoFeatureCard>
+              <CeoFeatureCard
+                icon={<Brain className="h-5 w-5 text-emerald-600" />}
+                title="Skill Verification"
+                description=""
+              >
+                <p>
+                  Digital badges verify students' academic and industry achievements, ensuring transparency and quality for employers.
+                </p>
+              </CeoFeatureCard>
+            </div>
           </TabsContent>
 
           <TabsContent value="safety">
-            <SafetyCompliance />
+            <CeoFeatureCard
+              icon={<Shield className="h-5 w-5 text-green-600" />}
+              title="Enhanced Safety Measures"
+              description="Industry-leading safety features for student job seekers"
+            >
+              <ul className="space-y-4">
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-green-600 mt-1" />
+                  <div>
+                    <p className="font-medium">School Verification</p>
+                    <p className="text-muted-foreground">All student accounts verified through trusted school systems</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-blue-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Employer Background Checks</p>
+                    <p className="text-muted-foreground">Mandatory checks ensure trustworthy employer profiles</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-purple-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Protected Communication</p>
+                    <p className="text-muted-foreground">Monitored messaging system with content filtering to keep interactions safe</p>
+                  </div>
+                </li>
+              </ul>
+            </CeoFeatureCard>
           </TabsContent>
 
           <TabsContent value="coverage">
-            <GeographicCoverage />
+            <CeoFeatureCard
+              icon={<Globe className="h-5 w-5 text-blue-600" />}
+              title="App Geographic Coverage"
+              description="Platform service area and expansion regions"
+            >
+              <div className="mt-4">
+                <GeoJsonDownload />
+              </div>
+              <div className="mt-6 space-y-4">
+                <div className="flex items-start gap-2">
+                  <Globe className="h-5 w-5 text-green-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Priority Service Areas</p>
+                    <p className="text-muted-foreground">Jacksonville, Florida and surrounding areas have enhanced local support and resources</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Globe className="h-5 w-5 text-amber-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Expansion Regions</p>
+                    <p className="text-muted-foreground">Upcoming service areas with educational institution partnerships in development</p>
+                  </div>
+                </div>
+              </div>
+            </CeoFeatureCard>
           </TabsContent>
 
           <TabsContent value="analytics">
-            <PlatformAnalytics />
+            <div className="grid gap-6">
+              <CeoFeatureCard
+                icon={<CalendarClock className="h-5 w-5 text-muted-foreground" />}
+                title="Platform Analytics"
+                description=""
+              >
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Active Verified Students:</span>
+                    <span className="font-medium">50+</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Verified Employers:</span>
+                    <span className="font-medium">25+</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Successful Placements:</span>
+                    <span className="font-medium">30+</span>
+                  </div>
+                </div>
+              </CeoFeatureCard>
+            </div>
           </TabsContent>
         </Tabs>
 
-        <CeoActionCards />
+        <div className="my-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="shadow-md border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <LayoutList className="h-5 w-5 text-purple-600" />
+                <CardTitle>Employer Job Posting Approvals</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-muted-foreground">
+                CEOs/Admins: Easily review and approve or deny all pending employer job postings in one place.
+              </p>
+              <Button
+                className="bg-gradient-to-r from-purple-600 to-blue-600"
+                onClick={() => navigate('/admin/employer-verification')}
+              >
+                Go to Approvals
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <Briefcase className="h-5 w-5 text-amber-600" />
+                <CardTitle>Job Management</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-muted-foreground">
+                Create new job listings or use our automatic internship scraper to find opportunities in Jacksonville.
+              </p>
+              <Button
+                className="bg-gradient-to-r from-amber-600 to-orange-500 text-white"
+                onClick={() => navigate('/admin/job-management')}
+              >
+                Manage Jobs
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
 
         <Separator className="my-12" />
 

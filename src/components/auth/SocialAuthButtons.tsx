@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import GoogleSignInButton from "./buttons/GoogleSignInButton";
 import AppleSignInButton from "./buttons/AppleSignInButton";
@@ -8,23 +8,22 @@ import NetworkOfflineState from "./diagnostic/NetworkOfflineState";
 import { useDiagnosticInfo } from "./diagnostic/useDiagnosticInfo";
 import { useNetworkStatus } from "./hooks/useNetworkStatus";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Wifi, WifiOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
 
 interface SocialAuthButtonsProps {
   onAppleSignIn: () => Promise<void>;
   onGoogleSignIn: () => Promise<void>;
-  isAppleLoading?: boolean;
-  isGoogleLoading?: boolean;
-  isFormLoading?: boolean;
+  isAppleLoading: boolean;
+  isGoogleLoading: boolean;
+  isFormLoading: boolean;
 }
 
 const SocialAuthButtons = ({
   onAppleSignIn,
   onGoogleSignIn,
-  isAppleLoading = false,
-  isGoogleLoading = false,
-  isFormLoading = false
+  isAppleLoading,
+  isGoogleLoading,
+  isFormLoading
 }: SocialAuthButtonsProps) => {
   const { toast } = useToast();
   const [googleError, setGoogleError] = useState<string | null>(null);
@@ -32,17 +31,9 @@ const SocialAuthButtons = ({
   const [showGoogleDebugInfo, setShowGoogleDebugInfo] = useState(false);
   const [showAppleDebugInfo, setShowAppleDebugInfo] = useState(false);
   const [isAppleDisabled, setIsAppleDisabled] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   
   const isOnline = useNetworkStatus();
   const diagnosticInfo = useDiagnosticInfo();
-  
-  // Effect to check for reload-specific issues
-  useEffect(() => {
-    // Clear any previous errors when component mounts/remounts
-    setGoogleError(null);
-    setAppleError(null);
-  }, []);
   
   const handleGoogleSignIn = async () => {
     try {
@@ -64,8 +55,7 @@ const SocialAuthButtons = ({
         online: navigator.onLine,
         protocol: window.location.protocol,
         hostname: window.location.hostname,
-        cookiesEnabled: navigator.cookieEnabled,
-        retryCount: retryCount
+        cookiesEnabled: navigator.cookieEnabled
       });
       
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -75,25 +65,19 @@ const SocialAuthButtons = ({
       
       let errorMessage = error?.message || "Sign-in failed";
       if (errorMessage.includes("network") || errorMessage.includes("connection") || 
-          errorMessage.includes("refused") || errorMessage.includes("failed to fetch")) {
+          errorMessage.includes("refused")) {
         errorMessage = "Connection to Google failed. This could be due to network issues or browser settings:";
         setGoogleError(errorMessage);
         setShowGoogleDebugInfo(true);
-        
-        toast({
-          title: "Google Sign-In Error",
-          description: "Failed to connect to authentication service. Please try again.",
-          variant: "destructive",
-        });
       } else {
         setGoogleError(errorMessage);
-        
-        toast({
-          title: "Google Sign-In Error",
-          description: errorMessage,
-          variant: "destructive",
-        });
       }
+      
+      toast({
+        title: "Google Sign-In Error",
+        description: "Failed to connect to Google authentication. See details below for troubleshooting.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -117,8 +101,7 @@ const SocialAuthButtons = ({
         online: navigator.onLine,
         protocol: window.location.protocol,
         hostname: window.location.hostname,
-        cookiesEnabled: navigator.cookieEnabled,
-        retryCount: retryCount
+        cookiesEnabled: navigator.cookieEnabled
       });
       
       sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -134,7 +117,7 @@ const SocialAuthButtons = ({
         errorMessage = "Apple Sign-In is not enabled for this application. Please use another sign-in method.";
         setIsAppleDisabled(true);
       } else if (errorMessage.includes("network") || errorMessage.includes("connection") || 
-          errorMessage.includes("refused") || errorMessage.includes("failed to fetch")) {
+          errorMessage.includes("refused")) {
         errorMessage = "Connection to Apple failed. This could be due to network issues or browser settings:";
         setShowAppleDebugInfo(true);
       }
@@ -149,21 +132,8 @@ const SocialAuthButtons = ({
     }
   };
   
-  const handleRetry = (provider: 'google' | 'apple') => {
-    setRetryCount(prev => prev + 1);
-    if (provider === 'google') {
-      setGoogleError(null);
-      setShowGoogleDebugInfo(false);
-      setTimeout(handleGoogleSignIn, 500);
-    } else {
-      setAppleError(null);
-      setShowAppleDebugInfo(false);
-      setTimeout(handleAppleSignIn, 500);
-    }
-  };
-  
   if (!isOnline) {
-    return <NetworkOfflineState onRetry={() => window.location.reload()} />;
+    return <NetworkOfflineState />;
   }
   
   return (
@@ -171,42 +141,17 @@ const SocialAuthButtons = ({
       <GoogleSignInButton 
         onClick={handleGoogleSignIn}
         isLoading={isGoogleLoading}
-        disabled={isFormLoading || !isOnline}
+        disabled={isFormLoading}
       />
       
       {googleError && (
-        <div className="space-y-2">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="ml-2">
-              {googleError}
-            </AlertDescription>
-          </Alert>
-          
-          {googleError.includes("network") || googleError.includes("failed to fetch") || googleError.includes("connection") && (
-            <div className="flex justify-end">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => handleRetry('google')}
-              >
-                <Wifi className="h-4 w-4" />
-                Retry Connection
-              </Button>
-            </div>
-          )}
-          
-          {showGoogleDebugInfo && (
-            <DiagnosticPanel 
-              errorMessage={googleError}
-              diagnosticInfo={diagnosticInfo}
-              showDebugInfo={showGoogleDebugInfo}
-              onToggleDebugInfo={() => setShowGoogleDebugInfo(!showGoogleDebugInfo)}
-              provider="google"
-            />
-          )}
-        </div>
+        <DiagnosticPanel 
+          errorMessage={googleError}
+          diagnosticInfo={diagnosticInfo}
+          showDebugInfo={showGoogleDebugInfo}
+          onToggleDebugInfo={() => setShowGoogleDebugInfo(!showGoogleDebugInfo)}
+          provider="google"
+        />
       )}
       
       {isAppleDisabled ? (
@@ -220,43 +165,18 @@ const SocialAuthButtons = ({
         <AppleSignInButton 
           onClick={handleAppleSignIn}
           isLoading={isAppleLoading}
-          disabled={isFormLoading || isAppleDisabled || !isOnline}
+          disabled={isFormLoading || isAppleDisabled}
         />
       )}
       
       {appleError && !isAppleDisabled && (
-        <div className="space-y-2">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="ml-2">
-              {appleError}
-            </AlertDescription>
-          </Alert>
-          
-          {appleError.includes("network") || appleError.includes("failed to fetch") || appleError.includes("connection") && (
-            <div className="flex justify-end">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => handleRetry('apple')}
-              >
-                <Wifi className="h-4 w-4" />
-                Retry Connection
-              </Button>
-            </div>
-          )}
-          
-          {showAppleDebugInfo && (
-            <DiagnosticPanel 
-              errorMessage={appleError}
-              diagnosticInfo={diagnosticInfo}
-              showDebugInfo={showAppleDebugInfo}
-              onToggleDebugInfo={() => setShowAppleDebugInfo(!showAppleDebugInfo)}
-              provider="apple"
-            />
-          )}
-        </div>
+        <DiagnosticPanel 
+          errorMessage={appleError}
+          diagnosticInfo={diagnosticInfo}
+          showDebugInfo={showAppleDebugInfo}
+          onToggleDebugInfo={() => setShowAppleDebugInfo(!showAppleDebugInfo)}
+          provider="apple"
+        />
       )}
     </div>
   );

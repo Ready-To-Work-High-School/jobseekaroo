@@ -1,10 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Mic, Play, X, Check, Video } from 'lucide-react';
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { useToast } from '@/hooks/use-toast';
 
 interface InterviewPracticeRecorderProps {
   commonQuestions: string[];
@@ -14,56 +12,24 @@ interface InterviewPracticeRecorderProps {
 const InterviewPracticeRecorder = ({ commonQuestions, onComplete }: InterviewPracticeRecorderProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
-  const [recordingProgress, setRecordingProgress] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const isOnline = useNetworkStatus();
-  const { toast } = useToast();
   
   const startRecording = (question: string) => {
-    if (!isOnline) {
-      toast({
-        title: "Network Error",
-        description: "You appear to be offline. Recording may not work properly.",
-        variant: "destructive"
-      });
-    }
-    
     setSelectedQuestion(question);
     setIsRecording(true);
-    setRecordingProgress(0);
-    
-    // Simulate recording progress
-    const progressInterval = setInterval(() => {
-      setRecordingProgress(prev => {
-        const newProgress = prev + 33;
-        if (newProgress >= 100) {
-          clearInterval(progressInterval);
-          setTimeout(() => {
-            setIsRecording(false);
-            setIsProcessing(true);
-            // Simulate processing before completing
-            setTimeout(() => {
-              setIsProcessing(false);
-              if (question) {
-                onComplete(question);
-              }
-            }, 1000);
-          }, 500);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 1000);
+    // Simulate recording completion after 3 seconds
+    setTimeout(() => {
+      setIsRecording(false);
+      onComplete(question);
+    }, 3000);
   };
   
   const stopRecording = () => {
     setIsRecording(false);
-    setRecordingProgress(0);
   };
   
   return (
     <div className="space-y-3">
-      {!isRecording && !isProcessing ? (
+      {!isRecording ? (
         <div className="space-y-3">
           <p className="font-medium">Select a question:</p>
           <div className="grid grid-cols-1 gap-2">
@@ -79,15 +45,6 @@ const InterviewPracticeRecorder = ({ commonQuestions, onComplete }: InterviewPra
             ))}
           </div>
         </div>
-      ) : isProcessing ? (
-        <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg border border-blue-200">
-          <div className="flex flex-col items-center">
-            <div className="animate-spin mb-2">
-              <Video className="h-12 w-12 text-blue-500" />
-            </div>
-            <p className="font-medium text-blue-600">Processing recording...</p>
-          </div>
-        </div>
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-center p-6 bg-red-50 rounded-lg border border-red-200">
@@ -97,14 +54,6 @@ const InterviewPracticeRecorder = ({ commonQuestions, onComplete }: InterviewPra
               </div>
               <p className="font-medium text-red-600">Recording...</p>
               <p className="text-sm text-muted-foreground mt-1">Answering: {selectedQuestion}</p>
-              
-              {/* Progress bar */}
-              <div className="w-full mt-3 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-red-600 h-2 rounded-full" 
-                  style={{ width: `${recordingProgress}%` }}
-                />
-              </div>
             </div>
           </div>
           <Button 

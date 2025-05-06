@@ -1,8 +1,7 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/auth';
-import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import { UserSkill, SkillResource } from '@/types/skills';
 import { 
   getUserSkills, 
@@ -10,7 +9,7 @@ import {
   updateUserSkill, 
   deleteUserSkill, 
   getSkillResources 
-} from '@/lib/supabase/skills';
+} from '@/lib/supabase';
 
 interface SkillsContextType {
   skills: UserSkill[];
@@ -23,7 +22,6 @@ interface SkillsContextType {
   handleAddSkill: (newSkill: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<void>;
   handleUpdateSkill: (skillId: string, updates: Partial<UserSkill>) => Promise<void>;
   handleDeleteSkill: (skillId: string, skillName: string) => Promise<void>;
-  refreshSkills: () => Promise<void>;
 }
 
 const SkillsContext = createContext<SkillsContextType | undefined>(undefined);
@@ -37,6 +35,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
   
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   useEffect(() => {
     if (!user) {
@@ -44,46 +43,36 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     }
   }, [user, navigate]);
   
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      if (user) {
-        console.log('Loading skills for user:', user.id);
-        const userSkills = await getUserSkills(user.id);
-        console.log('Loaded user skills:', userSkills);
-        setSkills(userSkills);
-      }
-      
-      const skillResources = await getSkillResources(selectedSkill || undefined);
-      console.log('Loaded skill resources:', skillResources);
-      setResources(skillResources);
-    } catch (error) {
-      console.error('Error loading skills data:', error);
-      toast.error('Failed to load skills data');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
   useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        if (user) {
+          const userSkills = await getUserSkills(user.id);
+          setSkills(userSkills);
+        }
+        
+        const skillResources = await getSkillResources(selectedSkill || undefined);
+        setResources(skillResources);
+      } catch (error) {
+        console.error('Error loading skills data:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load skills data',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
     loadData();
-  }, [user, selectedSkill]);
-  
-  const refreshSkills = async () => {
-    if (!user) return;
-    try {
-      const userSkills = await getUserSkills(user.id);
-      setSkills(userSkills);
-    } catch (error) {
-      console.error('Error refreshing skills:', error);
-    }
-  };
+  }, [user, selectedSkill, toast]);
   
   const handleAddSkill = async (newSkill: Omit<UserSkill, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
     if (!user) return;
     
     try {
-      console.log('Adding skill:', newSkill);
       const skill = await createUserSkill({
         ...newSkill,
         user_id: user.id
@@ -91,47 +80,59 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       
       if (skill) {
         setSkills(prev => [...prev, skill]);
-        toast.success(`${skill.skill_name} has been added to your skills`);
+        toast({
+          title: 'Skill Added',
+          description: `${skill.skill_name} has been added to your skills`,
+        });
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error adding skill:', error);
-      if (error.message === 'Skill already exists for this user') {
-        toast.error('This skill is already in your skill set');
-      } else {
-        toast.error('Failed to add skill');
-      }
-      throw error;
+      toast({
+        title: 'Error',
+        description: 'Failed to add skill',
+        variant: 'destructive',
+      });
     }
   };
   
   const handleUpdateSkill = async (skillId: string, updates: Partial<UserSkill>) => {
     try {
-      console.log('Updating skill:', skillId, updates);
       const updatedSkill = await updateUserSkill(skillId, updates);
       
       if (updatedSkill) {
         setSkills(prev => prev.map(skill => 
           skill.id === skillId ? updatedSkill : skill
         ));
-        toast.success(`${updatedSkill.skill_name} has been updated`);
+        toast({
+          title: 'Skill Updated',
+          description: `${updatedSkill.skill_name} has been updated`,
+        });
       }
     } catch (error) {
       console.error('Error updating skill:', error);
-      toast.error('Failed to update skill');
-      throw error;
+      toast({
+        title: 'Error',
+        description: 'Failed to update skill',
+        variant: 'destructive',
+      });
     }
   };
   
   const handleDeleteSkill = async (skillId: string, skillName: string) => {
     try {
-      console.log('Deleting skill:', skillId);
       await deleteUserSkill(skillId);
       setSkills(prev => prev.filter(skill => skill.id !== skillId));
-      toast.success(`${skillName} has been removed from your skills`);
+      toast({
+        title: 'Skill Deleted',
+        description: `${skillName} has been removed from your skills`,
+      });
     } catch (error) {
       console.error('Error deleting skill:', error);
-      toast.error('Failed to delete skill');
-      throw error;
+      toast({
+        title: 'Error',
+        description: 'Failed to delete skill',
+        variant: 'destructive',
+      });
     }
   };
   
@@ -146,8 +147,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       setSelectedSkill,
       handleAddSkill,
       handleUpdateSkill,
-      handleDeleteSkill,
-      refreshSkills
+      handleDeleteSkill
     }}>
       {children}
     </SkillsContext.Provider>

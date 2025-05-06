@@ -1,106 +1,66 @@
-
-import { RouteObject, createBrowserRouter } from 'react-router-dom';
-import React, { lazy, Suspense } from 'react';
-import App from '@/App';
+import React from 'react';
+import { Route } from 'react-router-dom';
+import Home from '@/pages/Home';
+import Jobs from '@/pages/Jobs';
+import JobDetail from '@/pages/JobDetail';
+import SignIn from '@/pages/SignIn';
+import SignUp from '@/pages/SignUp';
+import Dashboard from '@/pages/Dashboard';
+import Profile from '@/pages/Profile';
+import Applications from '@/pages/Applications';
 import ErrorPage from '@/pages/ErrorPage';
-import SharedRoutes from './sharedRoutes';
-// Import only the components we need eagerly, lazy load the rest
+import EmployerDashboard from '@/pages/EmployerDashboard';
+import AdminDashboard from '@/pages/AdminDashboard';
+import TeacherDashboard from '@/pages/TeacherDashboard';
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
-import Home from '@/pages/Home';  // Eagerly import Home component for faster initial load
+import NotFound from '@/pages/NotFound';
+import SkillDevelopment from '@/pages/SkillDevelopment';
+import InterviewPrep from '@/pages/InterviewPrep';
+import EmployerAnalytics from '@/pages/EmployerAnalytics';
+import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
+import PremiumServices from '@/pages/PremiumServices';
+import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
+import SchoolGuide from '@/pages/SchoolGuide';
+import SchoolIntegration from '@/pages/SchoolIntegration';
+import Resources from '@/pages/Resources';
+import PlatformGuide from '@/pages/PlatformGuide';
+import ForEmployers from '@/pages/ForEmployers';
+import SchedulePage from '@/pages/SchedulePage';
+import TestPage from '@/pages/TestPage';
 
-// Lazy load non-critical route components
-const Profile = lazy(() => import('@/pages/Profile'));
-const Skills = lazy(() => import('@/pages/Skills'));
-const JobSimulations = lazy(() => import('@/pages/JobSimulations'));
-const SimulationDetail = lazy(() => import('@/pages/SimulationDetail'));
-const HealthcareSimulation = lazy(() => import('@/pages/HealthcareSimulation'));
-const UserCredentials = lazy(() => import('@/pages/UserCredentials'));
-const PersonalizedAssessment = lazy(() => import('@/pages/PersonalizedAssessment'));
+import { PublicRoutes } from './publicRoutes';
+import { SchoolRoutes } from './schoolRoutes';
+import { EmployerRoutes } from './employerRoutes';
 
-// Loading fallback component
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-[70vh]">
-    <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-  </div>
-);
+const AppRoutes = [
+  <Route path="/" element={<Home />} key="home" />,
+  <Route path="/jobs" element={<Jobs />} key="jobs" />,
+  <Route path="/jobs/:id" element={<JobDetail />} key="jobDetail" />,
+  <Route path="/signin" element={<SignIn />} key="signin" />,
+  <Route path="/sign-in" element={<SignIn />} key="sign-in" />,
+  <Route path="/signup" element={<SignUp />} key="signup" />,
+  <Route path="/sign-up" element={<SignUp />} key="sign-up" />,
+  <Route path="/dashboard" element={<Dashboard />} key="dashboard" />,
+  <Route path="/profile" element={<Profile />} key="profile" />,
+  <Route path="/applications" element={<Applications />} key="applications" />,
+  <Route path="/error" element={<ErrorPage />} key="error" />,
+  <Route path="/employer-dashboard" element={<EmployerDashboard />} key="employer-dashboard" />,
+  <Route path="/admin-dashboard" element={<AdminDashboard />} key="admin-dashboard" />,
+  <Route path="/teacher-dashboard" element={<TeacherDashboard />} key="teacher-dashboard" />,
+  <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} key="system-diagnostics" />,
+  <Route path="/skill-development" element={<SkillDevelopment />} key="skill-development" />,
+  <Route path="/interview-prep" element={<InterviewPrep />} key="interview-prep" />,
+  <Route path="/employer-analytics" element={<EmployerAnalytics />} key="employer-analytics" />,
+  <Route path="/premium-services" element={<PremiumServices />} key="premium-services" />,
+  <Route path="/employer-premium" element={<EmployerPremiumServices />} key="employer-premium" />,
+  <Route path="/analytics" element={<AnalyticsDashboard />} key="analytics" />,
+  <Route path="/school-guide" element={<SchoolGuide />} key="school-guide" />,
+  <Route path="/resources" element={<Resources />} key="resources" />,
+  <Route path="/platform-guide" element={<PlatformGuide />} key="platform-guide" />,
+  <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
+  <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
+  <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
+  <Route path="/test" element={<TestPage />} key="test" />,
+];
 
-// Create a router with routes configuration
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      // Important: Home route must be at the top for immediate loading
-      {
-        index: true,
-        element: <Home />
-      },
-      // Regular routes with lazy loading
-      {
-        path: 'skills',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <Skills />
-          </Suspense>
-        )
-      },
-      {
-        path: 'job-simulations',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <JobSimulations />
-          </Suspense>
-        )
-      },
-      {
-        path: 'job-simulations/:id',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <SimulationDetail />
-          </Suspense>
-        )
-      },
-      {
-        path: 'healthcare-simulation',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <HealthcareSimulation />
-          </Suspense>
-        )
-      },
-      {
-        path: 'credentials',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <UserCredentials />
-          </Suspense>
-        )
-      },
-      {
-        path: 'personalized-assessment',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <PersonalizedAssessment />
-          </Suspense>
-        )
-      },
-      {
-        path: 'profile',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <Profile />
-          </Suspense>
-        )
-      },
-      {
-        path: 'system-diagnostics',
-        element: <SystemDiagnosticsPage />
-      },
-      // Spread the shared routes
-      ...SharedRoutes,
-    ],
-  },
-]);
-
-export default router;
+export default AppRoutes;

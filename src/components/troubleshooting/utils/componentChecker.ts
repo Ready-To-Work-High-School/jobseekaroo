@@ -1,127 +1,68 @@
 
 /**
- * Utility functions for checking UI components and navigation issues
+ * Utility functions to check for missing UI components and links
  */
 
 /**
- * Check for missing or broken navigation links
- * @returns Array of detected issues
+ * Check for essential navigation links that should be present
+ * @returns Array of missing link descriptions
  */
 export const checkMissingLinks = (): string[] => {
-  const issues: string[] = [];
-  
   try {
-    // Check if essential navigation links are present in the DOM
-    const essentialPaths = ['/', '/jobs', '/profile', '/sign-in', '/sign-up'];
-    const links = Array.from(document.querySelectorAll('a'))
-      .map(link => link.getAttribute('href'))
-      .filter(Boolean);
+    // Define essential routes that should be accessible
+    const essentialRoutes = [
+      { path: '/jobs', name: 'Jobs listing' },
+      { path: '/student-dashboard', name: 'Student dashboard' },
+      { path: '/profile', name: 'User profile' },
+      { path: '/applications', name: 'Applications' },
+      { path: '/settings', name: 'Settings' }
+    ];
     
-    essentialPaths.forEach(path => {
-      if (!links.some(link => link === path || link?.endsWith(path))) {
-        issues.push(`Navigation link to "${path}" may be missing`);
+    const missingLinks: string[] = [];
+    
+    // Check for the presence of navigation links in the DOM
+    essentialRoutes.forEach(route => {
+      const linkExists = document.querySelector(`a[href="${route.path}"]`) || 
+                        document.querySelector(`a[href="#${route.path}"]`);
+      
+      if (!linkExists) {
+        missingLinks.push(`Missing link: ${route.name}`);
       }
     });
     
-    // Check for broken links (those with '#' only or javascript:void(0))
-    const potentiallyBrokenLinks = Array.from(document.querySelectorAll('a[href="#"], a[href="javascript:void(0)"]'));
-    if (potentiallyBrokenLinks.length > 0) {
-      issues.push(`Found ${potentiallyBrokenLinks.length} potentially broken or placeholder links`);
-    }
+    return missingLinks;
   } catch (error) {
-    console.error("Error checking navigation links:", error);
+    console.error("Error checking for missing links:", error);
+    return [];
   }
-  
-  return issues;
 };
 
 /**
- * Check for critical component presence and errors
- * @returns Array of detected issues
+ * Check for critical UI components that should be present
+ * @returns Array of missing component descriptions
  */
 export const checkCriticalComponents = (): string[] => {
-  const issues: string[] = [];
-  
-  // Check if critical components are present
-  const criticalComponents = [
-    { selector: 'nav', name: 'Navigation bar' },
-    { selector: 'main', name: 'Main content container' },
-    { selector: 'footer', name: 'Footer' }
-  ];
-  
-  criticalComponents.forEach(component => {
-    if (document.querySelector(component.selector) === null) {
-      issues.push(`Critical component "${component.name}" may be missing`);
-    }
-  });
-  
-  // Check for error boundaries without fallbacks
-  // This is just a heuristic check since we can't truly detect this at runtime
-  const errorBoundaries = Array.from(document.querySelectorAll('[data-error-boundary]'));
-  if (errorBoundaries.length === 0) {
-    issues.push('No error boundaries detected, application may crash on component errors');
-  }
-  
-  // Check for UI inconsistencies
-  const buttons = document.querySelectorAll('button');
-  const visibleButtons = Array.from(buttons).filter(button => {
-    const style = window.getComputedStyle(button);
-    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
-  });
-  
-  // Check if any visible buttons lack accessible text
-  const inaccessibleButtons = visibleButtons.filter(button => 
-    !button.textContent?.trim() && 
-    !button.getAttribute('aria-label') &&
-    !button.getAttribute('title')
-  );
-  
-  if (inaccessibleButtons.length > 0) {
-    issues.push(`Found ${inaccessibleButtons.length} buttons without accessible text`);
-  }
-  
-  return issues;
-};
-
-/**
- * Check for accessibility issues in the current DOM
- * @returns Array of detected accessibility issues
- */
-export const checkAccessibilityIssues = (): string[] => {
-  const issues: string[] = [];
-  
   try {
-    // Check for images without alt text
-    const imagesWithoutAlt = document.querySelectorAll('img:not([alt])');
-    if (imagesWithoutAlt.length > 0) {
-      issues.push(`Found ${imagesWithoutAlt.length} images without alt text`);
-    }
+    // Define critical components that should be present
+    const criticalComponents = [
+      { selector: '#job-listings', name: 'Job listings component' },
+      { selector: '.user-profile', name: 'User profile component' },
+      { selector: '.navigation-menu', name: 'Navigation menu' }
+    ];
     
-    // Check for form elements without labels
-    const formElements = document.querySelectorAll('input, select, textarea');
-    let unlabeledElements = 0;
+    const missingComponents: string[] = [];
     
-    formElements.forEach(element => {
-      const id = element.getAttribute('id');
-      if (id) {
-        // Check if there's a label with a matching 'for' attribute
-        const hasLabel = document.querySelector(`label[for="${id}"]`);
-        if (!hasLabel && !element.getAttribute('aria-label')) {
-          unlabeledElements++;
-        }
-      } else if (!element.getAttribute('aria-label')) {
-        // No id and no aria-label
-        unlabeledElements++;
+    // Check if these components exist in the DOM
+    criticalComponents.forEach(component => {
+      const exists = document.querySelector(component.selector);
+      if (!exists) {
+        missingComponents.push(`Missing component: ${component.name}`);
       }
     });
     
-    if (unlabeledElements > 0) {
-      issues.push(`Found ${unlabeledElements} form elements without proper labels`);
-    }
+    return missingComponents;
   } catch (error) {
-    console.error("Error checking accessibility issues:", error);
+    console.error("Error checking for critical components:", error);
+    return [];
   }
-  
-  return issues;
 };
-

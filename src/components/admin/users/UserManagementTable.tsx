@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Eye, MoreHorizontal, ShieldCheck, User, Briefcase, School } from 'lucide-react';
+import { Eye, MoreHorizontal, ShieldCheck, GraduationCap, Briefcase, BookOpen } from 'lucide-react';
 import { UserTableEmptyState, UserTableLoadingState } from './UserTableEmptyState';
 import AccountTypeBadge from '@/components/layout/AccountTypeBadge';
 
@@ -44,11 +44,11 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
       case 'admin':
         return <ShieldCheck className="h-4 w-4 text-white" />;
       case 'student':
-        return <User className="h-4 w-4 text-white" />;
+        return <GraduationCap className="h-4 w-4 text-white" />;
       case 'employer':
         return <Briefcase className="h-4 w-4 text-white" />;
       case 'teacher':
-        return <School className="h-4 w-4 text-white" />;
+        return <BookOpen className="h-4 w-4 text-white" />;
       default:
         return null;
     }
