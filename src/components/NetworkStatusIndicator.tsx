@@ -5,17 +5,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 interface NetworkStatusIndicatorProps {
   isOnline: boolean;
-  lastOnlineAt?: Date | null;
 }
 
-const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ 
-  isOnline,
-  lastOnlineAt 
-}) => {
-  const offlineMessage = lastOnlineAt 
-    ? `Offline - Last online ${lastOnlineAt.toLocaleTimeString()}` 
-    : 'Offline - Check your connection';
-
+const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnline }) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -33,7 +25,7 @@ const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          {isOnline ? 'Online' : offlineMessage}
+          {isOnline ? 'Online' : 'Offline - Check your connection'}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

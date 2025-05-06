@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast()
   const navigate = useNavigate();
-  const { isOnline } = useNetworkStatus();
+  const isOnline = useNetworkStatus();
 
   const handleSignOut = async () => {
     await signOut();

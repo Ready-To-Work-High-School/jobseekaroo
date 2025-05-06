@@ -3,7 +3,6 @@ import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import React, { lazy, Suspense } from 'react';
 import App from '@/App';
 import ErrorPage from '@/pages/ErrorPage';
-import NotFound from '@/pages/NotFound';
 import SharedRoutes from './sharedRoutes';
 // Import only the components we need eagerly, lazy load the rest
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
@@ -100,11 +99,6 @@ const router = createBrowserRouter([
       },
       // Spread the shared routes
       ...SharedRoutes,
-      // Add explicit 404 route at the end
-      {
-        path: '*',
-        element: <NotFound />
-      }
     ],
   },
 ]);
