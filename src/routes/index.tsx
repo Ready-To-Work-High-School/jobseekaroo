@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from '@/pages/Home';
@@ -28,39 +29,154 @@ import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
 import TestPage from '@/pages/TestPage';
 
-import { PublicRoutes } from './publicRoutes';
-import { SchoolRoutes } from './schoolRoutes';
-import { EmployerRoutes } from './employerRoutes';
-
+// These are route configurations that can be imported in App.tsx
+// They are not actual Route components
 const AppRoutes = [
-  <Route path="/" element={<Home />} key="home" />,
-  <Route path="/jobs" element={<Jobs />} key="jobs" />,
-  <Route path="/jobs/:id" element={<JobDetail />} key="jobDetail" />,
-  <Route path="/signin" element={<SignIn />} key="signin" />,
-  <Route path="/sign-in" element={<SignIn />} key="sign-in" />,
-  <Route path="/signup" element={<SignUp />} key="signup" />,
-  <Route path="/sign-up" element={<SignUp />} key="sign-up" />,
-  <Route path="/dashboard" element={<Dashboard />} key="dashboard" />,
-  <Route path="/profile" element={<Profile />} key="profile" />,
-  <Route path="/applications" element={<Applications />} key="applications" />,
-  <Route path="/error" element={<ErrorPage />} key="error" />,
-  <Route path="/employer-dashboard" element={<EmployerDashboard />} key="employer-dashboard" />,
-  <Route path="/admin-dashboard" element={<AdminDashboard />} key="admin-dashboard" />,
-  <Route path="/teacher-dashboard" element={<TeacherDashboard />} key="teacher-dashboard" />,
-  <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} key="system-diagnostics" />,
-  <Route path="/skill-development" element={<SkillDevelopment />} key="skill-development" />,
-  <Route path="/interview-prep" element={<InterviewPrep />} key="interview-prep" />,
-  <Route path="/employer-analytics" element={<EmployerAnalytics />} key="employer-analytics" />,
-  <Route path="/premium-services" element={<PremiumServices />} key="premium-services" />,
-  <Route path="/employer-premium" element={<EmployerPremiumServices />} key="employer-premium" />,
-  <Route path="/analytics" element={<AnalyticsDashboard />} key="analytics" />,
-  <Route path="/school-guide" element={<SchoolGuide />} key="school-guide" />,
-  <Route path="/resources" element={<Resources />} key="resources" />,
-  <Route path="/platform-guide" element={<PlatformGuide />} key="platform-guide" />,
-  <Route path="/for-employers" element={<ForEmployers />} key="for-employers" />,
-  <Route path="/school-integration" element={<SchoolIntegration />} key="school-integration" />,
-  <Route path="/schedule" element={<SchedulePage />} key="schedule" />,
-  <Route path="/test" element={<TestPage />} key="test" />,
+  {
+    path: "/",
+    element: <Home />,
+    key: "home"
+  },
+  {
+    path: "/jobs",
+    element: <Jobs />,
+    key: "jobs"
+  },
+  {
+    path: "/jobs/:id",
+    element: <JobDetail />,
+    key: "jobDetail"
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+    key: "signin"
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+    key: "sign-in"
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+    key: "signup"
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
+    key: "sign-up"
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    key: "dashboard"
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+    key: "profile"
+  },
+  {
+    path: "/applications",
+    element: <Applications />,
+    key: "applications"
+  },
+  {
+    path: "/error",
+    element: <ErrorPage />,
+    key: "error"
+  },
+  {
+    path: "/employer-dashboard",
+    element: <EmployerDashboard />,
+    key: "employer-dashboard"
+  },
+  {
+    path: "/admin-dashboard",
+    element: <AdminDashboard />,
+    key: "admin-dashboard"
+  },
+  {
+    path: "/teacher-dashboard",
+    element: <TeacherDashboard />,
+    key: "teacher-dashboard"
+  },
+  {
+    path: "/system-diagnostics",
+    element: <SystemDiagnosticsPage />,
+    key: "system-diagnostics"
+  },
+  {
+    path: "/skill-development",
+    element: <SkillDevelopment />,
+    key: "skill-development"
+  },
+  {
+    path: "/interview-prep",
+    element: <InterviewPrep />,
+    key: "interview-prep"
+  },
+  {
+    path: "/employer-analytics",
+    element: <EmployerAnalytics />,
+    key: "employer-analytics"
+  },
+  {
+    path: "/premium-services",
+    element: <PremiumServices />,
+    key: "premium-services"
+  },
+  {
+    path: "/employer-premium",
+    element: <EmployerPremiumServices />,
+    key: "employer-premium"
+  },
+  {
+    path: "/analytics",
+    element: <AnalyticsDashboard />,
+    key: "analytics"
+  },
+  {
+    path: "/school-guide",
+    element: <SchoolGuide />,
+    key: "school-guide"
+  },
+  {
+    path: "/resources",
+    element: <Resources />,
+    key: "resources"
+  },
+  {
+    path: "/platform-guide",
+    element: <PlatformGuide />,
+    key: "platform-guide"
+  },
+  {
+    path: "/for-employers",
+    element: <ForEmployers />,
+    key: "for-employers"
+  },
+  {
+    path: "/school-integration",
+    element: <SchoolIntegration />,
+    key: "school-integration"
+  },
+  {
+    path: "/schedule",
+    element: <SchedulePage />,
+    key: "schedule"
+  },
+  {
+    path: "/test",
+    element: <TestPage />,
+    key: "test"
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+    key: "not-found"
+  }
 ];
 
 export default AppRoutes;
