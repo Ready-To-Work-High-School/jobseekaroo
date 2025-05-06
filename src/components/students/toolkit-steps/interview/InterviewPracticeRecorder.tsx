@@ -1,8 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Mic, Play, X, Check, Video } from 'lucide-react';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { useToast } from '@/hooks/use-toast';
 
 interface InterviewPracticeRecorderProps {
   commonQuestions: string[];
@@ -14,8 +16,18 @@ const InterviewPracticeRecorder = ({ commonQuestions, onComplete }: InterviewPra
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const [recordingProgress, setRecordingProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const isOnline = useNetworkStatus();
+  const { toast } = useToast();
   
   const startRecording = (question: string) => {
+    if (!isOnline) {
+      toast({
+        title: "Network Error",
+        description: "You appear to be offline. Recording may not work properly.",
+        variant: "destructive"
+      });
+    }
+    
     setSelectedQuestion(question);
     setIsRecording(true);
     setRecordingProgress(0);
@@ -32,7 +44,9 @@ const InterviewPracticeRecorder = ({ commonQuestions, onComplete }: InterviewPra
             // Simulate processing before completing
             setTimeout(() => {
               setIsProcessing(false);
-              onComplete(question);
+              if (question) {
+                onComplete(question);
+              }
             }, 1000);
           }, 500);
           return 100;

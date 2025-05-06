@@ -1,22 +1,17 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { toast } from 'sonner';
 
-interface NetworkStatusContextType {
+type NetworkStatusContextType = {
   isOnline: boolean;
-  lastOnlineTime: Date | null;
   checkConnection: () => Promise<boolean>;
-}
-
-const NetworkStatusContext = createContext<NetworkStatusContextType | undefined>(undefined);
-
-export const useNetworkStatus = (): NetworkStatusContextType => {
-  const context = useContext(NetworkStatusContext);
-  if (!context) {
-    throw new Error('useNetworkStatus must be used within a NetworkStatusProvider');
-  }
-  return context;
 };
+
+const NetworkStatusContext = createContext<NetworkStatusContextType>({
+  isOnline: true,
+  checkConnection: async () => true
+});
+
+export const useNetworkStatusContext = () => useContext(NetworkStatusContext);
 
 interface NetworkStatusProviderProps {
   children: ReactNode;
@@ -24,69 +19,44 @@ interface NetworkStatusProviderProps {
 
 export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ children }) => {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
-  const [lastOnlineTime, setLastOnlineTime] = useState<Date | null>(navigator.onLine ? new Date() : null);
-  const [hasShownOfflineToast, setHasShownOfflineToast] = useState<boolean>(false);
 
+  // Check if we can actually reach any server
   const checkConnection = async (): Promise<boolean> => {
     try {
-      // Try to reach a reliable endpoint with a timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
-      await fetch('https://www.google.com/generate_204', { 
+      const response = await fetch('/favicon.ico', { 
         method: 'HEAD',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        signal: controller.signal
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' },
       });
-      
-      clearTimeout(timeoutId);
-      
-      if (!isOnline) {
-        setIsOnline(true);
-        setLastOnlineTime(new Date());
-        toast.success("You're back online!");
-      }
-      
-      return true;
+      const online = response.ok;
+      setIsOnline(online);
+      return online;
     } catch (error) {
       console.error('Connection check failed:', error);
-      
-      if (isOnline) {
-        setIsOnline(false);
-        if (!hasShownOfflineToast) {
-          toast.error("You appear to be offline. Some features may not work properly.");
-          setHasShownOfflineToast(true);
-        }
-      }
-      
+      setIsOnline(false);
       return false;
     }
   };
 
   useEffect(() => {
     const handleOnline = () => {
-      setIsOnline(true);
-      setLastOnlineTime(new Date());
-      toast.success("You're back online!");
-      setHasShownOfflineToast(false);
+      console.log('Browser reports online status');
+      checkConnection();
     };
     
     const handleOffline = () => {
+      console.log('Browser reports offline status');
       setIsOnline(false);
-      if (!hasShownOfflineToast) {
-        toast.error("You appear to be offline. Some features may not work properly.");
-        setHasShownOfflineToast(true);
-      }
     };
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
     
     // Initial check
     checkConnection();
     
-    // Periodic check every 30 seconds
+    // Set up listeners
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    // Periodic check (every 30 seconds)
     const intervalId = setInterval(checkConnection, 30000);
     
     return () => {
@@ -94,10 +64,10 @@ export const NetworkStatusProvider: React.FC<NetworkStatusProviderProps> = ({ ch
       window.removeEventListener('offline', handleOffline);
       clearInterval(intervalId);
     };
-  }, [isOnline, hasShownOfflineToast]);
+  }, []);
 
   return (
-    <NetworkStatusContext.Provider value={{ isOnline, lastOnlineTime, checkConnection }}>
+    <NetworkStatusContext.Provider value={{ isOnline, checkConnection }}>
       {children}
     </NetworkStatusContext.Provider>
   );

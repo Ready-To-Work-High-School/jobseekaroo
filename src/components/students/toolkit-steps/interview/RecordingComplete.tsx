@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Check, Video, X, Play, Pause } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 interface RecordingCompleteProps {
   selectedQuestion: string;
@@ -12,24 +13,60 @@ interface RecordingCompleteProps {
 const RecordingComplete = ({ selectedQuestion, onReset }: RecordingCompleteProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  const isOnline = useNetworkStatus();
   const { toast } = useToast();
 
-  const handlePlay = () => {
+  // Simulate audio loading on component mount
+  useEffect(() => {
+    let loadingTimeout: NodeJS.Timeout;
+    
+    // Simulate loading audio data
     setIsLoading(true);
-    // Simulate loading the audio
-    setTimeout(() => {
+    loadingTimeout = setTimeout(() => {
+      setAudioReady(true);
       setIsLoading(false);
-      setIsPlaying(true);
-      toast({
-        title: "Playing your recording",
-        description: "Your recorded answer is now playing",
-      });
-      
-      // Simulate end of playback after 3 seconds
-      setTimeout(() => {
-        setIsPlaying(false);
-      }, 3000);
     }, 1000);
+    
+    return () => {
+      clearTimeout(loadingTimeout);
+    };
+  }, []);
+
+  const handlePlay = () => {
+    if (!isOnline) {
+      toast({
+        title: "Network Error",
+        description: "You appear to be offline. Playback may not work properly.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!audioReady) {
+      setIsLoading(true);
+      // Simulate loading the audio
+      setTimeout(() => {
+        setIsLoading(false);
+        setAudioReady(true);
+        startPlayback();
+      }, 1000);
+    } else {
+      startPlayback();
+    }
+  };
+
+  const startPlayback = () => {
+    setIsPlaying(true);
+    toast({
+      title: "Playing your recording",
+      description: "Your recorded answer is now playing",
+    });
+    
+    // Simulate end of playback after 3 seconds
+    setTimeout(() => {
+      setIsPlaying(false);
+    }, 3000);
   };
 
   const handlePause = () => {
