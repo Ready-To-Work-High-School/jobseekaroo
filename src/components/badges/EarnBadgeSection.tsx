@@ -60,7 +60,7 @@ const EarnBadgeSection = () => {
         {user ? (
           <div className="flex justify-center">
             <Button asChild>
-              <Link to="/student-toolkit?tab=badges" className="flex items-center gap-2">
+              <Link to="/skill-development?tab=badges" className="flex items-center gap-2">
                 Start Earning Badges <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -68,7 +68,7 @@ const EarnBadgeSection = () => {
         ) : (
           <div className="flex justify-center">
             <Button asChild>
-              <Link to="/sign-in?redirect=/student-toolkit?tab=badges" className="flex items-center gap-2">
+              <Link to="/sign-in?redirect=/skill-development?tab=badges" className="flex items-center gap-2">
                 Sign In to Earn Badges <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
