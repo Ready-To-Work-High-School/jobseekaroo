@@ -9,6 +9,7 @@ import HowItWorksSection from '@/components/home/HowItWorksSection';
 import EnhancedHero from '@/components/EnhancedHero';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { toast } from 'sonner';
+import TopEmployersSection from '@/components/job/TopEmployersSection';
 
 const Home = () => {
   const { isOnline, refreshData } = useNetworkStatus();
@@ -81,6 +82,10 @@ const Home = () => {
 
         <ErrorBoundary>
           <SearchSection />
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <TopEmployersSection />
         </ErrorBoundary>
 
         <ErrorBoundary>

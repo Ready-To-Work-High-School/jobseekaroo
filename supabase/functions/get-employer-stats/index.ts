@@ -13,13 +13,15 @@ Deno.serve(async (req) => {
   }
 
   try {
+    console.log('Employer stats function called')
+    
     // Create a Supabase client with the anon key
     const supabase = createClient(
       supabaseUrl,
       supabaseAnonKey
     )
 
-    // Query the employer_job_counts view - now with fixed security settings
+    // Query the employer_job_counts view with improved error handling
     const { data, error } = await supabase
       .from('employer_job_counts')
       .select('*')
@@ -31,6 +33,8 @@ Deno.serve(async (req) => {
       throw error
     }
 
+    console.log(`Retrieved ${data?.length || 0} employer records`)
+    
     // Return the data with proper headers
     return new Response(JSON.stringify({ 
       employers: data || [],
@@ -42,7 +46,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Error fetching employer stats:', error)
     return new Response(JSON.stringify({ 
-      error: error.message,
+      error: error.message || 'Unknown error occurred',
       success: false 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
