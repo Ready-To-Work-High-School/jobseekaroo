@@ -6,7 +6,7 @@ import AppleSignInButton from "./buttons/AppleSignInButton";
 import DiagnosticPanel from "./diagnostic/DiagnosticPanel";
 import NetworkOfflineState from "./diagnostic/NetworkOfflineState";
 import { useDiagnosticInfo } from "./diagnostic/useDiagnosticInfo";
-import { useNetworkStatus } from "./hooks/useNetworkStatus";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
