@@ -4,12 +4,14 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, RefreshCw, Home } from 'lucide-react';
+import { AlertCircle, RefreshCw, Home, Wifi, WifiOff } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
   const [errorDetails, setErrorDetails] = useState<Error | null>(null);
+  const { isOnline } = useNetworkStatus();
   
   useEffect(() => {
     // Get error information from window.history.state
@@ -41,15 +43,26 @@ const ErrorPage = () => {
           <CardHeader className="bg-red-50">
             <div className="flex items-center gap-2">
               <AlertCircle className="h-6 w-6 text-red-500" />
-              <CardTitle className="text-2xl">Oops! Something went wrong</CardTitle>
+              <CardTitle className="text-2xl">
+                {!isOnline ? 'No Internet Connection' : 'Oops! Something went wrong'}
+              </CardTitle>
             </div>
+            {!isOnline && (
+              <div className="flex items-center gap-2 mt-2 text-red-500">
+                <WifiOff className="h-5 w-5" />
+                <span className="text-sm">You're currently offline</span>
+              </div>
+            )}
           </CardHeader>
           <CardContent className="pt-6">
             <p className="text-muted-foreground mb-8">
-              We're sorry, but there was an error processing your request.
+              {!isOnline
+                ? "We can't connect to the internet right now. Please check your connection and try again."
+                : "We're sorry, but there was an error processing your request."
+              }
             </p>
             
-            {errorDetails && (
+            {isOnline && errorDetails && (
               <div className="bg-slate-50 p-4 rounded-md mb-6 border border-slate-200">
                 <p className="font-medium text-red-600">{errorDetails.message}</p>
                 {errorDetails.stack && (
@@ -70,11 +83,13 @@ const ErrorPage = () => {
               </Button>
               <Button onClick={handleTryAgain} variant="outline" className="flex items-center gap-2">
                 <RefreshCw className="h-4 w-4" />
-                Try Again
+                {!isOnline ? "Retry Connection" : "Try Again"}
               </Button>
-              <Button onClick={handleDiagnostics} variant="ghost" className="flex items-center gap-2">
-                Run Diagnostics
-              </Button>
+              {isOnline && (
+                <Button onClick={handleDiagnostics} variant="ghost" className="flex items-center gap-2">
+                  Run Diagnostics
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
