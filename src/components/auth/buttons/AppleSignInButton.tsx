@@ -13,10 +13,16 @@ const AppleSignInButton = ({
   isLoading, 
   disabled = false 
 }: AppleSignInButtonProps) => {
+  const handleClick = () => {
+    if (!isLoading && !disabled) {
+      onClick();
+    }
+  };
+
   return (
     <Button
       variant="outline"
-      onClick={onClick}
+      onClick={handleClick}
       disabled={isLoading || disabled}
       className="w-full flex justify-center items-center gap-2 transition-all border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 apple-auth-button"
       aria-label="Sign in with Apple"
