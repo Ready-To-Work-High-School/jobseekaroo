@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Video, X, Play, Pause } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Check, Play, Pause, RefreshCw, Share2, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
@@ -10,112 +10,115 @@ interface RecordingCompleteProps {
   onReset: () => void;
 }
 
-const RecordingComplete = ({ selectedQuestion, onReset }: RecordingCompleteProps) => {
+const RecordingComplete: React.FC<RecordingCompleteProps> = ({ selectedQuestion, onReset }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
   const { isOnline } = useNetworkStatus();
   const { toast } = useToast();
 
-  // Simulate audio loading on component mount
   useEffect(() => {
-    let loadingTimeout: NodeJS.Timeout;
-    
-    // Simulate loading audio data
+    // Simulate audio loading
     setIsLoading(true);
-    loadingTimeout = setTimeout(() => {
-      setAudioReady(true);
+    const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
-    
-    return () => {
-      clearTimeout(loadingTimeout);
-    };
+      setAudioReady(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const handlePlay = () => {
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleShare = () => {
     if (!isOnline) {
       toast({
-        title: "Network Error",
-        description: "You appear to be offline. Playback may not work properly.",
-        variant: "destructive"
+        title: "Offline",
+        description: "You are currently offline. Please check your internet connection to share.",
+        variant: "destructive",
       });
       return;
     }
     
-    if (!audioReady) {
-      setIsLoading(true);
-      // Simulate loading the audio
-      setTimeout(() => {
-        setIsLoading(false);
-        setAudioReady(true);
-        startPlayback();
-      }, 1000);
-    } else {
-      startPlayback();
-    }
-  };
-
-  const startPlayback = () => {
-    setIsPlaying(true);
     toast({
-      title: "Playing your recording",
-      description: "Your recorded answer is now playing",
+      title: "Share Recording",
+      description: "Sharing functionality is under development.",
     });
-    
-    // Simulate end of playback after 3 seconds
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 3000);
   };
 
-  const handlePause = () => {
-    setIsPlaying(false);
+  const handleDownload = () => {
+    if (!isOnline) {
+      toast({
+        title: "Offline",
+        description: "You are currently offline. Please check your internet connection to download.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
-      title: "Paused",
-      description: "Recording paused",
+      title: "Download Recording",
+      description: "Downloading functionality is under development.",
     });
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-center p-6 bg-green-50 rounded-lg border border-green-200">
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-2">
-            <Check className="h-10 w-10 text-green-500" />
-          </div>
-          <p className="font-medium text-green-600">Recording Complete!</p>
-          <p className="text-sm text-muted-foreground mt-1 max-w-xs">
-            Answered: <span className="font-medium">{selectedQuestion}</span>
-          </p>
+    <Card className="w-full">
+      <CardContent className="p-4">
+        <div className="mb-4">
+          <h4 className="text-lg font-semibold">Recording Complete!</h4>
+          <p className="text-sm text-gray-500">Question: {selectedQuestion}</p>
         </div>
-      </div>
-      
-      <div className="flex flex-col sm:flex-row gap-2">
-        <Button variant="secondary" className="flex-1" onClick={onReset}>
-          <X className="h-4 w-4 mr-2" /> Record Again
-        </Button>
-        <Button 
-          className="flex-1 bg-primary"
-          onClick={isPlaying ? handlePause : handlePlay}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Video className="h-4 w-4 mr-2 animate-spin" /> Loading...
-            </>
-          ) : isPlaying ? (
-            <>
-              <Pause className="h-4 w-4 mr-2" /> Pause
-            </>
-          ) : (
-            <>
-              <Play className="h-4 w-4 mr-2" /> Listen
-            </>
-          )}
-        </Button>
-      </div>
-    </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={togglePlay}
+              disabled={isLoading || !audioReady}
+            >
+              {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            </Button>
+            <span className="ml-2 text-sm text-gray-500">
+              {isLoading ? 'Loading...' : audioReady ? 'Ready' : 'Not Ready'}
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={handleShare}
+              disabled={isLoading || !audioReady}
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={handleDownload}
+              disabled={isLoading || !audioReady}
+            >
+              <Download className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex justify-between">
+          <Button variant="ghost" onClick={onReset}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Record Again
+          </Button>
+          <Button variant="ghost">
+            <Check className="h-4 w-4 mr-2" />
+            Save Response
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

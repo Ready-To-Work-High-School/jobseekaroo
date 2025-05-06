@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 export interface NetworkStatusResult {
   isOnline: boolean;
   refreshData: () => void;
-  lastOnlineAt: Date | null;  // Added this property to match usage in components
+  lastOnlineAt: Date | null;
 }
 
 export const useNetworkStatus = (): NetworkStatusResult => {
