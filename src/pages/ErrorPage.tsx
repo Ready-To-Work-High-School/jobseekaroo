@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, RefreshCw, Home } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
   const [errorDetails, setErrorDetails] = useState<Error | null>(null);
+  const { isOnline } = useNetworkStatus();
   
   useEffect(() => {
     // Get error information from window.history.state
@@ -76,6 +78,13 @@ const ErrorPage = () => {
                 Run Diagnostics
               </Button>
             </div>
+
+            {!isOnline && (
+              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-md text-amber-700 text-sm">
+                <p className="font-medium">You appear to be offline</p>
+                <p className="mt-1">Your network connection may be unavailable. Please check your internet connection and try again.</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
