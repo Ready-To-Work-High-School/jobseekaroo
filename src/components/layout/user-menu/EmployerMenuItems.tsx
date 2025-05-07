@@ -27,13 +27,15 @@ const EmployerMenuItems = ({ isEmployer, isCeo, hasPremium = false }: EmployerMe
             <BarChart3 className="mr-2 h-4 w-4" />
             <span>Analytics</span>
           </div>
-          <Badge 
-            variant="outline" 
-            className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
-          >
-            <Sparkles className="h-3 w-3 mr-1" />
-            Premium
-          </Badge>
+          {!hasPremium && (
+            <Badge 
+              variant="outline" 
+              className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
+            >
+              <Sparkles className="h-3 w-3 mr-1" />
+              Premium
+            </Badge>
+          )}
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild className="cursor-pointer">
@@ -42,13 +44,15 @@ const EmployerMenuItems = ({ isEmployer, isCeo, hasPremium = false }: EmployerMe
             <Calendar className="mr-2 h-4 w-4" />
             <span>Calendar</span>
           </div>
-          <Badge 
-            variant="outline" 
-            className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
-          >
-            <Sparkles className="h-3 w-3 mr-1" />
-            Premium
-          </Badge>
+          {!hasPremium && (
+            <Badge 
+              variant="outline" 
+              className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
+            >
+              <Sparkles className="h-3 w-3 mr-1" />
+              Premium
+            </Badge>
+          )}
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild className="cursor-pointer">
