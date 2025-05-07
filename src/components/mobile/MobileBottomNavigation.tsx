@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Briefcase, Building2, GraduationCap, User, Menu, Shield, School } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth'; // Fixed import path
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 
