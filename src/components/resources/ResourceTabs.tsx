@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import ResourceTab from './ResourceTab';
 import { useFadeIn } from '@/utils/animations';
 import { 
@@ -64,7 +64,13 @@ const ResourceTabs = () => {
           
           {activeTab === "resume" && (
             <Button asChild>
-              <a href="/resume-assistant">Go to Resume Assistant</a>
+              <Link to="/resume-assistant">Go to Resume Assistant</Link>
+            </Button>
+          )}
+          
+          {activeTab === "interview" && (
+            <Button asChild>
+              <Link to="/interview-prep">Interview Preparation</Link>
             </Button>
           )}
         </div>

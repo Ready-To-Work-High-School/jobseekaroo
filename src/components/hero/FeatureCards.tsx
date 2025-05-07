@@ -19,7 +19,7 @@ export const FeatureCards = () => {
         </div>
       </Link>
       
-      <Link to="/skill-development" className="min-w-[260px]">
+      <Link to="/skill-development?tab=badges" className="min-w-[260px]">
         <div className="bg-white p-6 rounded-lg shadow-sm border border-amber-100 hover:border-amber-200 transition-colors h-full">
           <Award className="h-8 w-8 text-amber-500 mb-2 mx-auto" />
           <h3 className="font-medium">Earn Badges</h3>
