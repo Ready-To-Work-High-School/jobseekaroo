@@ -45,6 +45,9 @@ import CareerQuiz from './pages/CareerQuiz';
 import PersonalizedAssessment from './pages/PersonalizedAssessment';
 import SavedJobs from './pages/SavedJobs';
 import EmployerOnboarding from './pages/employer/EmployerOnboarding';
+import EmployerKanban from './pages/EmployerKanban';
+import EmployerApplicants from './pages/employer/EmployerApplicants';
+import EmployerCalendar from './pages/employer/EmployerCalendar';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -106,6 +109,9 @@ function App() {
               <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
               <Route path="/saved-jobs" element={<SavedJobs />} />
               <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
+              <Route path="/employer/candidates" element={<EmployerKanban />} />
+              <Route path="/employer/applicants" element={<EmployerApplicants />} />
+              <Route path="/employer/calendar" element={<EmployerCalendar />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <MobileBottomNavigation />
