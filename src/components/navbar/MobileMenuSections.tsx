@@ -15,7 +15,11 @@ import {
   Info,
   Home,
   Award,
-  Building2
+  Building2,
+  FileCheck,
+  Kanban,
+  BarChart3,
+  Folder
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -43,6 +47,32 @@ export const JobSeekersSection = ({ getPath }: { getPath: (path: string) => stri
     <MobileNavLink to={getPath("/saved-jobs")}>
       <BookMarked className="h-5 w-5" />
       Saved Jobs
+    </MobileNavLink>
+  </div>
+);
+
+export const EmployerSection = ({ getPath }: { getPath: (path: string) => string }) => (
+  <div>
+    <h4 className="px-4 py-2 text-sm font-semibold">For Employers</h4>
+    <MobileNavLink to={getPath("/employer/dashboard")}>
+      <Briefcase className="h-5 w-5" />
+      Post Jobs
+    </MobileNavLink>
+    <MobileNavLink to={getPath("/employer/candidates")}>
+      <Kanban className="h-5 w-5" />
+      Candidate Pipeline
+    </MobileNavLink>
+    <MobileNavLink to={getPath("/employer/verifications")}>
+      <FileCheck className="h-5 w-5" />
+      Verifications
+    </MobileNavLink>
+    <MobileNavLink to={getPath("/employer/analytics")}>
+      <BarChart3 className="h-5 w-5" />
+      Hiring Analytics
+    </MobileNavLink>
+    <MobileNavLink to={getPath("/employer/tools")}>
+      <Folder className="h-5 w-5" />
+      Recruitment Tools
     </MobileNavLink>
   </div>
 );
