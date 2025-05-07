@@ -5,14 +5,12 @@ import { Circle, Shield, GraduationCap, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '@/contexts/auth';
 import { isAdmin } from '@/utils/adminUtils';
 import AuthLinks from '../AuthLinks';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 export const NavLinks = () => {
   const location = useLocation();
   const { userProfile, user } = useAuth();
-  
-  const handleCeoPortalClick = () => {
-    console.log('CEO portal accessed');
-  };
+  const { isCeo } = useAdminStatus();
   
   return (
     <div className="flex items-center gap-6">
@@ -49,17 +47,21 @@ export const NavLinks = () => {
           </Link>
         )}
         
+        {/* Enhanced hidden CEO link with subtle indicator */}
         <Link 
           to="/ceo-portal" 
-          onClick={handleCeoPortalClick}
           className={cn(
-            "opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center gap-1",
+            "opacity-10 hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 relative",
             "text-sm font-medium",
             location.pathname === "/ceo-portal" ? "text-primary" : "text-muted-foreground hover:text-primary"
           )}
           aria-label="CEO Portal"
         >
-          <Shield className="w-3 h-3" />
+          <div className={cn(
+            "absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full",
+            isCeo ? "bg-amber-400 animate-pulse-slow" : "hidden"
+          )}></div>
+          <Shield className="w-3 h-3 text-amber-500" />
           <span className="sr-only">CEO Portal</span>
         </Link>
       </div>

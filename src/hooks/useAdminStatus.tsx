@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth'; // Fixed import path
+import { useAuth } from '@/contexts/auth'; // Fixed import path
 
 export function useAdminStatus() {
   const { userProfile, user } = useAuth();

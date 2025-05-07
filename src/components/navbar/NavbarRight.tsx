@@ -1,87 +1,37 @@
 
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import AuthStatus from '@/components/AuthStatus';
-import { useAuth } from '@/contexts/AuthContext';
-import { Bell } from 'lucide-react';
-import { fetchUserNotifications } from '@/contexts/auth/services/notificationService';
-import NotificationsDropdown from './NotificationsDropdown';
-import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Search, Shield } from "lucide-react";
+import { SearchBar } from "./SearchBar";
+import { NotificationsDropdown } from "./NotificationsDropdown";
+import { useAuth } from "@/contexts/auth";
+import { ModeToggle } from "@/components/theme/ThemeToggle";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 
-export function NavbarRight() {
+export const NavbarRight = () => {
   const { user, userProfile } = useAuth();
-  const { isAdmin } = useAdminStatus();
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { isCeo } = useAdminStatus();
   
-  useEffect(() => {
-    let isMounted = true;
-    
-    const loadNotifications = async () => {
-      if (user && isAdmin) {
-        const notifications = await fetchUserNotifications(user.id);
-        if (isMounted) {
-          setUnreadNotifications(notifications.filter(n => !n.read).length);
-        }
-      }
-    };
-    
-    loadNotifications();
-    
-    // Poll for new notifications every 30 seconds for admins
-    let interval: number | undefined;
-    if (user && isAdmin) {
-      interval = window.setInterval(loadNotifications, 30000);
-    }
-    
-    return () => {
-      isMounted = false;
-      if (interval) clearInterval(interval);
-    };
-  }, [user, isAdmin]);
-
   return (
-    <div className="flex items-center gap-4">
-      {user ? (
-        <>
-          {isAdmin && (
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
-                onClick={() => setShowNotifications(!showNotifications)}
-                aria-label="Notifications"
-              >
-                <Bell className="h-5 w-5" />
-                {unreadNotifications > 0 && (
-                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {unreadNotifications}
-                  </span>
-                )}
-              </Button>
-              
-              {showNotifications && (
-                <NotificationsDropdown 
-                  onClose={() => setShowNotifications(false)}
-                  onNotificationsRead={(count) => setUnreadNotifications(prev => Math.max(0, prev - count))}
-                />
-              )}
-            </div>
-          )}
-          <AuthStatus />
-        </>
-      ) : (
-        <div className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link to="/sign-in">Sign In</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/sign-up">Sign Up</Link>
-          </Button>
-        </div>
+    <div className="flex items-center gap-2">
+      <div className="relative">
+        <SearchBar />
+      </div>
+
+      {/* Hidden shield for CEO access */}
+      {isCeo && (
+        <Link 
+          to="/ceo-portal" 
+          className="relative opacity-20 hover:opacity-100 transition-opacity duration-300 group"
+          aria-label="CEO Portal Access"
+        >
+          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 opacity-70 group-hover:opacity-100 group-hover:animate-ping"></div>
+          <Shield className="h-5 w-5 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" />
+        </Link>
       )}
+      
+      {user && <NotificationsDropdown />}
+      <ModeToggle />
     </div>
   );
-}
+};
