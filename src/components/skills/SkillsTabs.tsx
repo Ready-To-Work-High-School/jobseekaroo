@@ -33,6 +33,9 @@ const SkillsTabs = () => {
     handleDeleteSkill
   } = useSkills();
 
+  // Extract skill names from user skills objects for components that expect string[]
+  const skillNames = skills.map(skill => skill.skill_name);
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
       <TabsList className="grid w-full grid-cols-4">
@@ -84,8 +87,8 @@ const SkillsTabs = () => {
           
           {activeTab === 'skill-gaps' && (
             <SkillGapAnalysis 
-              userSkills={skills}
-              onAddSkill={handleAddSkill}
+              userSkills={skillNames}
+              jobId="job-001" // Using a default job ID for demo purposes
             />
           )}
           

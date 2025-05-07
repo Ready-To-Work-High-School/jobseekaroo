@@ -1,6 +1,6 @@
 
 import { supabase } from './index';
-import { Job } from '@/types/job';
+import { Job, JobType, ExperienceLevel } from '@/types/job';
 
 // Get all jobs
 export async function getAllJobs(): Promise<Job[]> {
@@ -24,14 +24,14 @@ export async function getAllJobs(): Promise<Job[]> {
       title: job.title,
       company: {
         name: job.company_name,
-        logo: job.logo_url || null,
+        logoUrl: job.logo_url || null,
       },
       location: {
         city: job.location_city,
         state: job.location_state,
-        zip: job.location_zip,
+        zipCode: job.location_zip,
       },
-      type: job.job_type,
+      type: job.job_type as JobType,
       description: job.description,
       requirements: job.requirements || [],
       isFeatured: job.is_featured || false,
@@ -42,9 +42,9 @@ export async function getAllJobs(): Promise<Job[]> {
       payRate: {
         min: job.pay_rate_min,
         max: job.pay_rate_max,
-        period: job.pay_rate_period
+        period: job.pay_rate_period as "hourly" | "weekly" | "monthly"
       },
-      experienceLevel: job.experience_level
+      experienceLevel: job.experience_level as ExperienceLevel
     }));
     
     return formattedData;
@@ -85,14 +85,14 @@ export async function getJobById(jobId: string): Promise<Job | null> {
       title: data.title,
       company: {
         name: data.company_name,
-        logo: data.logo_url || null,
+        logoUrl: data.logo_url || null,
       },
       location: {
         city: data.location_city,
         state: data.location_state,
-        zip: data.location_zip,
+        zipCode: data.location_zip,
       },
-      type: data.job_type,
+      type: data.job_type as JobType,
       description: data.description,
       requirements: data.requirements || [],
       isFeatured: data.is_featured || false,
@@ -103,9 +103,9 @@ export async function getJobById(jobId: string): Promise<Job | null> {
       payRate: {
         min: data.pay_rate_min,
         max: data.pay_rate_max,
-        period: data.pay_rate_period
+        period: data.pay_rate_period as "hourly" | "weekly" | "monthly"
       },
-      experienceLevel: data.experience_level
+      experienceLevel: data.experience_level as ExperienceLevel
     };
   } catch (error) {
     console.error('Error fetching job by ID:', error);
