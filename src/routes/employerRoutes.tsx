@@ -36,7 +36,6 @@ export const EmployerRoutes = (
     <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/employer/badges" element={<EmployerBadges />} />
     <Route path="/employer-badges" element={<EmployerBadges />} />
-    <Route path="/resume-assistant" element={<ForEmployers />} />
     <Route path="/post-job" element={<EmployerDashboard />} />
     <Route path="/applicants" element={<EmployerDashboard />} />
     <Route 

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useFadeIn } from '@/utils/animations';
-import { Briefcase, FileText, GraduationCap, Settings, User, Blocks } from 'lucide-react';
+import { Briefcase, Settings, User, Blocks } from 'lucide-react';
 import JobSimulationsCard from '@/components/students/JobSimulationsCard';
 
 const Dashboard = () => {
@@ -20,20 +20,6 @@ const Dashboard = () => {
       icon: <Briefcase className="h-5 w-5" />,
       link: '/jobs',
       color: 'bg-blue-50 text-blue-700'
-    },
-    {
-      title: 'Resume Assistant',
-      description: 'Build and improve your resume',
-      icon: <FileText className="h-5 w-5" />,
-      link: '/resume-assistant',
-      color: 'bg-amber-50 text-amber-700'
-    },
-    {
-      title: 'Skills',
-      description: 'View and update your skills profile',
-      icon: <GraduationCap className="h-5 w-5" />,
-      link: '/skills',
-      color: 'bg-green-50 text-green-700'
     },
     {
       title: 'Profile',
@@ -54,7 +40,7 @@ const Dashboard = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
           {dashboardCards.map((card, index) => (
             <Card key={index} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-2">
@@ -87,7 +73,7 @@ const Dashboard = () => {
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-full bg-amber-100">
-                    <GraduationCap className="h-6 w-6 text-amber-700" />
+                    <User className="h-6 w-6 text-amber-700" />
                   </div>
                   <div>
                     <CardTitle className="text-xl">First Job Toolkit</CardTitle>
@@ -115,12 +101,6 @@ const Dashboard = () => {
         <div className="mt-8 pt-6 border-t">
           <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-4">
-            <Button asChild variant="outline" size="sm" className="gap-2">
-              <Link to="/applications">
-                <Briefcase className="h-4 w-4" />
-                View Applications
-              </Link>
-            </Button>
             <Button asChild variant="outline" size="sm" className="gap-2">
               <Link to="/saved-jobs">
                 <Briefcase className="h-4 w-4" />

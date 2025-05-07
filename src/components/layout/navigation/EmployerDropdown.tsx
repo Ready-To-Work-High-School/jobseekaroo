@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
-import { Briefcase, BarChart3, Star } from 'lucide-react';
+import { Briefcase, BarChart3, Star, Building2 } from 'lucide-react';
 
 export const EmployerDropdown = () => {
   const location = useLocation();
@@ -28,26 +28,26 @@ export const EmployerDropdown = () => {
       <DropdownMenuContent align="start" className="bg-background">
         <DropdownMenuItem asChild>
           <Link to="/for-employers" className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4" />
+            <Building2 className="h-4 w-4" />
             Employer Overview
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/employer-dashboard" className="flex items-center gap-2">
             <Briefcase className="h-4 w-4" />
-            Employer Dashboard
+            Post Jobs
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/employer-analytics" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Analytics Dashboard
+            Hiring Analytics
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/premium-services" className="flex items-center gap-2">
             <Star className="h-4 w-4" />
-            Premium Services
+            Premium Features
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

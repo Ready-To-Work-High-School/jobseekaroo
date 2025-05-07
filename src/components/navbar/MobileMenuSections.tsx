@@ -12,10 +12,10 @@ import {
   BookMarked, 
   Settings,
   Shield,
-  FileText,
   Info,
   Home,
-  Award
+  Award,
+  Building2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -27,7 +27,7 @@ export const PrimaryNavigationLinks = () => (
       Find Jobs
     </MobileNavLink>
     <MobileNavLink to="/for-employers">
-      <Briefcase className="h-5 w-5" />
+      <Building2 className="h-5 w-5" />
       For Employers
     </MobileNavLink>
     <MobileNavLink to="/about">
@@ -40,17 +40,9 @@ export const PrimaryNavigationLinks = () => (
 export const JobSeekersSection = ({ getPath }: { getPath: (path: string) => string }) => (
   <div>
     <h4 className="px-4 py-2 text-sm font-semibold">For Job Seekers</h4>
-    <MobileNavLink to={getPath("/resume-assistant")}>
-      <FileText className="h-5 w-5" />
-      Resume Assistant
-    </MobileNavLink>
     <MobileNavLink to={getPath("/saved-jobs")}>
       <BookMarked className="h-5 w-5" />
       Saved Jobs
-    </MobileNavLink>
-    <MobileNavLink to={getPath("/applications")}>
-      <Briefcase className="h-5 w-5" />
-      Your Applications
     </MobileNavLink>
   </div>
 );

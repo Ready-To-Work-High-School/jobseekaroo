@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, BookMarked, CheckSquare, FileText, TrendingUp, Award, Shield } from 'lucide-react';
+import { LogOut, User, BookMarked, Award, Shield } from 'lucide-react';
 
 const AuthStatus = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -91,27 +91,9 @@ const AuthStatus = () => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/skills" className="flex items-center cursor-pointer">
-                <TrendingUp className="mr-2 h-4 w-4" />
-                <span>Skills</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
               <Link to="/saved-jobs" className="flex items-center cursor-pointer">
                 <BookMarked className="mr-2 h-4 w-4" />
                 <span>Saved Jobs</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/applications" className="flex items-center cursor-pointer">
-                <CheckSquare className="mr-2 h-4 w-4" />
-                <span>Applications</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/resume-assistant" className="flex items-center cursor-pointer">
-                <FileText className="mr-2 h-4 w-4" />
-                <span>Resume Assistant</span>
               </Link>
             </DropdownMenuItem>
             {isAdmin && (
