@@ -1,40 +1,108 @@
 
 import React from 'react';
-import { CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Edit, X, Check } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { UserProfile } from '@/types/user';
+import { Award, Briefcase, MapPin, Mail, Shield, Calendar } from 'lucide-react';
 
 interface ProfileHeaderProps {
-  isEditing: boolean;
-  setIsEditing: (isEditing: boolean) => void;
-  handleUpdateProfile: () => Promise<void>;
+  user: any;
+  userProfile: UserProfile | null;
+  isCeo: boolean;
+  showCeoIcon: boolean;
+  isInceptionMember: boolean;
+  accountAge: string;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
-  isEditing,
-  setIsEditing,
-  handleUpdateProfile,
+  user,
+  userProfile,
+  isCeo,
+  showCeoIcon,
+  isInceptionMember,
+  accountAge,
 }) => {
+  if (!userProfile) return null;
+  
   return (
-    <div className="flex justify-between items-center">
-      <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
-      {isEditing ? (
-        <div className="space-x-2">
-          <Button variant="ghost" onClick={() => setIsEditing(false)}>
-            <X className="h-4 w-4 mr-2" />
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateProfile}>
-            <Check className="h-4 w-4 mr-2" />
-            Save
-          </Button>
+    <div className="relative border-b bg-gradient-to-r from-blue-50 to-white dark:from-blue-950/30 dark:to-background pb-6">
+      {/* Profile background accent */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -mr-20 -mt-20"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-100 rounded-full blur-2xl opacity-30 -ml-10 -mb-10"></div>
+      
+      <div className="flex items-center gap-4 relative">
+        <div className="relative">
+          <Avatar className="h-16 w-16 border-2 border-blue-100 shadow-md">
+            <AvatarImage src={userProfile?.avatar_url || ''} alt="Profile" />
+            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+              {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
+            </AvatarFallback>
+          </Avatar>
+          
+          {/* CEO Shield badge on avatar */}
+          {showCeoIcon && (
+            <div className="absolute -bottom-1 -right-1">
+              <Link to="/ceo-portal">
+                <div className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 border-2 border-white shadow-md">
+                  <Shield className="h-3 w-3 text-white" />
+                </div>
+              </Link>
+            </div>
+          )}
+          
+          {/* Inception Member ribbon for 2025-2026 signups */}
+          {isInceptionMember && (
+            <div className="absolute -right-2 -top-2 rotate-45">
+              <div className="bg-blue-600 text-white text-[10px] py-1 px-6 shadow-md font-semibold">
+                INCEPTION
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <Button variant="outline" onClick={() => setIsEditing(true)}>
-          <Edit className="h-4 w-4 mr-2" />
-          Edit Profile
-        </Button>
-      )}
+        
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-2xl font-bold">
+              {userProfile?.first_name} {userProfile?.last_name}
+            </h2>
+            {isCeo && (
+              <Badge variant="outline" className="bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white border-gray-700">
+                <Shield className="h-3 w-3 mr-1" />
+                Chief Executive Officer
+              </Badge>
+            )}
+          </div>
+          
+          <div className="flex flex-wrap gap-2 mt-1">
+            <span className="flex items-center text-sm text-muted-foreground">
+              <Mail className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+              {user.email}
+            </span>
+            
+            {userProfile?.job_title && !isCeo && (
+              <span className="flex items-center text-sm text-muted-foreground">
+                <Briefcase className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                {userProfile.job_title}
+              </span>
+            )}
+            
+            {userProfile?.location && (
+              <span className="flex items-center text-sm text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                {userProfile.location}
+              </span>
+            )}
+            
+            {userProfile?.created_at && (
+              <span className="flex items-center text-sm text-muted-foreground">
+                <Calendar className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                Member for {accountAge}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
