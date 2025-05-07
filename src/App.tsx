@@ -44,6 +44,7 @@ import StudentSuccess from './pages/StudentSuccess';
 import CareerQuiz from './pages/CareerQuiz';
 import PersonalizedAssessment from './pages/PersonalizedAssessment';
 import SavedJobs from './pages/SavedJobs';
+import EmployerOnboarding from './pages/employer/EmployerOnboarding';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -104,6 +105,7 @@ function App() {
               <Route path="/career-assessment" element={<CareerQuiz />} />
               <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
               <Route path="/saved-jobs" element={<SavedJobs />} />
+              <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <MobileBottomNavigation />

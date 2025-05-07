@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert } from '@/components/ui/alert';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
 
 interface EmployerSignUpFormProps {
@@ -30,9 +30,8 @@ type FormData = {
 
 const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({ 
   onSuccess,
-  isLoading: externalIsLoading,
-  isAppleLoading,
-  handleAppleSignIn 
+  isLoading: externalIsLoading = false,
+  isAppleLoading = false
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +40,18 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      companyName: '',
+      companyWebsite: '',
+      jobTitle: ''
+    }
+  });
+  
   const password = watch('password', ''); // Watch password for strength indicator
   
   const onSubmit = async (data: FormData) => {
@@ -86,6 +96,8 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
           // If no onSuccess callback, navigate to dashboard
           navigate('/dashboard');
         }
+      } else {
+        throw new Error("Failed to create account");
       }
     } catch (error: any) {
       console.error('Signup error:', error);
@@ -157,8 +169,8 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
             {...register('password', {
               required: 'Password is required',
               minLength: {
-                value: 12,
-                message: 'Password must be at least 12 characters',
+                value: 6,
+                message: 'Password must be at least 6 characters',
               },
             })}
           />
@@ -177,8 +189,6 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
-        
-        <PasswordStrengthIndicator password={password} />
       </div>
       
       <div className="space-y-2">
@@ -223,7 +233,7 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
         )}
       </div>
       
-      <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading || externalIsLoading || isAppleLoading}>
         {isLoading || externalIsLoading ? 'Creating Account...' : 'Sign Up as Employer'}
       </Button>
     </form>

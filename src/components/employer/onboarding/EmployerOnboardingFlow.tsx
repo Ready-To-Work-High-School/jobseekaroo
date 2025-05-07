@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Stepper, Step } from "@/components/ui/stepper";
 import EmployerSignUpForm from "@/components/auth/EmployerSignUpForm";
 import { VerificationForm } from "@/components/employer/VerificationForm";
@@ -31,11 +30,13 @@ const EmployerOnboardingFlow = () => {
       <CardHeader>
         <CardTitle className="text-2xl text-center">Join as an Employer</CardTitle>
         
-        <Stepper currentStep={currentStep} className="mt-6">
-          <Step>Account Registration</Step>
-          <Step>Business Verification</Step>
-          <Step>Ready to Hire</Step>
-        </Stepper>
+        <div className="mt-6">
+          <Stepper currentStep={currentStep}>
+            <Step>Account Registration</Step>
+            <Step>Business Verification</Step>
+            <Step>Ready to Hire</Step>
+          </Stepper>
+        </div>
       </CardHeader>
       
       <CardContent className="pt-6">
@@ -56,7 +57,7 @@ const EmployerOnboardingFlow = () => {
             </div>
             
             <VerificationForm 
-              userId={userId}
+              userId={userId || ''}
               onSuccess={handleVerificationSuccess}
             />
           </div>

@@ -1,352 +1,161 @@
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { employerVerificationSchema, type EmployerVerificationFormData } from "@/types/employer";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/lib/supabase';
+import { Alert } from '@/components/ui/alert';
 
 interface VerificationFormProps {
-  userId?: string | null;
-  onSuccess?: () => void;
+  userId: string;
+  onSuccess: () => void;
 }
 
-export function VerificationForm({ userId, onSuccess }: VerificationFormProps) {
-  const form = useForm<EmployerVerificationFormData>({
-    resolver: zodResolver(employerVerificationSchema),
-    defaultValues: {
-      safety_pledge_accepted: false,
-    },
-  });
+type FormData = {
+  companyAddress: string;
+  businessRegistrationNumber: string;
+  contactPhone: string;
+  businessDescription: string;
+};
 
-  const onSubmit = async (data: EmployerVerificationFormData) => {
+export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSuccess }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  const onSubmit = async (data: FormData) => {
+    if (!userId) {
+      setError("Missing user information. Please try again.");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError(null);
+    
     try {
-      // Format the date properly before sending to Supabase
-      const formattedExpiryDate = new Date(data.workers_comp_expiry_date).toISOString().split('T')[0];
-      
-      // Create the record to insert, explicitly defining all required fields
-      const recordToInsert = {
-        company_name: data.company_name,
-        ein: data.ein,
-        address: data.address,
-        website: data.website || null,
-        contact_name: data.contact_name,
-        contact_email: data.contact_email,
-        contact_phone: data.contact_phone || null,
-        job_description: data.job_description,
-        wage_range_min: data.wage_range_min,
-        wage_range_max: data.wage_range_max,
-        hours_per_week: data.hours_per_week,
-        workers_comp_policy_number: data.workers_comp_policy_number,
-        workers_comp_provider: data.workers_comp_provider,
-        workers_comp_expiry_date: formattedExpiryDate,
-        safety_pledge_accepted: data.safety_pledge_accepted
-      };
-
-      const { error } = await supabase
+      // Save verification data to employer_verifications table
+      const { error: insertError } = await supabase
         .from('employer_verifications')
-        .insert(recordToInsert);
-
-      if (error) throw error;
-
-      // If userId is provided, update the profile to link to this verification
-      if (userId) {
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({
-            employer_verification_status: 'pending',
-            company_name: data.company_name
-          })
-          .eq('id', userId);
-
-        if (updateError) console.error('Error updating profile:', updateError);
-      }
-
+        .insert([{
+          user_id: userId,
+          company_address: data.companyAddress,
+          business_registration_number: data.businessRegistrationNumber,
+          contact_phone: data.contactPhone,
+          business_description: data.businessDescription,
+          verification_status: 'pending',
+          submitted_at: new Date().toISOString()
+        }]);
+      
+      if (insertError) throw insertError;
+      
+      // Update the verification_submitted flag in the profile
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ 
+          employer_verification_status: 'pending',
+          verification_submitted_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+      
+      if (updateError) throw updateError;
+      
       toast({
-        title: "Application Submitted",
-        description: "Your employer verification application has been received. We'll review it within 48 hours.",
+        title: "Verification submitted",
+        description: "Your business verification information has been submitted for review.",
       });
-
-      // Call onSuccess callback if provided
-      if (onSuccess) {
-        onSuccess();
-      }
-
-      form.reset();
-    } catch (error) {
-      console.error('Error submitting form:', error);
+      
+      onSuccess();
+    } catch (error: any) {
+      console.error('Verification submission error:', error);
+      setError(error.message || 'Failed to submit verification. Please try again.');
+      
       toast({
-        title: "Error",
-        description: "There was a problem submitting your application. Please try again.",
         variant: "destructive",
+        title: "Submission failed",
+        description: "There was a problem submitting your verification. Please try again.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
+  
   return (
-    <Card className="p-6">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="company_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="ein"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>EIN (XX-XXXXXXX)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="12-3456789" />
-                  </FormControl>
-                  <FormDescription>
-                    Your Federal Employer Identification Number
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Business Address</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {error && (
+        <Alert variant="destructive">
+          {error}
+        </Alert>
+      )}
+      
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="companyAddress">Company Address</Label>
+          <Input
+            id="companyAddress"
+            placeholder="123 Business St, Suite 100, City, State ZIP"
+            {...register('companyAddress', { required: 'Company address is required' })}
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="website"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Website</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="url" placeholder="https://" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Phone</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="tel" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="contact_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Person</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Email</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="job_description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Description</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          {errors.companyAddress && (
+            <p className="text-sm text-red-500">{errors.companyAddress.message}</p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="businessRegistrationNumber">Business Registration Number</Label>
+          <Input
+            id="businessRegistrationNumber"
+            placeholder="Business license, EIN, or registration number"
+            {...register('businessRegistrationNumber', { required: 'Business registration number is required' })}
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="wage_range_min"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Minimum Wage</FormLabel>
-                  <FormControl>
-                    <Input 
-                      {...field} 
-                      type="number" 
-                      onChange={e => field.onChange(parseFloat(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="wage_range_max"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Maximum Wage</FormLabel>
-                  <FormControl>
-                    <Input 
-                      {...field} 
-                      type="number"
-                      onChange={e => field.onChange(parseFloat(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="hours_per_week"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Hours per Week</FormLabel>
-                  <FormControl>
-                    <Input 
-                      {...field} 
-                      type="number"
-                      onChange={e => field.onChange(parseInt(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="workers_comp_policy_number"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Workers Comp Policy Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="workers_comp_provider"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Workers Comp Provider</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="workers_comp_expiry_date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Policy Expiry Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="safety_pledge_accepted"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Safety Pledge</FormLabel>
-                  <FormDescription>
-                    I agree to comply with all applicable child labor laws and maintain a safe work environment. 
-                    I understand that any violation may result in immediate removal from the platform.
-                  </FormDescription>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
+          {errors.businessRegistrationNumber && (
+            <p className="text-sm text-red-500">{errors.businessRegistrationNumber.message}</p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="contactPhone">Contact Phone</Label>
+          <Input
+            id="contactPhone"
+            type="tel"
+            placeholder="(555) 555-5555"
+            {...register('contactPhone', { required: 'Contact phone is required' })}
           />
-
-          <Button type="submit" className="w-full">Submit for Verification</Button>
-        </form>
-      </Form>
-    </Card>
+          {errors.contactPhone && (
+            <p className="text-sm text-red-500">{errors.contactPhone.message}</p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="businessDescription">Business Description</Label>
+          <Textarea
+            id="businessDescription"
+            placeholder="Tell us about your business, including how long you've been operating, what services/products you provide, and why you're interested in employing students."
+            rows={5}
+            {...register('businessDescription', {
+              required: 'Business description is required',
+              minLength: {
+                value: 50,
+                message: 'Please provide at least 50 characters'
+              }
+            })}
+          />
+          {errors.businessDescription && (
+            <p className="text-sm text-red-500">{errors.businessDescription.message}</p>
+          )}
+        </div>
+      </div>
+      
+      <Button 
+        type="submit" 
+        className="w-full" 
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? 'Submitting...' : 'Submit Verification'}
+      </Button>
+    </form>
   );
-}
+};
