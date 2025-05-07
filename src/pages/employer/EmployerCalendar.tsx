@@ -5,11 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Calendar as CalendarIcon, Sparkles, UserPlus, Calendar, ClipboardList } from 'lucide-react';
+import { Calendar as CalendarIcon, Sparkles, UserPlus, Calendar, ClipboardList, CalendarDays } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useFadeIn } from '@/utils/animations';
 import { DatePicker } from '@/components/ui/date-picker';
 import CalendlyUserProfile from '@/components/employer/calendar/CalendlyUserProfile';
+import CalendlyScheduledEvents from '@/components/employer/calendar/CalendlyScheduledEvents';
 
 // Mock data for Calendly user
 const mockCalendlyUser = {
@@ -21,12 +22,60 @@ const mockCalendlyUser = {
   avatar_url: null,
 };
 
+// Mock data for Calendly events
+const mockScheduledEvents = [
+  {
+    uri: "https://api.calendly.com/scheduled_events/ABCDEF123456",
+    name: "Interview with Sarah Johnson",
+    status: "active",
+    start_time: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+    end_time: new Date(Date.now() + 86400000 + 3600000).toISOString(), // Tomorrow + 1 hour
+    location: { type: "Zoom" },
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    event_type: "https://api.calendly.com/event_types/ABCDEF123456",
+    invitees_counter: { total: 1, active: 1, limit: 1 }
+  },
+  {
+    uri: "https://api.calendly.com/scheduled_events/GHIJKL789012",
+    name: "Follow-up with John Smith",
+    status: "active",
+    start_time: new Date(Date.now() + 172800000).toISOString(), // Day after tomorrow
+    end_time: new Date(Date.now() + 172800000 + 1800000).toISOString(), // Day after tomorrow + 30 min
+    location: { type: "Google Meet" },
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    event_type: "https://api.calendly.com/event_types/GHIJKL789012",
+    invitees_counter: { total: 2, active: 1, limit: 2 }
+  },
+  {
+    uri: "https://api.calendly.com/scheduled_events/MNOPQR345678",
+    name: "Team Sync Meeting",
+    status: "completed",
+    start_time: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+    end_time: new Date(Date.now() - 86400000 + 3600000).toISOString(), // Yesterday + 1 hour
+    location: { type: "Microsoft Teams" },
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    event_type: "https://api.calendly.com/event_types/MNOPQR345678",
+    invitees_counter: { total: 5, active: 5, limit: 10 }
+  }
+];
+
+const mockPagination = {
+  count: 3,
+  next_page: null
+};
+
 const EmployerCalendar = () => {
   const [activeTab, setActiveTab] = useState('schedule');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [calendlyUser, setCalendlyUser] = useState<any>(null);
   const [eventTypes, setEventTypes] = useState<any[]>([]);
+  const [scheduledEvents, setScheduledEvents] = useState<any[]>([]);
+  const [pagination, setPagination] = useState<any>(null);
+  const [pageHistory, setPageHistory] = useState<string[]>([]);
   const fadeIn = useFadeIn(300);
   const { userProfile } = useAuth();
   
@@ -67,10 +116,73 @@ const EmployerCalendar = () => {
           }
         ]);
       }, 1500);
+      
+      // Simulate API fetch for scheduled events
+      setTimeout(() => {
+        setScheduledEvents(mockScheduledEvents);
+        setPagination(mockPagination);
+      }, 2000);
     } else {
       setIsLoading(false);
     }
   }, [hasPremium]);
+
+  // Handle pagination for scheduled events
+  const handleLoadMore = () => {
+    if (pagination?.next_page) {
+      setIsLoading(true);
+      // Store current page for going back
+      setPageHistory([...pageHistory, window.location.href]);
+      
+      // Simulate API fetch for next page of scheduled events
+      setTimeout(() => {
+        // Mock additional events
+        const additionalEvents = [
+          {
+            uri: "https://api.calendly.com/scheduled_events/STUVWX901234",
+            name: "Candidate Screening",
+            status: "active",
+            start_time: new Date(Date.now() + 259200000).toISOString(), // 3 days from now
+            end_time: new Date(Date.now() + 259200000 + 1800000).toISOString(), // 3 days from now + 30 min
+            location: { type: "Phone Call" },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            event_type: "https://api.calendly.com/event_types/STUVWX901234",
+            invitees_counter: { total: 1, active: 1, limit: 1 }
+          }
+        ];
+        
+        // Append new events and update pagination
+        setScheduledEvents([...scheduledEvents, ...additionalEvents]);
+        // Set next_page to null to simulate end of pages
+        setPagination({
+          count: 1,
+          next_page: null
+        });
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
+  // Handle going back to previous page
+  const handlePrevious = () => {
+    if (pageHistory.length > 0) {
+      setIsLoading(true);
+      
+      // Get the last page from history and remove it
+      const prevPages = [...pageHistory];
+      prevPages.pop();
+      setPageHistory(prevPages);
+      
+      // Simulate API fetch for previous page
+      setTimeout(() => {
+        // Reset to original events and pagination
+        setScheduledEvents(mockScheduledEvents);
+        setPagination(mockPagination);
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
 
   // If not premium, show upgrade prompt
   if (!hasPremium) {
@@ -113,7 +225,7 @@ const EmployerCalendar = () => {
             <CalendlyUserProfile user={calendlyUser} isLoading={isLoading} />
             
             <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="mb-6">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="schedule">
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule
@@ -121,6 +233,10 @@ const EmployerCalendar = () => {
                 <TabsTrigger value="event-types">
                   <ClipboardList className="h-4 w-4 mr-2" />
                   Event Types
+                </TabsTrigger>
+                <TabsTrigger value="scheduled-events">
+                  <CalendarDays className="h-4 w-4 mr-2" />
+                  Events
                 </TabsTrigger>
                 <TabsTrigger value="invitees">
                   <UserPlus className="h-4 w-4 mr-2" />
@@ -210,6 +326,24 @@ const EmployerCalendar = () => {
                 </Card>
               </TabsContent>
               
+              <TabsContent value="scheduled-events" className="mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Scheduled Events</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CalendlyScheduledEvents 
+                      events={scheduledEvents}
+                      isLoading={isLoading}
+                      pagination={pagination}
+                      onLoadMore={handleLoadMore}
+                      onPrevious={handlePrevious}
+                      hasPrevious={pageHistory.length > 0}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
               <TabsContent value="invitees" className="mt-6">
                 <Card>
                   <CardHeader>
@@ -252,9 +386,45 @@ const EmployerCalendar = () => {
                 <CardTitle className="text-lg">Upcoming Events</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-4">
-                  <p className="text-muted-foreground text-sm">No upcoming events</p>
-                </div>
+                {isLoading ? (
+                  <div className="space-y-3">
+                    {Array.from({ length: 2 }).map((_, i) => (
+                      <div key={i} className="flex items-center gap-3 animate-pulse">
+                        <div className="h-10 w-10 rounded-full bg-gray-200"></div>
+                        <div className="space-y-2 flex-1">
+                          <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+                          <div className="h-3 w-1/2 bg-gray-200 rounded"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : scheduledEvents.filter(e => e.status === 'active').length > 0 ? (
+                  <div className="space-y-3">
+                    {scheduledEvents
+                      .filter(event => event.status === 'active')
+                      .slice(0, 2)
+                      .map(event => {
+                        const eventDate = new Date(event.start_time);
+                        return (
+                          <div key={event.uri} className="flex items-start gap-3">
+                            <div className="bg-blue-100 dark:bg-blue-900/30 text-center p-1 rounded min-w-[40px]">
+                              <div className="text-xs font-semibold">{format(eventDate, 'MMM')}</div>
+                              <div className="text-sm font-bold">{format(eventDate, 'd')}</div>
+                            </div>
+                            <div>
+                              <div className="font-medium text-sm">{event.name}</div>
+                              <div className="text-xs text-muted-foreground">{format(eventDate, 'h:mm a')}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    <Button variant="link" size="sm" className="w-full mt-2">View all events</Button>
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-muted-foreground text-sm">No upcoming events</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
