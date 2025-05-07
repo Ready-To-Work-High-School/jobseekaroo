@@ -31,6 +31,8 @@ import InterviewPrep from '../pages/InterviewPrep';
 import SchedulePage from '@/pages/SchedulePage';
 import SchoolGuide from '../pages/SchoolGuide';
 import SafetyCompliance from '../pages/SafetyCompliance';
+import HealthcarePathways from '../pages/HealthcarePathways';
+import StudentSuccess from '../pages/StudentSuccess';
 
 export const PublicRoutes = (
   <>
@@ -65,6 +67,9 @@ export const PublicRoutes = (
     <Route path="/interview-prep" element={<InterviewPrep />} />
     <Route path="/school-guide" element={<SchoolGuide />} />
     <Route path="/safety-compliance" element={<SafetyCompliance />} />
+    <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
+    <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
+    <Route path="/student-success" element={<StudentSuccess />} />
     
     <Route path="/school/students" element={<SchoolStudents />} />
     <Route path="/school/analytics" element={<SchoolAnalytics />} />

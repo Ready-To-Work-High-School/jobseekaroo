@@ -4,13 +4,14 @@ import { Route } from 'react-router-dom';
 import PlatformGuide from '@/pages/PlatformGuide';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import Support from '@/pages/Support';
+import HealthcarePathways from '@/pages/HealthcarePathways';
+import StudentSuccess from '@/pages/StudentSuccess';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
 import About from '@/pages/Index'; // Using Index as a fallback for AboutPage
 import Resources from '@/pages/Resources';
 import MacquarieExternship from '@/pages/MacquarieExternship';
-import HealthcarePathways from '@/pages/HealthcarePathways';
 import VystarInternship from '@/pages/VystarInternship';
 import SkillDevelopment from '@/pages/SkillDevelopment';
 import CeoPortal from '@/pages/CeoPortal';
@@ -44,10 +45,12 @@ const HomeRoutes = (
     <Route path="/safety-compliance" element={<SafetyCompliancePage />} />
     <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
     <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
+    <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
     <Route path="/programs/vystar-internship" element={<VystarInternship />} />
     <Route path="/skill-development" element={<SkillDevelopment />} />
     <Route path="/badges" element={<BadgesPage />} />
     <Route path="/ceo-portal" element={<CeoPortal />} />
+    <Route path="/student-success" element={<StudentSuccess />} />
   </>
 );
 

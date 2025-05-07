@@ -29,7 +29,7 @@ const ApplyButton = () => {
           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all relative z-10"
           size="lg"
         >
-          <Link to="/programs/healthcare-pathways#baptist" className="flex items-center gap-2">
+          <Link to="/healthcare-pathways#baptist" className="flex items-center gap-2">
             Learn More
             <Sparkles className="h-4 w-4" />
           </Link>

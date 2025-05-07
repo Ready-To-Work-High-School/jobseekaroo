@@ -39,6 +39,8 @@ import ForEmployers from './pages/ForEmployers';
 import SchedulePage from './pages/SchedulePage';
 import TestPage from './pages/TestPage';
 import Index from './pages/Index';
+import HealthcarePathways from './pages/HealthcarePathways';
+import StudentSuccess from './pages/StudentSuccess';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -92,6 +94,9 @@ function App() {
               <Route path="/test" element={<TestPage />} />
               <Route path="/index" element={<Index />} />
               <Route path="/about" element={<Index />} />
+              <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
+              <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
+              <Route path="/student-success" element={<StudentSuccess />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <MobileBottomNavigation />

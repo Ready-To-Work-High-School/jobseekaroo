@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Briefcase, Calendar, MapPin, Clock, CheckCircle, ExternalLink, Award, GraduationCap, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HealthcarePathways = () => {
   return (
@@ -106,9 +107,9 @@ const HealthcarePathways = () => {
 
             <div className="text-center">
               <Button size="lg" className="bg-amber-600 hover:bg-amber-700">
-                <a href="/jobs/mayo-summer-program" className="flex items-center gap-2">
+                <Link to="/skill-development?tab=badges" className="flex items-center gap-2">
                   Apply Now <ExternalLink className="h-4 w-4" />
-                </a>
+                </Link>
               </Button>
               <p className="text-sm text-muted-foreground mt-4">
                 Application deadline: May 1, 2025
@@ -217,9 +218,9 @@ const HealthcarePathways = () => {
 
             <div className="text-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <a href="https://baptisthealth.com/education/high-school-programs" className="flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+                <Link to="/skill-development?tab=badges" className="flex items-center gap-2">
                   Submit Application <ExternalLink className="h-4 w-4" />
-                </a>
+                </Link>
               </Button>
               <p className="text-sm text-muted-foreground mt-4">
                 Application deadline: July 15, 2025
