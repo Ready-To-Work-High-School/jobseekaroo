@@ -159,6 +159,102 @@ const QuizResult: React.FC<QuizResultProps> = ({
                           </div>
                         </li>
                       </>
+                    ) : careerRecommendation.title === "Business & Leadership" ? (
+                      <>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Business Administration Degree</p>
+                            <p className="text-sm text-muted-foreground">Bachelor's degree focusing on management, finance, and organizational leadership.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">MBA Program</p>
+                            <p className="text-sm text-muted-foreground">Advanced degree for leadership and specialized business knowledge.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Project Management Certification</p>
+                            <p className="text-sm text-muted-foreground">Professional certifications like PMP or CAPM for project management skills.</p>
+                          </div>
+                        </li>
+                      </>
+                    ) : careerRecommendation.title === "Environmental Sciences" ? (
+                      <>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Environmental Science Degree</p>
+                            <p className="text-sm text-muted-foreground">Bachelor's degree covering ecology, conservation, and sustainability principles.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Field Research Programs</p>
+                            <p className="text-sm text-muted-foreground">Specialized fieldwork training and research experience programs.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Environmental Policy Certificates</p>
+                            <p className="text-sm text-muted-foreground">Focused training in environmental regulations and policy development.</p>
+                          </div>
+                        </li>
+                      </>
+                    ) : careerRecommendation.title === "Hospitality & Culinary Arts" ? (
+                      <>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Culinary School</p>
+                            <p className="text-sm text-muted-foreground">Professional culinary training at institutes like CIA or Le Cordon Bleu.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Hospitality Management Degree</p>
+                            <p className="text-sm text-muted-foreground">Bachelor's degree covering hotel operations, event planning, and tourism.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Apprenticeships</p>
+                            <p className="text-sm text-muted-foreground">Hands-on training under experienced chefs or hotel managers.</p>
+                          </div>
+                        </li>
+                      </>
+                    ) : careerRecommendation.title === "Skilled Trades & Construction" ? (
+                      <>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Trade School</p>
+                            <p className="text-sm text-muted-foreground">Specialized training in electrical, plumbing, HVAC, or other skilled trades.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Apprenticeship Programs</p>
+                            <p className="text-sm text-muted-foreground">Paid on-the-job training combined with classroom instruction.</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start">
+                          <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                          <div>
+                            <p className="font-medium">Certifications & Licensure</p>
+                            <p className="text-sm text-muted-foreground">Required professional certifications for specific trades and specializations.</p>
+                          </div>
+                        </li>
+                      </>
                     ) : (
                       <li className="flex items-start">
                         <GraduationCap className="h-5 w-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
