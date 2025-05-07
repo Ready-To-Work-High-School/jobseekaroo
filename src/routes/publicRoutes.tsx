@@ -33,6 +33,7 @@ import SchoolGuide from '../pages/SchoolGuide';
 import SafetyCompliance from '../pages/SafetyCompliance';
 import HealthcarePathways from '../pages/HealthcarePathways';
 import StudentSuccess from '../pages/StudentSuccess';
+import PersonalizedAssessment from '../pages/PersonalizedAssessment';
 
 export const PublicRoutes = (
   <>
@@ -60,6 +61,8 @@ export const PublicRoutes = (
     <Route path="/job-simulations" element={<JobSimulations />} />
     <Route path="/job-simulations/:id" element={<SimulationDetail />} />
     <Route path="/career-quiz" element={<CareerQuiz />} />
+    <Route path="/career-assessment" element={<CareerQuiz />} />
+    <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/school-dashboard" element={<SchoolDashboard />} />

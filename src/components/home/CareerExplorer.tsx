@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, Briefcase, Star, Users, GraduationCap, MapPin, Info } from 'lucide-react';
 
@@ -178,7 +178,7 @@ const CareerExplorer: React.FC = () => {
                 <Link to="/jobs">Search All Jobs</Link>
               </Button>
               <Button asChild>
-                <Link to="/career-assessment">Take Career Assessment</Link>
+                <Link to="/career-quiz">Take Career Assessment</Link>
               </Button>
             </div>
           </div>

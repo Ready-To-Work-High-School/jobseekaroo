@@ -6,6 +6,8 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import Support from '@/pages/Support';
 import HealthcarePathways from '@/pages/HealthcarePathways';
 import StudentSuccess from '@/pages/StudentSuccess';
+import CareerQuiz from '@/pages/CareerQuiz';
+import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -51,6 +53,9 @@ const HomeRoutes = (
     <Route path="/badges" element={<BadgesPage />} />
     <Route path="/ceo-portal" element={<CeoPortal />} />
     <Route path="/student-success" element={<StudentSuccess />} />
+    <Route path="/career-quiz" element={<CareerQuiz />} />
+    <Route path="/career-assessment" element={<CareerQuiz />} />
+    <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
   </>
 );
 
