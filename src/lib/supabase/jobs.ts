@@ -123,8 +123,7 @@ export async function getEmployerJobStats(employerId: string): Promise<{
     // Get jobs posted count
     const { count: jobsCount, error: jobsError } = await supabase
       .from('jobs')
-      .select('id', { count: 'exact', head: true })
-      .eq('employer_id', employerId);
+      .select('id', { count: 'exact', head: true });
     
     if (jobsError) throw jobsError;
     
@@ -132,7 +131,6 @@ export async function getEmployerJobStats(employerId: string): Promise<{
     const { count: hiresCount, error: hiresError } = await supabase
       .from('job_applications')
       .select('id', { count: 'exact', head: true })
-      .eq('employer_id', employerId)
       .eq('status', 'hired');
     
     if (hiresError) throw hiresError;
@@ -140,8 +138,7 @@ export async function getEmployerJobStats(employerId: string): Promise<{
     // Get applications count
     const { count: applicationsCount, error: applicationsError } = await supabase
       .from('job_applications')
-      .select('id', { count: 'exact', head: true })
-      .eq('employer_id', employerId);
+      .select('id', { count: 'exact', head: true });
     
     if (applicationsError) throw applicationsError;
     

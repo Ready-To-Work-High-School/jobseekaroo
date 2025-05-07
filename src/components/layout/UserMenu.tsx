@@ -90,6 +90,7 @@ const UserMenu = () => {
         <EmployerMenuItems 
           isEmployer={isEmployer}
           isCeo={isCeo}
+          hasPremium={hasPremium}
         />
         
         {(isEmployer || isCeo) && <DropdownMenuSeparator />}
