@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -137,7 +138,7 @@ const UserMenu = () => {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/profile-tabs" className="cursor-pointer">
-              <Tabs className="mr-2 h-4 w-4" />
+              <User className="mr-2 h-4 w-4" />
               <span>Tabbed Profile</span>
             </Link>
           </DropdownMenuItem>
