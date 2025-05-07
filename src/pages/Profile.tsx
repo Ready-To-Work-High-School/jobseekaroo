@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Award, Briefcase, MapPin, Mail, Sparkles, Shield, Calendar, FileText } from 'lucide-react';
+import { Award, Briefcase, MapPin, Mail, Shield, Calendar, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import UserBadges from '@/components/badges/UserBadges';
 import { useUserBadges } from '@/hooks/use-user-badges';
@@ -15,15 +15,22 @@ import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { supabase } from '@/lib/supabase';
 
+// Define simplified types to avoid circular dependencies
+type EmployerStats = {
+  jobsPosted: number;
+  hires: number;
+  applications: number;
+};
+
 const Profile = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const { badges, isLoading: badgesLoading } = useUserBadges();
-  const [employerStats, setEmployerStats] = useState<{
-    jobsPosted: number;
-    hires: number;
-    applications: number;
-  }>({ jobsPosted: 0, hires: 0, applications: 0 });
+  const [employerStats, setEmployerStats] = useState<EmployerStats>({ 
+    jobsPosted: 0, 
+    hires: 0, 
+    applications: 0 
+  });
   
   // Check if user is CEO based on job title or company name
   const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
