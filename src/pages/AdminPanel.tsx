@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -13,7 +12,8 @@ import {
   Clock, 
   Trash2, 
   LogOut, 
-  Settings 
+  Settings, 
+  Briefcase 
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import UserManagementContainer from "@/components/admin/users/UserManagementContainer";
@@ -48,7 +48,7 @@ export default function AdminPanel() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-xl flex items-center gap-2">
@@ -83,6 +83,25 @@ export default function AdminPanel() {
                   className="w-full flex items-center gap-2"
                 >
                   <BarChart className="h-4 w-4" /> View Analytics
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Briefcase className="h-5 w-5 text-primary" />
+                  Job Catalog
+                </CardTitle>
+                <CardDescription>View all posted jobs</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  onClick={() => navigate("/admin/job-catalog")}
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                >
+                  <Briefcase className="h-4 w-4" /> View Job Catalog
                 </Button>
               </CardContent>
             </Card>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -7,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users, Briefcase, Search, Globe } from "lucide-react";
+import { Bell, Shield, LayoutList, BadgeCheck, Award, Brain, CalendarClock, Users, Briefcase, Search, Globe, Kanban } from "lucide-react";
 import { useState } from "react";
 import CeoFeatureCard from '@/components/ceo/CeoFeatureCard';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -177,7 +176,7 @@ const CeoPortal = () => {
           </TabsContent>
         </Tabs>
 
-        <div className="my-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="my-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="shadow-md border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50">
             <CardHeader>
               <div className="flex items-center gap-2 mb-2">
@@ -214,6 +213,26 @@ const CeoPortal = () => {
                 onClick={() => navigate('/admin/job-management')}
               >
                 Manage Jobs
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md border-green-100 bg-gradient-to-br from-green-50 to-teal-50">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <Kanban className="h-5 w-5 text-green-600" />
+                <CardTitle>Job Catalog</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-muted-foreground">
+                View all jobs posted across the platform in one centralized catalog with filtering and export options.
+              </p>
+              <Button
+                className="bg-gradient-to-r from-green-600 to-teal-500 text-white"
+                onClick={() => navigate('/admin/job-catalog')}
+              >
+                View Job Catalog
               </Button>
             </CardContent>
           </Card>

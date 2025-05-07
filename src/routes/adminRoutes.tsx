@@ -61,6 +61,13 @@ export const AdminRoutes = (
         </Layout>
       </ProtectedRoute>
     } />
+    <Route path="/admin/job-catalog" element={
+      <ProtectedRoute adminOnly>
+        <Layout>
+          <AdminJobManagement />
+        </Layout>
+      </ProtectedRoute>
+    } />
     {/* CEO Portal route */}
     <Route path="/ceo-portal" element={
       <ProtectedRoute adminOnly>
@@ -71,3 +78,5 @@ export const AdminRoutes = (
     } />
   </>
 );
+
+export default AdminRoutes;
