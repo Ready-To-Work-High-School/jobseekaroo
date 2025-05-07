@@ -1,67 +1,56 @@
 
 import { Link } from 'react-router-dom';
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Briefcase, Sparkles, BarChart3, Calendar } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { DropdownMenuItem, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { Building2, BarChart2, Award, Shield, Settings } from 'lucide-react';
 
 interface EmployerMenuItemsProps {
   isEmployer: boolean;
   isCeo: boolean;
-  hasPremium?: boolean;
+  hasPremium: boolean;
 }
 
-const EmployerMenuItems = ({ isEmployer, isCeo, hasPremium = false }: EmployerMenuItemsProps) => {
+const EmployerMenuItems = ({ isEmployer, isCeo, hasPremium }: EmployerMenuItemsProps) => {
   if (!isEmployer && !isCeo) return null;
   
   return (
-    <>
-      <DropdownMenuItem asChild className="cursor-pointer">
-        <Link to="/employer-dashboard" className="flex items-center w-full">
-          <Briefcase className="mr-2 h-4 w-4" />
+    <DropdownMenuGroup>
+      <DropdownMenuItem asChild>
+        <Link to="/employer/dashboard" className="cursor-pointer">
+          <Building2 className="mr-2 h-4 w-4" />
           <span>Employer Dashboard</span>
         </Link>
       </DropdownMenuItem>
-      <DropdownMenuItem asChild className="cursor-pointer">
-        <Link to="/employer/analytics" className="flex items-center justify-between w-full">
-          <div className="flex items-center">
-            <BarChart3 className="mr-2 h-4 w-4" />
-            <span>Analytics</span>
-          </div>
-          {!hasPremium && (
-            <Badge 
-              variant="outline" 
-              className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
-            >
-              <Sparkles className="h-3 w-3 mr-1" />
-              Premium
-            </Badge>
-          )}
+      
+      <DropdownMenuItem asChild>
+        <Link to="/employer/analytics" className="cursor-pointer">
+          <BarChart2 className="mr-2 h-4 w-4" />
+          <span>Performance Analytics</span>
         </Link>
       </DropdownMenuItem>
-      <DropdownMenuItem asChild className="cursor-pointer">
-        <Link to="/employer/calendar" className="flex items-center justify-between w-full">
-          <div className="flex items-center">
-            <Calendar className="mr-2 h-4 w-4" />
-            <span>Calendar</span>
-          </div>
-          {!hasPremium && (
-            <Badge 
-              variant="outline" 
-              className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50 ml-2 py-0 h-5"
-            >
-              <Sparkles className="h-3 w-3 mr-1" />
-              Premium
-            </Badge>
-          )}
+      
+      <DropdownMenuItem asChild>
+        <Link to="/account-benefits" className="cursor-pointer">
+          <Award className="mr-2 h-4 w-4" />
+          <span>Account Benefits</span>
         </Link>
       </DropdownMenuItem>
-      <DropdownMenuItem asChild className="cursor-pointer">
-        <Link to="/employer-premium" className="flex items-center w-full">
-          <Sparkles className="mr-2 h-4 w-4 text-amber-500" />
-          <span>Premium Services</span>
+      
+      {isCeo && (
+        <DropdownMenuItem asChild>
+          <Link to="/ceo-portal" className="cursor-pointer opacity-80 hover:opacity-100">
+            <Shield className="mr-2 h-4 w-4" />
+            <span>CEO Portal</span>
+          </Link>
+        </DropdownMenuItem>
+      )}
+      
+      <DropdownMenuItem asChild>
+        <Link to="/settings" className="cursor-pointer">
+          <Settings className="mr-2 h-4 w-4" />
+          <span>Account Settings</span>
         </Link>
       </DropdownMenuItem>
-    </>
+    </DropdownMenuGroup>
   );
 };
 

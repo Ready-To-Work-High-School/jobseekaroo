@@ -1,3 +1,3 @@
 
 // Re-export the ThemeToggle to fix the import path issue
-export { ModeToggle } from "@/components/theme/ThemeToggle";
+export { ThemeToggle as ModeToggle } from "@/components/theme/ThemeToggle";

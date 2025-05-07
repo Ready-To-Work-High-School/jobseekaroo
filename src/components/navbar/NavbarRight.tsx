@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import { SearchBar } from "./SearchBar";
 import NotificationsDropdown from "./NotificationsDropdown";
 import { useAuth } from "@/contexts/auth";
