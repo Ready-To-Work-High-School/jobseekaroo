@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
@@ -17,7 +17,17 @@ const Profile = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const { badges, isLoading: badgesLoading } = useUserBadges();
-  const { isCeo, isAdmin, isEmployer, showCeoIcon, accountAge, isInceptionMember } = useProfileStatus(userProfile);
+  
+  // Use custom hooks to get user status and employer stats
+  const { 
+    isCeo, 
+    isAdmin, 
+    isEmployer, 
+    showCeoIcon, 
+    accountAge, 
+    isInceptionMember 
+  } = useProfileStatus(userProfile);
+  
   const { employerStats } = useEmployerStats(user, isEmployer);
   
   return (

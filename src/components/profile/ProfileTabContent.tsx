@@ -47,9 +47,6 @@ const ProfileTabContent: React.FC<ProfileTabContentProps> = ({
           setIsEditing={setIsEditing}
           handleUpdateProfile={handleUpdateProfile}
         />
-        <p className="text-sm text-muted-foreground">
-          Manage your profile information and settings
-        </p>
       </CardHeader>
       <CardContent className="space-y-4">
         {userProfile ? (

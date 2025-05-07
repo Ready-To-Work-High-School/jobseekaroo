@@ -5,14 +5,18 @@ import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { UserProfile } from '@/types/user';
 import { Award, Briefcase, MapPin, Mail, Shield, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-interface ProfileHeaderProps {
-  user: any;
-  userProfile: UserProfile | null;
-  isCeo: boolean;
-  showCeoIcon: boolean;
-  isInceptionMember: boolean;
-  accountAge: string;
+export interface ProfileHeaderProps {
+  user?: any;
+  userProfile?: UserProfile | null;
+  isCeo?: boolean;
+  showCeoIcon?: boolean;
+  isInceptionMember?: boolean;
+  accountAge?: string;
+  isEditing?: boolean;
+  setIsEditing?: (isEditing: boolean) => void;
+  handleUpdateProfile?: () => Promise<void>;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -22,9 +26,35 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   showCeoIcon,
   isInceptionMember,
   accountAge,
+  isEditing,
+  setIsEditing,
+  handleUpdateProfile,
 }) => {
-  if (!userProfile) return null;
+  if (!userProfile && !isEditing) return null;
   
+  // For ProfileTabContent component which uses this in edit mode
+  if (isEditing !== undefined && setIsEditing && handleUpdateProfile) {
+    return (
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-medium">Personal Information</h3>
+          <p className="text-sm text-muted-foreground">Update your personal details</p>
+        </div>
+        <div>
+          {isEditing ? (
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+              <Button onClick={handleUpdateProfile}>Save</Button>
+            </div>
+          ) : (
+            <Button onClick={() => setIsEditing(true)}>Edit</Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+  
+  // Original display mode for the main profile
   return (
     <div className="relative border-b bg-gradient-to-r from-blue-50 to-white dark:from-blue-950/30 dark:to-background pb-6">
       {/* Profile background accent */}
@@ -77,7 +107,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="flex flex-wrap gap-2 mt-1">
             <span className="flex items-center text-sm text-muted-foreground">
               <Mail className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
-              {user.email}
+              {user?.email}
             </span>
             
             {userProfile?.job_title && !isCeo && (

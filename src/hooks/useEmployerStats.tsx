@@ -27,34 +27,34 @@ export function useEmployerStats(user: User | null, isEmployer: boolean) {
     
     try {
       // Get jobs posted count
-      const { data: jobsData, error: jobsError } = await supabase
+      const { count: jobsCount, error: jobsError } = await supabase
         .from('jobs')
-        .select('id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .eq('employer_id', user.id);
       
       if (jobsError) throw jobsError;
       
       // Get hires count
-      const { data: hiresData, error: hiresError } = await supabase
+      const { count: hiresCount, error: hiresError } = await supabase
         .from('job_applications')
-        .select('id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .eq('employer_id', user.id)
         .eq('status', 'hired');
       
       if (hiresError) throw hiresError;
       
       // Get applications count
-      const { data: applicationsData, error: applicationsError } = await supabase
+      const { count: applicationsCount, error: applicationsError } = await supabase
         .from('job_applications')
-        .select('id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .eq('employer_id', user.id);
       
       if (applicationsError) throw applicationsError;
       
       setEmployerStats({
-        jobsPosted: jobsData?.length || 0,
-        hires: hiresData?.length || 0,
-        applications: applicationsData?.length || 0,
+        jobsPosted: jobsCount || 0,
+        hires: hiresCount || 0,
+        applications: applicationsCount || 0,
       });
     } catch (error) {
       console.error('Error fetching employer stats:', error);
