@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFadeIn } from '@/utils/animations';
-import { Calendar, Sparkles, Loader2 } from 'lucide-react';
+import { Calendar, Sparkles, Loader2, CalendarDays } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import CalendlyEmbed from '@/components/calendly/CalendlyEmbed';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 interface CalendlyOrganizationMembership {
   resource: {
@@ -19,8 +21,37 @@ interface CalendlyOrganizationMembership {
   };
 }
 
-interface CalendlyResponse {
+interface CalendlyEventType {
+  resource: {
+    uri: string;
+    name: string;
+    description: string | null;
+    duration: number;
+    slug: string;
+    color: string;
+    active: boolean;
+    scheduling_url: string;
+    profile: {
+      name: string;
+      owner: string;
+      type: string;
+    };
+  };
+}
+
+interface CalendlyMembershipsResponse {
   collection: CalendlyOrganizationMembership[];
+  pagination: {
+    count: number;
+    next_page: string | null;
+    previous_page: string | null;
+    next_page_token: string | null;
+    previous_page_token: string | null;
+  };
+}
+
+interface CalendlyEventTypesResponse {
+  collection: CalendlyEventType[];
   pagination: {
     count: number;
     next_page: string | null;
@@ -35,32 +66,24 @@ const EmployerCalendar = () => {
   const { userProfile } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('calendar');
   const [calendlyMemberships, setCalendlyMemberships] = useState<CalendlyOrganizationMembership[]>([]);
+  const [eventTypes, setEventTypes] = useState<CalendlyEventType[]>([]);
   
   // Check if user has premium membership
   const hasPremium = userProfile?.preferences?.hasPremium === true;
   
   useEffect(() => {
-    const fetchCalendlyOrgMemberships = async () => {
+    const fetchCalendlyData = async () => {
       if (!hasPremium) return;
       
       try {
         setIsLoading(true);
-        // This would be replaced with actual API call if we had Calendly API token
-        // Example of how the actual API call would look:
-        // 
-        // const response = await fetch('https://api.calendly.com/organization_memberships?user=https://api.calendly.com/users/ABC123XYZ789', {
-        //   headers: {
-        //     'Authorization': `Bearer ${calendlyToken}`,
-        //     'Content-Type': 'application/json'
-        //   }
-        // });
-        // const data: CalendlyResponse = await response.json();
-        // setCalendlyMemberships(data.collection);
-
+        
         // For demo purposes, we'll use mock data
         setTimeout(() => {
-          const mockData = {
+          // Mock organization memberships
+          const mockMembershipsData = {
             collection: [
               {
                 resource: {
@@ -80,11 +103,76 @@ const EmployerCalendar = () => {
             }
           };
           
-          setCalendlyMemberships(mockData.collection);
+          // Mock event types
+          const mockEventTypesData = {
+            collection: [
+              {
+                resource: {
+                  uri: "https://api.calendly.com/event_types/ABCDEF123456",
+                  name: "Initial Interview",
+                  description: "30-minute initial interview with candidate",
+                  duration: 30,
+                  slug: "initial-interview",
+                  color: "#0056b3",
+                  active: true,
+                  scheduling_url: "https://calendly.com/johndoe/initial-interview",
+                  profile: {
+                    name: "John Doe",
+                    owner: "https://api.calendly.com/users/ABC123XYZ789",
+                    type: "User"
+                  }
+                }
+              },
+              {
+                resource: {
+                  uri: "https://api.calendly.com/event_types/GHIJKL789012",
+                  name: "Technical Assessment",
+                  description: "60-minute technical assessment interview",
+                  duration: 60,
+                  slug: "technical-assessment",
+                  color: "#28a745",
+                  active: true,
+                  scheduling_url: "https://calendly.com/johndoe/technical-assessment",
+                  profile: {
+                    name: "John Doe",
+                    owner: "https://api.calendly.com/users/ABC123XYZ789",
+                    type: "User"
+                  }
+                }
+              },
+              {
+                resource: {
+                  uri: "https://api.calendly.com/event_types/MNOPQR345678",
+                  name: "Final Interview",
+                  description: "45-minute final interview with hiring manager",
+                  duration: 45,
+                  slug: "final-interview",
+                  color: "#dc3545",
+                  active: true,
+                  scheduling_url: "https://calendly.com/johndoe/final-interview",
+                  profile: {
+                    name: "John Doe",
+                    owner: "https://api.calendly.com/users/ABC123XYZ789",
+                    type: "User"
+                  }
+                }
+              }
+            ],
+            pagination: {
+              count: 3,
+              next_page: null,
+              previous_page: null,
+              next_page_token: null,
+              previous_page_token: null
+            }
+          };
+          
+          setCalendlyMemberships(mockMembershipsData.collection);
+          setEventTypes(mockEventTypesData.collection);
           setIsLoading(false);
         }, 1000);
       } catch (error) {
-        console.error('Failed to fetch Calendly organization memberships:', error);
+        console.error('Failed to fetch Calendly data:', error);
         toast({
           title: "Error",
           description: "Failed to load Calendly data. Please try again later.",
@@ -94,7 +182,7 @@ const EmployerCalendar = () => {
       }
     };
     
-    fetchCalendlyOrgMemberships();
+    fetchCalendlyData();
   }, [hasPremium, toast]);
   
   // If not premium, show upgrade prompt
@@ -137,36 +225,145 @@ const EmployerCalendar = () => {
           Schedule interviews, events, and manage your recruitment timeline
         </p>
         
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              <span>Interview Calendar</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
-              </div>
-            ) : (
-              <div className="min-h-[400px]">
-                <CalendlyEmbed />
-                {calendlyMemberships.length > 0 && (
-                  <div className="mt-4 border-t pt-4">
-                    <p className="text-sm font-medium text-muted-foreground mb-2">Connected Calendly Account</p>
-                    <div className="bg-muted/20 p-3 rounded text-sm">
-                      <p>Organization Role: {calendlyMemberships[0].resource.role}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        API Reference: /organization_memberships?user=https://api.calendly.com/users/ABC123XYZ789
-                      </p>
-                    </div>
+        <Tabs 
+          defaultValue="calendar" 
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="mb-6"
+        >
+          <TabsList className="mb-4">
+            <TabsTrigger value="calendar" className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>Calendar</span>
+            </TabsTrigger>
+            <TabsTrigger value="event-types" className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4" />
+              <span>Event Types</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="calendar" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  <span>Interview Calendar</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-64">
+                    <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
+                  </div>
+                ) : (
+                  <div className="min-h-[400px]">
+                    <CalendlyEmbed />
+                    {calendlyMemberships.length > 0 && (
+                      <div className="mt-4 border-t pt-4">
+                        <p className="text-sm font-medium text-muted-foreground mb-2">Connected Calendly Account</p>
+                        <div className="bg-muted/20 p-3 rounded text-sm">
+                          <p>Organization Role: {calendlyMemberships[0].resource.role}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            API Reference: /organization_memberships?user=https://api.calendly.com/users/ABC123XYZ789
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="event-types" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5" />
+                  <span>Meeting Types</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-64">
+                    <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
+                  </div>
+                ) : (
+                  <div>
+                    {eventTypes.length > 0 ? (
+                      <>
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                          {eventTypes.map((eventType) => (
+                            <div 
+                              key={eventType.resource.uri} 
+                              className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                            >
+                              <div 
+                                className="w-3 h-3 rounded-full mb-2" 
+                                style={{ backgroundColor: eventType.resource.color }} 
+                              />
+                              <h3 className="font-medium text-lg">{eventType.resource.name}</h3>
+                              {eventType.resource.description && (
+                                <p className="text-muted-foreground text-sm mt-1">
+                                  {eventType.resource.description}
+                                </p>
+                              )}
+                              <div className="flex items-center justify-between mt-3">
+                                <Badge variant="outline" className="bg-muted/40">
+                                  {eventType.resource.duration} minutes
+                                </Badge>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  className="text-sm" 
+                                  asChild
+                                >
+                                  <a 
+                                    href={eventType.resource.scheduling_url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                  >
+                                    View
+                                  </a>
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-4 border-t pt-4">
+                          <p className="text-sm font-medium text-muted-foreground mb-2">API Details</p>
+                          <div className="bg-muted/20 p-3 rounded text-sm">
+                            <p>API Endpoint: GET /event_types</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Profile Owner: {eventTypes[0].resource.profile.owner}
+                            </p>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-center py-12">
+                        <CalendarDays className="h-16 w-16 mx-auto mb-4 text-muted-foreground/60" />
+                        <h3 className="text-lg font-medium">No Event Types Found</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto mt-2">
+                          You don't have any Calendly event types configured yet. Create event types in Calendly to offer scheduling options.
+                        </p>
+                        <Button className="mt-4" asChild>
+                          <a 
+                            href="https://calendly.com/event_types/new" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Create in Calendly
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
         
         <Card>
           <CardHeader>
