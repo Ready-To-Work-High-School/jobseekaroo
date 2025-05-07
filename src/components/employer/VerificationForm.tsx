@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,142 +9,134 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 
-const verificationFormSchema = z.object({
-  company_name: z.string().min(2, { message: "Company name is required" }),
-  address: z.string().min(5, { message: "Valid address is required" }),
-  contact_name: z.string().min(2, { message: "Contact name is required" }),
-  contact_email: z.string().email({ message: "Valid email is required" }),
-  contact_phone: z.string().min(10, { message: "Valid phone number is required" }),
-  ein: z.string().min(9, { message: "Valid EIN is required" }),
-  job_description: z.string().min(20, { message: "Please provide a detailed job description" }),
-  hours_per_week: z.coerce.number().min(1, { message: "Hours per week is required" }),
-  wage_range_min: z.coerce.number().min(1, { message: "Minimum wage is required" }),
-  wage_range_max: z.coerce.number().min(1, { message: "Maximum wage is required" })
-    .refine(val => val >= 1, { message: "Maximum wage must be greater than zero" }),
-  workers_comp_policy_number: z.string().min(1, { message: "Workers comp policy number is required" }),
-  workers_comp_provider: z.string().min(1, { message: "Workers comp provider is required" }),
-  workers_comp_expiry_date: z.string().min(1, { message: "Workers comp expiry date is required" }),
-  safety_pledge_accepted: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the safety pledge" })
-  })
+const verificationSchema = z.object({
+  companyName: z.string().min(2, { message: "Company name is required" }),
+  contactName: z.string().min(2, { message: "Contact name is required" }),
+  contactEmail: z.string().email({ message: "Valid email is required" }),
+  contactPhone: z.string().optional(),
+  address: z.string().min(5, { message: "Company address is required" }),
+  ein: z.string().min(9, { message: "EIN is required" }),
+  website: z.string().optional(),
+  jobDescription: z.string().min(20, { message: "Job description is required" }),
+  wageRangeMin: z.number().min(1, { message: "Minimum wage is required" }),
+  wageRangeMax: z.number().min(1, { message: "Maximum wage is required" }),
+  hoursPerWeek: z.number().min(1, { message: "Hours per week is required" }),
+  workersCompProvider: z.string().min(2, { message: "Workers' comp provider is required" }),
+  workersCompPolicyNumber: z.string().min(2, { message: "Workers' comp policy number is required" }),
+  workersCompExpiryDate: z.string().min(2, { message: "Workers' comp expiry date is required" }),
+  safetyPledgeAccepted: z.boolean().refine(val => val === true, { message: "You must accept the safety pledge" })
 });
 
-type VerificationFormValues = z.infer<typeof verificationFormSchema>;
+type VerificationFormValues = z.infer<typeof verificationSchema>;
 
 interface VerificationFormProps {
+  onSuccess: () => void;
+  onError: (error: Error) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
   userId?: string;
-  onSuccess?: () => void;
 }
 
-export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSuccess }) => {
-  const { toast } = useToast();
-  const { user } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+export const VerificationForm = ({ 
+  onSuccess, 
+  onError, 
+  isSubmitting, 
+  setIsSubmitting,
+  userId 
+}: VerificationFormProps) => {
   const form = useForm<VerificationFormValues>({
-    resolver: zodResolver(verificationFormSchema),
+    resolver: zodResolver(verificationSchema),
     defaultValues: {
-      company_name: '',
+      companyName: '',
+      contactName: '',
+      contactEmail: '',
+      contactPhone: '',
       address: '',
-      contact_name: '',
-      contact_email: '',
-      contact_phone: '',
       ein: '',
-      job_description: '',
-      hours_per_week: 20,
-      wage_range_min: 15,
-      wage_range_max: 25,
-      workers_comp_policy_number: '',
-      workers_comp_provider: '',
-      workers_comp_expiry_date: '',
-      safety_pledge_accepted: false
+      website: '',
+      jobDescription: '',
+      wageRangeMin: 15,
+      wageRangeMax: 20,
+      hoursPerWeek: 20,
+      workersCompProvider: '',
+      workersCompPolicyNumber: '',
+      workersCompExpiryDate: '',
+      safetyPledgeAccepted: false
     }
   });
 
   const onSubmit = async (data: VerificationFormValues) => {
-    if (!userId && !user?.id) {
-      toast({
-        title: "Authentication Error",
-        description: "User ID is required for verification",
-        variant: "destructive"
-      });
+    if (!userId) {
+      onError(new Error("You must be signed in to submit verification"));
       return;
     }
-
+    
     setIsSubmitting(true);
 
     try {
       const { error } = await supabase
         .from('employer_verifications')
         .insert({
-          ...data,
-          user_id: userId || user?.id,
+          company_name: data.companyName,
+          contact_name: data.contactName,
+          contact_email: data.contactEmail,
+          contact_phone: data.contactPhone,
+          address: data.address,
+          ein: data.ein,
+          website: data.website,
+          job_description: data.jobDescription,
+          wage_range_min: data.wageRangeMin,
+          wage_range_max: data.wageRangeMax,
+          hours_per_week: data.hoursPerWeek,
+          workers_comp_provider: data.workersCompProvider,
+          workers_comp_policy_number: data.workersCompPolicyNumber,
+          workers_comp_expiry_date: data.workersCompExpiryDate,
+          safety_pledge_accepted: data.safetyPledgeAccepted,
           status: 'pending'
         });
 
-      if (error) {
-        throw error;
-      }
-
-      toast({
-        title: "Verification Submitted",
-        description: "Your employer verification has been submitted and is pending review."
-      });
-
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (error: any) {
-      console.error('Error submitting verification:', error);
+      if (error) throw error;
       
-      toast({
-        title: "Submission Error",
-        description: error.message || "There was an error submitting your verification",
-        variant: "destructive"
-      });
+      // Also update the user's profile with verification status
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          employer_verification_status: 'pending',
+          company_name: data.companyName
+        })
+        .eq('id', userId);
+        
+      if (profileError) {
+        console.error('Error updating profile:', profileError);
+      }
+
+      onSuccess();
+    } catch (error) {
+      console.error('Error submitting verification:', error);
+      onError(error instanceof Error ? error : new Error('An unknown error occurred'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-lg border p-6 shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">Employer Verification</h2>
-      <p className="text-muted-foreground mb-6">
-        Please provide the following information to verify your employer account. 
-        This helps ensure a safe environment for students.
-      </p>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="font-medium">Company Information</h3>
-            
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-6">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium">Company Information</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="company_name"
+              name="companyName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Company Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your company's legal name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Business Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Complete business address" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -158,28 +150,60 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
                 <FormItem>
                   <FormLabel>Employer Identification Number (EIN)</FormLabel>
                   <FormControl>
-                    <Input placeholder="XX-XXXXXXX" {...field} />
+                    <Input {...field} placeholder="XX-XXXXXXX" />
                   </FormControl>
                   <FormDescription>
-                    Your 9-digit tax ID number assigned by the IRS
+                    Your 9-digit Tax ID number
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+          
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Business Address</FormLabel>
+                <FormControl>
+                  <Textarea {...field} placeholder="Street, City, State, ZIP" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="website"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company Website (Optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="https://www.example.com" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <div className="space-y-4">
-            <h3 className="font-medium">Contact Information</h3>
-            
+        <div className="space-y-6">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium">Contact Information</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="contact_name"
+              name="contactName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Contact Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Full name of primary contact" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,150 +212,156 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
             
             <FormField
               control={form.control}
-              name="contact_email"
+              name="contactEmail"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Contact Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="email@company.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="contact_phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Phone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="(XXX) XXX-XXXX" {...field} />
+                    <Input {...field} type="email" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-
-          <div className="space-y-4">
-            <h3 className="font-medium">Employment Details</h3>
-            
-            <FormField
-              control={form.control}
-              name="job_description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Description</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Describe the typical jobs you'll be posting for high school students" 
-                      rows={4}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="hours_per_week"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hours Per Week</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={1} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="wage_range_min"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Min Wage ($)</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={1} step={0.5} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="wage_range_max"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Max Wage ($)</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={1} step={0.5} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="font-medium">Insurance Information</h3>
-            
-            <FormField
-              control={form.control}
-              name="workers_comp_provider"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Workers' Comp Provider</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Insurance company name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="workers_comp_policy_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Policy Number</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Policy number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="workers_comp_expiry_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Expiry Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
+          
           <FormField
             control={form.control}
-            name="safety_pledge_accepted"
+            name="contactPhone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact Phone (Optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="(XXX) XXX-XXXX" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="space-y-6">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium">Job Details</h3>
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="jobDescription"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Description</FormLabel>
+                <FormControl>
+                  <Textarea {...field} placeholder="Describe the types of jobs you'll be posting for high school students" rows={4} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <FormField
+              control={form.control}
+              name="wageRangeMin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Minimum Wage ($)</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="wageRangeMax"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Maximum Wage ($)</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="hoursPerWeek"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hours Per Week</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium">Workers' Compensation Insurance</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="workersCompProvider"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Insurance Provider</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="workersCompPolicyNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Policy Number</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="workersCompExpiryDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Expiry Date</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="space-y-6">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium">Safety Pledge</h3>
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="safetyPledgeAccepted"
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
@@ -341,28 +371,23 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Safety Pledge</FormLabel>
+                  <FormLabel>
+                    I pledge to maintain a safe working environment for high school students in compliance with all applicable labor laws and regulations.
+                  </FormLabel>
                   <FormDescription>
-                    I certify that my company follows all applicable labor laws and safety standards 
-                    for employing minors, and I agree to maintain a safe working environment.
+                    This includes providing proper training, supervision, and ensuring all safety protocols are followed.
                   </FormDescription>
-                  <FormMessage />
                 </div>
+                <FormMessage />
               </FormItem>
             )}
           />
-          
-          <div className="flex justify-end">
-            <Button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="w-full sm:w-auto"
-            >
-              {isSubmitting ? "Submitting..." : "Submit for Verification"}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+        </div>
+
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit for Verification"}
+        </Button>
+      </form>
+    </Form>
   );
 };

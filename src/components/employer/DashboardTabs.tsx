@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ListFilter, BarChart3, Settings, Users } from 'lucide-react';
@@ -11,37 +11,18 @@ import AnalyticsTab from './AnalyticsTab';
 import CreateJobTab from './CreateJobTab';
 import FreemiumInfoCard from './FreemiumInfoCard';
 import PremiumFeaturesBanner from './PremiumFeaturesBanner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
-// Mock job data
-const jobs = [
-  {
-    id: '1',
-    title: 'Cashier',
-    company: 'Local Market',
-    location: 'San Francisco, CA',
-    posted: '2023-11-03',
-    status: 'active',
-    applicants: 8
-  },
-  {
-    id: '2',
-    title: 'Stock Associate',
-    company: 'Retail Store',
-    location: 'Oakland, CA',
-    posted: '2023-10-27',
-    status: 'active',
-    applicants: 5
-  },
-  {
-    id: '3',
-    title: 'Weekend Server',
-    company: 'Cafe Bruno',
-    location: 'Berkeley, CA',
-    posted: '2023-10-15',
-    status: 'closed',
-    applicants: 12
-  }
-];
+interface JobPosting {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  posted: string;
+  status: string;
+  applicants: number;
+}
 
 interface DashboardTabsProps {
   activeTab: string;
@@ -50,6 +31,49 @@ interface DashboardTabsProps {
 
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const [jobPostings, setJobPostings] = useState<JobPosting[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('jobs')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching jobs:', error);
+          return;
+        }
+
+        if (data) {
+          const formattedJobs = data.map(job => ({
+            id: job.id,
+            title: job.title,
+            company: job.company_name,
+            location: `${job.location_city}, ${job.location_state}`,
+            posted: job.posted_date,
+            status: 'active', // You may want to add a status field to your jobs table
+            applicants: 0 // This would ideally come from a count of applications
+          }));
+          setJobPostings(formattedJobs);
+        }
+      } catch (err) {
+        console.error('Failed to fetch jobs:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (activeTab === 'postings') {
+      fetchJobs();
+    }
+  }, [activeTab, user]);
 
   return (
     <>
@@ -85,8 +109,8 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
             
           <TabsContent value="postings">
             <PostingsTab 
-              jobPostings={jobs} 
-              isMobile={isMobile}
+              jobPostings={jobPostings} 
+              loading={loading}
               setActiveTab={setActiveTab}
             />
           </TabsContent>

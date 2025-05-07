@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -77,14 +76,54 @@ const JobPostForm = ({ onSuccess, onCancel }: JobPostFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const { data: jobData, error } = await supabase
+      // Parse location into city and state
+      const [city = '', state = ''] = data.location.split(',').map(s => s.trim());
+      
+      // Parse salary into min and max
+      const salaryText = data.salary.replace(/[^0-9.-]/g, ' ');
+      const salaryNumbers = salaryText.split(/\s+/).filter(Boolean).map(Number);
+      const payRateMin = salaryNumbers.length > 0 ? salaryNumbers[0] : 0;
+      const payRateMax = salaryNumbers.length > 1 ? salaryNumbers[1] : payRateMin;
+      
+      // Get pay period from salary
+      let payRatePeriod = 'hourly';
+      if (data.salary.toLowerCase().includes('week')) {
+        payRatePeriod = 'weekly';
+      } else if (data.salary.toLowerCase().includes('month')) {
+        payRatePeriod = 'monthly';
+      } else if (data.salary.toLowerCase().includes('year')) {
+        payRatePeriod = 'yearly';
+      }
+
+      // Split requirements into array
+      const requirementsArray = data.requirements
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      const jobData = {
+        title: data.title,
+        company_name: data.company,
+        location_city: city,
+        location_state: state,
+        location_zip: '', // Could be added as a field to the form
+        job_type: data.jobType,
+        pay_rate_min: payRateMin,
+        pay_rate_max: payRateMax,
+        pay_rate_period: payRatePeriod,
+        description: data.description,
+        requirements: requirementsArray,
+        experience_level: 'entry-level', // Could be added as a field to the form
+        is_remote: data.isRemote,
+        is_featured: data.isPremium,
+        is_premium: data.isPremium,
+        posted_date: new Date().toISOString(),
+        hours_per_week: 20 // Default for high school students
+      };
+
+      const { data: jobResult, error } = await supabase
         .from('jobs')
-        .insert({
-          ...data,
-          user_id: user.id,
-          status: 'active',
-          is_premium: data.isPremium
-        })
+        .insert(jobData)
         .select('id')
         .single();
 
@@ -92,7 +131,7 @@ const JobPostForm = ({ onSuccess, onCancel }: JobPostFormProps) => {
         throw error;
       }
 
-      setCreatedJobId(jobData.id);
+      setCreatedJobId(jobResult.id);
 
       if (data.isPremium) {
         setShowPremiumOptions(true);
@@ -102,7 +141,7 @@ const JobPostForm = ({ onSuccess, onCancel }: JobPostFormProps) => {
           description: "Your job has been posted and is now live"
         });
         
-        onSuccess(jobData.id);
+        onSuccess(jobResult.id);
       }
     } catch (error: any) {
       console.error('Error posting job:', error);
