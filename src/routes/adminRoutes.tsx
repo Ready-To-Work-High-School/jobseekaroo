@@ -16,7 +16,9 @@ export const AdminRoutes = (
     {/* Admin routes */}
     <Route path="/admin" element={
       <ProtectedRoute adminOnly>
-        <AdminPanel />
+        <Layout>
+          <AdminPanel />
+        </Layout>
       </ProtectedRoute>
     } />
     <Route path="/admin/dashboard" element={

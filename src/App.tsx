@@ -9,6 +9,7 @@ import AutoRecoveryErrorBoundary from './components/ErrorRecovery/AutoRecoveryEr
 import DiagnosticMenuButton from './components/ErrorRecovery/DiagnosticMenuButton';
 import ScrollToTop from './components/navigation/ScrollToTop';
 import { motion } from 'framer-motion'; 
+import AdminRoutes from './routes/adminRoutes';
 
 // Import all necessary route components
 import Home from './pages/Home';
@@ -21,7 +22,6 @@ import Profile from './pages/Profile';
 import Applications from './pages/Applications';
 import ErrorPage from './pages/ErrorPage';
 import EmployerDashboard from './pages/EmployerDashboard';
-import AdminDashboard from './pages/AdminDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import NotFound from './pages/NotFound';
@@ -48,6 +48,9 @@ import EmployerOnboarding from './pages/employer/EmployerOnboarding';
 import EmployerKanban from './pages/EmployerKanban';
 import EmployerApplicants from './pages/employer/EmployerApplicants';
 import EmployerCalendar from './pages/employer/EmployerCalendar';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminPanel from './pages/AdminPanel';
+import TestAdmin from './pages/TestAdmin';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -83,7 +86,6 @@ function App() {
               <Route path="/applications" element={<Applications />} />
               <Route path="/error" element={<ErrorPage />} />
               <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-              <Route path="/admin-dashboard" element={<AdminDashboard />} />
               <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
               <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
               <Route path="/skill-development" element={<SkillDevelopment />} />
@@ -99,6 +101,7 @@ function App() {
               <Route path="/school-integration" element={<SchoolIntegration />} />
               <Route path="/schedule" element={<SchedulePage />} />
               <Route path="/test" element={<TestPage />} />
+              <Route path="/test-admin" element={<TestAdmin />} />
               <Route path="/index" element={<Index />} />
               <Route path="/about" element={<Index />} />
               <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
@@ -112,6 +115,14 @@ function App() {
               <Route path="/employer/candidates" element={<EmployerKanban />} />
               <Route path="/employer/applicants" element={<EmployerApplicants />} />
               <Route path="/employer/calendar" element={<EmployerCalendar />} />
+              
+              {/* Include direct routes to admin pages for fallback/compatibility */}
+              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              
+              {/* Include all admin routes from the adminRoutes file */}
+              {AdminRoutes}
+              
               <Route path="*" element={<NotFound />} />
             </Routes>
             <MobileBottomNavigation />

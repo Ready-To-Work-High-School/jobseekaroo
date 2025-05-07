@@ -16,13 +16,22 @@ const ProtectedRoute = ({ children, adminOnly, requiredRoles }: ProtectedRoutePr
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('ProtectedRoute - checking access:', { 
+      user: !!user, 
+      adminOnly, 
+      isAdmin, 
+      userType: userProfile?.user_type 
+    });
+    
     if (!user) {
+      console.log('ProtectedRoute - redirecting to sign-in: no user');
       navigate('/sign-in', { state: { from: window.location.pathname } });
       return;
     }
 
     // Check admin access if required
     if (adminOnly && !isAdmin) {
+      console.log('ProtectedRoute - redirecting to home: admin required but user is not admin');
       navigate('/');
       return;
     }
@@ -31,10 +40,13 @@ const ProtectedRoute = ({ children, adminOnly, requiredRoles }: ProtectedRoutePr
     if (requiredRoles && userProfile) {
       const userRole = userProfile.user_type;
       if (!userRole || !requiredRoles.includes(userRole)) {
+        console.log('ProtectedRoute - redirecting to home: role required but user does not have it');
         navigate('/');
         return;
       }
     }
+    
+    console.log('ProtectedRoute - access granted');
   }, [user, userProfile, adminOnly, requiredRoles, navigate, isAdmin]);
 
   if (!user) {
