@@ -1,127 +1,48 @@
 
-import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Card } from '@/components/ui/card';
-import { 
-  fetchUserNotifications, 
-  markNotificationAsRead 
-} from '@/contexts/auth/services/notificationService';
-import { formatDistanceToNow } from 'date-fns';
+import React from 'react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from '@/contexts/auth';
 
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: string;
-  link: string | null;
-  read: boolean;
-  created_at: string;
-}
-
-interface NotificationsDropdownProps {
-  onClose: () => void;
-  onNotificationsRead: (count: number) => void;
-}
-
-const NotificationsDropdown = ({ onClose, onNotificationsRead }: NotificationsDropdownProps) => {
+const NotificationsDropdown = () => {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [hasNotifications, setHasNotifications] = React.useState(false);
   
-  useEffect(() => {
-    const loadNotifications = async () => {
-      if (user) {
-        setIsLoading(true);
-        const data = await fetchUserNotifications(user.id);
-        setNotifications(data as Notification[]);
-        setIsLoading(false);
-      }
-    };
-    
-    loadNotifications();
-  }, [user]);
-  
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onClose]);
-  
-  const handleNotificationClick = async (notification: Notification) => {
-    if (!notification.read) {
-      await markNotificationAsRead(notification.id);
-      setNotifications(prev => 
-        prev.map(n => n.id === notification.id ? { ...n, read: true } : n)
-      );
-      onNotificationsRead(1);
-    }
-  };
+  // Dummy check for notifications
+  React.useEffect(() => {
+    // Simulate checking for notifications
+    const hasUnread = Math.random() > 0.5;
+    setHasNotifications(hasUnread);
+  }, []);
   
   return (
-    <Card 
-      ref={dropdownRef}
-      className="absolute right-0 mt-2 w-80 max-h-96 overflow-auto z-50 shadow-lg"
-    >
-      <div className="p-2 border-b bg-muted/50">
-        <h3 className="font-medium">Notifications</h3>
-      </div>
-      
-      <div className="divide-y">
-        {isLoading ? (
-          <div className="p-4 text-center text-muted-foreground">Loading notifications...</div>
-        ) : notifications.length > 0 ? (
-          notifications.map(notification => (
-            <div 
-              key={notification.id} 
-              className={`p-3 hover:bg-muted/50 cursor-pointer ${!notification.read ? 'bg-blue-50' : ''}`}
-              onClick={() => handleNotificationClick(notification)}
-            >
-              {notification.link ? (
-                <Link to={notification.link} className="block">
-                  <NotificationContent notification={notification} />
-                </Link>
-              ) : (
-                <NotificationContent notification={notification} />
-              )}
-            </div>
-          ))
-        ) : (
-          <div className="p-4 text-center text-muted-foreground">No notifications</div>
-        )}
-      </div>
-      
-      {notifications.length > 0 && (
-        <div className="p-2 border-t bg-muted/50">
-          <Link 
-            to="/admin/notifications" 
-            className="text-xs text-blue-600 hover:underline block text-center"
-          >
-            View all notifications
-          </Link>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="h-5 w-5" />
+          {hasNotifications && (
+            <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500" />
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80 p-0" align="end">
+        <div className="p-4 border-b">
+          <h4 className="text-sm font-medium">Notifications</h4>
         </div>
-      )}
-    </Card>
-  );
-};
-
-const NotificationContent = ({ notification }: { notification: Notification }) => {
-  return (
-    <>
-      <h4 className="font-medium text-sm">{notification.title}</h4>
-      <p className="text-xs text-muted-foreground line-clamp-2">{notification.message}</p>
-      <p className="text-xs text-muted-foreground mt-1">
-        {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
-      </p>
-    </>
+        <div className="p-4">
+          <p className="text-sm text-muted-foreground">
+            {hasNotifications 
+              ? "You have new notifications" 
+              : "No new notifications"}
+          </p>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search, Shield } from "lucide-react";
 import { SearchBar } from "./SearchBar";
-import { NotificationsDropdown } from "./NotificationsDropdown";
+import NotificationsDropdown from "./NotificationsDropdown";
 import { useAuth } from "@/contexts/auth";
-import { ModeToggle } from "@/components/theme/ThemeToggle";
+import { ModeToggle } from "@/components/theme/theme-toggle";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 
 export const NavbarRight = () => {
