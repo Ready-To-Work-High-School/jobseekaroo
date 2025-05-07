@@ -14,6 +14,7 @@ import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { Badge } from '@/components/ui/badge';
 import CalendlyUserProfile from "@/components/employer/calendar/CalendlyUserProfile";
 
+// Move types to the top for better organization
 interface CalendlyEvent {
   uri: string;
   name?: string;
@@ -109,6 +110,7 @@ const EmployerCalendar = () => {
     }, 500);
   };
   
+  // Pagination methods
   const loadMoreEvents = () => {
     if (pagination?.next_page) {
       setPreviousPages(prev => [...prev, window.location.href]);

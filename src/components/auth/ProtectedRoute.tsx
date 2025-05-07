@@ -1,6 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth'; // Updated import
 import { useEffect } from 'react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 
