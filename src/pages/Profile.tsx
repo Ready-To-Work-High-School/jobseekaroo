@@ -15,12 +15,12 @@ import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { supabase } from '@/lib/supabase';
 
-// Define simplified types to avoid circular dependencies
-type EmployerStats = {
+// Define a simple type for employer stats without circular references
+interface EmployerStats {
   jobsPosted: number;
   hires: number;
   applications: number;
-};
+}
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
