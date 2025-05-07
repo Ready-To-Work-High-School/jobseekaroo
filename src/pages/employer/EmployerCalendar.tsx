@@ -1,116 +1,29 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { Layout } from '@/components/Layout';
-import { PageHeader } from '@/components/PageHeader';
+import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Clock, ListFilter, List, Plus, User, Users, Calendar as CalendarIcon } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
+import { Calendar, Clock, Globe, Bell, Settings, Users, CalendarDays, Webhook } from 'lucide-react';
+import CalendlyEmbed from '@/components/calendly/CalendlyEmbed';
 import CalendlyUserProfile from '@/components/employer/calendar/CalendlyUserProfile';
 import CalendlyScheduledEvents from '@/components/employer/calendar/CalendlyScheduledEvents';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
+import { useFadeIn, useSlideIn } from '@/utils/animations';
+import { Badge } from "@/components/ui/badge";
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
-// Mock Calendly API data
-const mockUser = {
-  name: "John Doe",
-  email: "john.doe@fakeaddress.com",
-  timezone: "America/New_York",
-  scheduling_url: "https://www.calendly.com/john-doe",
-  slug: "john-doe",
-  avatar_url: null
-};
+interface CalendlyUser {
+  name: string;
+  email: string;
+  timezone: string;
+  scheduling_url: string;
+  slug: string;
+  avatar_url?: string | null;
+}
 
-const mockEventTypes = [
-  {
-    uri: "https://api.calendly.com/event_types/A",
-    name: "30 Minute Meeting",
-    description: "Half hour meeting to discuss project needs",
-    duration: 30,
-    slug: "30min",
-    color: "#0088ff",
-    active: true,
-    secret: false,
-    scheduling_url: "https://calendly.com/john-doe/30min"
-  },
-  {
-    uri: "https://api.calendly.com/event_types/B",
-    name: "60 Minute Interview",
-    description: "Full interview session with candidate",
-    duration: 60,
-    slug: "interview",
-    color: "#ff8800",
-    active: true,
-    secret: false,
-    scheduling_url: "https://calendly.com/john-doe/interview"
-  },
-  {
-    uri: "https://api.calendly.com/event_types/C",
-    name: "15 Minute Check-in",
-    description: "Quick follow-up meeting",
-    duration: 15,
-    slug: "checkin",
-    color: "#00cc44",
-    active: true,
-    secret: false,
-    scheduling_url: "https://calendly.com/john-doe/checkin"
-  }
-];
-
-const mockEvents = [
-  {
-    uri: "https://api.calendly.com/scheduled_events/1",
-    name: "Interview with Jane Smith",
-    status: "active",
-    start_time: "2025-05-15T14:00:00Z",
-    end_time: "2025-05-15T15:00:00Z",
-    location: { type: "Zoom" },
-    created_at: "2025-05-01T12:30:00Z",
-    updated_at: "2025-05-01T12:30:00Z",
-    event_type: "60 Minute Interview",
-    invitees_counter: { total: 1, active: 1, limit: 1 }
-  },
-  {
-    uri: "https://api.calendly.com/scheduled_events/2",
-    name: "Project Discussion with Bob Johnson",
-    status: "active",
-    start_time: "2025-05-16T10:00:00Z",
-    end_time: "2025-05-16T10:30:00Z",
-    location: { type: "Google Meet" },
-    created_at: "2025-05-02T08:15:00Z",
-    updated_at: "2025-05-02T08:15:00Z",
-    event_type: "30 Minute Meeting",
-    invitees_counter: { total: 1, active: 1, limit: 1 }
-  },
-  {
-    uri: "https://api.calendly.com/scheduled_events/3",
-    name: "Check-in with Mark Williams",
-    status: "canceled",
-    start_time: "2025-05-14T09:00:00Z",
-    end_time: "2025-05-14T09:15:00Z",
-    location: { type: "Phone Call" },
-    created_at: "2025-05-03T14:20:00Z",
-    updated_at: "2025-05-09T11:30:00Z",
-    event_type: "15 Minute Check-in",
-    invitees_counter: { total: 1, active: 0, limit: 1 }
-  },
-  {
-    uri: "https://api.calendly.com/scheduled_events/4",
-    name: "Interview with Alex Rodriguez",
-    status: "active",
-    start_time: "2025-05-18T13:00:00Z",
-    end_time: "2025-05-18T14:00:00Z",
-    location: { type: "Microsoft Teams" },
-    created_at: "2025-05-04T09:45:00Z",
-    updated_at: "2025-05-04T09:45:00Z",
-    event_type: "60 Minute Interview",
-    invitees_counter: { total: 1, active: 1, limit: 1 }
-  }
-];
-
-interface ScheduledEvent {
+interface CalendlyEvent {
   uri: string;
   name?: string;
   status: string;
@@ -130,512 +43,645 @@ interface ScheduledEvent {
   };
 }
 
-const EmployerCalendar = () => {
-  const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const { userProfile } = useAuth();
-  const hasPremium = userProfile?.preferences?.hasPremium === true;
-  
-  // User state
-  const [user, setUser] = useState<any>(null);
-  const [loadingUser, setLoadingUser] = useState(true);
-  
-  // Event types state
-  const [eventTypes, setEventTypes] = useState<any[]>([]);
-  const [loadingEventTypes, setLoadingEventTypes] = useState(true);
-  
-  // Event types by user state
-  const [eventTypesByUser, setEventTypesByUser] = useState<any[]>([]);
-  const [loadingEventTypesByUser, setLoadingEventTypesByUser] = useState(true);
+interface EventType {
+  uri: string;
+  name: string;
+  description?: string;
+  active: boolean;
+  scheduling_url: string;
+  duration: number; // Minutes
+  color: string;
+}
 
-  // Scheduled events state
-  const [events, setEvents] = useState<ScheduledEvent[]>([]);
-  const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventPagination, setEventPagination] = useState<{count: number, next_page: string | null} | null>(null);
-  const [eventsHistory, setEventsHistory] = useState<string[]>([]);
-  const [currentEventPage, setCurrentEventPage] = useState("");
+interface Webhook {
+  uri: string;
+  callback_url: string;
+  created_at: string;
+  updated_at: string;
+  events: string[];
+  scope: string;
+  organization: string;
+}
+
+const EmployerCalendar = () => {
+  const { user, userProfile } = useAuth();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("schedule");
+  const [isLoading, setIsLoading] = useState(true);
+  const [calendlyUser, setCalendlyUser] = useState<CalendlyUser | null>(null);
+  const [events, setEvents] = useState<CalendlyEvent[]>([]);
+  const [eventTypes, setEventTypes] = useState<EventType[]>([]);
+  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
+  const [pagination, setPagination] = useState<{count: number, next_page: string | null} | null>(null);
+  const [previousPages, setPreviousPages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState<string | null>(null);
   
-  // Fetch user data
+  const fadeIn = useFadeIn(100);
+  const slideIn = useSlideIn('left', 200);
+  
+  // Mock API call for getting Calendly user data
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // In a real app, this would be an API call
-        // const response = await fetch('api.calendly.com/users/me');
-        // const data = await response.json();
-        
-        // Using mock data for now
-        setTimeout(() => {
-          setUser(mockUser);
-          setLoadingUser(false);
-        }, 800);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load calendar profile",
-          variant: "destructive",
-        });
-        setLoadingUser(false);
-      }
-    };
+    // This would be replaced with a real API call to your backend
+    // which would then call the Calendly API using your API key
+    setIsLoading(true);
     
-    fetchUser();
-  }, [toast]);
-  
-  // Fetch event types
-  useEffect(() => {
-    const fetchEventTypes = async () => {
-      try {
-        // In a real app, this would be an API call
-        // const response = await fetch('api.calendly.com/event_types');
-        // const data = await response.json();
-        
-        // Using mock data for now
-        setTimeout(() => {
-          setEventTypes(mockEventTypes);
-          setLoadingEventTypes(false);
-        }, 1000);
-      } catch (error) {
-        console.error('Error fetching event types:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load event types",
-          variant: "destructive",
-        });
-        setLoadingEventTypes(false);
-      }
-    };
-    
-    fetchEventTypes();
-  }, [toast]);
-  
-  // Fetch event types by user
-  useEffect(() => {
-    const fetchEventTypesByUser = async () => {
-      try {
-        // In a real app, this would be an API call with the user parameter
-        // const response = await fetch('api.calendly.com/event_types?user=<user_id>');
-        // const data = await response.json();
-        
-        // Using mock data for now
-        setTimeout(() => {
-          setEventTypesByUser(mockEventTypes);
-          setLoadingEventTypesByUser(false);
-        }, 1200);
-      } catch (error) {
-        console.error('Error fetching event types by user:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load event types by user",
-          variant: "destructive",
-        });
-        setLoadingEventTypesByUser(false);
-      }
-    };
-    
-    fetchEventTypesByUser();
-  }, [toast]);
-  
-  // Fetch scheduled events
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        // In a real app, this would be an API call
-        // const response = await fetch('api.calendly.com/scheduled_events');
-        // const data = await response.json();
-        
-        // Using mock data for now
-        setTimeout(() => {
-          setEvents(mockEvents);
-          setEventPagination({
-            count: mockEvents.length,
-            next_page: null
-          });
-          setCurrentEventPage("initial");
-          setLoadingEvents(false);
-        }, 1200);
-      } catch (error) {
-        console.error('Error fetching scheduled events:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load scheduled events",
-          variant: "destructive",
-        });
-        setLoadingEvents(false);
-      }
-    };
-    
-    fetchEvents();
-  }, [toast]);
-  
-  // Handle load more events
-  const handleLoadMoreEvents = useCallback(() => {
-    if (!eventPagination?.next_page) return;
-    
-    setLoadingEvents(true);
-    const previousPage = currentEventPage;
-    
-    // Simulate API call with a delay
-    setTimeout(() => {
-      const newEvents = [
+    // Simulating API delay
+    const timer = setTimeout(() => {
+      // Mock user data
+      setCalendlyUser({
+        name: userProfile?.full_name || "John Doe",
+        email: userProfile?.email || "john.doe@example.com",
+        timezone: "America/New_York",
+        scheduling_url: "https://calendly.com/johndoe",
+        slug: "johndoe",
+        avatar_url: userProfile?.avatar_url || null
+      });
+      
+      // Mock scheduled events
+      setEvents([
         {
-          uri: "https://api.calendly.com/scheduled_events/5",
-          name: "Follow-up with Sarah Lee",
+          uri: "https://api.calendly.com/scheduled_events/123",
+          name: "Initial Consultation",
           status: "active",
-          start_time: "2025-05-20T15:30:00Z",
-          end_time: "2025-05-20T16:00:00Z",
-          location: { type: "Google Meet" },
-          created_at: "2025-05-05T10:15:00Z",
-          updated_at: "2025-05-05T10:15:00Z",
-          event_type: "30 Minute Meeting",
-          invitees_counter: { total: 1, active: 1, limit: 1 }
+          start_time: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+          end_time: new Date(Date.now() + 86400000 + 3600000).toISOString(), // Tomorrow + 1 hour
+          location: {
+            type: "web_conferencing",
+            location: "Zoom"
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          event_type: "consultation",
+          invitees_counter: {
+            total: 1,
+            active: 1,
+            limit: 1
+          }
         },
         {
-          uri: "https://api.calendly.com/scheduled_events/6",
-          name: "Quick check-in with Tom Brown",
+          uri: "https://api.calendly.com/scheduled_events/456",
+          name: "Follow-up Meeting",
           status: "active",
-          start_time: "2025-05-21T09:00:00Z",
-          end_time: "2025-05-21T09:15:00Z",
-          location: { type: "Phone Call" },
-          created_at: "2025-05-06T16:45:00Z",
-          updated_at: "2025-05-06T16:45:00Z",
-          event_type: "15 Minute Check-in",
-          invitees_counter: { total: 1, active: 1, limit: 1 }
+          start_time: new Date(Date.now() + 172800000).toISOString(), // Day after tomorrow
+          end_time: new Date(Date.now() + 172800000 + 3600000).toISOString(), // Day after tomorrow + 1 hour
+          location: {
+            type: "physical",
+            location: "Office"
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          event_type: "meeting",
+          invitees_counter: {
+            total: 3,
+            active: 2,
+            limit: 5
+          }
         }
-      ];
+      ]);
       
-      setEvents(prev => [...prev, ...newEvents]);
-      setEventsHistory(prev => [...prev, previousPage]);
-      setCurrentEventPage("page-2");
-      setEventPagination({
-        count: newEvents.length,
-        next_page: null // No more pages
+      // Mock event types
+      setEventTypes([
+        {
+          uri: "https://api.calendly.com/event_types/A",
+          name: "30 Minute Meeting",
+          description: "Quick consultation session",
+          active: true,
+          scheduling_url: "https://calendly.com/johndoe/30min",
+          duration: 30,
+          color: "#0069ff"
+        },
+        {
+          uri: "https://api.calendly.com/event_types/B",
+          name: "60 Minute Meeting",
+          description: "In-depth consultation",
+          active: true,
+          scheduling_url: "https://calendly.com/johndoe/60min",
+          duration: 60,
+          color: "#f5a623"
+        }
+      ]);
+      
+      // Mock webhook subscriptions
+      setWebhooks([
+        {
+          uri: "https://api.calendly.com/webhook_subscriptions/123",
+          callback_url: "https://your-app.com/api/calendly-webhook",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          events: ["invitee.created", "invitee.canceled"],
+          scope: "organization",
+          organization: "https://api.calendly.com/organizations/ABC123"
+        }
+      ]);
+      
+      // Mock pagination
+      setPagination({
+        count: 2,
+        next_page: null
       });
-      setLoadingEvents(false);
-    }, 800);
-  }, [eventPagination, currentEventPage]);
-  
-  // Handle previous page of events
-  const handlePreviousEvents = useCallback(() => {
-    if (eventsHistory.length === 0) return;
-    
-    setLoadingEvents(true);
-    
-    // Simulate API call with a delay
-    setTimeout(() => {
-      // Remove the current events added from the "next page"
-      const newEvents = mockEvents;
       
-      setEvents(newEvents);
-      const updatedHistory = [...eventsHistory];
-      updatedHistory.pop(); // Remove the last page from history
-      setEventsHistory(updatedHistory);
-      setCurrentEventPage("initial");
-      setEventPagination({
-        count: mockEvents.length,
-        next_page: "https://api.calendly.com/scheduled_events?page=2" // Re-enable next page option
-      });
-      setLoadingEvents(false);
-    }, 800);
-  }, [eventsHistory]);
+      setIsLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [userProfile]);
   
-  // Format upcoming event dates for display
-  const getUpcomingEventDisplay = () => {
-    const now = new Date();
-    const futureEvents = events
-      .filter(event => new Date(event.start_time) > now && event.status === 'active')
-      .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
-      
-    if (futureEvents.length === 0) {
-      return {
-        date: "No upcoming events",
-        time: "",
-        title: "Schedule your next meeting"
-      };
+  // Function to load more events
+  const handleLoadMore = useCallback(() => {
+    if (!pagination || !pagination.next_page) return;
+    
+    setIsLoading(true);
+    
+    // In a real implementation, this would call your backend
+    // which would then make a request to the next_page URL
+    
+    // Store current page for "back" navigation
+    if (currentPage) {
+      setPreviousPages(prev => [...prev, currentPage]);
     }
+    setCurrentPage(pagination.next_page);
     
-    const nextEvent = futureEvents[0];
-    const eventDate = new Date(nextEvent.start_time);
+    // Simulate API delay
+    setTimeout(() => {
+      // Mock more events
+      setEvents(prev => [
+        ...prev,
+        {
+          uri: "https://api.calendly.com/scheduled_events/789",
+          name: "Project Review",
+          status: "active",
+          start_time: new Date(Date.now() + 259200000).toISOString(), // 3 days from now
+          end_time: new Date(Date.now() + 259200000 + 5400000).toISOString(), // 3 days from now + 1.5 hours
+          location: {
+            type: "web_conferencing",
+            location: "Microsoft Teams"
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          event_type: "review",
+          invitees_counter: {
+            total: 4,
+            active: 4,
+            limit: 10
+          }
+        }
+      ]);
+      
+      // Update pagination to indicate no more pages
+      setPagination({
+        count: 3,
+        next_page: null
+      });
+      
+      setIsLoading(false);
+    }, 1000);
+  }, [pagination, currentPage]);
+  
+  // Function to go back to previous page
+  const handlePrevious = useCallback(() => {
+    if (previousPages.length === 0) return;
     
-    return {
-      date: format(eventDate, "MMMM d, yyyy"),
-      time: format(eventDate, "h:mm a"),
-      title: nextEvent.name || "Scheduled Meeting"
-    };
+    setIsLoading(true);
+    
+    // In a real implementation, this would call your backend
+    // which would make a request to the previous page URL
+    
+    // Get the last page from history
+    const lastPage = previousPages[previousPages.length - 1];
+    setCurrentPage(lastPage);
+    setPreviousPages(prev => prev.slice(0, -1));
+    
+    // Simulate API delay
+    setTimeout(() => {
+      // Simulate returning to previous events state
+      // In a real app, you would fetch the actual data for that page
+      setEvents([
+        {
+          uri: "https://api.calendly.com/scheduled_events/123",
+          name: "Initial Consultation",
+          status: "active",
+          start_time: new Date(Date.now() + 86400000).toISOString(),
+          end_time: new Date(Date.now() + 86400000 + 3600000).toISOString(),
+          location: {
+            type: "web_conferencing",
+            location: "Zoom"
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          event_type: "consultation",
+          invitees_counter: {
+            total: 1,
+            active: 1,
+            limit: 1
+          }
+        },
+        {
+          uri: "https://api.calendly.com/scheduled_events/456",
+          name: "Follow-up Meeting",
+          status: "active",
+          start_time: new Date(Date.now() + 172800000).toISOString(),
+          end_time: new Date(Date.now() + 172800000 + 3600000).toISOString(),
+          location: {
+            type: "physical",
+            location: "Office"
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          event_type: "meeting",
+          invitees_counter: {
+            total: 3,
+            active: 2,
+            limit: 5
+          }
+        }
+      ]);
+      
+      // Restore pagination state
+      setPagination({
+        count: 2,
+        next_page: "https://api.calendly.com/scheduled_events?page=2"
+      });
+      
+      setIsLoading(false);
+    }, 1000);
+  }, [previousPages]);
+  
+  // Handler for creating a new webhook subscription
+  const handleCreateWebhook = () => {
+    // In a real implementation, this would call your backend
+    // which would then create a webhook via the Calendly API
+    toast({
+      title: "Webhook Creation",
+      description: "This would create a new webhook subscription in a real implementation.",
+    });
   };
   
-  const upcomingEvent = getUpcomingEventDisplay();
-  
-  const handleConnectCalendly = () => {
+  // Handler for deleting a webhook subscription
+  const handleDeleteWebhook = (webhookUri: string) => {
+    // In a real implementation, this would call your backend
+    // which would then delete the webhook via the Calendly API
+    setWebhooks(prev => prev.filter(webhook => webhook.uri !== webhookUri));
+    
     toast({
-      title: "Calendly Integration",
-      description: "This would open Calendly OAuth flow in a real implementation.",
+      title: "Webhook Deleted",
+      description: "Webhook subscription successfully removed.",
     });
   };
   
   return (
     <Layout>
-      <div className="container max-w-screen-xl mx-auto py-6 space-y-8">
-        <PageHeader
-          title="Calendar Management"
-          description="Manage your calendar scheduling and appointments"
-          icon={<Calendar className="h-6 w-6 text-primary" />}
-        />
-        
-        {/* Premium feature card for non-premium users */}
-        {!hasPremium && (
-          <Card className="bg-muted/50 border border-amber-200 dark:border-amber-900">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center text-amber-700 dark:text-amber-500">
-                <Badge variant="outline" className="mr-2 bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50">
-                  <Plus className="h-3 w-3 mr-1" />
-                  Premium
-                </Badge>
-                Calendar Integration
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                Upgrade to premium to connect your Calendly account and manage all your scheduling in one place.
-              </CardDescription>
-            </CardHeader>
-            <CardFooter className="pt-2">
-              <Button variant="default" className="bg-amber-500 hover:bg-amber-600 text-white" onClick={() => window.location.href = "/employer/premium-features"}>
-                Upgrade to Premium
-              </Button>
-            </CardFooter>
-          </Card>
-        )}
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left column - user profile and info */}
-          <div className="space-y-6">
-            <CalendlyUserProfile 
-              user={user} 
-              isLoading={loadingUser}
-            />
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <CalendarIcon className="h-5 w-5" />
-                  Upcoming Event
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-xl font-medium">{upcomingEvent.title}</div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{upcomingEvent.date}</span>
-                  </div>
-                  {upcomingEvent.time && (
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{upcomingEvent.time}</span>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0">
-                {hasPremium ? (
-                  <Button variant="outline" className="w-full" onClick={handleConnectCalendly}>
-                    {user ? "Manage Calendly Settings" : "Connect Calendly"}
-                  </Button>
-                ) : (
-                  <Button variant="outline" className="w-full" disabled>
-                    Premium Feature
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+      <div className={`container max-w-5xl mx-auto px-4 py-8 ${fadeIn}`}>
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold">Calendar Management</h1>
+            <Badge variant="outline" className="gap-1.5">
+              <Calendar className="h-3.5 w-3.5" />
+              Calendly Integration
+            </Badge>
           </div>
           
-          {/* Right column - scheduled events and event types */}
-          <div className="md:col-span-2 space-y-6">
-            <Tabs
-              defaultValue="upcoming"
-              value={activeTab}
-              onValueChange={setActiveTab}
-              className="w-full"
-            >
-              <TabsList className="grid grid-cols-3 mb-6">
-                <TabsTrigger value="upcoming" className="flex gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Upcoming</span>
-                </TabsTrigger>
-                <TabsTrigger value="events" className="flex gap-2">
-                  <List className="h-4 w-4" />
-                  <span>Events</span>
-                </TabsTrigger>
-                <TabsTrigger value="event-types" className="flex gap-2">
-                  <ListFilter className="h-4 w-4" />
-                  <span>Event Types</span>
-                </TabsTrigger>
-              </TabsList>
-              
-              {/* Upcoming tab */}
-              <TabsContent value="upcoming" className="space-y-6">
+          <CalendlyUserProfile user={calendlyUser} isLoading={isLoading} />
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+              <TabsTrigger value="schedule" className="flex gap-1.5">
+                <Calendar className="h-4 w-4" />
+                <span>Schedule</span>
+              </TabsTrigger>
+              <TabsTrigger value="events" className="flex gap-1.5">
+                <CalendarDays className="h-4 w-4" />
+                <span>Events</span>
+              </TabsTrigger>
+              <TabsTrigger value="event-types" className="flex gap-1.5">
+                <Clock className="h-4 w-4" />
+                <span>Event Types</span>
+              </TabsTrigger>
+              <TabsTrigger value="webhooks" className="flex gap-1.5">
+                <Webhook className="h-4 w-4" />
+                <span>Webhooks</span>
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex gap-1.5 hidden lg:flex">
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="schedule" className="mt-6">
+              <div className="grid gap-6">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Calendar Overview</CardTitle>
+                  <CardHeader className="pb-3">
+                    <CardTitle>Book Your Meetings</CardTitle>
                     <CardDescription>
-                      View and manage your upcoming calendar events
+                      Use your Calendly scheduling page to allow candidates to book time with you.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {hasPremium ? (
-                      <div className="p-8 text-center">
-                        {/* In a real implementation, this would show a calendar or schedule view */}
-                        <Calendar className="h-12 w-12 mx-auto mb-4 text-primary" />
-                        <h3 className="text-lg font-medium mb-2">Your Calendar</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Connect your Calendly account to display your calendar here
-                        </p>
-                        <Button onClick={handleConnectCalendly}>
-                          Connect Calendly
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="p-8 text-center">
-                        <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-medium mb-2">Premium Feature</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Upgrade to premium to connect your calendar
-                        </p>
-                        <Button onClick={() => window.location.href = "/employer/premium-features"}>
-                          Upgrade to Premium
-                        </Button>
-                      </div>
-                    )}
+                    <CalendlyEmbed url={calendlyUser?.scheduling_url} />
                   </CardContent>
                 </Card>
-              </TabsContent>
-              
-              {/* Events tab */}
-              <TabsContent value="events" className="space-y-6">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Scheduled Events</CardTitle>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="events" className="mt-6">
+              <div className="grid gap-6">
+                <Card className="overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center justify-between">
+                      <span>Scheduled Events</span>
+                      <Badge variant="secondary" className="text-xs">
+                        {pagination?.count || 0} Total
+                      </Badge>
+                    </CardTitle>
                     <CardDescription>
-                      View all your scheduled meetings and events
+                      View and manage your upcoming appointments.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-4">
-                    {hasPremium ? (
-                      <CalendlyScheduledEvents 
-                        events={events}
-                        isLoading={loadingEvents}
-                        pagination={eventPagination}
-                        onLoadMore={handleLoadMoreEvents}
-                        onPrevious={handlePreviousEvents}
-                        hasPrevious={eventsHistory.length > 0}
-                      />
-                    ) : (
-                      <div className="p-8 text-center">
-                        <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-medium mb-2">Premium Feature</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Upgrade to premium to view and manage your scheduled events
-                        </p>
-                        <Button onClick={() => window.location.href = "/employer/premium-features"}>
-                          Upgrade to Premium
-                        </Button>
-                      </div>
-                    )}
+                  <CardContent>
+                    <CalendlyScheduledEvents 
+                      events={events} 
+                      isLoading={isLoading}
+                      pagination={pagination}
+                      onLoadMore={handleLoadMore}
+                      onPrevious={handlePrevious}
+                      hasPrevious={previousPages.length > 0}
+                    />
                   </CardContent>
                 </Card>
-              </TabsContent>
-              
-              {/* Event Types tab */}
-              <TabsContent value="event-types" className="space-y-6">
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="event-types" className="mt-6">
+              <div className="grid gap-6">
                 <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Event Types</CardTitle>
+                  <CardHeader className="pb-3">
+                    <CardTitle>Your Event Types</CardTitle>
                     <CardDescription>
-                      Manage your meeting types and availability
+                      Manage your available meeting types and durations.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-4">
-                    {hasPremium ? (
-                      loadingEventTypes ? (
-                        <div className="space-y-4">
-                          {Array.from({ length: 3 }).map((_, i) => (
-                            <Card key={i} className="border-muted">
-                              <CardHeader className="pb-2">
-                                <div className="flex items-center justify-between">
-                                  <div className="h-5 w-48 bg-gray-200 animate-pulse rounded"></div>
-                                  <div className="h-5 w-24 bg-gray-200 animate-pulse rounded"></div>
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="space-y-2">
-                                  <div className="h-4 w-full bg-gray-200 animate-pulse rounded"></div>
-                                  <div className="h-4 w-3/4 bg-gray-200 animate-pulse rounded"></div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : eventTypes.length === 0 ? (
-                        <div className="text-center py-8">
-                          <ListFilter className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                          <h3 className="text-lg font-medium mb-2">No Event Types</h3>
-                          <p className="text-muted-foreground mb-4">
-                            You don't have any event types configured yet.
-                          </p>
-                          <Button>Create Your First Event Type</Button>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {eventTypes.map((eventType) => (
-                            <Card key={eventType.uri} className="border-muted hover:border-primary/20 transition-colors">
-                              <CardHeader className="pb-2">
-                                <div className="flex items-center justify-between">
-                                  <CardTitle className="text-base font-medium">{eventType.name}</CardTitle>
-                                  <Badge 
-                                    style={{ backgroundColor: eventType.color + '20', color: eventType.color, borderColor: eventType.color + '40' }}
-                                    variant="outline"
-                                  >
-                                    {eventType.duration} min
-                                  </Badge>
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="space-y-2">
-                                  <p className="text-sm text-muted-foreground">{eventType.description || "No description provided"}</p>
-                                  <div className="flex items-center gap-2">
-                                    <User className="h-4 w-4 text-muted-foreground" />
-                                    <a 
-                                      href={eventType.scheduling_url} 
-                                      target="_blank" 
-                                      rel="noopener noreferrer"
-                                      className="text-sm text-primary hover:underline"
-                                    >
-                                      {eventType.scheduling_url}
-                                    </a>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      )
+                  <CardContent>
+                    {isLoading ? (
+                      <div className="space-y-4">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                          <Card key={i} className="border-muted">
+                            <CardHeader className="pb-2">
+                              <div className="h-5 w-48 bg-gray-200 animate-pulse rounded"></div>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-2">
+                                <div className="h-4 w-full bg-gray-200 animate-pulse rounded"></div>
+                                <div className="h-4 w-3/4 bg-gray-200 animate-pulse rounded"></div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : eventTypes.length > 0 ? (
+                      <div className="space-y-4">
+                        {eventTypes.map(eventType => (
+                          <Card key={eventType.uri} className="border-muted hover:border-muted-foreground/20 transition-colors">
+                            <CardHeader className="pb-2">
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-base font-medium flex items-center">
+                                  <div 
+                                    className="h-3 w-3 rounded-full mr-2" 
+                                    style={{ backgroundColor: eventType.color }}
+                                  />
+                                  {eventType.name}
+                                </CardTitle>
+                                <Badge 
+                                  variant={eventType.active ? "default" : "secondary"}
+                                  className="text-xs"
+                                >
+                                  {eventType.duration} min
+                                </Badge>
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {eventType.description || "No description provided."}
+                              </p>
+                              <div className="text-sm flex items-center">
+                                <Globe className="h-4 w-4 mr-1.5 text-muted-foreground" />
+                                <a 
+                                  href={eventType.scheduling_url} 
+                                  className="text-primary hover:underline"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {eventType.scheduling_url.split('//')[1]}
+                                </a>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     ) : (
-                      <div className="p-8 text-center">
-                        <ListFilter className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-medium mb-2">Premium Feature</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Upgrade to premium to view and manage your event types
+                      <div className="text-center py-10">
+                        <Clock className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
+                        <h3 className="text-lg font-medium mb-2">No Event Types Found</h3>
+                        <p className="text-muted-foreground mb-6">
+                          Create your first event type on Calendly to get started.
                         </p>
-                        <Button onClick={() => window.location.href = "/employer/premium-features"}>
-                          Upgrade to Premium
+                        <Button asChild>
+                          <a 
+                            href="https://calendly.com/event_types/new" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Create Event Type
+                          </a>
                         </Button>
                       </div>
                     )}
                   </CardContent>
                 </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="webhooks" className="mt-6">
+              <div className="grid gap-6">
+                <Card className={slideIn}>
+                  <CardHeader className="pb-3">
+                    <CardTitle>Webhook Subscriptions</CardTitle>
+                    <CardDescription>
+                      Receive real-time notifications when events are scheduled, canceled, or updated.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {isLoading ? (
+                      <div className="space-y-4">
+                        {Array.from({ length: 2 }).map((_, i) => (
+                          <div key={i} className="p-4 border rounded-md">
+                            <div className="h-5 w-full bg-gray-200 animate-pulse rounded mb-4"></div>
+                            <div className="space-y-2">
+                              <div className="h-4 w-3/4 bg-gray-200 animate-pulse rounded"></div>
+                              <div className="h-4 w-1/2 bg-gray-200 animate-pulse rounded"></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : webhooks.length > 0 ? (
+                      <div className="space-y-4">
+                        {webhooks.map(webhook => (
+                          <div key={webhook.uri} className="p-4 border rounded-md">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h4 className="font-medium text-sm">Callback URL</h4>
+                                <a 
+                                  href={webhook.callback_url} 
+                                  className="text-primary text-sm hover:underline"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {webhook.callback_url}
+                                </a>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDeleteWebhook(webhook.uri)}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <div>
+                                <h4 className="text-xs font-medium text-muted-foreground">Events</h4>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {webhook.events.map(event => (
+                                    <Badge key={event} variant="secondary" className="text-xs">
+                                      {event}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <h4 className="text-xs font-medium text-muted-foreground">Created</h4>
+                                <p className="text-sm">
+                                  {format(new Date(webhook.created_at), 'MMM d, yyyy')}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Bell className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
+                        <h3 className="text-lg font-medium mb-2">No Webhook Subscriptions</h3>
+                        <p className="text-muted-foreground mb-6">
+                          Set up webhooks to get notified about scheduling events.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="flex justify-end">
+                    <Button onClick={handleCreateWebhook}>
+                      Add Webhook
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className={slideIn}>
+                  <CardHeader className="pb-3">
+                    <CardTitle>Webhook Integration Guide</CardTitle>
+                    <CardDescription>
+                      Learn how to integrate Calendly webhooks with your application.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-medium mb-1">1. Create a Webhook Endpoint</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Set up an HTTP endpoint in your application that can receive POST requests from Calendly.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-medium mb-1">2. Subscribe to Events</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Use the "Add Webhook" button to create a subscription to events like invitee.created or invitee.canceled.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-medium mb-1">3. Handle Webhook Payloads</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Process the JSON payload sent to your endpoint when events occur.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-muted/50 p-3 rounded-md">
+                        <h4 className="text-sm font-medium mb-2">Available Event Types</h4>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                          <li className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 bg-green-500 rounded-full"></span>
+                            invitee.created
+                          </li>
+                          <li className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 bg-red-500 rounded-full"></span>
+                            invitee.canceled
+                          </li>
+                          <li className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
+                            event_type.created
+                          </li>
+                          <li className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 bg-amber-500 rounded-full"></span>
+                            event_type.updated
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="settings" className="mt-6">
+              <div className="grid gap-6">
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle>Calendar Settings</CardTitle>
+                    <CardDescription>
+                      Manage your calendar preferences and integrations.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="font-medium mb-2">Connected Calendar</h3>
+                        <Badge variant="outline" className="gap-1.5">
+                          <Calendar className="h-3.5 w-3.5" />
+                          Google Calendar
+                        </Badge>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-medium mb-2">Time Zone</h3>
+                        <div className="flex items-center gap-1.5">
+                          <Globe className="h-4 w-4 text-muted-foreground" />
+                          <span>{calendlyUser?.timezone || "Loading..."}</span>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-medium mb-2">Availability</h3>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Set your default availability for meetings.
+                        </p>
+                        <Button variant="outline">Configure Availability</Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </Layout>
@@ -643,3 +689,4 @@ const EmployerCalendar = () => {
 };
 
 export default EmployerCalendar;
+
