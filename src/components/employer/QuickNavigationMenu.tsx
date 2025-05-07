@@ -16,7 +16,9 @@ import {
   FileCheck, 
   Folder,
   Settings,
-  Kanban
+  Kanban,
+  Calendar,
+  FilePlus
 } from 'lucide-react';
 
 interface QuickNavigationProps {
@@ -28,7 +30,7 @@ export const QuickNavigationMenu: React.FC<QuickNavigationProps> = ({ className 
     {
       title: 'Post Jobs',
       description: 'Create and manage job listings',
-      icon: <Briefcase className="h-5 w-5" />,
+      icon: <FilePlus className="h-5 w-5" />,
       path: '/employer/dashboard',
       color: 'text-blue-500',
     },
@@ -40,11 +42,25 @@ export const QuickNavigationMenu: React.FC<QuickNavigationProps> = ({ className 
       color: 'text-purple-500',
     },
     {
+      title: 'View Applicants',
+      description: 'Review job applicants',
+      icon: <Users className="h-5 w-5" />,
+      path: '/employer/applicants',
+      color: 'text-indigo-500',
+    },
+    {
       title: 'Analytics',
       description: 'View hiring performance metrics',
       icon: <BarChart3 className="h-5 w-5" />,
       path: '/employer/analytics',
       color: 'text-green-500',
+    },
+    {
+      title: 'Calendar',
+      description: 'Schedule interviews and events',
+      icon: <Calendar className="h-5 w-5" />,
+      path: '/employer/calendar',
+      color: 'text-teal-500',
     },
     {
       title: 'Premium Features',
@@ -78,7 +94,7 @@ export const QuickNavigationMenu: React.FC<QuickNavigationProps> = ({ className 
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {navigationItems.map((item) => (
             <Link
               key={item.path}

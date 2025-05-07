@@ -16,7 +16,10 @@ import {
   Building2, 
   FileCheck, 
   Folder,
-  Kanban 
+  Kanban,
+  Calendar,
+  FilePlus,
+  Users 
 } from 'lucide-react';
 
 export const EmployerDropdown = () => {
@@ -42,7 +45,7 @@ export const EmployerDropdown = () => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/employer/dashboard" className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4" />
+            <FilePlus className="h-4 w-4" />
             Post Jobs
           </Link>
         </DropdownMenuItem>
@@ -53,15 +56,27 @@ export const EmployerDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/employer/verifications" className="flex items-center gap-2">
-            <FileCheck className="h-4 w-4" />
-            Verifications
+          <Link to="/employer/applicants" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            View Applicants
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/employer/analytics" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Hiring Analytics
+            Analytics
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/employer/calendar" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Calendar
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/employer/verifications" className="flex items-center gap-2">
+            <FileCheck className="h-4 w-4" />
+            Verifications
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
