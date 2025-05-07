@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ListFilter, BarChart3, Settings, Users } from 'lucide-react';
@@ -13,6 +13,7 @@ import FreemiumInfoCard from './FreemiumInfoCard';
 import PremiumFeaturesBanner from './PremiumFeaturesBanner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useQuery } from '@tanstack/react-query';
 
 interface JobPosting {
   id: string;
@@ -32,48 +33,48 @@ interface DashboardTabsProps {
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   const isMobile = useIsMobile();
   const { user } = useAuth();
-  const [jobPostings, setJobPostings] = useState<JobPosting[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      if (!user) return;
+  // Define fetchJobs as a stable callback function
+  const fetchJobs = useCallback(async () => {
+    if (!user) return [];
 
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('jobs')
-          .select('*')
-          .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error('Error fetching jobs:', error);
-          return;
-        }
-
-        if (data) {
-          const formattedJobs = data.map(job => ({
-            id: job.id,
-            title: job.title,
-            company: job.company_name,
-            location: `${job.location_city}, ${job.location_state}`,
-            posted: job.posted_date,
-            status: 'active', // You may want to add a status field to your jobs table
-            applicants: 0 // This would ideally come from a count of applications
-          }));
-          setJobPostings(formattedJobs);
-        }
-      } catch (err) {
-        console.error('Failed to fetch jobs:', err);
-      } finally {
-        setLoading(false);
+      if (error) {
+        console.error('Error fetching jobs:', error);
+        return [];
       }
-    };
 
-    if (activeTab === 'postings') {
-      fetchJobs();
+      if (data) {
+        return data.map(job => ({
+          id: job.id,
+          title: job.title,
+          company: job.company_name,
+          location: `${job.location_city}, ${job.location_state}`,
+          posted: job.posted_date,
+          status: 'active', // You may want to add a status field to your jobs table
+          applicants: 0 // This would ideally come from a count of applications
+        }));
+      }
+      return [];
+    } catch (err) {
+      console.error('Failed to fetch jobs:', err);
+      return [];
     }
-  }, [activeTab, user]);
+  }, [user]);
+
+  // Use React Query for data fetching with proper caching
+  const { data: jobPostings = [], isLoading } = useQuery({
+    queryKey: ['jobs', user?.id],
+    queryFn: fetchJobs,
+    enabled: !!user && activeTab === 'postings',
+    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <>
@@ -110,7 +111,7 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
           <TabsContent value="postings">
             <PostingsTab 
               jobPostings={jobPostings} 
-              loading={loading}
+              loading={isLoading}
               setActiveTab={setActiveTab}
             />
           </TabsContent>

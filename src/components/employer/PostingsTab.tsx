@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building, Users, Clock, PlusCircle, Loader2 } from 'lucide-react';
+import AdvancedSpinner from '@/components/ui/advanced-spinner';
 
 interface JobPosting {
   id: string;
@@ -21,7 +22,8 @@ interface PostingsTabProps {
   setActiveTab: (tab: string) => void;
 }
 
-const PostingsTab = ({ jobPostings, loading = false, setActiveTab }: PostingsTabProps) => {
+// Using memo to prevent unnecessary re-renders
+const PostingsTab = memo(({ jobPostings, loading = false, setActiveTab }: PostingsTabProps) => {
   return (
     <Card>
       <CardHeader>
@@ -33,8 +35,13 @@ const PostingsTab = ({ jobPostings, loading = false, setActiveTab }: PostingsTab
       <CardContent>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-10">
-            <Loader2 className="h-10 w-10 text-muted-foreground animate-spin mb-4" />
-            <p className="text-muted-foreground">Loading your job postings...</p>
+            <AdvancedSpinner 
+              variant="circle" 
+              size="lg" 
+              text="Loading your job postings..." 
+              centered 
+              className="text-muted-foreground" 
+            />
           </div>
         ) : jobPostings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
@@ -102,6 +109,8 @@ const PostingsTab = ({ jobPostings, loading = false, setActiveTab }: PostingsTab
       )}
     </Card>
   );
-};
+});
+
+PostingsTab.displayName = 'PostingsTab';
 
 export default PostingsTab;
