@@ -48,3 +48,13 @@ export const useSlideIn = (direction: 'left' | 'right' | 'top' | 'bottom' = 'lef
   
   return classes;
 };
+
+/**
+ * Hook that creates a numbered slide-in animation effect
+ * This is an overload that accepts a number for the delay
+ * @param delay Delay in milliseconds before the animation starts
+ * @returns CSS class string for the animation
+ */
+export const useSlideInWithDelay = (delay: number = 0): string => {
+  return useSlideIn('left', delay);
+};
