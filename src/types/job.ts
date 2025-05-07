@@ -35,4 +35,5 @@ export interface Job {
   isRemote: boolean;
   isFlexible: boolean;
   isFeatured?: boolean;
+  isPremium?: boolean;
 }

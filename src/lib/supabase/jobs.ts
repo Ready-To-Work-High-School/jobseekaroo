@@ -114,7 +114,11 @@ export async function getJobById(jobId: string): Promise<Job | null> {
 }
 
 // Get employer job statistics
-export async function getEmployerJobStats(employerId: string) {
+export async function getEmployerJobStats(employerId: string): Promise<{
+  jobsPosted: number;
+  hires: number;
+  applications: number;
+}> {
   try {
     // Get jobs posted count
     const { count: jobsCount, error: jobsError } = await supabase
