@@ -77,7 +77,7 @@ export const KanbanHeader: React.FC<KanbanHeaderProps> = ({
               Filter
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="z-[100]">
             <DropdownMenuItem onClick={() => onFilterChange?.('all')}>
               All Candidates
             </DropdownMenuItem>
@@ -107,7 +107,7 @@ export const KanbanHeader: React.FC<KanbanHeaderProps> = ({
               Actions
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="z-[100]">
             <DropdownMenuItem onClick={onExport}>
               <Download className="h-4 w-4 mr-2" />
               Export Candidates

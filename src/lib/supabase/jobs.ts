@@ -36,8 +36,8 @@ export async function getAllJobs(): Promise<Job[]> {
       requirements: job.requirements || [],
       isFeatured: job.is_featured || false,
       isRemote: job.is_remote || false,
-      isPremium: job.is_premium || false,
       isFlexible: job.is_flexible || false,
+      isPremium: job.is_premium || false,
       postedDate: job.posted_date,
       payRate: {
         min: job.pay_rate_min,
@@ -97,8 +97,8 @@ export async function getJobById(jobId: string): Promise<Job | null> {
       requirements: data.requirements || [],
       isFeatured: data.is_featured || false,
       isRemote: data.is_remote || false,
-      isPremium: data.is_premium || false,
       isFlexible: data.is_flexible || false,
+      isPremium: data.is_premium || false,
       postedDate: data.posted_date,
       payRate: {
         min: data.pay_rate_min,
@@ -117,34 +117,34 @@ export async function getJobById(jobId: string): Promise<Job | null> {
 export async function getEmployerJobStats(employerId: string) {
   try {
     // Get jobs posted count
-    const { data: jobsData, error: jobsError } = await supabase
+    const { count: jobsCount, error: jobsError } = await supabase
       .from('jobs')
-      .select('id', { count: 'exact' })
+      .select('id', { count: 'exact', head: true })
       .eq('employer_id', employerId);
     
     if (jobsError) throw jobsError;
     
     // Get hires count 
-    const { data: hiresData, error: hiresError } = await supabase
+    const { count: hiresCount, error: hiresError } = await supabase
       .from('job_applications')
-      .select('id', { count: 'exact' })
+      .select('id', { count: 'exact', head: true })
       .eq('employer_id', employerId)
       .eq('status', 'hired');
     
     if (hiresError) throw hiresError;
     
     // Get applications count
-    const { data: applicationsData, error: applicationsError } = await supabase
+    const { count: applicationsCount, error: applicationsError } = await supabase
       .from('job_applications')
-      .select('id', { count: 'exact' })
+      .select('id', { count: 'exact', head: true })
       .eq('employer_id', employerId);
     
     if (applicationsError) throw applicationsError;
     
     return {
-      jobsPosted: jobsData?.length || 0,
-      hires: hiresData?.length || 0,
-      applications: applicationsData?.length || 0
+      jobsPosted: jobsCount || 0,
+      hires: hiresCount || 0,
+      applications: applicationsCount || 0
     };
   } catch (error) {
     console.error('Error fetching employer stats:', error);

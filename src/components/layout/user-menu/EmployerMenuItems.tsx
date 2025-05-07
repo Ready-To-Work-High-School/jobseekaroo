@@ -13,14 +13,14 @@ const EmployerMenuItems = ({ isEmployer, isCeo }: EmployerMenuItemsProps) => {
   
   return (
     <>
-      <DropdownMenuItem asChild>
-        <Link to="/employer-dashboard" className="cursor-pointer">
+      <DropdownMenuItem asChild className="cursor-pointer">
+        <Link to="/employer-dashboard" className="flex items-center w-full">
           <Briefcase className="mr-2 h-4 w-4" />
           <span>Employer Dashboard</span>
         </Link>
       </DropdownMenuItem>
-      <DropdownMenuItem asChild>
-        <Link to="/employer-premium" className="cursor-pointer">
+      <DropdownMenuItem asChild className="cursor-pointer">
+        <Link to="/employer-premium" className="flex items-center w-full">
           <Sparkles className="mr-2 h-4 w-4" />
           <span>Premium Services</span>
         </Link>
