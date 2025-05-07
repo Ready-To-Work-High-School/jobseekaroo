@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, Shield, Sparkles, Tabs
+  BookmarkCheck, Award, Shield, Sparkles
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
