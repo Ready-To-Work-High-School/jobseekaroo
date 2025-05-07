@@ -1,15 +1,47 @@
 
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Briefcase, LineChart, Settings, Users, KanbanSquare, PlusCircle } from 'lucide-react';
-import PostingsTab from './tabs/JobPostingsTab';
+import { PlusCircle, ListFilter, BarChart3, Settings, Users } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import PostingsTab from './PostingsTab';
 import ApplicantsTab from './ApplicantsTab';
-import AnalyticsTab from './AnalyticsTab';
 import SettingsTab from './SettingsTab';
+import AnalyticsTab from './AnalyticsTab';
 import CreateJobTab from './CreateJobTab';
+import FreemiumInfoCard from './FreemiumInfoCard';
+import PremiumFeaturesBanner from './PremiumFeaturesBanner';
+
+// Mock job data
+const jobs = [
+  {
+    id: '1',
+    title: 'Cashier',
+    company: 'Local Market',
+    location: 'San Francisco, CA',
+    posted: '2023-11-03',
+    status: 'active',
+    applicants: 8
+  },
+  {
+    id: '2',
+    title: 'Stock Associate',
+    company: 'Retail Store',
+    location: 'Oakland, CA',
+    posted: '2023-10-27',
+    status: 'active',
+    applicants: 5
+  },
+  {
+    id: '3',
+    title: 'Weekend Server',
+    company: 'Cafe Bruno',
+    location: 'Berkeley, CA',
+    posted: '2023-10-15',
+    status: 'closed',
+    applicants: 12
+  }
+];
 
 interface DashboardTabsProps {
   activeTab: string;
@@ -17,128 +49,76 @@ interface DashboardTabsProps {
 }
 
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-        <TabsList className="grid grid-cols-4 md:grid-cols-5 gap-2">
-          <TabsTrigger value="postings">
-            <Briefcase className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Job Postings</span>
-            <span className="sm:hidden">Jobs</span>
-          </TabsTrigger>
-          <TabsTrigger value="applicants">
-            <Users className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Applicants</span>
-            <span className="sm:hidden">Apply</span>
-          </TabsTrigger>
-          <TabsTrigger value="analytics">
-            <LineChart className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Analytics</span>
-            <span className="sm:hidden">Stats</span>
-          </TabsTrigger>
-          <TabsTrigger value="settings">
-            <Settings className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Settings</span>
-            <span className="sm:hidden">Config</span>
-          </TabsTrigger>
-          <TabsTrigger value="candidates" className="bg-amber-50 hover:bg-amber-100 text-amber-700">
-            <KanbanSquare className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Kanban Board</span>
-            <span className="sm:hidden">Kanban</span>
-          </TabsTrigger>
-        </TabsList>
-        
-        {activeTab === "postings" && (
-          <Button onClick={() => setActiveTab("create")} className="gap-2">
-            <PlusCircle className="h-4 w-4" />
-            Post New Job
+    <>
+      <FreemiumInfoCard />
+      <PremiumFeaturesBanner />
+      
+      <div className="flex justify-between items-center mb-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-4 md:grid-cols-5 mb-6">
+            <TabsTrigger value="postings" className="flex gap-2">
+              <ListFilter className="h-4 w-4" />
+              <span>Postings</span>
+            </TabsTrigger>
+            <TabsTrigger value="applicants" className="flex gap-2">
+              <Users className="h-4 w-4" />
+              <span>Applicants</span>
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex gap-2">
+              <BarChart3 className="h-4 w-4" />
+              <span>Analytics</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex gap-2">
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
+            </TabsTrigger>
+            {!isMobile && (
+              <TabsTrigger value="create" className="hidden md:flex gap-2">
+                <PlusCircle className="h-4 w-4" />
+                <span>Create Job</span>
+              </TabsTrigger>
+            )}
+          </TabsList>
+            
+          <TabsContent value="postings">
+            <PostingsTab 
+              jobPostings={jobs} 
+              isMobile={isMobile}
+              setActiveTab={setActiveTab}
+            />
+          </TabsContent>
+            
+          <TabsContent value="applicants">
+            <ApplicantsTab />
+          </TabsContent>
+            
+          <TabsContent value="analytics">
+            <AnalyticsTab />
+          </TabsContent>
+            
+          <TabsContent value="settings">
+            <SettingsTab />
+          </TabsContent>
+            
+          <TabsContent value="create">
+            <CreateJobTab setActiveTab={setActiveTab} />
+          </TabsContent>
+        </Tabs>
+            
+        {isMobile && activeTab !== 'create' && (
+          <Button 
+            onClick={() => setActiveTab('create')}
+            className="fixed right-4 bottom-4 z-10 shadow-lg rounded-full h-14 w-14 p-0"
+          >
+            <PlusCircle className="h-6 w-6" />
+            <span className="sr-only">Create Job</span>
           </Button>
         )}
       </div>
-
-      <TabsContent value="postings" className="space-y-4">
-        <PostingsTab setActiveTab={setActiveTab} isMobile={false} jobPostings={[
-          {
-            id: "1",
-            title: "Retail Associate",
-            company: "Local Market",
-            location: "Miami, FL",
-            posted: "2025-04-15",
-            status: "active",
-            applicants: 12
-          },
-          {
-            id: "2",
-            title: "Customer Service Representative",
-            company: "Tech Solutions Inc",
-            location: "Orlando, FL",
-            posted: "2025-04-10",
-            status: "active",
-            applicants: 8
-          },
-          {
-            id: "3",
-            title: "Administrative Assistant",
-            company: "Business Enterprises",
-            location: "Tampa, FL",
-            posted: "2025-04-05",
-            status: "closed",
-            applicants: 15
-          }
-        ]} />
-      </TabsContent>
-      
-      <TabsContent value="applicants" className="space-y-4">
-        <ApplicantsTab />
-      </TabsContent>
-      
-      <TabsContent value="analytics" className="space-y-4">
-        <AnalyticsTab />
-      </TabsContent>
-      
-      <TabsContent value="settings" className="space-y-4">
-        <SettingsTab />
-      </TabsContent>
-      
-      <TabsContent value="create" className="space-y-4">
-        <CreateJobTab setActiveTab={setActiveTab} />
-      </TabsContent>
-      
-      <TabsContent value="candidates" className="space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Candidate Pipeline</CardTitle>
-            <CardDescription>
-              Manage your candidate pipeline with our interactive Kanban board
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground mb-6">
-              Organize candidates through your hiring process using our drag-and-drop interface. Move candidates between stages, add notes, and track progress all in one place.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border rounded-md p-4 text-center bg-blue-50">
-                <h3 className="font-medium mb-1">Applied</h3>
-                <p className="text-sm text-muted-foreground">New applicants waiting for review</p>
-              </div>
-              <div className="border rounded-md p-4 text-center bg-amber-50">
-                <h3 className="font-medium mb-1">Interview</h3>
-                <p className="text-sm text-muted-foreground">Candidates in interview process</p>
-              </div>
-              <div className="border rounded-md p-4 text-center bg-green-50">
-                <h3 className="font-medium mb-1">Hired</h3>
-                <p className="text-sm text-muted-foreground">Successfully placed candidates</p>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button asChild className="w-full">
-              <Link to="/employer/candidates">Open Kanban Board</Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    </>
   );
 };
 
