@@ -15,6 +15,7 @@ enum OnboardingStep {
 const EmployerOnboardingFlow = () => {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>(OnboardingStep.Registration);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegistrationSuccess = (newUserId: string) => {
     setUserId(newUserId);
@@ -23,6 +24,11 @@ const EmployerOnboardingFlow = () => {
 
   const handleVerificationSuccess = () => {
     setCurrentStep(OnboardingStep.Success);
+  };
+
+  const handleVerificationError = (error: Error) => {
+    console.error("Verification error:", error.message);
+    // You might want to display an error message to the user here
   };
 
   return (
@@ -59,6 +65,9 @@ const EmployerOnboardingFlow = () => {
             <VerificationForm 
               userId={userId || ''}
               onSuccess={handleVerificationSuccess}
+              onError={handleVerificationError}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
             />
           </div>
         )}
