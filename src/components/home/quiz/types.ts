@@ -12,4 +12,6 @@ export interface CareerPath {
   title: string;
   description: string;
   icon: ReactNode;
+  highlights?: string[];
+  nextSteps?: string[];
 }
