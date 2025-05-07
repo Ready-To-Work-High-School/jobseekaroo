@@ -37,6 +37,7 @@ export async function getAllJobs(): Promise<Job[]> {
       isFeatured: job.is_featured || false,
       isRemote: job.is_remote || false,
       isPremium: job.is_premium || false,
+      isFlexible: job.is_flexible || false,
       postedDate: job.posted_date,
       payRate: {
         min: job.pay_rate_min,
@@ -49,6 +50,65 @@ export async function getAllJobs(): Promise<Job[]> {
     return formattedData;
   } catch (error) {
     console.error('Error fetching jobs:', error);
+    throw error;
+  }
+}
+
+// Get job by ID
+export async function getJobById(jobId: string): Promise<Job | null> {
+  try {
+    const { data, error } = await supabase
+      .from('jobs')
+      .select(`
+        *,
+        company:company_name (
+          name,
+          logo_url
+        )
+      `)
+      .eq('id', jobId)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No rows returned - job not found
+        return null;
+      }
+      throw error;
+    }
+    
+    if (!data) return null;
+    
+    // Format the data to match the Job interface
+    return {
+      id: data.id,
+      title: data.title,
+      company: {
+        name: data.company_name,
+        logo: data.logo_url || null,
+      },
+      location: {
+        city: data.location_city,
+        state: data.location_state,
+        zip: data.location_zip,
+      },
+      type: data.job_type,
+      description: data.description,
+      requirements: data.requirements || [],
+      isFeatured: data.is_featured || false,
+      isRemote: data.is_remote || false,
+      isPremium: data.is_premium || false,
+      isFlexible: data.is_flexible || false,
+      postedDate: data.posted_date,
+      payRate: {
+        min: data.pay_rate_min,
+        max: data.pay_rate_max,
+        period: data.pay_rate_period
+      },
+      experienceLevel: data.experience_level
+    };
+  } catch (error) {
+    console.error('Error fetching job by ID:', error);
     throw error;
   }
 }
