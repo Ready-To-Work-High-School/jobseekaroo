@@ -8,6 +8,7 @@ import HealthcarePathways from '@/pages/HealthcarePathways';
 import StudentSuccess from '@/pages/StudentSuccess';
 import CareerQuiz from '@/pages/CareerQuiz';
 import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
+import UserProfileTabs from '@/pages/UserProfileTabs';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -56,6 +57,7 @@ const HomeRoutes = (
     <Route path="/career-quiz" element={<CareerQuiz />} />
     <Route path="/career-assessment" element={<CareerQuiz />} />
     <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
+    <Route path="/profile-tabs" element={<UserProfileTabs />} />
   </>
 );
 

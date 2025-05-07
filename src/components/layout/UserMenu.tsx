@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { 
   Settings, User, BarChart2, Briefcase, 
-  BookmarkCheck, Award, Shield, Sparkles
+  BookmarkCheck, Award, Shield, Sparkles, Tabs
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import AccountTypeBadge from './AccountTypeBadge';
@@ -133,6 +134,12 @@ const UserMenu = () => {
             <Link to={userProfile?.user_type === 'student' ? "/student-profile" : "/profile"} className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/profile-tabs" className="cursor-pointer">
+              <Tabs className="mr-2 h-4 w-4" />
+              <span>Tabbed Profile</span>
             </Link>
           </DropdownMenuItem>
           {!isAdmin && (

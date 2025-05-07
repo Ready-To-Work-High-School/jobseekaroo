@@ -19,3 +19,10 @@ export interface CareerPath {
     description: string;
   }[];
 }
+
+export interface UserProfileTab {
+  id: string;
+  title: string;
+  icon: ReactNode;
+}
+
