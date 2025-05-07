@@ -20,30 +20,16 @@ export function useAdminStatus() {
       console.log('useAdminStatus: User is not admin');
     }
     
-    // Check CEO status - admin with specific CEO markers
-    // CEO can be determined by multiple conditions:
-    // 1. Admin user with CEO_EMAIL environment variable match
-    // 2. Admin user with redeemed code (CEO redemption)
-    // 3. Admin user with special job title containing "CEO" or "Chief Executive"
-    // 4. Admin user with company name containing "CEO"
+    // CEO status - only one person gets this, with full access
+    // We'll make this determination based ONLY on the CEO_EMAIL environment variable match
+    // This is the most secure and controllable method
     if (userProfile?.user_type === 'admin') {
-      // Check for CEO email match (primary determinant)
+      // Check for CEO email match (ONLY determinant - single source of truth)
       const isCeoByEmail = userProfile?.email?.toLowerCase() === process.env.CEO_EMAIL?.toLowerCase();
       
-      // Check for CEO in job title
-      const isCeoByTitle = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
-                          userProfile?.job_title?.toLowerCase()?.includes('chief executive');
-      
-      // Check for CEO in company name
-      const isCeoByCompany = userProfile?.company_name?.toLowerCase()?.includes('ceo');
-      
-      // Check for CEO by special redemption
-      const isCeoByRedemption = userProfile?.redeemed_at && userProfile?.redeemed_code?.startsWith('CEO-');
-      
-      // Set CEO status if any conditions match
-      if (isCeoByEmail || isCeoByTitle || isCeoByCompany || isCeoByRedemption) {
+      if (isCeoByEmail) {
         setIsCeo(true);
-        console.log('useAdminStatus: User is CEO');
+        console.log('useAdminStatus: User is CEO with full access');
       } else {
         setIsCeo(false);
         console.log('useAdminStatus: User is not CEO');
