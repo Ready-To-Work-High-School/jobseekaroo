@@ -1,82 +1,93 @@
 
-import { Job, JobType, ExperienceLevel } from '@/types/job';
 import { supabase } from './index';
+import { Job } from '@/types/job';
 
-// Helper to fetch all jobs from the database
+// Get all jobs
 export async function getAllJobs(): Promise<Job[]> {
   try {
     const { data, error } = await supabase
       .from('jobs')
-      .select('*')
+      .select(`
+        *,
+        company:company_name (
+          name,
+          logo_url
+        )
+      `)
       .order('posted_date', { ascending: false });
     
-    if (error) {
-      console.error('Error fetching jobs:', error);
-      return [];
-    }
+    if (error) throw error;
     
-    // Transform the database records to match the Job type
-    return (data || []).map(job => transformDatabaseJobToJobType(job));
+    // Format the data to match the Job interface
+    const formattedData = data.map(job => ({
+      id: job.id,
+      title: job.title,
+      company: {
+        name: job.company_name,
+        logo: job.logo_url || null,
+      },
+      location: {
+        city: job.location_city,
+        state: job.location_state,
+        zip: job.location_zip,
+      },
+      type: job.job_type,
+      description: job.description,
+      requirements: job.requirements || [],
+      isFeatured: job.is_featured || false,
+      isRemote: job.is_remote || false,
+      isPremium: job.is_premium || false,
+      postedDate: job.posted_date,
+      payRate: {
+        min: job.pay_rate_min,
+        max: job.pay_rate_max,
+        period: job.pay_rate_period
+      },
+      experienceLevel: job.experience_level
+    }));
+    
+    return formattedData;
   } catch (error) {
-    console.error('Exception fetching jobs:', error);
-    return [];
+    console.error('Error fetching jobs:', error);
+    throw error;
   }
 }
 
-// Helper to fetch a specific job by ID
-export async function getJobById(id: string): Promise<Job | null> {
+// Get employer job statistics
+export async function getEmployerJobStats(employerId: string) {
   try {
-    const { data, error } = await supabase
+    // Get jobs posted count
+    const { data: jobsData, error: jobsError } = await supabase
       .from('jobs')
-      .select('*')
-      .eq('id', id)
-      .single();
+      .select('id', { count: 'exact' })
+      .eq('employer_id', employerId);
     
-    if (error) {
-      if (error.code === 'PGRST116') {
-        // Record not found, this is expected in some cases
-        console.log(`Job with ID ${id} not found in database`);
-        return null;
-      }
-      console.error('Error fetching job by id:', error);
-      return null;
-    }
+    if (jobsError) throw jobsError;
     
-    if (!data) return null;
+    // Get hires count 
+    const { data: hiresData, error: hiresError } = await supabase
+      .from('job_applications')
+      .select('id', { count: 'exact' })
+      .eq('employer_id', employerId)
+      .eq('status', 'hired');
     
-    return transformDatabaseJobToJobType(data);
+    if (hiresError) throw hiresError;
+    
+    // Get applications count
+    const { data: applicationsData, error: applicationsError } = await supabase
+      .from('job_applications')
+      .select('id', { count: 'exact' })
+      .eq('employer_id', employerId);
+    
+    if (applicationsError) throw applicationsError;
+    
+    return {
+      jobsPosted: jobsData?.length || 0,
+      hires: hiresData?.length || 0,
+      applications: applicationsData?.length || 0
+    };
   } catch (error) {
-    console.error('Exception fetching job by id:', error);
-    return null;
+    console.error('Error fetching employer stats:', error);
+    throw error;
   }
-}
-
-// Helper function to transform a database job record to the Job type
-function transformDatabaseJobToJobType(dbJob: any): Job {
-  return {
-    id: dbJob.id,
-    title: dbJob.title,
-    company: {
-      name: dbJob.company_name,
-    },
-    location: {
-      city: dbJob.location_city,
-      state: dbJob.location_state,
-      zipCode: dbJob.location_zip,
-    },
-    type: dbJob.job_type as JobType,
-    payRate: {
-      min: Number(dbJob.pay_rate_min),
-      max: Number(dbJob.pay_rate_max),
-      period: dbJob.pay_rate_period as 'hourly' | 'weekly' | 'monthly',
-    },
-    description: dbJob.description,
-    requirements: dbJob.requirements,
-    experienceLevel: dbJob.experience_level as ExperienceLevel,
-    postedDate: dbJob.posted_date,
-    logoUrl: dbJob.logo_url,
-    isRemote: dbJob.is_remote,
-    isFlexible: dbJob.is_flexible,
-    isFeatured: dbJob.is_featured,
-  };
 }

@@ -1,21 +1,29 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import AccountSecurityForm from '@/components/profile/AccountSecurityForm';
-import { Award, Briefcase, MapPin, Mail, Sparkles, Shield } from 'lucide-react';
+import { Award, Briefcase, MapPin, Mail, Sparkles, Shield, Calendar, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import UserBadges from '@/components/badges/UserBadges';
 import { useUserBadges } from '@/hooks/use-user-badges';
 import JobRecommendations from '@/components/JobRecommendations';
 import { Link } from 'react-router-dom';
+import { format, formatDistanceToNow } from 'date-fns';
+import { supabase } from '@/lib/supabase';
 
 const Profile = () => {
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const { badges, isLoading: badgesLoading } = useUserBadges();
+  const [employerStats, setEmployerStats] = useState<{
+    jobsPosted: number;
+    hires: number;
+    applications: number;
+  }>({ jobsPosted: 0, hires: 0, applications: 0 });
   
   // Check if user is CEO based on job title or company name
   const isCeo = userProfile?.job_title?.toLowerCase()?.includes('ceo') || 
@@ -24,7 +32,64 @@ const Profile = () => {
   
   // Check if user is admin as well (for CEO portal access)
   const isAdmin = userProfile?.user_type === 'admin';
+  const isEmployer = userProfile?.user_type === 'employer';
   const showCeoIcon = isCeo && isAdmin;
+
+  // Calculate account age
+  const accountAge = userProfile?.created_at 
+    ? formatDistanceToNow(new Date(userProfile.created_at), { addSuffix: false })
+    : 'Unknown';
+  
+  // Check if user signed up for the 2025-2026 year
+  const isInceptionMember = userProfile?.created_at
+    ? new Date(userProfile.created_at) >= new Date('2025-01-01') && 
+      new Date(userProfile.created_at) <= new Date('2026-12-31')
+    : false;
+  
+  useEffect(() => {
+    if (user && isEmployer) {
+      fetchEmployerStats();
+    }
+  }, [user, isEmployer]);
+  
+  const fetchEmployerStats = async () => {
+    if (!user) return;
+    
+    try {
+      // Get jobs posted count
+      const { data: jobsData, error: jobsError } = await supabase
+        .from('jobs')
+        .select('id', { count: 'exact' })
+        .eq('employer_id', user.id);
+      
+      if (jobsError) throw jobsError;
+      
+      // Get hires count
+      const { data: hiresData, error: hiresError } = await supabase
+        .from('job_applications')
+        .select('id', { count: 'exact' })
+        .eq('employer_id', user.id)
+        .eq('status', 'hired');
+      
+      if (hiresError) throw hiresError;
+      
+      // Get applications count
+      const { data: applicationsData, error: applicationsError } = await supabase
+        .from('job_applications')
+        .select('id', { count: 'exact' })
+        .eq('employer_id', user.id);
+      
+      if (applicationsError) throw applicationsError;
+      
+      setEmployerStats({
+        jobsPosted: jobsData?.length || 0,
+        hires: hiresData?.length || 0,
+        applications: applicationsData?.length || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching employer stats:', error);
+    }
+  };
   
   return (
     <Layout>
@@ -56,6 +121,15 @@ const Profile = () => {
                             <Shield className="h-3 w-3 text-white" />
                           </div>
                         </Link>
+                      </div>
+                    )}
+                    
+                    {/* Inception Member ribbon for 2025-2026 signups */}
+                    {isInceptionMember && (
+                      <div className="absolute -right-2 -top-2 rotate-45">
+                        <div className="bg-blue-600 text-white text-[10px] py-1 px-6 shadow-md font-semibold">
+                          INCEPTION
+                        </div>
                       </div>
                     )}
                   </div>
@@ -92,6 +166,13 @@ const Profile = () => {
                           {userProfile.location}
                         </span>
                       )}
+                      
+                      {userProfile?.created_at && (
+                        <span className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-3.5 w-3.5 mr-1 text-muted-foreground/70" />
+                          Member for {accountAge}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -104,6 +185,36 @@ const Profile = () => {
                   </div>
                 ) : (
                   <UserBadges badges={badges} className="mt-0" />
+                )}
+                
+                {/* Display employer stats if user is an employer */}
+                {isEmployer && (
+                  <div className="mt-4 pt-4 border-t">
+                    <h3 className="font-medium flex items-center gap-2 mb-2">
+                      <FileText className="h-4 w-4 text-blue-500" />
+                      Employer Statistics
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 text-center">
+                        <p className="text-sm text-muted-foreground">Jobs Posted</p>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                          {employerStats.jobsPosted}
+                        </p>
+                      </div>
+                      <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 text-center">
+                        <p className="text-sm text-muted-foreground">Hires</p>
+                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          {employerStats.hires}
+                        </p>
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 text-center">
+                        <p className="text-sm text-muted-foreground">Applications</p>
+                        <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                          {employerStats.applications}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -139,6 +250,24 @@ const Profile = () => {
                                   {skill}
                                 </Badge>
                               ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {userProfile?.created_at && (
+                          <div>
+                            <h3 className="font-medium">Account Information</h3>
+                            <div className="mt-1 text-muted-foreground">
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-4 w-4" />
+                                <span>Joined: {format(new Date(userProfile.created_at), 'MMMM d, yyyy')}</span>
+                              </div>
+                              {isInceptionMember && (
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Award className="h-4 w-4 text-blue-500" />
+                                  <span className="text-blue-600 font-medium">2025-2026 Inception Member</span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}

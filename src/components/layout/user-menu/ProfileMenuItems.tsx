@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { DropdownMenuItem, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
-import { User, BarChart2, BookmarkCheck, Award } from 'lucide-react';
+import { User, BarChart2, BookmarkCheck, Award, FileText } from 'lucide-react';
 
 interface ProfileMenuItemsProps {
   userProfile: any;
@@ -25,6 +25,14 @@ const ProfileMenuItems = ({ userProfile, isAdmin }: ProfileMenuItemsProps) => {
           <span>Tabbed Profile</span>
         </Link>
       </DropdownMenuItem>
+      {isEmployer && (
+        <DropdownMenuItem asChild>
+          <Link to="/employer/stats" className="cursor-pointer">
+            <FileText className="mr-2 h-4 w-4" />
+            <span>Employer Statistics</span>
+          </Link>
+        </DropdownMenuItem>
+      )}
       {!isAdmin && (
         <DropdownMenuItem asChild>
           <Link to="/account-benefits" className="cursor-pointer">
