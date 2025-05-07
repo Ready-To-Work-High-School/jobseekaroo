@@ -6,9 +6,9 @@ import { Calendar, Grid, ListPlus, Bell, Webhook } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/auth';
-import CalendlyEmbed from '@/components/employer/calendar/CalendlyEmbed';
-import CalendlyScheduledEvents from '@/components/employer/calendar/CalendlyScheduledEvents';
-import CalendlyWebhookManager from '@/components/employer/calendar/CalendlyWebhookManager';
+import CalendlyEmbed from '@/components/calendly/CalendlyEmbed';
+import CalendlyScheduledEvents from "@/components/employer/calendar/CalendlyScheduledEvents";
+import CalendlyWebhookManager from "@/components/employer/calendar/CalendlyWebhookManager";
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { Badge } from '@/components/ui/badge';
 
