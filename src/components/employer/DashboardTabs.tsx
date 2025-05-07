@@ -4,11 +4,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Briefcase, LineChart, Settings, Users, FileText, KanbanSquare } from 'lucide-react';
-import PostingsTab from './PostingsTab';
+import { Briefcase, LineChart, Settings, Users, KanbanSquare, PlusCircle } from 'lucide-react';
+import PostingsTab from './tabs/JobPostingsTab';
 import ApplicantsTab from './ApplicantsTab';
 import AnalyticsTab from './AnalyticsTab';
 import SettingsTab from './SettingsTab';
+import CreateJobTab from './CreateJobTab';
 
 interface DashboardTabsProps {
   activeTab: string;
@@ -18,36 +19,73 @@ interface DashboardTabsProps {
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <TabsList className="grid grid-cols-4 md:grid-cols-5 gap-2">
-        <TabsTrigger value="postings">
-          <Briefcase className="mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Job Postings</span>
-          <span className="sm:hidden">Jobs</span>
-        </TabsTrigger>
-        <TabsTrigger value="applicants">
-          <Users className="mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Applicants</span>
-          <span className="sm:hidden">Apply</span>
-        </TabsTrigger>
-        <TabsTrigger value="analytics">
-          <LineChart className="mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Analytics</span>
-          <span className="sm:hidden">Stats</span>
-        </TabsTrigger>
-        <TabsTrigger value="settings">
-          <Settings className="mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Settings</span>
-          <span className="sm:hidden">Config</span>
-        </TabsTrigger>
-        <TabsTrigger value="candidates" className="bg-amber-50 hover:bg-amber-100 text-amber-700">
-          <KanbanSquare className="mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Kanban Board</span>
-          <span className="sm:hidden">Kanban</span>
-        </TabsTrigger>
-      </TabsList>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+        <TabsList className="grid grid-cols-4 md:grid-cols-5 gap-2">
+          <TabsTrigger value="postings">
+            <Briefcase className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Job Postings</span>
+            <span className="sm:hidden">Jobs</span>
+          </TabsTrigger>
+          <TabsTrigger value="applicants">
+            <Users className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Applicants</span>
+            <span className="sm:hidden">Apply</span>
+          </TabsTrigger>
+          <TabsTrigger value="analytics">
+            <LineChart className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Analytics</span>
+            <span className="sm:hidden">Stats</span>
+          </TabsTrigger>
+          <TabsTrigger value="settings">
+            <Settings className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Settings</span>
+            <span className="sm:hidden">Config</span>
+          </TabsTrigger>
+          <TabsTrigger value="candidates" className="bg-amber-50 hover:bg-amber-100 text-amber-700">
+            <KanbanSquare className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Kanban Board</span>
+            <span className="sm:hidden">Kanban</span>
+          </TabsTrigger>
+        </TabsList>
+        
+        {activeTab === "postings" && (
+          <Button onClick={() => setActiveTab("create")} className="gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Post New Job
+          </Button>
+        )}
+      </div>
 
       <TabsContent value="postings" className="space-y-4">
-        <PostingsTab />
+        <PostingsTab setActiveTab={setActiveTab} isMobile={false} jobPostings={[
+          {
+            id: "1",
+            title: "Retail Associate",
+            company: "Local Market",
+            location: "Miami, FL",
+            posted: "2025-04-15",
+            status: "active",
+            applicants: 12
+          },
+          {
+            id: "2",
+            title: "Customer Service Representative",
+            company: "Tech Solutions Inc",
+            location: "Orlando, FL",
+            posted: "2025-04-10",
+            status: "active",
+            applicants: 8
+          },
+          {
+            id: "3",
+            title: "Administrative Assistant",
+            company: "Business Enterprises",
+            location: "Tampa, FL",
+            posted: "2025-04-05",
+            status: "closed",
+            applicants: 15
+          }
+        ]} />
       </TabsContent>
       
       <TabsContent value="applicants" className="space-y-4">
@@ -60,6 +98,10 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
       
       <TabsContent value="settings" className="space-y-4">
         <SettingsTab />
+      </TabsContent>
+      
+      <TabsContent value="create" className="space-y-4">
+        <CreateJobTab setActiveTab={setActiveTab} />
       </TabsContent>
       
       <TabsContent value="candidates" className="space-y-4">

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -8,6 +8,7 @@ import { KanbanHeader } from '@/components/employer/kanban/KanbanHeader';
 import { KanbanStageCustomization } from '@/components/employer/kanban/KanbanStageCustomization';
 import { useKanbanBoard } from '@/hooks/employer/useKanbanBoard';
 import { Helmet } from 'react-helmet';
+import { useToast } from '@/hooks/use-toast';
 
 const EmployerKanban = () => {
   const {
@@ -21,7 +22,32 @@ const EmployerKanban = () => {
     handleRemoveStage,
     handleMoveItem,
     handleUpdateItem,
+    loadKanbanData,
   } = useKanbanBoard();
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Load kanban data when component mounts
+    loadKanbanData();
+  }, [loadKanbanData]);
+
+  // Show toast when kanban board is loaded
+  useEffect(() => {
+    if (stages && stages.length > 0) {
+      console.log("Kanban board stages loaded:", stages);
+    }
+  }, [stages]);
+
+  const handleStageEdit = () => {
+    setIsEditing(!isEditing);
+    if (isEditing) {
+      toast({
+        title: "Stages updated",
+        description: "Your candidate pipeline has been updated."
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -36,7 +62,7 @@ const EmployerKanban = () => {
         
         <KanbanHeader 
           isEditing={isEditing}
-          onEditingToggle={() => setIsEditing(!isEditing)}
+          onEditingToggle={handleStageEdit}
         />
 
         {isEditing && (

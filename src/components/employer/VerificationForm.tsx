@@ -10,15 +10,21 @@ import { supabase } from '@/lib/supabase';
 import { Alert } from '@/components/ui/alert';
 
 interface VerificationFormProps {
-  userId: string;
-  onSuccess: () => void;
+  userId?: string;
+  onSuccess?: () => void;
 }
 
 type FormData = {
-  companyAddress: string;
-  businessRegistrationNumber: string;
+  companyName: string;
+  address: string;
+  ein: string;
+  contactName: string;
   contactPhone: string;
-  businessDescription: string;
+  contactEmail: string;
+  hoursPerWeek: number;
+  wageMin: number;
+  wageMax: number;
+  jobDescription: string;
 };
 
 export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSuccess }) => {
@@ -40,15 +46,20 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
       // Save verification data to employer_verifications table
       const { error: insertError } = await supabase
         .from('employer_verifications')
-        .insert([{
-          user_id: userId,
-          company_address: data.companyAddress,
-          business_registration_number: data.businessRegistrationNumber,
+        .insert({
+          address: data.address,
+          company_name: data.companyName,
+          contact_email: data.contactEmail,
+          contact_name: data.contactName,
           contact_phone: data.contactPhone,
-          business_description: data.businessDescription,
-          verification_status: 'pending',
-          submitted_at: new Date().toISOString()
-        }]);
+          ein: data.ein,
+          hours_per_week: data.hoursPerWeek,
+          job_description: data.jobDescription,
+          wage_range_min: data.wageMin,
+          wage_range_max: data.wageMax,
+          safety_pledge_accepted: true,
+          status: 'pending'
+        });
       
       if (insertError) throw insertError;
       
@@ -68,7 +79,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
         description: "Your business verification information has been submitted for review.",
       });
       
-      onSuccess();
+      if (onSuccess) onSuccess();
     } catch (error: any) {
       console.error('Verification submission error:', error);
       setError(error.message || 'Failed to submit verification. Please try again.');
@@ -93,58 +104,169 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ userId, onSu
       
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="companyAddress">Company Address</Label>
+          <Label htmlFor="companyName">Company Name</Label>
           <Input
-            id="companyAddress"
+            id="companyName"
+            placeholder="Your Company Name"
+            {...register('companyName', { required: 'Company name is required' })}
+          />
+          {errors.companyName && (
+            <p className="text-sm text-red-500">{errors.companyName.message}</p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="address">Company Address</Label>
+          <Input
+            id="address"
             placeholder="123 Business St, Suite 100, City, State ZIP"
-            {...register('companyAddress', { required: 'Company address is required' })}
+            {...register('address', { required: 'Company address is required' })}
           />
-          {errors.companyAddress && (
-            <p className="text-sm text-red-500">{errors.companyAddress.message}</p>
+          {errors.address && (
+            <p className="text-sm text-red-500">{errors.address.message}</p>
           )}
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="businessRegistrationNumber">Business Registration Number</Label>
+          <Label htmlFor="ein">EIN (Employer Identification Number)</Label>
           <Input
-            id="businessRegistrationNumber"
-            placeholder="Business license, EIN, or registration number"
-            {...register('businessRegistrationNumber', { required: 'Business registration number is required' })}
+            id="ein"
+            placeholder="XX-XXXXXXX"
+            {...register('ein', { required: 'EIN is required' })}
           />
-          {errors.businessRegistrationNumber && (
-            <p className="text-sm text-red-500">{errors.businessRegistrationNumber.message}</p>
+          {errors.ein && (
+            <p className="text-sm text-red-500">{errors.ein.message}</p>
           )}
         </div>
         
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="contactName">Contact Name</Label>
+            <Input
+              id="contactName"
+              placeholder="Your Name"
+              {...register('contactName', { required: 'Contact name is required' })}
+            />
+            {errors.contactName && (
+              <p className="text-sm text-red-500">{errors.contactName.message}</p>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="contactPhone">Contact Phone</Label>
+            <Input
+              id="contactPhone"
+              type="tel"
+              placeholder="(555) 555-5555"
+              {...register('contactPhone', { required: 'Contact phone is required' })}
+            />
+            {errors.contactPhone && (
+              <p className="text-sm text-red-500">{errors.contactPhone.message}</p>
+            )}
+          </div>
+        </div>
+        
         <div className="space-y-2">
-          <Label htmlFor="contactPhone">Contact Phone</Label>
+          <Label htmlFor="contactEmail">Contact Email</Label>
           <Input
-            id="contactPhone"
-            type="tel"
-            placeholder="(555) 555-5555"
-            {...register('contactPhone', { required: 'Contact phone is required' })}
+            id="contactEmail"
+            type="email"
+            placeholder="contact@company.com"
+            {...register('contactEmail', { 
+              required: 'Contact email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address'
+              }
+            })}
           />
-          {errors.contactPhone && (
-            <p className="text-sm text-red-500">{errors.contactPhone.message}</p>
+          {errors.contactEmail && (
+            <p className="text-sm text-red-500">{errors.contactEmail.message}</p>
           )}
         </div>
         
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="hoursPerWeek">Hours per Week</Label>
+            <Input
+              id="hoursPerWeek"
+              type="number"
+              min="1"
+              max="40"
+              {...register('hoursPerWeek', { 
+                required: 'Hours is required',
+                min: {
+                  value: 1,
+                  message: 'Must be at least 1'
+                },
+                max: {
+                  value: 40,
+                  message: 'Cannot exceed 40'
+                }
+              })}
+            />
+            {errors.hoursPerWeek && (
+              <p className="text-sm text-red-500">{errors.hoursPerWeek.message}</p>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="wageMin">Minimum Wage ($/hr)</Label>
+            <Input
+              id="wageMin"
+              type="number"
+              min="12"
+              step="0.01"
+              {...register('wageMin', { 
+                required: 'Minimum wage is required',
+                min: {
+                  value: 12,
+                  message: 'Must be at least $12/hr'
+                }
+              })}
+            />
+            {errors.wageMin && (
+              <p className="text-sm text-red-500">{errors.wageMin.message}</p>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="wageMax">Maximum Wage ($/hr)</Label>
+            <Input
+              id="wageMax"
+              type="number"
+              min="12"
+              step="0.01"
+              {...register('wageMax', { 
+                required: 'Maximum wage is required',
+                min: {
+                  value: 12,
+                  message: 'Must be at least $12/hr'
+                }
+              })}
+            />
+            {errors.wageMax && (
+              <p className="text-sm text-red-500">{errors.wageMax.message}</p>
+            )}
+          </div>
+        </div>
+        
         <div className="space-y-2">
-          <Label htmlFor="businessDescription">Business Description</Label>
+          <Label htmlFor="jobDescription">Job Description</Label>
           <Textarea
-            id="businessDescription"
-            placeholder="Tell us about your business, including how long you've been operating, what services/products you provide, and why you're interested in employing students."
+            id="jobDescription"
+            placeholder="Describe the types of jobs you'll be posting and what students can expect working for your company"
             rows={5}
-            {...register('businessDescription', {
-              required: 'Business description is required',
+            {...register('jobDescription', {
+              required: 'Job description is required',
               minLength: {
                 value: 50,
                 message: 'Please provide at least 50 characters'
               }
             })}
           />
-          {errors.businessDescription && (
-            <p className="text-sm text-red-500">{errors.businessDescription.message}</p>
+          {errors.jobDescription && (
+            <p className="text-sm text-red-500">{errors.jobDescription.message}</p>
           )}
         </div>
       </div>

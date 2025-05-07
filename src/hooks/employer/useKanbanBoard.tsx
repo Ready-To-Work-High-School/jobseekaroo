@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, useCallback } from 'react';
 import { mockStudentProfiles } from '@/lib/mock-data/students';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,6 +10,7 @@ export const useKanbanBoard = () => {
   const { userProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [newStageTitle, setNewStageTitle] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Check if user has premium access
   const hasPremium = userProfile?.preferences?.hasPremium === true;
@@ -32,27 +34,46 @@ export const useKanbanBoard = () => {
 
   const [stages, setStages] = useState<KanbanStage[]>(getInitialStages());
 
-  useEffect(() => {
-    const initialItems: KanbanItem[] = mockStudentProfiles.map(student => ({
-      id: `item-${student.id}`,
-      studentId: student.id,
-      name: `${student.firstName} ${student.lastName}`,
-      grade: student.grade,
-      academy: student.academy,
-      avatar: student.avatar,
-      status: null,
-      notes: '',
-    }));
+  // Load kanban data (candidates etc.)
+  const loadKanbanData = useCallback(() => {
+    setIsLoading(true);
+    try {
+      // In a real implementation, this would fetch data from Supabase
+      // For now, we'll use the mock data
+      
+      const initialItems: KanbanItem[] = mockStudentProfiles.map(student => ({
+        id: `item-${student.id}`,
+        studentId: student.id,
+        name: `${student.firstName} ${student.lastName}`,
+        grade: student.grade,
+        academy: student.academy,
+        avatar: student.avatar,
+        status: null,
+        notes: '',
+      }));
 
-    setStages(prevStages => {
-      const newStages = [...prevStages];
-      initialItems.forEach((item, index) => {
-        const stageIndex = index % 2 === 0 ? 0 : 1;
-        newStages[stageIndex].items.push(item);
+      setStages(prevStages => {
+        const newStages = [...prevStages];
+        // Distribute candidates across stages for demo purposes
+        initialItems.forEach((item, index) => {
+          const stageIndex = index % newStages.length;
+          newStages[stageIndex].items.push(item);
+        });
+        return newStages;
       });
-      return newStages;
-    });
-  }, []);
+      
+      console.log("Kanban data loaded successfully");
+    } catch (error) {
+      console.error("Error loading kanban data:", error);
+      toast({
+        title: "Error loading data",
+        description: "Could not load candidate pipeline data. Please refresh the page.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
 
   const handleAddStage = () => {
     if (!hasPremium) {
@@ -81,6 +102,11 @@ export const useKanbanBoard = () => {
 
     setStages([...stages, newStage]);
     setNewStageTitle('');
+    
+    toast({
+      title: "Stage added",
+      description: `New stage "${newStageTitle}" has been added to your pipeline.`,
+    });
   };
 
   const handleRemoveStage = (stageId: string) => {
@@ -107,6 +133,11 @@ export const useKanbanBoard = () => {
     }).filter(stage => stage.id !== stageId);
 
     setStages(newStages);
+    
+    toast({
+      title: "Stage removed",
+      description: `Stage "${stageToRemove.title}" has been removed. All candidates moved to Applied stage.`,
+    });
   };
 
   const handleMoveItem = (itemId: string, fromStageId: string, toStageId: string) => {
@@ -151,6 +182,18 @@ export const useKanbanBoard = () => {
     };
     
     setStages(newStages);
+    
+    if (updates.notes) {
+      toast({
+        title: "Notes updated",
+        description: "Candidate notes have been updated successfully.",
+      });
+    } else if (updates.status) {
+      toast({
+        title: "Status updated",
+        description: "Candidate status has been updated successfully.",
+      });
+    }
   };
 
   return {
@@ -158,11 +201,13 @@ export const useKanbanBoard = () => {
     isEditing,
     newStageTitle,
     hasPremium,
+    isLoading,
     setIsEditing,
     setNewStageTitle,
     handleAddStage,
     handleRemoveStage,
     handleMoveItem,
     handleUpdateItem,
+    loadKanbanData,
   };
 };

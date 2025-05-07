@@ -9,11 +9,11 @@ import EmployerBadges from '../pages/EmployerBadges';
 import PremiumServices from '../pages/PremiumServices';
 import AnalyticsDashboard from '../pages/AnalyticsDashboard';
 import PremiumFeaturesPage from '../pages/employer/PremiumFeaturesPage';
-import { VerificationForm } from '@/components/employer/VerificationForm';
 import EmployerVerifications from '@/pages/employer/EmployerVerifications';
 import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
 import EmployerKanban from '@/pages/EmployerKanban';
 import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
+import { VerificationFormContainer } from '@/components/employer/VerificationFormContainer';
 
 export const EmployerRoutes = (
   <>
@@ -43,7 +43,7 @@ export const EmployerRoutes = (
       path="/employer/verify" 
       element={
         <ProtectedRoute>
-          <VerificationForm />
+          <VerificationFormContainer />
         </ProtectedRoute>
       } 
     />
