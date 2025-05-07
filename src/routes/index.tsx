@@ -28,6 +28,7 @@ import PlatformGuide from '@/pages/PlatformGuide';
 import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
 import TestPage from '@/pages/TestPage';
+import SavedJobs from '@/pages/SavedJobs';
 
 // These are route configurations that can be imported in App.tsx
 // They are not actual Route components
@@ -81,6 +82,11 @@ const AppRoutes = [
     path: "/applications",
     element: <Applications />,
     key: "applications"
+  },
+  {
+    path: "/saved-jobs",
+    element: <SavedJobs />,
+    key: "saved-jobs"
   },
   {
     path: "/error",

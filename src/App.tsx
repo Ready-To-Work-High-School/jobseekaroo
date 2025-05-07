@@ -43,6 +43,7 @@ import HealthcarePathways from './pages/HealthcarePathways';
 import StudentSuccess from './pages/StudentSuccess';
 import CareerQuiz from './pages/CareerQuiz';
 import PersonalizedAssessment from './pages/PersonalizedAssessment';
+import SavedJobs from './pages/SavedJobs';
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -102,6 +103,7 @@ function App() {
               <Route path="/career-quiz" element={<CareerQuiz />} />
               <Route path="/career-assessment" element={<CareerQuiz />} />
               <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
+              <Route path="/saved-jobs" element={<SavedJobs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <MobileBottomNavigation />
