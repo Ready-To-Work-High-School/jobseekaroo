@@ -7,19 +7,26 @@ import { Loader2 } from 'lucide-react';
 interface CalendlyEmbedProps {
   url?: string;
   className?: string;
+  userName?: string;
 }
 
 const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({ 
   url,
-  className 
+  className,
+  userName 
 }) => {
   // In Vite, we need to use import.meta.env instead of process.env
   const defaultUrl = import.meta.env.VITE_CALENDLY_CLIENT_ID ? 
     `https://calendly.com/d/${import.meta.env.VITE_CALENDLY_CLIENT_ID}` : 
     '';
     
-  // Use provided URL or fallback to default
-  const calendlyUrl = url || defaultUrl;
+  // Use provided URL, construct one with userName, or fallback to default
+  let calendlyUrl = url;
+  if (!calendlyUrl && userName) {
+    calendlyUrl = `https://calendly.com/${userName.toLowerCase().replace(/\s+/g, '-')}`;
+  }
+  calendlyUrl = calendlyUrl || defaultUrl;
+  
   const scriptStatus = useScript('https://assets.calendly.com/assets/external/widget.js');
 
   useEffect(() => {

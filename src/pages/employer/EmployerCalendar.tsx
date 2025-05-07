@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,12 +12,7 @@ import CalendlyScheduledEvents from "@/components/employer/calendar/CalendlySche
 import CalendlyWebhookManager from "@/components/employer/calendar/CalendlyWebhookManager";
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { Badge } from '@/components/ui/badge';
-
-interface Event {
-  title: string;
-  date: Date;
-  type: string;
-}
+import CalendlyUserProfile from "@/components/employer/calendar/CalendlyUserProfile";
 
 interface CalendlyEvent {
   uri: string;
@@ -60,11 +56,17 @@ const EmployerCalendar = () => {
   
   const userName = userProfile ? `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : '';
   
+  useEffect(() => {
+    if (activeTab === 'events') {
+      loadEvents();
+    } else if (activeTab === 'webhooks') {
+      loadWebhooks();
+    }
+  }, [activeTab]);
+
+  // Event loading and pagination methods
   const loadEvents = async (url?: string) => {
     setIsLoadingEvents(true);
-    
-    // Simulate API call - replace with your actual API endpoint
-    // and data fetching logic
     
     // Mock data for demonstration
     const mockEvents: CalendlyEvent[] = [
@@ -122,17 +124,14 @@ const EmployerCalendar = () => {
     }
   };
   
-  // Load webhooks with permission handling
+  // Webhook management methods
   const loadWebhooks = async () => {
     setIsLoadingWebhooks(true);
     setPermissionError(false);
     
     try {
-      // Simulate API call - in a real app this would be a call to your Calendly API proxy
-      // For demo purposes we're handling the 403 error shown in the example
-      
-      // Mock response based on the permission status we got from the user
-      const response = { status: 403 }; // Simulate 403 permission denied error
+      // Simulate API call with permission denied error
+      const response = { status: 403 };
       
       if (response.status === 403) {
         setPermissionError(true);
@@ -143,7 +142,6 @@ const EmployerCalendar = () => {
           variant: "destructive",
         });
       } else {
-        // In a real implementation, this would parse the response data
         setWebhooks([]);
       }
     } catch (error) {
@@ -158,7 +156,6 @@ const EmployerCalendar = () => {
     }
   };
   
-  // Handle webhook creation
   const handleCreateWebhook = async (url: string, events: string[]) => {
     if (permissionError) {
       toast({
@@ -169,14 +166,12 @@ const EmployerCalendar = () => {
       return;
     }
     
-    // In a real application, this would call the Calendly API
     toast({
       title: "Feature requires permissions",
       description: "Creating webhooks requires admin privileges in Calendly.",
     });
   };
   
-  // Handle webhook deletion
   const handleDeleteWebhook = async (webhookUri: string) => {
     if (permissionError) {
       toast({
@@ -187,20 +182,102 @@ const EmployerCalendar = () => {
       return;
     }
     
-    // In a real application, this would call the Calendly API
     toast({
       title: "Feature requires permissions",
       description: "Deleting webhooks requires admin privileges in Calendly.",
     });
   };
-  
-  useEffect(() => {
-    if (activeTab === 'events') {
-      loadEvents();
-    } else if (activeTab === 'webhooks') {
-      loadWebhooks();
-    }
-  }, [activeTab]);
+
+  // Render upcoming events preview
+  const renderUpcomingEvents = () => {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Upcoming Events</CardTitle>
+          <CardDescription>
+            Your next few scheduled appointments.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {events.slice(0, 3).map((event) => {
+              const start = new Date(event.start_time);
+              return (
+                <div key={event.uri} className="flex items-center justify-between border-b pb-3 last:border-0">
+                  <div>
+                    <p className="font-medium">{event.name || "Scheduled Meeting"}</p>
+                    <p className="text-sm text-muted-foreground">{format(start, 'MMMM d, yyyy • h:mm a')}</p>
+                  </div>
+                  <Badge variant="outline" className={`${event.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100'}`}>
+                    {event.status}
+                  </Badge>
+                </div>
+              );
+            })}
+            
+            {events.length === 0 && !isLoadingEvents && (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground">No upcoming events</p>
+              </div>
+            )}
+            
+            {isLoadingEvents && (
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between animate-pulse">
+                    <div>
+                      <div className="h-4 bg-gray-200 rounded w-48 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-32"></div>
+                    </div>
+                    <div className="h-5 bg-gray-200 rounded w-16"></div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button variant="outline" size="sm" className="ml-auto" onClick={() => setActiveTab('events')}>
+            View All Events
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  };
+
+  // Render permission error card for webhooks
+  const renderWebhookPermissionError = () => {
+    return (
+      <Card className="border-destructive/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            <Bell className="h-5 w-5" />
+            Permission Denied
+          </CardTitle>
+          <CardDescription>
+            You don't have permission to manage webhooks. This feature requires admin privileges in Calendly.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm mb-4">
+            Webhook management allows admins to configure real-time event notifications for your Calendly events.
+            These notifications can be sent to your application when events are created, canceled, or rescheduled.
+          </p>
+          
+          {isAdmin && (
+            <div className="bg-muted p-4 rounded-md">
+              <h3 className="font-medium mb-2">Admin Note</h3>
+              <p className="text-sm">
+                While you have admin privileges in this application, you may need additional permissions in your Calendly 
+                account to manage webhooks. Please contact your Calendly administrator or upgrade your Calendly plan 
+                to access this feature.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
   
   return (
     <div className="container max-w-7xl mx-auto py-8">
@@ -241,57 +318,7 @@ const EmployerCalendar = () => {
               </CardContent>
             </Card>
             
-            <Card>
-              <CardHeader>
-                <CardTitle>Upcoming Events</CardTitle>
-                <CardDescription>
-                  Your next few scheduled appointments.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {events.slice(0, 3).map((event, i) => {
-                    const start = new Date(event.start_time);
-                    return (
-                      <div key={event.uri} className="flex items-center justify-between border-b pb-3 last:border-0">
-                        <div>
-                          <p className="font-medium">{event.name || "Scheduled Meeting"}</p>
-                          <p className="text-sm text-muted-foreground">{format(start, 'MMMM d, yyyy • h:mm a')}</p>
-                        </div>
-                        <Badge variant="outline" className={`${event.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100'}`}>
-                          {event.status}
-                        </Badge>
-                      </div>
-                    );
-                  })}
-                  
-                  {events.length === 0 && !isLoadingEvents && (
-                    <div className="text-center py-4">
-                      <p className="text-muted-foreground">No upcoming events</p>
-                    </div>
-                  )}
-                  
-                  {isLoadingEvents && (
-                    <div className="space-y-2">
-                      {Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="flex items-center justify-between animate-pulse">
-                          <div>
-                            <div className="h-4 bg-gray-200 rounded w-48 mb-2"></div>
-                            <div className="h-3 bg-gray-200 rounded w-32"></div>
-                          </div>
-                          <div className="h-5 bg-gray-200 rounded w-16"></div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" size="sm" className="ml-auto" onClick={() => setActiveTab('events')}>
-                  View All Events
-                </Button>
-              </CardFooter>
-            </Card>
+            {renderUpcomingEvents()}
           </TabsContent>
           
           <TabsContent value="events">
@@ -306,36 +333,7 @@ const EmployerCalendar = () => {
           </TabsContent>
           
           <TabsContent value="webhooks">
-            {permissionError ? (
-              <Card className="border-destructive/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-destructive">
-                    <Bell className="h-5 w-5" />
-                    Permission Denied
-                  </CardTitle>
-                  <CardDescription>
-                    You don't have permission to manage webhooks. This feature requires admin privileges in Calendly.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-4">
-                    Webhook management allows admins to configure real-time event notifications for your Calendly events.
-                    These notifications can be sent to your application when events are created, canceled, or rescheduled.
-                  </p>
-                  
-                  {isAdmin && (
-                    <div className="bg-muted p-4 rounded-md">
-                      <h3 className="font-medium mb-2">Admin Note</h3>
-                      <p className="text-sm">
-                        While you have admin privileges in this application, you may need additional permissions in your Calendly 
-                        account to manage webhooks. Please contact your Calendly administrator or upgrade your Calendly plan 
-                        to access this feature.
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            ) : (
+            {permissionError ? renderWebhookPermissionError() : (
               <CalendlyWebhookManager
                 webhooks={webhooks}
                 onDelete={handleDeleteWebhook}
