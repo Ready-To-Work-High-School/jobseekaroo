@@ -1,96 +1,74 @@
 
 import React from 'react';
-import { useNotifications } from '@/contexts/notifications/NotificationsContext';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import NotificationFilters from './NotificationFilters';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Notification } from '@/types/notification';
 import NotificationItem from './NotificationItem';
+import NotificationEmpty from './NotificationEmpty';
 
-const NotificationContent: React.FC = () => {
-  const { 
-    notifications, 
-    filteredNotifications, 
-    isLoading, 
-    errorMessage, 
-    markAsRead, 
-    markAllAsRead, 
-    clearAll 
-  } = useNotifications();
-  
-  if (isLoading) {
-    return (
-      <div className="space-y-4 p-4">
-        <NotificationFilters />
-        <div className="space-y-2">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-16 rounded-md" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-  
-  if (errorMessage) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{errorMessage}</AlertDescription>
-      </Alert>
-    );
-  }
-  
-  if (notifications.length === 0) {
-    return (
-      <div className="p-6 flex flex-col items-center justify-center space-y-4">
-        <AlertCircle className="h-10 w-10 text-muted-foreground" />
-        <h3 className="text-lg font-medium text-muted-foreground">
-          No notifications yet
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          Check back later for updates
-        </p>
-      </div>
-    );
-  }
-  
+interface NotificationContentProps {
+  unreadCount: number;
+  filteredNotifications: Notification[];
+  markAllAsRead: () => void;
+  onClose: () => void;
+  isLoading: boolean;
+  errorMessage: string | null;
+}
+
+const NotificationContent: React.FC<NotificationContentProps> = ({
+  unreadCount,
+  filteredNotifications,
+  markAllAsRead,
+  onClose,
+  isLoading,
+  errorMessage
+}) => {
   return (
-    <div className="space-y-4 p-4">
-      <NotificationFilters />
-      
-      {filteredNotifications.length === 0 ? (
-        <Alert className="w-full">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Notifications Found</AlertTitle>
-          <AlertDescription>
-            No notifications match the current filters.
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <div className="space-y-2">
-          {filteredNotifications.map(notification => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              markAsRead={markAsRead}
-            />
-          ))}
+    <>
+      <div className="flex items-center justify-between border-b p-3">
+        <div className="flex items-center space-x-2">
+          <h3 className="font-medium">Notifications</h3>
+          {unreadCount > 0 && (
+            <span className="inline-flex h-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-medium text-primary-foreground">
+              {unreadCount}
+            </span>
+          )}
         </div>
-      )}
-      
-      {notifications.length > 0 && (
-        <div className="flex justify-between items-center">
-          <Button variant="ghost" onClick={markAllAsRead}>
-            Mark All as Read
-          </Button>
-          <Button variant="ghost" onClick={clearAll}>
-            Clear All
+        <div className="flex items-center space-x-2">
+          {unreadCount > 0 && (
+            <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-7 px-2">
+              <Check className="mr-1 h-3.5 w-3.5" />
+              <span className="text-xs">Mark all read</span>
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0">
+            <span className="sr-only">Close</span>
+            <X className="h-4 w-4" />
           </Button>
         </div>
-      )}
-    </div>
+      </div>
+      
+      <ScrollArea className="flex-1 p-0">
+        {isLoading ? (
+          <div className="flex items-center justify-center p-8">
+            <div className="animate-spin h-6 w-6 rounded-full border-2 border-primary border-t-transparent"></div>
+          </div>
+        ) : errorMessage ? (
+          <div className="p-4 text-center text-muted-foreground">
+            {errorMessage}
+          </div>
+        ) : filteredNotifications.length > 0 ? (
+          <div className="divide-y">
+            {filteredNotifications.map((notification) => (
+              <NotificationItem key={notification.id} notification={notification} />
+            ))}
+          </div>
+        ) : (
+          <NotificationEmpty />
+        )}
+      </ScrollArea>
+    </>
   );
 };
 

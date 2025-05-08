@@ -3,8 +3,8 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationsContext';
 import { useNotificationVisibility } from '@/hooks/useNotificationVisibility';
-import { NotificationHeader } from './NotificationHeader';
-import { NotificationContent } from './NotificationContent';
+import NotificationHeader from './NotificationHeader';
+import NotificationContent from './NotificationContent';
 
 export const NotificationCenter = () => {
   const { isOpen, setIsOpen } = useNotificationVisibility();
@@ -22,8 +22,7 @@ export const NotificationCenter = () => {
   return (
     <div className="relative" data-notification-center>
       <NotificationHeader 
-        unreadCount={unreadCount} 
-        onClick={() => setIsOpen(!isOpen)} 
+        onFilterClick={() => setIsOpen(!isOpen)} 
       />
       
       {isOpen && (
