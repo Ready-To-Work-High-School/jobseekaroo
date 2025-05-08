@@ -22,4 +22,6 @@ export interface NotificationResponse {
   metadata: Record<string, any>;
 }
 
+// Define the roles enum type to match what's allowed in the database
+export type AppRole = 'admin' | 'moderator' | 'user' | 'ceo';
 export type NotificationRole = 'admin' | 'ceo';

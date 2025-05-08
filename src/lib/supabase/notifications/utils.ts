@@ -12,7 +12,7 @@ export function transformNotification(notification: NotificationResponse): Notif
   // Return transformed notification
   return {
     id: notification.id,
-    userId: notification.user_id,
+    userId: notification.user_id, // Map user_id to userId for frontend
     title: notification.title,
     message: notification.message,
     type: notification.type,

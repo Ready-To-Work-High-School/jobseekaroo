@@ -2,7 +2,7 @@
 import { createNotification } from './createNotifications';
 import { NotificationType } from '@/types/notification';
 import { supabase } from '../index';
-import { NotificationRole } from './types';
+import { NotificationRole, AppRole } from './types';
 
 /**
  * Get user IDs by role
@@ -13,7 +13,7 @@ async function getUsersByRole(role: NotificationRole): Promise<string[]> {
   const { data, error } = await supabase
     .from('user_roles')
     .select('user_id')
-    .eq('role', role);
+    .eq('role', role as AppRole);
     
   if (error) {
     console.error('Error fetching users by role:', error);
