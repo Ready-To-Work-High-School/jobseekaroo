@@ -2,6 +2,7 @@
 import { supabase } from '../index';
 import { Notification } from '@/types/notification';
 import { transformNotification } from './utils';
+import { NotificationResponse } from './types';
 
 /**
  * Fetch all notifications for a user
@@ -15,5 +16,6 @@ export async function fetchNotifications(userId: string): Promise<Notification[]
     
   if (error) throw error;
   
-  return data?.map(transformNotification) || [];
+  // Explicitly cast data to NotificationResponse[] to ensure proper typing
+  return (data as NotificationResponse[])?.map(transformNotification) || [];
 }

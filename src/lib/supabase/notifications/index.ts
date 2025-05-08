@@ -5,3 +5,4 @@ export * from './createNotifications';
 export * from './realtimeNotifications';
 export * from './types';
 export * from './utils';
+export * from './createAdminNotification';

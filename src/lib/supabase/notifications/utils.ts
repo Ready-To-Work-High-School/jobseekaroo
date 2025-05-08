@@ -17,7 +17,7 @@ export function transformNotification(notification: NotificationResponse): Notif
     message: notification.message,
     type: notification.type,
     read: notification.read,
-    createdAt: new Date(notification.created_at),
+    createdAt: notification.created_at, // Return as string instead of Date
     link: notification.link,
     metadata: metadata
   };
