@@ -45,6 +45,16 @@ export async function markAllNotificationsAsRead(userId: string): Promise<void> 
   if (error) throw error;
 }
 
+// Clear all notifications for a user
+export async function clearAllNotifications(userId: string): Promise<void> {
+  const { error } = await supabase
+    .from('notifications')
+    .delete()
+    .eq('user_id', userId);
+    
+  if (error) throw error;
+}
+
 // Create a new notification for a user
 export async function createNotification(
   notification: {

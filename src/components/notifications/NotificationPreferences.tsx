@@ -30,8 +30,6 @@ const NotificationPreferences = () => {
     setIsLoading(true);
     
     try {
-      // For now, we'll use a dummy implementation since the function doesn't exist
-      // This would normally call fetchNotificationPreferences from lib/supabase/notifications
       const { data, error } = await supabase
         .from('notification_preferences')
         .select('*')
@@ -46,7 +44,7 @@ const NotificationPreferences = () => {
         setPreferences({
           email: data.email_notifications ?? true,
           push: data.push_notifications ?? true,
-          inApp: data.in_app_notifications ?? true,
+          inApp: data.application_notifications ?? true, // Changed from in_app_notifications to application_notifications
         });
       }
     } catch (error) {
@@ -66,15 +64,13 @@ const NotificationPreferences = () => {
     setIsSaving(true);
     
     try {
-      // For now, we'll use a dummy implementation since the function doesn't exist
-      // This would normally call updateNotificationPreferences from lib/supabase/notifications
       const { error } = await supabase
         .from('notification_preferences')
         .upsert({
           user_id: user.id,
           email_notifications: preferences.email,
           push_notifications: preferences.push,
-          in_app_notifications: preferences.inApp,
+          application_notifications: preferences.inApp, // Changed from in_app_notifications to application_notifications
           updated_at: new Date().toISOString()
         });
         

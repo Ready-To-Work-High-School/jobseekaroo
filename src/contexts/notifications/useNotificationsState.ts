@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { Notification, NotificationFilterOptions } from '@/types/notification';
-import { fetchNotifications, markNotificationAsRead, clearAllNotifications } from '@/lib/supabase/notifications';
+import { fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead } from '@/lib/supabase/notifications';
+import { supabase } from '@/lib/supabase';
 
 export const useNotificationsState = (userId?: string) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -94,12 +95,7 @@ export const useNotificationsState = (userId?: string) => {
     if (!userId || notifications.length === 0) return;
 
     try {
-      // Update each unread notification
-      const unreadNotifications = notifications.filter(notification => !notification.read);
-      
-      for (const notification of unreadNotifications) {
-        await markNotificationAsRead(notification.id);
-      }
+      await markAllNotificationsAsRead(userId);
       
       // Update local state
       setNotifications(prevNotifications =>
@@ -115,7 +111,13 @@ export const useNotificationsState = (userId?: string) => {
     if (!userId || notifications.length === 0) return;
 
     try {
-      await clearAllNotifications(userId);
+      // Delete all notifications for the user
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', userId);
+      
+      if (error) throw error;
       
       // Update local state
       setNotifications([]);

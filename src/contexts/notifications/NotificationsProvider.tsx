@@ -1,10 +1,9 @@
-
 import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Notification, NotificationType } from '@/types/notification';
 import { NotificationsContextType, NotificationFilterOptions } from './types';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
-import { fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead, createNotification } from '@/lib/supabase/notifications';
+import { fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead } from '@/lib/supabase/notifications';
 
 interface NotificationsProviderProps {
   children: ReactNode;
@@ -208,47 +207,6 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
 
   // Count unread notifications
   const unreadCount = notifications.filter((notification) => !notification.read).length;
-
-  // Create a notification
-  const addNotification = async (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
-    if (!user) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .insert({
-          user_id: notification.user_id,
-          title: notification.title,
-          message: notification.message,
-          type: notification.type,
-          link: notification.link,
-          metadata: notification.metadata || {},
-          read: false,
-        })
-        .select()
-        .single();
-        
-      if (error) throw error;
-      
-      if (data) {
-        const newNotification = {
-          id: data.id,
-          user_id: data.user_id,
-          title: data.title,
-          message: data.message,
-          type: data.type as NotificationType,
-          read: data.read,
-          createdAt: data.created_at,
-          link: data.link,
-          metadata: data.metadata || {},
-        };
-        
-        setNotifications((prev) => [newNotification, ...prev]);
-      }
-    } catch (error) {
-      console.error('Error creating notification:', error);
-    }
-  };
 
   return (
     <NotificationsContext.Provider
