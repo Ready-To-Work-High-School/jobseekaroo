@@ -169,3 +169,31 @@ export async function createCeoNotification(
     
   if (error) throw error;
 }
+
+// Subscribe to real-time notifications
+export function subscribeToNotifications(userId: string, callback: (notification: Notification) => void) {
+  return supabase
+    .channel('notifications')
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'notifications',
+      filter: `user_id=eq.${userId}`,
+    }, (payload) => {
+      // Transform the payload to a Notification object
+      const notification: Notification = {
+        id: payload.new.id,
+        user_id: payload.new.user_id,
+        title: payload.new.title,
+        message: payload.new.message,
+        type: payload.new.type as NotificationType,
+        read: payload.new.read,
+        createdAt: payload.new.created_at,
+        link: payload.new.link || '',
+        metadata: payload.new.metadata || {},
+      };
+      
+      callback(notification);
+    })
+    .subscribe();
+}
