@@ -21,7 +21,7 @@ export async function fetchNotifications(userId: string): Promise<Notification[]
     read: item.read,
     createdAt: item.created_at,
     link: item.link || '',
-    metadata: item.metadata ? item.metadata : {},
+    metadata: item.metadata ? (typeof item.metadata === 'object' ? item.metadata : {}) : {},
   })) || [];
 }
 
@@ -91,7 +91,7 @@ export async function createNotification(
     read: data.read,
     createdAt: data.created_at,
     link: data.link || '',
-    metadata: data.metadata || {},
+    metadata: data.metadata ? (typeof data.metadata === 'object' ? data.metadata : {}) : {},
   };
 }
 
@@ -190,7 +190,7 @@ export function subscribeToNotifications(userId: string, callback: (notification
         read: payload.new.read,
         createdAt: payload.new.created_at,
         link: payload.new.link || '',
-        metadata: payload.new.metadata || {},
+        metadata: payload.new.metadata ? (typeof payload.new.metadata === 'object' ? payload.new.metadata : {}) : {},
       };
       
       callback(notification);

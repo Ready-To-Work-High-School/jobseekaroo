@@ -10,7 +10,7 @@ export interface Notification {
   read: boolean;
   createdAt: string;
   link: string;
-  metadata?: Record<string, any>;
+  metadata: Record<string, any>;
 }
 
 export interface NotificationFilterOptions {

@@ -65,7 +65,7 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
         table: 'notifications',
         filter: `user_id=eq.${user.id}`,
       }, (payload) => {
-        const newNotification = {
+        const newNotification: Notification = {
           id: payload.new.id,
           user_id: payload.new.user_id,
           title: payload.new.title,
@@ -74,7 +74,7 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
           read: payload.new.read,
           createdAt: payload.new.created_at,
           link: payload.new.link || '',
-          metadata: payload.new.metadata || {},
+          metadata: payload.new.metadata ? (typeof payload.new.metadata === 'object' ? payload.new.metadata : {}) : {},
         };
         setNotifications((prev) => [newNotification, ...prev]);
         toast({
