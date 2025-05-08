@@ -21,7 +21,7 @@ export async function fetchNotifications(userId: string): Promise<Notification[]
     read: item.read,
     createdAt: item.created_at,
     link: item.link || '',
-    metadata: item.metadata ? (typeof item.metadata === 'object' ? item.metadata : {}) : {},
+    metadata: processMetadata(item.metadata),
   })) || [];
 }
 
@@ -53,6 +53,13 @@ export async function clearAllNotifications(userId: string): Promise<void> {
     .eq('user_id', userId);
     
   if (error) throw error;
+}
+
+// Helper function to process metadata
+function processMetadata(metadata: unknown): Record<string, any> {
+  if (!metadata) return {};
+  if (typeof metadata !== 'object') return {};
+  return metadata as Record<string, any>;
 }
 
 // Create a new notification for a user
@@ -91,7 +98,7 @@ export async function createNotification(
     read: data.read,
     createdAt: data.created_at,
     link: data.link || '',
-    metadata: data.metadata ? (typeof data.metadata === 'object' ? data.metadata : {}) : {},
+    metadata: processMetadata(data.metadata),
   };
 }
 
@@ -190,7 +197,7 @@ export function subscribeToNotifications(userId: string, callback: (notification
         read: payload.new.read,
         createdAt: payload.new.created_at,
         link: payload.new.link || '',
-        metadata: payload.new.metadata ? (typeof payload.new.metadata === 'object' ? payload.new.metadata : {}) : {},
+        metadata: processMetadata(payload.new.metadata),
       };
       
       callback(notification);
