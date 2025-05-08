@@ -25,3 +25,6 @@ export interface NotificationResponse {
 // Define the roles enum type to match what's allowed in the database
 export type AppRole = 'admin' | 'moderator' | 'user' | 'ceo';
 export type NotificationRole = 'admin' | 'ceo';
+
+// This type ensures we're using valid database role values
+export type DatabaseRole = 'admin' | 'moderator' | 'user' | 'ceo';
