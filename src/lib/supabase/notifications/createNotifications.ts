@@ -1,102 +1,58 @@
 
 import { supabase } from '../index';
-import { NotificationType } from '@/types/notification';
-import { NotificationData, NotificationResponse } from './types';
-import { transformNotification } from './utils';
+import { NotificationData } from './types';
 
 /**
- * Create a new notification for a user
+ * Create a notification for a user
+ * 
+ * @param notification The notification data to create
+ * @returns The created notification ID
  */
-export async function createNotification(notification: NotificationData) {
-  const { data, error } = await supabase
-    .from('notifications')
-    .insert({
-      user_id: notification.user_id,
-      title: notification.title,
-      message: notification.message,
-      type: notification.type,
-      link: notification.link || '',
-      metadata: notification.metadata || {},
-      read: false,
-    })
-    .select()
-    .single();
+export async function createNotification(notification: NotificationData): Promise<string> {
+  try {
+    // Process the metadata to ensure it's in the correct format
+    const processedNotification = {
+      ...notification,
+      metadata: notification.metadata ? JSON.stringify(notification.metadata) : null
+    };
     
-  if (error) throw error;
-  
-  return transformNotification(data);
-}
-
-/**
- * Create admin notifications (for CEO and admins)
- */
-export async function createAdminNotification(
-  title: string,
-  message: string,
-  type: NotificationType,
-  link?: string,
-  metadata?: Record<string, any>
-): Promise<void> {
-  // Get all users with admin or CEO role
-  const { data: adminUsers, error: adminError } = await supabase
-    .from('users')
-    .select('id')
-    .in('role', ['admin', 'ceo']);
+    const { data, error } = await supabase
+      .from('notifications')
+      .insert(processedNotification)
+      .select('id')
+      .single();
     
-  if (adminError) throw adminError;
-  
-  if (!adminUsers || adminUsers.length === 0) return;
-  
-  // Create notifications for each admin user
-  const notifications = adminUsers.map(admin => ({
-    user_id: admin.id,
-    title,
-    message,
-    type,
-    link: link || '',
-    metadata: metadata || {},
-    read: false,
-  }));
-  
-  const { error } = await supabase
-    .from('notifications')
-    .insert(notifications);
-    
-  if (error) throw error;
-}
-
-/**
- * Create CEO notification (only for CEO)
- */
-export async function createCeoNotification(
-  title: string,
-  message: string,
-  type: NotificationType,
-  link?: string,
-  metadata?: Record<string, any>
-): Promise<void> {
-  // Get the CEO user
-  const { data: ceoUser, error: ceoError } = await supabase
-    .from('users')
-    .select('id')
-    .eq('role', 'ceo')
-    .single();
-    
-  if (ceoError) {
-    // If there's no CEO user, just return
-    if (ceoError.code === 'PGRST116') return;
-    throw ceoError;
+    if (error) throw error;
+    return data.id;
+  } catch (error) {
+    console.error('Error creating notification:', error);
+    throw error;
   }
-  
-  if (!ceoUser) return;
-  
-  // Create notification for the CEO
-  await createNotification({
-    user_id: ceoUser.id,
-    title,
-    message,
-    type,
-    link,
-    metadata
-  });
+}
+
+/**
+ * Create multiple notifications at once
+ * 
+ * @param notifications Array of notification data to create
+ * @returns Array of created notification IDs
+ */
+export async function createNotifications(notifications: NotificationData[]): Promise<string[]> {
+  try {
+    // Process the metadata for each notification
+    const processedNotifications = notifications.map(notification => ({
+      ...notification,
+      metadata: notification.metadata ? JSON.stringify(notification.metadata) : null
+    }));
+    
+    const { data, error } = await supabase
+      .from('notifications')
+      .insert(processedNotifications)
+      .select('id');
+    
+    if (error) throw error;
+    return data?.map(notification => notification.id) || [];
+  } catch (error) {
+    console.error('Error creating multiple notifications:', error);
+    throw error;
+  }
 }
