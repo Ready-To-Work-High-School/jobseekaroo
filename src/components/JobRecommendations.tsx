@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,51 +18,63 @@ interface JobRecommendationsProps {
 const JobRecommendations: React.FC<JobRecommendationsProps> = ({ limit = 5, showReason = false }) => {
   const { user } = useAuth();
   
-  // Fetch job recommendations with a stable key that won't cause blinking
+  // Fetch job recommendations with improved cache settings to reduce blinking
   const { data: recommendations, isLoading } = useQuery({
     queryKey: ['jobRecommendations', user?.id, limit],
     queryFn: async () => {
       if (!user) return [];
       
-      // First get the recommendation IDs
-      const { data: recommendationData, error: recommendationError } = await supabase
-        .from('job_recommendations')
-        .select('job_id, score, reason')
-        .eq('user_id', user.id)
-        .order('score', { ascending: false })
-        .limit(limit);
-      
-      if (recommendationError) throw recommendationError;
-      
-      if (!recommendationData || recommendationData.length === 0) {
+      try {
+        // First get the recommendation IDs
+        const { data: recommendationData, error: recommendationError } = await supabase
+          .from('job_recommendations')
+          .select('job_id, score, reason')
+          .eq('user_id', user.id)
+          .order('score', { ascending: false })
+          .limit(limit);
+        
+        if (recommendationError) {
+          console.error("Error fetching recommendations:", recommendationError);
+          return [];
+        }
+        
+        if (!recommendationData || recommendationData.length === 0) {
+          return [];
+        }
+        
+        // Then get the actual job details
+        const jobIds = recommendationData.map(rec => rec.job_id);
+        const { data: jobsData, error: jobsError } = await supabase
+          .from('jobs')
+          .select('*')
+          .in('id', jobIds);
+        
+        if (jobsError) {
+          console.error("Error fetching jobs:", jobsError);
+          return [];
+        }
+        
+        // Combine the data
+        return recommendationData.map(rec => {
+          const jobData = jobsData?.find(job => job.id === rec.job_id);
+          return {
+            ...jobData,
+            score: rec.score,
+            reason: rec.reason
+          };
+        }).filter(Boolean);
+      } catch (error) {
+        console.error("Exception in recommendation fetch:", error);
         return [];
       }
-      
-      // Then get the actual job details
-      const jobIds = recommendationData.map(rec => rec.job_id);
-      const { data: jobsData, error: jobsError } = await supabase
-        .from('jobs')
-        .select('*')
-        .in('id', jobIds);
-      
-      if (jobsError) throw jobsError;
-      
-      // Combine the data
-      return recommendationData.map(rec => {
-        const jobData = jobsData?.find(job => job.id === rec.job_id);
-        return {
-          ...jobData,
-          score: rec.score,
-          reason: rec.reason
-        };
-      }).filter(Boolean);
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes cache to reduce blinking
+    staleTime: 10 * 60 * 1000, // 10 minutes cache to reduce blinking
+    gcTime: 15 * 60 * 1000,    // 15 minutes garbage collection
     enabled: !!user
   });
   
-  // Use a stable empty state that won't change during rendering
-  const emptyState = useMemo(() => (
+  // Use stable empty state
+  const emptyState = (
     <Card className="bg-muted/40">
       <CardContent className="p-6 text-center">
         <p className="text-muted-foreground mb-4">
@@ -75,7 +87,7 @@ const JobRecommendations: React.FC<JobRecommendationsProps> = ({ limit = 5, show
         </Button>
       </CardContent>
     </Card>
-  ), [user]);
+  );
   
   // Show a stable loading state
   if (isLoading) {

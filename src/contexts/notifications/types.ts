@@ -25,4 +25,5 @@ export interface NotificationsContextType {
   clearAll: () => void;
   filterOptions: NotificationFilterOptions;
   updateFilters: (filters: Partial<NotificationFilterOptions>) => void;
+  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void;
 }

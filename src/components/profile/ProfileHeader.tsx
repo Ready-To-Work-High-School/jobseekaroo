@@ -63,8 +63,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       
       {/* Inception Member ribbon - ENHANCED & MOVED ABOVE USERNAME */}
       {isInceptionMember && (
-        <div className="mb-4 animate-pulse">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2.5 px-4 shadow-lg font-bold text-center text-lg rounded-md">
+        <div className="mb-4">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2.5 px-4 shadow-lg font-bold text-center text-lg rounded-md transition-all duration-1000">
             🌟 FOUNDING MEMBER 2025-2026 🌟
           </div>
         </div>
