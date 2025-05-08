@@ -21,7 +21,7 @@ export async function fetchNotifications(userId: string): Promise<Notification[]
     read: item.read,
     createdAt: item.created_at,
     link: item.link || '',
-    metadata: item.metadata || {},
+    metadata: item.metadata ? item.metadata : {},
   })) || [];
 }
 

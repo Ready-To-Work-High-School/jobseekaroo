@@ -73,7 +73,7 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
           type: payload.new.type as NotificationType,
           read: payload.new.read,
           createdAt: payload.new.created_at,
-          link: payload.new.link,
+          link: payload.new.link || '',
           metadata: payload.new.metadata || {},
         };
         setNotifications((prev) => [newNotification, ...prev]);
