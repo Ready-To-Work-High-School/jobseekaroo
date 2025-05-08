@@ -55,8 +55,8 @@ export async function clearAllNotifications(userId: string): Promise<void> {
   if (error) throw error;
 }
 
-// Helper function to process metadata
-function processMetadata(metadata: unknown): Record<string, any> {
+// Helper function to process metadata safely
+function processMetadata(metadata: any): Record<string, any> {
   if (!metadata) return {};
   if (typeof metadata !== 'object') return {};
   return metadata as Record<string, any>;

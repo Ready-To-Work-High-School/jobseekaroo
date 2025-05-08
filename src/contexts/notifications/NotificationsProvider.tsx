@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Notification, NotificationType } from '@/types/notification';
 import { NotificationsContextType, NotificationFilterOptions } from './types';
@@ -46,18 +47,21 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
   useEffect(() => {
     if (user) {
       loadNotifications();
-      subscribeToNotifications();
+      const subscription = subscribeToNotifications();
+      
+      return () => {
+        if (subscription) {
+          subscription.unsubscribe();
+        }
+      };
     }
-    return () => {
-      unsubscribeFromNotifications();
-    };
   }, [user]);
 
   // Subscribe to real-time notifications
   const subscribeToNotifications = () => {
-    if (!user) return;
+    if (!user) return null;
 
-    const channel = supabase
+    return supabase
       .channel('notifications')
       .on('postgres_changes', {
         event: 'INSERT',
@@ -76,19 +80,16 @@ export const NotificationsProvider = ({ children, user }: NotificationsProviderP
           link: payload.new.link || '',
           metadata: payload.new.metadata ? (typeof payload.new.metadata === 'object' ? payload.new.metadata : {}) : {},
         };
-        setNotifications((prev) => [newNotification, ...prev]);
+        
+        // Use function form of setState to avoid stale closures
+        setNotifications(prev => [newNotification, ...prev]);
+        
         toast({
           title: 'New Notification',
           description: payload.new.title,
         });
       })
       .subscribe();
-
-    return channel;
-  };
-
-  const unsubscribeFromNotifications = () => {
-    supabase.channel('notifications').unsubscribe();
   };
 
   const loadNotifications = async () => {
