@@ -10,10 +10,11 @@ import { NotificationRole, AppRole } from './types';
  * @returns Array of user IDs with the specified role
  */
 async function getUsersByRole(role: NotificationRole): Promise<string[]> {
+  // We need to use a type assertion here since the database query expects a specific set of roles
   const { data, error } = await supabase
     .from('user_roles')
     .select('user_id')
-    .eq('role', role as AppRole);
+    .eq('role', role);
     
   if (error) {
     console.error('Error fetching users by role:', error);
