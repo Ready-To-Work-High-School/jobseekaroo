@@ -2,7 +2,7 @@
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useNotifications } from '@/contexts/NotificationsContext';
+import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 

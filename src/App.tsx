@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
@@ -10,6 +9,7 @@ import DiagnosticMenuButton from './components/ErrorRecovery/DiagnosticMenuButto
 import ScrollToTop from './components/navigation/ScrollToTop';
 import { motion } from 'framer-motion'; 
 import AdminRoutes from './routes/adminRoutes';
+import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
 
 // Import all necessary route components
 import Home from './pages/Home';
@@ -62,72 +62,74 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AutoRecoveryErrorBoundary maxAutoRecoveryAttempts={2}>
         <TooltipProvider>
-          <motion.div 
-            className="min-h-screen flex flex-col"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <ScrollToTop />
-            <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
-              <DiagnosticMenuButton />
-            </div>
-            
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/jobs" element={<Jobs />} />
-              <Route path="/jobs/:id" element={<JobDetail />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/sign-in" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/applications" element={<Applications />} />
-              <Route path="/error" element={<ErrorPage />} />
-              <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-              <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
-              <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
-              <Route path="/skill-development" element={<SkillDevelopment />} />
-              <Route path="/interview-prep" element={<InterviewPrep />} />
-              <Route path="/employer-analytics" element={<EmployerAnalytics />} />
-              <Route path="/premium-services" element={<PremiumServices />} />
-              <Route path="/employer-premium" element={<EmployerPremiumServices />} />
-              <Route path="/analytics" element={<AnalyticsDashboard />} />
-              <Route path="/school-guide" element={<SchoolGuide />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/platform-guide" element={<PlatformGuide />} />
-              <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/school-integration" element={<SchoolIntegration />} />
-              <Route path="/schedule" element={<SchedulePage />} />
-              <Route path="/test" element={<TestPage />} />
-              <Route path="/test-admin" element={<TestAdmin />} />
-              <Route path="/index" element={<Index />} />
-              <Route path="/about" element={<Index />} />
-              <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
-              <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
-              <Route path="/student-success" element={<StudentSuccess />} />
-              <Route path="/career-quiz" element={<CareerQuiz />} />
-              <Route path="/career-assessment" element={<CareerQuiz />} />
-              <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
-              <Route path="/saved-jobs" element={<SavedJobs />} />
-              <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
-              <Route path="/employer/candidates" element={<EmployerKanban />} />
-              <Route path="/employer/applicants" element={<EmployerApplicants />} />
-              <Route path="/employer/calendar" element={<EmployerCalendar />} />
+          <NotificationsProvider>
+            <motion.div 
+              className="min-h-screen flex flex-col"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <ScrollToTop />
+              <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
+                <DiagnosticMenuButton />
+              </div>
               
-              {/* Include direct routes to admin pages for fallback/compatibility */}
-              <Route path="/admin" element={<AdminPanel />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              
-              {/* Include all admin routes from the adminRoutes file */}
-              {AdminRoutes}
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <MobileBottomNavigation />
-            <Toaster />
-          </motion.div>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/jobs/:id" element={<JobDetail />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/applications" element={<Applications />} />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+                <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+                <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
+                <Route path="/skill-development" element={<SkillDevelopment />} />
+                <Route path="/interview-prep" element={<InterviewPrep />} />
+                <Route path="/employer-analytics" element={<EmployerAnalytics />} />
+                <Route path="/premium-services" element={<PremiumServices />} />
+                <Route path="/employer-premium" element={<EmployerPremiumServices />} />
+                <Route path="/analytics" element={<AnalyticsDashboard />} />
+                <Route path="/school-guide" element={<SchoolGuide />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/platform-guide" element={<PlatformGuide />} />
+                <Route path="/for-employers" element={<ForEmployers />} />
+                <Route path="/school-integration" element={<SchoolIntegration />} />
+                <Route path="/schedule" element={<SchedulePage />} />
+                <Route path="/test" element={<TestPage />} />
+                <Route path="/test-admin" element={<TestAdmin />} />
+                <Route path="/index" element={<Index />} />
+                <Route path="/about" element={<Index />} />
+                <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
+                <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
+                <Route path="/student-success" element={<StudentSuccess />} />
+                <Route path="/career-quiz" element={<CareerQuiz />} />
+                <Route path="/career-assessment" element={<CareerQuiz />} />
+                <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
+                <Route path="/saved-jobs" element={<SavedJobs />} />
+                <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
+                <Route path="/employer/candidates" element={<EmployerKanban />} />
+                <Route path="/employer/applicants" element={<EmployerApplicants />} />
+                <Route path="/employer/calendar" element={<EmployerCalendar />} />
+                
+                {/* Include direct routes to admin pages for fallback/compatibility */}
+                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                
+                {/* Include all admin routes from the adminRoutes file */}
+                {AdminRoutes}
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <MobileBottomNavigation />
+              <Toaster />
+            </motion.div>
+          </NotificationsProvider>
         </TooltipProvider>
       </AutoRecoveryErrorBoundary>
     </QueryClientProvider>

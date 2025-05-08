@@ -5,7 +5,7 @@ import { NotificationsContextType } from './types';
 // NotificationsContext provides notification state to any consumer
 export const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
-// Update the export structure to match what NotificationsProvider is importing
+// useNotifications hook provides access to the notifications context
 export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (context === undefined) {
