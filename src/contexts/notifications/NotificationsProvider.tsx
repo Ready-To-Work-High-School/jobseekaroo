@@ -1,6 +1,6 @@
 
 import { ReactNode } from 'react';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { NotificationsContext } from '@/contexts/notifications/NotificationsContext';
 import { Toaster } from 'sonner';
 import { useNotificationsRealtime } from './useNotificationsRealtime';

@@ -61,6 +61,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -mr-20 -mt-20"></div>
       <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-100 rounded-full blur-2xl opacity-30 -ml-10 -mb-10"></div>
       
+      {/* Inception Member ribbon - ENHANCED & MOVED ABOVE USERNAME */}
+      {isInceptionMember && (
+        <div className="mb-4 animate-pulse">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2.5 px-4 shadow-lg font-bold text-center text-lg rounded-md">
+            🌟 FOUNDING MEMBER 2025-2026 🌟
+          </div>
+        </div>
+      )}
+      
       <div className="flex items-center gap-4 relative">
         <div className="relative">
           <Avatar className="h-16 w-16 border-2 border-blue-100 shadow-md">
@@ -78,15 +87,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   <Shield className="h-3 w-3 text-white" />
                 </div>
               </Link>
-            </div>
-          )}
-          
-          {/* Inception Member ribbon for 2025-2026 signups - ENHANCED */}
-          {isInceptionMember && (
-            <div className="absolute -right-3 -top-3 rotate-45 z-10">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs py-1 px-8 shadow-lg font-bold animate-pulse">
-                INCEPTION
-              </div>
             </div>
           )}
         </div>
@@ -132,7 +132,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             )}
           </div>
           
-          {/* Enhanced inception member badge */}
+          {/* Enhanced inception member badge - still kept here for extra emphasis */}
           {isInceptionMember && (
             <div className="mt-2">
               <Badge className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-3 py-1 text-sm font-medium">

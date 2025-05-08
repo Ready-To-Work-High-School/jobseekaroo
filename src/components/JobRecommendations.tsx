@@ -115,7 +115,6 @@ const JobRecommendations: React.FC<JobRecommendationsProps> = ({ limit = 5, show
                 <JobCardLogo
                   logoUrl={job.logo_url}
                   companyName={job.company_name}
-                  size="sm"
                 />
                 <div>
                   <h3 className="font-medium line-clamp-1">{job.title}</h3>

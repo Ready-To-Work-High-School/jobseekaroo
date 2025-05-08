@@ -1,19 +1,17 @@
 
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNotifications } from '@/contexts/NotificationsContext';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export const NavbarNotifications = () => {
   const { user } = useAuth();
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   
-  // Only show for job seekers
-  if (!user || user.user_metadata?.role !== 'job_seeker') {
+  if (!user) {
     return null;
   }
   
