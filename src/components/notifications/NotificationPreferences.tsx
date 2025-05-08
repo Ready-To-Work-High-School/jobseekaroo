@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
-import { fetchNotificationPreferences, updateNotificationPreferences } from '@/lib/supabase/notifications';
 
 const NotificationPreferences = () => {
   const { user } = useAuth();
@@ -45,9 +44,9 @@ const NotificationPreferences = () => {
       
       if (data) {
         setPreferences({
-          email: data.email_enabled ?? true,
-          push: data.push_enabled ?? true,
-          inApp: data.in_app_enabled ?? true,
+          email: data.email_notifications ?? true,
+          push: data.push_notifications ?? true,
+          inApp: data.in_app_notifications ?? true,
         });
       }
     } catch (error) {
@@ -73,9 +72,9 @@ const NotificationPreferences = () => {
         .from('notification_preferences')
         .upsert({
           user_id: user.id,
-          email_enabled: preferences.email,
-          push_enabled: preferences.push,
-          in_app_enabled: preferences.inApp,
+          email_notifications: preferences.email,
+          push_notifications: preferences.push,
+          in_app_notifications: preferences.inApp,
           updated_at: new Date().toISOString()
         });
         

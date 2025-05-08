@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
 import Navbar from './components/navbar/Navbar';
@@ -23,21 +23,19 @@ function App() {
     <div className="app">
       <AuthProvider>
         <NotificationsProvider user={user}>
-          <Router>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-              <Route path="/jobs" element={<EnhancedJobListings />} />
-              <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
-              <Route path="/ceo-portal" element={<CeoPortal />} />
-              <Route path="/notifications" element={<Notifications />} />
-            </Routes>
-            <Footer />
-          </Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+            <Route path="/jobs" element={<EnhancedJobListings />} />
+            <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
+            <Route path="/ceo-portal" element={<CeoPortal />} />
+            <Route path="/notifications" element={<Notifications />} />
+          </Routes>
+          <Footer />
         </NotificationsProvider>
       </AuthProvider>
     </div>
