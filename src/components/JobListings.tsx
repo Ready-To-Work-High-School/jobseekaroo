@@ -5,6 +5,7 @@ import { Briefcase, MapPin, Clock, DollarSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { useFadeIn } from '@/utils/animations';
+import { toast } from 'sonner';
 
 type Job = {
   id: string;
@@ -70,9 +71,12 @@ const JobListings = () => {
           ];
           setJobs(sampleJobs);
           setLoading(false);
+          // Add a toast to inform the user that jobs loaded
+          toast.success('Jobs loaded successfully');
         }, 1000);
       } catch (error) {
         console.error('Error fetching jobs:', error);
+        toast.error('Failed to load jobs');
         setLoading(false);
       }
     };
@@ -102,35 +106,45 @@ const JobListings = () => {
 
   return (
     <div id="job-listings" className={`space-y-4 ${fadeIn}`}>
-      {jobs.map(job => (
-        <Card key={job.id} className="hover:shadow-md transition-shadow">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-            <p className="text-muted-foreground mb-3">{job.company_name}</p>
-            
-            <div className="flex flex-wrap gap-3 mb-4">
-              <span className="inline-flex items-center text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 mr-1" />
-                {job.location_city}, {job.location_state}
-              </span>
+      {jobs.length > 0 ? (
+        jobs.map(job => (
+          <Card key={job.id} className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
+              <p className="text-muted-foreground mb-3">{job.company_name}</p>
               
-              <span className="inline-flex items-center text-sm text-muted-foreground">
-                <Clock className="h-4 w-4 mr-1" />
-                {job.job_type.charAt(0).toUpperCase() + job.job_type.slice(1)}
-              </span>
+              <div className="flex flex-wrap gap-3 mb-4">
+                <span className="inline-flex items-center text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 mr-1" />
+                  {job.location_city}, {job.location_state}
+                </span>
+                
+                <span className="inline-flex items-center text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4 mr-1" />
+                  {job.job_type.charAt(0).toUpperCase() + job.job_type.slice(1)}
+                </span>
+                
+                <span className="inline-flex items-center text-sm text-muted-foreground">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  ${job.pay_rate_min}-${job.pay_rate_max}/{job.pay_rate_period === 'hourly' ? 'hr' : job.pay_rate_period}
+                </span>
+              </div>
               
-              <span className="inline-flex items-center text-sm text-muted-foreground">
-                <DollarSign className="h-4 w-4 mr-1" />
-                ${job.pay_rate_min}-${job.pay_rate_max}/{job.pay_rate_period === 'hourly' ? 'hr' : job.pay_rate_period}
-              </span>
-            </div>
-            
-            <Button asChild>
-              <Link to={`/jobs/${job.id}`}>View Details</Link>
-            </Button>
+              <Button asChild>
+                <Link to={`/jobs/${job.id}`}>View Details</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Card>
+          <CardContent className="p-6 text-center">
+            <h3 className="text-xl font-semibold mb-2">No Jobs Found</h3>
+            <p className="text-muted-foreground mb-4">We couldn't find any job listings matching your criteria.</p>
+            <Button onClick={() => window.location.reload()}>Refresh</Button>
           </CardContent>
         </Card>
-      ))}
+      )}
     </div>
   );
 };

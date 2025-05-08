@@ -18,6 +18,7 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 
+// Export as default instead of named export
 const NotificationFilters: React.FC = () => {
   const { filterOptions, updateFilters } = useNotifications();
 
@@ -155,4 +156,5 @@ const NotificationFilters: React.FC = () => {
   );
 };
 
+// Export as default
 export default NotificationFilters;

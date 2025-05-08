@@ -11,8 +11,8 @@ export interface EmployerStats {
 
 interface EmployerStatsHookResult {
   employerStats: EmployerStats;
-  isLoading?: boolean;
-  error?: Error | null;
+  isLoading: boolean;
+  error: Error | null;
 }
 
 export function useEmployerStats(user: User | null, isEmployer: boolean): EmployerStatsHookResult {

@@ -1,5 +1,5 @@
 
-export type NotificationType = 'job' | 'application' | 'message' | 'email' | 'account' | 'achievement' | 'general';
+export type NotificationType = 'system' | 'application' | 'job' | 'message';
 
 export interface Notification {
   id: string;
@@ -7,18 +7,7 @@ export interface Notification {
   title: string;
   message: string;
   type: NotificationType;
-  link?: string;
   read: boolean;
   createdAt: string;
-  metadata?: Record<string, any>;
-}
-
-export interface NotificationFilterOptions {
-  type?: NotificationType | 'all';
-  read?: boolean | 'all';
-  dateRange?: {
-    from: Date | null;
-    to: Date | null;
-  };
-  sortBy: 'newest' | 'oldest';
+  link: string;
 }

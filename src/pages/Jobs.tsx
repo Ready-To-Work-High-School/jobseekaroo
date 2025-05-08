@@ -1,13 +1,18 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
-import JobListingsLayout from '@/components/job/JobListingsLayout';
+import JobListings from '@/components/JobListings';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Star, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Jobs = () => {
+  // Log when the component mounts to debug
+  useEffect(() => {
+    console.log('Jobs page mounted');
+  }, []);
+
   return (
     <Layout>
       <div className="bg-gradient-to-b from-blue-50/50 via-purple-50/30 to-transparent dark:from-blue-950/20 dark:via-purple-950/10">
@@ -64,15 +69,10 @@ const Jobs = () => {
         </div>
       </div>
 
-      <JobListingsLayout
-        title="Browse Jobs"
-        description="Find the perfect job opportunity"
-        searchForm={<div />}
-      >
-        <div className="container mx-auto px-4">
-          {/* Job listings content will go here */}
-        </div>
-      </JobListingsLayout>
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold mb-6">Browse Jobs</h2>
+        <JobListings />
+      </div>
     </Layout>
   );
 };
