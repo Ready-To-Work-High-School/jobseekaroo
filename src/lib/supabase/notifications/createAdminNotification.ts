@@ -2,13 +2,14 @@
 import { createNotification } from './createNotifications';
 import { NotificationType } from '@/types/notification';
 import { supabase } from '../index';
+import { NotificationRole } from './types';
 
 /**
  * Get user IDs by role
  * @param role The role to find users for
  * @returns Array of user IDs with the specified role
  */
-async function getUsersByRole(role: string): Promise<string[]> {
+async function getUsersByRole(role: NotificationRole): Promise<string[]> {
   const { data, error } = await supabase
     .from('user_roles')
     .select('user_id')
