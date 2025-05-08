@@ -81,10 +81,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </div>
           )}
           
-          {/* Inception Member ribbon for 2025-2026 signups */}
+          {/* Inception Member ribbon for 2025-2026 signups - ENHANCED */}
           {isInceptionMember && (
-            <div className="absolute -right-2 -top-2 rotate-45">
-              <div className="bg-blue-600 text-white text-[10px] py-1 px-6 shadow-md font-semibold">
+            <div className="absolute -right-3 -top-3 rotate-45 z-10">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs py-1 px-8 shadow-lg font-bold animate-pulse">
                 INCEPTION
               </div>
             </div>
@@ -131,6 +131,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </span>
             )}
           </div>
+          
+          {/* Enhanced inception member badge */}
+          {isInceptionMember && (
+            <div className="mt-2">
+              <Badge className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-3 py-1 text-sm font-medium">
+                <Award className="h-4 w-4 mr-1.5" />
+                Founding Member (2025-2026)
+              </Badge>
+            </div>
+          )}
         </div>
       </div>
     </div>
