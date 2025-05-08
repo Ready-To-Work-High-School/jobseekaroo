@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Notification, NotificationType } from '@/types/notification';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -8,7 +8,7 @@ import { NotificationFilterOptions, NotificationsContextType } from './types';
 export const NotificationsContext = createContext<NotificationsContextType | null>(null);
 
 export const useNotifications = () => {
-  const context = useContext(NotificationsContext);
+  const context = React.useContext(NotificationsContext);
   if (!context) {
     throw new Error('useNotifications must be used within a NotificationsProvider');
   }
@@ -35,6 +35,19 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
     },
     sortBy: 'newest'
   });
+  
+  // Add filterType and filterStatus states that NotificationFilters.tsx expects
+  const [filterType, setFilterType] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'unread' | 'read'>('all');
+  
+  // Sync filterOptions with filterType and filterStatus
+  useEffect(() => {
+    setFilterOptions(prev => ({
+      ...prev,
+      type: filterType || 'all',
+      read: filterStatus === 'all' ? 'all' : filterStatus === 'read'
+    }));
+  }, [filterType, filterStatus]);
   
   // Fetch notifications when user changes
   useEffect(() => {
@@ -66,7 +79,8 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
             type: payload.new.type as NotificationType,
             read: !!payload.new.read,
             createdAt: payload.new.created_at,
-            link: payload.new.link || ''
+            link: payload.new.link || '',
+            metadata: payload.new.metadata || {}
           };
           
           setNotifications(prev => [newNotification, ...prev]);
@@ -80,17 +94,18 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
   }, [user]);
   
   // Filter notifications based on filter options
-  const filteredNotifications = React.useMemo(() => {
+  const filteredNotifications = useMemo(() => {
     let filtered = [...notifications];
     
     // Apply type filter
-    if (filterOptions.type !== 'all') {
-      filtered = filtered.filter(notification => notification.type === filterOptions.type);
+    if (filterOptions.type !== 'all' && filterType) {
+      filtered = filtered.filter(notification => notification.type === filterType);
     }
     
     // Apply read status filter
     if (filterOptions.read !== 'all') {
-      filtered = filtered.filter(notification => notification.read === filterOptions.read);
+      const isRead = filterStatus === 'read';
+      filtered = filtered.filter(notification => notification.read === isRead);
     }
     
     // Apply date range filter
@@ -113,10 +128,10 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
     });
     
     return filtered;
-  }, [notifications, filterOptions]);
+  }, [notifications, filterOptions, filterType, filterStatus]);
   
   // Calculate unread count
-  const unreadCount = React.useMemo(() => {
+  const unreadCount = useMemo(() => {
     return notifications.filter(notification => !notification.read).length;
   }, [notifications]);
   
@@ -145,7 +160,8 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
         type: item.type as NotificationType,
         read: !!item.read,
         createdAt: item.created_at,
-        link: item.link || ''
+        link: item.link || '',
+        metadata: item.metadata || {}
       }));
       
       setNotifications(transformedData);
@@ -224,12 +240,12 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
   };
   
   // Update filter options
-  const updateFilters = (filters: Partial<NotificationFilterOptions>) => {
+  const updateFilters = useCallback((filters: Partial<NotificationFilterOptions>) => {
     setFilterOptions(prev => ({
       ...prev,
       ...filters
     }));
-  };
+  }, []);
   
   // Add a new notification
   const addNotification = async (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
@@ -244,7 +260,8 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
             title: notification.title,
             message: notification.message,
             type: notification.type,
-            link: notification.link || ''
+            link: notification.link || '',
+            metadata: notification.metadata || {}
           }
         ])
         .select();
@@ -260,7 +277,8 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
           type: data[0].type as NotificationType,
           read: false,
           createdAt: data[0].created_at,
-          link: data[0].link || ''
+          link: data[0].link || '',
+          metadata: data[0].metadata || {}
         };
         
         setNotifications(prev => [newNotification, ...prev]);
@@ -286,7 +304,12 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({ ch
         clearAll,
         filterOptions,
         updateFilters,
-        addNotification
+        addNotification,
+        // Add the new properties
+        filterType,
+        setFilterType,
+        filterStatus,
+        setFilterStatus
       }}
     >
       {children}

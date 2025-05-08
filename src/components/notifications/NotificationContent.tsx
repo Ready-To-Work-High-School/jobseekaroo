@@ -1,74 +1,94 @@
 
 import React from 'react';
-import { Check, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Notification } from '@/types/notification';
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 import NotificationItem from './NotificationItem';
 import NotificationEmpty from './NotificationEmpty';
 
-interface NotificationContentProps {
-  unreadCount: number;
-  filteredNotifications: Notification[];
-  markAllAsRead: () => void;
-  onClose: () => void;
-  isLoading: boolean;
-  errorMessage: string | null;
+export interface NotificationContentProps {
+  unreadCount?: number;
+  filteredNotifications?: any[];
+  markAllAsRead?: () => void;
+  onClose?: () => void;
+  isLoading?: boolean;
+  errorMessage?: string | null;
 }
 
 const NotificationContent: React.FC<NotificationContentProps> = ({
   unreadCount,
-  filteredNotifications,
   markAllAsRead,
   onClose,
+  filteredNotifications,
   isLoading,
   errorMessage
 }) => {
+  const notifications = useNotifications();
+  
+  // Use props if provided, otherwise use context values
+  const count = unreadCount ?? notifications.unreadCount;
+  const notifs = filteredNotifications ?? notifications.filteredNotifications;
+  const handleMarkAllAsRead = markAllAsRead ?? notifications.markAllAsRead;
+  const loading = isLoading ?? notifications.isLoading;
+  const error = errorMessage ?? notifications.errorMessage;
+
   return (
-    <>
-      <div className="flex items-center justify-between border-b p-3">
-        <div className="flex items-center space-x-2">
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b flex items-center justify-between">
+        <div>
           <h3 className="font-medium">Notifications</h3>
-          {unreadCount > 0 && (
-            <span className="inline-flex h-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-medium text-primary-foreground">
-              {unreadCount}
-            </span>
+          {count > 0 && (
+            <p className="text-xs text-muted-foreground">{count} unread</p>
           )}
         </div>
-        <div className="flex items-center space-x-2">
-          {unreadCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-7 px-2">
-              <Check className="mr-1 h-3.5 w-3.5" />
-              <span className="text-xs">Mark all read</span>
+        <div className="flex gap-2">
+          {notifs.length > 0 && count > 0 && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleMarkAllAsRead}
+              className="text-xs"
+            >
+              Mark all as read
             </Button>
           )}
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0">
-            <span className="sr-only">Close</span>
-            <X className="h-4 w-4" />
-          </Button>
+          {onClose && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onClose}
+              className="text-xs"
+            >
+              Close
+            </Button>
+          )}
         </div>
       </div>
-      
-      <ScrollArea className="flex-1 p-0">
-        {isLoading ? (
-          <div className="flex items-center justify-center p-8">
-            <div className="animate-spin h-6 w-6 rounded-full border-2 border-primary border-t-transparent"></div>
+
+      <ScrollArea className="flex-1">
+        {loading ? (
+          <div className="p-6 text-center">
+            <p className="text-sm text-muted-foreground">Loading notifications...</p>
           </div>
-        ) : errorMessage ? (
-          <div className="p-4 text-center text-muted-foreground">
-            {errorMessage}
+        ) : error ? (
+          <div className="p-6 text-center">
+            <p className="text-sm text-red-500">{error}</p>
           </div>
-        ) : filteredNotifications.length > 0 ? (
-          <div className="divide-y">
-            {filteredNotifications.map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+        ) : notifs.length === 0 ? (
+          <NotificationEmpty />
+        ) : (
+          <div className="divide-y divide-border">
+            {notifs.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                onClose={onClose}
+              />
             ))}
           </div>
-        ) : (
-          <NotificationEmpty />
         )}
       </ScrollArea>
-    </>
+    </div>
   );
 };
 

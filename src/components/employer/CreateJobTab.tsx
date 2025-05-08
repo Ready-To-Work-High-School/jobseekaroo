@@ -4,6 +4,7 @@ import JobPostForm from './job/JobPostForm';
 import JobPostSuccess from './job/JobPostSuccess';
 import { useToast } from '@/hooks/use-toast';
 import { createAdminNotification } from '@/lib/supabase/notifications';
+import { useAuth } from '@/contexts/auth';
 
 interface CreateJobTabProps {
   setActiveTab: (tab: string) => void;
@@ -12,24 +13,30 @@ interface CreateJobTabProps {
 const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
   const [createdJobId, setCreatedJobId] = useState<string | null>(null);
   const { toast } = useToast();
+  const { userProfile } = useAuth();
 
   const handleJobSubmitSuccess = async (jobId: string) => {
     console.log("Job created successfully with ID:", jobId);
     setCreatedJobId(jobId);
     
+    const companyName = userProfile?.company_name || 'An employer';
+    const employerName = userProfile?.first_name 
+      ? `${userProfile.first_name} ${userProfile.last_name || ''}`
+      : 'An employer';
+    
     // Notify admins and CEOs about the new job post
     try {
       await createAdminNotification(
         'New Job Posted',
-        'A new job has been posted and requires review.',
+        `${companyName} (${employerName}) has posted a new job that requires review.`,
         'job',
         `/jobs/${jobId}`,
-        { jobId }
+        { jobId, employerName, companyName }
       );
       
-      console.log('Admin notification sent for new job post');
+      console.log('Admin and CEO notifications sent for new job post');
     } catch (error) {
-      console.error('Failed to send admin notification:', error);
+      console.error('Failed to send admin/CEO notifications:', error);
     }
     
     toast({

@@ -28,4 +28,9 @@ export interface NotificationsContextType {
   filterOptions: NotificationFilterOptions;
   updateFilters: (filters: Partial<NotificationFilterOptions>) => void;
   addNotification?: (notification: Omit<Notification, "id" | "read" | "createdAt">) => Promise<void> | void;
+  // Add the new properties
+  filterType: string | null;
+  setFilterType: (type: string | null) => void;
+  filterStatus: 'all' | 'unread' | 'read';
+  setFilterStatus: (status: 'all' | 'unread' | 'read') => void;
 }

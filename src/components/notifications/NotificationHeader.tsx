@@ -1,36 +1,27 @@
 
 import React from 'react';
-import { Bell, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useNotifications } from '@/contexts/notifications/NotificationsContext';
+import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
 
 interface NotificationHeaderProps {
   onFilterClick: () => void;
 }
 
-export const NotificationHeader: React.FC<NotificationHeaderProps> = ({ onFilterClick }) => {
-  const { unreadCount } = useNotifications();
-  
+const NotificationHeader: React.FC<NotificationHeaderProps> = ({ onFilterClick }) => {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center">
-        <Bell className="h-6 w-6 mr-2 text-primary" />
-        <h2 className="text-2xl font-bold">Notifications</h2>
-        {unreadCount > 0 && (
-          <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-bold rounded-full">
-            {unreadCount}
-          </span>
-        )}
+    <div className="flex justify-between items-center">
+      <div>
+        <h1 className="text-2xl font-bold">Notifications</h1>
+        <p className="text-muted-foreground">Stay updated with the latest information</p>
       </div>
-      
-      <Button 
-        variant="outline" 
-        size="sm" 
+      <Button
+        variant="outline"
+        size="sm"
         onClick={onFilterClick}
-        className="flex items-center"
+        className="gap-2"
       >
-        <Filter className="h-4 w-4 mr-2" />
-        Filter
+        <Filter className="h-4 w-4" />
+        <span>Filter</span>
       </Button>
     </div>
   );

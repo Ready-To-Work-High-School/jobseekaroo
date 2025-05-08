@@ -1,13 +1,13 @@
+
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import NotificationContent from '@/components/notifications/NotificationContent';
 import NotificationHeader from '@/components/notifications/NotificationHeader';
-import NotificationEmpty from '@/components/notifications/NotificationEmpty';
-import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 import NotificationFilters from '@/components/notifications/NotificationFilters';
+import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 
 const Notifications = () => {
-  const { notifications, isLoading, errorMessage } = useNotifications();
+  const { filteredNotifications, unreadCount, markAllAsRead, isLoading, errorMessage } = useNotifications();
   const [showFilters, setShowFilters] = useState(false);
 
   return (
@@ -26,15 +26,13 @@ const Notifications = () => {
             )}
             
             <main className={`md:col-span-${showFilters ? 3 : 4}`}>
-              {isLoading ? (
-                <p>Loading notifications...</p>
-              ) : errorMessage ? (
-                <p className="text-red-500">{errorMessage}</p>
-              ) : notifications.length === 0 ? (
-                <NotificationEmpty />
-              ) : (
-                <NotificationContent />
-              )}
+              <NotificationContent 
+                filteredNotifications={filteredNotifications}
+                unreadCount={unreadCount}
+                markAllAsRead={markAllAsRead}
+                isLoading={isLoading}
+                errorMessage={errorMessage}
+              />
             </main>
           </div>
         </div>
