@@ -1,31 +1,39 @@
 
-import { Bell } from 'lucide-react';
+import React from 'react';
+import { Bell, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useNotifications } from '@/contexts/notifications/NotificationsContext';
 
 interface NotificationHeaderProps {
-  unreadCount: number;
-  onClick: () => void;
+  onFilterClick: () => void;
 }
 
-export const NotificationHeader = ({ unreadCount, onClick }: NotificationHeaderProps) => {
+export const NotificationHeader: React.FC<NotificationHeaderProps> = ({ onFilterClick }) => {
+  const { unreadCount } = useNotifications();
+  
   return (
-    <Button 
-      variant="ghost" 
-      size="icon"
-      onClick={onClick}
-      aria-label="Notifications"
-      className="relative"
-    >
-      <Bell className="h-5 w-5" />
-      {unreadCount > 0 && (
-        <Badge 
-          className="absolute -top-1 -right-1 px-1.5 py-0.5 min-w-[18px] h-[18px] text-[10px] flex items-center justify-center bg-red-500"
-          aria-label={`${unreadCount} unread notifications`}
-        >
-          {unreadCount}
-        </Badge>
-      )}
-    </Button>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <Bell className="h-6 w-6 mr-2 text-primary" />
+        <h2 className="text-2xl font-bold">Notifications</h2>
+        {unreadCount > 0 && (
+          <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-bold rounded-full">
+            {unreadCount}
+          </span>
+        )}
+      </div>
+      
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={onFilterClick}
+        className="flex items-center"
+      >
+        <Filter className="h-4 w-4 mr-2" />
+        Filter
+      </Button>
+    </div>
   );
 };
+
+export default NotificationHeader;

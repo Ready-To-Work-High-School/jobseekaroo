@@ -1,130 +1,142 @@
-import { useState, useEffect, useMemo } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Notification, NotificationFilterOptions } from '@/types/notification';
-import { useAuth } from '@/contexts/auth';
-import { v4 as uuidv4 } from 'uuid';
-import { useToast } from '@/hooks/use-toast';
-import { isAfter, isBefore, parseISO } from 'date-fns';
+import { fetchNotifications, markNotificationAsRead, clearAllNotifications } from '@/lib/supabase/notifications';
 
-const DEFAULT_FILTERS: NotificationFilterOptions = {
-  type: 'all',
-  read: 'all',
-  dateRange: {
-    from: null,
-    to: null
-  },
-  sortBy: 'newest'
-};
-
-export const useNotificationsState = () => {
+export const useNotificationsState = (userId?: string) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [filteredNotifications, setFilteredNotifications] = useState<Notification[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [filters, setFilters] = useState<NotificationFilterOptions>(DEFAULT_FILTERS);
-  
-  const { user } = useAuth();
-  const { toast } = useToast();
+  const [filterType, setFilterType] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'unread' | 'read'>('all');
 
-  const filteredNotifications = useMemo(() => {
-    return notifications.filter(notification => {
-      if (filters.type && filters.type !== 'all' && notification.type !== filters.type) {
-        return false;
-      }
-      
-      if (filters.read !== 'all' && notification.read !== filters.read) {
-        return false;
-      }
-      
-      if (filters.dateRange?.from && !isBefore(parseISO(notification.createdAt), filters.dateRange.from)) {
-        return false;
-      }
-      
-      if (filters.dateRange?.to && !isAfter(parseISO(notification.createdAt), filters.dateRange.to)) {
-        return false;
-      }
-      
-      return true;
-    }).sort((a, b) => {
-      if (filters.sortBy === 'newest') {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      }
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    });
-  }, [notifications, filters]);
+  // Calculate unread count
+  const unreadCount = notifications.filter(notification => !notification.read).length;
 
-  const unreadCount = useMemo(() => {
-    return notifications.filter(notification => !notification.read).length;
-  }, [notifications]);
+  // Fetch notifications on component mount and when user ID changes
+  useEffect(() => {
+    const loadNotifications = async () => {
+      if (!userId) {
+        setNotifications([]);
+        setFilteredNotifications([]);
+        setIsLoading(false);
+        return;
+      }
 
-  const addNotification = (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
-    if (!user) return;
+      setIsLoading(true);
+      setErrorMessage(null);
 
-    const newNotification: Notification = {
-      id: uuidv4(),
-      ...notification,
-      user_id: user.id,
-      createdAt: new Date().toISOString(),
-      read: false
+      try {
+        const data = await fetchNotifications(userId);
+        setNotifications(data);
+        applyFilters(data, { type: filterType, status: filterStatus });
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        setErrorMessage('Failed to load notifications. Please try again later.');
+        setNotifications([]);
+        setFilteredNotifications([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setNotifications(prev => [newNotification, ...prev]);
-    
-    toast({
-      title: notification.title,
-      description: notification.message,
-    });
+    loadNotifications();
+  }, [userId]);
+
+  // Apply filters whenever filter options change
+  useEffect(() => {
+    applyFilters(notifications, { type: filterType, status: filterStatus });
+  }, [filterType, filterStatus, notifications]);
+
+  // Function to apply filters
+  const applyFilters = (notificationsList: Notification[], filters: NotificationFilterOptions) => {
+    let filtered = [...notificationsList];
+
+    // Filter by type
+    if (filters.type) {
+      filtered = filtered.filter(notification => notification.type === filters.type);
+    }
+
+    // Filter by read status
+    if (filters.status === 'read') {
+      filtered = filtered.filter(notification => notification.read);
+    } else if (filters.status === 'unread') {
+      filtered = filtered.filter(notification => !notification.read);
+    }
+
+    // Sort by most recent first
+    filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    setFilteredNotifications(filtered);
   };
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true } 
-          : notification
-      )
-    );
+  // Function to mark a notification as read
+  const markAsRead = async (id: string) => {
+    if (!userId) return;
+
+    try {
+      await markNotificationAsRead(id);
+      
+      // Update local state
+      setNotifications(prevNotifications =>
+        prevNotifications.map(notification =>
+          notification.id === id ? { ...notification, read: true } : notification
+        )
+      );
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
-  const markAllAsRead = () => {
-    if (notifications.length === 0) return;
-    
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
-    );
+  // Function to mark all notifications as read
+  const markAllAsRead = async () => {
+    if (!userId || notifications.length === 0) return;
+
+    try {
+      // Update each unread notification
+      const unreadNotifications = notifications.filter(notification => !notification.read);
+      
+      for (const notification of unreadNotifications) {
+        await markNotificationAsRead(notification.id);
+      }
+      
+      // Update local state
+      setNotifications(prevNotifications =>
+        prevNotifications.map(notification => ({ ...notification, read: true }))
+      );
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
   };
 
-  const removeNotification = (id: string) => {
-    setNotifications(prev => 
-      prev.filter(notification => notification.id !== id)
-    );
-  };
+  // Function to clear all notifications
+  const clearAll = async () => {
+    if (!userId || notifications.length === 0) return;
 
-  const clearAll = () => {
-    if (notifications.length === 0) return;
-    setNotifications([]);
-  };
-
-  const updateFilters = (newFilters: Partial<NotificationFilterOptions>) => {
-    setFilters(prev => ({
-      ...prev,
-      ...newFilters
-    }));
+    try {
+      await clearAllNotifications(userId);
+      
+      // Update local state
+      setNotifications([]);
+      setFilteredNotifications([]);
+    } catch (error) {
+      console.error('Error clearing all notifications:', error);
+    }
   };
 
   return {
     notifications,
     filteredNotifications,
     unreadCount,
-    addNotification,
+    isLoading,
+    errorMessage,
     markAsRead,
     markAllAsRead,
-    removeNotification,
     clearAll,
-    setNotifications,
-    isLoading,
-    setIsLoading,
-    filters,
-    setFilters: updateFilters,
-    errorMessage,
-    setErrorMessage
+    filterType,
+    setFilterType,
+    filterStatus,
+    setFilterStatus
   };
 };

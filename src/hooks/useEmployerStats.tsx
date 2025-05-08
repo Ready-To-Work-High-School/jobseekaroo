@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 
 export interface EmployerStats {
   jobsPosted: number; 

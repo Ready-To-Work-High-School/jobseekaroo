@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { useNotifications } from '@/contexts/notifications/NotificationsContext';
-import NotificationItem from './NotificationItem';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import NotificationFilters from './NotificationFilters';
+import NotificationItem from './NotificationItem';
 
 const NotificationContent: React.FC = () => {
   const { 

@@ -20,7 +20,7 @@ const Jobs = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="text-center mb-12"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
@@ -32,8 +32,8 @@ const Jobs = () => {
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-2 bg-white/50 dark:bg-white/5 px-4 py-2 rounded-full shadow-sm"
               >
                 <Star className="h-5 w-5 text-amber-500" />
@@ -41,8 +41,8 @@ const Jobs = () => {
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-2 bg-white/50 dark:bg-white/5 px-4 py-2 rounded-full shadow-sm"
               >
                 <Briefcase className="h-5 w-5 text-blue-500" />
@@ -50,8 +50,8 @@ const Jobs = () => {
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-2 bg-white/50 dark:bg-white/5 px-4 py-2 rounded-full shadow-sm"
               >
                 <Sparkles className="h-5 w-5 text-purple-500" />
@@ -60,7 +60,7 @@ const Jobs = () => {
             </div>
 
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
-              <Link to="/jobs">
+              <Link to="/job-listings">
                 <Briefcase className="mr-2 h-5 w-5" />
                 Start Your Search
               </Link>

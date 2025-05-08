@@ -10,4 +10,10 @@ export interface Notification {
   read: boolean;
   createdAt: string;
   link: string;
+  metadata?: Record<string, any>; // Add optional metadata field
+}
+
+export interface NotificationFilterOptions {
+  type?: string | null;
+  status?: 'all' | 'unread' | 'read';
 }

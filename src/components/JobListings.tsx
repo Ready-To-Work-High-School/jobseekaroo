@@ -67,12 +67,50 @@ const JobListings = () => {
               pay_rate_max: 17,
               pay_rate_period: 'hourly',
               posted_date: new Date(Date.now() - 172800000).toISOString()
+            },
+            {
+              id: '4',
+              title: 'Teacher Assistant',
+              company_name: 'Duval County Public Schools',
+              location_city: 'Jacksonville',
+              location_state: 'FL',
+              job_type: 'part-time',
+              pay_rate_min: 16,
+              pay_rate_max: 20,
+              pay_rate_period: 'hourly',
+              posted_date: new Date(Date.now() - 259200000).toISOString()
+            },
+            {
+              id: '5',
+              title: 'Accounting Clerk',
+              company_name: 'Financial Services LLC',
+              location_city: 'Jacksonville',
+              location_state: 'FL',
+              job_type: 'part-time',
+              pay_rate_min: 17,
+              pay_rate_max: 22,
+              pay_rate_period: 'hourly',
+              posted_date: new Date(Date.now() - 345600000).toISOString()
+            },
+            {
+              id: '6',
+              title: 'Cashier',
+              company_name: 'SuperMart',
+              location_city: 'Jacksonville',
+              location_state: 'FL',
+              job_type: 'part-time',
+              pay_rate_min: 14,
+              pay_rate_max: 16,
+              pay_rate_period: 'hourly',
+              posted_date: new Date(Date.now() - 432000000).toISOString()
             }
           ];
           setJobs(sampleJobs);
           setLoading(false);
           // Add a toast to inform the user that jobs loaded
-          toast.success('Jobs loaded successfully');
+          toast.success('Jobs loaded successfully', {
+            description: 'Including teacher, accountant, and cashier positions'
+          });
         }, 1000);
       } catch (error) {
         console.error('Error fetching jobs:', error);
