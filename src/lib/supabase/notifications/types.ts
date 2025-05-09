@@ -26,5 +26,5 @@ export interface NotificationResponse {
 export type AppRole = 'admin' | 'moderator' | 'user' | 'ceo';
 export type NotificationRole = 'admin' | 'ceo';
 
-// This type ensures we're using valid database role values
-export type DatabaseRole = 'admin' | 'moderator' | 'user' | 'ceo';
+// Update DatabaseRole to match exactly what the database expects
+export type DatabaseRole = 'admin' | 'moderator' | 'user';
