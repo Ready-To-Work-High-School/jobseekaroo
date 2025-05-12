@@ -16,6 +16,7 @@ import { useAuth } from './contexts/auth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
 import EmployerProfile from './pages/EmployerProfile';
+import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 
 function App() {
   const { user } = useAuth();
@@ -36,6 +37,7 @@ function App() {
           <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
           <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
         </Routes>
       </NotificationsProvider>
     </div>
