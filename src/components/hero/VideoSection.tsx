@@ -15,8 +15,8 @@ export const VideoSection = () => {
         <div className="rounded-lg overflow-hidden shadow-xl relative">
           <VideoPlayer 
             thumbnailUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" 
-            videoUrl="https://www.youtube.com/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67"
-            title="Kickstart Your Career with Ease!"
+            videoUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.mp4"
+            title="Kickstart Your Career with AI-Powered Tools!"
           />
         </div>
       </div>
