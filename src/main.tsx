@@ -6,6 +6,7 @@ import App from './App'
 import { AuthProvider } from './contexts/auth'
 import { Toaster as SonnerToaster } from 'sonner'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Import styles
 import './styles/index.css'
@@ -13,6 +14,16 @@ import './styles/global.css'
 import './styles/mobile.css'
 import './styles/mobile-optimization.css'
 import './styles/animations.css'
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+})
 
 // Add some fun console messages for teen developers
 console.log(
@@ -28,21 +39,23 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <AuthProvider>
-          <App />
-          {/* Modern toast notifications with animations */}
-          <SonnerToaster 
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'white',
-                color: 'black',
-                border: '1px solid #e2e8f0',
-              },
-              className: 'font-medium',
-            }}
-          />
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <App />
+            {/* Modern toast notifications with animations */}
+            <SonnerToaster 
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: 'white',
+                  color: 'black',
+                  border: '1px solid #e2e8f0',
+                },
+                className: 'font-medium',
+              }}
+            />
+          </AuthProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,

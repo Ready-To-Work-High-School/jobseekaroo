@@ -22,24 +22,22 @@ function App() {
 
   return (
     <div className="app">
-      <AuthProvider>
-        <NotificationsProvider user={user}>
-          <Routes>
-            <Route path="/" element={<Layout><Home /></Layout>} />
-            <Route path="/signup" element={<Layout><SignUp /></Layout>} />
-            <Route path="/signin" element={<Layout><SignIn /></Layout>} />
-            <Route path="/profile" element={<Layout><Profile /></Layout>} />
-            <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
-            <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
-            <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
-            <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
-            <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
-            <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
-            <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
-            <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
-          </Routes>
-        </NotificationsProvider>
-      </AuthProvider>
+      <NotificationsProvider user={user}>
+        <Routes>
+          <Route path="/" element={<Layout><Home /></Layout>} />
+          <Route path="/signup" element={<Layout><SignUp /></Layout>} />
+          <Route path="/signin" element={<Layout><SignIn /></Layout>} />
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
+          <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+          <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
+          <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
+          <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
+          <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
+          <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+          <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+        </Routes>
+      </NotificationsProvider>
     </div>
   );
 }
