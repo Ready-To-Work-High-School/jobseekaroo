@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppHeader from './app/AppHeader';
 import Footer from './layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
@@ -21,10 +21,6 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const isHomePage = location.pathname === '/';
   const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
   
-  useEffect(() => {
-    console.log("Layout mounted with pathname:", location.pathname);
-  }, [location.pathname]);
-
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
       <ErrorBoundary>
