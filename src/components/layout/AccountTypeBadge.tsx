@@ -2,13 +2,19 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { UserProfile } from '@/types/user';
 
 interface AccountTypeBadgeProps {
+  userProfile?: UserProfile | null;
   className?: string;
+  showText?: boolean;
 }
 
-const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ className }) => {
-  const { userProfile } = useAuth();
+const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ userProfile: propUserProfile, className, showText = true }) => {
+  const { userProfile: contextUserProfile } = useAuth();
+  
+  // Use provided userProfile prop or fall back to the one from context
+  const userProfile = propUserProfile || contextUserProfile;
   
   if (!userProfile?.user_type) {
     return null;
@@ -56,7 +62,7 @@ const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ className }) => {
       variant={variant as any} 
       className={className}
     >
-      {label}
+      {showText ? label : ''}
     </Badge>
   );
 };
