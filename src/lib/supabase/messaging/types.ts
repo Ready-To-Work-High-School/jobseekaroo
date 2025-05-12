@@ -17,10 +17,10 @@ export interface ConversationCreatePayload {
   participant_ids: string[];
 }
 
-// Add ModerationMessage type to extend the Message type with additional properties
+// Update ModerationMessage type to make profile fields optional
 export interface ModerationMessage extends Message {
-  sender_name: string;
+  sender_name?: string;
   sender_avatar?: string;
-  receiver_name: string;
+  receiver_name?: string;
   receiver_avatar?: string;
 }
