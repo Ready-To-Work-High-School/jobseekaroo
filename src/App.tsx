@@ -15,6 +15,7 @@ import CeoPortal from './pages/CeoPortal';
 import { useAuth } from './contexts/auth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
+import EmployerProfile from './pages/EmployerProfile';
 
 function App() {
   const { user } = useAuth();
@@ -29,6 +30,7 @@ function App() {
             <Route path="/signin" element={<Layout><SignIn /></Layout>} />
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
             <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+            <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
             <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
             <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
             <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />

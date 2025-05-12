@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
-import { School, Briefcase, UserCircle, CreditCard, Info, Award, LogOut, LogIn, UserPlus, Shield } from 'lucide-react';
+import { School, Briefcase, UserCircle, CreditCard, Info, Award, LogOut, LogIn, UserPlus, Shield, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import AdminTestLink from '../shared/AdminTestLink';
@@ -15,6 +15,8 @@ export const MobileMenu = () => {
   const handleSignOut = () => {
     signOut();
   };
+
+  const isEmployer = userProfile?.user_type === 'employer';
 
   return (
     <Sheet>
@@ -96,6 +98,24 @@ export const MobileMenu = () => {
                   Profile
                 </Link>
               </Button>
+
+              {isEmployer && (
+                <>
+                  <Button asChild variant="ghost" className="justify-start">
+                    <Link to="/employer-dashboard" className="flex items-center">
+                      <Briefcase className="mr-2 h-4 w-4" />
+                      Employer Dashboard
+                    </Link>
+                  </Button>
+                  
+                  <Button asChild variant="ghost" className="justify-start">
+                    <Link to="/employer-profile" className="flex items-center">
+                      <Building2 className="mr-2 h-4 w-4" />
+                      Company Profile
+                    </Link>
+                  </Button>
+                </>
+              )}
               
               <Button asChild variant="ghost" className="justify-start">
                 <Link to="/notifications" className="flex items-center">

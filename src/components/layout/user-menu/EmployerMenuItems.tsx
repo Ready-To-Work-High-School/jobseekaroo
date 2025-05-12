@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { DropdownMenuItem, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
-import { Building2, BarChart2, Award, Shield, Settings } from 'lucide-react';
+import { Building2, BarChart2, Award, Shield, Settings, UserCircle } from 'lucide-react';
 
 interface EmployerMenuItemsProps {
   isEmployer: boolean;
@@ -15,9 +15,16 @@ const EmployerMenuItems = ({ isEmployer, isCeo, hasPremium }: EmployerMenuItemsP
   return (
     <DropdownMenuGroup>
       <DropdownMenuItem asChild>
-        <Link to="/employer/dashboard" className="cursor-pointer">
+        <Link to="/employer-dashboard" className="cursor-pointer">
           <Building2 className="mr-2 h-4 w-4" />
           <span>Employer Dashboard</span>
+        </Link>
+      </DropdownMenuItem>
+      
+      <DropdownMenuItem asChild>
+        <Link to="/employer-profile" className="cursor-pointer">
+          <UserCircle className="mr-2 h-4 w-4" />
+          <span>Company Profile</span>
         </Link>
       </DropdownMenuItem>
       
