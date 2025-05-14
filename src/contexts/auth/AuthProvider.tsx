@@ -1,259 +1,179 @@
-import { ReactNode, useEffect } from 'react';
+
+import React, { createContext, useState, useEffect } from 'react';
+import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
-import { useAuthState } from './hooks/useAuthState';
-import { useJobActions } from './hooks/useJobActions';
-import { useApplications } from './hooks/useApplications';
-import { User } from '@supabase/supabase-js';
-import { UserProfile, UserProfileUpdate } from '@/types/user';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  signIn, 
-  signUp, 
-  signOut, 
-  signInWithGoogle, 
-  signInWithApple 
-} from './authService';
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const {
-    user,
-    setUser,
-    userProfile,
-    setUserProfile,
-    isLoading,
-    setIsLoading,
-    error,
-    setError,
-    refreshProfile
-  } = useAuthState();
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
-  const jobActions = useJobActions(user);
-  const applicationActions = useApplications(user);
-  const { toast } = useToast();
-
   useEffect(() => {
-    let isFirstLoad = true;
-    let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
+    const fetchSession = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
         
-        if (session?.user) {
-          // Clear any existing timeouts to prevent multiple refreshes
-          if (refreshTimeout) {
-            clearTimeout(refreshTimeout);
-          }
-          
-          // Use timeout to avoid blocking render
-          refreshTimeout = setTimeout(() => {
-            refreshProfile().catch(err => {
-              console.error('Background profile refresh failed:', err);
-              // Only show toast on initial load, not on subsequent refreshes
-              if (isFirstLoad) {
-                toast({
-                  title: "Profile loading issue",
-                  description: "Some profile information might not be available",
-                  variant: "destructive",
-                });
-                isFirstLoad = false;
-              }
-            });
-          }, 0);
-        } else {
-          setUserProfile(null);
+        if (error) {
+          console.error('Error fetching session:', error);
+          setLoading(false);
+          return;
         }
         
-        setIsLoading(false);
-      }
-    );
-    
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        refreshProfile().catch(err => {
-          console.error('Initial profile refresh failed:', err);
-          toast({
-            title: "Profile loading issue",
-            description: "Some profile information might not be available",
-            variant: "destructive",
-          });
-        });
-      }
-      
-      setIsLoading(false);
-      isFirstLoad = false;
-    });
-    
-    return () => {
-      subscription.unsubscribe();
-      if (refreshTimeout) {
-        clearTimeout(refreshTimeout);
+        setSession(data.session);
+        setUser(data.session?.user || null);
+        setIsAuthenticated(!!data.session);
+        
+        if (data.session?.user) {
+          fetchUserProfile(data.session.user.id);
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error in auth initialization:', error);
+        setLoading(false);
       }
     };
-  }, [setUser, setUserProfile, setIsLoading, refreshProfile, toast]);
 
-  const handleSignIn = async (email: string, password: string): Promise<User | null> => {
-    try {
-      const { user, error } = await signIn(email, password);
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message || "Failed to sign in",
-          variant: "destructive",
-        });
-        throw error;
-      }
-      if (user) {
-        toast({
-          title: "Success",
-          description: "You have successfully signed in",
-        });
-      }
-      return user;
-    } catch (error: any) {
-      console.error('Error signing in:', error);
-      throw error;
-    }
-  };
+    fetchSession();
 
-  const handleSignUp = async (
-    email: string, 
-    password: string, 
-    firstName: string, 
-    lastName: string,
-    userType: 'student' | 'employer' = 'student'
-  ): Promise<User | null> => {
-    try {
-      const { user, error } = await signUp({
-        email, password, firstName, lastName, userType
-      });
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message || "Failed to create account",
-          variant: "destructive",
-        });
-        throw error;
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user || null);
+        setSession(session);
+        setIsAuthenticated(!!session);
+        
+        if (session?.user) {
+          fetchUserProfile(session.user.id);
+        } else {
+          setUserProfile(null);
+          setLoading(false);
+        }
       }
-      if (user) {
-        toast({
-          title: "Success",
-          description: "Your account has been created successfully",
-        });
-      }
-      return user;
-    } catch (error: any) {
-      console.error('Error signing up:', error);
-      throw error;
-    }
-  };
+    );
 
-  const updateProfile = async (profileData: UserProfileUpdate): Promise<UserProfile | null> => {
-    if (!user) throw new Error('User not authenticated');
-    
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  const fetchUserProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .update(profileData)
-        .eq('id', user.id)
-        .select()
+        .select('*')
+        .eq('id', userId)
         .single();
-      
-      if (error) throw error;
-      
-      if (data) {
-        // Format the profile data to match UserProfile type
-        const formattedProfile: UserProfile = {
-          id: data.id,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          bio: data.bio,
-          location: data.location,
-          resume_url: data.resume_url,
-          skills: data.skills || [],
-          // Explicitly cast preferences to Record<string, any>
-          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
-          // Cast user_type to the appropriate union type
-          user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
-          redeemed_at: data.redeemed_at,
-          redeemed_code: data.redeemed_code,
-          avatar_url: data.avatar_url,
-          email: data.email,
-          company_name: data.company_name,
-          company_website: data.company_website,
-          job_title: data.job_title,
-          // Cast employer_verification_status to the appropriate union type
-          employer_verification_status: data.employer_verification_status as "pending" | "approved" | "rejected" | null,
-          verification_notes: data.verification_notes,
-          resume_data_encrypted: data.resume_data_encrypted,
-          contact_details_encrypted: data.contact_details_encrypted,
-          created_at: data.created_at,
-          updated_at: data.updated_at,
-          badges: Array.isArray(data.badges)
-            ? data.badges.map(badge => ({
-                id: (badge as any).id || '',
-                name: (badge as any).name || '',
-                earned_at: (badge as any).earned_at
-              }))
-            : []
-        };
-        
-        setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
-        return formattedProfile;
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+      } else {
+        setUserProfile(data);
       }
-      return null;
     } catch (error) {
-      console.error('Failed to update profile:', error);
-      throw error;
+      console.error('Error fetching profile:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        userProfile,
-        isLoading,
-        error,
-        signIn: handleSignIn,
-        signUp: handleSignUp,
-        signOut: async () => {
-          const { error } = await signOut();
-          if (error) throw error;
-          return;
-        },
-        // Fix the return type mismatch for signInWithGoogle and signInWithApple
-        // These functions return AuthResponse but we cast to User | null
-        signInWithGoogle: async () => {
-          const { user, error } = await signInWithGoogle();
-          if (error) throw error;
-          return user;
-        },
-        signInWithApple: async () => {
-          const { user, error } = await signInWithApple();
-          if (error) throw error;
-          return user;
-        },
-        ...jobActions,
-        ...applicationActions,
-        updateProfile,
-        refreshProfile,
-        makeAdmin: async () => console.log('makeAdmin method called but not implemented'),
-        verifyEmployer: async () => console.log('verifyEmployer method called but not implemented'),
-        redeemCode: async () => console.log('redeemCode method called but not implemented'),
-        submitApplication: async (jobId: string, data: any) => {
-          await applicationActions.createApplication({
-            job_id: jobId,
-            ...data
-          });
-        }
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const signIn = async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return { error };
+      return { data };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const signUp = async ({ email, password, metadata }: { email: string; password: string; metadata?: object }) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: { data: metadata }
+      });
+      
+      if (error) return { error };
+      return { data };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+      if (error) return { error };
+      return { success: true };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const updateProfile = async (updates: any) => {
+    try {
+      if (!user) return { error: 'No user logged in' };
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+      
+      if (error) return { error };
+      
+      // Update local userProfile state
+      setUserProfile({
+        ...userProfile,
+        ...updates
+      });
+      
+      return { data };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const refreshSession = async () => {
+    try {
+      const { data, error } = await supabase.auth.refreshSession();
+      if (error) return { error };
+      return { data };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const value = {
+    user,
+    session,
+    userProfile,
+    loading,
+    isAuthenticated,
+    signIn,
+    signUp,
+    signOut,
+    resetPassword,
+    updateProfile,
+    refreshSession
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

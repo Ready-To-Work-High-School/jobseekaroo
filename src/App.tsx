@@ -25,41 +25,51 @@ import ForEmployers from './pages/ForEmployers';
 import JobPostingPage from './pages/employer/JobPostingPage';
 
 function App() {
+  // We'll use the useAuth hook inside the Routes component to avoid circular dependency
+  return (
+    <div className="app">
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </div>
+  );
+}
+
+// Create a separate component to use useAuth hook after AuthProvider is loaded
+function AppContent() {
   const { user } = useAuth();
 
   return (
-    <div className="app">
-      <NotificationsProvider user={user}>
-        <Routes>
-          <Route path="/" element={<Layout><Home /></Layout>} />
-          <Route path="/signup" element={<Layout><SignUp /></Layout>} />
-          <Route path="/signin" element={<Layout><SignIn /></Layout>} />
-          <Route path="/profile" element={<Layout><Profile /></Layout>} />
-          <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
-          <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
-          <Route path="/for-employers" element={<Layout><ForEmployers /></Layout>} />
-          <Route path="/employer" element={<Layout><ForEmployers /></Layout>} />
-          <Route path="/post-job" element={<Layout><JobPostingPage /></Layout>} />
-          <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
-          <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
-          <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
-          <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
-          <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
-          <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
-          <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
-          <Route path="/entrepreneurship-academy" element={<Layout><EntrepreneurshipAcademy /></Layout>} />
-          
-          {/* Include all employer routes */}
-          {EmployerRoutes}
-          
-          {/* Include all public routes */}
-          {PublicRoutes}
-          
-          {/* 404 page for unmatched routes */}
-          <Route path="*" element={<Layout><NotFound /></Layout>} />
-        </Routes>
-      </NotificationsProvider>
-    </div>
+    <NotificationsProvider user={user}>
+      <Routes>
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/signup" element={<Layout><SignUp /></Layout>} />
+        <Route path="/signin" element={<Layout><SignIn /></Layout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+        <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
+        <Route path="/for-employers" element={<Layout><ForEmployers /></Layout>} />
+        <Route path="/employer" element={<Layout><ForEmployers /></Layout>} />
+        <Route path="/post-job" element={<Layout><JobPostingPage /></Layout>} />
+        <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
+        <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
+        <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
+        <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+        <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
+        <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+        <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
+        <Route path="/entrepreneurship-academy" element={<Layout><EntrepreneurshipAcademy /></Layout>} />
+        
+        {/* Include all employer routes */}
+        {EmployerRoutes}
+        
+        {/* Include all public routes */}
+        {PublicRoutes}
+        
+        {/* 404 page for unmatched routes */}
+        <Route path="*" element={<Layout><NotFound /></Layout>} />
+      </Routes>
+    </NotificationsProvider>
   );
 }
 

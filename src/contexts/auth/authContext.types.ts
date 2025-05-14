@@ -1,36 +1,31 @@
 
-import { User } from '@supabase/supabase-js';
-import { UserProfile, UserProfileUpdate } from '@/types/user';
-import { ApplicationStatus } from '@/types/application';
+import { User, Session } from '@supabase/supabase-js';
+import { UserProfile } from '@/types/user';
 
 export interface AuthContextType {
   user: User | null;
+  session: Session | null;
+  userProfile: UserProfile | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  signIn: (credentials: { email: string; password: string }) => Promise<{ data?: any; error?: any }>;
+  signUp: (credentials: { email: string; password: string; metadata?: object }) => Promise<{ data?: any; error?: any }>;
+  signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ success?: boolean; error?: any }>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ data?: any; error?: any }>;
+  refreshSession: () => Promise<{ data?: any; error?: any }>;
+}
+
+export interface AuthState {
+  user: User | null;
   userProfile: UserProfile | null;
   isLoading: boolean;
-  error: Error | null;
-  signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
-  signOut: () => Promise<void>;
-  signInWithGoogle: () => Promise<User | null>;
-  signInWithApple: () => Promise<User | null>;
-  updateProfile: (profileData: UserProfileUpdate) => Promise<UserProfile | null>;
-  refreshProfile: () => Promise<void>;
-  makeAdmin: (userId: string) => Promise<void>;
-  verifyEmployer: (userId: string, status: 'approved' | 'rejected', notes?: string) => Promise<void>;
-  redeemCode: (code: string) => Promise<any>;
-  submitApplication: (jobId: string, data: any) => Promise<void>;
-  
-  // Fix the return types to match the actual implementation
-  deleteApplication?: (id: string) => Promise<void>;
-  getSavedJobs?: () => Promise<any[]>;
-  isSavedJob?: (jobId: string) => Promise<boolean>;
-  getApplications?: () => Promise<any[]>;
-  
-  // Add any additional job or application methods here
-  saveJob?: (jobId: string) => Promise<void>;
-  unsaveJob?: (jobId: string) => Promise<void>;
-  createJob?: (jobData: any) => Promise<any>;
-  updateJob?: (jobId: string, jobData: any) => Promise<any>;
-  createApplication?: (applicationData: any) => Promise<any>;
-  updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  error: any | null;
 }
+
+export const initialAuthState: AuthState = {
+  user: null,
+  userProfile: null,
+  isLoading: true,
+  error: null
+};
