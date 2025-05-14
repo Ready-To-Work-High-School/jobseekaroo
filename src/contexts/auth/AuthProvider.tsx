@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
+import { UserProfile } from '@/types/user';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -11,46 +12,24 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Error fetching session:', error);
-          setLoading(false);
-          return;
-        }
-        
-        setSession(data.session);
-        setUser(data.session?.user || null);
-        setIsAuthenticated(!!data.session);
-        
-        if (data.session?.user) {
-          fetchUserProfile(data.session.user.id);
-        } else {
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error in auth initialization:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setUser(session?.user || null);
+        console.log("Auth state change event:", event);
         setSession(session);
+        setUser(session?.user ?? null);
         setIsAuthenticated(!!session);
         
         if (session?.user) {
-          fetchUserProfile(session.user.id);
+          // Use setTimeout to prevent blocking renderer
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
         } else {
           setUserProfile(null);
           setLoading(false);
@@ -58,13 +37,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     );
 
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Initial session check:", session?.user?.id);
+      
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsAuthenticated(!!session);
+      
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      setLoading(true);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -74,6 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (error) {
         console.error('Error fetching user profile:', error);
       } else {
+        console.log("User profile fetched:", data);
         setUserProfile(data);
       }
     } catch (error) {
@@ -93,7 +88,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const signUp = async ({ email, password, metadata }: { email: string; password: string; metadata?: object }) => {
+  const signUp = async ({ 
+    email, 
+    password, 
+    metadata 
+  }: { 
+    email: string; 
+    password: string; 
+    metadata?: { 
+      first_name?: string;
+      last_name?: string;
+      user_type?: 'student' | 'employer' | 'admin';
+    } 
+  }) => {
     try {
       const { data, error } = await supabase.auth.signUp({ 
         email, 
@@ -143,7 +150,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUserProfile({
         ...userProfile,
         ...updates
-      });
+      } as UserProfile);
       
       return { data };
     } catch (error) {
@@ -172,7 +179,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signOut,
     resetPassword,
     updateProfile,
-    refreshSession
+    refreshSession,
+    fetchUserProfile
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
