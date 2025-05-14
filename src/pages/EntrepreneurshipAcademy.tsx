@@ -1,9 +1,9 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import WestsideAcademy from '@/components/programs/WestsideAcademy';
 import { Separator } from '@/components/ui/separator';
-import ProgramCards from '@/components/programs/ProgramCards';
 import HeroSection from '@/components/programs/entrepreneurship/HeroSection';
 import CompetitiveEdgeSection from '@/components/programs/entrepreneurship/CompetitiveEdgeSection';
 import TechCredentialsSection from '@/components/programs/entrepreneurship/TechCredentialsSection';
@@ -11,10 +11,13 @@ import BusinessCredentialsSection from '@/components/programs/entrepreneurship/B
 import ContactEnrollmentSection from '@/components/programs/entrepreneurship/ContactEnrollmentSection';
 import StudentSuccessSection from '@/components/programs/entrepreneurship/StudentSuccessSection';
 import SectionSeparator from '@/components/home/SectionSeparator';
+
 const EntrepreneurshipAcademy = () => {
   const fadeIn = useFadeIn(300);
   const slideIn = useSlideIn(400);
-  return <Layout>
+  
+  return (
+    <Layout>
       {/* Hero Section */}
       <div className={slideIn}>
         <HeroSection />
@@ -44,11 +47,6 @@ const EntrepreneurshipAcademy = () => {
         </div>
       </section>
       
-      {/* Program Cards */}
-      <section className={fadeIn}>
-        
-      </section>
-      
       {/* New Competitive Edge Section */}
       <CompetitiveEdgeSection />
       
@@ -60,6 +58,8 @@ const EntrepreneurshipAcademy = () => {
           <ContactEnrollmentSection />
         </section>
       </div>
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default EntrepreneurshipAcademy;

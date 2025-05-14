@@ -17,6 +17,7 @@ import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
 import EmployerProfile from './pages/EmployerProfile';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
+import { PublicRoutes } from './routes/publicRoutes';
 
 function App() {
   const { user } = useAuth();
@@ -38,6 +39,9 @@ function App() {
           <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
+          
+          {/* Include all public routes */}
+          {PublicRoutes}
         </Routes>
       </NotificationsProvider>
     </div>
