@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import Profile from './pages/Profile';
-import EmployerDashboard from './pages/EmployerDashboard';
+import EmployerDashboard from './pages/employer/EmployerDashboard';
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
@@ -18,8 +18,11 @@ import AdminPanel from './pages/AdminPanel';
 import EmployerProfile from './pages/EmployerProfile';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import { PublicRoutes } from './routes/publicRoutes';
+import EmployerRoutes from './routes/employerRoutes';
 import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
 import NotFound from './pages/NotFound';
+import ForEmployers from './pages/ForEmployers';
+import JobPostingPage from './pages/employer/JobPostingPage';
 
 function App() {
   const { user } = useAuth();
@@ -34,6 +37,9 @@ function App() {
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
           <Route path="/employer-profile" element={<Layout><EmployerProfile /></Layout>} />
+          <Route path="/for-employers" element={<Layout><ForEmployers /></Layout>} />
+          <Route path="/employer" element={<Layout><ForEmployers /></Layout>} />
+          <Route path="/post-job" element={<Layout><JobPostingPage /></Layout>} />
           <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
           <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
           <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
@@ -42,6 +48,9 @@ function App() {
           <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
           <Route path="/entrepreneurship-academy" element={<Layout><EntrepreneurshipAcademy /></Layout>} />
+          
+          {/* Include all employer routes */}
+          {EmployerRoutes}
           
           {/* Include all public routes */}
           {PublicRoutes}
