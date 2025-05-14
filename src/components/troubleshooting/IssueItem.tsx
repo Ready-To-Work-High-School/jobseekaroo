@@ -1,46 +1,74 @@
 
-import React from 'react';
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CommonIssue } from './data/troubleshootingData';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface Issue {
+  id: string;
+  title: string;
+  description: string;
+  solution: string[];
+}
 
 interface IssueItemProps {
-  issue: CommonIssue;
+  issue: Issue;
   isSelected: boolean;
   onSelect: (id: string) => void;
 }
 
 export const IssueItem = ({ issue, isSelected, onSelect }: IssueItemProps) => {
-  const Icon = issue.icon;
+  const [solutionApplied, setSolutionApplied] = useState(false);
   
   return (
-    <div
-      className={`p-4 rounded-lg border transition-colors cursor-pointer hover:bg-accent ${
-        isSelected ? 'bg-accent' : ''
-      }`}
-      onClick={() => onSelect(issue.id)}
-    >
-      <div className="flex items-start gap-3">
-        <div className="p-2 rounded-full bg-primary/10">
-          <Icon className="h-4 w-4 text-primary" />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-medium mb-1">{issue.title}</h3>
-          <p className="text-sm text-muted-foreground mb-2">
-            {issue.description}
-          </p>
-          {isSelected && (
-            <Alert>
-              <AlertDescription>
-                <ul className="list-disc pl-4 space-y-1 text-sm">
-                  {issue.solutions.map((solution, index) => (
-                    <li key={index}>{solution}</li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          )}
+    <div className={cn(
+      "border rounded-lg overflow-hidden transition-all",
+      isSelected ? "border-primary" : "border-muted",
+      solutionApplied && "bg-green-50 border-green-200"
+    )}>
+      <div 
+        className="flex justify-between items-center p-4 cursor-pointer"
+        onClick={() => onSelect(isSelected ? '' : issue.id)}
+      >
+        <h3 className={cn(
+          "font-medium flex items-center",
+          solutionApplied && "text-green-600"
+        )}>
+          {solutionApplied && <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />}
+          {issue.title}
+        </h3>
+        <div>
+          {isSelected ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
         </div>
       </div>
+      
+      {isSelected && (
+        <div className="p-4 pt-0 border-t">
+          <p className="text-muted-foreground mb-4">{issue.description}</p>
+          
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold">Solution:</h4>
+            <ol className="space-y-2 list-decimal pl-5">
+              {issue.solution.map((step, idx) => (
+                <li key={idx}>{step}</li>
+              ))}
+            </ol>
+            
+            <button
+              onClick={() => setSolutionApplied(!solutionApplied)}
+              className={cn(
+                "w-full mt-4 py-2 px-4 rounded-md text-sm",
+                solutionApplied
+                  ? "bg-green-100 text-green-600 hover:bg-green-200"
+                  : "bg-primary/10 text-primary hover:bg-primary/20"
+              )}
+            >
+              {solutionApplied ? "Mark as Unsolved" : "Mark as Solved"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+export default IssueItem;
