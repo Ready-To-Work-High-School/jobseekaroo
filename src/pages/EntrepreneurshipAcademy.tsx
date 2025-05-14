@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Layout from '@/components/Layout';
 import { useFadeIn, useSlideIn } from '@/utils/animations';
 import WestsideAcademy from '@/components/programs/WestsideAcademy';
 import { Separator } from '@/components/ui/separator';
@@ -17,7 +16,7 @@ const EntrepreneurshipAcademy = () => {
   const slideIn = useSlideIn(400);
   
   return (
-    <Layout>
+    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       {/* Hero Section */}
       <div className={slideIn}>
         <HeroSection />
@@ -58,7 +57,7 @@ const EntrepreneurshipAcademy = () => {
           <ContactEnrollmentSection />
         </section>
       </div>
-    </Layout>
+    </div>
   );
 };
 

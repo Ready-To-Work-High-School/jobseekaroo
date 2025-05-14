@@ -18,6 +18,8 @@ import AdminPanel from './pages/AdminPanel';
 import EmployerProfile from './pages/EmployerProfile';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import { PublicRoutes } from './routes/publicRoutes';
+import EntrepreneurshipAcademy from './pages/EntrepreneurshipAcademy';
+import NotFound from './pages/NotFound';
 
 function App() {
   const { user } = useAuth();
@@ -39,9 +41,13 @@ function App() {
           <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
+          <Route path="/entrepreneurship-academy" element={<Layout><EntrepreneurshipAcademy /></Layout>} />
           
           {/* Include all public routes */}
           {PublicRoutes}
+          
+          {/* 404 page for unmatched routes */}
+          <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>
       </NotificationsProvider>
     </div>
