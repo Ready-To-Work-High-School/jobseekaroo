@@ -1,126 +1,161 @@
-
 import React from 'react';
 import Layout from '../components/Layout';
 import { Helmet } from 'react-helmet';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { useFadeIn } from '@/utils/animations';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminToggle from '@/components/admin/AdminToggle';
 import SearchSection from '@/components/home/SearchSection';
+import EnhancedJobListings from '@/components/home/EnhancedJobListings';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import FeeTeaser from '@/components/pricing/FeeTeaser';
 import Hero from '@/components/Hero';
 import SuccessStories from '@/components/home/SuccessStories';
+import JobPlacementsSection from '@/components/home/JobPlacementsSection';
+import CallToActionSection from '@/components/home/CallToActionSection';
+import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
+import Chatbot from '@/components/support/Chatbot';
+import JobSimulationsSection from '@/components/home/JobSimulationsSection';
+import InfoBanner from '@/components/home/InfoBanner';
 import SectionSeparator from '@/components/home/SectionSeparator';
-import { EmployerSection } from '@/components/hero/EmployerSection';
-import { CompanySpotlight } from '@/components/company/CompanySpotlight';
-import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess';
-import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
-import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
-import CareerExplorer from '@/components/home/CareerExplorer';
-
-// Create a wrapper component that doesn't render WhatYouGetCTA
-const HomeLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  return (
-    <Layout>
-      {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
-      <style dangerouslySetInnerHTML={{__html: `
-        /* Hide the default WhatYouGetCTA that comes from the Layout */
-        .what-you-get-cta-container {
-          display: none;
-        }
-      `}} />
-      {children}
-    </Layout>
-  );
-};
+import { topJacksonvilleCompanies } from '@/lib/mock-data/companiesData';
+import CompanyDirectory from '@/components/resources/CompanyDirectory';
 
 const Home = () => {
+  const fadeIn = useFadeIn(300);
   const { user } = useAuth();
 
   return (
-    <HomeLayout>
+    <Layout>
       <Helmet>
         <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
         <meta 
           name="description" 
           content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students at Westside High School." 
         />
+        <link 
+          rel="preload" 
+          href="/lovable-uploads/cd1a1f58-31a6-4665-a843-055feedeccc7.webp" 
+          as="image" 
+          fetchPriority="high" 
+          type="image/webp" 
+        />
+        <link rel="preconnect" href="https://cdn.gpteng.co" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.canva.com" crossOrigin="anonymous" />
+        <meta 
+          name="viewport" 
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
+        />
       </Helmet>
 
+      {/* Info Banner */}
+      <ErrorBoundary>
+        <InfoBanner />
+      </ErrorBoundary>
+
+      {/* Hero Section - Updated for student focus */}
       <ErrorBoundary>
         <Hero />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* Search Section - Keep it prominent for quick job search */}
       <ErrorBoundary>
         <SearchSection />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* Enhanced Job Listings - Show available opportunities */}
       <ErrorBoundary>
-        <CareerExplorer />
+        <EnhancedJobListings />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* User Recommendations - Moved up to appear right after job listings */}
       <ErrorBoundary>
-        <EmployerSection />
+        <UserRecommendationsSection />
       </ErrorBoundary>
 
       <SectionSeparator />
 
-      <ErrorBoundary>
-        <CompanySpotlight />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
+      {/* How It Works - Make the process clear */}
       <ErrorBoundary>
         <HowItWorksSection />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* Top Jacksonville Employers with logos */}
+      <ErrorBoundary>
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-6 text-center">Top Employers in Jacksonville</h2>
+          <CompanyDirectory companies={topJacksonvilleCompanies.slice(0, 6)} />
+        </div>
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Success Stories - Show real outcomes */}
       <ErrorBoundary>
         <SuccessStories />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* First Job Toolkit - Help students prepare */}
       <ErrorBoundary>
         <FirstJobToolkit />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* Job Simulations Section */}
+      <ErrorBoundary>
+        <JobSimulationsSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Mayo Summer Program Feature */}
       <ErrorBoundary>
         <MayoSummerFeature />
       </ErrorBoundary>
 
       <SectionSeparator />
 
+      {/* Fee Teaser */}
       <ErrorBoundary>
         <FeeTeaser />
       </ErrorBoundary>
 
+      <SectionSeparator />
+
+      {/* Call to Action */}
+      <ErrorBoundary>
+        <CallToActionSection />
+      </ErrorBoundary>
+
+      <SectionSeparator />
+
+      {/* Admin Toggle (if user is logged in) */}
       {user && (
         <div className="container mx-auto px-4 py-8">
           <AdminToggle />
         </div>
       )}
 
-      <div className="container mx-auto px-4 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TroubleshootDialog />
-        </div>
-      </div>
+      <SectionSeparator />
 
-      <FloatingQuickAccess />
-    </HomeLayout>
+      {/* Chatbot for support */}
+      <ErrorBoundary>
+        <Chatbot />
+      </ErrorBoundary>
+    </Layout>
   );
 };
 

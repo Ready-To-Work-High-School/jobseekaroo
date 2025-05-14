@@ -10,18 +10,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
+import JobSeekers4HSBadge from '@/components/badges/JobSeekers4HSBadge';
+import { motion } from 'framer-motion';
 
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [atTop, setAtTop] = useState(true);
   const { userProfile } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
+  const [isScrolled, setIsScrolled] = useState(false);
 
   console.log('Navbar render - isAdmin:', isAdmin, 'isCeo:', isCeo);
 
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 10);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -40,7 +44,20 @@ const Navbar = () => {
       role="banner"
       aria-label="Main navigation"
     >
-      <div className="container-custom flex h-16 items-center justify-between py-2">
+      {/* JS4HS Badge - centered at the top */}
+      <motion.div 
+        className="absolute left-0 right-0 -top-6 md:-top-5 z-10 flex justify-center"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 50 }}
+      >
+        <JobSeekers4HSBadge 
+          variant="default"
+          className="transform hover:scale-105 transition-transform duration-200"
+        />
+      </motion.div>
+      
+      <div className="container-custom flex h-16 items-center justify-between py-2 pt-6 md:pt-5">
         <div className="flex items-center gap-2 md:gap-6">
           {isMobile && <MobileMenu />}
           <NavbarBrand />
