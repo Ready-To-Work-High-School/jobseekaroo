@@ -1,190 +1,110 @@
-import React, { useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { AuthContext } from './AuthContext';
+
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '@/lib/supabase/client';
+import { AuthContextType } from './AuthContext';
 import { UserProfile } from '@/types/user';
-import { JobApplication, ApplicationStatus } from '@/types/application';
-import { AuthContextType } from './authContext.types';
-
-// Import services or create them inline
-const saveJob = async (userId: string, jobId: string): Promise<void> => {
-  try {
-    const { error } = await supabase
-      .from('saved_jobs')
-      .insert({ user_id: userId, job_id: jobId });
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error('Error saving job:', error);
-    throw error;
-  }
-};
-
-const unsaveJob = async (userId: string, jobId: string): Promise<void> => {
-  try {
-    const { error } = await supabase
-      .from('saved_jobs')
-      .delete()
-      .match({ user_id: userId, job_id: jobId });
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error('Error unsaving job:', error);
-    throw error;
-  }
-};
-
-const isSavedJob = async (userId: string, jobId: string): Promise<boolean> => {
-  try {
-    const { data, error } = await supabase
-      .from('saved_jobs')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('job_id', jobId)
-      .single();
-    
-    if (error && error.code !== 'PGRST116') throw error;
-    return !!data;
-  } catch (error) {
-    console.error('Error checking if job is saved:', error);
-    return false;
-  }
-};
-
-const getSavedJobs = async (userId: string): Promise<string[]> => {
-  try {
-    const { data, error } = await supabase
-      .from('saved_jobs')
-      .select('job_id')
-      .eq('user_id', userId);
-    
-    if (error) throw error;
-    return data.map(item => item.job_id);
-  } catch (error) {
-    console.error('Error getting saved jobs:', error);
-    return [];
-  }
-};
+import { JobApplication } from '@/types/job';
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
+// Create the context with default values
+export const AuthContext = createContext<AuthContextType | null>(null);
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log("Auth state change event:", event);
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsAuthenticated(!!session);
+    // Check active sessions and set the user
+    const getSession = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        const session = data.session;
+        setUser(session?.user || null);
         
         if (session?.user) {
-          // Use setTimeout to prevent blocking renderer
-          setTimeout(() => {
-            fetchUserProfile(session.user.id);
-          }, 0);
-        } else {
-          setUserProfile(null);
-          setLoading(false);
+          await getUserProfile(session.user.id);
         }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session check:", session?.user?.id);
-      
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsAuthenticated(!!session);
-      
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
+      } catch (error) {
+        console.error('Error getting session:', error);
+      } finally {
         setLoading(false);
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const fetchUserProfile = async (userId: string) => {
-    try {
+    getSession();
+    
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user || null);
       setLoading(true);
       
+      if (session?.user) {
+        await getUserProfile(session.user.id);
+      } else {
+        setUserProfile(null);
+      }
+      
+      setLoading(false);
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  // Get the user profile
+  const getUserProfile = async (userId: string) => {
+    try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) {
-        console.error('Error fetching user profile:', error);
-      } else {
-        console.log("User profile fetched:", data);
-        // Convert JSON into proper record if needed
-        const processedData = {
-          ...data,
-          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {}
-        };
-        
-        // Ensure proper typecasting
-        setUserProfile(processedData as UserProfile);
-      }
+      if (error) throw error;
+
+      setUserProfile(data as UserProfile);
     } catch (error) {
-      console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  const refreshProfile = async () => {
-    if (user) {
-      await fetchUserProfile(user.id);
+      console.error('Error loading user profile:', error);
+      setUserProfile(null);
     }
   };
 
+  // Sign in with email and password
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      return data.user;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      return { error };
     } catch (error) {
       console.error('Error signing in:', error);
-      throw error;
+      return { error };
     }
   };
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, userType?: string) => {
+  // Sign up with email and password
+  const signUp = async (email: string, password: string, userData: any) => {
     try {
-      const metadata = {
-        first_name: firstName,
-        last_name: lastName,
-        user_type: userType
-      };
-      
-      const { data, error } = await supabase.auth.signUp({ 
-        email, 
+      const { error } = await supabase.auth.signUp({
+        email,
         password,
-        options: { data: metadata }
+        options: {
+          data: userData,
+        },
       });
-      
-      if (error) throw error;
-      return data.user;
+      return { error };
     } catch (error) {
       console.error('Error signing up:', error);
-      throw error;
+      return { error };
     }
   };
 
+  // Sign out
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -192,219 +112,89 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.error('Error signing out:', error);
     }
   };
-  
-  const signInWithGoogle = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      });
-      if (error) throw error;
-      return null; // Return null as user data will be set by auth state change
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-      throw error;
-    }
-  };
-  
-  const signInWithApple = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'apple',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      });
-      if (error) throw error;
-      return null; // Return null as user data will be set by auth state change
-    } catch (error) {
-      console.error('Error signing in with Apple:', error);
-      throw error;
-    }
-  };
 
-  const resetPassword = async (email: string) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`
-      });
-      if (error) return { error };
-      return { success: true };
-    } catch (error) {
-      return { error };
-    }
-  };
-
+  // Update user profile
   const updateProfile = async (updates: Partial<UserProfile>) => {
     try {
-      if (!user) return { error: 'No user logged in' };
-      
-      const { data, error } = await supabase
+      if (!user) throw new Error('No user logged in');
+
+      const { error } = await supabase
         .from('profiles')
         .update(updates)
         .eq('id', user.id);
+
+      if (error) throw error;
+
+      // Update local profile state
+      setUserProfile(prev => prev ? { ...prev, ...updates } : null);
       
-      if (error) return { error };
-      
-      // Update local userProfile state
-      setUserProfile(prev => prev ? {...prev, ...updates} : null);
-      
-      return { data };
+      return { error: null };
     } catch (error) {
+      console.error('Error updating profile:', error);
       return { error };
     }
   };
-  
-  // Application management methods
-  const createApplication = async (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
-    if (!user) throw new Error('User must be logged in to create an application');
+
+  // Job application methods
+  const createApplication = async (application: any) => {
+    if (!user) throw new Error('User not authenticated');
     
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('job_applications')
         .insert({
+          user_id: user.id,
           ...application,
-          user_id: user.id
-        })
-        .select()
-        .single();
-      
+        });
+        
       if (error) throw error;
-      return data;
     } catch (error) {
       console.error('Error creating application:', error);
       throw error;
     }
   };
   
-  const updateApplicationStatus = async (applicationId: string, status: ApplicationStatus) => {
-    if (!user) throw new Error('User must be logged in to update an application');
+  const updateApplication = async (id: string, data: Partial<JobApplication>) => {
+    if (!user) throw new Error('User not authenticated');
     
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('job_applications')
-        .update({ status })
-        .match({ id: applicationId, user_id: user.id })
-        .select()
-        .single();
-      
+        .update(data)
+        .eq('id', id)
+        .eq('user_id', user.id);
+        
       if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error updating application status:', error);
-      throw error;
-    }
-  };
-  
-  const updateApplication = async (applicationId: string, updates: Partial<JobApplication>) => {
-    if (!user) throw new Error('User must be logged in to update an application');
-    
-    try {
-      const { data, error } = await supabase
-        .from('job_applications')
-        .update({ 
-          ...updates,
-          updated_at: new Date().toISOString() 
-        })
-        .match({ id: applicationId, user_id: user.id })
-        .select()
-        .single();
-      
-      if (error) throw error;
-      return data;
     } catch (error) {
       console.error('Error updating application:', error);
       throw error;
     }
   };
-  
-  const getApplications = async () => {
-    if (!user) return [];
-    
-    try {
-      const { data, error } = await supabase
-        .from('job_applications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Error getting applications:', error);
-      return [];
-    }
-  };
-  
-  const deleteApplication = async (applicationId: string) => {
-    if (!user) throw new Error('User must be logged in to delete an application');
-    
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .delete()
-        .match({ id: applicationId, user_id: user.id });
-      
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      console.error('Error deleting application:', error);
-      throw error;
-    }
-  };
 
-  // Job management methods
-  const handleSaveJob = async (jobId: string): Promise<void> => {
-    if (!user) throw new Error('User must be logged in to save jobs');
-    await saveJob(user.id, jobId);
-  };
-
-  const handleUnsaveJob = async (jobId: string): Promise<void> => {
-    if (!user) throw new Error('User must be logged in to unsave jobs');
-    await unsaveJob(user.id, jobId);
-  };
-
-  const handleIsSavedJob = async (jobId: string): Promise<boolean> => {
-    if (!user) return false;
-    return isSavedJob(user.id, jobId);
-  };
-
-  const handleGetSavedJobs = async (): Promise<string[]> => {
-    if (!user) return [];
-    return getSavedJobs(user.id);
-  };
-
-  const contextValue: AuthContextType = {
+  const value = {
     user,
-    session,
     userProfile,
     loading,
-    isAuthenticated,
     signIn,
     signUp,
     signOut,
-    resetPassword,
     updateProfile,
-    fetchUserProfile,
-    refreshProfile,
-    signInWithGoogle,
-    signInWithApple,
-    
-    // Application management
     createApplication,
-    updateApplicationStatus,
     updateApplication,
-    getApplications,
-    deleteApplication,
-    
-    // Job management
-    saveJob: handleSaveJob,
-    unsaveJob: handleUnsaveJob,
-    isSavedJob: handleIsSavedJob,
-    getSavedJobs: handleGetSavedJobs
   };
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// Export the hook
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

@@ -1,4 +1,5 @@
 
+// Define the job-related type exports
 export type JobType = 'full-time' | 'part-time' | 'internship' | 'volunteer' | 'seasonal' | 'weekend' | 'summer';
 export type ExperienceLevel = 'entry-level' | 'mid-level' | 'senior' | 'internship' | 'no-experience' | 'some-experience';
 export type ApplicationStatus = 'applied' | 'interviewing' | 'rejected' | 'accepted' | 'pending' | 'hired' | 'withdrawn' | 'offered';
@@ -6,36 +7,34 @@ export type ApplicationStatus = 'applied' | 'interviewing' | 'rejected' | 'accep
 export interface Job {
   id: string;
   title: string;
+  description: string;
+  requirements: string[];
+  
+  // Formatted properties (camelCase)
   company: {
     name: string;
     logoUrl?: string;
   };
-  description: string;
   location: {
     city: string;
     state: string;
     zip: string;
   };
-  type: JobType;
-  logoUrl?: string;
-  postedDate: string;
-  isRemote?: boolean;
-  isFlexible?: boolean;
-  experienceLevel: ExperienceLevel;
   payRate: {
     min: number;
     max: number;
     period: string;
   };
-  hours_per_week?: number;
-  requirements: string[];
+  type: JobType;
+  experienceLevel: ExperienceLevel;
+  postedDate: string;
+  isRemote?: boolean;
+  isFlexible?: boolean;
   isFeatured?: boolean;
   isPremium?: boolean;
-  is_teen_appropriate?: boolean;
-  prohibited_types?: string[];
-  created_at: string;
-  updated_at: string;
-  // Legacy properties for compatibility
+  logoUrl?: string;
+  
+  // Original DB properties (snake_case)
   company_name?: string;
   logo_url?: string;
   location_city?: string;
@@ -51,6 +50,11 @@ export interface Job {
   is_featured?: boolean;
   is_premium?: boolean;
   posted_date?: string;
+  hours_per_week?: number;
+  is_teen_appropriate?: boolean;
+  prohibited_types?: string[];
+  created_at: string;
+  updated_at: string;
 }
 
 export interface JobSearchFilters {

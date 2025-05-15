@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
-import { generateRecommendationsForUser } from '@/lib/supabase';
-import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase/client';
+import { useAuth } from '@/contexts/auth';
 import { useToast } from '@/hooks/use-toast';
 
 interface TriggerRecommendationsProps {
@@ -31,7 +31,14 @@ export function TriggerRecommendations({ className }: TriggerRecommendationsProp
     setStatus('loading');
 
     try {
-      await generateRecommendationsForUser(user.id);
+      // Call the RPC function on Supabase to generate recommendations
+      const { data, error } = await supabase
+        .rpc('generate_job_recommendations', { user_id_param: user.id });
+      
+      if (error) {
+        throw error;
+      }
+      
       setStatus('success');
       toast({
         title: "Success!",

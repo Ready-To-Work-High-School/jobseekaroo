@@ -11,5 +11,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Export job-related functions from the jobs module
 export * from './jobs';
 
+// Export recommendation-related functions
+export * from './recommendations';
+
 // Re-export all necessary functions and types
 export { normalizeJobs, normalizeJob };

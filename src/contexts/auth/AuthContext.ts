@@ -1,37 +1,28 @@
 
-import { createContext } from 'react';
-import { AuthContextType } from './authContext.types';
+import { UserProfile } from '@/types/user';
+import { JobApplication } from '@/types/job';
 
-// Create context with default values to avoid undefined errors
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  session: null,
-  userProfile: null,
-  loading: true,
-  isAuthenticated: false,
-  
-  // Authentication methods
-  signIn: async () => null,
-  signUp: async () => null,
-  signOut: async () => {},
-  resetPassword: async () => ({ error: null }),
-  signInWithGoogle: async () => null,
-  signInWithApple: async () => null,
-  
-  // Profile methods
-  updateProfile: async () => ({}),
-  fetchUserProfile: async () => {},
-  refreshProfile: async () => {},
-  
-  // Application methods
-  createApplication: async () => ({}),
-  updateApplicationStatus: async () => ({}),
-  getApplications: async () => [],
-  deleteApplication: async () => ({}),
-  
-  // Job management methods
-  saveJob: async () => {},
-  unsaveJob: async () => {},
-  isSavedJob: async () => false,
-  getSavedJobs: async () => [],
-});
+export interface JobApplicationInput {
+  job_id: string;
+  job_title: string;
+  company: string;
+  status: string;
+  applied_date: string;
+  contact_name?: string;
+  contact_email?: string;
+  next_step?: string;
+  next_step_date?: string;
+  notes?: string;
+}
+
+export interface AuthContextType {
+  user: any | null;
+  userProfile: UserProfile | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
+  signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
+  createApplication: (application: JobApplicationInput) => Promise<void>;
+  updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
+}
