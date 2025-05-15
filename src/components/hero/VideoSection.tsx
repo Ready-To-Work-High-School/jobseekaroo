@@ -1,5 +1,6 @@
 
 import { motion } from 'framer-motion';
+import VideoPlayer from '@/components/video/VideoPlayer';
 
 export const VideoSection = () => {
   return (
@@ -11,16 +12,11 @@ export const VideoSection = () => {
     >
       {/* Gradient accent border around video */}
       <div className="p-1 rounded-lg bg-gradient-to-r from-purple-600 via-blue-500 to-amber-500">
-        <div className="rounded-lg overflow-hidden shadow-xl">
-          <iframe 
-            src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1" 
-            width="744" 
-            height="504" 
-            frameBorder="0" 
-            title="Kickstart Your Career with Ease!" 
-            className="w-full aspect-video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+        <div className="rounded-lg overflow-hidden shadow-xl relative">
+          <VideoPlayer 
+            thumbnailUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" 
+            videoUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.mp4"
+            title="Kickstart Your Career with AI-Powered Tools!"
           />
         </div>
       </div>

@@ -3,8 +3,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
-import Navbar from './components/navbar/Navbar';
-import Footer from './components/layout/Footer';
+import Layout from './components/Layout';
 import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
@@ -15,6 +14,7 @@ import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
 import { useAuth } from './contexts/auth';
 import Notifications from './pages/Notifications';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
   const { user } = useAuth();
@@ -23,19 +23,19 @@ function App() {
     <div className="app">
       <AuthProvider>
         <NotificationsProvider user={user}>
-          <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-            <Route path="/jobs" element={<EnhancedJobListings />} />
-            <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
-            <Route path="/ceo-portal" element={<CeoPortal />} />
-            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/" element={<Layout><Home /></Layout>} />
+            <Route path="/signup" element={<Layout><SignUp /></Layout>} />
+            <Route path="/signin" element={<Layout><SignIn /></Layout>} />
+            <Route path="/profile" element={<Layout><Profile /></Layout>} />
+            <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+            <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
+            <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
+            <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
+            <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+            <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
+            <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
           </Routes>
-          <Footer />
         </NotificationsProvider>
       </AuthProvider>
     </div>

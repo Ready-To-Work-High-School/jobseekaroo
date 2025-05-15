@@ -1,327 +1,78 @@
-import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import Layout from "@/components/Layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
-  Users, 
-  BarChart, 
-  Shield, 
-  Clock, 
-  Trash2, 
-  LogOut, 
-  Settings, 
-  Briefcase 
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import UserManagementContainer from "@/components/admin/users/UserManagementContainer";
-import AdminAnalytics from "@/components/admin/AdminAnalytics";
 
-export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const navigate = useNavigate();
-  const { userProfile, refreshProfile } = useAuth();
+import React from 'react';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { Shield } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-  // Add debug log to trace page rendering
-  console.log('AdminPanel page rendered, userProfile:', userProfile);
-
+const AdminPanel: React.FC = () => {
+  const { isAdmin, isCeo } = useAdminStatus();
+  
+  // Redirect non-admin users
+  if (!isAdmin && !isCeo) {
+    return <Navigate to="/" replace />;
+  }
+  
   return (
-    <Layout>
-      <ProtectedRoute adminOnly>
-        <div className="container py-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              <p className="text-muted-foreground">
-                Manage users, view analytics, and control system settings
-              </p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="gap-2"
-              onClick={() => refreshProfile()}
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh Data
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" />
-                  User Management
-                </CardTitle>
-                <CardDescription>Manage all platform users</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  onClick={() => setActiveTab("users")}
-                  variant="outline"
-                  className="w-full flex items-center gap-2"
-                >
-                  <Users className="h-4 w-4" /> View All Users
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <BarChart className="h-5 w-5 text-primary" />
-                  Analytics Dashboard
-                </CardTitle>
-                <CardDescription>Monitor platform usage</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  onClick={() => setActiveTab("analytics")}
-                  variant="outline"
-                  className="w-full flex items-center gap-2"
-                >
-                  <BarChart className="h-4 w-4" /> View Analytics
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-primary" />
-                  Job Catalog
-                </CardTitle>
-                <CardDescription>View all posted jobs</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  onClick={() => navigate("/admin/job-catalog")}
-                  variant="outline"
-                  className="w-full flex items-center gap-2"
-                >
-                  <Briefcase className="h-4 w-4" /> View Job Catalog
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-primary" />
-                  System Settings
-                </CardTitle>
-                <CardDescription>Manage system configuration</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  onClick={() => setActiveTab("settings")}
-                  variant="outline"
-                  className="w-full flex items-center gap-2"
-                >
-                  <Settings className="h-4 w-4" /> View Settings
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid grid-cols-1 md:grid-cols-4 h-auto">
-              <TabsTrigger value="dashboard" className="flex gap-2 items-center">
-                <Shield className="h-4 w-4" /> Dashboard
-              </TabsTrigger>
-              <TabsTrigger value="users" className="flex gap-2 items-center">
-                <Users className="h-4 w-4" /> Users
-              </TabsTrigger>
-              <TabsTrigger value="analytics" className="flex gap-2 items-center">
-                <BarChart className="h-4 w-4" /> Analytics
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="flex gap-2 items-center">
-                <Settings className="h-4 w-4" /> Settings
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="dashboard">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Admin Dashboard</CardTitle>
-                  <CardDescription>
-                    Welcome to the administrative control panel
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    Select a section from the tabs above to manage different aspects of the platform.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <Button className="justify-start" onClick={() => setActiveTab("users")}>
-                      <Users className="mr-2 h-4 w-4" />
-                      Manage Users
-                    </Button>
-                    <Button className="justify-start" onClick={() => setActiveTab("analytics")}>
-                      <BarChart className="mr-2 h-4 w-4" />
-                      View Analytics
-                    </Button>
-                    <Button className="justify-start" onClick={() => setActiveTab("settings")}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      System Settings
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="users">
-              <UserManagementContainer />
-            </TabsContent>
-
-            <TabsContent value="analytics">
-              <AdminAnalytics />
-            </TabsContent>
-
-            <TabsContent value="settings">
-              <Card>
-                <CardHeader>
-                  <CardTitle>System Settings</CardTitle>
-                  <CardDescription>
-                    Configure system-wide settings and permissions
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Danger Zone</h3>
-                      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
-                        <p className="text-sm text-red-800 dark:text-red-300 mb-4">
-                          These actions are destructive and may affect system stability.
-                          Use with caution.
-                        </p>
-                        
-                        <div className="flex flex-col space-y-2">
-                          <Button 
-                            variant="destructive" 
-                            className="w-full justify-start"
-                            onClick={() => {
-                              if (confirm("Are you sure you want to clear all user data? This cannot be undone.")) {
-                                // Implementation would go here
-                                alert("This feature is not implemented yet");
-                              }
-                            }}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Clear All User Data
-                          </Button>
-                          
-                          <Button 
-                            variant="destructive" 
-                            className="w-full justify-start"
-                            onClick={() => {
-                              if (confirm("Are you sure you want to reset the entire system? This cannot be undone.")) {
-                                // Implementation would go here
-                                alert("This feature is not implemented yet");
-                              }
-                            }}
-                          >
-                            <LogOut className="mr-2 h-4 w-4" />
-                            Reset System
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">System Configuration</h3>
-                      <div className="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-800 rounded-md p-4">
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <p className="font-medium">Enable User Registrations</p>
-                              <p className="text-sm text-muted-foreground">
-                                Allow new users to register on the platform
-                              </p>
-                            </div>
-                            <input 
-                              type="checkbox" 
-                              className="toggle toggle-primary" 
-                              defaultChecked={true} 
-                            />
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <p className="font-medium">Require Email Verification</p>
-                              <p className="text-sm text-muted-foreground">
-                                Users must verify their email before accessing features
-                              </p>
-                            </div>
-                            <input 
-                              type="checkbox" 
-                              className="toggle toggle-primary" 
-                              defaultChecked={true} 
-                            />
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <p className="font-medium">Log User Activity</p>
-                              <p className="text-sm text-muted-foreground">
-                                Track detailed user actions for analytics
-                              </p>
-                            </div>
-                            <input 
-                              type="checkbox" 
-                              className="toggle toggle-primary" 
-                              defaultChecked={true} 
-                            />
-                          </div>
-                          
-                          <Button
-                            variant="outline"
-                            className="mt-2 w-full"
-                            onClick={() => {
-                              alert("Settings saved successfully");
-                            }}
-                          >
-                            Save Settings
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+    <div className="container mx-auto px-4 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex items-center mb-6">
+          <Shield className={`h-6 w-6 mr-2 ${isCeo ? 'text-amber-500' : 'text-red-600'}`} />
+          <h1 className="text-2xl font-bold">
+            {isCeo ? 'Executive Administration Portal' : 'Admin Panel'}
+          </h1>
         </div>
-      </ProtectedRoute>
-    </Layout>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Admin dashboard cards will go here */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4">User Management</h2>
+            <p className="text-gray-500">Manage users and permissions</p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4">Content Moderation</h2>
+            <p className="text-gray-500">Review and moderate site content</p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4">Analytics</h2>
+            <p className="text-gray-500">View site usage statistics</p>
+          </div>
+        </div>
+        
+        {/* Show special CEO section if user is CEO */}
+        {isCeo && (
+          <div className="mt-8 bg-gradient-to-r from-purple-100 to-amber-100 p-6 rounded-lg shadow-md border border-amber-200">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text text-transparent">
+              Executive Controls
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Welcome to the executive portal. You have access to all system controls and premium features.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <button className="p-4 bg-white rounded-md shadow hover:shadow-md transition-all">
+                Financial Reports
+              </button>
+              <button className="p-4 bg-white rounded-md shadow hover:shadow-md transition-all">
+                System Configuration
+              </button>
+              <button className="p-4 bg-white rounded-md shadow hover:shadow-md transition-all">
+                User Privileges
+              </button>
+              <button className="p-4 bg-white rounded-md shadow hover:shadow-md transition-all">
+                Executive Dashboard
+              </button>
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </div>
   );
 };
 
-function RefreshCw(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-      <path d="M21 3v5h-5" />
-      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-      <path d="M3 21v-5h5" />
-    </svg>
-  );
-}
+export default AdminPanel;
