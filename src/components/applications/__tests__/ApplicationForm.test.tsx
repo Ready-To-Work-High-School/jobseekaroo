@@ -1,125 +1,151 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
-import { ApplicationForm } from '../ApplicationForm';
-import { Job } from '@/types/job';
+import ApplicationForm from '../ApplicationForm';
+import { useAuth } from '@/contexts/auth/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
-vi.mock('@/contexts/AuthContext', () => ({
-  useAuth: () => ({
-    createApplication: vi.fn().mockResolvedValue({}),
-  }),
+// Mock the auth context and toast hooks
+vi.mock('@/contexts/auth/AuthContext', () => ({
+  useAuth: vi.fn(),
+}));
+
+vi.mock('@/hooks/use-toast', () => ({
+  useToast: vi.fn(),
 }));
 
 describe('ApplicationForm', () => {
-  const mockOnCancel = vi.fn();
-  const mockOnShowSavedJobs = vi.fn();
-  const mockOnSuccess = vi.fn();
-  const mockSetIsAdding = vi.fn();
-
+  const mockCreateApplication = vi.fn();
+  const mockToast = vi.fn();
+  
   beforeEach(() => {
-    mockOnCancel.mockClear();
-    mockOnShowSavedJobs.mockClear();
-    mockOnSuccess.mockClear();
-    mockSetIsAdding.mockClear();
+    vi.clearAllMocks();
+    
+    (useAuth as any).mockReturnValue({
+      user: { id: 'test-user' },
+      userProfile: { first_name: 'Test', last_name: 'User' },
+      createApplication: mockCreateApplication,
+    });
+    
+    (useToast as any).mockReturnValue({
+      toast: mockToast,
+    });
   });
-
+  
   it('renders form fields correctly', () => {
     render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
+      <BrowserRouter>
+        <ApplicationForm
+          jobId="test-job"
+          jobTitle="Test Job"
+          companyName="Test Company"
+          isAdding={true}
+          onCancel={() => {}}
+          onSuccess={() => {}}
+          onShowSavedJobs={() => {}}
+          setIsAdding={() => {}}
+        />
+      </BrowserRouter>
     );
-
-    expect(screen.getByLabelText(/job title/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/application date/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/status/i)).toBeInTheDocument();
+    
+    expect(screen.getByLabelText(/cover letter/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/availability/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/how did you hear/i)).toBeInTheDocument();
+    expect(screen.getByText(/submit application/i)).toBeInTheDocument();
   });
-
-  it('pre-fills form when selectedJob is provided', () => {
-    const selectedJob: Partial<Job> = {
-      id: '1',
-      title: 'Frontend Developer',
-      company: {
-        name: 'Tech Company',
-      },
-      location: {
-        city: 'San Francisco',
-        state: 'CA',
-        zipCode: '94105',
-      },
-      type: 'full-time',
-      payRate: {
-        min: 50000,
-        max: 100000,
-        period: 'monthly',
-      },
-      description: 'Job description',
-      requirements: ['React', 'TypeScript'],
-      experienceLevel: 'entry-level',
-      postedDate: '2023-01-01',
-      isRemote: false,
-      isFlexible: true,
-    };
-
+  
+  it('shows login message when user is not authenticated', () => {
+    (useAuth as any).mockReturnValue({
+      user: null,
+      createApplication: mockCreateApplication,
+    });
+    
     render(
-      <ApplicationForm
-        selectedJob={selectedJob as Job}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
+      <BrowserRouter>
+        <ApplicationForm
+          jobId="test-job"
+          jobTitle="Test Job"
+          companyName="Test Company"
+          isAdding={true}
+          onCancel={() => {}}
+          onSuccess={() => {}}
+          onShowSavedJobs={() => {}}
+          setIsAdding={() => {}}
+        />
+      </BrowserRouter>
     );
-
-    expect(screen.getByDisplayValue('Frontend Developer')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Tech Company')).toBeInTheDocument();
+    
+    expect(screen.getByText(/please sign in to apply for jobs/i)).toBeInTheDocument();
+    expect(screen.getByText(/sign in/i)).toBeInTheDocument();
+    expect(screen.getByText(/create account/i)).toBeInTheDocument();
   });
-
-  it('handles form submission', async () => {
+  
+  it('submits the form with correct data', async () => {
     render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
+      <BrowserRouter>
+        <ApplicationForm
+          jobId="test-job"
+          jobTitle="Test Job"
+          companyName="Test Company"
+          isAdding={true}
+          onCancel={() => {}}
+          onSuccess={() => {}}
+          onShowSavedJobs={() => {}}
+          setIsAdding={() => {}}
+          selectedJob={{
+            id: 'test-job',
+            title: 'Test Job',
+            company: { name: 'Test Company' },
+            location: { city: 'Test City', state: 'TS', zip: '12345' },
+            payRate: { min: 15, max: 20, period: 'hourly' },
+            type: 'full-time',
+            experienceLevel: 'entry-level',
+            description: 'Test job description',
+            requirements: ['Requirement 1', 'Requirement 2'],
+            postedDate: '2023-05-15',
+            created_at: '2023-05-15',
+            updated_at: '2023-05-15'
+          }}
+        />
+      </BrowserRouter>
     );
-
-    fireEvent.change(screen.getByLabelText(/job title/i), {
-      target: { value: 'Test Job' },
+    
+    fireEvent.change(screen.getByLabelText(/cover letter/i), {
+      target: { value: 'This is my application' },
     });
-    fireEvent.change(screen.getByLabelText(/company/i), {
-      target: { value: 'Test Company' },
+    
+    fireEvent.change(screen.getByLabelText(/phone number/i), {
+      target: { value: '123-456-7890' },
     });
-
-    fireEvent.click(screen.getByText('Add Application'));
-
+    
+    fireEvent.change(screen.getByLabelText(/availability/i), {
+      target: { value: 'Available weekdays' },
+    });
+    
+    fireEvent.change(screen.getByLabelText(/how did you hear/i), {
+      target: { value: 'School counselor' },
+    });
+    
+    fireEvent.click(screen.getByText(/submit application/i));
+    
     await waitFor(() => {
-      expect(mockSetIsAdding).toHaveBeenCalledWith(true);
+      expect(mockCreateApplication).toHaveBeenCalledWith({
+        job_id: 'test-job',
+        job_title: 'Test Job',
+        company: 'Test Company',
+        status: 'applied',
+        applied_date: expect.any(String),
+        notes: 'This is my application',
+        contact_name: '',
+        contact_email: '',
+      });
+      
+      expect(mockToast).toHaveBeenCalledWith({
+        title: 'Application submitted!',
+        description: expect.stringContaining('Test Job'),
+      });
     });
-  });
-
-  it('disables form submission while adding', () => {
-    render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={true}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
-    );
-
-    expect(screen.getByText('Adding...')).toBeDisabled();
   });
 });

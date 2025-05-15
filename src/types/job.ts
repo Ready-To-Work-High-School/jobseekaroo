@@ -1,5 +1,5 @@
 
-export type JobType = 'full-time' | 'part-time' | 'internship' | 'volunteer' | 'seasonal' | 'weekend' | 'summer';
+export type JobType = 'full-time' | 'part-time' | 'internship' | 'volunteer' | 'seasonal' | 'weekend' | 'summer' | 'contract' | 'temporary' | 'apprenticeship';
 export type ExperienceLevel = 'entry-level' | 'mid-level' | 'senior' | 'internship' | 'no-experience' | 'some-experience';
 export type ApplicationStatus = 'applied' | 'interviewing' | 'rejected' | 'accepted' | 'pending' | 'hired' | 'withdrawn' | 'offered';
 
@@ -63,7 +63,7 @@ export interface JobSearchFilters {
   experienceLevel?: string;
   isRemote?: boolean | null;
   isFlexible?: boolean | null;
-  category?: string; // Added category property
+  category?: string;
   salary?: {
     min?: number;
     max?: number;

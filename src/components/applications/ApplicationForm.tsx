@@ -24,11 +24,11 @@ interface ApplicationFormProps {
   jobTitle?: string;
   companyName?: string;
   selectedJob?: Job | null;
-  isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
-  onCancel: () => void;
-  onShowSavedJobs: () => void;
-  onSuccess: () => void;
+  isAdding?: boolean;
+  setIsAdding?: (value: boolean) => void;
+  onCancel?: () => void;
+  onShowSavedJobs?: () => void;
+  onSuccess?: () => void;
 }
 
 const ApplicationForm: React.FC<ApplicationFormProps> = ({ 
@@ -50,7 +50,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
   const normalizedJob = selectedJob ? normalizeJob(selectedJob) : null;
   const finalJobId = normalizedJob?.id || jobId;
   const finalJobTitle = normalizedJob?.title || jobTitle;
-  const finalCompanyName = normalizedJob?.company?.name || normalizedJob?.company || companyName;
+  const finalCompanyName = normalizedJob?.company?.name || (typeof normalizedJob?.company === 'string' ? normalizedJob.company : companyName);
   
   const form = useForm({
     defaultValues: {
@@ -78,7 +78,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
       await createApplication({
         job_id: finalJobId,
         job_title: finalJobTitle,
-        company: finalCompanyName,
+        company: typeof finalCompanyName === 'string' ? finalCompanyName : finalCompanyName.name || 'Unknown Company',
         status: 'applied',
         applied_date: new Date().toISOString().slice(0, 10),
         notes: data.coverLetter,
@@ -88,7 +88,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
       
       toast({
         title: "Application submitted!",
-        description: `Your application for ${finalJobTitle} at ${finalCompanyName} has been submitted successfully.`
+        description: `Your application for ${finalJobTitle} at ${typeof finalCompanyName === 'string' ? finalCompanyName : finalCompanyName.name || 'Unknown Company'} has been submitted successfully.`
       });
       
       form.reset();

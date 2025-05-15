@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { UserProfile } from '@/types/user';
 import { Button } from '@/components/ui/button';
@@ -128,7 +127,10 @@ const BenefitsTabContent: React.FC<BenefitsTabContentProps> = ({ userProfile }) 
           </CardHeader>
           <CardContent>
             {!isAccountActivated && (
-              <Alert className="mb-4" variant="warning">
+              <Alert 
+                variant="default"
+                className="bg-amber-50 border-amber-200 text-amber-700"
+              >
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Account Not Activated</AlertTitle>
                 <AlertDescription>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './contexts/auth';
+import { AuthProvider } from './contexts/auth/AuthContext';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
 import SecurityProvider from './components/security/SecurityProvider';
 import Layout from './components/Layout';
@@ -13,7 +13,7 @@ import EmployerDashboard from './pages/employer/EmployerDashboard';
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
-import { useAuth } from './contexts/auth';
+import { useAuth } from './hooks/useAuth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
 import EmployerProfile from './pages/EmployerProfile';

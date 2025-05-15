@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -54,13 +54,17 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       }
       
       // Create the user account with student user type
-      await signUp(
-        data.email, 
+      const result = await signUp(
+        data.email,
         data.password,
         data.firstName,
         data.lastName,
         'student'
       );
+      
+      if (result.error) {
+        throw result.error;
+      }
       
       // Display success message
       toast({

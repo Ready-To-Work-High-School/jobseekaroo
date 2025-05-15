@@ -1,6 +1,6 @@
 
 import { Badge } from '@/components/ui/badge';
-import { ApplicationStatus } from '@/types/job';
+import { ApplicationStatus } from '@/types/application';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
@@ -34,11 +34,15 @@ const ApplicationStatusBadge = ({ status, size = 'default' }: ApplicationStatusB
       break;
     case 'offered':
       variant = 'info';
-      label = 'offer received';
+      label = 'offered';
       break;
     case 'hired':
       variant = 'success';
       label = 'hired';
+      break;
+    case 'pending':
+      variant = 'secondary';
+      label = 'pending';
       break;
     default:
       variant = 'secondary';

@@ -1,8 +1,8 @@
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { UserProfile } from '@/types/user';
-import { JobApplication, ApplicationStatus } from '@/types/job';
+import { JobApplication, ApplicationStatus } from '@/types/application';
 
 export interface JobApplicationInput {
   job_id: string;
@@ -22,13 +22,19 @@ export interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
+  signInWithGoogle?: () => Promise<any>;
+  signInWithApple?: () => Promise<any>;
   createApplication: (application: JobApplicationInput) => Promise<void>;
   updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
   deleteApplication: (id: string) => Promise<void>;
   getApplications: () => Promise<JobApplication[]>;
+  saveJob?: (jobId: string) => Promise<void>;
+  unsaveJob?: (jobId: string) => Promise<void>;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
   resetPassword: (email: string) => Promise<{ error: any }>;
+  updateProfile?: (updates: Partial<UserProfile>) => Promise<{ error: any | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -118,22 +124,48 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // Sign up with email and password
-  const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: string) => {
     try {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            first_name: userData.first_name,
-            last_name: userData.last_name,
-            user_type: userData.user_type,
+            first_name: firstName,
+            last_name: lastName,
+            user_type: userType,
           },
         },
       });
       return { error };
     } catch (error) {
       console.error('Error signing up:', error);
+      return { error };
+    }
+  };
+
+  // Sign in with Google
+  const signInWithGoogle = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      return { data, error };
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+      return { error };
+    }
+  };
+
+  // Sign in with Apple
+  const signInWithApple = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+      });
+      return { data, error };
+    } catch (error) {
+      console.error('Error signing in with Apple:', error);
       return { error };
     }
   };
@@ -155,6 +187,89 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.error('Error resetting password:', error);
       return { error };
+    }
+  };
+
+  // Update user profile
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    try {
+      if (!user) throw new Error('No user logged in');
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      // Update local profile state
+      setUserProfile(prev => prev ? { ...prev, ...updates } : null);
+      
+      return { error: null };
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      return { error };
+    }
+  };
+
+  // Job saving methods
+  const saveJob = async (jobId: string) => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .insert({
+          user_id: user.id,
+          job_id: jobId,
+        });
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving job:', error);
+      throw error;
+    }
+  };
+
+  const unsaveJob = async (jobId: string) => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('job_id', jobId);
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error removing saved job:', error);
+      throw error;
+    }
+  };
+
+  const isSavedJob = async (jobId: string) => {
+    if (!user) return false;
+    
+    try {
+      const { data, error } = await supabase
+        .from('saved_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('job_id', jobId)
+        .single();
+        
+      if (error) {
+        if (error.code === 'PGRST116') { // Code for "no rows found"
+          return false;
+        }
+        throw error;
+      }
+      
+      return !!data;
+    } catch (error) {
+      console.error('Error checking saved job status:', error);
+      return false;
     }
   };
 
@@ -242,7 +357,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signIn,
     signUp,
     signOut,
+    signInWithGoogle,
+    signInWithApple,
     resetPassword,
+    updateProfile,
+    saveJob,
+    unsaveJob,
+    isSavedJob,
     createApplication,
     updateApplication,
     deleteApplication,
