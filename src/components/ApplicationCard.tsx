@@ -3,12 +3,10 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ApplicationStatus, JobApplication } from '@/types/job';
 import { useAuth } from '@/contexts/auth';
 import ApplicationStatusBadge from './ApplicationStatusBadge';
-import ApplicationForm from './applications/ApplicationForm';
 
 interface ApplicationCardProps {
   application: JobApplication;

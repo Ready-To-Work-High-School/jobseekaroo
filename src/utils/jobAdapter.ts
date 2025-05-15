@@ -2,7 +2,6 @@
 import { Job } from '@/types/job';
 
 // This utility helps handle both property naming conventions in our application
-// during the transition period
 export function normalizeJob(job: any): Job {
   // Normalize inconsistent property names
   const normalizedJob: Job = {

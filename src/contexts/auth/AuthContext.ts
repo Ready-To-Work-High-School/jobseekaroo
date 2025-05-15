@@ -25,4 +25,11 @@ export interface AuthContextType {
   updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
   createApplication: (application: JobApplicationInput) => Promise<void>;
   updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
+  deleteApplication?: (id: string) => Promise<void>;
+  getApplications?: () => Promise<JobApplication[]>;
+  resetPassword?: (email: string) => Promise<{ error: any }>;
 }
+
+// Create the auth context
+import { createContext } from 'react';
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);

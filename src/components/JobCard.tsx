@@ -8,6 +8,7 @@ import JobCardLogo from './job/JobCardLogo';
 import JobCardHeader from './job/JobCardHeader';
 import JobCardDetails from './job/JobCardDetails';
 import JobCardFeatures from './job/JobCardFeatures';
+import { normalizeJob } from '@/utils/jobAdapter';
 
 interface JobCardProps {
   job: Job;
@@ -15,14 +16,15 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job, index }: JobCardProps) => {
+  const normalizedJob = normalizeJob(job);
   const animation = useFadeIn(100 + index * 50);
-  const useAmberStyling = isJacksonvilleCompany(job.company.name);
+  const useAmberStyling = isJacksonvilleCompany(normalizedJob.company.name);
   
   return (
     <Link 
-      to={`/jobs/${job.id}`} 
+      to={`/jobs/${normalizedJob.id}`} 
       className={animation}
-      aria-label={`${job.title} at ${job.company.name}, ${job.payRate ? formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period) : ''}`}
+      aria-label={`${normalizedJob.title} at ${normalizedJob.company.name}, ${normalizedJob.payRate ? formatPayRange(normalizedJob.payRate.min, normalizedJob.payRate.max, normalizedJob.payRate.period) : ''}`}
     >
       <div 
         className={`flex flex-col space-y-3 sm:space-y-4 p-4 sm:p-6 rounded-lg ${useAmberStyling ? 'border-amber-400 border-2' : 'border border-border'} bg-white hover:shadow-md transition-all duration-200`}
@@ -30,16 +32,16 @@ const JobCard = ({ job, index }: JobCardProps) => {
       >
         <div className="flex items-start gap-3 sm:gap-4">
           <JobCardLogo 
-            logoUrl={job.logoUrl} 
-            companyName={job.company.name}
+            logoUrl={normalizedJob.logoUrl} 
+            companyName={normalizedJob.company.name}
             useAmberStyling={useAmberStyling}
           />
           
           <JobCardHeader 
-            title={job.title}
-            companyName={job.company.name}
-            postedDate={job.postedDate}
-            jobId={job.id}
+            title={normalizedJob.title}
+            companyName={normalizedJob.company.name}
+            postedDate={normalizedJob.postedDate}
+            jobId={normalizedJob.id}
             useAmberStyling={useAmberStyling}
             formatRelativeDate={formatRelativeDate}
           />
@@ -47,25 +49,25 @@ const JobCard = ({ job, index }: JobCardProps) => {
 
         <div className="sm:hidden flex items-center gap-2 text-xs text-black">
           <Clock className="h-3 w-3" aria-hidden="true" />
-          <span>{formatRelativeDate(job.postedDate)}</span>
+          <span>{formatRelativeDate(normalizedJob.postedDate)}</span>
         </div>
 
         <JobCardDetails 
-          location={job.location}
-          payRange={formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
-          jobType={job.type}
+          location={normalizedJob.location}
+          payRange={formatPayRange(normalizedJob.payRate.min, normalizedJob.payRate.max, normalizedJob.payRate.period)}
+          jobType={normalizedJob.type}
           useAmberStyling={useAmberStyling}
         />
 
         <JobCardFeatures 
-          isRemote={job.isRemote}
-          isFlexible={job.isFlexible}
-          experienceLevel={job.experienceLevel}
+          isRemote={normalizedJob.isRemote}
+          isFlexible={normalizedJob.isFlexible}
+          experienceLevel={normalizedJob.experienceLevel}
           useAmberStyling={useAmberStyling}
         />
 
         <p className="text-xs sm:text-sm text-black line-clamp-2">
-          {job.description}
+          {normalizedJob.description}
         </p>
       </div>
     </Link>
