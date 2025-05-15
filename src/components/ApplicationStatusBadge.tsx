@@ -1,94 +1,94 @@
 
-import { ApplicationStatus } from '@/types/application';
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Clock, CheckCircle, XCircle, MessageCircle, HourglassIcon, Award, User, LogOut } from 'lucide-react';
+import { ApplicationStatus } from '@/types/job';
 import { cn } from '@/lib/utils';
-import { 
-  Clock, 
-  CalendarRange, 
-  CheckCircle, 
-  ThumbsUp, 
-  XCircle, 
-  XOctagon,
-  Search
-} from 'lucide-react';
-import { Badge } from './ui/badge';
-import { validateApplicationStatus } from '@/lib/supabase/utils';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
   className?: string;
-  large?: boolean;
 }
 
-export const ApplicationStatusBadge = ({ status, className, large = false }: ApplicationStatusBadgeProps) => {
-  // Make sure we're dealing with a valid status
-  const validStatus = validateApplicationStatus(status);
-  
-  const getStatusConfig = (status: ApplicationStatus) => {
+const ApplicationStatusBadge: React.FC<ApplicationStatusBadgeProps> = ({ status, className }) => {
+  const getStatusDetails = (status: ApplicationStatus): {
+    label: string;
+    color: string;
+    icon: React.ReactNode;
+  } => {
     switch (status) {
       case 'applied':
         return {
-          icon: Clock,
           label: 'Applied',
-          variant: 'secondary' as const,
+          color: 'bg-blue-100 text-blue-800',
+          icon: <Clock className="h-3 w-3" />
         };
       case 'interviewing':
         return {
-          icon: CalendarRange,
           label: 'Interviewing',
-          variant: 'default' as const,
-        };
-      case 'offered':
-        return {
-          icon: ThumbsUp,
-          label: 'Offered',
-          variant: 'default' as const,
+          color: 'bg-purple-100 text-purple-800',
+          icon: <MessageCircle className="h-3 w-3" />
         };
       case 'accepted':
         return {
-          icon: CheckCircle,
           label: 'Accepted',
-          variant: 'default' as const,
+          color: 'bg-green-100 text-green-800',
+          icon: <CheckCircle className="h-3 w-3" />
+        };
+      case 'offered':
+        return {
+          label: 'Offered',
+          color: 'bg-amber-100 text-amber-800',
+          icon: <Award className="h-3 w-3" />
         };
       case 'rejected':
         return {
-          icon: XCircle,
           label: 'Rejected',
-          variant: 'outline' as const,
+          color: 'bg-red-100 text-red-800',
+          icon: <XCircle className="h-3 w-3" />
+        };
+      case 'pending':
+        return {
+          label: 'Pending',
+          color: 'bg-gray-100 text-gray-800',
+          icon: <HourglassIcon className="h-3 w-3" />
+        };
+      case 'hired':
+        return {
+          label: 'Hired',
+          color: 'bg-emerald-100 text-emerald-800',
+          icon: <User className="h-3 w-3" />
         };
       case 'withdrawn':
         return {
-          icon: XOctagon,
           label: 'Withdrawn',
-          variant: 'outline' as const,
+          color: 'bg-neutral-100 text-neutral-800',
+          icon: <LogOut className="h-3 w-3" />
         };
       default:
         return {
-          icon: Clock,
           label: 'Unknown',
-          variant: 'secondary' as const,
+          color: 'bg-gray-100 text-gray-800',
+          icon: <Clock className="h-3 w-3" />
         };
     }
   };
 
-  const { icon: Icon, label, variant } = getStatusConfig(validStatus);
+  const { label, color, icon } = getStatusDetails(status);
 
   return (
     <Badge 
-      variant={variant} 
+      variant="outline" 
       className={cn(
-        "gap-1 font-medium flex items-center",
-        status === 'applied' && "bg-secondary text-secondary-foreground",
-        status === 'interviewing' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
-        status === 'offered' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
-        status === 'accepted' && "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
-        status === 'rejected' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
-        status === 'withdrawn' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
-        large && "text-sm px-3 py-1",
+        'flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', 
+        color, 
         className
       )}
     >
-      <Icon className={cn("h-3 w-3", large && "h-4 w-4")} />
+      {icon}
       {label}
     </Badge>
   );
 };
+
+export default ApplicationStatusBadge;

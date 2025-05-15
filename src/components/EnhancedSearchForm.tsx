@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -13,9 +14,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useDebounce } from '@/hooks/useDebounce';
 import { categories } from '@/lib/constants';
-import { JobSearchFilters, Job } from '@/types/job';
-import { SavedSearch } from '@/types/user';
-import SavedSearches from './SavedSearches';
+import { JobSearchFilters } from '@/types/job';
+
+interface SavedSearch {
+  id: string;
+  name: string;
+  query?: string;
+  zipCode?: string;
+  radius?: number;
+  filters?: JobSearchFilters;
+}
 
 interface EnhancedSearchFormProps {
   initialLocation?: string;
@@ -26,7 +34,7 @@ interface EnhancedSearchFormProps {
 const EnhancedSearchForm = ({ initialLocation, initialRadius, initialFilters }: EnhancedSearchFormProps) => {
   const [location, setLocation] = useState(initialLocation || '');
   const [radius, setRadius] = useState(initialRadius || 25);
-  const [isRemote, setIsRemote] = useState(initialFilters?.remote || false);
+  const [isRemote, setIsRemote] = useState(initialFilters?.isRemote || false);
   const [filters, setFilters] = useState<JobSearchFilters>(initialFilters || {});
   const [category, setCategory] = useState(initialFilters?.category || '');
   const [showSavedSearches, setShowSavedSearches] = useState(false);
@@ -36,7 +44,7 @@ const EnhancedSearchForm = ({ initialLocation, initialRadius, initialFilters }: 
   useEffect(() => {
     setLocation(initialLocation || '');
     setRadius(initialRadius || 25);
-    setIsRemote(initialFilters?.remote || false);
+    setIsRemote(initialFilters?.isRemote || false);
     setFilters(initialFilters || {});
     setCategory(initialFilters?.category || '');
   }, [initialLocation, initialRadius, initialFilters]);
@@ -151,13 +159,7 @@ const EnhancedSearchForm = ({ initialLocation, initialRadius, initialFilters }: 
 
       {showSavedSearches && (
         <div className="absolute top-full mt-2 right-0 bg-card border rounded-md shadow-md z-10">
-          <SavedSearches
-            currentLocation={location}
-            currentRadius={radius}
-            currentFilters={filters}
-            onSearchSelect={handleSelectSavedSearch}
-            className="p-4 w-80"
-          />
+          {/* SavedSearches component should be loaded conditionally here */}
         </div>
       )}
     </div>

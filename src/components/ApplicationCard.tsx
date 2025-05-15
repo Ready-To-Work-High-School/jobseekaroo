@@ -1,313 +1,175 @@
-
-import { useState } from 'react';
-import { format } from 'date-fns';
-import { JobApplication, ApplicationStatus } from '@/types/application';
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { ApplicationStatusBadge } from './ApplicationStatusBadge';
-import { Building, Calendar, Pencil, Trash2 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { Check, ChevronsUpDown, Copy, ExternalLink, MoreVertical, Send, Trash2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { JobApplication, ApplicationStatus } from '@/types/job';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateApplicationStatus } from '@/lib/supabase/queries';
+import ApplicationStatusBadge from './ApplicationStatusBadge';
 
 interface ApplicationCardProps {
   application: JobApplication;
-  onUpdate: () => void;
+  className?: string;
 }
 
-export const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps) => {
-  const { updateApplicationStatus, deleteApplication } = useAuth();
-  const { toast } = useToast();
-  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [notes, setNotes] = useState(application.notes || '');
-  const [contactName, setContactName] = useState(application.contact_name || '');
-  const [contactEmail, setContactEmail] = useState(application.contact_email || '');
-  const [nextStep, setNextStep] = useState(application.next_step || '');
-  const [nextStepDate, setNextStepDate] = useState(application.next_step_date || '');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleStatusChange = async (newStatus: ApplicationStatus) => {
-    setIsStatusDropdownOpen(false);
-    setIsLoading(true);
-    
-    try {
-      await updateApplicationStatus(application.id, newStatus);
-      toast({
-        title: "Status updated",
-        description: `Application status updated to ${newStatus}`,
-      });
-      onUpdate();
-    } catch (error) {
-      toast({
-        title: "Error updating status",
-        description: "Failed to update application status",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, className }) => {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  
+  const { mutate: updateStatusMutation, isLoading } = useMutation(
+    ({ id, status }: { id: string, status: ApplicationStatus }) => updateApplicationStatus(id, status),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['applications']);
+        toast.success('Application status updated successfully');
+      },
+      onError: (error: any) => {
+        console.error('Error updating application status:', error);
+        toast.error('Failed to update application status');
+      },
     }
+  );
+
+  const updateStatus = (status: ApplicationStatus) => {
+    updateStatusMutation({ id: application.id, status });
   };
 
-  const handleDeleteApplication = async () => {
-    setIsLoading(true);
-    
-    try {
-      await deleteApplication(application.id);
-      toast({
-        title: "Application deleted",
-        description: "Application has been deleted successfully",
-      });
-      onUpdate();
-    } catch (error) {
-      toast({
-        title: "Error deleting application",
-        description: "Failed to delete application",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-      setShowDeleteDialog(false);
-    }
-  };
+  const handleStatusChange = (newStatus: ApplicationStatus) => {
+    const statusUpdates: Record<string, () => void> = {
+      applied: () => updateStatus('applied'),
+      interviewing: () => updateStatus('interviewing'),
+      rejected: () => updateStatus('rejected'),
+      accepted: () => updateStatus('accepted'),
+      pending: () => updateStatus('pending'),
+      hired: () => updateStatus('hired'),
+      withdrawn: () => updateStatus('withdrawn'),
+      offered: () => updateStatus('offered'),
+    };
 
-  const handleSaveNotes = async () => {
-    setIsLoading(true);
-    
-    try {
-      await updateApplicationStatus(application.id, application.status);
-      toast({
-        title: "Notes saved",
-        description: "Application details have been updated",
-      });
-      onUpdate();
-    } catch (error) {
-      toast({
-        title: "Error saving notes",
-        description: "Failed to update application details",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-      setShowEditDialog(false);
-    }
+    const updateFn = statusUpdates[newStatus];
+    if (updateFn) updateFn();
   };
 
   return (
-    <Card className="w-full">
-      <CardContent className="pt-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h3 className="font-semibold text-lg">{application.job_title}</h3>
-            <div className="flex items-center text-muted-foreground mt-1">
-              <Building className="h-4 w-4 mr-1" />
-              <span>{application.company}</span>
-            </div>
+    <Card className={cn("w-full", className)}>
+      <CardHeader>
+        <div className="flex items-center">
+          <Avatar className="mr-4">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div className="space-y-0.5">
+            <CardTitle className="text-base font-semibold">{application.contact_name || 'No Contact Name'}</CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">{application.contact_email || 'No Contact Email'}</CardDescription>
           </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium">Application Status:</p>
           <ApplicationStatusBadge status={application.status} />
         </div>
-
-        <div className="flex items-center text-sm text-muted-foreground mt-1 mb-4">
-          <Calendar className="h-4 w-4 mr-1" />
-          <span>Applied: {format(new Date(application.applied_date), 'MMM d, yyyy')}</span>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium">Applied Date:</p>
+          <p className="text-sm text-muted-foreground">{format(new Date(application.applied_date), 'MMM dd, yyyy')}</p>
         </div>
-
-        {application.notes && (
-          <div className="mt-3 text-sm">
-            <p className="text-muted-foreground line-clamp-2">{application.notes}</p>
+        {application.next_step && (
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">Next Step:</p>
+            <p className="text-sm text-muted-foreground">{application.next_step}</p>
           </div>
         )}
-
-        {(application.next_step || application.next_step_date) && (
-          <div className="mt-3 text-sm bg-secondary p-2 rounded-md">
-            <div className="font-medium">Next Step:</div>
-            <div className="text-muted-foreground mt-1 flex items-start gap-2">
-              {application.next_step && (
-                <span>{application.next_step}</span>
-              )}
-              {application.next_step_date && (
-                <span className="text-muted-foreground">
-                  {format(new Date(application.next_step_date), 'MMM d, yyyy')}
-                </span>
-              )}
-            </div>
+        {application.next_step_date && (
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">Next Step Date:</p>
+            <p className="text-sm text-muted-foreground">{format(new Date(application.next_step_date), 'MMM dd, yyyy')}</p>
+          </div>
+        )}
+        {application.notes && (
+          <div className="space-y-1">
+            <p className="text-sm font-medium">Notes:</p>
+            <p className="text-sm text-muted-foreground">{application.notes}</p>
           </div>
         )}
       </CardContent>
-      
-      <CardFooter className="flex justify-between pt-0">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowEditDialog(true)}
-          disabled={isLoading}
-        >
-          <Pencil className="h-4 w-4 mr-1" /> Edit
-        </Button>
-        
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowDeleteDialog(true)}
-            disabled={isLoading}
-          >
-            <Trash2 className="h-4 w-4 mr-1" /> Delete
-          </Button>
-          
-          <DropdownMenu open={isStatusDropdownOpen} onOpenChange={setIsStatusDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" disabled={isLoading}>
-                Update Status
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuItem onClick={() => handleStatusChange('applied')}>
-                <ApplicationStatusBadge status="applied" className="w-full justify-start" />
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('interviewing')}>
-                <ApplicationStatusBadge status="interviewing" className="w-full justify-start" />
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('offered')}>
-                <ApplicationStatusBadge status="offered" className="w-full justify-start" />
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('accepted')}>
-                <ApplicationStatusBadge status="accepted" className="w-full justify-start" />
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('rejected')}>
-                <ApplicationStatusBadge status="rejected" className="w-full justify-start" />
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('withdrawn')}>
-                <ApplicationStatusBadge status="withdrawn" className="w-full justify-start" />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+      <CardFooter className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => setOpen(true)}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Withdraw
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              <a href={`/jobs/${application.job_id}`} target="_blank" rel="noopener noreferrer">
+                View Job
+              </a>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <AlertDialog open={open} onOpenChange={setOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently withdraw your application from this job.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  handleStatusChange('withdrawn');
+                  setOpen(false);
+                }}
+              >
+                Withdraw
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Application</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this application? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowDeleteDialog(false)}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="destructive"
-              onClick={handleDeleteApplication}
-              disabled={isLoading}
-            >
-              {isLoading ? "Deleting..." : "Delete"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Application Dialog */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit Application Details</DialogTitle>
-            <DialogDescription>
-              Update the details for your application to {application.company}.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                placeholder="Add any notes about this application"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="resize-none"
-                rows={3}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="contactName">Contact Name</Label>
-                <Input
-                  id="contactName"
-                  placeholder="Contact person"
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="contactEmail">Contact Email</Label>
-                <Input
-                  id="contactEmail"
-                  placeholder="Contact email"
-                  type="email"
-                  value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="nextStep">Next Step</Label>
-              <Input
-                id="nextStep"
-                placeholder="e.g., Phone Interview"
-                value={nextStep}
-                onChange={(e) => setNextStep(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="nextStepDate">Next Step Date</Label>
-              <Input
-                id="nextStepDate"
-                type="date"
-                value={nextStepDate ? nextStepDate.substring(0, 10) : ''}
-                onChange={(e) => setNextStepDate(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowEditDialog(false)}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleSaveNotes}
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </Card>
   );
 };
+
+export default ApplicationCard;

@@ -24,6 +24,18 @@ export const PAY_PERIODS = [
   'yearly'
 ];
 
+// Categories for job searching
+export const categories = [
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'retail', label: 'Retail' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'office', label: 'Office' },
+  { value: 'trades', label: 'Trades' },
+  { value: 'food-service', label: 'Food Service' },
+  { value: 'education', label: 'Education' },
+  { value: 'customer-service', label: 'Customer Service' }
+];
+
 // Search-related constants
 export const SEARCH_RADIUS_OPTIONS = [
   { value: 5, label: '5 miles' },
@@ -64,5 +76,6 @@ export const APPLICATION_STATUS = [
   'accepted',
   'pending',
   'hired',
-  'withdrawn'
+  'withdrawn',
+  'offered'
 ];
