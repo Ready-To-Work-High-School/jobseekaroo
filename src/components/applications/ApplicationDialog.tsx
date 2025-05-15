@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ApplicationForm } from './ApplicationForm';
+import ApplicationForm from './ApplicationForm';
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -42,7 +42,7 @@ export const ApplicationDialog = ({
     
     try {
       const savedJobIds = await getSavedJobs();
-      const jobDetails = savedJobIds.map(id => getJobById(id)).filter(Boolean) as Job[];
+      const jobDetails = savedJobIds.map((id:string) => getJobById(id)).filter(Boolean) as Job[];
       setSavedJobs(jobDetails);
     } catch (error) {
       console.error('Error fetching saved jobs:', error);
@@ -114,3 +114,5 @@ export const ApplicationDialog = ({
     </Dialog>
   );
 };
+
+export default ApplicationDialog;

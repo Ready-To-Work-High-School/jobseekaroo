@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { JobType, ExperienceLevel } from '@/types/job';
+import { classNames } from '@/utils/classNames';
 
 interface FilterBarProps {
   onFilterChange: (filters: FilterState) => void;
@@ -31,7 +32,7 @@ const FilterBar = ({ onFilterChange, className }: FilterBarProps) => {
   };
 
   return (
-    <div className={cn("p-5 rounded-xl border border-border bg-white", className)}>
+    <div className={classNames("p-5 rounded-xl border border-border bg-white", className)}>
       <h3 className="text-lg font-medium mb-4">Filter Results</h3>
       
       <div className="space-y-6">
@@ -146,7 +147,7 @@ interface FilterButtonProps {
 const FilterButton = ({ label, isActive, onClick }: FilterButtonProps) => (
   <button
     onClick={onClick}
-    className={cn(
+    className={classNames(
       "w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-200 focus-ring",
       isActive
         ? "bg-primary/10 text-primary font-medium"
@@ -174,7 +175,7 @@ const ToggleButton = ({ label, value, onChange }: ToggleButtonProps) => {
   return (
     <button
       onClick={handleClick}
-      className={cn(
+      className={classNames(
         "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-all duration-200 focus-ring",
         value === true
           ? "bg-primary/10 text-primary font-medium"

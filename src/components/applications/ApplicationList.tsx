@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ApplicationCard from "@/components/ApplicationCard";
 import { Button } from '@/components/ui/button';
@@ -69,3 +70,4 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
 };
 
 export default ApplicationList;
+export { ApplicationList };

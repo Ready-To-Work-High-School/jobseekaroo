@@ -1,3 +1,4 @@
+
 export type JobType = 'full-time' | 'part-time' | 'internship' | 'volunteer' | 'seasonal' | 'weekend' | 'summer';
 export type ExperienceLevel = 'entry-level' | 'mid-level' | 'senior' | 'internship' | 'no-experience' | 'some-experience';
 export type ApplicationStatus = 'applied' | 'interviewing' | 'rejected' | 'accepted' | 'pending' | 'hired' | 'withdrawn' | 'offered';
@@ -6,53 +7,53 @@ export interface Job {
   id: string;
   title: string;
   description: string;
-  company: string;
-  location: string;
-  payRate: number;
-  type: string;
-  postedDate: string;
-  isRemote: boolean;
-  isFlexible: boolean;
-  experienceLevel: string;
-  isFeatured?: boolean;
-  logoUrl?: string;
+  requirements: string[];
   
-  // Keep snake_case versions for compatibility with API responses
-  posted_date?: string;
-  is_remote?: boolean;
-  is_flexible?: boolean;
-  experience_level?: string;
-  is_featured?: boolean;
-  logo_url?: string;
-  company_name?: string;
-  location_city?: string;
-  location_state?: string;
-  location_zip?: string;
-  job_type?: string;
-  pay_rate_min?: number;
-  pay_rate_max?: number;
-  pay_rate_period?: string;
-  hours_per_week?: number;
-  is_teen_appropriate?: boolean;
-  prohibited_types?: string[];
-  created_at?: string;
-  updated_at?: string;
-  
-  // For nested objects used in components
-  company?: {
+  // Formatted properties (camelCase)
+  company: {
     name: string;
     logoUrl?: string;
   };
-  location?: {
+  location: {
     city: string;
     state: string;
     zip: string;
   };
-  payRate?: {
+  payRate: {
     min: number;
     max: number;
     period: string;
   };
+  type: JobType | string;
+  experienceLevel: ExperienceLevel | string;
+  postedDate: string;
+  isRemote?: boolean;
+  isFlexible?: boolean;
+  isFeatured?: boolean;
+  isPremium?: boolean;
+  logoUrl?: string;
+  
+  // Original DB properties (snake_case)
+  company_name?: string;
+  logo_url?: string;
+  location_city?: string;
+  location_state?: string;
+  location_zip?: string;
+  job_type?: string;
+  experience_level?: string;
+  pay_rate_min?: number;
+  pay_rate_max?: number;
+  pay_rate_period?: string;
+  is_remote?: boolean;
+  is_flexible?: boolean;
+  is_featured?: boolean;
+  is_premium?: boolean;
+  posted_date?: string;
+  hours_per_week?: number;
+  is_teen_appropriate?: boolean;
+  prohibited_types?: string[];
+  created_at: string;
+  updated_at: string;
 }
 
 export interface JobSearchFilters {

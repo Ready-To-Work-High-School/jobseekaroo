@@ -10,35 +10,31 @@ export function normalizeJob(job: any): Job {
     description: job.description || '',
     requirements: job.requirements || [],
     
-    // Handle string properties
-    company: job.company || job.company_name || '',
-    location: job.location || `${job.location_city || ''}, ${job.location_state || ''}`,
+    // Handle nested objects for components that expect them
+    company: {
+      name: job.company_name || (job.company ? (typeof job.company === 'object' ? job.company.name : job.company) : ''),
+      logoUrl: job.logo_url || job.logoUrl || (job.company && typeof job.company === 'object' ? job.company.logoUrl : undefined)
+    },
+    
+    location: {
+      city: job.location_city || (job.location && typeof job.location === 'object' ? job.location.city : ''),
+      state: job.location_state || (job.location && typeof job.location === 'object' ? job.location.state : ''),
+      zip: job.location_zip || (job.location && typeof job.location === 'object' ? job.location.zip : '')
+    },
+    
+    payRate: {
+      min: job.pay_rate_min || (job.payRate && typeof job.payRate === 'object' ? job.payRate.min : 0),
+      max: job.pay_rate_max || (job.payRate && typeof job.payRate === 'object' ? job.payRate.max : 0),
+      period: job.pay_rate_period || (job.payRate && typeof job.payRate === 'object' ? job.payRate.period : 'hourly')
+    },
+    
     type: job.type || job.job_type || 'full-time',
     experienceLevel: job.experienceLevel || job.experience_level || 'entry-level',
-    payRate: job.payRate || job.pay_rate_min || 0,
     postedDate: job.postedDate || job.posted_date || new Date().toISOString(),
     isRemote: job.isRemote !== undefined ? job.isRemote : (job.is_remote || false),
     isFlexible: job.isFlexible !== undefined ? job.isFlexible : (job.is_flexible || false),
     isFeatured: job.isFeatured !== undefined ? job.isFeatured : (job.is_featured || false),
     logoUrl: job.logoUrl || job.logo_url,
-    
-    // Handle nested objects for components that expect them
-    company: {
-      name: job.company_name || (job.company ? job.company.name : '') || job.company || '',
-      logoUrl: job.logo_url || job.logoUrl || (job.company ? job.company.logoUrl : undefined)
-    },
-    
-    location: {
-      city: job.location_city || (job.location ? job.location.city : ''),
-      state: job.location_state || (job.location ? job.location.state : ''),
-      zip: job.location_zip || (job.location ? job.location.zip : '')
-    },
-    
-    payRate: {
-      min: job.pay_rate_min || (job.payRate ? job.payRate.min : 0),
-      max: job.pay_rate_max || (job.payRate ? job.payRate.max : 0),
-      period: job.pay_rate_period || (job.payRate ? job.payRate.period : 'hourly')
-    },
     
     // Include original properties for compatibility
     company_name: job.company_name || '',
@@ -48,9 +44,9 @@ export function normalizeJob(job: any): Job {
     location_zip: job.location_zip || '',
     job_type: job.job_type || job.type,
     experience_level: job.experience_level || job.experienceLevel,
-    pay_rate_min: job.pay_rate_min || (job.payRate ? job.payRate.min : 0),
-    pay_rate_max: job.pay_rate_max || (job.payRate ? job.payRate.max : 0),
-    pay_rate_period: job.pay_rate_period || (job.payRate ? job.payRate.period : 'hourly'),
+    pay_rate_min: job.pay_rate_min || (job.payRate && typeof job.payRate === 'object' ? job.payRate.min : 0),
+    pay_rate_max: job.pay_rate_max || (job.payRate && typeof job.payRate === 'object' ? job.payRate.max : 0),
+    pay_rate_period: job.pay_rate_period || (job.payRate && typeof job.payRate === 'object' ? job.payRate.period : 'hourly'),
     is_remote: job.is_remote !== undefined ? job.is_remote : job.isRemote,
     is_flexible: job.is_flexible !== undefined ? job.is_flexible : job.isFlexible,
     is_featured: job.is_featured !== undefined ? job.is_featured : job.isFeatured,

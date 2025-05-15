@@ -18,27 +18,27 @@ const ApplicationStatusBadge = ({ status, size = 'default' }: ApplicationStatusB
       break;
     case 'interviewing':
       variant = 'warning';
-      label = 'Interviewing';
+      label = 'interviewing';
       break;
     case 'accepted':
       variant = 'success';
-      label = 'Accepted';
+      label = 'accepted';
       break;
     case 'rejected':
       variant = 'destructive';
-      label = 'Rejected';
+      label = 'rejected';
       break;
     case 'withdrawn':
       variant = 'outline';
-      label = 'Withdrawn';
+      label = 'withdrawn';
       break;
     case 'offered':
       variant = 'info';
-      label = 'Offer Received';
+      label = 'offer received';
       break;
     case 'hired':
       variant = 'success';
-      label = 'Hired';
+      label = 'hired';
       break;
     default:
       variant = 'secondary';

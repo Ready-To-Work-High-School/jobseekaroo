@@ -153,3 +153,5 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     </>
   );
 };
+
+export default JobApplyButton;
