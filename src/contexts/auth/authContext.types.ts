@@ -1,6 +1,7 @@
 
 import { User, Session } from '@supabase/supabase-js';
 import { UserProfile } from '@/types/user';
+import { JobApplication, ApplicationStatus } from '@/types/application';
 
 export interface AuthContextType {
   user: User | null;
@@ -8,19 +9,29 @@ export interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   isAuthenticated: boolean;
-  signIn: (credentials: { email: string; password: string }) => Promise<{ data?: any; error?: any }>;
-  signUp: (credentials: { 
-    email: string; 
-    password: string; 
-    metadata?: {
-      first_name?: string;
-      last_name?: string;
-      user_type?: 'student' | 'employer' | 'admin';
-    } 
-  }) => Promise<{ data?: any; error?: any }>;
+  
+  // Authentication methods
+  signIn: (email: string, password: string) => Promise<User | null>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string, userType?: string) => Promise<User | null>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ success?: boolean; error?: any }>;
-  updateProfile: (updates: Partial<UserProfile>) => Promise<{ data?: any; error?: any }>;
-  refreshSession: () => Promise<{ data?: any; error?: any }>;
+  signInWithGoogle: () => Promise<User | null>;
+  signInWithApple: () => Promise<User | null>;
+  
+  // Profile methods
+  updateProfile: (updates: Partial<UserProfile>) => Promise<any>;
   fetchUserProfile: (userId: string) => Promise<void>;
+  refreshProfile: () => Promise<void>;
+  
+  // Application methods
+  createApplication: (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<any>;
+  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  getApplications: () => Promise<any[]>;
+  deleteApplication: (applicationId: string) => Promise<any>;
+  
+  // Job management methods
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
+  getSavedJobs: () => Promise<string[]>;
 }
