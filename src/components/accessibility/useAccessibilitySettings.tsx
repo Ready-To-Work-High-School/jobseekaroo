@@ -1,92 +1,104 @@
 
-import { useState, useEffect } from 'react';
-import { AccessibilitySettings } from '@/types/user';
+import { useState, useEffect, createContext, useContext } from 'react';
 
-const DEFAULT_SETTINGS: AccessibilitySettings = {
+// Define the settings interface
+export interface AccessibilitySettings {
+  highContrast: boolean;
+  fontSize: number;
+  dyslexiaFont: boolean;
+  enhancedFocus: boolean;
+  reducedMotion: boolean;
+  darkMode: boolean;
+  screenReaderOptimized: boolean;
+}
+
+// Default settings
+const defaultSettings: AccessibilitySettings = {
   highContrast: false,
-  largeText: false,
+  fontSize: 1,
+  dyslexiaFont: false,
+  enhancedFocus: false,
   reducedMotion: false,
-  dyslexicFont: false,
-  invertColors: false,
-  grayscale: false,
+  darkMode: false,
   screenReaderOptimized: false,
 };
 
-const STORAGE_KEY = 'accessibility-settings';
+// Create context
+const AccessibilityContext = createContext<{
+  settings: AccessibilitySettings;
+  updateSettings: (key: keyof AccessibilitySettings, value: any) => void;
+}>({
+  settings: defaultSettings,
+  updateSettings: () => {},
+});
 
-export const useAccessibilitySettings = () => {
-  const [settings, setSettings] = useState<AccessibilitySettings>(DEFAULT_SETTINGS);
+// Provider component
+export const AccessibilityProvider = ({ children }: { children: React.ReactNode }) => {
+  const [settings, setSettings] = useState<AccessibilitySettings>(defaultSettings);
 
-  // Load settings from localStorage on mount
   useEffect(() => {
-    try {
-      const savedSettings = localStorage.getItem(STORAGE_KEY);
-      if (savedSettings) {
-        setSettings(JSON.parse(savedSettings));
-      }
-    } catch (error) {
-      console.error('Error loading accessibility settings:', error);
+    // Load settings from localStorage on mount
+    const savedSettings = localStorage.getItem('accessibilitySettings');
+    if (savedSettings) {
+      setSettings(JSON.parse(savedSettings));
     }
   }, []);
 
-  // Apply CSS classes based on settings
   useEffect(() => {
-    const html = document.documentElement;
+    // Apply settings to document
+    document.documentElement.style.setProperty('--font-scale', settings.fontSize.toString());
     
     if (settings.highContrast) {
-      html.classList.add('high-contrast');
+      document.documentElement.classList.add('high-contrast');
     } else {
-      html.classList.remove('high-contrast');
+      document.documentElement.classList.remove('high-contrast');
     }
     
-    if (settings.largeText) {
-      html.classList.add('large-text');
+    if (settings.dyslexiaFont) {
+      document.documentElement.classList.add('dyslexia-font');
     } else {
-      html.classList.remove('large-text');
+      document.documentElement.classList.remove('dyslexia-font');
+    }
+    
+    if (settings.enhancedFocus) {
+      document.documentElement.classList.add('enhanced-focus');
+    } else {
+      document.documentElement.classList.remove('enhanced-focus');
     }
     
     if (settings.reducedMotion) {
-      html.classList.add('reduced-motion');
+      document.documentElement.classList.add('reduced-motion');
     } else {
-      html.classList.remove('reduced-motion');
-    }
-    
-    if (settings.dyslexicFont) {
-      html.classList.add('dyslexic-font');
-    } else {
-      html.classList.remove('dyslexic-font');
-    }
-    
-    if (settings.invertColors) {
-      html.classList.add('invert-colors');
-    } else {
-      html.classList.remove('invert-colors');
-    }
-    
-    if (settings.grayscale) {
-      html.classList.add('grayscale-mode');
-    } else {
-      html.classList.remove('grayscale-mode');
+      document.documentElement.classList.remove('reduced-motion');
     }
     
     if (settings.screenReaderOptimized) {
-      html.classList.add('screen-reader-optimized');
+      document.documentElement.classList.add('screen-reader');
     } else {
-      html.classList.remove('screen-reader-optimized');
+      document.documentElement.classList.remove('screen-reader');
     }
   }, [settings]);
 
-  // Update a single setting
-  const updateSetting = (key: keyof AccessibilitySettings, value: boolean) => {
+  const updateSettings = (key: keyof AccessibilitySettings, value: any) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
-    
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
-    } catch (error) {
-      console.error('Error saving accessibility settings:', error);
-    }
+    localStorage.setItem('accessibilitySettings', JSON.stringify(newSettings));
   };
 
-  return { settings, updateSetting };
+  return (
+    <AccessibilityContext.Provider value={{ settings, updateSettings }}>
+      {children}
+    </AccessibilityContext.Provider>
+  );
+};
+
+// Hook for using accessibility settings
+export const useAccessibilitySettings = () => {
+  const context = useContext(AccessibilityContext);
+  
+  if (!context) {
+    throw new Error('useAccessibilitySettings must be used within an AccessibilityProvider');
+  }
+  
+  return context;
 };

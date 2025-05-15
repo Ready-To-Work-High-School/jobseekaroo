@@ -1,26 +1,33 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { Accessibility } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import AccessibilityMenuContent from './AccessibilityMenuContent';
 
-export const AccessibilityMenu: React.FC = () => {
+export const AccessibilityMenu = () => {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="Accessibility options">
-          <Accessibility className="h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80" align="end">
+    <Sheet>
+      <SheetTrigger asChild>
+        <button
+          className="flex items-center justify-center rounded-full w-10 h-10 bg-muted hover:bg-muted/80 transition-colors"
+          aria-label="Accessibility Settings"
+        >
+          <Accessibility className="h-5 w-5" />
+        </button>
+      </SheetTrigger>
+      <SheetContent side="right" className="w-[300px] sm:w-[450px] overflow-y-auto">
+        <SheetHeader className="mb-4">
+          <SheetTitle>Accessibility Settings</SheetTitle>
+        </SheetHeader>
         <AccessibilityMenuContent />
-      </PopoverContent>
-    </Popover>
+      </SheetContent>
+    </Sheet>
   );
 };
 

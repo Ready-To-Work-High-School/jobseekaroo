@@ -1,108 +1,194 @@
 
-import React from 'react';
-import {
-  EyeIcon,
-  TextIcon,
-  ZoomInIcon,
-  MousePointerClick,
-  Moon,
-  SunMoon,
-  Glasses,
-} from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
+import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
-import { useAccessibilitySettings } from './useAccessibilitySettings';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import {
+  useAccessibilitySettings,
+  AccessibilitySettings,
+} from './useAccessibilitySettings';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { HelpCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 const AccessibilityMenuContent = () => {
-  const { settings, updateSetting } = useAccessibilitySettings();
+  const { settings, updateSettings } = useAccessibilitySettings();
+  const [fontScale, setFontScale] = useState(settings.fontSize);
+
+  useEffect(() => {
+    setFontScale(settings.fontSize);
+  }, [settings.fontSize]);
+
+  const handleFontScaleChange = (value: number[]) => {
+    setFontScale(value[0]);
+    updateSettings('fontSize', value[0]);
+  };
+
+  const handleToggle = (key: keyof AccessibilitySettings) => {
+    updateSettings(key, !settings[key]);
+  };
 
   return (
-    <div className="p-4">
-      <h3 className="text-lg font-medium mb-4">Accessibility Options</h3>
-      
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <EyeIcon className="h-4 w-4" />
-            <Label htmlFor="high-contrast">High Contrast</Label>
+    <div className="p-6 space-y-6">
+      <div>
+        <h3 className="text-lg font-medium mb-4">Text Options</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label htmlFor="font-scale">Font Size</Label>
+              <span className="text-sm font-medium">
+                {fontScale === 0.9
+                  ? 'Small'
+                  : fontScale === 1
+                  ? 'Default'
+                  : fontScale === 1.1
+                  ? 'Large'
+                  : 'X-Large'}
+              </span>
+            </div>
+            <Slider
+              id="font-scale"
+              min={0.9}
+              max={1.2}
+              step={0.1}
+              value={[fontScale]}
+              onValueChange={handleFontScaleChange}
+            />
           </div>
-          <Switch
-            id="high-contrast"
-            checked={settings.highContrast}
-            onCheckedChange={(checked) => updateSetting('highContrast', checked)}
-          />
+
+          <div className="flex items-center justify-between">
+            <div className="space-x-2 flex items-center">
+              <Label htmlFor="high-contrast">High Contrast</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">
+                      Increases contrast between text and background
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="high-contrast"
+              checked={settings.highContrast}
+              onCheckedChange={() => handleToggle('highContrast')}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-x-2 flex items-center">
+              <Label htmlFor="dyslexia-font">Dyslexia-Friendly Font</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">
+                      Uses OpenDyslexic font to improve readability
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="dyslexia-font"
+              checked={settings.dyslexiaFont}
+              onCheckedChange={() => handleToggle('dyslexiaFont')}
+            />
+          </div>
         </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <TextIcon className="h-4 w-4" />
-            <Label htmlFor="large-text">Large Text</Label>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-lg font-medium mb-4">Visual Options</h3>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-x-2 flex items-center">
+              <Label htmlFor="reduced-motion">Reduced Motion</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">
+                      Reduces animations and transitions
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="reduced-motion"
+              checked={settings.reducedMotion}
+              onCheckedChange={() => handleToggle('reducedMotion')}
+            />
           </div>
-          <Switch
-            id="large-text"
-            checked={settings.largeText}
-            onCheckedChange={(checked) => updateSetting('largeText', checked)}
-          />
+
+          <div className="flex items-center justify-between">
+            <div className="space-x-2 flex items-center">
+              <Label htmlFor="screen-reader">Screen Reader Optimized</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">
+                      Optimizes content for screen readers
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="screen-reader"
+              checked={settings.screenReaderOptimized}
+              onCheckedChange={() => handleToggle('screenReaderOptimized')}
+            />
+          </div>
         </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <MousePointerClick className="h-4 w-4" />
-            <Label htmlFor="reduced-motion">Reduced Motion</Label>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-lg font-medium mb-4">Focus Options</h3>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-x-2 flex items-center">
+              <Label htmlFor="focus-indicators">Enhanced Focus Indicators</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">
+                      Makes focus indicators more visible
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="focus-indicators"
+              checked={settings.enhancedFocus}
+              onCheckedChange={() => handleToggle('enhancedFocus')}
+            />
           </div>
-          <Switch
-            id="reduced-motion"
-            checked={settings.reducedMotion}
-            onCheckedChange={(checked) => updateSetting('reducedMotion', checked)}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Glasses className="h-4 w-4" />
-            <Label htmlFor="dyslexic-font">Dyslexic Font</Label>
-          </div>
-          <Switch
-            id="dyslexic-font"
-            checked={settings.dyslexicFont}
-            onCheckedChange={(checked) => updateSetting('dyslexicFont', checked)}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Moon className="h-4 w-4" />
-            <Label htmlFor="invert-colors">Invert Colors</Label>
-          </div>
-          <Switch
-            id="invert-colors"
-            checked={settings.invertColors}
-            onCheckedChange={(checked) => updateSetting('invertColors', checked)}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <SunMoon className="h-4 w-4" />
-            <Label htmlFor="grayscale">Grayscale</Label>
-          </div>
-          <Switch
-            id="grayscale"
-            checked={settings.grayscale}
-            onCheckedChange={(checked) => updateSetting('grayscale', checked)}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <ZoomInIcon className="h-4 w-4" />
-            <Label htmlFor="screen-reader">Screen Reader Optimized</Label>
-          </div>
-          <Switch
-            id="screen-reader"
-            checked={settings.screenReaderOptimized}
-            onCheckedChange={(checked) => updateSetting('screenReaderOptimized', checked)}
-          />
         </div>
       </div>
     </div>

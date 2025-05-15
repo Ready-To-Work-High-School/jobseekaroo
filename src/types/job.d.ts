@@ -50,7 +50,7 @@ export interface JobSearchFilters {
   experienceLevel?: string;
   isRemote?: boolean | null;
   isFlexible?: boolean | null;
-  category?: string;
+  category?: string; // Added category property
   salary?: {
     min?: number;
     max?: number;
