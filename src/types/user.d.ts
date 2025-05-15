@@ -1,48 +1,35 @@
 
-export type UserType = 'student' | 'employer' | 'admin' | 'teacher';
-
 export interface UserProfile {
   id: string;
   email?: string;
   first_name?: string;
   last_name?: string;
-  avatar_url?: string;
-  user_type?: UserType;
+  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
   company_name?: string;
   company_website?: string;
-  resume_url?: string;
+  phone?: string;
   bio?: string;
-  job_title?: string;
-  skills?: string[];
-  badges?: any[];
-  student_badges?: any[];
   location?: string;
+  avatar_url?: string;
   redeemed_code?: string;
   redeemed_at?: string;
-  employer_verification_status?: string;
-  verification_notes?: string;
-  preferences?: any;
+  premium_status?: string;
   created_at: string;
   updated_at: string;
-  premium_status?: string;
-  contact_details_encrypted?: string;
-  resume_data_encrypted?: string;
+  preferences: Record<string, any>;
 }
 
-export interface SavedSearch {
+export interface AdminUser {
   id: string;
-  name: string;
-  query?: string;
-  zipCode?: string;
-  radius?: number;
-  filters?: JobSearchFilters;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  user_type?: string;
+  company_name?: string;
+  company_website?: string;
   created_at: string;
   updated_at?: string;
-}
-
-export interface AccessibilitySettings {
-  highContrast: boolean;
-  largeText: boolean;
-  reduceMotion: boolean;
-  screenReaderOptimized: boolean;
+  redeemed_code?: string;
+  redeemed_at?: string;
+  premium_status?: string;
 }

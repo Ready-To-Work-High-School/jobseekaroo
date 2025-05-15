@@ -1,204 +1,170 @@
 
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { format, isValid, parseISO } from 'date-fns';
-import { Check, CalendarDays, Clock, Phone, Mail, MoreHorizontal, Trash2, Pencil } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { format } from 'date-fns';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ApplicationStatus, JobApplication } from '@/types/job';
+import { useAuth } from '@/contexts/auth';
 import ApplicationStatusBadge from './ApplicationStatusBadge';
-import { JobApplication, ApplicationStatus } from '@/types/application';
-import { useAuth } from '@/contexts/AuthContext';
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import ApplicationForm from './applications/ApplicationForm';
 
 interface ApplicationCardProps {
   application: JobApplication;
-  onUpdate: () => void;
+  onDelete: (id: string) => void;
 }
 
-const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps) => {
-  const [open, setOpen] = useState(false);
-  const { deleteApplication, updateApplicationStatus } = useAuth();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
+const ApplicationCard = ({ application, onDelete }: ApplicationCardProps) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const { updateApplication } = useAuth();
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '';
-    
-    const date = parseISO(dateString);
-    if (!isValid(date)) return dateString;
-    
-    return format(date, 'MMM dd, yyyy');
-  };
-  
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      await deleteApplication(application.id);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Application deleted",
-        description: "The job application has been removed from tracking",
-      });
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
-      onUpdate();
-    },
-    onError: (error) => {
-      console.error('Error deleting application:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete the application",
-        variant: "destructive",
-      });
-    }
-  });
-  
-  // Status update mutation
-  const statusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: ApplicationStatus }) => {
-      await updateApplicationStatus(id, status);
-    },
-    onSuccess: () => {
-      toast({ title: "Status updated" });
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
-      onUpdate();
-    },
-    onError: (error) => {
+  const handleStatusChange = async (status: ApplicationStatus) => {
+    try {
+      await updateApplication(application.id, { status });
+    } catch (error) {
       console.error('Error updating status:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update status",
-        variant: "destructive",
-      });
     }
-  });
-  
-  const handleStatusChange = (newStatus: ApplicationStatus) => {
-    statusMutation.mutate({ id: application.id, status: newStatus });
   };
-  
-  const handleDelete = () => {
-    deleteMutation.mutate();
+
+  const handleSaveEdit = async (updatedData: Partial<JobApplication>) => {
+    try {
+      await updateApplication(application.id, updatedData);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating application:', error);
+    }
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-0">
-        <div className="flex items-center justify-between py-4 px-5 border-b">
-          <div>
-            <h3 className="font-medium mb-1">{application.job_title}</h3>
-            <p className="text-muted-foreground text-sm">{application.company}</p>
-          </div>
-          <ApplicationStatusBadge status={application.status} />
-        </div>
-        
-        <div className="p-5 space-y-4">
-          <div className="flex items-center text-sm">
-            <CalendarDays className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span>Applied: {formatDate(application.applied_date)}</span>
+    <>
+      <Card className="shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-medium text-lg">{application.job_title}</h3>
+              <p className="text-sm text-muted-foreground">{application.company}</p>
+            </div>
+            <ApplicationStatusBadge status={application.status} />
           </div>
           
-          {application.contact_name && (
+          <div className="mt-3 space-y-2">
             <div className="flex items-center text-sm">
-              <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-              <span>{application.contact_name}</span>
+              <span className="font-medium mr-2">Applied:</span>
+              <span>{format(new Date(application.applied_date), 'MMM d, yyyy')}</span>
             </div>
-          )}
-          
-          {application.contact_email && (
-            <div className="flex items-center text-sm">
-              <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-              <span>{application.contact_email}</span>
-            </div>
-          )}
-          
-          {application.next_step && (
-            <div className="flex items-center text-sm">
-              <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-              <span>Next: {application.next_step}</span>
-              {application.next_step_date && (
-                <span className="ml-1">({formatDate(application.next_step_date)})</span>
-              )}
-            </div>
-          )}
+            
+            {application.contact_name && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium mr-2">Contact:</span>
+                <span>{application.contact_name}</span>
+              </div>
+            )}
+            
+            {application.next_step && (
+              <div className="flex flex-col text-sm">
+                <span className="font-medium">Next Step:</span>
+                <span>{application.next_step}</span>
+                {application.next_step_date && (
+                  <span className="text-xs text-muted-foreground">
+                    Due: {format(new Date(application.next_step_date), 'MMM d, yyyy')}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
           
           {application.notes && (
-            <div className="text-sm mt-2 text-muted-foreground">
-              <p className="line-clamp-2">{application.notes}</p>
+            <div className="mt-3 p-2 bg-muted/50 rounded-md text-sm">
+              <p className="font-medium text-xs mb-1">Notes:</p>
+              <p className="whitespace-pre-wrap">{application.notes}</p>
             </div>
           )}
-        </div>
+        </CardContent>
         
-        <div className="border-t p-3 flex justify-between items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-1">
-                Update Status <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleStatusChange('applied')}>
-                <Check className="mr-2 h-4 w-4" />
-                Applied
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('interviewing')}>
-                <Check className="mr-2 h-4 w-4" />
-                Interviewing
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('offered')}>
-                <Check className="mr-2 h-4 w-4" />
-                Offered
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('accepted')}>
-                <Check className="mr-2 h-4 w-4" />
-                Accepted
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleStatusChange('rejected')}>
-                <Check className="mr-2 h-4 w-4" />
-                Rejected
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange('withdrawn')}>
-                <Check className="mr-2 h-4 w-4" />
-                Withdrawn
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <CardFooter className="flex justify-between p-4 pt-0">
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-destructive hover:text-destructive"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
+          <div className="flex gap-2">
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={() => handleStatusChange('interviewing')}
+              disabled={application.status === 'interviewing'}
+            >
+              Mark as Interview
+            </Button>
+            <Button 
+              variant="default" 
+              size="sm"
+              onClick={() => handleStatusChange('accepted')}
+              disabled={application.status === 'accepted'}
+            >
+              Mark as Accepted
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+      
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Application</DialogTitle>
+          </DialogHeader>
+          <p>Are you sure you want to delete this job application? This action cannot be undone.</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={() => {
+                onDelete(application.id);
+                setShowDeleteDialog(false);
+              }}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Edit Application Dialog */}
+      {isEditing && (
+        <Dialog open={isEditing} onOpenChange={setIsEditing}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Edit Application</DialogTitle>
+            </DialogHeader>
+            {/* Replace with your edit form */}
+            <p>Edit form will go here</p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditing(false)}>
+                Cancel
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setOpen(true)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleDelete} className="text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardContent>
-    </Card>
+              <Button onClick={() => setIsEditing(false)}>
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 };
 
 export default ApplicationCard;
-
-// Import the missing ChevronDown component
-import { ChevronDown } from 'lucide-react';

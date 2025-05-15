@@ -1,50 +1,52 @@
 
-import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { ApplicationStatus } from '@/types/application';
+import { ApplicationStatus } from '@/types/job';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
-  size?: 'default' | 'sm';
-  className?: string;
+  size?: 'sm' | 'default';
 }
 
-const ApplicationStatusBadge: React.FC<ApplicationStatusBadgeProps> = ({
-  status,
-  size = 'default',
-  className = '',
-}) => {
-  const getStatusStyles = () => {
-    switch (status) {
-      case 'applied':
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200';
-      case 'interviewing':
-        return 'bg-purple-100 text-purple-800 hover:bg-purple-200 border-purple-200';
-      case 'offered':
-        return 'bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-200';
-      case 'accepted':
-        return 'bg-green-100 text-green-800 hover:bg-green-200 border-green-200';
-      case 'rejected':
-        return 'bg-red-100 text-red-800 hover:bg-red-200 border-red-200';
-      case 'withdrawn':
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-200';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-200';
-      case 'hired':
-        return 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-emerald-200';
-      default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-200';
-    }
-  };
+const ApplicationStatusBadge = ({ status, size = 'default' }: ApplicationStatusBadgeProps) => {
+  let variant = 'default';
+  let label = status;
+  const className = size === 'sm' ? 'text-xs py-0 px-2' : '';
   
-  const sizeClass = size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-0.5 text-sm';
+  switch (status) {
+    case 'applied':
+      variant = 'secondary';
+      break;
+    case 'interviewing':
+      variant = 'warning';
+      label = 'Interviewing';
+      break;
+    case 'accepted':
+      variant = 'success';
+      label = 'Accepted';
+      break;
+    case 'rejected':
+      variant = 'destructive';
+      label = 'Rejected';
+      break;
+    case 'withdrawn':
+      variant = 'outline';
+      label = 'Withdrawn';
+      break;
+    case 'offered':
+      variant = 'info';
+      label = 'Offer Received';
+      break;
+    case 'hired':
+      variant = 'success';
+      label = 'Hired';
+      break;
+    default:
+      variant = 'secondary';
+  }
   
   return (
-    <Badge 
-      variant="outline" 
-      className={`font-medium border ${getStatusStyles()} ${sizeClass} ${className}`}
-    >
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+    <Badge variant={variant as any} className={className}>
+      {label.charAt(0).toUpperCase() + label.slice(1)}
     </Badge>
   );
 };

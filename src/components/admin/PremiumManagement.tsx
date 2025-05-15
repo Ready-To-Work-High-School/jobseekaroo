@@ -1,50 +1,43 @@
 
-import React from 'react';
-import { AlertCircle, Loader2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useCeoStatus } from '@/components/admin/redemption/tab-manager/useCeoStatus';
-import PremiumManagementHeader from './premium/PremiumManagementHeader';
-import PremiumManagementTable from './premium/PremiumManagementTable';
+import React, { useEffect } from 'react';
 import { usePremiumManagement } from './premium/usePremiumManagement';
+import PremiumManagementTable from './premium/PremiumManagementTable';
+import { UserProfile } from '@/types/user';
+import LoadingSpinner from '@/components/ui/loading-spinner';
 
 const PremiumManagement = () => {
-  const { isCeo } = useCeoStatus();
-  const { users, loading, fetchUsers, grantPremiumAccess, revokePremiumAccess } = usePremiumManagement();
-  
-  if (!isCeo) {
+  const { premiumUsers, loading, fetchPremiumUsers, cancelSubscription } = usePremiumManagement();
+
+  useEffect(() => {
+    fetchPremiumUsers();
+  }, [fetchPremiumUsers]);
+
+  const handleCancelSubscription = async (user: UserProfile) => {
+    if (!user.premium_status) return;
+    
+    try {
+      await cancelSubscription(user.premium_status);
+    } catch (error) {
+      console.error('Failed to cancel subscription:', error);
+    }
+  };
+
+  if (loading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Premium Management</CardTitle>
-          <CardDescription>Manage premium privileges for users</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center py-6 text-muted-foreground">
-            <AlertCircle className="mr-2 h-5 w-5" />
-            <p>Only the CEO can access this restricted area.</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex justify-center items-center h-48">
+        <LoadingSpinner />
+      </div>
     );
   }
 
   return (
-    <Card>
-      <PremiumManagementHeader loading={loading} onRefresh={fetchUsers} />
-      <CardContent>
-        {loading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-          </div>
-        ) : (
-          <PremiumManagementTable
-            users={users}
-            onGrantAccess={grantPremiumAccess}
-            onRevokeAccess={revokePremiumAccess}
-          />
-        )}
-      </CardContent>
-    </Card>
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Premium Users Management</h1>
+      <PremiumManagementTable
+        users={premiumUsers}
+        onCancelSubscription={handleCancelSubscription}
+      />
+    </div>
   );
 };
 

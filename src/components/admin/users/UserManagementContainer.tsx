@@ -1,26 +1,28 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserDataTable from './UserDataTable';
 import { AdminUser } from './types';
 import LoadingSpinner from '@/components/ui/loading-spinner';
+import { supabase } from '@/lib/supabase';
+import { UserProfile } from '@/types/user';
 
 interface UserManagementContainerProps {
   initialFilter?: string;
 }
 
 const UserManagementContainer = ({ initialFilter }: { initialFilter?: string }) => {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(initialFilter || 'all');
 
   // Convert AdminUser[] to UserProfile[] by adding required fields
-  const prepareUsers = (adminUsers: AdminUser[]) => {
+  const prepareUsers = (adminUsers: AdminUser[]): UserProfile[] => {
     return adminUsers.map(user => ({
       ...user,
       preferences: {},
-      created_at: user.created_at,
       updated_at: user.updated_at || new Date().toISOString(),
     }));
   };

@@ -19,33 +19,43 @@ export interface Job {
   type: JobType;
   logoUrl?: string;
   postedDate: string;
-  is_remote?: boolean;
-  is_flexible?: boolean;
-  isRemote?: boolean; // Support both formats temporarily during migration
-  isFlexible?: boolean; // Support both formats temporarily during migration
+  isRemote?: boolean;
+  isFlexible?: boolean;
   experienceLevel: ExperienceLevel;
-  experience_level?: string;
   payRate: {
     min: number;
     max: number;
     period: string;
   };
-  pay_rate_min?: number;
-  pay_rate_max?: number;
-  pay_rate_period?: string;
   hours_per_week?: number;
   requirements: string[];
-  is_featured?: boolean;
-  isFeatured?: boolean; // Support both formats
-  is_premium?: boolean;
+  isFeatured?: boolean;
   isPremium?: boolean;
   is_teen_appropriate?: boolean;
   prohibited_types?: string[];
   created_at: string;
   updated_at: string;
+  // Legacy properties for compatibility
+  company_name?: string;
+  logo_url?: string;
+  location_city?: string;
+  location_state?: string;
+  location_zip?: string;
+  job_type?: string;
+  experience_level?: string;
+  pay_rate_min?: number;
+  pay_rate_max?: number;
+  pay_rate_period?: string;
+  is_remote?: boolean;
+  is_flexible?: boolean;
+  is_featured?: boolean;
+  is_premium?: boolean;
+  posted_date?: string;
 }
 
 export interface JobSearchFilters {
+  zipCode?: string;
+  radius?: number;
   type?: string;
   experienceLevel?: string;
   isRemote?: boolean | null;
@@ -57,7 +67,6 @@ export interface JobSearchFilters {
   };
   postedWithin?: number;
   keywords?: string[];
-  radius?: number;
   sortBy?: 'relevance' | 'date' | 'salary' | 'distance';
   page?: number;
   limit?: number;
@@ -78,4 +87,14 @@ export interface JobApplication {
   notes?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface SavedSearch {
+  id: string;
+  user_id: string;
+  name: string;
+  query: string;
+  filters: JobSearchFilters;
+  created_at: string;
+  updated_at?: string;
 }
