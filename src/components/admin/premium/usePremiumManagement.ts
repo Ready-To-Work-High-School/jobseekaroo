@@ -1,188 +1,110 @@
 
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { UserProfile, UserBadge } from '@/types/user';
+import { useToast } from '@/components/ui/use-toast';
+import { UserProfile } from '@/types/user';
 
 export const usePremiumManagement = () => {
+  const [premiumUsers, setPremiumUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const [users, setUsers] = useState<UserProfile[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const fetchUsers = async () => {
+  const fetchPremiumUsers = async () => {
     try {
       setLoading(true);
-      
-      const { data: profiles, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-        
+      const { data, error } = await supabase
+        .from('premium_subscriptions')
+        .select('*, user_id');
+
       if (error) throw error;
 
-      const { data: premiumData, error: premiumError } = await supabase
-        .from('premium_subscriptions')
-        .select('*');
+      // If we have premium users, fetch their profile details
+      if (data && data.length > 0) {
+        const userIds = data.map(subscription => subscription.user_id);
         
-      if (premiumError) throw premiumError;
-      
-      const usersWithPremium = profiles.map(profile => {
-        const premiumSub = premiumData?.find(sub => sub.user_id === profile.id);
-        
-        // Type assertion to ensure user_type is of the correct type
-        const userType = profile.user_type as 'student' | 'employer' | 'admin' | 'teacher' | null;
-        
-        // Type assertion for employer_verification_status
-        const verificationStatus = profile.employer_verification_status as 'pending' | 'approved' | 'rejected' | null;
-        
-        // Transform profile data to match UserProfile type
-        const userProfile: UserProfile = {
-          ...profile,
-          // Parse preferences JSON to become Record<string, any>
-          preferences: typeof profile.preferences === 'string' 
-            ? JSON.parse(profile.preferences) 
-            : (profile.preferences as Record<string, any> || {}),
-          // Transform badges to match UserBadge[] type
-          badges: Array.isArray(profile.badges) 
-            ? profile.badges.map((badge: any) => ({ 
-                id: badge.id || '', 
-                name: badge.name || '',
-                earned_at: badge.earned_at
-              })) as UserBadge[]
-            : [],
-          // Set user_type with the correctly typed value
-          user_type: userType,
-          // Set employer_verification_status with the correctly typed value
-          employer_verification_status: verificationStatus,
-          // Add premium status based on subscription data
-          premium_status: premiumSub ? `${premiumSub.plan_type} (${premiumSub.status})` : 'Free'
-        };
-        
-        return userProfile;
-      });
-      
-      setUsers(usersWithPremium);
-    } catch (error) {
-      console.error('Error fetching users:', error);
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', userIds);
+
+        if (profileError) throw profileError;
+
+        // Combine premium subscription data with user profiles
+        const combinedData = data.map(subscription => {
+          const profile = profiles?.find(p => p.id === subscription.user_id);
+          if (!profile) return subscription;
+
+          return {
+            ...subscription,
+            ...profile,
+            premium_status: subscription.status,
+            // Ensure student_badges is processed correctly as an array
+            student_badges: Array.isArray(profile.student_badges) 
+              ? profile.student_badges 
+              : [],
+          };
+        });
+
+        setPremiumUsers(combinedData);
+      } else {
+        setPremiumUsers([]);
+      }
+    } catch (err) {
+      console.error('Error fetching premium users:', err);
       toast({
         title: 'Error',
-        description: 'Failed to load user data',
-        variant: 'destructive'
+        description: 'Failed to fetch premium users',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const grantPremiumAccess = async (userId: string) => {
+  const cancelSubscription = async (stripeSubscriptionId: string) => {
     try {
-      const { data: existingSub, error: checkError } = await supabase
-        .from('premium_subscriptions')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-        
-      if (existingSub) {
-        const { error: updateError } = await supabase
-          .from('premium_subscriptions')
-          .update({
-            status: 'active',
-            plan_type: 'premium_plus',
-            current_period_end: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-          })
-          .eq('id', existingSub.id);
-          
-        if (updateError) throw updateError;
-      } else {
-        const { error: insertError } = await supabase
-          .from('premium_subscriptions')
-          .insert({
-            user_id: userId,
-            plan_type: 'premium_plus',
-            status: 'active',
-            current_period_end: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-          });
-          
-        if (insertError) throw insertError;
-      }
-      
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          preferences: { hasPremium: true }
-        })
-        .eq('id', userId);
-        
-      if (profileError) throw profileError;
-      
-      await fetchUsers();
-      
-      toast({
-        title: 'Success',
-        description: 'Premium access granted successfully',
+      setLoading(true);
+      // Call your edge function to cancel the subscription
+      const { data, error } = await supabase.functions.invoke('cancel-subscription', {
+        body: { subscription_id: stripeSubscriptionId }
       });
-    } catch (error) {
-      console.error('Error granting premium access:', error);
+
+      if (error) throw error;
+
+      // Update the local state
+      setPremiumUsers(prevUsers => 
+        prevUsers.map(user => 
+          user.stripe_subscription_id === stripeSubscriptionId 
+            ? { ...user, premium_status: 'canceled' } 
+            : user
+        )
+      );
+
+      toast({
+        title: 'Subscription cancelled',
+        description: 'The subscription has been cancelled successfully',
+      });
+      
+      return data;
+    } catch (err) {
+      console.error('Error cancelling subscription:', err);
       toast({
         title: 'Error',
-        description: 'Failed to grant premium access',
-        variant: 'destructive'
+        description: 'Failed to cancel subscription',
+        variant: 'destructive',
       });
+      return null;
+    } finally {
+      setLoading(false);
     }
   };
-
-  const revokePremiumAccess = async (userId: string) => {
-    try {
-      const { data: existingSub, error: checkError } = await supabase
-        .from('premium_subscriptions')
-        .select('*')
-        .eq('user_id', userId);
-        
-      if (existingSub && existingSub.length > 0) {
-        const { error: updateError } = await supabase
-          .from('premium_subscriptions')
-          .update({
-            status: 'cancelled'
-          })
-          .eq('user_id', userId);
-          
-        if (updateError) throw updateError;
-      }
-      
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          preferences: { hasPremium: false }
-        })
-        .eq('id', userId);
-        
-      if (profileError) throw profileError;
-      
-      await fetchUsers();
-      
-      toast({
-        title: 'Success',
-        description: 'Premium access revoked successfully',
-      });
-    } catch (error) {
-      console.error('Error revoking premium access:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to revoke premium access',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   return {
-    users,
+    premiumUsers,
     loading,
-    fetchUsers,
-    grantPremiumAccess,
-    revokePremiumAccess
+    fetchPremiumUsers,
+    cancelSubscription
   };
 };
+
+export default usePremiumManagement;

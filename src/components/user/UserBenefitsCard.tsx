@@ -1,193 +1,170 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, AlertCircle, Sparkles, Crown } from 'lucide-react';
+import { Check, X, AlertTriangle, Info } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useAuth } from '@/contexts/auth';
 import { UserProfile } from '@/types/user';
+import { Badge } from '@/components/ui/badge';
+import { formatDistanceToNow } from 'date-fns';
 
-interface UserBenefitsCardProps {
-  userProfile: UserProfile | null;
+interface BenefitItem {
+  name: string;
+  included: boolean;
+  highlightFeature?: boolean;
 }
 
-const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
-  // Determine the account type for displaying benefits
-  const accountType = userProfile?.user_type || 'basic';
-  
-  // Check if user has premium subscription
-  const hasPremium = userProfile?.preferences?.hasPremium === true;
-  
-  // Format date to readable string
-  const formatDate = (dateString: string | undefined) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-  
-  // Check if user has founding member badge
-  const isFoundingMember = userProfile?.badges?.some(
-    (badge: any) => badge.id === 'founding_member'
-  );
-  
-  // Define benefits based on account type
-  const getBenefits = () => {
-    switch (accountType) {
-      case 'student':
-        return [
-          { name: 'Access to premium job listings', active: true },
-          { name: 'Resume builder tools', active: true },
-          { name: 'Interview preparation resources', active: true },
-          { name: 'Skill assessment tools', active: true },
-          { name: 'Career coaching sessions', active: false, comingSoon: true }
-        ];
-      case 'employer':
-        if (hasPremium) {
-          return [
-            { name: 'Unlimited premium job posts', active: true, premium: true },
-            { name: 'Featured placement in search results', active: true, premium: true },
-            { name: 'Enhanced candidate search', active: true, premium: true },
-            { name: 'Analytics dashboard', active: true, premium: true },
-            { name: 'Unlimited candidate messaging', active: true, premium: true },
-            { name: 'Featured employer badge', active: true, premium: true },
-            { name: 'AI-powered candidate matching', active: true, premium: true },
-            { name: 'Custom recruitment workflows', active: true, premium: true },
-            { name: 'Priority support', active: true, premium: true }
-          ];
-        } else {
-          return [
-            { name: 'Up to 3 active job postings', active: true },
-            { name: 'Basic company profile', active: true },
-            { name: 'Simple candidate search', active: true },
-            { name: 'Connect with candidates', active: true },
-            { name: 'Interview calendar', active: true },
-            { name: 'Enhanced candidate search', active: false, locked: true },
-            { name: 'Analytics dashboard', active: false, locked: true }
-          ];
-        }
-      case 'teacher':
-        return [
-          { name: 'Student progress tracking', active: true },
-          { name: 'Career pathway management', active: true },
-          { name: 'Employer connection tools', active: true },
-          { name: 'Curriculum resources', active: true },
-          { name: 'Student assessment tools', active: true }
-        ];
-      case 'admin':
-        return [
-          { name: 'Full platform administration', active: true },
-          { name: 'User management access', active: true },
-          { name: 'Content moderation tools', active: true },
-          { name: 'Analytics dashboard', active: true },
-          { name: 'System configuration', active: true },
-          { name: 'Executive decision making', active: true }
-        ];
-      default:
-        return [
-          { name: 'Basic job search', active: true },
-          { name: 'Create a profile', active: true },
-          { name: 'Save job listings', active: true },
-          { name: 'Premium features', active: false, locked: true }
-        ];
-    }
-  };
+interface UserBenefitsCardProps {
+  userProfile: UserProfile;
+  onRedeemClick?: () => void;
+  showRedeemButton?: boolean;
+}
 
-  const getAccountBadge = () => {
-    switch (accountType) {
-      case 'student':
-        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">Student</Badge>;
-      case 'employer':
-        return hasPremium ? (
-          <div className="flex gap-2">
-            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>
-            <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100 flex items-center gap-1">
-              <Sparkles className="h-3 w-3" /> Premium
-            </Badge>
-          </div>
-        ) : (
-          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>
-        );
-      case 'admin':
-        return <Badge className="bg-black text-white hover:bg-black">Chief Executive Officer</Badge>;
-      case 'teacher':
-        return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">Teacher</Badge>;
-      default:
-        return <Badge variant="outline">Basic</Badge>;
-    }
-  };
+const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({
+  userProfile,
+  onRedeemClick,
+  showRedeemButton = true,
+}) => {
+  // Define benefits for different user types
+  const studentBenefits: BenefitItem[] = [
+    { name: 'Exclusive job listings', included: true, highlightFeature: true },
+    { name: 'Professional profile', included: true },
+    { name: 'Resume builder tools', included: true },
+    { name: 'Interview preparation', included: true },
+    { name: 'Job application tracking', included: true },
+    { name: 'Career coaching access', included: false },
+    { name: 'Advanced analytics', included: false },
+  ];
+
+  const employerBenefits: BenefitItem[] = [
+    { name: 'Post job listings', included: true },
+    { name: 'Student profile search', included: true },
+    { name: 'Basic analytics', included: true },
+    { name: 'Featured listings', included: false },
+    { name: 'Automatic matching', included: false },
+    { name: 'Premium analytics', included: false },
+    { name: 'Employer branding', included: false },
+  ];
+
+  const teacherBenefits: BenefitItem[] = [
+    { name: 'Student progress tracking', included: true, highlightFeature: true },
+    { name: 'Employer connections', included: true },
+    { name: 'Job recommendation tools', included: true },
+    { name: 'Classroom reporting', included: true },
+    { name: 'Career curriculum resources', included: true },
+    { name: 'Premium analytics', included: false },
+    { name: 'Advanced student placement', included: false },
+  ];
+
+  const adminBenefits: BenefitItem[] = [
+    { name: 'Full platform access', included: true, highlightFeature: true },
+    { name: 'User management', included: true },
+    { name: 'Analytics dashboard', included: true },
+    { name: 'Job listing approval', included: true },
+    { name: 'Student verification', included: true },
+    { name: 'Employer verification', included: true },
+    { name: 'System configuration', included: true },
+  ];
+
+  const basicBenefits: BenefitItem[] = [
+    { name: 'Browse job listings', included: true },
+    { name: 'Basic profile', included: true },
+    { name: 'Job search filters', included: true },
+    { name: 'Application tracking', included: false },
+    { name: 'Career resources', included: false },
+    { name: 'Employer messaging', included: false },
+    { name: 'Premium features', included: false },
+  ];
+
+  // Choose the right benefits list based on user type
+  let benefits: BenefitItem[] = basicBenefits;
+  let userTypeLabel = 'Basic User';
+  let hasRedeemedCode = false;
+
+  if (userProfile.user_type === 'student') {
+    benefits = studentBenefits;
+    userTypeLabel = 'Student';
+    hasRedeemedCode = !!userProfile.redeemed_at;
+  } else if (userProfile.user_type === 'employer') {
+    benefits = employerBenefits;
+    userTypeLabel = 'Employer';
+  } else if (userProfile.user_type === 'teacher') {
+    benefits = teacherBenefits;
+    userTypeLabel = 'Teacher';
+    hasRedeemedCode = !!userProfile.redeemed_at;
+  } else if (userProfile.user_type === 'admin') {
+    benefits = adminBenefits;
+    userTypeLabel = 'Administrator';
+  }
+
+  const redemptionDate = userProfile.redeemed_at ? new Date(userProfile.redeemed_at) : null;
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="shadow-md overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
         <div className="flex justify-between items-center">
-          <CardTitle>Account Benefits</CardTitle>
-          {getAccountBadge()}
+          <div>
+            <CardTitle className="text-xl font-bold">{userTypeLabel} Account</CardTitle>
+            <CardDescription className="mt-1">
+              Your account features and benefits
+            </CardDescription>
+          </div>
+          <Badge variant={userProfile.user_type === 'admin' ? 'destructive' : 'default'}>
+            {userTypeLabel}
+          </Badge>
         </div>
-        <CardDescription>
-          Your current account features and benefits
-        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <div className="space-y-4">
-          {isFoundingMember && (
-            <div className="bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Crown className="h-5 w-5 text-amber-600" />
-                <span className="font-medium text-amber-900">Founding Member</span>
-              </div>
-              <p className="text-sm text-amber-800 mt-1">
-                One of our earliest employer partners, helping shape the future of student employment.
-              </p>
-            </div>
+          {redemptionDate && (
+            <Alert className="bg-green-50 border-green-200">
+              <Info className="h-4 w-4 text-green-600" />
+              <AlertTitle className="text-green-800">Account Activated</AlertTitle>
+              <AlertDescription className="text-green-700">
+                Your account was activated {formatDistanceToNow(redemptionDate, { addSuffix: true })}
+              </AlertDescription>
+            </Alert>
           )}
-          
+
           <ul className="space-y-2">
-            {getBenefits().map((benefit, index) => (
-              <li key={index} className="flex items-start gap-2">
-                {benefit.active ? (
-                  benefit.premium ? (
-                    <Sparkles className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                  ) : (
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  )
-                ) : benefit.comingSoon ? (
-                  <Clock className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            {benefits.map((benefit, index) => (
+              <li key={index} className="flex items-center gap-2 py-1">
+                {benefit.included ? (
+                  <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <X className="h-4 w-4 text-gray-300 flex-shrink-0" />
                 )}
-                <span className={benefit.active ? "" : "text-muted-foreground"}>
+                <span className={`${!benefit.included ? 'text-gray-400' : ''} ${benefit.highlightFeature ? 'font-medium' : ''}`}>
                   {benefit.name}
-                  {benefit.comingSoon && (
-                    <Badge variant="outline" className="ml-2 text-xs">Coming Soon</Badge>
-                  )}
-                  {benefit.locked && (
-                    <Badge variant="outline" className="ml-2 text-xs">Premium</Badge>
-                  )}
-                  {benefit.premium && (
-                    <Badge variant="outline" className="ml-2 text-xs bg-amber-50 text-amber-700 border-amber-200">Premium</Badge>
-                  )}
                 </span>
+                {!benefit.included && (
+                  <Badge variant="outline" className="ml-auto text-xs">
+                    Premium
+                  </Badge>
+                )}
               </li>
             ))}
           </ul>
-          
-          {accountType !== 'basic' && userProfile?.redeemed_at && (
-            <div className="text-sm text-muted-foreground pt-2 border-t">
-              <p>Account upgraded on {formatDate(userProfile.redeemed_at)}</p>
-            </div>
-          )}
-          
-          {hasPremium && (
-            <div className="text-sm text-muted-foreground pt-2 border-t">
-              <p className="flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                Premium subscription active
-              </p>
-            </div>
+
+          {!userProfile.redeemed_at && userProfile.user_type === 'student' && (
+            <Alert variant="destructive" className="mt-6">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Account Not Activated</AlertTitle>
+              <AlertDescription>
+                Your student account needs to be activated with a redemption code.
+              </AlertDescription>
+            </Alert>
           )}
         </div>
       </CardContent>
+      {showRedeemButton && userProfile.user_type === 'student' && !userProfile.redeemed_at && (
+        <CardFooter className="flex justify-end bg-gray-50 border-t">
+          <Button onClick={onRedeemClick} variant="default">
+            Redeem Activation Code
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

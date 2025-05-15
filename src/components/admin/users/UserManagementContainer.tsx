@@ -1,72 +1,92 @@
 
 import React, { useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import UserManagementFilters from './UserManagementFilters';
-import UserManagementTable from '@/components/admin/UserManagementTable';
-import UserTypeStatistics from './UserTypeStatistics';
-import UserDetailDialog from './UserDetailDialog';
-import UserActionButtons from './UserActionButtons';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import UserDataTable from './UserDataTable';
+import { useAdminUserManagement } from '@/hooks/admin/useAdminUserManagement';
 
-// Import a specific hook for user management functionality
-import { useAdminUserManagement } from '@/hooks/useAdminUserManagement';
-
-const UserManagementContainer: React.FC = () => {
-  const {
-    users,
-    isLoading,
-    userStats,
-    selectedUser,
-    showUserDialog,
-    fetchUsers,
+const UserManagementContainer = () => {
+  // Use the admin-specific hook instead
+  const { 
+    users, 
+    loading, 
+    error,
+    fetchUsers, 
     updateUserType,
     deleteUser,
-    handleFilterChange,
-    handleViewUserDetails,
-    setShowUserDialog,
-    exportUsers
   } = useAdminUserManagement();
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+  }, []);
+
+  const studentUsers = users.filter(user => user.user_type === 'student');
+  const employerUsers = users.filter(user => user.user_type === 'employer');
+  const adminUsers = users.filter(user => user.user_type === 'admin');
+  const teacherUsers = users.filter(user => user.user_type === 'teacher');
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <UserTypeStatistics stats={userStats} className="lg:col-span-5" />
-      </div>
-
-      <Card className="p-4">
-        <div className="flex justify-between items-center mb-4">
-          <UserManagementFilters onFilterChange={handleFilterChange} />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>User Management</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="all">
+          <TabsList className="mb-4">
+            <TabsTrigger value="all">All Users</TabsTrigger>
+            <TabsTrigger value="students">Students</TabsTrigger>
+            <TabsTrigger value="employers">Employers</TabsTrigger>
+            <TabsTrigger value="admins">Admins</TabsTrigger>
+            <TabsTrigger value="teachers">Teachers</TabsTrigger>
+          </TabsList>
           
-          <UserActionButtons
-            isLoading={isLoading}
-            onRefresh={fetchUsers}
-            onExport={exportUsers}
-            usersCount={users.length}
-          />
-        </div>
+          <TabsContent value="all">
+            <UserDataTable 
+              users={users} 
+              loading={loading} 
+              onUpdateUserType={updateUserType}
+              onDeleteUser={deleteUser}
+            />
+          </TabsContent>
+          
+          <TabsContent value="students">
+            <UserDataTable 
+              users={studentUsers} 
+              loading={loading} 
+              onUpdateUserType={updateUserType}
+              onDeleteUser={deleteUser}
+            />
+          </TabsContent>
+          
+          <TabsContent value="employers">
+            <UserDataTable 
+              users={employerUsers} 
+              loading={loading} 
+              onUpdateUserType={updateUserType}
+              onDeleteUser={deleteUser}
+            />
+          </TabsContent>
+          
+          <TabsContent value="admins">
+            <UserDataTable 
+              users={adminUsers} 
+              loading={loading} 
+              onUpdateUserType={updateUserType}
+              onDeleteUser={deleteUser}
+            />
+          </TabsContent>
 
-        <UserManagementTable 
-          users={users}
-          isLoading={isLoading}
-          onViewDetails={handleViewUserDetails}
-          onUpdateUserType={updateUserType}
-          onDeleteUser={deleteUser}
-        />
-      </Card>
-
-      {selectedUser && (
-        <UserDetailDialog
-          user={selectedUser}
-          isOpen={showUserDialog}
-          onClose={() => setShowUserDialog(false)}
-          onUpdateUserType={updateUserType}
-          onDeleteUser={deleteUser}
-        />
-      )}
-    </div>
+          <TabsContent value="teachers">
+            <UserDataTable 
+              users={teacherUsers} 
+              loading={loading} 
+              onUpdateUserType={updateUserType}
+              onDeleteUser={deleteUser}
+            />
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 

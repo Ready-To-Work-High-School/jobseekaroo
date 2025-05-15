@@ -8,7 +8,7 @@ import { JobApplication, ApplicationStatus } from '@/types/application';
 import { AuthContextType } from './authContext.types';
 
 // Import services or create them inline
-const saveJob = async (userId: string, jobId: string) => {
+const saveJob = async (userId: string, jobId: string): Promise<void> => {
   try {
     const { error } = await supabase
       .from('saved_jobs')
@@ -21,7 +21,7 @@ const saveJob = async (userId: string, jobId: string) => {
   }
 };
 
-const unsaveJob = async (userId: string, jobId: string) => {
+const unsaveJob = async (userId: string, jobId: string): Promise<void> => {
   try {
     const { error } = await supabase
       .from('saved_jobs')
@@ -35,7 +35,7 @@ const unsaveJob = async (userId: string, jobId: string) => {
   }
 };
 
-const isSavedJob = async (userId: string, jobId: string) => {
+const isSavedJob = async (userId: string, jobId: string): Promise<boolean> => {
   try {
     const { data, error } = await supabase
       .from('saved_jobs')
@@ -52,7 +52,7 @@ const isSavedJob = async (userId: string, jobId: string) => {
   }
 };
 
-const getSavedJobs = async (userId: string) => {
+const getSavedJobs = async (userId: string): Promise<string[]> => {
   try {
     const { data, error } = await supabase
       .from('saved_jobs')
@@ -196,7 +196,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
   const signInWithGoogle = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`
@@ -212,7 +212,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
   const signInWithApple = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`
