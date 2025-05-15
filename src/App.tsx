@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
+import SecurityProvider from './components/security/SecurityProvider';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import SignUp from './pages/SignUp';
@@ -28,9 +29,11 @@ function App() {
   // We'll use the useAuth hook inside the Routes component to avoid circular dependency
   return (
     <div className="app">
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <SecurityProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </SecurityProvider>
     </div>
   );
 }
