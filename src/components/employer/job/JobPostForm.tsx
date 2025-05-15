@@ -163,22 +163,25 @@ const JobPostForm = ({ onSuccess, onCancel }: JobPostFormProps) => {
                     hoursPerWeek={form.watch('hours_per_week')}
                     payRateMin={form.watch('pay_rate_min')}
                     payRateMax={form.watch('pay_rate_max')}
-                    onChange={(field, value) => form.setValue(field as any, value)}
+                    onChange={(e) => {
+                      const { name, value } = e.target;
+                      form.setValue(name as any, Number(value));
+                    }}
                   />
                   
                   <JobDescriptionSection
                     description={form.watch('description')}
-                    onChange={(value) => form.setValue('description', value)}
+                    onChange={(e) => form.setValue('description', e.target.value)}
                   />
                   
                   <JobRequirementsSection
                     requirements={form.watch('requirements')}
-                    onChange={(value) => form.setValue('requirements', value)}
+                    onChange={(e) => form.setValue('requirements', e.target.value)}
                   />
                   
                   <PremiumJobToggle
                     isPremium={form.watch('isPremium')}
-                    onChange={(value) => form.setValue('isPremium', value)}
+                    onToggle={() => form.setValue('isPremium', !form.watch('isPremium'))}
                   />
                 </CardContent>
                 <CardFooter className="flex justify-between">

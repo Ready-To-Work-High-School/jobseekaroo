@@ -1,6 +1,6 @@
-
 import { supabase } from './index';
 import { Job, JobType, ExperienceLevel } from '@/types/job';
+import { JobSubmitData } from '@/types/jobs';
 
 // Get all jobs
 export async function getAllJobs(): Promise<Job[]> {
@@ -150,5 +150,23 @@ export async function getEmployerJobStats(employerId: string): Promise<{
   } catch (error) {
     console.error('Error fetching employer stats:', error);
     throw error;
+  }
+}
+
+// Create a new job
+export async function createJob(jobData: JobSubmitData): Promise<{ data: { id: string } | null, error: Error | null }> {
+  try {
+    const { data, error } = await supabase
+      .from('jobs')
+      .insert(jobData)
+      .select('id')
+      .single();
+    
+    if (error) throw error;
+    
+    return { data, error: null };
+  } catch (error) {
+    console.error('Error creating job:', error);
+    return { data: null, error: error as Error };
   }
 }

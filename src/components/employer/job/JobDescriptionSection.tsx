@@ -1,6 +1,7 @@
 
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import React from "react";
 
 interface JobDescriptionSectionProps {
   description: string;
