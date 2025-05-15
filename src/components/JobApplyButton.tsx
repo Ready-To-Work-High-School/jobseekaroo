@@ -56,8 +56,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
         company: job.company.name,
         status: 'applied',
         applied_date: new Date().toISOString().substring(0, 10),
-        notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
-        resume_url: userProfile?.resume_url || undefined
+        notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`
       });
       
       setShowSuccessDialog(true);

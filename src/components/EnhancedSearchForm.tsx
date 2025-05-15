@@ -1,170 +1,166 @@
-
-import { useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { toast } from '@/components/ui/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import LocationSelector from './LocationSelector';
-import SavedSearches from './SavedSearches';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, createSearchParams } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { SearchIcon, MapPin, ChevronDown } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useDebounce } from '@/hooks/useDebounce';
+import { categories } from '@/lib/constants';
+import { JobSearchFilters, Job } from '@/types/job';
 import { SavedSearch } from '@/types/user';
-import FilterButton from './search/FilterButton';
-import RadiusSelector from './search/RadiusSelector';
-import { useJobSearch } from '@/hooks/useJobSearch';
+import SavedSearches from './SavedSearches';
 
 interface EnhancedSearchFormProps {
-  className?: string;
-  variant?: 'default' | 'minimal';
-  initialZipCode?: string;
+  initialLocation?: string;
   initialRadius?: number;
+  initialFilters?: JobSearchFilters;
 }
 
-const EnhancedSearchForm = ({ 
-  className, 
-  variant = 'default',
-  initialZipCode = '',
-  initialRadius = 0
-}: EnhancedSearchFormProps) => {
-  const { user } = useAuth();
-  
-  const {
-    zipCode,
-    setZipCode,
-    radius,
-    setRadius,
-    isValid,
-    showRadius,
-    toggleRadius,
-    isFilterOpen,
-    setIsFilterOpen,
-    jobType,
-    setJobType,
-    experienceLevel,
-    setExperienceLevel,
-    isRemote,
-    setIsRemote,
-    isFlexible,
-    setIsFlexible,
-    sortBy,
-    setSortBy,
-    appliedFiltersCount,
-    handleSubmit,
-    resetFilters,
-    getCurrentFilters
-  } = useJobSearch({ initialZipCode, initialRadius });
+const EnhancedSearchForm = ({ initialLocation, initialRadius, initialFilters }: EnhancedSearchFormProps) => {
+  const [location, setLocation] = useState(initialLocation || '');
+  const [radius, setRadius] = useState(initialRadius || 25);
+  const [isRemote, setIsRemote] = useState(initialFilters?.remote || false);
+  const [filters, setFilters] = useState<JobSearchFilters>(initialFilters || {});
+  const [category, setCategory] = useState(initialFilters?.category || '');
+  const [showSavedSearches, setShowSavedSearches] = useState(false);
+  const debouncedLocation = useDebounce(location, 500);
+  const navigate = useNavigate();
 
-  const handleSavedSearchSelect = (search: SavedSearch) => {
-    setZipCode(search.zipCode);
-    setRadius(search.radius || 0);
-    
-    // Set other filters from the saved search
-    if (search.filters.type) {
-      setJobType(search.filters.type);
+  useEffect(() => {
+    setLocation(initialLocation || '');
+    setRadius(initialRadius || 25);
+    setIsRemote(initialFilters?.remote || false);
+    setFilters(initialFilters || {});
+    setCategory(initialFilters?.category || '');
+  }, [initialLocation, initialRadius, initialFilters]);
+
+  const handleSearch = useCallback(() => {
+    const params = createSearchParams();
+
+    if (debouncedLocation) {
+      params.set('location', debouncedLocation);
     }
-    
-    if (search.filters.experienceLevel) {
-      setExperienceLevel(search.filters.experienceLevel);
+
+    if (radius && radius !== 25) {
+      params.set('radius', radius.toString());
     }
-    
-    if (search.filters.isRemote !== undefined) {
-      setIsRemote(search.filters.isRemote);
+
+    if (isRemote) {
+      params.set('remote', 'true');
     }
-    
-    if (search.filters.isFlexible !== undefined) {
-      setIsFlexible(search.filters.isFlexible);
+
+    if (category) {
+      params.set('category', category);
     }
+
+    navigate(`/?${params.toString()}`);
+  }, [debouncedLocation, radius, isRemote, category, navigate]);
+
+  const handleSelectSavedSearch = (search: SavedSearch) => {
+    // Extract the components from the saved search
+    const zipCode = search.zipCode || search.query || '';
+    const radius = search.radius || 25;
+    const filters = search.filters || {};
     
-    if (search.filters.sortBy) {
-      setSortBy(search.filters.sortBy as 'relevance' | 'date' | 'salary' | 'distance');
-    }
-    
-    // Submit form with search parameters
-    setTimeout(() => {
-      handleSubmit(new Event('submit') as any);
-      toast({
-        title: "Saved search applied",
-        description: "Your saved search has been applied"
-      });
-    }, 100);
+    // Set the form state
+    setLocation(zipCode);
+    setRadius(radius);
+    setFilters(filters);
+
+    // Trigger the search
+    handleSearch();
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
-      className={cn(
-        "relative",
-        variant === 'default' && "w-full max-w-md",
-        variant === 'minimal' && "w-full max-w-xs",
-        className
-      )}
-    >
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <LocationSelector 
-            value={zipCode} 
-            onChange={setZipCode}
-            className="w-full"
+    <div className="container relative max-w-4xl mx-auto p-4">
+      <div className="grid gap-4 md:grid-cols-3 items-center">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Enter location or zip code"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="pl-10"
+          />
+          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        </div>
+
+        <div className="md:flex md:items-center">
+          <Label htmlFor="radius" className="text-sm mr-2 hidden md:block">Radius:</Label>
+          <div className="flex items-center">
+            <Slider
+              id="radius"
+              defaultValue={[radius]}
+              max={100}
+              step={5}
+              onValueChange={(value) => setRadius(value[0])}
+              className="w-full"
+            />
+            <span className="ml-2 text-sm">{radius} miles</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Button onClick={handleSearch} className="w-full md:w-auto">
+            <SearchIcon className="h-4 w-4 mr-2" />
+            Search
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                Category
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {categories.map((cat) => (
+                <Button
+                  key={cat.value}
+                  variant="ghost"
+                  className="justify-start w-full hover:bg-secondary/50"
+                  onClick={() => setCategory(cat.value)}
+                >
+                  {cat.label}
+                </Button>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div className="ml-4 flex items-center space-x-2">
+            <Switch id="remote" checked={isRemote} onCheckedChange={setIsRemote} />
+            <Label htmlFor="remote" className="text-sm">Remote</Label>
+          </div>
+        </div>
+
+        <Button variant="secondary" size="sm" onClick={() => setShowSavedSearches(!showSavedSearches)}>
+          {showSavedSearches ? 'Hide Saved Searches' : 'Show Saved Searches'}
+        </Button>
+      </div>
+
+      {showSavedSearches && (
+        <div className="absolute top-full mt-2 right-0 bg-card border rounded-md shadow-md z-10">
+          <SavedSearches
+            currentLocation={location}
+            currentRadius={radius}
+            currentFilters={filters}
+            onSearchSelect={handleSelectSavedSearch}
+            className="p-4 w-80"
           />
         </div>
-        
-        <FilterButton
-          variant={variant}
-          isFilterOpen={isFilterOpen}
-          setIsFilterOpen={setIsFilterOpen}
-          appliedFiltersCount={appliedFiltersCount}
-          jobType={jobType}
-          setJobType={setJobType}
-          experienceLevel={experienceLevel}
-          setExperienceLevel={setExperienceLevel}
-          isRemote={isRemote}
-          setIsRemote={setIsRemote}
-          isFlexible={isFlexible}
-          setIsFlexible={setIsFlexible}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          resetFilters={resetFilters}
-        />
-        
-        <button
-          type="submit"
-          className={cn(
-            "rounded-full focus-ring",
-            "text-white font-medium",
-            "transition-all duration-200 hover:bg-primary/90",
-            variant === 'default' ? (
-              "bg-primary px-4 py-2"
-            ) : (
-              "bg-primary px-3 py-1 text-sm"
-            )
-          )}
-        >
-          {variant === 'default' ? 'Find Jobs' : 'Search'}
-        </button>
-      </div>
-      
-      <RadiusSelector
-        showRadius={showRadius}
-        toggleRadius={toggleRadius}
-        radius={radius}
-        setRadius={setRadius}
-      />
-      
-      {/* Saved Searches Component */}
-      {variant === 'default' && (
-        <SavedSearches
-          userId={user?.id}
-          zipCode={zipCode}
-          radius={radius > 0 ? radius : undefined}
-          filters={getCurrentFilters()}
-          className="mt-4"
-          onSelectSearch={handleSavedSearchSelect}
-        />
       )}
-      
-      {!isValid && (
-        <p className="absolute -bottom-6 left-0 text-xs text-destructive">
-          Please enter a valid 5-digit ZIP code
-        </p>
-      )}
-    </form>
+    </div>
   );
 };
 

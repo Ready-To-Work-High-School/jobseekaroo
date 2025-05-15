@@ -1,234 +1,237 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { PlusIcon, XCircleIcon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { BookmarkIcon, XIcon, SearchIcon } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { SavedSearch } from '@/types/user';
-import { saveSearch, deleteSavedSearch } from '@/lib/mock-data/search';
-import { cn } from '@/lib/utils';
+import { JobSearchFilters } from '@/types/job';
+import Loading from './ui/Loading';
 
 interface SavedSearchesProps {
-  userId?: string;
-  zipCode: string;
-  radius?: number;
-  filters: Record<string, any>;
+  currentLocation?: string; 
+  currentRadius?: number;
+  currentFilters?: JobSearchFilters;
+  onSearchSelect: (search: SavedSearch) => void;
   className?: string;
-  onSelectSearch?: (search: SavedSearch) => void;
 }
 
-const SavedSearches = ({ userId, zipCode, radius, filters, className, onSelectSearch }: SavedSearchesProps) => {
-  const [searchName, setSearchName] = useState('');
-  const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const navigate = useNavigate();
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+});
 
-  // Load saved searches on component mount
+const SavedSearches = ({ 
+  currentLocation, 
+  currentRadius, 
+  currentFilters, 
+  onSearchSelect, 
+  className 
+}: SavedSearchesProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [searches, setSearches] = useState<SavedSearch[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const form = useForm<{ name: string }>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  const loadSearches = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('saved_searches')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setSearches(data || []);
+    } catch (error) {
+      console.error('Error loading saved searches:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load your saved searches',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (userId) {
-      // In a real app, we would fetch saved searches from Supabase here
-      // For now, we're using mock data from localStorage
-      const storedSearches = localStorage.getItem(`savedSearches-${userId}`);
-      if (storedSearches) {
-        setSavedSearches(JSON.parse(storedSearches));
-      }
-    }
-  }, [userId]);
+    loadSearches();
+  }, [user]);
 
-  // Save searches to localStorage whenever they change
-  useEffect(() => {
-    if (userId && savedSearches.length > 0) {
-      localStorage.setItem(`savedSearches-${userId}`, JSON.stringify(savedSearches));
-    }
-  }, [savedSearches, userId]);
-
-  const handleSaveSearch = async () => {
-    if (!userId) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to save searches",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!searchName.trim()) {
-      toast({
-        title: "Name required",
-        description: "Please provide a name for your saved search",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!zipCode.trim()) {
-      toast({
-        title: "Location required",
-        description: "Please provide a location for your search",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleSaveSearch = async (values: { name: string }) => {
+    if (!user || !currentFilters) return;
 
     try {
-      // In a production app, this would save to Supabase
-      const savedSearch = await saveSearch(userId, searchName, zipCode, radius, filters);
-      
-      // For demo purposes, we're saving to state and localStorage
-      setSavedSearches(prev => [...prev, savedSearch as SavedSearch]);
-      
+      // Convert the current search to the SavedSearch format
+      const newSearch = {
+        name: values.name,
+        query: currentLocation || '',
+        zipCode: currentLocation || '',
+        radius: currentRadius || 25,
+        filters: currentFilters,
+        user_id: user.id
+      };
+
+      const { error } = await supabase
+        .from('saved_searches')
+        .insert(newSearch);
+
+      if (error) throw error;
+
       toast({
-        title: "Search saved",
-        description: "Your search has been saved successfully"
+        title: 'Search saved',
+        description: 'Your search has been saved successfully',
       });
       
-      setSearchName('');
-      setIsDialogOpen(false);
+      form.reset();
+      setShowSaveDialog(false);
+      loadSearches();
     } catch (error) {
       console.error('Error saving search:', error);
       toast({
-        title: "Error saving search",
-        description: "There was a problem saving your search",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to save your search',
+        variant: 'destructive',
       });
     }
   };
 
-  const handleDeleteSearch = async (searchId: string) => {
-    if (!userId) return;
+  const handleDeleteSearch = async (id: string) => {
+    if (!user) return;
 
+    setDeleting(id);
     try {
-      // In a production app, this would delete from Supabase
-      await deleteSavedSearch(userId, searchId);
-      
-      // For demo purposes, we're removing from state and localStorage
-      setSavedSearches(prev => prev.filter(search => search.id !== searchId));
-      
+      const { error } = await supabase
+        .from('saved_searches')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
       toast({
-        title: "Search deleted",
-        description: "Your saved search has been deleted"
+        title: 'Search deleted',
+        description: 'Your saved search has been removed',
       });
+      
+      setSearches(searches.filter(search => search.id !== id));
     } catch (error) {
       console.error('Error deleting search:', error);
       toast({
-        title: "Error deleting search",
-        description: "There was a problem deleting your search",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to delete your search',
+        variant: 'destructive',
       });
+    } finally {
+      setDeleting(null);
     }
   };
 
-  const handleSearchClick = (search: SavedSearch) => {
-    if (onSelectSearch) {
-      onSelectSearch(search);
-    } else {
-      // Navigate to search results page with the saved search parameters
-      const params = new URLSearchParams();
-      params.set('zipCode', search.zipCode);
-      if (search.radius) params.set('radius', search.radius.toString());
-      
-      // Add other filters from the saved search
-      Object.entries(search.filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          if (typeof value === 'object') {
-            Object.entries(value).forEach(([subKey, subValue]) => {
-              if (subValue !== undefined && subValue !== null) {
-                params.set(`${key}.${subKey}`, subValue.toString());
-              }
-            });
-          } else {
-            params.set(key, value.toString());
-          }
-        }
-      });
-      
-      navigate(`/jobs?${params.toString()}`);
-    }
-  };
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className={className}>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-2">
-            <BookmarkIcon className="h-4 w-4" />
-            Save Search
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold">Saved Searches</h3>
+        <Button variant="outline" size="icon" onClick={() => setShowSaveDialog(true)}>
+          <PlusIcon className="h-4 w-4" />
+        </Button>
+      </div>
+      {searches.length === 0 ? (
+        <div className="text-muted-foreground">No saved searches yet.</div>
+      ) : (
+        <ul className="space-y-2">
+          {searches.map((search) => (
+            <li key={search.id} className="flex items-center justify-between p-2 rounded-md hover:bg-secondary cursor-pointer">
+              <button onClick={() => onSearchSelect(search)} className="flex-1 text-left">
+                {search.name}
+                {search.zipCode && (
+                  <Badge variant="secondary" className="ml-2">{search.zipCode}</Badge>
+                )}
+              </button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteSearch(search.id);
+                }}
+                disabled={deleting === search.id}
+              >
+                {deleting === search.id ? (
+                  <Loading size="sm" />
+                ) : (
+                  <XCircleIcon className="h-4 w-4" />
+                )}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Save this search</DialogTitle>
-            <DialogDescription>
-              Save your current search criteria to quickly access it later.
-            </DialogDescription>
+            <DialogTitle>Save Search</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="search-name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="search-name"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                className="col-span-3"
-                placeholder="e.g., Weekend Jobs Near Home"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSaveSearch)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Remote React Jobs" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">Location</Label>
-              <div className="col-span-3 text-sm">
-                {zipCode}
-                {radius ? ` (within ${radius} miles)` : ''}
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSaveSearch}>Save</Button>
-          </DialogFooter>
+              <DialogFooter>
+                <Button type="submit" disabled={loading}>
+                  Save Search
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
-
-      {savedSearches.length > 0 && (
-        <div className="mt-4">
-          <h3 className="text-sm font-medium mb-2">Your Saved Searches</h3>
-          <div className="space-y-2">
-            {savedSearches.map((search) => (
-              <div
-                key={search.id}
-                className={cn(
-                  "flex items-center justify-between",
-                  "p-2 rounded-md border border-border",
-                  "hover:border-primary/50 hover:bg-accent/50 cursor-pointer transition-colors"
-                )}
-              >
-                <div 
-                  className="flex-1 flex items-center gap-2"
-                  onClick={() => handleSearchClick(search)}
-                >
-                  <SearchIcon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">{search.name}</span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteSearch(search.id);
-                  }}
-                >
-                  <XIcon className="h-3 w-3" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

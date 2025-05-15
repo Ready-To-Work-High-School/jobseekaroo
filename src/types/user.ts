@@ -25,6 +25,7 @@ export interface UserProfile {
   redeemed_at?: string;
   redeemed_code?: string;
   accessibility_settings?: AccessibilitySettings;
+  premium_status?: string; // Added for premium management
 }
 
 export interface UserProfileUpdate {
@@ -45,6 +46,7 @@ export interface AccessibilitySettings {
   highContrast: boolean;
   largeText: boolean;
   reducedMotion: boolean;
+  screenReaderOptimized?: boolean; // Made optional for backward compatibility
 }
 
 export interface SavedSearch {
@@ -54,6 +56,8 @@ export interface SavedSearch {
   filters: Record<string, any>;
   name: string;
   created_at: string;
+  zipCode?: string; // Added for compatibility with existing code
+  radius?: number; // Added for compatibility with existing code
 }
 
 export interface UserBadge {

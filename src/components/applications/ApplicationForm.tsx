@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Job } from '@/types/job';
@@ -55,7 +54,15 @@ export const ApplicationForm = ({
     try {
       await createApplication({
         job_id: selectedJob?.id || 'manual-entry',
-        ...values
+        job_title: values.job_title,
+        company: values.company,
+        status: values.status,
+        applied_date: values.applied_date,
+        notes: values.notes,
+        contact_name: values.contact_name || undefined,
+        contact_email: values.contact_email || undefined,
+        next_step: values.next_step || undefined,
+        next_step_date: values.next_step_date || undefined
       });
       
       toast({

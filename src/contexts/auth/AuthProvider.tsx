@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
 import { UserProfile } from '@/types/user';
 import { JobApplication, ApplicationStatus } from '@/types/application';
+import { AuthContextType } from './authContext.types';
 
 // Import services or create them inline
 const saveJob = async (userId: string, jobId: string) => {
@@ -14,7 +14,6 @@ const saveJob = async (userId: string, jobId: string) => {
       .insert({ user_id: userId, job_id: jobId });
     
     if (error) throw error;
-    return true;
   } catch (error) {
     console.error('Error saving job:', error);
     throw error;
@@ -29,7 +28,6 @@ const unsaveJob = async (userId: string, jobId: string) => {
       .match({ user_id: userId, job_id: jobId });
     
     if (error) throw error;
-    return true;
   } catch (error) {
     console.error('Error unsaving job:', error);
     throw error;
@@ -137,6 +135,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           ...data,
           preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {}
         };
+        
+        // Ensure proper typecasting
         setUserProfile(processedData as UserProfile);
       }
     } catch (error) {

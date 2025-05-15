@@ -26,8 +26,8 @@ export const AccessibilityMenuContent = ({
         id="high-contrast"
         label="High Contrast"
         description="Increase color contrast for better readability"
-        checked={settings.high_contrast}
-        onChange={() => handleSettingChange('high_contrast', !settings.high_contrast)}
+        checked={settings.highContrast}
+        onChange={() => handleSettingChange('highContrast', !settings.highContrast)}
       />
       
       <div className="space-y-2">
@@ -51,16 +51,16 @@ export const AccessibilityMenuContent = ({
         id="reduce-motion"
         label="Reduce Motion"
         description="Minimize animations and transitions"
-        checked={settings.reduce_motion}
-        onChange={() => handleSettingChange('reduce_motion', !settings.reduce_motion)}
+        checked={settings.reducedMotion}
+        onChange={() => handleSettingChange('reducedMotion', !settings.reducedMotion)}
       />
       
       <AccessibilityToggle
         id="screen-reader"
         label="Screen Reader Mode"
         description="Optimize layout for screen readers"
-        checked={settings.screen_reader_optimized}
-        onChange={() => handleSettingChange('screen_reader_optimized', !settings.screen_reader_optimized)}
+        checked={settings.screenReaderOptimized}
+        onChange={() => handleSettingChange('screenReaderOptimized', !settings.screenReaderOptimized)}
       />
       
       <Button 

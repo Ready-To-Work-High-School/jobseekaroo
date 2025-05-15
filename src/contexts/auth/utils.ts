@@ -1,7 +1,7 @@
 
 import { UserProfile } from '@/types/user';
 
-export const formatUserProfile = (data: any): UserProfile => {
+export const formatUserProfile = (data: any): UserProfile | null => {
   if (!data) return null;
   
   return {
@@ -27,8 +27,6 @@ export const formatUserProfile = (data: any): UserProfile => {
     updated_at: data.updated_at,
     redeemed_at: data.redeemed_at,
     redeemed_code: data.redeemed_code,
-    accessibility_settings: data.accessibility_settings,
-    badges: data.badges,
-    student_badges: data.student_badges
+    accessibility_settings: data.accessibility_settings
   };
 };

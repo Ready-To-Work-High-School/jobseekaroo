@@ -12,10 +12,10 @@ type UseAccessibilitySettingsProps = {
 
 export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfile }: UseAccessibilitySettingsProps) => {
   const defaultSettings: AccessibilitySettings = {
-    high_contrast: false,
-    increased_font_size: false,
-    reduce_motion: false,
-    screen_reader_optimized: false,
+    highContrast: false,
+    largeText: false,
+    reducedMotion: false,
+    screenReaderOptimized: false,
   };
 
   const [settings, setSettings] = useState<AccessibilitySettings>(
@@ -23,14 +23,14 @@ export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfi
   );
   
   const [fontSize, setFontSize] = useState<number>(
-    userProfile?.accessibility_settings?.increased_font_size ? 1.2 : 1
+    userProfile?.accessibility_settings?.largeText ? 1.2 : 1
   );
 
   // Update settings when userProfile changes
   useEffect(() => {
     if (userProfile?.accessibility_settings) {
       setSettings(userProfile.accessibility_settings);
-      setFontSize(userProfile.accessibility_settings.increased_font_size ? 1.2 : 1);
+      setFontSize(userProfile.accessibility_settings.largeText ? 1.2 : 1);
     }
   }, [userProfile]);
 
@@ -39,21 +39,21 @@ export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfi
     const html = document.documentElement;
     
     // Apply high contrast
-    if (settings.high_contrast) {
+    if (settings.highContrast) {
       html.classList.add('high-contrast');
     } else {
       html.classList.remove('high-contrast');
     }
     
     // Apply reduced motion
-    if (settings.reduce_motion) {
+    if (settings.reducedMotion) {
       html.classList.add('reduce-motion');
     } else {
       html.classList.remove('reduce-motion');
     }
     
     // Apply screen reader optimizations
-    if (settings.screen_reader_optimized) {
+    if (settings.screenReaderOptimized) {
       html.classList.add('screen-reader');
     } else {
       html.classList.remove('screen-reader');
@@ -97,7 +97,7 @@ export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfi
     
     const newSettings = { 
       ...settings, 
-      increased_font_size: increase 
+      largeText: increase 
     };
     
     setSettings(newSettings);
@@ -123,7 +123,7 @@ export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfi
         setFontSize(increase ? 1 : 1.2);
         setSettings({
           ...settings,
-          increased_font_size: !increase
+          largeText: !increase
         });
       }
     }
@@ -153,7 +153,7 @@ export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfi
         // Revert changes if resetting failed
         if (userProfile?.accessibility_settings) {
           setSettings(userProfile.accessibility_settings);
-          setFontSize(userProfile.accessibility_settings.increased_font_size ? 1.2 : 1);
+          setFontSize(userProfile.accessibility_settings.largeText ? 1.2 : 1);
         }
       }
     }
