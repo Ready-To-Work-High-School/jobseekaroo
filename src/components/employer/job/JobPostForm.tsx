@@ -1,36 +1,39 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import FreemiumFeatures from '@/components/employer/FreemiumFeatures';
 
+import { useState } from 'react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from '@/hooks/use-toast';
+import { Briefcase, Plus } from 'lucide-react';
+import { createJob } from '@/lib/supabase/jobs';
+import { JobFormData } from '@/types/jobs';
+import { useAuth } from '@/contexts/auth';
+import BasicJobDetails from './BasicJobDetails';
+import JobDescriptionSection from './JobDescriptionSection';
+import JobRequirementsSection from './JobRequirementsSection';
+import CompensationDetails from './CompensationDetails';
+import PremiumJobToggle from './PremiumJobToggle';
+import AIQuickJobPost from './AIQuickJobPost';
+
+// Define form schema
 const jobFormSchema = z.object({
-  title: z.string().min(3, { message: "Job title must be at least 3 characters long" }),
+  title: z.string().min(5, { message: "Job title must be at least 5 characters" }),
   company: z.string().min(2, { message: "Company name is required" }),
   location: z.string().min(2, { message: "Location is required" }),
-  description: z.string().min(20, { message: "Please provide a detailed job description" }),
-  jobType: z.string().min(1, { message: "Job type is required" }),
-  salary: z.string().min(1, { message: "Salary/wage information is required" }),
-  requirements: z.string().min(1, { message: "Requirements are required" }),
-  contactEmail: z.string().email({ message: "Valid email is required" }),
-  contactPhone: z.string().optional(),
-  applicationDeadline: z.string().min(1, { message: "Application deadline is required" }),
-  isRemote: z.boolean().default(false),
-  acceptsApplications: z.boolean().default(true),
-  isPremium: z.boolean().default(false)
+  type: z.string(),
+  description: z.string().min(20, { message: "Description must be at least 20 characters" }),
+  requirements: z.string(),
+  hours_per_week: z.number().min(1).max(40),
+  pay_rate_min: z.number().min(0),
+  pay_rate_max: z.number().min(0),
+  contactEmail: z.string().email({ message: "Please enter a valid email" }),
+  isPremium: z.boolean().default(false),
+  prohibited_types: z.array(z.string()).default([])
 });
-
-type JobFormValues = z.infer<typeof jobFormSchema>;
 
 interface JobPostFormProps {
   onSuccess: (jobId: string) => void;
@@ -38,384 +41,167 @@ interface JobPostFormProps {
 }
 
 const JobPostForm = ({ onSuccess, onCancel }: JobPostFormProps) => {
-  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formMode, setFormMode] = useState<'manual' | 'ai'>('manual');
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPremiumOptions, setShowPremiumOptions] = useState(false);
-  const [createdJobId, setCreatedJobId] = useState<string | null>(null);
+  const { userProfile } = useAuth();
 
-  const form = useForm<JobFormValues>({
+  const form = useForm<JobFormData>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
-      title: '',
-      company: '',
-      location: '',
-      description: '',
-      jobType: 'part-time',
-      salary: '',
-      requirements: '',
-      contactEmail: '',
-      contactPhone: '',
-      applicationDeadline: '',
-      isRemote: false,
-      acceptsApplications: true,
-      isPremium: false
-    }
+      title: "",
+      company: userProfile?.company_name || "",
+      location: "",
+      type: "part-time",
+      description: "",
+      requirements: "",
+      hours_per_week: 20,
+      pay_rate_min: 15,
+      pay_rate_max: 20,
+      contactEmail: userProfile?.email || "",
+      isPremium: false,
+      prohibited_types: []
+    },
   });
 
-  const onSubmit = async (data: JobFormValues) => {
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "You must be logged in to post a job",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
+  const handleSubmit = async (data: JobFormData) => {
+    setIsLoading(true);
 
     try {
-      // Parse location into city and state
-      const [city = '', state = ''] = data.location.split(',').map(s => s.trim());
-      
-      // Parse salary into min and max
-      const salaryText = data.salary.replace(/[^0-9.-]/g, ' ');
-      const salaryNumbers = salaryText.split(/\s+/).filter(Boolean).map(Number);
-      const payRateMin = salaryNumbers.length > 0 ? salaryNumbers[0] : 0;
-      const payRateMax = salaryNumbers.length > 1 ? salaryNumbers[1] : payRateMin;
-      
-      // Get pay period from salary
-      let payRatePeriod = 'hourly';
-      if (data.salary.toLowerCase().includes('week')) {
-        payRatePeriod = 'weekly';
-      } else if (data.salary.toLowerCase().includes('month')) {
-        payRatePeriod = 'monthly';
-      } else if (data.salary.toLowerCase().includes('year')) {
-        payRatePeriod = 'yearly';
-      }
-
-      // Split requirements into array
+      // Convert requirements string to array
       const requirementsArray = data.requirements
         .split('\n')
-        .map(line => line.trim())
-        .filter(Boolean);
+        .filter(req => req.trim() !== '')
+        .map(req => req.trim());
 
+      // Prepare data for submission
       const jobData = {
         title: data.title,
         company_name: data.company,
-        location_city: city,
-        location_state: state,
-        location_zip: '', // Could be added as a field to the form
-        job_type: data.jobType,
-        pay_rate_min: payRateMin,
-        pay_rate_max: payRateMax,
-        pay_rate_period: payRatePeriod,
+        location_city: data.location.split(',')[0]?.trim() || data.location,
+        location_state: data.location.split(',')[1]?.trim() || 'FL',
+        location_zip: '32256', // Default zip code
+        job_type: data.type,
+        pay_rate_min: data.pay_rate_min,
+        pay_rate_max: data.pay_rate_max,
+        pay_rate_period: 'hourly',
         description: data.description,
         requirements: requirementsArray,
-        experience_level: 'entry-level', // Could be added as a field to the form
-        is_remote: data.isRemote,
-        is_featured: data.isPremium,
+        experience_level: 'entry-level',
+        hours_per_week: data.hours_per_week,
+        is_featured: false,
         is_premium: data.isPremium,
-        posted_date: new Date().toISOString(),
-        hours_per_week: 20 // Default for high school students
+        prohibited_types: data.prohibited_types
       };
 
-      const { data: jobResult, error } = await supabase
-        .from('jobs')
-        .insert(jobData)
-        .select('id')
-        .single();
+      const { data: job, error } = await createJob(jobData);
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      setCreatedJobId(jobResult.id);
-
-      if (data.isPremium) {
-        setShowPremiumOptions(true);
-      } else {
+      if (job) {
         toast({
-          title: "Job Posted Successfully",
-          description: "Your job has been posted and is now live"
+          title: "Success",
+          description: "Job posting created successfully"
         });
-        
-        onSuccess(jobResult.id);
+        onSuccess(job.id);
       }
     } catch (error: any) {
-      console.error('Error posting job:', error);
-      
+      console.error('Error creating job:', error);
       toast({
         title: "Error",
-        description: error.message || "There was an error posting your job",
+        description: error.message || "Failed to create job posting",
         variant: "destructive"
       });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
-  if (showPremiumOptions && createdJobId) {
-    return <FreemiumFeatures jobId={createdJobId} />;
-  }
+  const handleAIGenerated = (jobData: JobFormData) => {
+    // Populate form with AI-generated data
+    form.reset(jobData);
+    // Switch to manual mode to let user review and edit
+    setFormMode('manual');
+    toast({
+      title: "Job Generated",
+      description: "Review and make any necessary edits before posting"
+    });
+  };
 
   return (
-    <Card className="p-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold">Post a New Job</h2>
-        <p className="text-muted-foreground">
-          Create a new job posting to find qualified high school students
-        </p>
-      </div>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. Cashier, Server, Intern" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="company"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your company name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="City, State" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="jobType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select job type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="part-time">Part-time</SelectItem>
-                      <SelectItem value="full-time">Full-time</SelectItem>
-                      <SelectItem value="temporary">Temporary</SelectItem>
-                      <SelectItem value="seasonal">Seasonal</SelectItem>
-                      <SelectItem value="internship">Internship</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Description</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Describe the job responsibilities, schedule, and any other relevant details" 
-                    rows={5}
-                    {...field} 
+    <div className="w-full">
+      <Tabs defaultValue={formMode} onValueChange={(value) => setFormMode(value as 'manual' | 'ai')}>
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="manual">Manual Entry</TabsTrigger>
+          <TabsTrigger value="ai">AI Quick Post</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="manual">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Briefcase className="h-5 w-5" />
+                    Post a New Job
+                  </CardTitle>
+                  <CardDescription>
+                    Fill out the form below to create a new job listing
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <BasicJobDetails
+                    title={form.watch('title')}
+                    company={form.watch('company')}
+                    location={form.watch('location')}
+                    type={form.watch('type')}
+                    onInputChange={(e) => form.setValue(e.target.name as any, e.target.value)}
+                    onSelectChange={(name, value) => form.setValue(name as any, value)}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="salary"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Salary/Wage</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. $15-18/hour, $500/week" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="applicationDeadline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Application Deadline</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="requirements"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Requirements</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="List qualifications, skills, and requirements for the position" 
-                    rows={3}
-                    {...field} 
+                  
+                  <CompensationDetails
+                    hoursPerWeek={form.watch('hours_per_week')}
+                    payRateMin={form.watch('pay_rate_min')}
+                    payRateMax={form.watch('pay_rate_max')}
+                    onChange={(field, value) => form.setValue(field as any, value)}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+                  
+                  <JobDescriptionSection
+                    description={form.watch('description')}
+                    onChange={(value) => form.setValue('description', value)}
+                  />
+                  
+                  <JobRequirementsSection
+                    requirements={form.watch('requirements')}
+                    onChange={(value) => form.setValue('requirements', value)}
+                  />
+                  
+                  <PremiumJobToggle
+                    isPremium={form.watch('isPremium')}
+                    onChange={(value) => form.setValue('isPremium', value)}
+                  />
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <Button type="button" variant="outline" onClick={onCancel}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Posting...' : 'Post Job'}
+                  </Button>
+                </CardFooter>
+              </Card>
+            </form>
+          </Form>
+        </TabsContent>
+        
+        <TabsContent value="ai">
+          <AIQuickJobPost 
+            onJobGenerated={handleAIGenerated}
+            onCancel={onCancel}
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="contactEmail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="email@company.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="contactPhone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Phone (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="(XXX) XXX-XXXX" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="isRemote"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div>
-                    <FormLabel>Remote Work Available</FormLabel>
-                    <FormDescription>
-                      Check this if the job can be done remotely
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="acceptsApplications"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div>
-                    <FormLabel>Accept Applications</FormLabel>
-                    <FormDescription>
-                      Uncheck this if you want to create the job but not accept applications yet
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="isPremium"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-amber-50">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div>
-                    <FormLabel className="font-medium">Premium Listing</FormLabel>
-                    <FormDescription>
-                      Premium job postings receive up to 3x more qualified applications and include 
-                      enhanced visibility, branded listings, and detailed analytics. 
-                      Get a 30-day free trial!
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" type="button" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Posting..." : "Post Job"}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 

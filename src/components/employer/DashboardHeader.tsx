@@ -1,39 +1,64 @@
 
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Badge } from '@/components/ui/badge';
-import { Database, BookOpen } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, BarChart3, Users, PlusCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/auth';
 
-const DashboardHeader = () => {
+interface DashboardHeaderProps {
+  setActiveTab?: (tab: string) => void;
+}
+
+const DashboardHeader = ({ setActiveTab }: DashboardHeaderProps = {}) => {
   const { userProfile } = useAuth();
-  
-  // Check if user is CEO based on job title or company name
-  const isCeo = userProfile?.job_title?.toLowerCase().includes('ceo') || 
-               userProfile?.job_title?.toLowerCase().includes('chief executive') ||
-               userProfile?.company_name?.toLowerCase().includes('ceo');
+  const companyName = userProfile?.company_name || 'Your Company';
   
   return (
-    <div className="space-y-4 mb-8">
-      <h1 className="text-3xl font-bold">
-        {isCeo ? "CEO Job Management Dashboard" : "Employer Dashboard"}
-      </h1>
-      
+    <div className="mb-8 space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Employer Dashboard</h1>
+        {setActiveTab && (
+          <Button onClick={() => setActiveTab("create")} className="gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Quick Post Job
+          </Button>
+        )}
+      </div>
+
       <p className="text-muted-foreground">
-        Manage your job postings and track applicants in one place
+        Welcome to the employer portal for {companyName}. Manage your job postings and find the perfect candidates.
       </p>
-      
-      <div className="flex flex-wrap gap-2 mt-2">
-        <Badge variant="outline" className="gap-1">
-          <Database className="h-3.5 w-3.5" />
-          Supabase
-        </Badge>
-        <Badge variant="outline" className="gap-1">
-          <BookOpen className="h-3.5 w-3.5" />
-          API Documentation
-        </Badge>
-        <Badge variant="outline" className="gap-1">
-          Render
-        </Badge>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Jobs</CardTitle>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">+2 from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Applicants</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">47</div>
+            <p className="text-xs text-muted-foreground">+12 from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Interview Rate</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">24%</div>
+            <p className="text-xs text-muted-foreground">+5% from last month</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

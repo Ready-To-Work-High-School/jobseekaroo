@@ -1620,12 +1620,30 @@ export type Database = {
           is_approved: boolean | null
           is_read: boolean | null
           needs_moderation: boolean | null
-          receiver_avatar: string | null
           receiver_id: string | null
-          receiver_name: string | null
-          sender_avatar: string | null
           sender_id: string | null
-          sender_name: string | null
+        }
+        Insert: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          is_read?: boolean | null
+          needs_moderation?: boolean | null
+          receiver_id?: string | null
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          is_read?: boolean | null
+          needs_moderation?: boolean | null
+          receiver_id?: string | null
+          sender_id?: string | null
         }
         Relationships: [
           {
