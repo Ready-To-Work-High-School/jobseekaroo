@@ -1,80 +1,71 @@
-
-import { ApplicationCard } from '@/components/ApplicationCard';
+import React from 'react';
+import ApplicationCard from "@/components/ApplicationCard";
 import { Button } from '@/components/ui/button';
-import { JobApplication } from '@/types/application';
+import { Briefcase, Plus } from 'lucide-react';
 
 interface ApplicationListProps {
-  applications: JobApplication[];
+  applications: any[];
   isLoading: boolean;
   onUpdate: () => void;
   totalCount: number;
   onAddFirst: () => void;
 }
 
-export const ApplicationList = ({
+const ApplicationList: React.FC<ApplicationListProps> = ({
   applications,
   isLoading,
   onUpdate,
   totalCount,
   onAddFirst
-}: ApplicationListProps) => {
+}) => {
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      <div className="grid gap-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="animate-pulse rounded-md p-4 border">
+            <div className="h-4 bg-muted rounded-md w-3/4 mb-2"></div>
+            <div className="h-3 bg-muted rounded-md w-1/2 mb-4"></div>
+            <div className="h-2 bg-muted rounded-md w-2/3"></div>
+          </div>
+        ))}
       </div>
     );
   }
 
   if (applications.length === 0) {
     return (
-      <div className="text-center py-12 bg-secondary/20 rounded-lg">
-        <div className="mx-auto w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-4">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            className="text-muted-foreground"
-          >
-            <rect width="8" height="14" x="8" y="5" rx="1" />
-            <path d="M4 5h4" />
-            <path d="M16 5h4" />
-            <path d="M4 10h4" />
-            <path d="M16 10h4" />
-            <path d="M4 15h4" />
-            <path d="M16 15h4" />
-          </svg>
-        </div>
-        <h3 className="text-lg font-medium">No applications found</h3>
-        <p className="text-muted-foreground mt-1 mb-4 max-w-md mx-auto">
-          {totalCount === 0 
-            ? "You haven't added any job applications to track yet."
-            : "No applications match your current filters."}
+      <div className="text-center py-8">
+        <Briefcase className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold text-muted-foreground mb-2">
+          No Applications Yet
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Start tracking your job applications to stay organized.
         </p>
-        {totalCount === 0 && (
-          <Button onClick={onAddFirst}>
-            Add Your First Application
-          </Button>
-        )}
+        <Button onClick={onAddFirst}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Your First Application
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid gap-4">
       {applications.map((application) => (
-        <ApplicationCard 
-          key={application.id} 
-          application={application} 
-          onUpdate={onUpdate}
+        <ApplicationCard
+          key={application.id}
+          application={application}
+          onDelete={async (id: string) => {
+            // Optimistically update the UI
+            const updatedApplications = applications.filter(app => app.id !== id);
+            // setApplications(updatedApplications);
+            onUpdate();
+          }}
         />
       ))}
     </div>
   );
 };
+
+export default ApplicationList;

@@ -1,6 +1,6 @@
 
 import { UserProfile } from '@/types/user';
-import { JobApplication } from '@/types/job';
+import { JobApplication, Job } from '@/types/job';
 
 export interface JobApplicationInput {
   job_id: string;
@@ -23,10 +23,12 @@ export interface AuthContextType {
   signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
+  refreshProfile?: () => Promise<void>;
   createApplication: (application: JobApplicationInput) => Promise<void>;
   updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
   deleteApplication?: (id: string) => Promise<void>;
   getApplications?: () => Promise<JobApplication[]>;
+  getSavedJobs?: () => Promise<Job[]>;
   resetPassword?: (email: string) => Promise<{ error: any }>;
 }
 

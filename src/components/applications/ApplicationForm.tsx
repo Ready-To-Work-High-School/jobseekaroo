@@ -1,255 +1,208 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from '@/components/ui/form';
+import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/auth';
+import { Link } from 'react-router-dom';
 import { Job } from '@/types/job';
-
-const formSchema = z.object({
-  job_title: z.string().min(1, 'Job title is required'),
-  company: z.string().min(1, 'Company name is required'),
-  status: z.enum(['applied', 'interviewing', 'rejected', 'accepted', 'pending', 'hired', 'withdrawn', 'offered']),
-  applied_date: z.date(),
-  contact_name: z.string().optional(),
-  contact_email: z.string().email('Invalid email').optional().or(z.literal('')),
-  next_step: z.string().optional(),
-  next_step_date: z.date().optional(),
-  notes: z.string().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { normalizeJob } from '@/utils/jobAdapter';
 
 interface ApplicationFormProps {
-  initialValues?: Partial<FormValues>;
-  onSubmit: (values: FormValues) => void;
-  job?: Job;
-  loading?: boolean;
+  jobId?: string;
+  jobTitle?: string;
+  companyName?: string;
+  selectedJob?: Job | null;
+  isAdding: boolean;
+  setIsAdding: (value: boolean) => void;
+  onCancel: () => void;
+  onShowSavedJobs: () => void;
+  onSuccess: () => void;
 }
 
-export const ApplicationForm = ({ initialValues, onSubmit, job, loading = false }: ApplicationFormProps) => {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+const ApplicationForm: React.FC<ApplicationFormProps> = ({ 
+  jobId = '',
+  jobTitle = 'Job Position',
+  companyName = 'Company Name',
+  selectedJob = null,
+  isAdding = false,
+  setIsAdding,
+  onCancel,
+  onShowSavedJobs,
+  onSuccess
+}) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const { user, createApplication } = useAuth();
+  
+  // If a job was provided, normalize it and extract properties
+  const normalizedJob = selectedJob ? normalizeJob(selectedJob) : null;
+  const finalJobId = normalizedJob?.id || jobId;
+  const finalJobTitle = normalizedJob?.title || jobTitle;
+  const finalCompanyName = normalizedJob?.company?.name || normalizedJob?.company || companyName;
+  
+  const form = useForm({
     defaultValues: {
-      job_title: job?.title || initialValues?.job_title || '',
-      company: job?.company?.name || initialValues?.company || '',
-      status: initialValues?.status || 'applied',
-      applied_date: initialValues?.applied_date || new Date(),
-      contact_name: initialValues?.contact_name || '',
-      contact_email: initialValues?.contact_email || '',
-      next_step: initialValues?.next_step || '',
-      next_step_date: initialValues?.next_step_date,
-      notes: initialValues?.notes || '',
-    },
+      coverLetter: '',
+      phone: '',
+      availability: '',
+      referral: ''
+    }
   });
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="job_title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Title</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={loading} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+  const onSubmit = async (data: any) => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to apply for jobs",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Create the application
+      await createApplication({
+        job_id: finalJobId,
+        job_title: finalJobTitle,
+        company: finalCompanyName,
+        status: 'applied',
+        applied_date: new Date().toISOString().slice(0, 10),
+        notes: data.coverLetter,
+        contact_name: '',
+        contact_email: ''
+      });
+      
+      toast({
+        title: "Application submitted!",
+        description: `Your application for ${finalJobTitle} at ${finalCompanyName} has been submitted successfully.`
+      });
+      
+      form.reset();
+      if (onSuccess) onSuccess();
+      if (setIsAdding) setIsAdding(false);
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      toast({
+        title: "Submission failed",
+        description: "There was a problem submitting your application. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-          <FormField
-            control={form.control}
-            name="company"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={loading} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="applied_date"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Application Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                        disabled={loading}
-                      >
-                        {field.value ? format(field.value, "PPP") : "Select date"}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <FormControl>
-                  <select
-                    className="w-full p-2 border rounded-md"
-                    {...field}
-                    disabled={loading}
-                  >
-                    <option value="applied">Applied</option>
-                    <option value="interviewing">Interviewing</option>
-                    <option value="accepted">Accepted</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="withdrawn">Withdrawn</option>
-                    <option value="hired">Hired</option>
-                    <option value="offered">Offer Received</option>
-                  </select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="contact_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contact Name</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={loading} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="contact_email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contact Email</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={loading} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="next_step"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Next Step</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={loading} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="next_step_date"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Next Step Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                        disabled={loading}
-                      >
-                        {field.value ? format(field.value, "PPP") : "Select date"}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date < new Date("1900-01-01")}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+  if (!user) {
+    return (
+      <div className="application-form p-6 border rounded-lg bg-muted/30">
+        <h3 className="text-xl font-semibold mb-4">Apply for this position</h3>
+        <p className="mb-6 text-muted-foreground">Please sign in to apply for jobs</p>
+        <div className="flex gap-4">
+          <Button asChild>
+            <Link to="/sign-in">Sign In</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/sign-up">Create Account</Link>
+          </Button>
         </div>
+      </div>
+    );
+  }
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Textarea {...field} disabled={loading} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Save Application'}
-        </Button>
-      </form>
-    </Form>
+  return (
+    <div className="application-form">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="coverLetter"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cover Letter</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Why are you interested in this position?" 
+                    className="min-h-[120px]" 
+                    {...field} 
+                  />
+                </FormControl>
+                <FormDescription>
+                  Briefly explain why you're a good fit for this role.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your phone number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="availability"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Availability</FormLabel>
+                <FormControl>
+                  <Input placeholder="When can you start? What days/hours are you available?" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="referral"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>How did you hear about this position?</FormLabel>
+                <FormControl>
+                  <Input placeholder="School counselor, teacher, website, etc." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <div className="flex gap-2 justify-end">
+            {onCancel && (
+              <Button type="button" variant="outline" onClick={onCancel}>
+                Cancel
+              </Button>
+            )}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit Application"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
 

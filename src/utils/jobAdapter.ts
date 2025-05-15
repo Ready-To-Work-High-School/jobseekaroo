@@ -10,47 +10,42 @@ export function normalizeJob(job: any): Job {
     description: job.description || '',
     requirements: job.requirements || [],
     
-    // Handle company structure
+    // Handle string properties
+    company: job.company || job.company_name || '',
+    location: job.location || `${job.location_city || ''}, ${job.location_state || ''}`,
+    type: job.type || job.job_type || 'full-time',
+    experienceLevel: job.experienceLevel || job.experience_level || 'entry-level',
+    payRate: job.payRate || job.pay_rate_min || 0,
+    postedDate: job.postedDate || job.posted_date || new Date().toISOString(),
+    isRemote: job.isRemote !== undefined ? job.isRemote : (job.is_remote || false),
+    isFlexible: job.isFlexible !== undefined ? job.isFlexible : (job.is_flexible || false),
+    isFeatured: job.isFeatured !== undefined ? job.isFeatured : (job.is_featured || false),
+    logoUrl: job.logoUrl || job.logo_url,
+    
+    // Handle nested objects for components that expect them
     company: {
-      name: job.company_name || (job.company ? job.company.name : ''),
+      name: job.company_name || (job.company ? job.company.name : '') || job.company || '',
       logoUrl: job.logo_url || job.logoUrl || (job.company ? job.company.logoUrl : undefined)
     },
     
-    // Handle location structure
     location: {
       city: job.location_city || (job.location ? job.location.city : ''),
       state: job.location_state || (job.location ? job.location.state : ''),
       zip: job.location_zip || (job.location ? job.location.zip : '')
     },
     
-    // Handle pay rate structure
     payRate: {
       min: job.pay_rate_min || (job.payRate ? job.payRate.min : 0),
       max: job.pay_rate_max || (job.payRate ? job.payRate.max : 0),
       period: job.pay_rate_period || (job.payRate ? job.payRate.period : 'hourly')
     },
     
-    // Handle other properties with consistent naming
-    type: job.type || job.job_type || 'full-time',
-    experienceLevel: job.experienceLevel || job.experience_level || 'entry-level',
-    postedDate: job.postedDate || job.posted_date || new Date().toISOString(),
-    isRemote: job.isRemote !== undefined ? job.isRemote : job.is_remote,
-    isFlexible: job.isFlexible !== undefined ? job.isFlexible : job.is_flexible,
-    isFeatured: job.isFeatured !== undefined ? job.isFeatured : job.is_featured,
-    isPremium: job.isPremium !== undefined ? job.isPremium : job.is_premium,
-    logoUrl: job.logoUrl || job.logo_url,
-    hours_per_week: job.hours_per_week,
-    is_teen_appropriate: job.is_teen_appropriate,
-    prohibited_types: job.prohibited_types,
-    created_at: job.created_at || new Date().toISOString(),
-    updated_at: job.updated_at || new Date().toISOString(),
-    
-    // Include legacy properties for compatibility
-    company_name: job.company_name || (job.company ? job.company.name : ''),
+    // Include original properties for compatibility
+    company_name: job.company_name || '',
     logo_url: job.logo_url || job.logoUrl,
-    location_city: job.location_city || (job.location ? job.location.city : ''),
-    location_state: job.location_state || (job.location ? job.location.state : ''),
-    location_zip: job.location_zip || (job.location ? job.location.zip : ''),
+    location_city: job.location_city || '',
+    location_state: job.location_state || '',
+    location_zip: job.location_zip || '',
     job_type: job.job_type || job.type,
     experience_level: job.experience_level || job.experienceLevel,
     pay_rate_min: job.pay_rate_min || (job.payRate ? job.payRate.min : 0),
@@ -59,8 +54,12 @@ export function normalizeJob(job: any): Job {
     is_remote: job.is_remote !== undefined ? job.is_remote : job.isRemote,
     is_flexible: job.is_flexible !== undefined ? job.is_flexible : job.isFlexible,
     is_featured: job.is_featured !== undefined ? job.is_featured : job.isFeatured,
-    is_premium: job.is_premium !== undefined ? job.is_premium : job.isPremium,
-    posted_date: job.posted_date || job.postedDate
+    posted_date: job.posted_date || job.postedDate,
+    hours_per_week: job.hours_per_week,
+    is_teen_appropriate: job.is_teen_appropriate,
+    prohibited_types: job.prohibited_types,
+    created_at: job.created_at || new Date().toISOString(),
+    updated_at: job.updated_at || new Date().toISOString()
   };
   
   return normalizedJob;

@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { JobType, ExperienceLevel } from '@/types/job';
 
 interface FilterBarProps {
