@@ -1,87 +1,94 @@
 
-export type JobType = 
-  | 'full-time'
-  | 'part-time'
-  | 'internship'
-  | 'contract'
-  | 'temporary'
-  | 'volunteer'
-  | 'apprenticeship';
+export type JobType = 'full-time' | 'part-time' | 'internship' | 'contract' | 'temporary' | 'volunteer' | 'apprenticeship';
 
-export type ExperienceLevel = 
-  | 'entry-level'
-  | 'mid-level'
-  | 'senior-level'
-  | 'executive'
-  | 'no-experience';
+export type ExperienceLevel = 'entry-level' | 'mid-level' | 'senior-level' | 'manager' | 'executive';
 
-export type PayRatePeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+export type ApplicationStatus = 'applied' | 'interviewing' | 'offered' | 'accepted' | 'rejected' | 'pending' | 'hired' | 'withdrawn';
+
+export interface JobLocation {
+  city: string;
+  state: string;
+  zip: string;
+  zipCode?: string; // Adding this for backward compatibility
+}
+
+export interface JobSearchFilters {
+  keywords?: string;
+  type?: JobType | string;
+  experienceLevel?: ExperienceLevel | string;
+  isRemote?: boolean;
+  isFlexible?: boolean;
+  salary?: {
+    min?: number;
+    max?: number;
+  };
+  postedWithin?: number;
+  category?: string;
+  isFeatured?: boolean;
+  sortBy?: 'relevance' | 'date' | 'salary' | 'distance';
+  radius?: number;
+}
+
+export interface JobPayRate {
+  min: number;
+  max: number;
+  period: 'hourly' | 'yearly' | 'monthly' | 'weekly';
+}
+
+export interface JobCompany {
+  name: string;
+  logoUrl?: string;
+}
 
 export interface Job {
   id: string;
   title: string;
-  company_name: string;
-  company?: {
-    name: string;
-    logoUrl?: string;
-  };
-  logo_url?: string;
+  company: JobCompany | string;
+  location: JobLocation;
+  type: JobType;
+  payRate?: JobPayRate;
   description: string;
-  job_type: JobType;
-  experience_level: ExperienceLevel;
-  location: {
-    city: string;
-    state: string;
-    zip: string;
-  };
-  is_remote: boolean;
-  is_featured?: boolean;
-  is_premium?: boolean;
-  pay_rate_min: number;
-  pay_rate_max: number;
-  pay_rate_period: PayRatePeriod;
-  hours_per_week?: number;
-  is_flexible?: boolean;
   requirements: string[];
-  posted_date: string;
-  created_at: string;
-  updated_at: string;
-  is_teen_appropriate?: boolean;
+  experienceLevel: ExperienceLevel;
+  postedDate: string;
+  isRemote?: boolean;
+  isFlexible?: boolean;
+  isTeenAppropriate?: boolean;
+  isFeatured?: boolean;
+  isPremium?: boolean;
+  hoursPerWeek?: number;
+  prohibitedJobTypes?: string[];
+  skills?: string[];
 }
-
-export interface JobSearchFilters {
-  keyword?: string;
-  location?: string;
-  job_type?: JobType;
-  experience_level?: ExperienceLevel;
-  is_remote?: boolean;
-  salary_min?: number;
-  is_featured?: boolean;
-}
-
-export type ApplicationStatus =
-  | "applied"
-  | "interviewing"
-  | "rejected"
-  | "accepted"
-  | "withdrawn"
-  | "offered"
-  | "pending"
-  | "hired";
 
 export interface JobApplication {
   id: string;
-  job_id: string;
-  user_id: string;
-  job_title: string;
+  jobId: string;
+  jobTitle: string;
   company: string;
   status: ApplicationStatus;
-  applied_date: string;
-  contact_name?: string;
-  contact_email?: string;
-  next_step?: string;
-  next_step_date?: string;
+  appliedDate: string;
+  userId: string;
   notes?: string;
-  created_at: string;
-  updated_at: string;
+  contactName?: string;
+  contactEmail?: string;
+  nextStep?: string;
+  nextStepDate?: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface ApplicationStats {
+  applied: number;
+  interviewing: number;
+  offered: number;
+  accepted: number;
+  rejected: number;
+  withdrawn: number;
+  total: number;
+}
+
+export interface StatusCount {
+  status: ApplicationStatus;
+  count: number;
 }

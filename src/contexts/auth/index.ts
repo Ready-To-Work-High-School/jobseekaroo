@@ -1,6 +1,5 @@
 
-// Export the AuthProvider and useAuth hook from AuthContext.tsx
-export { AuthProvider, useAuth } from './AuthContext';
+import AuthContext, { AuthContextType } from './AuthContext';
+import AuthProvider from './AuthProvider';
 
-// Export other auth-related types and functions
-export * from './authContext.types';
+export { AuthContext, AuthProvider, type AuthContextType };

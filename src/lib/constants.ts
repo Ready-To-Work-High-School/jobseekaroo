@@ -1,14 +1,36 @@
 
+import { JobType, ExperienceLevel } from '@/types/job';
+
+// Job Types
+export const JOB_TYPES: JobType[] = [
+  'full-time',
+  'part-time',
+  'internship',
+  'contract',
+  'temporary',
+  'volunteer',
+  'apprenticeship'
+];
+
+// Experience Levels
+export const EXPERIENCE_LEVELS: ExperienceLevel[] = [
+  'entry-level',
+  'mid-level',
+  'senior-level',
+  'manager',
+  'executive'
+];
+
+// Job Categories
 export const categories = [
-  { value: 'all', label: 'All Categories' },
-  { value: 'retail', label: 'Retail' },
-  { value: 'hospitality', label: 'Hospitality' },
-  { value: 'healthcare', label: 'Healthcare' },
-  { value: 'technology', label: 'Technology' },
-  { value: 'education', label: 'Education' },
-  { value: 'finance', label: 'Finance' },
-  { value: 'manufacturing', label: 'Manufacturing' },
-  { value: 'construction', label: 'Construction' },
-  { value: 'customer-service', label: 'Customer Service' },
-  { value: 'transportation', label: 'Transportation' }
+  { label: 'All Categories', value: '' },
+  { label: 'Technology', value: 'technology' },
+  { label: 'Healthcare', value: 'healthcare' },
+  { label: 'Education', value: 'education' },
+  { label: 'Business', value: 'business' },
+  { label: 'Retail', value: 'retail' },
+  { label: 'Customer Service', value: 'customer-service' },
+  { label: 'Food Service', value: 'food-service' },
+  { label: 'Manufacturing', value: 'manufacturing' },
+  { label: 'Construction', value: 'construction' }
 ];

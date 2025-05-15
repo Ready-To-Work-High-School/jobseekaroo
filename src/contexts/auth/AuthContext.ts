@@ -1,37 +1,35 @@
 
-import { UserProfile } from '@/types/user';
-import { JobApplication, Job } from '@/types/job';
-
-export interface JobApplicationInput {
-  job_id: string;
-  job_title: string;
-  company: string;
-  status: string;
-  applied_date: string;
-  contact_name?: string;
-  contact_email?: string;
-  next_step?: string;
-  next_step_date?: string;
-  notes?: string;
-}
+import { createContext } from 'react';
+import { UserProfile, UserProfileUpdate } from '@/types/user';
 
 export interface AuthContextType {
-  user: any | null;
-  userProfile: UserProfile | null;
+  user: UserProfile | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
+  error: Error | null;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<void>;
   signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
-  refreshProfile?: () => Promise<void>;
-  createApplication: (application: JobApplicationInput) => Promise<void>;
-  updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
-  deleteApplication?: (id: string) => Promise<void>;
-  getApplications?: () => Promise<JobApplication[]>;
-  getSavedJobs?: () => Promise<Job[]>;
-  resetPassword?: (email: string) => Promise<{ error: any }>;
+  updateProfile: (data: UserProfileUpdate) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  getApplications: () => Promise<any[]>;
+  getSavedJobs?: () => Promise<string[]>;
+  saveJob?: (jobId: string) => Promise<void>;
+  unsaveJob?: (jobId: string) => Promise<void>;
+  isSavedJob?: (jobId: string) => boolean;
+  signInWithGoogle?: () => Promise<void>;
+  signInWithApple?: () => Promise<void>;
 }
 
-// Create the auth context
-import { createContext } from 'react';
-export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  error: null,
+  signIn: async () => {},
+  signUp: async () => {},
+  signOut: async () => {},
+  updateProfile: async () => {},
+  resetPassword: async () => {},
+  getApplications: async () => [],
+});
+
+export default AuthContext;

@@ -1,200 +1,163 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import { AuthContextType } from './AuthContext';
-import { UserProfile } from '@/types/user';
-import { JobApplication } from '@/types/job';
+import React, { useState, useEffect } from 'react';
+import AuthContext from './AuthContext';
+import { UserProfile, UserProfileUpdate } from '@/types/user';
 
 interface AuthProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-// Create the context with default values
-export const AuthContext = createContext<AuthContextType | null>(null);
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<any | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [savedJobs, setSavedJobs] = useState<string[]>([]);
 
   useEffect(() => {
-    // Check active sessions and set the user
-    const getSession = async () => {
-      setLoading(true);
+    // Initialize auth state here
+    // This would typically involve checking for an existing session
+    const checkAuthState = async () => {
       try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        
-        const session = data.session;
-        setUser(session?.user || null);
-        
-        if (session?.user) {
-          await getUserProfile(session.user.id);
-        }
-      } catch (error) {
-        console.error('Error getting session:', error);
-      } finally {
+        // Mock authentication check for now
+        setLoading(false);
+      } catch (err) {
+        setError(err as Error);
         setLoading(false);
       }
     };
 
-    getSession();
-    
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user || null);
-      setLoading(true);
-      
-      if (session?.user) {
-        await getUserProfile(session.user.id);
-      } else {
-        setUserProfile(null);
-      }
-      
-      setLoading(false);
-    });
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
+    checkAuthState();
   }, []);
 
-  // Get the user profile
-  const getUserProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) throw error;
-
-      setUserProfile(data as UserProfile);
-    } catch (error) {
-      console.error('Error loading user profile:', error);
-      setUserProfile(null);
-    }
-  };
-
-  // Sign in with email and password
   const signIn = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      return { error };
-    } catch (error) {
-      console.error('Error signing in:', error);
-      return { error };
+      // Mock sign in logic
+      setUser({ id: '1', email, user_type: 'student' });
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
     }
   };
 
-  // Sign up with email and password
-  const signUp = async (email: string, password: string, userData: any) => {
+  const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
+    setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: userData,
-        },
-      });
-      return { error };
-    } catch (error) {
-      console.error('Error signing up:', error);
-      return { error };
+      // Mock sign up logic
+      setUser({ id: '1', email, ...userData });
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
     }
   };
 
-  // Sign out
   const signOut = async () => {
+    setLoading(true);
     try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
+      // Mock sign out logic
+      setUser(null);
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
     }
   };
 
-  // Update user profile
-  const updateProfile = async (updates: Partial<UserProfile>) => {
+  const updateProfile = async (data: UserProfileUpdate) => {
+    setLoading(true);
     try {
-      if (!user) throw new Error('No user logged in');
-
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      // Update local profile state
-      setUserProfile(prev => prev ? { ...prev, ...updates } : null);
-      
-      return { error: null };
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      return { error };
+      // Mock update profile logic
+      if (user) {
+        setUser({ ...user, ...data });
+      }
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
     }
   };
 
-  // Job application methods
-  const createApplication = async (application: any) => {
-    if (!user) throw new Error('User not authenticated');
-    
+  const resetPassword = async (email: string) => {
+    setLoading(true);
     try {
-      const { error } = await supabase
-        .from('job_applications')
-        .insert({
-          user_id: user.id,
-          ...application,
-        });
-        
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error creating application:', error);
-      throw error;
-    }
-  };
-  
-  const updateApplication = async (id: string, data: Partial<JobApplication>) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .update(data)
-        .eq('id', id)
-        .eq('user_id', user.id);
-        
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error updating application:', error);
-      throw error;
+      // Mock password reset logic
+      console.log('Password reset email sent to:', email);
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
     }
   };
 
-  const value = {
-    user,
-    userProfile,
-    loading,
-    signIn,
-    signUp,
-    signOut,
-    updateProfile,
-    createApplication,
-    updateApplication,
+  const getApplications = async () => {
+    // Mock getting applications
+    return [];
+  };
+
+  const getSavedJobs = async () => {
+    // Mock getting saved jobs
+    return savedJobs;
+  };
+
+  const saveJob = async (jobId: string) => {
+    setSavedJobs(prevSavedJobs => [...prevSavedJobs, jobId]);
+  };
+
+  const unsaveJob = async (jobId: string) => {
+    setSavedJobs(prevSavedJobs => prevSavedJobs.filter(id => id !== jobId));
+  };
+
+  const isSavedJob = (jobId: string) => {
+    return savedJobs.includes(jobId);
+  };
+
+  const signInWithGoogle = async () => {
+    setLoading(true);
+    try {
+      // Mock Google sign in
+      setUser({ id: '1', email: 'google@example.com', user_type: 'student' });
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
+    }
+  };
+
+  const signInWithApple = async () => {
+    setLoading(true);
+    try {
+      // Mock Apple sign in
+      setUser({ id: '1', email: 'apple@example.com', user_type: 'student' });
+      setLoading(false);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
+    }
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      error,
+      signIn,
+      signUp,
+      signOut,
+      updateProfile,
+      resetPassword,
+      getApplications,
+      getSavedJobs,
+      saveJob,
+      unsaveJob,
+      isSavedJob,
+      signInWithGoogle,
+      signInWithApple
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Export the hook
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export default AuthProvider;
