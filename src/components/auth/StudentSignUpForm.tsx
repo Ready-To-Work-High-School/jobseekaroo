@@ -54,12 +54,16 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       }
       
       // Create the user account with student user type
+      const userData = {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        user_type: 'student'
+      };
+
       const result = await signUp(
         data.email,
         data.password,
-        data.firstName,
-        data.lastName,
-        'student'
+        userData
       );
       
       if (result.error) {

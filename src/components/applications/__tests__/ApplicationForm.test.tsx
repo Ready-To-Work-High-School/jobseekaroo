@@ -1,150 +1,68 @@
-
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
 import ApplicationForm from '../ApplicationForm';
-import { useAuth } from '@/contexts/auth/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { AuthProvider } from '@/contexts/auth/AuthContext';
+import { JobApplication } from '@/types/application';
 
-// Mock the auth context and toast hooks
-vi.mock('@/contexts/auth/AuthContext', () => ({
-  useAuth: vi.fn(),
-}));
-
-vi.mock('@/hooks/use-toast', () => ({
-  useToast: vi.fn(),
-}));
+const mockApplication: JobApplication = {
+  id: '1',
+  job_id: '123',
+  user_id: '456',
+  job_title: 'Software Engineer',
+  company: 'Tech Corp',
+  status: 'applied',
+  applied_date: '2024-01-01',
+  contact_name: 'John Doe',
+  contact_email: 'john.doe@example.com',
+  next_step: 'Interview',
+  next_step_date: '2024-01-15',
+  notes: 'Follow up after the interview',
+  created_at: '2024-01-01',
+  updated_at: '2024-01-01',
+};
 
 describe('ApplicationForm', () => {
-  const mockCreateApplication = vi.fn();
-  const mockToast = vi.fn();
-  
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    (useAuth as any).mockReturnValue({
-      user: { id: 'test-user' },
-      userProfile: { first_name: 'Test', last_name: 'User' },
-      createApplication: mockCreateApplication,
-    });
-    
-    (useToast as any).mockReturnValue({
-      toast: mockToast,
-    });
-  });
-  
-  it('renders form fields correctly', () => {
+  it('renders the form with initial values', () => {
     render(
-      <BrowserRouter>
-        <ApplicationForm
-          jobId="test-job"
-          jobTitle="Test Job"
-          companyName="Test Company"
-          isAdding={true}
-          onCancel={() => {}}
-          onSuccess={() => {}}
-          onShowSavedJobs={() => {}}
-          setIsAdding={() => {}}
-        />
-      </BrowserRouter>
+      <AuthProvider>
+        <ApplicationForm application={mockApplication} onSubmit={() => {}} />
+      </AuthProvider>
     );
-    
-    expect(screen.getByLabelText(/cover letter/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/availability/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/how did you hear/i)).toBeInTheDocument();
-    expect(screen.getByText(/submit application/i)).toBeInTheDocument();
+
+    expect(screen.getByLabelText('Job Title')).toHaveValue(mockApplication.job_title);
+    expect(screen.getByLabelText('Company')).toHaveValue(mockApplication.company);
+    expect(screen.getByLabelText('Applied Date')).toHaveValue(mockApplication.applied_date);
+    expect(screen.getByLabelText('Contact Name')).toHaveValue(mockApplication.contact_name || '');
+    expect(screen.getByLabelText('Contact Email')).toHaveValue(mockApplication.contact_email || '');
+    expect(screen.getByLabelText('Next Step')).toHaveValue(mockApplication.next_step || '');
+    expect(screen.getByLabelText('Notes')).toHaveValue(mockApplication.notes || '');
   });
-  
-  it('shows login message when user is not authenticated', () => {
-    (useAuth as any).mockReturnValue({
-      user: null,
-      createApplication: mockCreateApplication,
-    });
-    
+
+  it('calls onSubmit with the correct values when the form is submitted', async () => {
+    const onSubmit = jest.fn();
     render(
-      <BrowserRouter>
-        <ApplicationForm
-          jobId="test-job"
-          jobTitle="Test Job"
-          companyName="Test Company"
-          isAdding={true}
-          onCancel={() => {}}
-          onSuccess={() => {}}
-          onShowSavedJobs={() => {}}
-          setIsAdding={() => {}}
-        />
-      </BrowserRouter>
+      <AuthProvider>
+        <ApplicationForm application={mockApplication} onSubmit={onSubmit} />
+      </AuthProvider>
     );
-    
-    expect(screen.getByText(/please sign in to apply for jobs/i)).toBeInTheDocument();
-    expect(screen.getByText(/sign in/i)).toBeInTheDocument();
-    expect(screen.getByText(/create account/i)).toBeInTheDocument();
-  });
-  
-  it('submits the form with correct data', async () => {
-    render(
-      <BrowserRouter>
-        <ApplicationForm
-          jobId="test-job"
-          jobTitle="Test Job"
-          companyName="Test Company"
-          isAdding={true}
-          onCancel={() => {}}
-          onSuccess={() => {}}
-          onShowSavedJobs={() => {}}
-          setIsAdding={() => {}}
-          selectedJob={{
-            id: 'test-job',
-            title: 'Test Job',
-            company: { name: 'Test Company' },
-            location: { city: 'Test City', state: 'TS', zip: '12345' },
-            payRate: { min: 15, max: 20, period: 'hourly' },
-            type: 'full-time',
-            experienceLevel: 'entry-level',
-            description: 'Test job description',
-            requirements: ['Requirement 1', 'Requirement 2'],
-            postedDate: '2023-05-15',
-            created_at: '2023-05-15',
-            updated_at: '2023-05-15'
-          }}
-        />
-      </BrowserRouter>
-    );
-    
-    fireEvent.change(screen.getByLabelText(/cover letter/i), {
-      target: { value: 'This is my application' },
-    });
-    
-    fireEvent.change(screen.getByLabelText(/phone number/i), {
-      target: { value: '123-456-7890' },
-    });
-    
-    fireEvent.change(screen.getByLabelText(/availability/i), {
-      target: { value: 'Available weekdays' },
-    });
-    
-    fireEvent.change(screen.getByLabelText(/how did you hear/i), {
-      target: { value: 'School counselor' },
-    });
-    
-    fireEvent.click(screen.getByText(/submit application/i));
-    
+
+    fireEvent.change(screen.getByLabelText('Job Title'), { target: { value: 'Senior Software Engineer' } });
+    fireEvent.change(screen.getByLabelText('Company'), { target: { value: 'New Tech Corp' } });
+
+    fireEvent.click(screen.getByText('Submit'));
+
     await waitFor(() => {
-      expect(mockCreateApplication).toHaveBeenCalledWith({
-        job_id: 'test-job',
-        job_title: 'Test Job',
-        company: 'Test Company',
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(onSubmit).toHaveBeenCalledWith({
+        job_title: 'Senior Software Engineer',
+        company: 'New Tech Corp',
+        applied_date: '2024-01-01',
+        contact_name: 'John Doe',
+        contact_email: 'john.doe@example.com',
+        next_step: 'Interview',
+        next_step_date: '2024-01-15',
+        notes: 'Follow up after the interview',
         status: 'applied',
-        applied_date: expect.any(String),
-        notes: 'This is my application',
-        contact_name: '',
-        contact_email: '',
-      });
-      
-      expect(mockToast).toHaveBeenCalledWith({
-        title: 'Application submitted!',
-        description: expect.stringContaining('Test Job'),
+        job_id: '123',
       });
     });
   });

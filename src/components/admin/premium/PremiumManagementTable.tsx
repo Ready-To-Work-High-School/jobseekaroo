@@ -1,77 +1,97 @@
 
-import React from 'react';
+import { useState } from 'react';
 import { UserProfile } from '@/types/user';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { formatDate } from '@/utils/format';
-import { Badge } from '@/components/ui/badge';
+import { AlertTriangle, UserCheck } from 'lucide-react';
+import { formatDate, formatTimePeriod } from '@/utils/format';
 
 export interface PremiumManagementTableProps {
   users: UserProfile[];
   onCancelSubscription: (user: UserProfile) => Promise<void>;
 }
 
-const PremiumManagementTable: React.FC<PremiumManagementTableProps> = ({ users, onCancelSubscription }) => {
-  const getStatusBadge = (status: string | undefined) => {
-    if (!status) return <Badge variant="outline">None</Badge>;
-    
-    switch (status.toLowerCase()) {
-      case 'active':
-        return <Badge variant="success">Active</Badge>;
-      case 'inactive':
-        return <Badge variant="secondary">Inactive</Badge>;
-      case 'trial':
-        return <Badge variant="warning">Trial</Badge>;
-      case 'cancelled':
-        return <Badge variant="destructive">Cancelled</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+const PremiumManagementTable = ({ users, onCancelSubscription }: PremiumManagementTableProps) => {
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  
+  const handleCancel = async (user: UserProfile) => {
+    setProcessingId(user.id);
+    try {
+      await onCancelSubscription(user);
+      // Success is handled in parent component
+    } catch (error) {
+      console.error("Failed to cancel subscription:", error);
+    } finally {
+      setProcessingId(null);
     }
   };
-
+  
+  // Filter users with premium access
+  const premiumUsers = users.filter(user => 
+    user.premium_status || user.preferences?.hasPremium
+  );
+  
+  if (premiumUsers.length === 0) {
+    return (
+      <div className="text-center p-8 bg-slate-50 rounded-md">
+        <div className="flex justify-center mb-4">
+          <UserCheck className="h-12 w-12 text-muted-foreground/50" />
+        </div>
+        <h3 className="text-lg font-medium">No Premium Users</h3>
+        <p className="text-muted-foreground mt-2">
+          There are currently no users with premium access.
+        </p>
+      </div>
+    );
+  }
+  
   return (
-    <div className="rounded-md border">
+    <div className="border rounded-md">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>User</TableHead>
+            <TableHead className="w-[200px]">User</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Subscription Status</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead>Join Date</TableHead>
+            <TableHead>Premium Status</TableHead>
+            <TableHead>Since</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
-                No premium users found
+          {premiumUsers.map((user) => (
+            <TableRow key={user.id}>
+              <TableCell className="font-medium">
+                {user.first_name} {user.last_name}
+              </TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell className="capitalize">{user.user_type}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  {user.premium_status ? (
+                    <span className="capitalize">
+                      {user.premium_status.replace(/_/g, ' ')}
+                    </span>
+                  ) : user.preferences?.hasPremium ? (
+                    <span>Active</span>
+                  ) : (
+                    <span className="text-muted-foreground">None</span>
+                  )}
+                </div>
+              </TableCell>
+              <TableCell>{formatDate(user.updated_at || user.created_at)}</TableCell>
+              <TableCell className="text-right">
+                <Button
+                  onClick={() => handleCancel(user)}
+                  variant="outline"
+                  size="sm"
+                  disabled={processingId === user.id}
+                >
+                  {processingId === user.id ? "Processing..." : "Cancel Premium"}
+                </Button>
               </TableCell>
             </TableRow>
-          ) : (
-            users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">
-                  {user.first_name} {user.last_name}
-                </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{getStatusBadge(user.premium_status)}</TableCell>
-                <TableCell>{user.user_type}</TableCell>
-                <TableCell>{formatDate(user.created_at)}</TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onCancelSubscription(user)}
-                    disabled={!user.premium_status || user.premium_status.toLowerCase() === 'cancelled'}
-                  >
-                    Cancel Subscription
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
+          ))}
         </TableBody>
       </Table>
     </div>

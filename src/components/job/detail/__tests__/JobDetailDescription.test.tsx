@@ -1,18 +1,17 @@
-
 import { render, screen } from '@testing-library/react';
 import { JobDetailDescription } from '../JobDetailDescription';
 import { Job } from '@/types/job';
 
-const mockJob: Job = {
+const testJob: Job = {
   id: "1",
   title: "Software Engineer",
   company: {
     name: "Tech Corp",
   },
   location: {
-    city: "San Francisco",
-    state: "CA",
-    zipCode: "94105"
+    city: 'Jacksonville',
+    state: 'FL',
+    zip: '32202'  // Changed from zipCode to zip
   },
   type: "full-time",
   payRate: {
@@ -30,17 +29,17 @@ const mockJob: Job = {
 
 describe('JobDetailDescription', () => {
   const renderDescription = () => {
-    return render(<JobDetailDescription job={mockJob} />);
+    return render(<JobDetailDescription job={testJob} />);
   };
 
   it('renders job description', () => {
     renderDescription();
-    expect(screen.getByText(mockJob.description)).toBeInTheDocument();
+    expect(screen.getByText(testJob.description)).toBeInTheDocument();
   });
 
   it('displays all job requirements', () => {
     renderDescription();
-    mockJob.requirements.forEach(requirement => {
+    testJob.requirements.forEach(requirement => {
       expect(screen.getByText(requirement)).toBeInTheDocument();
     });
   });

@@ -1,62 +1,76 @@
 
-import { Badge } from '@/components/ui/badge';
-import { ApplicationStatus } from '@/types/application';
+import { Badge } from "@/components/ui/badge";
+import { ApplicationStatus } from "@/types/application";
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
-  size?: 'sm' | 'default';
 }
 
-const ApplicationStatusBadge = ({ status, size = 'default' }: ApplicationStatusBadgeProps) => {
-  let variant = 'default';
-  let label = status;
-  const className = size === 'sm' ? 'text-xs py-0 px-2' : '';
-  
+const ApplicationStatusBadge = ({ status }: ApplicationStatusBadgeProps) => {
   switch (status) {
-    case 'applied':
-      variant = 'secondary';
-      break;
-    case 'interviewing':
-      variant = 'warning';
-      label = 'interviewing';
-      break;
-    case 'accepted':
-      variant = 'success';
-      label = 'accepted';
-      break;
-    case 'rejected':
-      variant = 'destructive';
-      label = 'rejected';
-      break;
-    case 'withdrawn':
-      variant = 'outline';
-      label = 'withdrawn';
-      break;
-    case 'offered':
-      variant = 'info';
-      label = 'offered';
-      break;
-    case 'offer received':
-      variant = 'info';
-      label = 'offer received';
-      break;
-    case 'hired':
-      variant = 'success';
-      label = 'hired';
-      break;
-    case 'pending':
-      variant = 'secondary';
-      label = 'pending';
-      break;
+    case "applied":
+      return (
+        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+          Applied
+        </Badge>
+      );
+
+    case "interviewing":
+      return (
+        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">
+          Interviewing
+        </Badge>
+      );
+
+    case "rejected":
+      return (
+        <Badge className="bg-red-100 text-red-800 hover:bg-red-200">
+          Rejected
+        </Badge>
+      );
+
+    case "accepted":
+      return (
+        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
+          Accepted
+        </Badge>
+      );
+
+    case "withdrawn":
+      return (
+        <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+          Withdrawn
+        </Badge>
+      );
+
+    case "offered":
+      return (
+        <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200">
+          Offer Received
+        </Badge>
+      );
+
+    case "hired":
+      return (
+        <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+          Hired
+        </Badge>
+      );
+
+    case "pending":
+      return (
+        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+          Pending
+        </Badge>
+      );
+
     default:
-      variant = 'secondary';
+      return (
+        <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+          {status}
+        </Badge>
+      );
   }
-  
-  return (
-    <Badge variant={variant as any} className={className}>
-      {label.charAt(0).toUpperCase() + label.slice(1)}
-    </Badge>
-  );
 };
 
 export default ApplicationStatusBadge;

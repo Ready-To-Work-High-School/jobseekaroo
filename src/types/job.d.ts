@@ -1,80 +1,73 @@
 
-// Define the job-related type exports
-export type JobType = 'full-time' | 'part-time' | 'internship' | 'volunteer' | 'seasonal' | 'weekend' | 'summer';
-export type ExperienceLevel = 'entry-level' | 'mid-level' | 'senior' | 'internship' | 'no-experience' | 'some-experience';
-export type ApplicationStatus = 'applied' | 'interviewing' | 'rejected' | 'accepted' | 'pending' | 'hired' | 'withdrawn' | 'offered';
+export type JobType = 
+  | 'full-time'
+  | 'part-time'
+  | 'internship'
+  | 'contract'
+  | 'temporary'
+  | 'volunteer'
+  | 'apprenticeship';
+
+export type ExperienceLevel = 
+  | 'entry-level'
+  | 'mid-level'
+  | 'senior-level'
+  | 'executive'
+  | 'no-experience';
+
+export type PayRatePeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 export interface Job {
   id: string;
   title: string;
-  description: string;
-  requirements: string[];
-  
-  // Formatted properties (camelCase)
-  company: {
+  company_name: string;
+  company?: {
     name: string;
     logoUrl?: string;
   };
+  logo_url?: string;
+  description: string;
+  job_type: JobType;
+  experience_level: ExperienceLevel;
   location: {
     city: string;
     state: string;
     zip: string;
   };
-  payRate: {
-    min: number;
-    max: number;
-    period: string;
-  };
-  type: JobType;
-  experienceLevel: ExperienceLevel;
-  postedDate: string;
-  isRemote?: boolean;
-  isFlexible?: boolean;
-  isFeatured?: boolean;
-  isPremium?: boolean;
-  logoUrl?: string;
-  
-  // Original DB properties (snake_case)
-  company_name?: string;
-  logo_url?: string;
-  location_city?: string;
-  location_state?: string;
-  location_zip?: string;
-  job_type?: string;
-  experience_level?: string;
-  pay_rate_min?: number;
-  pay_rate_max?: number;
-  pay_rate_period?: string;
-  is_remote?: boolean;
-  is_flexible?: boolean;
+  is_remote: boolean;
   is_featured?: boolean;
   is_premium?: boolean;
-  posted_date?: string;
+  pay_rate_min: number;
+  pay_rate_max: number;
+  pay_rate_period: PayRatePeriod;
   hours_per_week?: number;
-  is_teen_appropriate?: boolean;
-  prohibited_types?: string[];
+  is_flexible?: boolean;
+  requirements: string[];
+  posted_date: string;
   created_at: string;
   updated_at: string;
+  is_teen_appropriate?: boolean;
 }
 
 export interface JobSearchFilters {
-  zipCode?: string;
-  radius?: number;
-  type?: string;
-  experienceLevel?: string;
-  isRemote?: boolean | null;
-  isFlexible?: boolean | null;
-  category?: string; // Added category property
-  salary?: {
-    min?: number;
-    max?: number;
-  };
-  postedWithin?: number;
-  keywords?: string[];
-  sortBy?: 'relevance' | 'date' | 'salary' | 'distance';
-  page?: number;
-  limit?: number;
+  keyword?: string;
+  location?: string;
+  job_type?: JobType;
+  experience_level?: ExperienceLevel;
+  is_remote?: boolean;
+  salary_min?: number;
+  is_featured?: boolean;
 }
+
+export type ApplicationStatus =
+  | "applied"
+  | "interviewing"
+  | "rejected"
+  | "accepted"
+  | "withdrawn"
+  | "offered"
+  | "pending"
+  | "hired";
 
 export interface JobApplication {
   id: string;
@@ -91,14 +84,4 @@ export interface JobApplication {
   notes?: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface SavedSearch {
-  id: string;
-  user_id: string;
-  name: string;
-  query: string;
-  filters: JobSearchFilters;
-  created_at: string;
-  updated_at?: string;
 }

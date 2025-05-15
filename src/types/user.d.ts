@@ -1,22 +1,21 @@
 
 export interface UserProfile {
   id: string;
-  email?: string;
   first_name?: string;
   last_name?: string;
-  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
+  email?: string;
+  avatar_url?: string;
+  bio?: string;
   company_name?: string;
   company_website?: string;
-  phone?: string;
-  bio?: string;
   location?: string;
-  avatar_url?: string;
-  redeemed_code?: string;
-  redeemed_at?: string;
-  premium_status?: string;
-  created_at: string;
-  updated_at: string;
-  preferences: {
+  job_title?: string;
+  skills?: string[];
+  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
+  employer_verification_status?: 'pending' | 'approved' | 'denied';
+  badges?: any[];
+  student_badges?: any[];
+  preferences?: {
     theme?: 'light' | 'dark' | 'system';
     notifications?: boolean;
     hasPremium?: boolean;
@@ -26,22 +25,43 @@ export interface UserProfile {
       reduceMotion?: boolean;
     };
   };
-  contact_details_encrypted?: string;
-}
-
-export interface AdminUser {
-  id: string;
-  email: string;
-  first_name?: string;
-  last_name?: string;
-  user_type?: string;
-  company_name?: string;
-  company_website?: string;
-  created_at: string;
-  updated_at?: string;
   redeemed_code?: string;
   redeemed_at?: string;
   premium_status?: string;
+  contact_details_encrypted?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface UserProfileUpdate {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  avatar_url?: string;
+  bio?: string;
+  company_name?: string;
+  company_website?: string;
+  location?: string;
+  job_title?: string;
+  skills?: string[];
+  preferences?: {
+    theme?: 'light' | 'dark' | 'system';
+    notifications?: boolean;
+    hasPremium?: boolean;
+    accessibility_settings?: {
+      fontSize?: 'small' | 'medium' | 'large';
+      highContrast?: boolean;
+      reduceMotion?: boolean;
+    };
+  };
+}
+
+export interface UserBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  type: string;
 }
 
 export interface SavedSearch {

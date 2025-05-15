@@ -1,111 +1,90 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/auth/AuthContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CheckCircle, XCircle } from "lucide-react";
+import { formatDate, formatPremiumStatus } from '@/utils/format';
 
-interface BenefitsTabContentProps {
-  userProfile: any;
-  onRedeemCode: (code: string) => Promise<void>;
-}
+const BenefitsTabContent = () => {
+  const { userProfile } = useAuth();
 
-const BenefitsTabContent = ({ userProfile, onRedeemCode }: BenefitsTabContentProps) => {
-  const [code, setCode] = useState('');
-  const { toast } = useToast();
-  const { user } = useAuth();
-  const [isRedeeming, setIsRedeeming] = useState(false);
-  
-  const handleRedeem = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!code) {
-      toast({
-        title: "Error",
-        description: "Please enter a code to redeem.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "You must be logged in to redeem a code.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setIsRedeeming(true);
-    
-    toast({
-      title: "Processing code...",
-      description: "Please wait while we verify your code.",
-      variant: "default" // Changed from "warning" to "default"
-    });
-    
-    try {
-      await onRedeemCode(code);
-      toast({
-        title: "Success",
-        description: "Code redeemed successfully!",
-      });
-    } catch (error: any) {
-      console.error("Redeem code error:", error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to redeem code. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsRedeeming(false);
-    }
-  };
-  
+  if (!userProfile) {
+    return <Alert variant="destructive">
+      <XCircle className="h-4 w-4 mr-2" />
+      User profile not loaded.
+    </Alert>;
+  }
+
+  const hasPremium = userProfile.premium_status || userProfile.preferences?.hasPremium;
+  const redeemedCode = userProfile.redeemed_code;
+  const redeemedAt = userProfile.redeemed_at;
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Your Benefits</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="redeem-code">Redeem Code</Label>
-          <form onSubmit={handleRedeem} className="flex items-center space-x-2">
-            <Input
-              id="redeem-code"
-              placeholder="Enter your code"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              disabled={isRedeeming}
-            />
-            <Button type="submit" disabled={isRedeeming}>
-              {isRedeeming ? "Redeeming..." : "Redeem"}
-            </Button>
-          </form>
-        </div>
-        
-        {userProfile?.premium_status && (
-          <div className="border rounded-md p-4 bg-green-50 border-green-200">
-            <h3 className="font-medium text-green-800">Premium Subscription</h3>
-            <p className="text-sm text-green-700">
-              You have an active premium subscription. Enjoy exclusive benefits!
+    <div className="grid gap-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Premium Status</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {hasPremium ? (
+            <Alert>
+              <CheckCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>
+                You have premium access! Enjoy enhanced features and benefits.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert variant="destructive">
+              <XCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>
+                You do not have premium access. Upgrade to unlock exclusive features.
+              </AlertDescription>
+            </Alert>
+          )}
+          {userProfile.premium_status && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Status: {formatPremiumStatus(userProfile.premium_status)}
             </p>
-          </div>
-        )}
-        
-        {!userProfile?.premium_status && (
-          <div className="border rounded-md p-4 bg-gray-50 border-gray-200">
-            <h3 className="font-medium text-gray-800">Unlock Premium Features</h3>
-            <p className="text-sm text-gray-700">
-              Redeem a code to unlock premium features and benefits.
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Redemption Code</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {redeemedCode ? (
+            <Alert>
+              <CheckCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>
+                You have successfully redeemed a code.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert variant="destructive">
+              <XCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>
+                You have not redeemed a code yet.
+              </AlertDescription>
+            </Alert>
+          )}
+          {redeemedAt && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Redeemed on: {formatDate(redeemedAt)}
             </p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
+};
+
+const alertVariant = (status: string): "default" | "destructive" => {
+  if (status === "error" || status === "warning") {
+    return "destructive";
+  }
+  return "default";
 };
 
 export default BenefitsTabContent;

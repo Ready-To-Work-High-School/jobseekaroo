@@ -1,5 +1,11 @@
-// Import necessary components and types
-import React, { useState } from 'react';
+
+import { useState } from 'react';
+import { JobSearchFilters } from '@/types/job';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 import { 
   Select, 
   SelectContent, 
@@ -7,201 +13,157 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { JobSearchFilters } from '@/types/job';
-import { JobType, ExperienceLevel } from '@/types/job';
+import { JOB_TYPES, EXPERIENCE_LEVELS } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/utils/format';
 
-// Define props interface
-interface JobFilterProps {
-  onFilterChange: (filters: any) => void;
+export interface JobFilterProps {
+  onFilterChange: (filters: JobSearchFilters) => void;
   className?: string;
 }
 
-const JobFilter: React.FC<JobFilterProps> = ({ 
-  onFilterChange, 
-  className = ''
-}) => {
-  // Define state variables for each filter
-  const [zipCode, setZipCode] = useState<string>('');
-  const [radius, setRadius] = useState<number>(25);
-  const [type, setType] = useState<JobType | ''>('');
-  const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel | ''>('');
-  const [isRemote, setIsRemote] = useState<boolean | null>(null);
-  const [isFlexible, setIsFlexible] = useState<boolean | null>(null);
-  const [salaryRange, setSalaryRange] = useState<number[]>([0, 100000]);
-  const [postedWithin, setPostedWithin] = useState<number | null>(null);
+const JobFilter = ({ onFilterChange, className }: JobFilterProps) => {
+  const [filters, setFilters] = useState<JobSearchFilters>({
+    keyword: '',
+    location: '',
+    job_type: undefined,
+    experience_level: undefined,
+    is_remote: false,
+    salary_min: 0,
+    is_featured: false
+  });
 
-  // Handle changes to the zip code input
-  const handleZipCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setZipCode(event.target.value);
+  const handleFilterChange = (key: keyof JobSearchFilters, value: any) => {
+    const updatedFilters = { ...filters, [key]: value };
+    setFilters(updatedFilters);
+    onFilterChange(updatedFilters);
   };
 
-  // Handle changes to the radius slider
-  const handleRadiusChange = (value: number[]) => {
-    setRadius(value[0]);
-  };
-
-  // Handle changes to the job type select
-  const handleTypeChange = (value: JobType | '') => {
-    setType(value);
-  };
-
-  // Handle changes to the experience level select
-  const handleExperienceLevelChange = (value: ExperienceLevel | '') => {
-    setExperienceLevel(value);
-  };
-
-  // Handle changes to the isRemote switch
-  const handleIsRemoteChange = (checked: boolean) => {
-    setIsRemote(checked);
-  };
-
-  // Handle changes to the isFlexible switch
-  const handleIsFlexibleChange = (checked: boolean) => {
-    setIsFlexible(checked);
-  };
-
-  // Handle changes to the salary range slider
-  const handleSalaryRangeChange = (value: number[]) => {
-    setSalaryRange(value);
-  };
-
-  // Handle changes to the posted within select
-  const handlePostedWithinChange = (value: number | null) => {
-    setPostedWithin(value);
-  };
-
-  // Apply the filters and call the onFilterChange callback
-  const applyFilters = () => {
-    const filters: JobSearchFilters = {
-      zipCode: zipCode,
-      radius: radius,
-      type: type,
-      experienceLevel: experienceLevel,
-      isRemote: isRemote,
-      isFlexible: isFlexible,
-      salary: {
-        min: salaryRange[0],
-        max: salaryRange[1],
-      },
-      postedWithin: postedWithin,
+  const handleReset = () => {
+    const resetFilters: JobSearchFilters = {
+      keyword: '',
+      location: '',
+      job_type: undefined,
+      experience_level: undefined,
+      is_remote: false,
+      salary_min: 0,
+      is_featured: false
     };
-    onFilterChange(filters);
+    setFilters(resetFilters);
+    onFilterChange(resetFilters);
   };
-
-  // Job type options
-  const jobTypeOptions: JobType[] = ['full-time', 'part-time', 'internship', 'volunteer', 'seasonal', 'weekend', 'summer'];
-
-  // Experience level options
-  const experienceLevelOptions: ExperienceLevel[] = ['entry-level', 'mid-level', 'senior', 'internship', 'no-experience', 'some-experience'];
 
   return (
-    <div className={`space-y-6 p-4 ${className}`}>
-      <div>
-        <Label htmlFor="zipCode">Zip Code</Label>
-        <input
-          type="text"
-          id="zipCode"
-          className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          value={zipCode}
-          onChange={handleZipCodeChange}
+    <div className={cn("space-y-6", className)}>
+      {/* Keyword Search */}
+      <div className="space-y-2">
+        <Label htmlFor="keyword">Keywords</Label>
+        <Input 
+          id="keyword"
+          placeholder="Job title, skills, or keywords"
+          value={filters.keyword}
+          onChange={(e) => handleFilterChange('keyword', e.target.value)}
         />
       </div>
-      <div>
-        <Label>Radius</Label>
-        <Slider
-          defaultValue={[radius]}
-          max={100}
-          step={1}
-          onValueChange={handleRadiusChange}
+      
+      {/* Location */}
+      <div className="space-y-2">
+        <Label htmlFor="location">Location</Label>
+        <Input 
+          id="location"
+          placeholder="City, state, or zip code"
+          value={filters.location}
+          onChange={(e) => handleFilterChange('location', e.target.value)}
         />
-        <p className="text-sm text-muted-foreground">
-          {radius} miles
-        </p>
       </div>
-      <div>
-        <Label>Type</Label>
-        <Select onValueChange={handleTypeChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a type" />
+      
+      {/* Job Type */}
+      <div className="space-y-2">
+        <Label htmlFor="job_type">Job Type</Label>
+        <Select 
+          value={filters.job_type} 
+          onValueChange={(value) => handleFilterChange('job_type', value)}
+        >
+          <SelectTrigger id="job_type">
+            <SelectValue placeholder="Select job type" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">Any</SelectItem>
-            {jobTypeOptions.map((type) => (
+            {JOB_TYPES.map((type) => (
               <SelectItem key={type} value={type}>{type}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      <div>
-        <Label>Experience Level</Label>
-        <Select onValueChange={handleExperienceLevelChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select an experience level" />
+      
+      {/* Experience Level */}
+      <div className="space-y-2">
+        <Label htmlFor="experience_level">Experience Level</Label>
+        <Select 
+          value={filters.experience_level}
+          onValueChange={(value) => handleFilterChange('experience_level', value)}
+        >
+          <SelectTrigger id="experience_level">
+            <SelectValue placeholder="Select experience" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">Any</SelectItem>
-            {experienceLevelOptions.map((level) => (
+            {EXPERIENCE_LEVELS.map((level) => (
               <SelectItem key={level} value={level}>{level}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center space-x-2">
-        <Switch id="isRemote" onCheckedChange={handleIsRemoteChange} />
-        <Label htmlFor="isRemote">Remote</Label>
-      </div>
-      <div className="flex items-center space-x-2">
-        <Switch id="isFlexible" onCheckedChange={handleIsFlexibleChange} />
-        <Label htmlFor="isFlexible">Flexible</Label>
-      </div>
-      {/* Salary Range Filter */}
-      <div className="space-y-2">
-        <Label htmlFor="salary-range">Salary Range</Label>
-        <div className="pt-6 pb-2">
-          <Slider
-            defaultValue={salaryRange}
-            max={100000}
-            step={1000}
-            value={salaryRange}
-            onValueChange={(value: number[]) => setSalaryRange(value)}
-          />
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-sm text-muted-foreground">{formatCurrency(salaryRange[0])}</span>
-            <span className="text-sm text-muted-foreground">{formatCurrency(salaryRange[1])}</span>
-          </div>
+      
+      {/* Minimum Salary */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="salary_min">Minimum Salary</Label>
+          <span className="text-sm">{formatCurrency(filters.salary_min)}</span>
         </div>
+        <Slider
+          id="salary_min"
+          min={0}
+          max={100000}
+          step={5000}
+          value={[filters.salary_min || 0]}
+          onValueChange={(value) => handleFilterChange('salary_min', value[0])}
+        />
       </div>
-      {/* Posted Within Filter */}
-      <div className="space-y-2">
-        <Label>Posted Within</Label>
-        <Select
-          value={postedWithin?.toString() || ''}
-          onValueChange={(value: string) => {
-            const numValue = value ? parseInt(value, 10) : null;
-            setPostedWithin(numValue);
-          }}
+      
+      {/* Remote Only */}
+      <div className="flex items-center space-x-2">
+        <Checkbox 
+          id="is_remote" 
+          checked={filters.is_remote}
+          onCheckedChange={(checked) => handleFilterChange('is_remote', !!checked)}
+        />
+        <Label htmlFor="is_remote" className="cursor-pointer">Remote only</Label>
+      </div>
+      
+      {/* Featured Jobs */}
+      <div className="flex items-center space-x-2">
+        <Checkbox 
+          id="is_featured" 
+          checked={filters.is_featured}
+          onCheckedChange={(checked) => handleFilterChange('is_featured', !!checked)}
+        />
+        <Label htmlFor="is_featured" className="cursor-pointer">Featured jobs only</Label>
+      </div>
+      
+      {/* Filter Actions */}
+      <div className="pt-4 flex justify-end">
+        <Button
+          variant="outline"
+          onClick={handleReset}
+          className="mr-2"
         >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Any" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Any</SelectItem>
-            <SelectItem value="7">Last 7 days</SelectItem>
-            <SelectItem value="14">Last 14 days</SelectItem>
-            <SelectItem value="30">Last 30 days</SelectItem>
-          </SelectContent>
-        </Select>
+          Reset
+        </Button>
+        <Button onClick={() => onFilterChange(filters)}>
+          Apply Filters
+        </Button>
       </div>
-      <button
-        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-        onClick={applyFilters}
-      >
-        Apply Filters
-      </button>
     </div>
   );
 };

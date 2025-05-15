@@ -1,38 +1,37 @@
 
-import { User, Session } from '@supabase/supabase-js';
 import { UserProfile } from '@/types/user';
-import { JobApplication, ApplicationStatus } from '@/types/application';
+import { JobApplication } from '@/types/application';
+
+export interface JobApplicationInput {
+  job_id: string;
+  job_title: string;
+  company: string;
+  status: string;
+  applied_date: string;
+  contact_name?: string;
+  contact_email?: string;
+  next_step?: string;
+  next_step_date?: string;
+  notes?: string;
+}
 
 export interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: any | null;
   userProfile: UserProfile | null;
   loading: boolean;
-  isAuthenticated: boolean;
-  
-  // Authentication methods
-  signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string, userType?: string) => Promise<User | null>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ success?: boolean; error?: any }>;
-  signInWithGoogle: () => Promise<User | null>;
-  signInWithApple: () => Promise<User | null>;
-  
-  // Profile methods
-  updateProfile: (updates: Partial<UserProfile>) => Promise<any>;
-  fetchUserProfile: (userId: string) => Promise<void>;
-  refreshProfile: () => Promise<void>;
-  
-  // Application methods
-  createApplication: (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<any>;
-  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<any>;
-  updateApplication: (id: string, updates: Partial<JobApplication>) => Promise<any>; // Add missing method
-  getApplications: () => Promise<any[]>;
-  deleteApplication: (applicationId: string) => Promise<any>;
-  
-  // Job management methods
-  saveJob: (jobId: string) => Promise<void>;
-  unsaveJob: (jobId: string) => Promise<void>;
-  isSavedJob: (jobId: string) => Promise<boolean>;
-  getSavedJobs: () => Promise<string[]>;
+  signInWithGoogle?: () => Promise<any>;
+  signInWithApple?: () => Promise<any>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
+  refreshProfile?: () => Promise<void>;
+  createApplication: (application: JobApplicationInput) => Promise<void>;
+  updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
+  deleteApplication?: (id: string) => Promise<void>;
+  getApplications?: () => Promise<JobApplication[]>;
+  saveJob?: (jobId: string) => Promise<void>;
+  unsaveJob?: (jobId: string) => Promise<void>;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
+  resetPassword?: (email: string) => Promise<{ error: any }>;
 }

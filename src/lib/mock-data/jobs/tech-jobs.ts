@@ -1,4 +1,3 @@
-
 import { Job } from '../../../types/job';
 
 export const techJobs: Job[] = [
@@ -11,7 +10,7 @@ export const techJobs: Job[] = [
     location: {
       city: 'Jacksonville',
       state: 'FL',
-      zipCode: '32204',
+      zip: '32202'  // Changed from zipCode to zip
     },
     type: 'apprenticeship',
     payRate: {

@@ -1,9 +1,8 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import JobApplicationFlow from '../../JobApplicationFlow';
-import { AuthProvider } from '@/contexts/AuthContext';
+import JobApplicationFlow from '../JobApplicationFlow';
+import { AuthProvider } from '@/contexts/auth/AuthContext';
 import { toast } from 'sonner';
 import { Job } from '@/types/job';
 
@@ -16,7 +15,7 @@ vi.mock('sonner', () => ({
 }));
 
 // Mock useAuth hook
-vi.mock('@/contexts/AuthContext', () => ({
+vi.mock('@/contexts/auth/AuthContext', () => ({
   useAuth: vi.fn(() => ({
     user: { id: 'test-user-id', email: 'test@example.com' },
     createApplication: vi.fn().mockResolvedValue({}),
@@ -39,9 +38,9 @@ const mockJob: Job = {
     logoUrl: '/test-logo.png'
   },
   location: {
-    city: 'Test City',
-    state: 'TS',
-    zipCode: '12345'
+    city: 'Jacksonville',
+    state: 'FL',
+    zip: '32202'
   },
   description: 'This is a test job description',
   payRate: {
