@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
@@ -153,6 +152,7 @@ export const useUserManagement = () => {
     setFilteredUsers(filtered);
   };
 
+  // Handle view user details
   const handleViewUserDetails = (user: UserProfile) => {
     setSelectedUser(user);
     setShowUserDialog(true);

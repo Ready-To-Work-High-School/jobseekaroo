@@ -14,8 +14,6 @@ export const formatUserProfile = (data: any): UserProfile => {
     skills: data.skills || [],
     preferences: data.preferences || {},
     user_type: data.user_type,
-    redeemed_at: data.redeemed_at,
-    redeemed_code: data.redeemed_code,
     avatar_url: data.avatar_url,
     email: data.email,
     company_name: data.company_name,
@@ -26,6 +24,11 @@ export const formatUserProfile = (data: any): UserProfile => {
     resume_data_encrypted: data.resume_data_encrypted,
     contact_details_encrypted: data.contact_details_encrypted,
     created_at: data.created_at,
-    updated_at: data.updated_at
+    updated_at: data.updated_at,
+    redeemed_at: data.redeemed_at,
+    redeemed_code: data.redeemed_code,
+    accessibility_settings: data.accessibility_settings,
+    badges: data.badges,
+    student_badges: data.student_badges
   };
 };

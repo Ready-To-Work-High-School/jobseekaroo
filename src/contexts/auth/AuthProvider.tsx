@@ -202,7 +202,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       });
       if (error) throw error;
-      return data.user || null;
+      return null; // Return null as user data will be set by auth state change
     } catch (error) {
       console.error('Error signing in with Google:', error);
       throw error;
@@ -218,7 +218,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       });
       if (error) throw error;
-      return data.user || null;
+      return null; // Return null as user data will be set by auth state change
     } catch (error) {
       console.error('Error signing in with Apple:', error);
       throw error;
@@ -334,27 +334,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // Job management methods
-  const handleSaveJob = async (jobId: string) => {
+  const handleSaveJob = async (jobId: string): Promise<void> => {
     if (!user) throw new Error('User must be logged in to save jobs');
-    return saveJob(user.id, jobId);
+    await saveJob(user.id, jobId);
   };
 
-  const handleUnsaveJob = async (jobId: string) => {
+  const handleUnsaveJob = async (jobId: string): Promise<void> => {
     if (!user) throw new Error('User must be logged in to unsave jobs');
-    return unsaveJob(user.id, jobId);
+    await unsaveJob(user.id, jobId);
   };
 
-  const handleIsSavedJob = async (jobId: string) => {
+  const handleIsSavedJob = async (jobId: string): Promise<boolean> => {
     if (!user) return false;
     return isSavedJob(user.id, jobId);
   };
 
-  const handleGetSavedJobs = async () => {
+  const handleGetSavedJobs = async (): Promise<string[]> => {
     if (!user) return [];
     return getSavedJobs(user.id);
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     session,
     userProfile,

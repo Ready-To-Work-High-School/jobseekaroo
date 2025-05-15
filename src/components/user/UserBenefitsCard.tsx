@@ -65,6 +65,14 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
             { name: 'Analytics dashboard', active: false, locked: true }
           ];
         }
+      case 'teacher':
+        return [
+          { name: 'Student progress tracking', active: true },
+          { name: 'Career pathway management', active: true },
+          { name: 'Employer connection tools', active: true },
+          { name: 'Curriculum resources', active: true },
+          { name: 'Student assessment tools', active: true }
+        ];
       case 'admin':
         return [
           { name: 'Full platform administration', active: true },
@@ -73,14 +81,6 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           { name: 'Analytics dashboard', active: true },
           { name: 'System configuration', active: true },
           { name: 'Executive decision making', active: true }
-        ];
-      case 'teacher':
-        return [
-          { name: 'Student progress tracking', active: true },
-          { name: 'Career pathway management', active: true },
-          { name: 'Employer connection tools', active: true },
-          { name: 'Curriculum resources', active: true },
-          { name: 'Student assessment tools', active: true }
         ];
       default:
         return [
