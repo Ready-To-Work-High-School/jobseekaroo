@@ -2,7 +2,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, CheckCircle, XCircle, MessageCircle, HourglassIcon, Award, User, LogOut } from 'lucide-react';
-import { ApplicationStatus } from '@/types/job';
+import { ApplicationStatus } from '@/types/job.d';
 import { cn } from '@/lib/utils';
 
 interface ApplicationStatusBadgeProps {

@@ -1,169 +1,92 @@
 
 import { useState, useEffect } from 'react';
-import { User } from '@supabase/supabase-js';
-import { UserProfile, AccessibilitySettings } from '@/types/user';
+import { AccessibilitySettings } from '@/types/user';
 
-type UseAccessibilitySettingsProps = {
-  toast: any;
-  user: User | null;
-  userProfile: UserProfile | null;
-  updateProfile: (profile: any) => Promise<void>;
+const DEFAULT_SETTINGS: AccessibilitySettings = {
+  highContrast: false,
+  largeText: false,
+  reducedMotion: false,
+  dyslexicFont: false,
+  invertColors: false,
+  grayscale: false,
+  screenReaderOptimized: false,
 };
 
-export const useAccessibilitySettings = ({ toast, user, userProfile, updateProfile }: UseAccessibilitySettingsProps) => {
-  const defaultSettings: AccessibilitySettings = {
-    highContrast: false,
-    largeText: false,
-    reducedMotion: false,
-    screenReaderOptimized: false,
-  };
+const STORAGE_KEY = 'accessibility-settings';
 
-  const [settings, setSettings] = useState<AccessibilitySettings>(
-    userProfile?.accessibility_settings || defaultSettings
-  );
-  
-  const [fontSize, setFontSize] = useState<number>(
-    userProfile?.accessibility_settings?.largeText ? 1.2 : 1
-  );
+export const useAccessibilitySettings = () => {
+  const [settings, setSettings] = useState<AccessibilitySettings>(DEFAULT_SETTINGS);
 
-  // Update settings when userProfile changes
+  // Load settings from localStorage on mount
   useEffect(() => {
-    if (userProfile?.accessibility_settings) {
-      setSettings(userProfile.accessibility_settings);
-      setFontSize(userProfile.accessibility_settings.largeText ? 1.2 : 1);
+    try {
+      const savedSettings = localStorage.getItem(STORAGE_KEY);
+      if (savedSettings) {
+        setSettings(JSON.parse(savedSettings));
+      }
+    } catch (error) {
+      console.error('Error loading accessibility settings:', error);
     }
-  }, [userProfile]);
+  }, []);
 
-  // Update document CSS when settings change
+  // Apply CSS classes based on settings
   useEffect(() => {
     const html = document.documentElement;
     
-    // Apply high contrast
     if (settings.highContrast) {
       html.classList.add('high-contrast');
     } else {
       html.classList.remove('high-contrast');
     }
     
-    // Apply reduced motion
+    if (settings.largeText) {
+      html.classList.add('large-text');
+    } else {
+      html.classList.remove('large-text');
+    }
+    
     if (settings.reducedMotion) {
-      html.classList.add('reduce-motion');
+      html.classList.add('reduced-motion');
     } else {
-      html.classList.remove('reduce-motion');
+      html.classList.remove('reduced-motion');
     }
     
-    // Apply screen reader optimizations
+    if (settings.dyslexicFont) {
+      html.classList.add('dyslexic-font');
+    } else {
+      html.classList.remove('dyslexic-font');
+    }
+    
+    if (settings.invertColors) {
+      html.classList.add('invert-colors');
+    } else {
+      html.classList.remove('invert-colors');
+    }
+    
+    if (settings.grayscale) {
+      html.classList.add('grayscale-mode');
+    } else {
+      html.classList.remove('grayscale-mode');
+    }
+    
     if (settings.screenReaderOptimized) {
-      html.classList.add('screen-reader');
+      html.classList.add('screen-reader-optimized');
     } else {
-      html.classList.remove('screen-reader');
+      html.classList.remove('screen-reader-optimized');
     }
-    
-    // Apply font size
-    html.style.setProperty('--accessibility-font-scale', fontSize.toString());
-    
-  }, [settings, fontSize]);
+  }, [settings]);
 
-  const handleSettingChange = async (key: keyof AccessibilitySettings, value: boolean) => {
+  // Update a single setting
+  const updateSetting = (key: keyof AccessibilitySettings, value: boolean) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
     
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: newSettings
-        });
-        
-        toast({
-          title: "Settings updated",
-          description: "Your accessibility preferences have been saved.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to save your preferences. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if saving failed
-        setSettings(settings);
-      }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+    } catch (error) {
+      console.error('Error saving accessibility settings:', error);
     }
   };
 
-  const handleFontSizeChange = async (increase: boolean) => {
-    const newSize = increase ? 1.2 : 1;
-    setFontSize(newSize);
-    
-    const newSettings = { 
-      ...settings, 
-      largeText: increase 
-    };
-    
-    setSettings(newSettings);
-    
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: newSettings
-        });
-        
-        toast({
-          title: "Font size updated",
-          description: "Your font size preference has been saved.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to save your font size preference. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if saving failed
-        setFontSize(increase ? 1 : 1.2);
-        setSettings({
-          ...settings,
-          largeText: !increase
-        });
-      }
-    }
-  };
-
-  const resetSettings = async () => {
-    setSettings(defaultSettings);
-    setFontSize(1);
-    
-    if (user) {
-      try {
-        await updateProfile({
-          accessibility_settings: defaultSettings
-        });
-        
-        toast({
-          title: "Settings reset",
-          description: "Your accessibility preferences have been reset to defaults.",
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to reset your preferences. Please try again.",
-          variant: "destructive",
-        });
-        
-        // Revert changes if resetting failed
-        if (userProfile?.accessibility_settings) {
-          setSettings(userProfile.accessibility_settings);
-          setFontSize(userProfile.accessibility_settings.largeText ? 1.2 : 1);
-        }
-      }
-    }
-  };
-
-  return {
-    settings,
-    fontSize,
-    handleSettingChange,
-    handleFontSizeChange,
-    resetSettings
-  };
+  return { settings, updateSetting };
 };

@@ -1,8 +1,8 @@
+
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Check, ChevronsUpDown, Copy, ExternalLink, MoreVertical, Send, Trash2 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -33,7 +33,7 @@ import {
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { JobApplication, ApplicationStatus } from '@/types/job';
+import { JobApplication, ApplicationStatus } from '@/types/job.d';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateApplicationStatus } from '@/lib/supabase/queries';
 import ApplicationStatusBadge from './ApplicationStatusBadge';
@@ -47,19 +47,18 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, classNam
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   
-  const { mutate: updateStatusMutation, isLoading } = useMutation(
-    ({ id, status }: { id: string, status: ApplicationStatus }) => updateApplicationStatus(id, status),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['applications']);
-        toast.success('Application status updated successfully');
-      },
-      onError: (error: any) => {
-        console.error('Error updating application status:', error);
-        toast.error('Failed to update application status');
-      },
-    }
-  );
+  const { mutate: updateStatusMutation, isPending } = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: ApplicationStatus }) => 
+      updateApplicationStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] });
+      toast.success('Application status updated successfully');
+    },
+    onError: (error: any) => {
+      console.error('Error updating application status:', error);
+      toast.error('Failed to update application status');
+    },
+  });
 
   const updateStatus = (status: ApplicationStatus) => {
     updateStatusMutation({ id: application.id, status });

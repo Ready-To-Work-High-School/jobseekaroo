@@ -1,16 +1,25 @@
+import { JobSearchFilters } from './job';
 
-export interface UserBadge {
+export interface SavedSearch {
   id: string;
+  user_id: string;
   name: string;
-  earned_at?: string;
+  query?: string;
+  zipCode?: string;
+  radius?: number;
+  filters?: JobSearchFilters;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface AccessibilitySettings {
-  highContrast?: boolean;
-  largeText?: boolean;
-  screenReader?: boolean;
-  reducedMotion?: boolean;
-  dyslexicFont?: boolean;
+  highContrast: boolean;
+  largeText: boolean;
+  reducedMotion: boolean;
+  dyslexicFont: boolean;
+  invertColors: boolean;
+  grayscale: boolean;
+  screenReaderOptimized: boolean;
 }
 
 export interface UserProfile {

@@ -1,81 +1,54 @@
 
-// Job-related constants
-export const JOB_TYPES = [
-  'full-time',
-  'part-time',
-  'internship',
-  'volunteer',
-  'seasonal'
-];
-
-export const EXPERIENCE_LEVELS = [
-  'entry-level',
-  'mid-level',
-  'senior',
-  'internship'
-];
-
-export const PAY_PERIODS = [
-  'hourly',
-  'daily',
-  'weekly',
-  'biweekly',
-  'monthly',
-  'yearly'
-];
-
-// Categories for job searching
 export const categories = [
-  { value: 'healthcare', label: 'Healthcare' },
-  { value: 'retail', label: 'Retail' },
-  { value: 'technology', label: 'Technology' },
-  { value: 'office', label: 'Office' },
-  { value: 'trades', label: 'Trades' },
-  { value: 'food-service', label: 'Food Service' },
-  { value: 'education', label: 'Education' },
-  { value: 'customer-service', label: 'Customer Service' }
+  { label: "All Categories", value: "" },
+  { label: "Retail & Customer Service", value: "retail" },
+  { label: "Food & Restaurants", value: "food" },
+  { label: "Office & Administrative", value: "office" },
+  { label: "Healthcare", value: "healthcare" },
+  { label: "Education", value: "education" },
+  { label: "Hospitality & Tourism", value: "hospitality" },
+  { label: "Manufacturing & Warehouse", value: "manufacturing" },
+  { label: "Transportation", value: "transportation" },
+  { label: "Outdoor & Recreation", value: "outdoor" },
+  { label: "Art & Entertainment", value: "entertainment" },
+  { label: "Technology", value: "technology" },
+  { label: "Non-Profit", value: "nonprofit" },
+  { label: "Government", value: "government" },
 ];
 
-// Search-related constants
-export const SEARCH_RADIUS_OPTIONS = [
-  { value: 5, label: '5 miles' },
-  { value: 10, label: '10 miles' },
-  { value: 25, label: '25 miles' },
-  { value: 50, label: '50 miles' },
-  { value: 100, label: '100 miles' }
+export const jobTypes = [
+  { label: "All Types", value: "all" },
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Internship", value: "internship" },
+  { label: "Volunteer", value: "volunteer" },
+  { label: "Seasonal", value: "seasonal" },
+  { label: "Weekend", value: "weekend" },
+  { label: "Summer", value: "summer" },
 ];
 
-export const POSTED_WITHIN_OPTIONS = [
-  { value: 1, label: 'Last 24 hours' },
-  { value: 7, label: 'Last 7 days' },
-  { value: 14, label: 'Last 14 days' },
-  { value: 30, label: 'Last 30 days' },
-  { value: 90, label: 'Last 90 days' }
+export const experienceLevels = [
+  { label: "All Levels", value: "all" },
+  { label: "No Experience", value: "no-experience" },
+  { label: "Entry Level", value: "entry-level" },
+  { label: "Mid Level", value: "mid-level" },
+  { label: "Senior", value: "senior" },
 ];
 
-export const SORT_OPTIONS = [
-  { value: 'relevance', label: 'Relevance' },
-  { value: 'date', label: 'Most Recent' },
-  { value: 'salary', label: 'Highest Salary' },
-  { value: 'distance', label: 'Closest Distance' }
+export const datePostedOptions = [
+  { label: "Any Time", value: null },
+  { label: "Last 24 hours", value: 1 },
+  { label: "Last week", value: 7 },
+  { label: "Last 2 weeks", value: 14 },
+  { label: "Last month", value: 30 },
+  { label: "Last 3 months", value: 90 },
 ];
 
-// User types
-export const USER_TYPES = [
-  'student',
-  'employer',
-  'admin',
-  'teacher'
-];
-
-// Application status
-export const APPLICATION_STATUS = [
-  'applied',
-  'interviewing',
-  'rejected',
-  'accepted',
-  'pending',
-  'hired',
-  'withdrawn',
-  'offered'
+export const salaryRanges = [
+  { label: "Any", value: [0, 100000] },
+  { label: "Up to $25k", value: [0, 25000] },
+  { label: "$25k - $50k", value: [25000, 50000] },
+  { label: "$50k - $75k", value: [50000, 75000] },
+  { label: "$75k - $100k", value: [75000, 100000] },
+  { label: "$100k+", value: [100000, 500000] },
 ];
