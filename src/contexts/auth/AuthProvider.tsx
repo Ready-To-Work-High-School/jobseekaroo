@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -299,6 +298,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
   
+  const updateApplication = async (applicationId: string, updates: Partial<JobApplication>) => {
+    if (!user) throw new Error('User must be logged in to update an application');
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .update({ 
+          ...updates,
+          updated_at: new Date().toISOString() 
+        })
+        .match({ id: applicationId, user_id: user.id })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error updating application:', error);
+      throw error;
+    }
+  };
+  
   const getApplications = async () => {
     if (!user) return [];
     
@@ -374,6 +395,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Application management
     createApplication,
     updateApplicationStatus,
+    updateApplication,
     getApplications,
     deleteApplication,
     

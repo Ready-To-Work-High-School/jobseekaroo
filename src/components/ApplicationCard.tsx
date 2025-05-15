@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import ApplicationStatusBadge from './ApplicationStatusBadge';
-import { JobApplication, ApplicationStatus } from '@/types/job';
+import { JobApplication, ApplicationStatus } from '@/types/application';
 import { useAuth } from '@/contexts/AuthContext';
 
 import {
@@ -25,7 +25,7 @@ interface ApplicationCardProps {
 
 const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps) => {
   const [open, setOpen] = useState(false);
-  const { deleteApplication, updateApplication } = useAuth();
+  const { deleteApplication, updateApplicationStatus } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -48,7 +48,7 @@ const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps) => {
         title: "Application deleted",
         description: "The job application has been removed from tracking",
       });
-      queryClient.invalidateQueries({queryKey: ['applications']});
+      queryClient.invalidateQueries({ queryKey: ['applications'] });
       onUpdate();
     },
     onError: (error) => {
@@ -64,11 +64,11 @@ const ApplicationCard = ({ application, onUpdate }: ApplicationCardProps) => {
   // Status update mutation
   const statusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: ApplicationStatus }) => {
-      await updateApplication(id, { status });
+      await updateApplicationStatus(id, status);
     },
     onSuccess: () => {
       toast({ title: "Status updated" });
-      queryClient.invalidateQueries({queryKey: ['applications']});
+      queryClient.invalidateQueries({ queryKey: ['applications'] });
       onUpdate();
     },
     onError: (error) => {

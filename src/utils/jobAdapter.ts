@@ -10,7 +10,7 @@ export function normalizeJob(job: any): Job {
     // Handle company structure
     company: job.company || { 
       name: job.company_name || '',
-      logoUrl: job.logo_url
+      logoUrl: job.logo_url || job.logoUrl
     },
     // Handle location structure
     location: job.location || {
@@ -32,6 +32,7 @@ export function normalizeJob(job: any): Job {
     isFeatured: job.isFeatured !== undefined ? job.isFeatured : job.is_featured,
     isPremium: job.isPremium !== undefined ? job.isPremium : job.is_premium,
     experienceLevel: job.experienceLevel || job.experience_level,
+    type: job.type || job.job_type,
     requirements: job.requirements || [],
     created_at: job.created_at || new Date().toISOString(),
     updated_at: job.updated_at || new Date().toISOString()

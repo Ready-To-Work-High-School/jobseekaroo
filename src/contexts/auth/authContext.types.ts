@@ -26,6 +26,7 @@ export interface AuthContextType {
   // Application methods
   createApplication: (application: Omit<JobApplication, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<any>;
   updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  updateApplication: (id: string, updates: Partial<JobApplication>) => Promise<any>; // Add missing method
   getApplications: () => Promise<any[]>;
   deleteApplication: (applicationId: string) => Promise<any>;
   

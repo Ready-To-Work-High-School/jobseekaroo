@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { ApplicationStatus } from '@/types/job';
+import { ApplicationStatus } from '@/types/application';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;

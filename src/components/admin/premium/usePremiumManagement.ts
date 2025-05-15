@@ -1,96 +1,78 @@
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from 'react';
+import { supabase } from '@/lib/supabase';
 import { UserProfile } from '@/types/user';
+import { useToast } from '@/hooks/use-toast';
 
-export function usePremiumManagement() {
-  const [users, setUsers] = useState<UserProfile[]>([]);
-  const [loading, setLoading] = useState(true);
+export const usePremiumManagement = () => {
+  const [premiumUsers, setPremiumUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const fetchUsers = async () => {
+  const fetchPremiumUsers = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*');
-      
+        .from('premium_subscriptions')
+        .select(`
+          *,
+          user:profiles(*)
+        `)
+        .eq('status', 'active');
+
       if (error) throw error;
-      
-      setUsers(data || []);
+
+      // Transform data to match expected format
+      const formattedUsers = data
+        .filter(item => item.user)
+        .map(item => ({
+          ...item.user,
+          premium_status: 'active',
+          subscription_id: item.stripe_subscription_id,
+          subscription_plan: item.plan_type,
+          subscription_end: item.current_period_end
+        }));
+
+      setPremiumUsers(formattedUsers);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching premium users:', error);
       toast({
-        title: "Error fetching users",
-        description: "Could not load user data",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load premium users',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  const grantPremiumAccess = async (userId: string) => {
+  const cancelSubscription = useCallback(async (stripeSubscriptionId: string) => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ premium_status: 'active' })
-        .eq('id', userId);
-      
+      // Call your backend endpoint to cancel the subscription
+      const { data, error } = await supabase.functions.invoke('cancel-subscription', {
+        body: { subscriptionId: stripeSubscriptionId }
+      });
+
       if (error) throw error;
       
-      toast({
-        title: "Premium access granted",
-        description: "User has been granted premium access",
-      });
+      await fetchPremiumUsers(); // Refresh the list
       
-      // Refresh the user list
-      fetchUsers();
-      return true;
+      return data;
     } catch (error) {
-      console.error('Error granting premium access:', error);
+      console.error('Error cancelling subscription:', error);
       toast({
-        title: "Error",
-        description: "Could not grant premium access",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to cancel subscription',
+        variant: 'destructive',
       });
-      return false;
+      throw error;
     }
+  }, [fetchPremiumUsers, toast]);
+
+  return {
+    premiumUsers,
+    loading,
+    fetchPremiumUsers,
+    cancelSubscription
   };
-
-  const revokePremiumAccess = async (userId: string) => {
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ premium_status: null })
-        .eq('id', userId);
-      
-      if (error) throw error;
-      
-      toast({
-        title: "Premium access revoked",
-        description: "User's premium access has been revoked",
-      });
-      
-      // Refresh the user list
-      fetchUsers();
-      return true;
-    } catch (error) {
-      console.error('Error revoking premium access:', error);
-      toast({
-        title: "Error",
-        description: "Could not revoke premium access",
-        variant: "destructive",
-      });
-      return false;
-    }
-  };
-
-  // Initial fetch
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  return { users, loading, fetchUsers, grantPremiumAccess, revokePremiumAccess };
-}
+};
