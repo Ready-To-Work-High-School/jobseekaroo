@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserProfile } from '@/types/user';
@@ -104,6 +105,7 @@ export const useUserManagement = () => {
     if (userProfile?.redeemed_at) return "Your account has been upgraded with a redemption code";
     if (userProfile?.user_type === 'student') return "Upgrade to premium for exclusive student features";
     if (userProfile?.user_type === 'employer') return "Upgrade to premium for enhanced employer tools";
+    if (userProfile?.user_type === 'teacher') return "Upgrade to premium for enhanced teaching tools";
     return "Upgrade to premium for enhanced features";
   };
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -354,7 +355,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return getSavedJobs(user.id);
   };
 
-  const value: AuthContextType = {
+  const contextValue: AuthContextType = {
     user,
     session,
     userProfile,
@@ -383,5 +384,5 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     getSavedJobs: handleGetSavedJobs
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };

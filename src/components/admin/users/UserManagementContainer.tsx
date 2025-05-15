@@ -6,7 +6,9 @@ import UserManagementTable from '@/components/admin/UserManagementTable';
 import UserTypeStatistics from './UserTypeStatistics';
 import UserDetailDialog from './UserDetailDialog';
 import UserActionButtons from './UserActionButtons';
-import { useUserManagement } from '@/hooks/useUserManagement';
+
+// Import a specific hook for user management functionality
+import { useAdminUserManagement } from '@/hooks/useAdminUserManagement';
 
 const UserManagementContainer: React.FC = () => {
   const {
@@ -22,11 +24,11 @@ const UserManagementContainer: React.FC = () => {
     handleViewUserDetails,
     setShowUserDialog,
     exportUsers
-  } = useUserManagement();
+  } = useAdminUserManagement();
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   return (
     <div className="space-y-6">

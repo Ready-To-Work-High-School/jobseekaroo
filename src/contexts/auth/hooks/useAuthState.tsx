@@ -52,12 +52,16 @@ export const useAuthState = () => {
           contact_details_encrypted: data.contact_details_encrypted,
           created_at: data.created_at,
           updated_at: data.updated_at,
+          accessibility_settings: data.accessibility_settings,
           badges: Array.isArray(data.badges) 
-            ? data.badges.map(badge => ({ 
-                id: (badge as any).id || '',
-                name: (badge as any).name || '',
-                earned_at: (badge as any).earned_at
+            ? data.badges.map((badge: any) => ({ 
+                id: badge.id || '',
+                name: badge.name || '',
+                earned_at: badge.earned_at
               }))
+            : [],
+          student_badges: Array.isArray(data.student_badges) 
+            ? data.student_badges
             : []
         };
         
