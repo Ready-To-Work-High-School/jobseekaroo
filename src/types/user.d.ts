@@ -1,46 +1,32 @@
 
-import { UserType } from './auth';
+export type UserType = 'student' | 'employer' | 'admin' | 'teacher';
 
 export interface UserProfile {
   id: string;
-  user_id?: string;
+  email?: string;
   first_name?: string;
   last_name?: string;
-  email?: string;
   avatar_url?: string;
-  bio?: string;
-  job_title?: string;
+  user_type?: UserType;
   company_name?: string;
   company_website?: string;
-  location?: string;
-  skills?: string[];
-  user_type?: UserType;
   resume_url?: string;
-  resume_data_encrypted?: string;
-  contact_details_encrypted?: string;
+  bio?: string;
+  job_title?: string;
+  skills?: string[];
   badges?: any[];
   student_badges?: any[];
+  location?: string;
+  redeemed_code?: string;
+  redeemed_at?: string;
   employer_verification_status?: string;
   verification_notes?: string;
   preferences?: any;
-  redeemed_code?: string;
-  redeemed_at?: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface UserProfileUpdate {
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  avatar_url?: string;
-  bio?: string;
-  job_title?: string;
-  company_name?: string;
-  company_website?: string;
-  location?: string;
-  skills?: string[];
-  preferences?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+  premium_status?: string;
+  contact_details_encrypted?: string;
+  resume_data_encrypted?: string;
 }
 
 export interface SavedSearch {
@@ -49,15 +35,14 @@ export interface SavedSearch {
   query?: string;
   zipCode?: string;
   radius?: number;
-  filters?: Record<string, any>;
-  created_at?: string;
-  user_id?: string;
+  filters?: JobSearchFilters;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface AccessibilitySettings {
   highContrast: boolean;
   largeText: boolean;
-  reducedMotion: boolean;
+  reduceMotion: boolean;
   screenReaderOptimized: boolean;
-  dyslexicFont: boolean;
 }

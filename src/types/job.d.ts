@@ -24,20 +24,21 @@ export interface Job {
   isRemote?: boolean; // Support both formats temporarily during migration
   isFlexible?: boolean; // Support both formats temporarily during migration
   experienceLevel: ExperienceLevel;
-  experience_level: string;
+  experience_level?: string;
   payRate: {
     min: number;
     max: number;
     period: string;
   };
-  pay_rate_min: number;
-  pay_rate_max: number;
-  pay_rate_period: string;
+  pay_rate_min?: number;
+  pay_rate_max?: number;
+  pay_rate_period?: string;
   hours_per_week?: number;
   requirements: string[];
   is_featured?: boolean;
   isFeatured?: boolean; // Support both formats
   is_premium?: boolean;
+  isPremium?: boolean;
   is_teen_appropriate?: boolean;
   prohibited_types?: string[];
   created_at: string;
@@ -78,4 +79,3 @@ export interface JobApplication {
   created_at: string;
   updated_at: string;
 }
-
