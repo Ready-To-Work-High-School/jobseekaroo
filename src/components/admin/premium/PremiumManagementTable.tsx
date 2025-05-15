@@ -1,92 +1,77 @@
 
 import React from 'react';
-import { Check, X, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { UserProfile } from '@/types/user';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { formatDate } from '@/utils/format';
+import { Badge } from '@/components/ui/badge';
 
-interface PremiumManagementTableProps {
+export interface PremiumManagementTableProps {
   users: UserProfile[];
-  onGrantAccess: (userId: string) => void;
-  onRevokeAccess: (userId: string) => void;
+  onCancelSubscription: (user: UserProfile) => Promise<void>;
 }
 
-const PremiumManagementTable = ({ users, onGrantAccess, onRevokeAccess }: PremiumManagementTableProps) => {
+const PremiumManagementTable: React.FC<PremiumManagementTableProps> = ({ users, onCancelSubscription }) => {
+  const getStatusBadge = (status: string | undefined) => {
+    if (!status) return <Badge variant="outline">None</Badge>;
+    
+    switch (status.toLowerCase()) {
+      case 'active':
+        return <Badge variant="success">Active</Badge>;
+      case 'inactive':
+        return <Badge variant="secondary">Inactive</Badge>;
+      case 'trial':
+        return <Badge variant="warning">Trial</Badge>;
+      case 'cancelled':
+        return <Badge variant="destructive">Cancelled</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
   return (
-    <div className="overflow-x-auto">
+    <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>User</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>User Type</TableHead>
-            <TableHead>Premium Status</TableHead>
+            <TableHead>Subscription Status</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Join Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => {
-            const hasPremium = user.premium_status && 
-              !user.premium_status.includes('Free') && 
-              !user.premium_status.includes('cancelled');
-            
-            return (
+          {users.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
+                No premium users found
+              </TableCell>
+            </TableRow>
+          ) : (
+            users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">
                   {user.first_name} {user.last_name}
                 </TableCell>
-                <TableCell>{user.email || 'N/A'}</TableCell>
-                <TableCell>
-                  {user.user_type === 'admin' ? (
-                    <Badge variant="destructive">Admin</Badge>
-                  ) : user.user_type === 'employer' ? (
-                    <Badge variant="default">Employer</Badge>
-                  ) : user.user_type === 'student' ? (
-                    <Badge variant="secondary">Student</Badge>
-                  ) : user.user_type === 'teacher' ? (
-                    <Badge variant="outline">Teacher</Badge>
-                  ) : user.user_type === 'school' ? (
-                    <Badge variant="outline" className="bg-purple-100 text-purple-800">School</Badge>
-                  ) : (
-                    <Badge variant="outline">Unknown</Badge>
-                  )}
-                </TableCell>
-                <TableCell>
-                  {hasPremium ? (
-                    <Badge variant="success" className="flex items-center gap-1">
-                      <Sparkles className="h-3 w-3" /> {user.premium_status}
-                    </Badge>
-                  ) : (
-                    <span className="text-muted-foreground">{user.premium_status || 'Free'}</span>
-                  )}
-                </TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{getStatusBadge(user.premium_status)}</TableCell>
+                <TableCell>{user.user_type}</TableCell>
+                <TableCell>{formatDate(user.created_at)}</TableCell>
                 <TableCell className="text-right">
-                  {hasPremium ? (
-                    <Button 
-                      variant="destructive" 
-                      size="sm" 
-                      onClick={() => onRevokeAccess(user.id)}
-                      className="inline-flex items-center"
-                    >
-                      <X className="h-4 w-4 mr-1" />
-                      Revoke
-                    </Button>
-                  ) : (
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      onClick={() => onGrantAccess(user.id)}
-                      className="inline-flex items-center"
-                    >
-                      <Check className="h-4 w-4 mr-1" />
-                      Grant
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onCancelSubscription(user)}
+                    disabled={!user.premium_status || user.premium_status.toLowerCase() === 'cancelled'}
+                  >
+                    Cancel Subscription
+                  </Button>
                 </TableCell>
               </TableRow>
-            );
-          })}
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

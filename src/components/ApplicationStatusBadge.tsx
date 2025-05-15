@@ -36,6 +36,10 @@ const ApplicationStatusBadge = ({ status, size = 'default' }: ApplicationStatusB
       variant = 'info';
       label = 'offered';
       break;
+    case 'offer received':
+      variant = 'info';
+      label = 'offer received';
+      break;
     case 'hired':
       variant = 'success';
       label = 'hired';

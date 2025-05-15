@@ -16,7 +16,17 @@ export interface UserProfile {
   premium_status?: string;
   created_at: string;
   updated_at: string;
-  preferences: Record<string, any>;
+  preferences: {
+    theme?: 'light' | 'dark' | 'system';
+    notifications?: boolean;
+    hasPremium?: boolean;
+    accessibility_settings?: {
+      fontSize?: 'small' | 'medium' | 'large';
+      highContrast?: boolean;
+      reduceMotion?: boolean;
+    };
+  };
+  contact_details_encrypted?: string;
 }
 
 export interface AdminUser {
@@ -32,4 +42,14 @@ export interface AdminUser {
   redeemed_code?: string;
   redeemed_at?: string;
   premium_status?: string;
+}
+
+export interface SavedSearch {
+  id: string;
+  user_id: string;
+  name: string;
+  query: string;
+  filters: JobSearchFilters;
+  created_at: string;
+  updated_at?: string;
 }

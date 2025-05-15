@@ -1,179 +1,110 @@
 import React, { useState } from 'react';
-import { UserProfile } from '@/types/user';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/auth';
-import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/supabase';
-import UserBenefitsCard from '@/components/user/UserBenefitsCard';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AlertTriangle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface BenefitsTabContentProps {
-  userProfile: UserProfile;
+  userProfile: any;
+  onRedeemCode: (code: string) => Promise<void>;
 }
 
-const BenefitsTabContent: React.FC<BenefitsTabContentProps> = ({ userProfile }) => {
-  const [redemptionCode, setRedemptionCode] = useState('');
-  const [isRedeeming, setIsRedeeming] = useState(false);
-  const [showRedeemForm, setShowRedeemForm] = useState(false);
-  const { refreshProfile } = useAuth();
+const BenefitsTabContent = ({ userProfile, onRedeemCode }: BenefitsTabContentProps) => {
+  const [code, setCode] = useState('');
   const { toast } = useToast();
-
-  const handleRedeemCode = async (e: React.FormEvent) => {
+  const { user } = useAuth();
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  
+  const handleRedeem = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!redemptionCode.trim()) {
+    if (!code) {
       toast({
-        title: 'Error',
-        description: 'Please enter a valid redemption code',
-        variant: 'destructive',
+        title: "Error",
+        description: "Please enter a code to redeem.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "You must be logged in to redeem a code.",
+        variant: "destructive"
       });
       return;
     }
     
     setIsRedeeming(true);
     
+    toast({
+      title: "Processing code...",
+      description: "Please wait while we verify your code.",
+      variant: "default" // Changed from "warning" to "default"
+    });
+    
     try {
-      // Check if the code exists and is valid
-      const { data: codeData, error: codeError } = await supabase
-        .from('redemption_codes')
-        .select('*')
-        .eq('code', redemptionCode)
-        .eq('used', false)
-        .single();
-      
-      if (codeError || !codeData) {
-        toast({
-          title: 'Invalid code',
-          description: 'The code you entered is invalid or has already been used',
-          variant: 'destructive',
-        });
-        return;
-      }
-      
-      // Update the user's profile
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          redeemed_at: new Date().toISOString(),
-          redeemed_code: redemptionCode
-        })
-        .eq('id', userProfile.id);
-      
-      if (updateError) throw updateError;
-      
-      // Mark the code as used
-      const { error: markUsedError } = await supabase
-        .from('redemption_codes')
-        .update({
-          used: true,
-          used_by: userProfile.id,
-          used_at: new Date().toISOString()
-        })
-        .eq('id', codeData.id);
-      
-      if (markUsedError) throw markUsedError;
-      
-      // Show success message
+      await onRedeemCode(code);
       toast({
-        title: 'Success!',
-        description: 'Your account has been activated successfully',
-        variant: 'default',
+        title: "Success",
+        description: "Code redeemed successfully!",
       });
-      
-      // Refresh the user profile
-      await refreshProfile();
-      
-      // Hide the form
-      setShowRedeemForm(false);
-      
-    } catch (error) {
-      console.error('Error redeeming code:', error);
+    } catch (error: any) {
+      console.error("Redeem code error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to redeem code. Please try again later.',
-        variant: 'destructive',
+        title: "Error",
+        description: error.message || "Failed to redeem code. Please try again.",
+        variant: "destructive"
       });
     } finally {
       setIsRedeeming(false);
     }
   };
-
-  const handleShowRedeemForm = () => {
-    setShowRedeemForm(true);
-  };
   
-  // User already has a redeemed code
-  const isAccountActivated = !!userProfile?.redeemed_at;
-  
-  // Only students need to redeem codes
-  const showRedeemOption = ['student', 'teacher'].includes(userProfile.user_type || '') && !isAccountActivated;
-
   return (
-    <div className="space-y-6">
-      <UserBenefitsCard 
-        userProfile={userProfile} 
-        showRedeemButton={showRedeemOption && !showRedeemForm}
-        onRedeemClick={handleShowRedeemForm}
-      />
-      
-      {showRedeemOption && showRedeemForm && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Redeem Activation Code</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {!isAccountActivated && (
-              <Alert 
-                variant="default"
-                className="bg-amber-50 border-amber-200 text-amber-700"
-              >
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Account Not Activated</AlertTitle>
-                <AlertDescription>
-                  Enter your activation code below to unlock all features.
-                </AlertDescription>
-              </Alert>
-            )}
-            <form onSubmit={handleRedeemCode}>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="redemption-code">Activation Code</Label>
-                  <Input
-                    id="redemption-code"
-                    placeholder="Enter your code"
-                    value={redemptionCode}
-                    onChange={(e) => setRedemptionCode(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-end space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowRedeemForm(false)}
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Benefits</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="redeem-code">Redeem Code</Label>
+          <form onSubmit={handleRedeem} className="flex items-center space-x-2">
+            <Input
+              id="redeem-code"
+              placeholder="Enter your code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
               disabled={isRedeeming}
-            >
-              Cancel
+            />
+            <Button type="submit" disabled={isRedeeming}>
+              {isRedeeming ? "Redeeming..." : "Redeem"}
             </Button>
-            <Button 
-              type="submit"
-              onClick={handleRedeemCode}
-              disabled={isRedeeming}
-            >
-              {isRedeeming ? 'Processing...' : 'Activate Account'}
-            </Button>
-          </CardFooter>
-        </Card>
-      )}
-      
-      {/* Premium features section if needed */}
-    </div>
+          </form>
+        </div>
+        
+        {userProfile?.premium_status && (
+          <div className="border rounded-md p-4 bg-green-50 border-green-200">
+            <h3 className="font-medium text-green-800">Premium Subscription</h3>
+            <p className="text-sm text-green-700">
+              You have an active premium subscription. Enjoy exclusive benefits!
+            </p>
+          </div>
+        )}
+        
+        {!userProfile?.premium_status && (
+          <div className="border rounded-md p-4 bg-gray-50 border-gray-200">
+            <h3 className="font-medium text-gray-800">Unlock Premium Features</h3>
+            <p className="text-sm text-gray-700">
+              Redeem a code to unlock premium features and benefits.
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

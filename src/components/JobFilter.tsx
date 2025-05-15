@@ -12,10 +12,11 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { JobSearchFilters } from '@/types/job';
 import { JobType, ExperienceLevel } from '@/types/job';
+import { formatCurrency } from '@/utils/format';
 
 // Define props interface
 interface JobFilterProps {
-  onFilterChange: (filters: JobSearchFilters) => void;
+  onFilterChange: (filters: any) => void;
   className?: string;
 }
 
@@ -98,7 +99,7 @@ const JobFilter: React.FC<JobFilterProps> = ({
   const experienceLevelOptions: ExperienceLevel[] = ['entry-level', 'mid-level', 'senior', 'internship', 'no-experience', 'some-experience'];
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-6 p-4 ${className}`}>
       <div>
         <Label htmlFor="zipCode">Zip Code</Label>
         <input
@@ -157,22 +158,33 @@ const JobFilter: React.FC<JobFilterProps> = ({
         <Switch id="isFlexible" onCheckedChange={handleIsFlexibleChange} />
         <Label htmlFor="isFlexible">Flexible</Label>
       </div>
-      <div>
-        <Label>Salary Range</Label>
-        <Slider
-          defaultValue={salaryRange}
-          max={200000}
-          step={1000}
-          values={salaryRange}
-          onValueChange={handleSalaryRangeChange}
-        />
-        <p className="text-sm text-muted-foreground">
-          ${salaryRange[0]} - ${salaryRange[1]}
-        </p>
+      {/* Salary Range Filter */}
+      <div className="space-y-2">
+        <Label htmlFor="salary-range">Salary Range</Label>
+        <div className="pt-6 pb-2">
+          <Slider
+            defaultValue={salaryRange}
+            max={100000}
+            step={1000}
+            value={salaryRange}
+            onValueChange={(value: number[]) => setSalaryRange(value)}
+          />
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-sm text-muted-foreground">{formatCurrency(salaryRange[0])}</span>
+            <span className="text-sm text-muted-foreground">{formatCurrency(salaryRange[1])}</span>
+          </div>
+        </div>
       </div>
-      <div>
+      {/* Posted Within Filter */}
+      <div className="space-y-2">
         <Label>Posted Within</Label>
-        <Select onValueChange={handlePostedWithinChange}>
+        <Select
+          value={postedWithin?.toString() || ''}
+          onValueChange={(value: string) => {
+            const numValue = value ? parseInt(value, 10) : null;
+            setPostedWithin(numValue);
+          }}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Any" />
           </SelectTrigger>
