@@ -1,76 +1,94 @@
 
-import { Badge } from "@/components/ui/badge";
-import { ApplicationStatus } from "@/types/application";
+import { ApplicationStatus } from '@/types/application';
+import { cn } from '@/lib/utils';
+import { 
+  Clock, 
+  CalendarRange, 
+  CheckCircle, 
+  ThumbsUp, 
+  XCircle, 
+  XOctagon,
+  Search
+} from 'lucide-react';
+import { Badge } from './ui/badge';
+import { validateApplicationStatus } from '@/lib/supabase/utils';
 
 interface ApplicationStatusBadgeProps {
   status: ApplicationStatus;
+  className?: string;
+  large?: boolean;
 }
 
-const ApplicationStatusBadge = ({ status }: ApplicationStatusBadgeProps) => {
-  switch (status) {
-    case "applied":
-      return (
-        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">
-          Applied
-        </Badge>
-      );
+export const ApplicationStatusBadge = ({ status, className, large = false }: ApplicationStatusBadgeProps) => {
+  // Make sure we're dealing with a valid status
+  const validStatus = validateApplicationStatus(status);
+  
+  const getStatusConfig = (status: ApplicationStatus) => {
+    switch (status) {
+      case 'applied':
+        return {
+          icon: Clock,
+          label: 'Applied',
+          variant: 'secondary' as const,
+        };
+      case 'interviewing':
+        return {
+          icon: CalendarRange,
+          label: 'Interviewing',
+          variant: 'default' as const,
+        };
+      case 'offered':
+        return {
+          icon: ThumbsUp,
+          label: 'Offered',
+          variant: 'default' as const,
+        };
+      case 'accepted':
+        return {
+          icon: CheckCircle,
+          label: 'Accepted',
+          variant: 'default' as const,
+        };
+      case 'rejected':
+        return {
+          icon: XCircle,
+          label: 'Rejected',
+          variant: 'outline' as const,
+        };
+      case 'withdrawn':
+        return {
+          icon: XOctagon,
+          label: 'Withdrawn',
+          variant: 'outline' as const,
+        };
+      default:
+        return {
+          icon: Clock,
+          label: 'Unknown',
+          variant: 'secondary' as const,
+        };
+    }
+  };
 
-    case "interviewing":
-      return (
-        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">
-          Interviewing
-        </Badge>
-      );
+  const { icon: Icon, label, variant } = getStatusConfig(validStatus);
 
-    case "rejected":
-      return (
-        <Badge className="bg-red-100 text-red-800 hover:bg-red-200">
-          Rejected
-        </Badge>
-      );
-
-    case "accepted":
-      return (
-        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
-          Accepted
-        </Badge>
-      );
-
-    case "withdrawn":
-      return (
-        <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">
-          Withdrawn
-        </Badge>
-      );
-
-    case "offered":
-      return (
-        <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200">
-          Offer Received
-        </Badge>
-      );
-
-    case "hired":
-      return (
-        <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
-          Hired
-        </Badge>
-      );
-
-    case "pending":
-      return (
-        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-          Pending
-        </Badge>
-      );
-
-    default:
-      return (
-        <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200">
-          {status}
-        </Badge>
-      );
-  }
+  return (
+    <Badge 
+      variant={variant} 
+      className={cn(
+        "gap-1 font-medium flex items-center",
+        status === 'applied' && "bg-secondary text-secondary-foreground",
+        status === 'interviewing' && "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
+        status === 'offered' && "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100",
+        status === 'accepted' && "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
+        status === 'rejected' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
+        status === 'withdrawn' && "bg-neutral-100 text-neutral-800 border-neutral-200 hover:bg-neutral-100",
+        large && "text-sm px-3 py-1",
+        className
+      )}
+    >
+      <Icon className={cn("h-3 w-3", large && "h-4 w-4")} />
+      {label}
+    </Badge>
+  );
 };
-
-export default ApplicationStatusBadge;

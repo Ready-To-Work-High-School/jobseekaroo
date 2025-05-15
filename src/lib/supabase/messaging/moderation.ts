@@ -28,7 +28,7 @@ export const fetchMessagesForModeration = async (): Promise<ModerationMessage[]>
   }
   
   try {
-    const { data: messagesData, error } = await supabase
+    const { data, error } = await supabase
       .from('messages_for_moderation_view')
       .select('*')
       .is('is_approved', null)
@@ -40,60 +40,17 @@ export const fetchMessagesForModeration = async (): Promise<ModerationMessage[]>
       throw error;
     }
     
-    // Add default is_read property
-    const messagesWithIsRead = messagesData.map(msg => ({
+    // Add is_read property to make TypeScript happy
+    const messagesWithIsRead = (data || []).map(msg => ({
       ...msg,
       is_read: false // Default value since we don't use it for moderation
     }));
     
-    // Create a list of user IDs to fetch profiles for
-    const userIds = new Set<string>();
-    messagesWithIsRead.forEach(msg => {
-      if (msg.sender_id) userIds.add(msg.sender_id);
-      if (msg.receiver_id) userIds.add(msg.receiver_id);
-    });
-    
-    // Fetch user profiles for these IDs
-    const { data: profilesData, error: profilesError } = await supabase
-      .from('profiles')
-      .select('id, first_name, last_name, avatar_url')
-      .in('id', Array.from(userIds));
-    
-    if (profilesError) {
-      console.error('Error fetching user profiles:', profilesError);
-    }
-    
-    // Create a map of user IDs to names and avatars
-    const userProfiles = new Map<string, { name: string, avatar?: string }>();
-    if (profilesData) {
-      profilesData.forEach(profile => {
-        const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Unknown User';
-        userProfiles.set(profile.id, { 
-          name, 
-          avatar: profile.avatar_url || undefined
-        });
-      });
-    }
-    
-    // Enhance the messages with profile information
-    const enhancedMessages: ModerationMessage[] = messagesWithIsRead.map(msg => {
-      const senderProfile = userProfiles.get(msg.sender_id);
-      const receiverProfile = userProfiles.get(msg.receiver_id);
-      
-      return {
-        ...msg,
-        sender_name: senderProfile?.name || 'Unknown User',
-        sender_avatar: senderProfile?.avatar,
-        receiver_name: receiverProfile?.name || 'Unknown User',
-        receiver_avatar: receiverProfile?.avatar
-      };
-    });
-    
     // Update cache
-    cache.data = enhancedMessages;
+    cache.data = messagesWithIsRead;
     cache.timestamp = now;
     
-    return enhancedMessages;
+    return messagesWithIsRead;
   } catch (error) {
     console.error('Error in fetchMessagesForModeration:', error);
     // If we have stale cache data, return it as fallback

@@ -8,12 +8,12 @@ import PostingsTab from './PostingsTab';
 import ApplicantsTab from './ApplicantsTab';
 import SettingsTab from './SettingsTab';
 import AnalyticsTab from './AnalyticsTab';
+import CreateJobTab from './CreateJobTab';
 import FreemiumInfoCard from './FreemiumInfoCard';
 import PremiumFeaturesBanner from './PremiumFeaturesBanner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
 
 interface JobPosting {
   id: string;
@@ -33,7 +33,6 @@ interface DashboardTabsProps {
 const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
   const isMobile = useIsMobile();
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   // Define fetchJobs as a stable callback function
   const fetchJobs = useCallback(async () => {
@@ -77,10 +76,6 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
     refetchOnWindowFocus: false,
   });
 
-  const handleCreateJobClick = () => {
-    navigate('/post-job');
-  };
-
   return (
     <>
       <FreemiumInfoCard />
@@ -106,11 +101,9 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
               <span>Settings</span>
             </TabsTrigger>
             {!isMobile && (
-              <TabsTrigger asChild value="create" className="hidden md:flex gap-2">
-                <Link to="/post-job">
-                  <PlusCircle className="h-4 w-4" />
-                  <span>Create Job</span>
-                </Link>
+              <TabsTrigger value="create" className="hidden md:flex gap-2">
+                <PlusCircle className="h-4 w-4" />
+                <span>Create Job</span>
               </TabsTrigger>
             )}
           </TabsList>
@@ -134,11 +127,15 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
           <TabsContent value="settings">
             <SettingsTab />
           </TabsContent>
+            
+          <TabsContent value="create">
+            <CreateJobTab setActiveTab={setActiveTab} />
+          </TabsContent>
         </Tabs>
             
         {isMobile && activeTab !== 'create' && (
           <Button 
-            onClick={handleCreateJobClick}
+            onClick={() => setActiveTab('create')}
             className="fixed right-4 bottom-4 z-10 shadow-lg rounded-full h-14 w-14 p-0"
           >
             <PlusCircle className="h-6 w-6" />

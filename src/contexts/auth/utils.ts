@@ -1,7 +1,7 @@
 
 import { UserProfile } from '@/types/user';
 
-export const formatUserProfile = (data: any): UserProfile | null => {
+export const formatUserProfile = (data: any): UserProfile => {
   if (!data) return null;
   
   return {
@@ -14,6 +14,8 @@ export const formatUserProfile = (data: any): UserProfile | null => {
     skills: data.skills || [],
     preferences: data.preferences || {},
     user_type: data.user_type,
+    redeemed_at: data.redeemed_at,
+    redeemed_code: data.redeemed_code,
     avatar_url: data.avatar_url,
     email: data.email,
     company_name: data.company_name,
@@ -24,9 +26,6 @@ export const formatUserProfile = (data: any): UserProfile | null => {
     resume_data_encrypted: data.resume_data_encrypted,
     contact_details_encrypted: data.contact_details_encrypted,
     created_at: data.created_at,
-    updated_at: data.updated_at,
-    redeemed_at: data.redeemed_at,
-    redeemed_code: data.redeemed_code,
-    accessibility_settings: data.accessibility_settings
+    updated_at: data.updated_at
   };
 };

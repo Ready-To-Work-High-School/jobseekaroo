@@ -1,14 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import AppHeader from './app/AppHeader';
 import Footer from './layout/Footer';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
 import MobileBottomNav from './mobile/MobileBottomNav';
 import { motion } from 'framer-motion';
-import WhatYouGetCTA from './auth/WhatYouGetCTA'; 
-import Navbar from './navbar/Navbar'; // Keep only one navbar import
+import WhatYouGetCTA from './auth/WhatYouGetCTA'; // Import the CTA component
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,10 +21,14 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const isHomePage = location.pathname === '/';
   const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
   
+  useEffect(() => {
+    console.log("Layout mounted with pathname:", location.pathname);
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
       <ErrorBoundary>
-        <Navbar />
+        <AppHeader />
       </ErrorBoundary>
       
       <motion.main 

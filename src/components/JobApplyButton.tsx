@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Job } from '@/types/job';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useQualificationMatch } from '@/hooks/useQualificationMatch';
 import {
@@ -21,20 +21,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Clipboard, ListTodo } from 'lucide-react';
-import { normalizeJob } from '@/utils/jobAdapter';
 
 interface JobApplyButtonProps {
   job: Job;
 }
 
 export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
-  const normalizedJob = normalizeJob(job);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user, userProfile, createApplication } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { matchClass } = useQualificationMatch(normalizedJob);
+  const { matchClass } = useQualificationMatch(job);
   
   const handleApplyAndTrack = async () => {
     if (!user) {
@@ -53,12 +51,13 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     
     try {
       await createApplication({
-        job_id: normalizedJob.id,
-        job_title: normalizedJob.title,
-        company: normalizedJob.company.name,
+        job_id: job.id,
+        job_title: job.title,
+        company: job.company.name,
         status: 'applied',
         applied_date: new Date().toISOString().substring(0, 10),
-        notes: `Applied for ${normalizedJob.title} at ${normalizedJob.company.name}. Pay range: $${normalizedJob.payRate.min}-$${normalizedJob.payRate.max} ${normalizedJob.payRate.period}.`
+        notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
+        resume_url: userProfile?.resume_url || undefined
       });
       
       setShowSuccessDialog(true);
@@ -117,7 +116,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
           <DialogHeader>
             <DialogTitle>Application Submitted!</DialogTitle>
             <DialogDescription>
-              Your application for the {normalizedJob.title} position at {normalizedJob.company.name} has been successfully submitted.
+              Your application for the {job.title} position at {job.company.name} has been successfully submitted.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
@@ -153,5 +152,3 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     </>
   );
 };
-
-export default JobApplyButton;

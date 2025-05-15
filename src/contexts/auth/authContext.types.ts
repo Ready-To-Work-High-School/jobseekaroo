@@ -1,37 +1,36 @@
 
-import { UserProfile } from '@/types/user';
-import { JobApplication } from '@/types/application';
-
-export interface JobApplicationInput {
-  job_id: string;
-  job_title: string;
-  company: string;
-  status: string;
-  applied_date: string;
-  contact_name?: string;
-  contact_email?: string;
-  next_step?: string;
-  next_step_date?: string;
-  notes?: string;
-}
+import { User } from '@supabase/supabase-js';
+import { UserProfile, UserProfileUpdate } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
 
 export interface AuthContextType {
-  user: any | null;
+  user: User | null;
   userProfile: UserProfile | null;
-  loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
+  isLoading: boolean;
+  error: Error | null;
+  signIn: (email: string, password: string) => Promise<User | null>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
   signOut: () => Promise<void>;
-  signInWithGoogle?: () => Promise<any>;
-  signInWithApple?: () => Promise<any>;
-  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
-  refreshProfile?: () => Promise<void>;
-  createApplication: (application: JobApplicationInput) => Promise<void>;
-  updateApplication: (id: string, data: Partial<JobApplication>) => Promise<void>;
+  signInWithGoogle: () => Promise<User | null>;
+  signInWithApple: () => Promise<User | null>;
+  updateProfile: (profileData: UserProfileUpdate) => Promise<UserProfile | null>;
+  refreshProfile: () => Promise<void>;
+  makeAdmin: (userId: string) => Promise<void>;
+  verifyEmployer: (userId: string, status: 'approved' | 'rejected', notes?: string) => Promise<void>;
+  redeemCode: (code: string) => Promise<any>;
+  submitApplication: (jobId: string, data: any) => Promise<void>;
+  
+  // Fix the return types to match the actual implementation
   deleteApplication?: (id: string) => Promise<void>;
-  getApplications?: () => Promise<JobApplication[]>;
+  getSavedJobs?: () => Promise<any[]>;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
+  getApplications?: () => Promise<any[]>;
+  
+  // Add any additional job or application methods here
   saveJob?: (jobId: string) => Promise<void>;
   unsaveJob?: (jobId: string) => Promise<void>;
-  isSavedJob?: (jobId: string) => Promise<boolean>;
-  resetPassword?: (email: string) => Promise<{ error: any }>;
+  createJob?: (jobData: any) => Promise<any>;
+  updateJob?: (jobId: string, jobData: any) => Promise<any>;
+  createApplication?: (applicationData: any) => Promise<any>;
+  updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
 }

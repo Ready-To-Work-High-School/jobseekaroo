@@ -1,107 +1,80 @@
 
-import { Badge } from "@/components/ui/badge";
-import { 
-  Briefcase, 
-  Clock, 
-  MapPin, 
-  CreditCard, 
-  Calendar, 
-  Zap, 
-  Laptop,
-  Building
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Job } from "@/types/job";
+import { Job } from '@/types/job';
 
-interface JobDetailBadgesProps {
-  job: Job;
+interface BadgeProps {
+  children: React.ReactNode;
+  icon: string;
   className?: string;
 }
 
-const JobDetailBadges = ({ job, className }: JobDetailBadgesProps) => {
-  const { job_type, experience_level, location, is_remote, pay_rate_min, pay_rate_max, pay_rate_period, hours_per_week, is_flexible } = job;
+const Badge = ({ children, icon, className }: BadgeProps) => (
+  <div className={`inline-flex items-center px-3 py-1.5 rounded-md bg-secondary text-sm font-medium ${className}`}>
+    <span className="mr-1.5 text-current opacity-70">
+      {icon === 'location' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      )}
+      {icon === 'dollar' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" x2="12" y1="2" y2="22" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      )}
+      {icon === 'clock' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      )}
+      {icon === 'laptop' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16" />
+        </svg>
+      )}
+      {icon === 'calendar' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 2v4" />
+          <path d="M16 2v4" />
+          <rect width="18" height="18" x="3" y="4" rx="2" />
+          <path d="M3 10h18" />
+        </svg>
+      )}
+    </span>
+    {children}
+  </div>
+);
 
+interface JobDetailBadgesProps {
+  job: Job;
+  formatPayRange: (min: number, max: number, period: string) => string;
+}
+
+export const JobDetailBadges = ({ job, formatPayRange }: JobDetailBadgesProps) => {
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      {/* Job Type Badge */}
-      <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-        <span className="bg-primary/10 p-1 rounded-md">
-          <Briefcase className="h-3.5 w-3.5 text-primary" />
-        </span>
-        <span className="text-xs capitalize">{job_type}</span>
+    <div className="flex flex-wrap gap-3">
+      <Badge icon="location">
+        {job.location.city}, {job.location.state} {job.location.zipCode}
       </Badge>
-
-      {/* Experience Level Badge */}
-      {experience_level && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <Calendar className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs capitalize">{experience_level}</span>
-        </Badge>
-      )}
-
-      {/* Location Badge */}
-      {location && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <MapPin className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">
-            {is_remote ? "Remote" : `${location.city}, ${location.state}`}
-          </span>
-        </Badge>
-      )}
-
-      {/* Pay Rate Badge */}
-      {pay_rate_min && pay_rate_max && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <CreditCard className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">
-            ${pay_rate_min} - ${pay_rate_max}/{pay_rate_period}
-          </span>
-        </Badge>
-      )}
-
-      {/* Hours Badge */}
-      {hours_per_week && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <Clock className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">{hours_per_week} hrs/week</span>
+      
+      <Badge icon="dollar">
+        {formatPayRange(job.payRate.min, job.payRate.max, job.payRate.period)}
+      </Badge>
+      
+      <Badge icon="clock" className="capitalize">
+        {job.type.replace('-', ' ')}
+      </Badge>
+      
+      {job.isRemote && (
+        <Badge icon="laptop" className="bg-primary/10 text-primary">
+          Remote
         </Badge>
       )}
       
-      {/* Flexible Schedule Badge */}
-      {is_flexible && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <Zap className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">Flexible Schedule</span>
-        </Badge>
-      )}
-      
-      {/* Remote Badge */}
-      {is_remote && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <Laptop className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">Remote</span>
-        </Badge>
-      )}
-
-      {/* Company Badge */}
-      {job.company_name && (
-        <Badge variant="outline" className="flex gap-1 items-center py-1.5 pl-1 pr-3">
-          <span className="bg-primary/10 p-1 rounded-md">
-            <Building className="h-3.5 w-3.5 text-primary" />
-          </span>
-          <span className="text-xs">{job.company_name}</span>
+      {job.isFlexible && (
+        <Badge icon="calendar" className="bg-emerald-100 text-emerald-800">
+          Flexible Schedule
         </Badge>
       )}
     </div>

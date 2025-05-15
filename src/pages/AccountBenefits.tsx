@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
@@ -8,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { useFadeIn } from '@/utils/animations';
-import { GraduationCap, Briefcase, Crown, ArrowRight, BookOpen } from 'lucide-react';
+import { GraduationCap, Briefcase, Crown, ArrowRight } from 'lucide-react';
 
 const AccountBenefits: React.FC = () => {
   const { userProfile } = useAuth();
@@ -33,7 +32,7 @@ const AccountBenefits: React.FC = () => {
       case 'teacher':
         return {
           title: 'Teacher Account',
-          icon: <BookOpen className="h-8 w-8 text-green-500" />,
+          icon: <GraduationCap className="h-8 w-8 text-green-500" />,
           description: 'Resources to guide students in their career development',
           color: 'bg-green-50 border-green-200'
         };

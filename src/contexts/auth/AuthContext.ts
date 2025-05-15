@@ -1,35 +1,17 @@
 
 import { createContext } from 'react';
+import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
+import { ApplicationStatus } from '@/types/application';
+import { AuthContextType } from './authContext.types';
 
-export interface AuthContextType {
-  user: UserProfile | null;
-  loading: boolean;
-  error: Error | null;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<void>;
-  signOut: () => Promise<void>;
-  updateProfile: (data: UserProfileUpdate) => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
-  getApplications: () => Promise<any[]>;
-  getSavedJobs?: () => Promise<string[]>;
-  saveJob?: (jobId: string) => Promise<void>;
-  unsaveJob?: (jobId: string) => Promise<void>;
-  isSavedJob?: (jobId: string) => boolean;
-  signInWithGoogle?: () => Promise<void>;
-  signInWithApple?: () => Promise<void>;
-}
+// Create context with default undefined value
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AuthContext = createContext<AuthContextType>({
+// Default initial state for use in provider
+export const initialAuthState = {
   user: null,
-  loading: true,
-  error: null,
-  signIn: async () => {},
-  signUp: async () => {},
-  signOut: async () => {},
-  updateProfile: async () => {},
-  resetPassword: async () => {},
-  getApplications: async () => [],
-});
-
-export default AuthContext;
+  userProfile: null,
+  isLoading: true,
+  error: null
+};

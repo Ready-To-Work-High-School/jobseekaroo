@@ -1,3 +1,4 @@
+
 import { Job } from '../../../types/job';
 
 export const officeJobs: Job[] = [
@@ -10,7 +11,7 @@ export const officeJobs: Job[] = [
     location: {
       city: 'Jacksonville',
       state: 'FL',
-      zip: '32202'  // Changed from zipCode to zip
+      zipCode: '32202',
     },
     type: 'part-time',
     payRate: {
@@ -40,7 +41,7 @@ export const officeJobs: Job[] = [
     location: {
       city: 'Jacksonville',
       state: 'FL',
-      zip: '32202'  // Changed from zipCode to zip
+      zipCode: '32202',
     },
     type: 'full-time',
     payRate: {

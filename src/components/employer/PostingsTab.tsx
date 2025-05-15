@@ -1,10 +1,10 @@
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React, { memo } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Building, Users, Clock, PlusCircle, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import AdvancedSpinner from '@/components/ui/advanced-spinner';
 
 interface JobPosting {
   id: string;
@@ -18,44 +18,43 @@ interface JobPosting {
 
 interface PostingsTabProps {
   jobPostings: JobPosting[];
-  loading: boolean;
+  loading?: boolean;
   setActiveTab: (tab: string) => void;
 }
 
-const PostingsTab = ({ jobPostings, loading, setActiveTab }: PostingsTabProps) => {
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="flex justify-center items-center py-16">
-          <div className="flex flex-col items-center gap-2">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-muted-foreground">Loading your job postings...</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
+// Using memo to prevent unnecessary re-renders
+const PostingsTab = memo(({ jobPostings, loading = false, setActiveTab }: PostingsTabProps) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Your Job Postings</CardTitle>
-        <p className="text-muted-foreground mt-1">
+        <CardDescription>
           Manage and track all your active and closed job postings
-        </p>
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        {jobPostings.length === 0 ? (
-          <div className="bg-muted p-6 rounded-lg text-center">
-            <h3 className="text-lg font-medium mb-2">No job postings yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Create your first job posting to start receiving applications
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-10">
+            <AdvancedSpinner 
+              variant="circle" 
+              size="lg" 
+              text="Loading your job postings..." 
+              centered 
+              className="text-muted-foreground" 
+            />
+          </div>
+        ) : jobPostings.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <div className="bg-muted/30 p-4 rounded-full mb-4">
+              <Building className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h3 className="font-medium mb-2">No job postings yet</h3>
+            <p className="text-muted-foreground max-w-md mb-6">
+              You haven't posted any jobs yet. Create your first job posting to start finding qualified candidates.
             </p>
-            <Button asChild>
-              <Link to="/post-job">
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Post Your First Job
-              </Link>
+            <Button onClick={() => setActiveTab("create")} className="gap-2">
+              <PlusCircle className="h-4 w-4" />
+              Post New Job
             </Button>
           </div>
         ) : (
@@ -69,7 +68,7 @@ const PostingsTab = ({ jobPostings, loading, setActiveTab }: PostingsTabProps) =
                       {job.status === 'active' ? 'Active' : 'Closed'}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Building className="h-3.5 w-3.5" />
                       {job.company}
@@ -97,19 +96,21 @@ const PostingsTab = ({ jobPostings, loading, setActiveTab }: PostingsTabProps) =
           </div>
         )}
       </CardContent>
-      <CardFooter className="border-t pt-6 flex justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing {jobPostings.length} job posting{jobPostings.length !== 1 ? 's' : ''}
-        </div>
-        <Button asChild className="gap-2">
-          <Link to="/post-job">
+      {jobPostings.length > 0 && (
+        <CardFooter className="border-t pt-6 flex justify-between">
+          <div className="text-sm text-muted-foreground">
+            Showing {jobPostings.length} job posting{jobPostings.length !== 1 ? 's' : ''}
+          </div>
+          <Button onClick={() => setActiveTab("create")} className="gap-2">
             <PlusCircle className="h-4 w-4" />
             Post New Job
-          </Link>
-        </Button>
-      </CardFooter>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
-};
+});
+
+PostingsTab.displayName = 'PostingsTab';
 
 export default PostingsTab;

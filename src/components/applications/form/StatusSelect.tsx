@@ -1,7 +1,7 @@
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import ApplicationStatusBadge from '@/components/ApplicationStatusBadge';
+import { ApplicationStatusBadge } from '@/components/ApplicationStatusBadge';
 import { UseFormReturn } from 'react-hook-form';
 import { ApplicationFormValues } from './validation';
 import { ApplicationStatus } from '@/types/application';
@@ -43,5 +43,3 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
     />
   );
 };
-
-export default StatusSelect;

@@ -9,8 +9,6 @@ import StudentSuccess from '@/pages/StudentSuccess';
 import CareerQuiz from '@/pages/CareerQuiz';
 import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 import UserProfileTabs from '@/pages/UserProfileTabs';
-import EntrepreneurshipAcademy from '@/pages/EntrepreneurshipAcademy';
-import NursingAcademy from '@/pages/NursingAcademy';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -60,8 +58,6 @@ const HomeRoutes = (
     <Route path="/career-assessment" element={<CareerQuiz />} />
     <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
     <Route path="/profile-tabs" element={<UserProfileTabs />} />
-    <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
-    <Route path="/nursing-academy" element={<NursingAcademy />} />
   </>
 );
 

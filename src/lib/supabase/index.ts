@@ -1,18 +1,14 @@
 
-import { createClient } from '@supabase/supabase-js';
-import { normalizeJobs, normalizeJob } from '@/utils/jobAdapter';
+import { supabaseClient } from '@/integrations/supabase/client';
 
-// Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Export the already configured supabase client
+export const supabase = supabaseClient;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Export job-related functions from the jobs module
+// Re-export all functionality from our modules
+export * from './profiles';
 export * from './jobs';
-
-// Export recommendation-related functions
+export * from './skills';
+export * from './applications';
 export * from './recommendations';
-
-// Re-export all necessary functions and types
-export { normalizeJobs, normalizeJob };
+export * from './utils';
+export * from './redemption';

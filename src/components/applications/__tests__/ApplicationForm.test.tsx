@@ -1,69 +1,125 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ApplicationForm from '../ApplicationForm';
-import { AuthProvider } from '@/contexts/auth/AuthContext';
-import { JobApplication } from '@/types/application';
 
-const mockApplication: JobApplication = {
-  id: '1',
-  job_id: '123',
-  user_id: '456',
-  job_title: 'Software Engineer',
-  company: 'Tech Corp',
-  status: 'applied',
-  applied_date: '2024-01-01',
-  contact_name: 'John Doe',
-  contact_email: 'john.doe@example.com',
-  next_step: 'Interview',
-  next_step_date: '2024-01-15',
-  notes: 'Follow up after the interview',
-  created_at: '2024-01-01',
-  updated_at: '2024-01-01',
-};
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
+import { ApplicationForm } from '../ApplicationForm';
+import { Job } from '@/types/job';
+
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => ({
+    createApplication: vi.fn().mockResolvedValue({}),
+  }),
+}));
 
 describe('ApplicationForm', () => {
-  it('renders the form with initial values', () => {
-    render(
-      <AuthProvider>
-        <ApplicationForm application={mockApplication} onSubmit={() => {}} />
-      </AuthProvider>
-    );
+  const mockOnCancel = vi.fn();
+  const mockOnShowSavedJobs = vi.fn();
+  const mockOnSuccess = vi.fn();
+  const mockSetIsAdding = vi.fn();
 
-    expect(screen.getByLabelText('Job Title')).toHaveValue(mockApplication.job_title);
-    expect(screen.getByLabelText('Company')).toHaveValue(mockApplication.company);
-    expect(screen.getByLabelText('Applied Date')).toHaveValue(mockApplication.applied_date);
-    expect(screen.getByLabelText('Contact Name')).toHaveValue(mockApplication.contact_name || '');
-    expect(screen.getByLabelText('Contact Email')).toHaveValue(mockApplication.contact_email || '');
-    expect(screen.getByLabelText('Next Step')).toHaveValue(mockApplication.next_step || '');
-    expect(screen.getByLabelText('Notes')).toHaveValue(mockApplication.notes || '');
+  beforeEach(() => {
+    mockOnCancel.mockClear();
+    mockOnShowSavedJobs.mockClear();
+    mockOnSuccess.mockClear();
+    mockSetIsAdding.mockClear();
   });
 
-  it('calls onSubmit with the correct values when the form is submitted', async () => {
-    const onSubmit = jest.fn();
+  it('renders form fields correctly', () => {
     render(
-      <AuthProvider>
-        <ApplicationForm application={mockApplication} onSubmit={onSubmit} />
-      </AuthProvider>
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
     );
 
-    fireEvent.change(screen.getByLabelText('Job Title'), { target: { value: 'Senior Software Engineer' } });
-    fireEvent.change(screen.getByLabelText('Company'), { target: { value: 'New Tech Corp' } });
+    expect(screen.getByLabelText(/job title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/application date/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/status/i)).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByText('Submit'));
+  it('pre-fills form when selectedJob is provided', () => {
+    const selectedJob: Partial<Job> = {
+      id: '1',
+      title: 'Frontend Developer',
+      company: {
+        name: 'Tech Company',
+      },
+      location: {
+        city: 'San Francisco',
+        state: 'CA',
+        zipCode: '94105',
+      },
+      type: 'full-time',
+      payRate: {
+        min: 50000,
+        max: 100000,
+        period: 'monthly',
+      },
+      description: 'Job description',
+      requirements: ['React', 'TypeScript'],
+      experienceLevel: 'entry-level',
+      postedDate: '2023-01-01',
+      isRemote: false,
+      isFlexible: true,
+    };
+
+    render(
+      <ApplicationForm
+        selectedJob={selectedJob as Job}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    expect(screen.getByDisplayValue('Frontend Developer')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Tech Company')).toBeInTheDocument();
+  });
+
+  it('handles form submission', async () => {
+    render(
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    fireEvent.change(screen.getByLabelText(/job title/i), {
+      target: { value: 'Test Job' },
+    });
+    fireEvent.change(screen.getByLabelText(/company/i), {
+      target: { value: 'Test Company' },
+    });
+
+    fireEvent.click(screen.getByText('Add Application'));
 
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledTimes(1);
-      expect(onSubmit).toHaveBeenCalledWith({
-        job_title: 'Senior Software Engineer',
-        company: 'New Tech Corp',
-        applied_date: '2024-01-01',
-        contact_name: 'John Doe',
-        contact_email: 'john.doe@example.com',
-        next_step: 'Interview',
-        next_step_date: '2024-01-15',
-        notes: 'Follow up after the interview',
-        status: 'applied',
-        job_id: '123',
-      });
+      expect(mockSetIsAdding).toHaveBeenCalledWith(true);
     });
+  });
+
+  it('disables form submission while adding', () => {
+    render(
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={true}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    expect(screen.getByText('Adding...')).toBeDisabled();
   });
 });

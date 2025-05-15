@@ -1,198 +1,105 @@
 
-import { useState, useEffect } from 'react';
-import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import {
-  useAccessibilitySettings,
-  AccessibilitySettings,
-} from './useAccessibilitySettings';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { HelpCircle } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { AccessibilitySettings } from '@/types/user';
 
-const AccessibilityMenuContent = () => {
-  const { settings, updateSettings } = useAccessibilitySettings();
-  const [fontScale, setFontScale] = useState(settings.fontSize);
+interface AccessibilityMenuContentProps {
+  settings: AccessibilitySettings;
+  fontSize: number;
+  handleSettingChange: (key: keyof AccessibilitySettings, value: boolean) => void;
+  handleFontSizeChange: (increase: boolean) => void;
+  resetSettings: () => void;
+}
 
-  useEffect(() => {
-    setFontScale(settings.fontSize);
-  }, [settings.fontSize]);
-
-  const handleFontScaleChange = (value: number[]) => {
-    setFontScale(value[0]);
-    updateSettings('fontSize', value[0]);
-  };
-
-  const handleToggle = (key: keyof AccessibilitySettings) => {
-    updateSettings(key, !settings[key]);
-  };
-
+export const AccessibilityMenuContent = ({
+  settings,
+  fontSize,
+  handleSettingChange,
+  handleFontSizeChange,
+  resetSettings
+}: AccessibilityMenuContentProps) => {
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h3 className="text-lg font-medium mb-4">Text Options</h3>
-        <div className="space-y-4">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="font-scale">Font Size</Label>
-              <span className="text-sm font-medium">
-                {fontScale === 0.9
-                  ? 'Small'
-                  : fontScale === 1
-                  ? 'Default'
-                  : fontScale === 1.1
-                  ? 'Large'
-                  : 'X-Large'}
-              </span>
-            </div>
-            <Slider
-              id="font-scale"
-              min={0.9}
-              max={1.2}
-              step={0.1}
-              value={[fontScale]}
-              onValueChange={handleFontScaleChange}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="space-x-2 flex items-center">
-              <Label htmlFor="high-contrast">High Contrast</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Increases contrast between text and background
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="high-contrast"
-              checked={settings.highContrast}
-              onCheckedChange={() => handleToggle('highContrast')}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="space-x-2 flex items-center">
-              <Label htmlFor="dyslexia-font">Dyslexia-Friendly Font</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Uses OpenDyslexic font to improve readability
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="dyslexia-font"
-              checked={settings.dyslexiaFont}
-              onCheckedChange={() => handleToggle('dyslexiaFont')}
-            />
-          </div>
+    <div className="space-y-4 py-2">
+      <AccessibilityToggle
+        id="high-contrast"
+        label="High Contrast"
+        description="Increase color contrast for better readability"
+        checked={settings.high_contrast}
+        onChange={() => handleSettingChange('high_contrast', !settings.high_contrast)}
+      />
+      
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="font-size" className="font-medium">Text Size</Label>
+          <span className="text-sm">{Math.round(fontSize * 100)}%</span>
         </div>
+        <Slider
+          id="font-size"
+          min={75}
+          max={150}
+          step={5}
+          value={[fontSize * 100]}
+          onValueChange={(value) => handleFontSizeChange(value[0] > 100)}
+          aria-label="Adjust font size"
+        />
+        <p className="text-xs text-muted-foreground">Adjust the size of text throughout the site</p>
       </div>
-
-      <Separator />
-
-      <div>
-        <h3 className="text-lg font-medium mb-4">Visual Options</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-x-2 flex items-center">
-              <Label htmlFor="reduced-motion">Reduced Motion</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Reduces animations and transitions
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="reduced-motion"
-              checked={settings.reducedMotion}
-              onCheckedChange={() => handleToggle('reducedMotion')}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="space-x-2 flex items-center">
-              <Label htmlFor="screen-reader">Screen Reader Optimized</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Optimizes content for screen readers
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="screen-reader"
-              checked={settings.screenReaderOptimized}
-              onCheckedChange={() => handleToggle('screenReaderOptimized')}
-            />
-          </div>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div>
-        <h3 className="text-lg font-medium mb-4">Focus Options</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-x-2 flex items-center">
-              <Label htmlFor="focus-indicators">Enhanced Focus Indicators</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Makes focus indicators more visible
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="focus-indicators"
-              checked={settings.enhancedFocus}
-              onCheckedChange={() => handleToggle('enhancedFocus')}
-            />
-          </div>
-        </div>
-      </div>
+      
+      <AccessibilityToggle
+        id="reduce-motion"
+        label="Reduce Motion"
+        description="Minimize animations and transitions"
+        checked={settings.reduce_motion}
+        onChange={() => handleSettingChange('reduce_motion', !settings.reduce_motion)}
+      />
+      
+      <AccessibilityToggle
+        id="screen-reader"
+        label="Screen Reader Mode"
+        description="Optimize layout for screen readers"
+        checked={settings.screen_reader_optimized}
+        onChange={() => handleSettingChange('screen_reader_optimized', !settings.screen_reader_optimized)}
+      />
+      
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={resetSettings}
+        className="w-full mt-2"
+      >
+        Reset to Default
+      </Button>
     </div>
   );
 };
 
-export default AccessibilityMenuContent;
+// Extract the toggle component for reuse
+interface AccessibilityToggleProps {
+  id: string;
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: () => void;
+}
+
+const AccessibilityToggle = ({
+  id,
+  label,
+  description,
+  checked,
+  onChange
+}: AccessibilityToggleProps) => (
+  <div className="flex items-center justify-between">
+    <div>
+      <Label htmlFor={id} className="font-medium">{label}</Label>
+      <p className="text-xs text-muted-foreground">{description}</p>
+    </div>
+    <Switch 
+      id={id} 
+      checked={checked}
+      onCheckedChange={onChange}
+    />
+  </div>
+);

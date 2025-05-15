@@ -9,18 +9,19 @@ export const VideoSection = () => {
       transition={{ duration: 0.5, delay: 0.5 }}
       className="mb-12"
     >
-      {/* Gradient accent border around image */}
+      {/* Gradient accent border around video */}
       <div className="p-1 rounded-lg bg-gradient-to-r from-purple-600 via-blue-500 to-amber-500">
-        <div className="rounded-lg overflow-hidden shadow-xl relative">
-          <img 
-            src="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" 
-            alt="Kickstart Your Career with AI-Powered Tools!" 
-            className="w-full h-auto"
+        <div className="rounded-lg overflow-hidden shadow-xl">
+          <iframe 
+            src="https://www.veed.io/embed/a2f96110-1b4c-4e7f-bc4d-73bcb4c28a67?watermark=0&color=purple&sharing=0&title=1" 
+            width="744" 
+            height="504" 
+            frameBorder="0" 
+            title="Kickstart Your Career with Ease!" 
+            className="w-full aspect-video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
           />
-          {/* AI Badge */}
-          <div className="absolute bottom-4 left-4 px-3 py-1 bg-purple-600/90 text-white text-xs font-medium rounded-full flex items-center">
-            <span className="mr-1">●</span> AI Generated
-          </div>
         </div>
       </div>
     </motion.div>

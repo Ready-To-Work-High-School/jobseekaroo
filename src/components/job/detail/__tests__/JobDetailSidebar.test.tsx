@@ -1,41 +1,79 @@
+
 import { render, screen } from '@testing-library/react';
-import JobDetailSidebar from '../JobDetailSidebar';
+import { BrowserRouter } from 'react-router-dom';
+import { JobDetailSidebar } from '../JobDetailSidebar';
 import { Job } from '@/types/job';
 
-describe('JobDetailSidebar Component', () => {
-  // Update the test job's location to use 'zip' instead of 'zipCode'
-  const testJob: Job = {
-    id: '1',
-    title: 'Software Engineer',
-    company_name: 'Test Corp',
-    description: 'Test description',
-    job_type: 'full-time',
-    experience_level: 'mid-level',
-    location: {
-      city: 'Jacksonville',
-      state: 'FL',
-      zip: '32202'  // Changed from zipCode to zip
-    },
-    is_remote: false,
-    pay_rate_min: 80000,
-    pay_rate_max: 120000,
-    pay_rate_period: 'yearly',
-    requirements: ['JavaScript', 'React'],
-    posted_date: '2024-01-01',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
+const mockJob: Job = {
+  id: "1",
+  title: "Software Engineer",
+  company: {
+    name: "Tech Corp",
+  },
+  location: {
+    city: "San Francisco",
+    state: "CA",
+    zipCode: "94105"
+  },
+  type: "full-time",
+  payRate: {
+    min: 20,
+    max: 30,
+    period: "hourly"
+  },
+  description: "Example job description",
+  requirements: ["Requirement 1"],
+  experienceLevel: "entry-level",
+  postedDate: "2025-04-18",
+  isRemote: false,
+  isFlexible: true
+};
+
+const formatDate = (date: string) => new Date(date).toLocaleDateString();
+const formatPayRange = (min: number, max: number, period: string) => `$${min}-$${max} ${period}`;
+
+describe('JobDetailSidebar', () => {
+  const renderSidebar = () => {
+    return render(
+      <BrowserRouter>
+        <JobDetailSidebar 
+          job={mockJob} 
+          formatDate={formatDate}
+          formatPayRange={formatPayRange}
+        />
+      </BrowserRouter>
+    );
   };
 
-  it('renders the JobDetailSidebar component with job details', () => {
-    render(<JobDetailSidebar job={testJob} />);
+  it('renders job details section', () => {
+    renderSidebar();
+    expect(screen.getByText('Job Details')).toBeInTheDocument();
+  });
 
-    // Check if job title is rendered
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+  it('displays company name', () => {
+    renderSidebar();
+    expect(screen.getByText(mockJob.company.name)).toBeInTheDocument();
+  });
 
-    // Check if company name is rendered
-    expect(screen.getByText('Test Corp')).toBeInTheDocument();
+  it('shows formatted posted date', () => {
+    renderSidebar();
+    const formattedDate = formatDate(mockJob.postedDate);
+    expect(screen.getByText(formattedDate)).toBeInTheDocument();
+  });
 
-    // Check if location is rendered
-    expect(screen.getByText('Jacksonville, FL')).toBeInTheDocument();
+  it('displays experience level', () => {
+    renderSidebar();
+    expect(screen.getByText('Entry Level')).toBeInTheDocument();
+  });
+
+  it('shows formatted pay rate', () => {
+    renderSidebar();
+    expect(screen.getByText('$20-$30 hourly')).toBeInTheDocument();
+  });
+
+  it('renders tips section', () => {
+    renderSidebar();
+    expect(screen.getByText('Tips for Applicants')).toBeInTheDocument();
+    expect(screen.getByText('View More Resources')).toBeInTheDocument();
   });
 });

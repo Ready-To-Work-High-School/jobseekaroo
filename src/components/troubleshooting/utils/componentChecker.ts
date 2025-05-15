@@ -1,67 +1,68 @@
 
 /**
- * Utility to check for missing/broken components in the UI
+ * Utility functions to check for missing UI components and links
  */
 
-// Check for missing links in the navigation
+/**
+ * Check for essential navigation links that should be present
+ * @returns Array of missing link descriptions
+ */
 export const checkMissingLinks = (): string[] => {
-  const issues: string[] = [];
-  
   try {
-    // Check if main navigation links are defined
-    const nav = document.querySelector('nav');
-    if (nav) {
-      // No navigation issues found
-    } else {
-      issues.push("Navigation component not found");
-    }
+    // Define essential routes that should be accessible
+    const essentialRoutes = [
+      { path: '/jobs', name: 'Jobs listing' },
+      { path: '/student-dashboard', name: 'Student dashboard' },
+      { path: '/profile', name: 'User profile' },
+      { path: '/applications', name: 'Applications' },
+      { path: '/settings', name: 'Settings' }
+    ];
     
-    // Check for broken links (404s would be caught by the browser)
-    const deadLinks = document.querySelectorAll('a[href="#broken"]');
-    if (deadLinks.length > 0) {
-      issues.push(`Found ${deadLinks.length} potentially broken links`);
-    }
+    const missingLinks: string[] = [];
+    
+    // Check for the presence of navigation links in the DOM
+    essentialRoutes.forEach(route => {
+      const linkExists = document.querySelector(`a[href="${route.path}"]`) || 
+                        document.querySelector(`a[href="#${route.path}"]`);
+      
+      if (!linkExists) {
+        missingLinks.push(`Missing link: ${route.name}`);
+      }
+    });
+    
+    return missingLinks;
   } catch (error) {
-    console.error("Error checking links:", error);
+    console.error("Error checking for missing links:", error);
+    return [];
   }
-  
-  return issues;
 };
 
-// Check for critical UI components
+/**
+ * Check for critical UI components that should be present
+ * @returns Array of missing component descriptions
+ */
 export const checkCriticalComponents = (): string[] => {
-  const issues: string[] = [];
-  
   try {
-    // Check for main content area
-    if (!document.querySelector('main')) {
-      issues.push("Main content area not found");
-    }
+    // Define critical components that should be present
+    const criticalComponents = [
+      { selector: '#job-listings', name: 'Job listings component' },
+      { selector: '.user-profile', name: 'User profile component' },
+      { selector: '.navigation-menu', name: 'Navigation menu' }
+    ];
     
-    // Check for proper layout structure
-    if (!document.querySelector('.layout, .app, #root > div')) {
-      issues.push("Basic layout structure may be broken");
-    }
+    const missingComponents: string[] = [];
+    
+    // Check if these components exist in the DOM
+    criticalComponents.forEach(component => {
+      const exists = document.querySelector(component.selector);
+      if (!exists) {
+        missingComponents.push(`Missing component: ${component.name}`);
+      }
+    });
+    
+    return missingComponents;
   } catch (error) {
-    console.error("Error checking components:", error);
+    console.error("Error checking for critical components:", error);
+    return [];
   }
-  
-  return issues;
-};
-
-// Check for rendering errors (React error boundaries would catch these)
-export const checkRenderingErrors = (): string[] => {
-  const issues: string[] = [];
-  
-  try {
-    // Look for error messages in the DOM
-    const errorMessages = document.querySelectorAll('.error-message, [data-error]');
-    if (errorMessages.length > 0) {
-      issues.push(`Found ${errorMessages.length} error messages in the UI`);
-    }
-  } catch (error) {
-    console.error("Error checking render errors:", error);
-  }
-  
-  return issues;
 };

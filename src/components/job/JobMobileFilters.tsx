@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import JobFilter from '@/components/JobFilter';
 import { JobSearchFilters } from '@/lib/mock-data/search';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface JobMobileFiltersProps {
   showFilters: boolean;

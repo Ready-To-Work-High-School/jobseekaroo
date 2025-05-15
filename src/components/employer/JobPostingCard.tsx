@@ -10,7 +10,7 @@ const JobPostingCard = () => {
       <CardHeader>
         <CardTitle>Post a Position</CardTitle>
         <CardDescription>
-          Complete the form to post a job opportunity for our students.
+          Complete the form below to post a job opportunity for our students.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -22,8 +22,8 @@ const JobPostingCard = () => {
         </div>
         <div className="text-center">
           <Button asChild size="lg" className="gap-2">
-            <Link to="/post-job">
-              Post a Job
+            <Link to="/employer-dashboard">
+              Access Employer Dashboard
               <ExternalLink className="h-4 w-4 ml-1" />
             </Link>
           </Button>
