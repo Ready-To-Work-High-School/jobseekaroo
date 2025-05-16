@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../navbar/Navbar';
@@ -23,7 +24,7 @@ const AppHeader = () => {
         />
       </motion.div>
       
-      {/* Keep the existing navbar with extra padding for the badge */}
+      {/* Single navbar instance */}
       <div className="pt-6 md:pt-5">
         <Navbar />
       </div>

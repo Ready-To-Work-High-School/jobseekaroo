@@ -9,7 +9,13 @@ const MobileBottomNav = () => {
   const location = useLocation();
   
   // Skip rendering on certain paths
-  if (['/sign-in', '/sign-up', '/forgot-password'].includes(location.pathname)) {
+  if ([
+    '/sign-in', 
+    '/sign-up', 
+    '/forgot-password', 
+    '/reset-password', 
+    '/auth/callback'
+  ].includes(location.pathname)) {
     return null;
   }
   
