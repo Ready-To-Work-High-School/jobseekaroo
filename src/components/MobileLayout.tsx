@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import MobileBottomNavigation from './mobile/MobileBottomNavigation';
+import MobileBottomNav from './mobile/MobileBottomNav';
 import BackButton from './navigation/BackButton';
 import BackToTopButton from './navigation/BackToTopButton';
 import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
@@ -124,7 +124,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       </AnimatePresence>
       
       <BackToTopButton />
-      <MobileBottomNavigation />
+      <MobileBottomNav />
       <UserOnboardingGuide />
     </div>
   );

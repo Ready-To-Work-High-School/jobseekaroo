@@ -17,8 +17,6 @@ const Navbar = () => {
   const { userProfile } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
 
-  console.log('Navbar render - isAdmin:', isAdmin, 'isCeo:', isCeo);
-
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY < 10);
