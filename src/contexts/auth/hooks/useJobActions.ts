@@ -48,79 +48,11 @@ export const useJobActions = (user: User | null) => {
     if (error) throw error;
     return data?.map(item => item.job_id) || [];
   };
-  
-  const createJob = async (jobData: any) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    const { data, error } = await supabase
-      .from('jobs')
-      .insert({ ...jobData, employer_id: user.id })
-      .select()
-      .single();
-      
-    if (error) throw error;
-    return data;
-  };
-  
-  const updateJob = async (jobId: string, jobData: any) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    const { data, error } = await supabase
-      .from('jobs')
-      .update(jobData)
-      .eq('id', jobId)
-      .eq('employer_id', user.id)
-      .select()
-      .single();
-      
-    if (error) throw error;
-    return data;
-  };
-  
-  const deleteJob = async (jobId: string) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    const { error } = await supabase
-      .from('jobs')
-      .delete()
-      .eq('id', jobId)
-      .eq('employer_id', user.id);
-      
-    if (error) throw error;
-  };
-  
-  const getJobs = async () => {
-    if (!user) return [];
-    
-    const { data, error } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('employer_id', user.id);
-      
-    if (error) throw error;
-    return data || [];
-  };
-  
-  const getJobById = async (jobId: string) => {
-    const { data, error } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('id', jobId)
-      .maybeSingle();
-      
-    if (error) throw error;
-    return data;
-  };
 
   return {
     saveJob,
     unsaveJob,
     isSavedJob,
-    getSavedJobs,
-    createJob,
-    updateJob,
-    deleteJob,
-    getJobs,
-    getJobById
+    getSavedJobs
   };
 };

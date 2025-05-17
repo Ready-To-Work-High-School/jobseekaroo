@@ -5,7 +5,6 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import ForEmployers from '../pages/ForEmployers';
 import EmployerDashboard from '../pages/employer/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
-import EmployerPremiumServices from '../pages/EmployerPremiumServices';
 import EmployerBadges from '../pages/EmployerBadges';
 import PremiumServices from '../pages/PremiumServices';
 import AnalyticsDashboard from '../pages/AnalyticsDashboard';
@@ -17,6 +16,7 @@ import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
 import { VerificationFormContainer } from '@/components/employer/VerificationFormContainer';
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
+import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
 
 const EmployerRoutes = (
   <>
@@ -41,6 +41,7 @@ const EmployerRoutes = (
     />
     <Route path="/analytics" element={<AnalyticsDashboard />} />
     <Route path="/employer/premium" element={<EmployerPremiumServices />} />
+    <Route path="/employer-premium" element={<EmployerPremiumServices />} />
     <Route path="/employer/premium-features" element={<PremiumFeaturesPage />} />
     <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/employer/badges" element={<EmployerBadges />} />
