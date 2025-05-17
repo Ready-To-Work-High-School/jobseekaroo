@@ -14,7 +14,19 @@ const PasswordResetTokenValidator = ({ onError }: PasswordResetTokenValidatorPro
   useEffect(() => {
     // Check if we have a token in the hash (from email link)
     const hash = location.hash;
-    console.log("Reset password location hash:", hash);
+    console.log("Reset password hash:", hash);
+    
+    if (!hash || hash.length <= 1) {
+      console.error("No hash found in URL");
+      onError("Invalid or missing reset token. Please request a new password reset link.");
+      toast({
+        variant: "destructive",
+        title: "Invalid reset link",
+        description: "This password reset link appears to be invalid. Please request a new one.",
+      });
+      setTimeout(() => navigate("/forgot-password"), 3000);
+      return;
+    }
     
     // Parse the hash fragment (skip the leading # character)
     const searchParams = new URLSearchParams(hash.substring(1));
