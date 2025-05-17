@@ -1,93 +1,87 @@
-
-import { ErrorInfo } from 'react';
-
-interface ErrorRecord {
+// Store session errors in memory
+let sessionErrors: Array<{
   message: string;
-  stack?: string;
+  timestamp: number;
   componentStack?: string;
-  timestamp: string;
-  url: string;
-  userAgent: string;
-}
+}> = [];
 
-// Track errors in memory for the session
-const errorRecords: ErrorRecord[] = [];
-const MAX_MEMORY_RECORDS = 10;
+// Max number of errors to keep
+const MAX_ERRORS = 50;
 
-// Track error in memory and optionally to remote storage
-export const trackError = async (error: Error, errorInfo: ErrorInfo) => {
-  // Create error record
-  const errorRecord: ErrorRecord = {
-    message: error.message,
-    stack: error.stack,
-    componentStack: errorInfo.componentStack,
-    timestamp: new Date().toISOString(),
-    url: window.location.href,
-    userAgent: navigator.userAgent
-  };
+/**
+ * Track a new error in the session
+ * @param error Error object or error message
+ * @param componentStack Optional component stack for React errors
+ */
+export const trackError = (
+  error: Error | string,
+  componentStack?: string
+) => {
+  const errorMessage = typeof error === 'string' ? error : error.message;
   
-  // Add to in-memory storage for this session
-  errorRecords.push(errorRecord);
-  if (errorRecords.length > MAX_MEMORY_RECORDS) {
-    errorRecords.shift(); // Remove oldest error if we exceed limit
+  // Add the error to our session tracking
+  sessionErrors.unshift({
+    message: errorMessage,
+    timestamp: Date.now(),
+    componentStack
+  });
+  
+  // Keep the list at a reasonable size
+  if (sessionErrors.length > MAX_ERRORS) {
+    sessionErrors = sessionErrors.slice(0, MAX_ERRORS);
   }
-
-  // Log to console for development
-  console.group('Error tracked:');
-  console.error(error);
-  console.info('Component stack:', errorInfo.componentStack);
-  console.groupEnd();
-
-  // If we're in production, we would log to a database
-  // But since we don't have the error_logs table, we'll just
-  // log to console for now
-  if (process.env.NODE_ENV === 'production') {
-    try {
-      console.log('Would save error to database:', errorRecord);
-      // Original code removed as error_logs table doesn't exist
-    } catch (logError) {
-      console.error('Error while logging error:', logError);
-    }
-  }
-
-  // Return record for potential further processing
-  return errorRecord;
+  
+  // Log to console for debugging
+  console.error('Error tracked:', errorMessage);
+  
+  return sessionErrors[0];
 };
 
-// Get errors for current session
-export const getSessionErrors = (): ErrorRecord[] => {
-  return [...errorRecords];
+/**
+ * Get all errors tracked in this session
+ * @returns Array of tracked errors
+ */
+export const getSessionErrors = () => {
+  return [...sessionErrors];
 };
 
-// Clear session errors
-export const clearSessionErrors = (): void => {
-  errorRecords.length = 0;
+/**
+ * Clear all tracked errors in the session
+ */
+export const clearSessionErrors = () => {
+  sessionErrors = [];
+  return true;
 };
 
-// Automatically detect potential error-causing states
-export const detectPotentialIssues = (): string[] => {
+/**
+ * Check for potential issues based on current application state
+ * @returns Array of potential issues detected
+ */
+export const detectPotentialIssues = () => {
   const issues: string[] = [];
   
-  // Check for memory issues
-  if (window.performance && 'memory' in window.performance) {
-    const memory = (window.performance as any).memory;
-    if (memory && memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
-      issues.push('High memory usage detected');
-    }
-  }
-  
-  // Network connectivity issues
+  // Check for network connectivity
   if (!navigator.onLine) {
     issues.push('No internet connection');
   }
   
-  // Check for slow response times
-  if (window.performance && performance.timing) {
-    const navTiming = performance.timing;
-    const pageLoadTime = navTiming.loadEventEnd - navTiming.navigationStart;
-    if (pageLoadTime > 5000) { // 5 seconds
-      issues.push('Slow page load time detected');
+  // Check for high memory usage
+  if ('memory' in window.performance) {
+    const memoryInfo = (window.performance as any).memory;
+    if (memoryInfo?.usedJSHeapSize > memoryInfo.jsHeapSizeLimit * 0.9) {
+      issues.push('High memory usage detected');
     }
+  }
+  
+  // Check local storage
+  try {
+    // Check if localStorage is accessible
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('diagnostic_test', 'test');
+      localStorage.removeItem('diagnostic_test');
+    }
+  } catch (e) {
+    issues.push('Local storage not available or quota exceeded');
   }
   
   return issues;

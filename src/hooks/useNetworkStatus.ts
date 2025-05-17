@@ -1,12 +1,7 @@
 
 import { useState, useEffect } from 'react';
 
-export interface NetworkStatusResult {
-  isOnline: boolean;
-  lastOnlineAt: Date | null;
-}
-
-export const useNetworkStatus = (): boolean => {
+export const useNetworkStatus = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -24,3 +19,5 @@ export const useNetworkStatus = (): boolean => {
 
   return isOnline;
 };
+
+export default useNetworkStatus;

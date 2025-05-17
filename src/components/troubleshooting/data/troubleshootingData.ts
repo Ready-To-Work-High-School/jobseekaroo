@@ -1,171 +1,33 @@
 
-import { 
-  Wifi, 
-  WifiOff, 
-  UserX, 
-  Database, 
-  FileWarning, 
-  Bug, 
-  Cpu,
-  AlertCircle,
-  Lock,
-  Mail,
-  User
-} from "lucide-react";
-import { LucideIcon } from "lucide-react";
-
-export interface CommonIssue {
-  id: string;
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  solutions: string[];
-  solution?: string; // For backward compatibility
-}
-
-export const commonIssues: CommonIssue[] = [
+export const commonIssues = [
   {
     id: "network",
     title: "Network Connectivity Issues",
-    description: "Unable to connect to the internet or access server resources.",
-    icon: WifiOff,
-    solutions: [
-      "Check your internet connection",
-      "Try refreshing the page",
-      "Clear your browser cache and cookies",
-      "Try accessing the site from a different network"
-    ]
-  },
-  {
-    id: "authentication",
-    title: "Authentication Problems",
-    description: "Issues with logging in or accessing your account.",
-    icon: UserX,
-    solutions: [
-      "Verify your username and password",
-      "Reset your password if you can't remember it",
-      "Clear your browser cookies and try again",
-      "Contact support if you're still having issues"
-    ]
-  },
-  {
-    id: "data",
-    title: "Data Loading Errors",
-    description: "Information or content isn't loading correctly.",
-    icon: Database,
-    solutions: [
-      "Refresh the page",
-      "Check your internet connection",
-      "Clear your browser cache",
-      "Try logging out and back in"
-    ]
-  },
-  {
-    id: "display",
-    title: "Display and Layout Problems",
-    description: "Interface elements are missing or displayed incorrectly.",
-    icon: FileWarning,
-    solutions: [
-      "Try a different browser",
-      "Update your browser to the latest version",
-      "Disable browser extensions that might interfere",
-      "Try adjusting your zoom level"
-    ]
-  },
-  {
-    id: "performance",
-    title: "Performance Issues",
-    description: "The application is running slowly or freezing.",
-    icon: Cpu,
-    solutions: [
-      "Close other browser tabs and applications",
-      "Clear your browser cache",
-      "Try a different browser",
-      "Check your device's available storage"
-    ]
-  },
-  {
-    id: "bugs",
-    title: "Feature Bugs",
-    description: "Specific features not working as expected.",
-    icon: Bug,
-    solutions: [
-      "Try refreshing the page",
-      "Clear your browser cache",
-      "Check for any browser console errors",
-      "Report the issue to support with specific details"
-    ]
-  },
-  {
-    id: "compatibility",
-    title: "Browser Compatibility Issues",
-    description: "Problems with specific browsers or devices.",
-    icon: AlertCircle,
-    solutions: [
-      "Try a different browser (Chrome, Firefox, Safari)",
-      "Update your browser to the latest version",
-      "Disable browser extensions",
-      "Try accessing from a different device"
-    ]
-  },
-  {
-    id: "connectivity",
-    title: "Connection Stability Issues",
-    description: "Intermittent connection problems affecting functionality.",
-    icon: Wifi,
-    solutions: [
-      "Check for a stable internet connection",
-      "Try connecting to a different network",
-      "Restart your router or modem",
-      "Contact your internet service provider if issues persist"
-    ]
+    description: "Problems connecting to our servers or loading content. This can happen if your internet connection is unstable or if our servers are experiencing high traffic.",
+    solution: "Check your internet connection, try using a different network if available. If the problem persists, our servers might be experiencing issues. Try again later.",
   },
   {
     id: "login",
-    title: "Login Issues",
-    description: "Having trouble signing in to your account?",
-    icon: Lock,
-    solutions: [
-      "Verify your email address and password are correct",
-      "Try resetting your password through the 'Forgot Password' link",
-      "Clear your browser cache and cookies",
-      "Try using an incognito/private browser window"
-    ]
+    title: "Login or Authentication Problems",
+    description: "Issues signing in, staying signed in, or accessing protected content.",
+    solution: "Clear your browser cookies, try using a private/incognito window, or reset your password. If you continue to have problems, contact support.",
   },
   {
-    id: "jobs",
-    title: "Jobs Not Loading",
-    description: "Issues with viewing or applying to jobs?",
-    icon: Bug,
-    solutions: [
-      "Refresh the page to reload job listings",
-      "Check your internet connection",
-      "Clear your browser cache and cookies",
-      "Try using a different browser or device"
-    ]
+    id: "display",
+    title: "Content Not Displaying Correctly",
+    description: "Images not loading, text formatting issues, or layout problems.",
+    solution: "Try refreshing the page, clear your browser cache, or try a different browser. Some features may require a modern browser with JavaScript enabled.",
   },
   {
-    id: "application",
-    title: "Application Submission Errors",
-    description: "Problems submitting your job application?",
-    icon: Mail,
-    solutions: [
-      "Ensure all required fields are completed correctly",
-      "Check for any error messages on the form",
-      "Try submitting your application from a different device",
-      "Contact support if the problem continues"
-    ]
+    id: "data",
+    title: "Data Not Saving or Loading",
+    description: "Changes you make aren't being saved, or previously saved data isn't loading.",
+    solution: "Ensure you're connected to the internet, refresh the page, and try again. If the problem persists, our database servers might be experiencing issues.",
   },
   {
-    id: "profile",
-    title: "Profile Updates Not Saving",
-    description: "Changes to your profile not being saved?",
-    icon: User,
-    solutions: [
-      "Make sure to click the Save button after making changes",
-      "Try uploading smaller image files (under 2MB) for profile pictures",
-      "Check your internet connection",
-      "Clear your browser cache and try again"
-    ]
+    id: "performance",
+    title: "Application Running Slowly",
+    description: "Pages taking a long time to load, animations stuttering, or overall sluggish performance.",
+    solution: "Close other browser tabs and applications, clear your browser cache, or try a different browser. Some features may require more system resources than others.",
   }
 ];

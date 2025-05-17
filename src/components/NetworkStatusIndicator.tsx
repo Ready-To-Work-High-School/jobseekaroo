@@ -1,25 +1,30 @@
 
 import React from 'react';
 import { Wifi, WifiOff } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface NetworkStatusIndicatorProps {
   isOnline: boolean;
-  className?: string;
 }
 
-const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ 
-  isOnline,
-  className 
-}) => {
+const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnline }) => {
   return (
-    <div className={cn('flex items-center', className)}>
-      {isOnline ? (
-        <Wifi className="h-4 w-4 text-green-500" />
-      ) : (
-        <WifiOff className="h-4 w-4 text-red-500 animate-pulse" />
-      )}
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="p-1">
+          {isOnline ? (
+            <Wifi className="h-4 w-4 text-green-500" />
+          ) : (
+            <WifiOff className="h-4 w-4 text-red-500 animate-pulse" />
+          )}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>
+          {isOnline ? "Connected to network" : "You are currently offline"}
+        </p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

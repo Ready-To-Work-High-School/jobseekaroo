@@ -1,46 +1,52 @@
 
 import React from 'react';
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CommonIssue } from './data/troubleshootingData';
+import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface Issue {
+  id: string;
+  title: string;
+  description: string;
+  solution: string;
+}
 
 interface IssueItemProps {
-  issue: CommonIssue;
+  issue: Issue;
   isSelected: boolean;
   onSelect: (id: string) => void;
 }
 
-export const IssueItem = ({ issue, isSelected, onSelect }: IssueItemProps) => {
-  const Icon = issue.icon;
-  
+export const IssueItem: React.FC<IssueItemProps> = ({
+  issue,
+  isSelected,
+  onSelect,
+}) => {
   return (
-    <div
-      className={`p-4 rounded-lg border transition-colors cursor-pointer hover:bg-accent ${
-        isSelected ? 'bg-accent' : ''
-      }`}
-      onClick={() => onSelect(issue.id)}
-    >
-      <div className="flex items-start gap-3">
-        <div className="p-2 rounded-full bg-primary/10">
-          <Icon className="h-4 w-4 text-primary" />
+    <div className="border rounded-md overflow-hidden">
+      <button
+        onClick={() => onSelect(isSelected ? '' : issue.id)}
+        className={cn(
+          "w-full flex justify-between items-center p-3 text-left",
+          isSelected ? "bg-muted/60" : "hover:bg-muted/30",
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <HelpCircle className="h-4 w-4 text-muted-foreground" />
+          <h3 className="font-medium">{issue.title}</h3>
         </div>
-        <div className="flex-1">
-          <h3 className="font-medium mb-1">{issue.title}</h3>
-          <p className="text-sm text-muted-foreground mb-2">
-            {issue.description}
-          </p>
-          {isSelected && (
-            <Alert>
-              <AlertDescription>
-                <ul className="list-disc pl-4 space-y-1 text-sm">
-                  {issue.solutions.map((solution, index) => (
-                    <li key={index}>{solution}</li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          )}
+        {isSelected ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+      </button>
+      
+      {isSelected && (
+        <div className="p-3 border-t">
+          <p className="mb-3 text-sm">{issue.description}</p>
+          
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md">
+            <h4 className="text-sm font-medium mb-2">Solution:</h4>
+            <p className="text-sm">{issue.solution}</p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

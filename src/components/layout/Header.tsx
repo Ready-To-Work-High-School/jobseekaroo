@@ -18,6 +18,7 @@ import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import NetworkStatusIndicator from '@/components/NetworkStatusIndicator';
 import TroubleshootDialog from '../troubleshooting/TroubleshootDialog';
 import MainNavigation from './MainNavigation';
+import DiagnosticMenuButton from '../ErrorRecovery/DiagnosticMenuButton';
 
 interface HeaderProps {
   hideAuthLinks?: boolean;
@@ -70,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
           {!hideAuthLinks && (
             <div className="flex items-center gap-2">
               <TroubleshootDialog />
+              <DiagnosticMenuButton />
             </div>
           )}
         </div>

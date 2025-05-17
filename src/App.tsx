@@ -7,7 +7,6 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import EmployerDashboard from './pages/EmployerDashboard';
-import EnhancedJobListings from './pages/EnhancedJobListings';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
 import { useAuth } from './hooks/useAuth';
@@ -22,6 +21,7 @@ import TermsOfService from './pages/TermsOfService';
 import Jobs from './pages/Jobs';
 import EmployerKanban from './pages/EmployerKanban';
 import CommunicationTools from './pages/CommunicationTools';
+import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 
 function App() {
   const { user } = useAuth();
@@ -50,6 +50,9 @@ function App() {
               <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
               <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
               <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+              
+              {/* Add system diagnostics route */}
+              <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
               
               {/* Add explicit routes for privacy policy and terms of service */}
               <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
