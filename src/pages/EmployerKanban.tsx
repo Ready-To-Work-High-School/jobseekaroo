@@ -7,7 +7,7 @@ import KanbanBoard from '@/components/employer/kanban/KanbanBoard';
 import { KanbanHeader } from '@/components/employer/kanban/KanbanHeader';
 import { KanbanStageCustomization } from '@/components/employer/kanban/KanbanStageCustomization';
 import { useKanbanBoard } from '@/hooks/employer/useKanbanBoard';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useToast } from '@/hooks/use-toast';
 import { QuickNavigationMenu } from '@/components/employer/QuickNavigationMenu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';

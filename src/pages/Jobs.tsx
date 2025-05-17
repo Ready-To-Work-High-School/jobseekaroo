@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Star, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const Jobs = () => {
   // Log when the component mounts to debug

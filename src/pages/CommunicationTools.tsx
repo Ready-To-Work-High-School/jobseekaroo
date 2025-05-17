@@ -2,7 +2,7 @@
 import Layout from '@/components/Layout';
 import { MessageSquare, Shield, FileText, Bell } from 'lucide-react';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const CommunicationTools = () => {
   return (

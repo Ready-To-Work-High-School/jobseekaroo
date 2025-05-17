@@ -16,7 +16,7 @@ import AdminPanel from './pages/AdminPanel';
 import AuthRoutes from './routes/authRoutes';
 import UserProfileTabs from './pages/UserProfileTabs';
 import PasswordResetRedirect from "./components/auth/PasswordResetRedirect";
-import { Helmet, HelmetProvider } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 function App() {
   const { user } = useAuth();
