@@ -5,7 +5,6 @@ import { MobileMenu } from './MobileMenu';
 import DesktopNav from './DesktopNav';
 import { NavbarBrand } from './NavbarBrand';
 import { NavbarRight } from './NavbarRight';
-import MainNavigation from '@/components/layout/MainNavigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -65,8 +64,7 @@ const Navbar = () => {
             </Link>
           )}
           
-          <MainNavigation className="hidden lg:flex" />
-          <DesktopNav className="hidden md:flex lg:hidden" />
+          <DesktopNav className="hidden md:flex" />
         </div>
 
         <NavbarRight />
