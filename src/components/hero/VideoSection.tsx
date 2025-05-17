@@ -10,7 +10,7 @@ export const VideoSection = () => {
       className="mb-12"
     >
       <div className="p-1 rounded-lg bg-gradient-to-r from-purple-600 via-blue-500 to-amber-500">
-        <div className="rounded-lg overflow-hidden shadow-xl">
+        <div className="rounded-lg overflow-hidden shadow-xl max-w-md mx-auto">
           <div style={{ 
             position: "relative", 
             width: "100%", 
