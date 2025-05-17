@@ -11,6 +11,7 @@ import Login from '../pages/Login';
 const AuthRoutes = (
   <>
     <Route path="/sign-in" element={<SignIn />} />
+    <Route path="/signin" element={<SignIn />} /> {/* Adding both routes to ensure all links work */}
     <Route path="/signup" element={<SignUp />} />
     <Route path="/sign-up" element={<SignUp />} /> {/* Adding both routes to ensure all links work */}
     <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -5,8 +5,6 @@ import { AuthProvider } from './contexts/auth';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import SignUp from './pages/SignUp';
-import SignIn from './pages/SignIn';
 import Profile from './pages/Profile';
 import EmployerDashboard from './pages/EmployerDashboard';
 import EnhancedJobListings from './pages/EnhancedJobListings';
@@ -15,6 +13,7 @@ import CeoPortal from './pages/CeoPortal';
 import { useAuth } from './contexts/auth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
+import AuthRoutes from './routes/authRoutes';
 
 function App() {
   const { user } = useAuth();
@@ -25,10 +24,6 @@ function App() {
         <NotificationsProvider user={user}>
           <Routes>
             <Route path="/" element={<Layout><Home /></Layout>} />
-            <Route path="/signup" element={<Layout><SignUp /></Layout>} />
-            <Route path="/sign-up" element={<Layout><SignUp /></Layout>} />
-            <Route path="/signin" element={<Layout><SignIn /></Layout>} />
-            <Route path="/sign-in" element={<Layout><SignIn /></Layout>} />
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
             <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
             <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
@@ -37,6 +32,9 @@ function App() {
             <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
             <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
             <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+            
+            {/* Include all auth routes */}
+            {AuthRoutes}
           </Routes>
         </NotificationsProvider>
       </AuthProvider>
