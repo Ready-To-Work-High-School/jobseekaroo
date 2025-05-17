@@ -24,8 +24,8 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
       <ErrorBoundary>
-        {/* Single AppHeader component that handles all navigation needs */}
-        <AppHeader />
+        {/* Only render the AppHeader when not on the homepage */}
+        {!isHomePage && <AppHeader />}
       </ErrorBoundary>
       
       <motion.main 
