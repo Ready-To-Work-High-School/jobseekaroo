@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './contexts/auth';
 import { NotificationsProvider } from './contexts/notifications/NotificationsProvider';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -16,7 +15,6 @@ import AdminPanel from './pages/AdminPanel';
 import AuthRoutes from './routes/authRoutes';
 import UserProfileTabs from './pages/UserProfileTabs';
 import FirstJobToolkit from './pages/FirstJobToolkit';
-import { ReactQueryProvider } from './lib/react-query';
 import { PublicRoutes } from './routes/publicRoutes';
 
 function App() {
@@ -24,31 +22,27 @@ function App() {
 
   return (
     <div className="app">
-      <ReactQueryProvider>
-        <AuthProvider>
-          <NotificationsProvider user={user}>
-            <Routes>
-              <Route path="/" element={<Layout><Home /></Layout>} />
-              <Route path="/profile" element={<Layout><Profile /></Layout>} />
-              <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
-              <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
-              <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
-              <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
-              <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
-              <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
-              <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
-              <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
-              <Route path="/first-job-toolkit" element={<Layout><FirstJobToolkit /></Layout>} />
-              
-              {/* Include all auth routes */}
-              {AuthRoutes}
-              
-              {/* Include public routes */}
-              {PublicRoutes}
-            </Routes>
-          </NotificationsProvider>
-        </AuthProvider>
-      </ReactQueryProvider>
+      <NotificationsProvider user={user}>
+        <Routes>
+          <Route path="/" element={<Layout><Home /></Layout>} />
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
+          <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
+          <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+          <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
+          <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
+          <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
+          <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+          <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/first-job-toolkit" element={<Layout><FirstJobToolkit /></Layout>} />
+          
+          {/* Include all auth routes */}
+          {AuthRoutes}
+          
+          {/* Include public routes */}
+          {PublicRoutes}
+        </Routes>
+      </NotificationsProvider>
     </div>
   );
 }

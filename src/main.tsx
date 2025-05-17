@@ -5,12 +5,15 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './styles/index.css';
 import { ReactQueryProvider } from './lib/react-query';
+import { AuthProvider } from './contexts/auth';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ReactQueryProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ReactQueryProvider>
     </BrowserRouter>
   </React.StrictMode>
