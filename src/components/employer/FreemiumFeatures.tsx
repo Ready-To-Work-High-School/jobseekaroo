@@ -3,7 +3,7 @@ import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { usePremiumPostings } from '@/hooks/usePremiumPostings';
 import { motion } from 'framer-motion';
-import { Star, Sparkles, Check, Clock, TrendingUp, Crown } from 'lucide-react';
+import { Star, Sparkles, Check, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,7 +16,6 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
   const { toast } = useToast();
   const { checkTrialEligibility, startPremiumTrial, isLoading } = usePremiumPostings();
   const [isEligibleForTrial, setIsEligibleForTrial] = React.useState(false);
-  const [selectedTier, setSelectedTier] = React.useState('basic');
   
   React.useEffect(() => {
     const checkEligibility = async () => {
@@ -53,56 +52,41 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
   };
   
   const features = {
-    basic: [
+    free: [
       "Up to 3 active job postings",
+      "Basic candidate search",
+      "Standard visibility",
+      "3-stage recruitment pipeline",
       "Basic company profile",
-      "Company name and logo",
-      "Simple candidate messaging",
-      "Basic applicant tracking"
+      "Limited candidate messaging"
     ],
-    pro: [
+    premium: [
       "Unlimited premium job postings",
-      "Enhanced candidate search",
-      "Priority placement in search results",
-      "Custom branded company profile",
-      "Analytics dashboard",
+      "Featured placement in search results",
+      "Custom recruitment pipeline stages",
+      "Advanced candidate tracking board",
+      "Full analytics dashboard",
       "Unlimited candidate messaging",
-      "Featured employer badge",
-      "AI-powered candidate matching",
-      "Custom recruitment workflows",
-      "Priority support"
-    ],
-    enterprise: [
-      "All Pro features included",
-      "Dedicated account manager",
-      "Custom integrations",
-      "API access",
-      "Advanced analytics and reporting",
-      "Customized job matching algorithms",
-      "Employer branding solutions",
-      "Multi-user access with roles",
-      "Bulk job posting",
-      "Enhanced security features"
+      "AI-powered candidate matching"
     ]
   };
   
   return (
     <Card>
       <CardHeader className="pb-4">
-        <CardTitle>Choose Your Plan</CardTitle>
+        <CardTitle>Choose How to Post Your Job</CardTitle>
         <CardDescription>
-          Select the tier that best fits your hiring needs
+          Post for free or upgrade to premium for enhanced visibility and features
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="basic" className="mt-2" onValueChange={setSelectedTier}>
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="basic">Basic</TabsTrigger>
-            <TabsTrigger value="pro">Pro</TabsTrigger>
-            <TabsTrigger value="enterprise">Enterprise</TabsTrigger>
+        <Tabs defaultValue="free" className="mt-2">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="free">Free Posting</TabsTrigger>
+            <TabsTrigger value="premium">Premium Posting</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="basic">
+          <TabsContent value="free">
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,14 +95,14 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-semibold">Basic Plan</h3>
-                  <p className="text-sm text-muted-foreground">For small businesses and startups</p>
+                  <h3 className="text-lg font-semibold">Free Job Posting</h3>
+                  <p className="text-sm text-muted-foreground">No payment required</p>
                 </div>
                 <div className="text-xl font-bold">$0</div>
               </div>
               
               <ul className="space-y-2">
-                {features.basic.map((feature, index) => (
+                {features.free.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     <span className="text-sm">{feature}</span>
@@ -133,12 +117,12 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
               </div>
               
               <Button variant="outline" className="w-full">
-                Continue with Free Plan
+                Continue with Free Posting
               </Button>
             </motion.div>
           </TabsContent>
           
-          <TabsContent value="pro">
+          <TabsContent value="premium">
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -148,10 +132,10 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
               <div className="flex justify-between items-center">
                 <div>
                   <div className="flex items-center">
-                    <h3 className="text-lg font-semibold">Pro Plan</h3>
+                    <h3 className="text-lg font-semibold">Premium Posting</h3>
                     <Sparkles className="h-4 w-4 ml-2 text-amber-500" />
                   </div>
-                  <p className="text-sm text-muted-foreground">$30/month after trial</p>
+                  <p className="text-sm text-muted-foreground">$59/month after trial</p>
                 </div>
                 <div className="text-xl font-bold">
                   {isEligibleForTrial ? (
@@ -160,13 +144,13 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
                       30-day free
                     </span>
                   ) : (
-                    "$30"
+                    "$59"
                   )}
                 </div>
               </div>
               
               <ul className="space-y-2">
-                {features.pro.map((feature, index) => (
+                {features.premium.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-amber-500" />
                     <span className="text-sm">{feature}</span>
@@ -187,7 +171,7 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
                 disabled={!isEligibleForTrial || isLoading}
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
               >
-                {isLoading ? "Processing..." : isEligibleForTrial ? "Start Free Trial" : "Upgrade to Pro"}
+                {isLoading ? "Processing..." : isEligibleForTrial ? "Start Free Trial" : "Upgrade to Premium"}
               </Button>
               
               {!isEligibleForTrial && (
@@ -195,49 +179,6 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
                   You've already used your free trial. Subscribe to continue with premium features.
                 </p>
               )}
-            </motion.div>
-          </TabsContent>
-          
-          <TabsContent value="enterprise">
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="flex items-center">
-                    <h3 className="text-lg font-semibold">Enterprise Plan</h3>
-                    <Crown className="h-4 w-4 ml-2 text-blue-500" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">For large organizations</p>
-                </div>
-                <div className="text-xl font-bold">$99</div>
-              </div>
-              
-              <ul className="space-y-2">
-                {features.enterprise.map((feature, index) => (
-                  <li key={index} className="flex items-center">
-                    <Check className="h-4 w-4 mr-2 text-blue-500" />
-                    <span className="text-sm">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <div className="bg-blue-50 border border-blue-100 rounded-md p-4 flex items-start gap-3">
-                <Crown className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium">Custom Enterprise Solutions</p>
-                  <p className="mt-1">Tailored features and dedicated support for large-scale hiring needs.</p>
-                </div>
-              </div>
-              
-              <Button 
-                className="w-full bg-blue-600 hover:bg-blue-700"
-              >
-                Contact Sales
-              </Button>
             </motion.div>
           </TabsContent>
         </Tabs>

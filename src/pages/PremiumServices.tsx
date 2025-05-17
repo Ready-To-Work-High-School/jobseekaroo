@@ -5,7 +5,7 @@ import { useFadeIn } from '@/utils/animations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Check, Sparkles, Star, Crown } from 'lucide-react';
+import { ArrowLeft, Check, Sparkles, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -13,36 +13,35 @@ const PremiumServices = () => {
   const fadeIn = useFadeIn(300);
 
   const features = {
-    basic: [
-      "Up to 3 job postings",
-      "Basic company profile",
-      "Company name and logo",
-      "Simple candidate messaging",
-      "Basic applicant tracking"
+    standard: [
+      "Job listings",
+      "Basic applicant tracking",
+      "Standard company profile",
+      "Email notifications",
+      "Basic analytics"
     ],
-    pro: [
-      "All Basic features",
-      "Unlimited job postings",
-      "Featured placement in search",
+    premium: [
+      "All Standard features",
+      "Featured job listings",
+      "Advanced applicant tracking",
       "Enhanced company profile",
       "Priority support",
-      "Analytics dashboard",
+      "Advanced analytics dashboard",
       "Custom branding",
       "Candidate skill matching",
-      "Unlimited messaging",
-      "Applicant tracking system"
+      "Bulk job posting",
+      "API access"
     ],
     enterprise: [
-      "All Pro features",
+      "All Premium features",
       "Dedicated account manager",
       "Custom integrations",
-      "API access",
-      "Advanced analytics",
-      "Custom reporting",
-      "Multi-user access",
-      "Bulk job posting",
-      "Enhanced security",
-      "SLA guarantees"
+      "White-label solutions",
+      "Advanced reporting",
+      "Unlimited job postings",
+      "Custom analytics",
+      "SLA guarantees",
+      "On-site training"
     ]
   };
 
@@ -79,21 +78,21 @@ const PremiumServices = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Find the perfect tier that suits your hiring needs and business goals.
+            Unlock premium features and take your experience to the next level with our subscription plans.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Basic Plan */}
+          {/* Standard Plan */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">Basic</CardTitle>
-              <CardDescription>Essential features for small businesses</CardDescription>
+              <CardTitle className="text-xl">Standard</CardTitle>
+              <CardDescription>Basic features for individuals</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-4xl font-bold">Free</div>
               <ul className="space-y-2">
-                {features.basic.map((feature, index) => (
+                {features.standard.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     <span className="text-sm">{feature}</span>
@@ -102,25 +101,25 @@ const PremiumServices = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" variant="outline">Get Started</Button>
+              <Button className="w-full" variant="outline">Current Plan</Button>
             </CardFooter>
           </Card>
 
-          {/* Pro Plan */}
+          {/* Premium Plan */}
           <Card className="border-2 border-amber-500 shadow-lg relative">
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
               <Badge className="bg-amber-500 hover:bg-amber-600">Popular</Badge>
             </div>
             <CardHeader>
               <CardTitle className="text-xl flex items-center">
-                Pro <Star className="h-4 w-4 ml-2 text-amber-500" />
+                Premium <Star className="h-4 w-4 ml-2 text-amber-500" />
               </CardTitle>
-              <CardDescription>Advanced features for growing businesses</CardDescription>
+              <CardDescription>Advanced features for professionals</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="text-4xl font-bold">$30<span className="text-lg font-normal">/mo</span></div>
+              <div className="text-4xl font-bold">$49<span className="text-lg font-normal">/mo</span></div>
               <ul className="space-y-2">
-                {features.pro.map((feature, index) => (
+                {features.premium.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     <span className="text-sm">{feature}</span>
@@ -130,7 +129,7 @@ const PremiumServices = () => {
             </CardContent>
             <CardFooter>
               <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
-                Start Free Trial
+                Upgrade Now
               </Button>
             </CardFooter>
           </Card>
@@ -138,13 +137,11 @@ const PremiumServices = () => {
           {/* Enterprise Plan */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl flex items-center">
-                Enterprise <Crown className="h-4 w-4 ml-2 text-blue-500" />
-              </CardTitle>
-              <CardDescription>Custom solutions for large organizations</CardDescription>
+              <CardTitle className="text-xl">Enterprise</CardTitle>
+              <CardDescription>Custom solutions for organizations</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="text-4xl font-bold">$99<span className="text-lg font-normal">/mo</span></div>
+              <div className="text-4xl font-bold">Contact Us</div>
               <ul className="space-y-2">
                 {features.enterprise.map((feature, index) => (
                   <li key={index} className="flex items-center">
@@ -167,11 +164,11 @@ const PremiumServices = () => {
           <div className="max-w-3xl mx-auto text-left space-y-6">
             <div>
               <h4 className="font-medium mb-2">How do I upgrade my account?</h4>
-              <p className="text-muted-foreground">You can upgrade your account by selecting a plan above and following the payment process.</p>
+              <p className="text-muted-foreground">You can upgrade your account by clicking on the "Upgrade Now" button and following the payment process.</p>
             </div>
             <div>
-              <h4 className="font-medium mb-2">Can I switch between different tiers?</h4>
-              <p className="text-muted-foreground">Yes, you can upgrade or downgrade your subscription at any time from your account settings.</p>
+              <h4 className="font-medium mb-2">Can I downgrade my subscription?</h4>
+              <p className="text-muted-foreground">Yes, you can downgrade your subscription at any time from your account settings.</p>
             </div>
             <div>
               <h4 className="font-medium mb-2">Do you offer refunds?</h4>

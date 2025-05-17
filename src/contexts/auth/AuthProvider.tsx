@@ -241,11 +241,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ...jobActions,
         ...applicationActions,
         updateProfile,
-        refreshProfile: async () => {
-          // Ensure this returns a UserProfile or null
-          const profile = await refreshProfile();
-          return profile;
-        },
+        refreshProfile,
         makeAdmin: async () => console.log('makeAdmin method called but not implemented'),
         verifyEmployer: async () => console.log('verifyEmployer method called but not implemented'),
         redeemCode: async () => console.log('redeemCode method called but not implemented'),

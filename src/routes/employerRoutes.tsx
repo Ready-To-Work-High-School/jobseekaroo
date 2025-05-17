@@ -1,10 +1,10 @@
 
-import React from 'react';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import ForEmployers from '../pages/ForEmployers';
 import EmployerDashboard from '../pages/employer/EmployerDashboard';
 import EmployerAnalytics from '../pages/EmployerAnalytics';
+import EmployerPremiumServices from '../pages/EmployerPremiumServices';
 import EmployerBadges from '../pages/EmployerBadges';
 import PremiumServices from '../pages/PremiumServices';
 import AnalyticsDashboard from '../pages/AnalyticsDashboard';
@@ -16,9 +16,8 @@ import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
 import { VerificationFormContainer } from '@/components/employer/VerificationFormContainer';
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
-import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
 
-const EmployerRoutes = (
+export const EmployerRoutes = (
   <>
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
@@ -26,22 +25,22 @@ const EmployerRoutes = (
     <Route 
       path="/employer/dashboard" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerDashboard />
         </ProtectedRoute>
       } 
     />
+    <Route path="/employer-dashboard" element={<EmployerDashboard />} />
     <Route 
       path="/employer/analytics" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerAnalytics />
         </ProtectedRoute>
       } 
     />
     <Route path="/analytics" element={<AnalyticsDashboard />} />
     <Route path="/employer/premium" element={<EmployerPremiumServices />} />
-    <Route path="/employer-premium" element={<EmployerPremiumServices />} />
     <Route path="/employer/premium-features" element={<PremiumFeaturesPage />} />
     <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/employer/badges" element={<EmployerBadges />} />
@@ -50,7 +49,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/applicants" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerApplicants />
         </ProtectedRoute>
       } 
@@ -59,7 +58,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/calendar" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerCalendar />
         </ProtectedRoute>
       } 
@@ -67,7 +66,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/verify" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <VerificationFormContainer />
         </ProtectedRoute>
       } 
@@ -75,7 +74,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/verifications" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerVerifications />
         </ProtectedRoute>
       } 
@@ -83,7 +82,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/candidates" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerKanban />
         </ProtectedRoute>
       } 
@@ -91,7 +90,7 @@ const EmployerRoutes = (
     <Route 
       path="/employer/tools" 
       element={
-        <ProtectedRoute requiredRoles={["employer"]}>
+        <ProtectedRoute>
           <EmployerToolsPage />
         </ProtectedRoute>
       } 
