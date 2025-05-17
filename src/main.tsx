@@ -6,13 +6,16 @@ import App from './App';
 import './styles/index.css';
 import { ReactQueryProvider } from './lib/react-query';
 import { AuthProvider } from './contexts/auth';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ReactQueryProvider>
         <AuthProvider>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </AuthProvider>
       </ReactQueryProvider>
     </BrowserRouter>
