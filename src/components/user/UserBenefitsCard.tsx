@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,7 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
   
   // Check if user has premium subscription
   const hasPremium = userProfile?.preferences?.hasPremium === true;
+  const premiumTier = userProfile?.preferences?.premiumTier || 'basic';
   
   // Format date to readable string
   const formatDate = (dateString: string | undefined) => {
@@ -43,28 +45,44 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
         ];
       case 'employer':
         if (hasPremium) {
-          return [
-            { name: 'Unlimited premium job posts', active: true, premium: true },
-            { name: 'Featured placement in search results', active: true, premium: true },
-            { name: 'Enhanced candidate search', active: true, premium: true },
-            { name: 'Analytics dashboard', active: true, premium: true },
-            { name: 'Unlimited candidate messaging', active: true, premium: true },
-            { name: 'Featured employer badge', active: true, premium: true },
-            { name: 'AI-powered candidate matching', active: true, premium: true },
-            { name: 'Custom recruitment workflows', active: true, premium: true },
-            { name: 'Priority support', active: true, premium: true }
-          ];
-        } else {
-          return [
-            { name: 'Up to 3 active job postings', active: true },
-            { name: 'Basic company profile', active: true },
-            { name: 'Simple candidate search', active: true },
-            { name: 'Connect with candidates', active: true },
-            { name: 'Interview calendar', active: true },
-            { name: 'Enhanced candidate search', active: false, locked: true },
-            { name: 'Analytics dashboard', active: false, locked: true }
-          ];
+          if (premiumTier === 'enterprise') {
+            return [
+              { name: 'All Pro features included', active: true, premium: true },
+              { name: 'Dedicated account manager', active: true, premium: true },
+              { name: 'Custom integrations', active: true, premium: true },
+              { name: 'API access', active: true, premium: true },
+              { name: 'Advanced analytics and reporting', active: true, premium: true },
+              { name: 'Customized job matching algorithms', active: true, premium: true },
+              { name: 'Employer branding solutions', active: true, premium: true },
+              { name: 'Multi-user access with roles', active: true, premium: true },
+              { name: 'Bulk job posting', active: true, premium: true },
+              { name: 'Enhanced security features', active: true, premium: true }
+            ];
+          } else if (premiumTier === 'pro') {
+            return [
+              { name: 'Unlimited premium job posts', active: true, premium: true },
+              { name: 'Enhanced candidate search', active: true, premium: true },
+              { name: 'Priority placement in search results', active: true, premium: true },
+              { name: 'Custom branded profile', active: true, premium: true },
+              { name: 'Analytics dashboard', active: true, premium: true },
+              { name: 'Unlimited candidate messaging', active: true, premium: true },
+              { name: 'Featured employer badge', active: true, premium: true },
+              { name: 'AI-powered candidate matching', active: true, premium: true },
+              { name: 'Custom recruitment workflows', active: true, premium: true },
+              { name: 'Priority support', active: true, premium: true }
+            ];
+          }
         }
+        // Default/Basic employer benefits
+        return [
+          { name: 'Up to 3 active job postings', active: true },
+          { name: 'Basic company profile', active: true },
+          { name: 'Company name and logo', active: true },
+          { name: 'Simple candidate messaging', active: true },
+          { name: 'Basic applicant tracking', active: true },
+          { name: 'Enhanced features', active: false, locked: true },
+          { name: 'Analytics dashboard', active: false, locked: true }
+        ];
       case 'admin':
         return [
           { name: 'Full platform administration', active: true },
@@ -101,7 +119,8 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
           <div className="flex gap-2">
             <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Employer</Badge>
             <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100 flex items-center gap-1">
-              <Sparkles className="h-3 w-3" /> Premium
+              <Sparkles className="h-3 w-3" /> 
+              {premiumTier === 'enterprise' ? 'Enterprise' : premiumTier === 'pro' ? 'Pro' : 'Premium'}
             </Badge>
           </div>
         ) : (
@@ -181,7 +200,7 @@ const UserBenefitsCard: React.FC<UserBenefitsCardProps> = ({ userProfile }) => {
             <div className="text-sm text-muted-foreground pt-2 border-t">
               <p className="flex items-center gap-1">
                 <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                Premium subscription active
+                {premiumTier === 'enterprise' ? 'Enterprise' : premiumTier === 'pro' ? 'Pro' : 'Premium'} subscription active
               </p>
             </div>
           )}

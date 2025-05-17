@@ -1,3 +1,4 @@
+
 export const employerPlans = [
   {
     name: 'Basic',
@@ -7,16 +8,16 @@ export const employerPlans = [
     features: [
       'Up to 3 active job postings',
       'Basic company profile',
-      'Simple candidate search',
-      'Connect with candidates',
-      'Interview calendar'
+      'Company name and logo',
+      'Simple candidate messaging',
+      'Basic applicant tracking'
     ],
     buttonText: 'Get Started',
     popular: false,
     planId: 'free'
   },
   {
-    name: 'Premium',
+    name: 'Pro',
     price: '$30',
     period: 'per month',
     description: 'Complete solution for growing businesses with moderate hiring needs',
@@ -24,7 +25,7 @@ export const employerPlans = [
       'Unlimited premium job posts',
       'Enhanced candidate search',
       'Priority placement in search results',
-      'Custom branded profile',
+      'Custom branded company profile',
       'Analytics dashboard',
       'Unlimited candidate messaging',
       'Featured employer badge',
@@ -34,7 +35,28 @@ export const employerPlans = [
     ],
     buttonText: 'Subscribe',
     popular: true,
-    planId: 'standard_monthly'
+    planId: 'pro'
+  },
+  {
+    name: 'Enterprise',
+    price: '$99',
+    period: 'per month',
+    description: 'Advanced features for large companies with extensive hiring needs',
+    features: [
+      'All Pro features included',
+      'Dedicated account manager',
+      'Custom integrations',
+      'API access',
+      'Advanced analytics and reporting',
+      'Customized job matching algorithms',
+      'Employer branding solutions',
+      'Multi-user access with roles',
+      'Bulk job posting',
+      'Enhanced security features'
+    ],
+    buttonText: 'Contact Sales',
+    popular: false,
+    planId: 'enterprise'
   }
 ];
 

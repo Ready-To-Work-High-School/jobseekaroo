@@ -16,16 +16,23 @@ const FeeTeaser = () => {
     free: [
       "Up to 3 job postings",
       "Basic company profile",
-      "Simple candidate search",
-      "Connect with candidates",
-      "Interview calendar"
+      "Company name and logo",
+      "Simple candidate messaging",
+      "Basic applicant tracking"
     ],
-    premium: [
+    pro: [
       "Unlimited job postings",
       "Featured placement in search",
       "Enhanced candidate search",
       "Analytics dashboard",
       "Verified employer badge"
+    ],
+    enterprise: [
+      "Dedicated account manager",
+      "Custom integrations",
+      "API access",
+      "Advanced analytics",
+      "Multi-user access"
     ]
   };
 
@@ -41,16 +48,16 @@ const FeeTeaser = () => {
         >
           <Badge className="mb-4" variant="outline">
             <Sparkles className="h-3.5 w-3.5 mr-1 text-amber-500" />
-            <span>New Freemium Model</span>
+            <span>Three Simple Tiers</span>
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple Pricing for Employers</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Pricing Plans for Every Employer</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Post jobs for free or upgrade to premium features to increase visibility and find the perfect candidates faster.
+            Whether you're just starting out or scaling up, we have a plan that fits your hiring needs.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Free Plan */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Basic Plan */}
           <motion.div 
             className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6"
             initial={{ opacity: 0, y: 20 }}
@@ -60,8 +67,8 @@ const FeeTeaser = () => {
           >
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="text-xl font-bold">Free</h3>
-                <p className="text-muted-foreground">Basic job posting</p>
+                <h3 className="text-xl font-bold">Basic</h3>
+                <p className="text-muted-foreground">For small businesses</p>
               </div>
               <div className="text-2xl font-bold">$0</div>
             </div>
@@ -76,11 +83,11 @@ const FeeTeaser = () => {
             </ul>
             
             <Button asChild className="w-full" variant="outline">
-              <Link to="/employer-dashboard">Post a Free Job</Link>
+              <Link to="/employer-dashboard">Get Started Free</Link>
             </Button>
           </motion.div>
           
-          {/* Premium Plan */}
+          {/* Pro Plan */}
           <motion.div 
             className="bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-xl border border-slate-700 shadow-lg p-6 relative overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
@@ -96,16 +103,16 @@ const FeeTeaser = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-xl font-bold flex items-center">
-                  Premium
+                  Pro
                   <Award className="h-4 w-4 ml-2 text-amber-400" />
                 </h3>
-                <p className="text-slate-300">Enhanced visibility</p>
+                <p className="text-slate-300">For growing teams</p>
               </div>
-              <div className="text-2xl font-bold">$30</div>
+              <div className="text-2xl font-bold">$30<span className="text-sm font-normal">/mo</span></div>
             </div>
             
             <ul className="space-y-3 my-6">
-              {features.premium.map((feature, index) => (
+              {features.pro.map((feature, index) => (
                 <li key={index} className="flex items-start">
                   <Check className="h-5 w-5 mr-2 text-amber-400 shrink-0 mt-0.5" />
                   <span>{feature}</span>
@@ -122,6 +129,36 @@ const FeeTeaser = () => {
               <Link to="/employer/premium">Start Free Trial</Link>
             </Button>
           </motion.div>
+          
+          {/* Enterprise Plan */}
+          <motion.div 
+            className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-xl font-bold">Enterprise</h3>
+                <p className="text-muted-foreground">For large organizations</p>
+              </div>
+              <div className="text-2xl font-bold">$99<span className="text-sm font-normal">/mo</span></div>
+            </div>
+            
+            <ul className="space-y-3 my-6">
+              {features.enterprise.map((feature, index) => (
+                <li key={index} className="flex items-start">
+                  <Check className="h-5 w-5 mr-2 text-blue-500 shrink-0 mt-0.5" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <Button asChild className="w-full" variant="default">
+              <Link to="/contact">Contact Sales</Link>
+            </Button>
+          </motion.div>
         </div>
         
         <motion.div 
@@ -132,7 +169,7 @@ const FeeTeaser = () => {
           viewport={{ once: true }}
         >
           <p className="text-sm text-muted-foreground">
-            All employers start with free access. Upgrade anytime to premium features.
+            All plans include access to our high school talent pool. Compare plans for detailed feature information.
             <br />
             <Link to="/pricing" className="text-primary hover:underline">
               View detailed plan comparison
