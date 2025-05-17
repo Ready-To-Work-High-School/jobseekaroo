@@ -19,7 +19,7 @@ import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess
 import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
 import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
 import CareerExplorer from '@/components/home/CareerExplorer';
-import HomeNavBar from '@/components/home/HomeNavBar';
+import HomeNavBar from '@/components/navbar/HomeNavBar';
 
 // Create a wrapper component that doesn't render WhatYouGetCTA
 const HomeLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {

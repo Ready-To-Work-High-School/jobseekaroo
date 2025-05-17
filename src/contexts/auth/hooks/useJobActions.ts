@@ -94,7 +94,7 @@ export const useJobActions = (user: User | null) => {
     
     const { data, error } = await supabase
       .from('jobs')
-      .select()
+      .select('*')
       .eq('employer_id', user.id);
       
     if (error) throw error;
@@ -104,7 +104,7 @@ export const useJobActions = (user: User | null) => {
   const getJobById = async (jobId: string) => {
     const { data, error } = await supabase
       .from('jobs')
-      .select()
+      .select('*')
       .eq('id', jobId)
       .maybeSingle();
       
