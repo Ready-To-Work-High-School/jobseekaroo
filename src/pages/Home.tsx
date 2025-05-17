@@ -19,20 +19,24 @@ import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess
 import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
 import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
 import CareerExplorer from '@/components/home/CareerExplorer';
+import HomeNavBar from '@/components/home/HomeNavBar';
 
 // Create a wrapper component that doesn't render WhatYouGetCTA
 const HomeLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {
   return (
-    <Layout>
-      {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
-      <style dangerouslySetInnerHTML={{__html: `
-        /* Hide the default WhatYouGetCTA that comes from the Layout */
-        .what-you-get-cta-container {
-          display: none;
-        }
-      `}} />
-      {children}
-    </Layout>
+    <div className="min-h-screen flex flex-col">
+      <HomeNavBar />
+      <div className="flex-grow">
+        {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
+        <style dangerouslySetInnerHTML={{__html: `
+          /* Hide the default WhatYouGetCTA that comes from the Layout */
+          .what-you-get-cta-container {
+            display: none;
+          }
+        `}} />
+        {children}
+      </div>
+    </div>
   );
 };
 

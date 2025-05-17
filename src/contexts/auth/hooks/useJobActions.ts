@@ -31,7 +31,7 @@ export const useJobActions = (user: User | null) => {
       .from('saved_jobs')
       .select()
       .match({ user_id: user.id, job_id: jobId })
-      .single();
+      .maybeSingle();
       
     if (error && error.code !== 'PGRST116') return false;
     return !!data;
@@ -43,10 +43,10 @@ export const useJobActions = (user: User | null) => {
     const { data, error } = await supabase
       .from('saved_jobs')
       .select('job_id')
-      .match({ user_id: user.id });
+      .eq('user_id', user.id);
       
     if (error) throw error;
-    return data.map(item => item.job_id);
+    return data?.map(item => item.job_id) || [];
   };
   
   const createJob = async (jobData: any) => {
@@ -98,7 +98,7 @@ export const useJobActions = (user: User | null) => {
       .eq('employer_id', user.id);
       
     if (error) throw error;
-    return data;
+    return data || [];
   };
   
   const getJobById = async (jobId: string) => {
@@ -106,7 +106,7 @@ export const useJobActions = (user: User | null) => {
       .from('jobs')
       .select()
       .eq('id', jobId)
-      .single();
+      .maybeSingle();
       
     if (error) throw error;
     return data;
