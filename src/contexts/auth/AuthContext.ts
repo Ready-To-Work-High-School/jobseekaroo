@@ -19,15 +19,26 @@ export interface AuthContextType {
   makeAdmin?: (userId: string) => Promise<void>;
   verifyEmployer?: (employerId: string, status: string) => Promise<void>;
   redeemCode?: (code: string) => Promise<void>;
+  
+  // Job management functions
   createJob?: (jobData: any) => Promise<any>;
   updateJob?: (jobId: string, jobData: any) => Promise<any>;
   deleteJob?: (jobId: string) => Promise<void>;
   getJobs?: () => Promise<any[]>;
   getJobById?: (jobId: string) => Promise<any>;
+  
+  // Saved jobs functions
+  saveJob?: (jobId: string) => Promise<void>;
+  unsaveJob?: (jobId: string) => Promise<void>;
+  getSavedJobs?: () => Promise<string[]>;
+  isSavedJob?: (jobId: string) => Promise<boolean>;
+  
+  // Application management functions
   createApplication?: (applicationData: any) => Promise<any>;
   getApplications?: () => Promise<any[]>;
   getApplicationById?: (applicationId: string) => Promise<any>;
   updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  deleteApplication?: (applicationId: string) => Promise<void>;
   submitApplication?: (jobId: string, data: any) => Promise<any>;
 }
 
