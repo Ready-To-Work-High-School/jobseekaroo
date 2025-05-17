@@ -7,10 +7,12 @@ import './styles/index.css';
 import { ReactQueryProvider } from './lib/react-query';
 import { AuthProvider } from './contexts/auth';
 import { ThemeProvider } from './contexts/ThemeContext';
+import ScrollToTop from './components/navigation/ScrollToTop';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <ReactQueryProvider>
         <AuthProvider>
           <ThemeProvider>

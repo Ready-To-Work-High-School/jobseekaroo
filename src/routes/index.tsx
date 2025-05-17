@@ -27,8 +27,11 @@ import Resources from '@/pages/Resources';
 import PlatformGuide from '@/pages/PlatformGuide';
 import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
-import TestPage from '@/pages/TestPage';
 import SavedJobs from '@/pages/SavedJobs';
+import RedemptionCode from '@/pages/RedemptionCode';
+import ParentalConsent from '@/pages/ParentalConsent';
+import ProfileEdit from '@/pages/ProfileEdit';
+import FirstJobToolkit from '@/pages/FirstJobToolkit';
 
 // These are route configurations that can be imported in App.tsx
 // They are not actual Route components
@@ -77,6 +80,11 @@ const AppRoutes = [
     path: "/profile",
     element: <Profile />,
     key: "profile"
+  },
+  {
+    path: "/profile-edit",
+    element: <ProfileEdit />,
+    key: "profile-edit"
   },
   {
     path: "/applications",
@@ -174,9 +182,19 @@ const AppRoutes = [
     key: "schedule"
   },
   {
-    path: "/test",
-    element: <TestPage />,
-    key: "test"
+    path: "/first-job-toolkit",
+    element: <FirstJobToolkit />,
+    key: "first-job-toolkit"
+  },
+  {
+    path: "/redemption-code",
+    element: <RedemptionCode />,
+    key: "redemption-code"
+  },
+  {
+    path: "/parental-consent",
+    element: <ParentalConsent />,
+    key: "parental-consent"
   },
   {
     path: "*",
