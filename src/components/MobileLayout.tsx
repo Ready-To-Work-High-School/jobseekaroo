@@ -17,7 +17,15 @@ interface MobileLayoutProps {
 const MobileLayout = ({ children }: MobileLayoutProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
+  const isAuthPage = [
+    '/sign-in',
+    '/signin',
+    '/signup',
+    '/sign-up',
+    '/forgot-password',
+    '/reset-password',
+    '/auth/callback'
+  ].includes(location.pathname);
   const [scrollY, setScrollY] = useState(0);
   
   // Add body class for mobile layout

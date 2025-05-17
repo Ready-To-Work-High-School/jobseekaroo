@@ -17,7 +17,7 @@ const NotSignedInAlert = () => {
             <Link to="/sign-in">Sign In</Link>
           </Button>
           <Button variant="default" asChild>
-            <Link to="/sign-up">Create Account</Link>
+            <Link to="/signup">Create Account</Link>
           </Button>
         </div>
       </AlertDescription>

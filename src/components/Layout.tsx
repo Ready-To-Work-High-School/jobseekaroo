@@ -2,7 +2,7 @@
 import React from 'react';
 import AppHeader from './app/AppHeader';
 import Footer from './layout/Footer';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
@@ -19,7 +19,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const { user } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const isAuthPage = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
+  const isAuthPage = ['/sign-in', '/signin', '/signup', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
