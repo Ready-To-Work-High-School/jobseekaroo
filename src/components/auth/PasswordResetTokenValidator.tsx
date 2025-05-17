@@ -58,7 +58,7 @@ const PasswordResetTokenValidator = ({ onError }: PasswordResetTokenValidatorPro
     const type = searchParams.get("type");
     
     console.log("Access token found:", !!accessToken);
-    console.log("Type:", type);
+    console.log("Token type:", type);
     
     if (!accessToken) {
       toast({

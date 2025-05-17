@@ -55,6 +55,11 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
       const accessToken = searchParams.get("access_token");
       const type = searchParams.get("type");
       
+      console.log("Token validation checks:", { 
+        hasAccessToken: !!accessToken,
+        tokenType: type
+      });
+      
       // Additional security validations
       if (!accessToken) {
         throw new Error("No access token found in URL. Please request a new password reset link.");
@@ -65,40 +70,18 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
         throw new Error("Invalid token type. Please request a new password reset link.");
       }
       
-      // Validate token structure (basic checks)
-      if (!accessToken.match(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)) {
-        throw new Error("Invalid token format. Please request a new password reset link.");
-      }
+      console.log("Attempting to update password using token");
       
-      console.log("Attempting to update password using verified token");
-      
-      // Set the session with the access token, with timeout for security
-      const sessionPromise = new Promise(async (resolve, reject) => {
-        const timeoutId = setTimeout(() => reject(new Error("Session update timed out")), 5000);
-        try {
-          const result = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: "",
-          });
-          clearTimeout(timeoutId);
-          resolve(result);
-        } catch (err) {
-          clearTimeout(timeoutId);
-          reject(err);
-        }
-      });
-      
-      const { error: sessionError } = await sessionPromise as any;
-      if (sessionError) throw sessionError;
-      
-      // Then update the password
-      const { error } = await supabase.auth.updateUser({
+      // Update password directly using the access_token
+      const { data, error: updateError } = await supabase.auth.updateUser({
         password: values.password
+      }, {
+        accessToken
       });
       
-      if (error) {
-        console.error("Update password error:", error);
-        throw error;
+      if (updateError) {
+        console.error("Password update error:", updateError);
+        throw updateError;
       }
       
       console.log("Password updated successfully");

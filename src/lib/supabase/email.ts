@@ -24,9 +24,17 @@ export async function sendEmail(params: SendEmailParams) {
 
 export async function sendPasswordResetEmail(email: string) {
   try {
-    // First, trigger Supabase's password reset functionality
+    // Get the current origin for the redirect URL to work in any environment
+    const origin = window.location.origin;
+    
+    // Ensure the redirect URL is properly formed with absolute path
+    const redirectTo = `${origin}/reset-password`;
+    
+    console.log('Using redirect URL:', redirectTo);
+    
+    // Use Supabase's built-in password reset functionality
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: redirectTo,
     });
 
     if (error) throw error;

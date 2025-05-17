@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CheckCircle2, AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/use-toast";
@@ -24,12 +24,6 @@ const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const location = useLocation();
-
-  // Check URL for error parameters
-  const searchParams = new URLSearchParams(location.hash.substring(1));
-  const urlError = searchParams.get("error");
-  const urlErrorDescription = searchParams.get("error_description");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -79,19 +73,6 @@ const ForgotPassword = () => {
       setIsSubmitting(false);
     }
   };
-
-  // Check for URL errors only once when the component mounts
-  useEffect(() => {
-    if (urlError && urlErrorDescription) {
-      const readableError = urlErrorDescription.replace(/\+/g, ' ');
-      setError(readableError);
-      toast({
-        variant: "destructive",
-        title: "Reset link error",
-        description: readableError,
-      });
-    }
-  }, [urlError, urlErrorDescription]);
 
   return (
     <Layout>
