@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Lightbulb, MessagesSquare } from 'lucide-react';
+import VeedVideoPlayer from '@/components/video/VeedVideoPlayer';
 
 const InterviewTips = () => {
   return (
@@ -14,6 +15,12 @@ const InterviewTips = () => {
           <p className="text-sm">Use our Interview Practice tool to record and improve your responses!</p>
         </div>
       </div>
+      
+      <VeedVideoPlayer 
+        videoId="4e32ccc9-686f-4609-9a24-afe82be84ad6"
+        title="Interview Tips and Tricks"
+        thumbnailUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg"
+      />
       
       <div className="flex gap-3 p-4 bg-gradient-to-r from-blue-400/10 to-teal-400/10 rounded-lg">
         <div className="flex-shrink-0">
