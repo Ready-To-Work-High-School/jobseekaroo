@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 
 interface AuthLinksProps {

@@ -10,10 +10,11 @@ import EmployerDashboard from './pages/EmployerDashboard';
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
-import { useAuth } from './contexts/auth';
+import { useAuth } from './hooks/useAuth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
 import AuthRoutes from './routes/authRoutes';
+import UserProfileTabs from './pages/UserProfileTabs';
 
 function App() {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout><Home /></Layout>} />
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
+            <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
             <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
             <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
             <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
