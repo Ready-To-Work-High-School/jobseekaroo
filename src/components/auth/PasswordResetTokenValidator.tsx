@@ -12,7 +12,7 @@ const PasswordResetTokenValidator = ({ onError }: PasswordResetTokenValidatorPro
   const location = useLocation();
 
   useEffect(() => {
-    // Supabase auth uses hash parameters for tokens
+    // Check if we have a token in the hash (from email link)
     const hash = location.hash;
     console.log("Reset password location hash:", hash);
     
