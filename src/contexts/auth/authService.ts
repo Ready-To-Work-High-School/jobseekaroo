@@ -68,11 +68,18 @@ export const signUp = async (signUpData: SignUpData): Promise<AuthResponse> => {
 
 export const signOut = async (): Promise<{ error: Error | null }> => {
   try {
+    console.log('Signing out...');
     const { error } = await supabase.auth.signOut();
     
-    if (error) return { error: new Error(error.message) };
+    if (error) {
+      console.error('Error during sign out:', error);
+      return { error: new Error(error.message) };
+    }
+    
+    console.log('Sign out successful');
     return { error: null };
   } catch (error: any) {
+    console.error('Exception during sign out:', error);
     return { error: new Error(error.message || 'Unknown error during sign out') };
   }
 };

@@ -42,36 +42,23 @@ export const signOut = async () => {
     
     // First try to invalidate the session
     const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    // Clear any stored auth data from sessionStorage
-    sessionStorage.removeItem('csrfToken');
-    sessionStorage.removeItem('csrfTokenExpires');
-    sessionStorage.removeItem('google_oauth_state');
-    sessionStorage.removeItem('apple_oauth_state');
-    sessionStorage.removeItem('redirectAfterLogin');
-    sessionStorage.removeItem('authSession');
-    sessionStorage.removeItem(AUTH_ATTEMPT_KEY);
-    sessionStorage.removeItem(AUTH_COOLDOWN_KEY);
-    
-    // Clear auth-related localStorage items
-    localStorage.removeItem('supabase.auth.token');
-    
-    // Perform a security audit log
-    try {
-      await supabase.functions.invoke('audit-log', {
-        body: { 
-          action: 'user_logout',
-          metadata: { timestamp: new Date().toISOString() }
-        }
-      });
-    } catch (auditError) {
-      console.error('Error logging audit event:', auditError);
-      // Non-blocking error
+    if (error) {
+      console.error('Error during sign out:', error);
+      throw error;
     }
     
-    // Redirect to home page after logout for complete session termination
-    window.location.href = '/';
+    console.log('Successfully signed out');
+    
+    // Success - clean up local storage
+    try {
+      sessionStorage.removeItem('redirectAfterLogin');
+      localStorage.removeItem('supabase.auth.token');
+    } catch (cleanupError) {
+      console.warn('Non-critical error clearing storage:', cleanupError);
+      // Non-blocking error, continue
+    }
+    
+    return { error: null };
   } catch (error) {
     console.error('Error during sign out:', error);
     throw error;

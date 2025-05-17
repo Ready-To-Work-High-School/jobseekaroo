@@ -27,7 +27,9 @@ const UserMenu = () => {
 
   const handleSignOut = async () => {
     try {
+      console.log('Starting sign out process');
       await signOut();
+      console.log('Sign out completed successfully');
       toast({
         title: "Signed out",
         description: "You have been successfully signed out.",
