@@ -1,4 +1,3 @@
-
 import React from 'react';
 import NavLink from './NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -81,7 +80,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ className }) => {
               <span>Sign In</span>
             </NavLink>
             <Button variant="default" asChild size="sm">
-              <NavLink to="/sign-up" className="flex items-center gap-1">
+              <NavLink to="/signup" className="flex items-center gap-1">
                 <UserPlus className="h-4 w-4" />
                 <span>Sign Up</span>
               </NavLink>

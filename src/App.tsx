@@ -26,7 +26,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout><Home /></Layout>} />
             <Route path="/signup" element={<Layout><SignUp /></Layout>} />
+            <Route path="/sign-up" element={<Layout><SignUp /></Layout>} />
             <Route path="/signin" element={<Layout><SignIn /></Layout>} />
+            <Route path="/sign-in" element={<Layout><SignIn /></Layout>} />
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
             <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
             <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />

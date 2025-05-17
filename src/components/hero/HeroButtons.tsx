@@ -12,7 +12,7 @@ export const HeroButtons = () => {
       transition={{ duration: 0.5, delay: 0.8 }}
       className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
     >
-      <Link to="/sign-up">
+      <Link to="/signup">
         <Button size="lg" className="w-full sm:w-auto gap-2 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-700 hover:to-amber-600">
           <GraduationCap className="h-5 w-5" />
           Sign Up Now

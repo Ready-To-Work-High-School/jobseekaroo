@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -29,7 +28,7 @@ const ThreeSteps = () => {
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 horizontal-scroll hide-scrollbar pb-4">
-        <Link to="/sign-up">
+        <Link to="/signup">
           <motion.div variants={itemVariants} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 min-w-[260px]">
             <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">1</div>
             <h3 className="font-medium text-white">Create Profile</h3>

@@ -20,7 +20,7 @@ const AuthLinks = ({ className }: AuthLinksProps) => {
         Sign In
       </Link>
       <Button asChild size="sm" className="h-9 px-4 py-2 text-sm">
-        <Link to="/sign-up" className={cn(
+        <Link to="/signup" className={cn(
           "inline-flex items-center justify-center",
         )}>
           Sign Up

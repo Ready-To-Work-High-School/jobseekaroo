@@ -6,7 +6,7 @@ const SignInLinks = () => {
     <div className="text-center text-sm">
       <p>
         Don't have an account?{" "}
-        <Link to="/sign-up" className="text-primary font-medium hover:underline transition-colors">
+        <Link to="/signup" className="text-primary font-medium hover:underline transition-colors">
           Sign Up
         </Link>
       </p>

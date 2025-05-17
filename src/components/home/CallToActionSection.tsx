@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -20,7 +19,7 @@ const CallToActionSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/sign-up">
+          <Link to="/signup">
             <Button size="lg" variant="secondary" className="w-full sm:w-auto gap-2 font-medium">
               Create an Account <ArrowRight className="h-4 w-4" />
             </Button>

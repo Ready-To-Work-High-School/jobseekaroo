@@ -44,7 +44,7 @@ const SignUpPrompt: React.FC<SignUpPromptProps> = ({
               <Link to="/sign-in">Sign In</Link>
             </Button>
             <Button asChild size="sm">
-              <Link to="/sign-up">Sign Up</Link>
+              <Link to="/signup">Sign Up</Link>
             </Button>
           </div>
         </div>
