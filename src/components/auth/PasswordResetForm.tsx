@@ -73,10 +73,10 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
       console.log("Attempting to update password using token");
       
       // Update password using the access_token
-      // Fix: Pass accessToken directly as the second argument, not in an options object
+      // Fixed format: Correctly pass the password in the first argument, and use a session parameter in the second
       const { data, error: updateError } = await supabase.auth.updateUser(
-        { password: values.password },
-        { accessToken }
+        { password: values.password }, 
+        { session: { access_token: accessToken, refresh_token: '', token_type: 'bearer' } }
       );
       
       if (updateError) {
