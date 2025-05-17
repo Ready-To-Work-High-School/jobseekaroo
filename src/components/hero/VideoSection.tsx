@@ -1,5 +1,6 @@
 
 import { motion } from 'framer-motion';
+import CanvaEmbed from '@/components/shared/CanvaEmbed';
 
 export const VideoSection = () => {
   return (
@@ -10,11 +11,14 @@ export const VideoSection = () => {
       className="mb-12"
     >
       <div className="p-1 rounded-lg bg-gradient-to-r from-purple-600 via-blue-500 to-amber-500">
-        <div className="rounded-lg overflow-hidden shadow-xl p-6 bg-white">
-          <h3 className="text-xl font-medium text-center mb-2">Video Content Coming Soon</h3>
-          <p className="text-center text-muted-foreground">
-            We're working on creating great video content to help you understand our platform better.
-          </p>
+        <div className="rounded-lg overflow-hidden shadow-xl">
+          <CanvaEmbed 
+            designId="DAGnt7_DWQs"
+            designName="Job Seekers 4 HS Introduction"
+            authorName="JS4HS Team"
+            aspectRatio="56.25%"
+            downloadUrl="https://www.canva.com/design/DAGnt7_DWQs/wVvFyiUq8Evef8u9TqzoRw/download?utm_content=DAGnt7_DWQs&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&type=4"
+          />
         </div>
       </div>
     </motion.div>
