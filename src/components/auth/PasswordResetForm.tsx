@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, WifiOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/use-toast";
+import { useNetworkStatus } from "@/components/auth/hooks/useNetworkStatus";
+import NetworkOfflineState from "@/components/auth/diagnostic/NetworkOfflineState";
 
 const passwordSchema = z.object({
   password: z
@@ -36,6 +38,8 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isOnline = useNetworkStatus();
+  const [retryCount, setRetryCount] = useState(0);
 
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
@@ -72,8 +76,8 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
       
       console.log("Attempting to update password using token");
       
-      // Update password using the access_token
-      // Correctly structure the call according to Supabase's API requirements
+      // Update password using the access_token - Supabase handles this automatically
+      // when we have an active recovery flow in progress
       const { data, error: updateError } = await supabase.auth.updateUser(
         { password: values.password }
       );
@@ -97,16 +101,42 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
       setTimeout(() => navigate("/sign-in"), 3000);
     } catch (err: any) {
       console.error('Password reset error:', err);
-      setError(err.message || "Failed to reset password. Please try again or request a new reset link.");
-      toast({
-        variant: "destructive",
-        title: "Password reset failed",
-        description: err.message || "Failed to reset password. Please try again or request a new reset link.",
-      });
+      
+      // Check if this is a network connectivity issue
+      if (!navigator.onLine || err.message === "Failed to fetch" || err.message?.includes("network")) {
+        setError("Network connection issue detected. Please check your internet connection and try again.");
+        toast({
+          variant: "destructive",
+          title: "Connection error",
+          description: "Unable to connect to authentication service. Please check your network connection.",
+        });
+      } else {
+        setError(err.message || "Failed to reset password. Please try again or request a new reset link.");
+        toast({
+          variant: "destructive",
+          title: "Password reset failed",
+          description: err.message || "Failed to reset password. Please try again or request a new reset link.",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Function to retry connection
+  const handleRetryConnection = () => {
+    setRetryCount(prev => prev + 1);
+    setError(null);
+    toast({
+      title: "Retrying connection",
+      description: "Attempting to reconnect to the server...",
+    });
+  };
+
+  // If user is offline, show offline state component
+  if (!isOnline) {
+    return <NetworkOfflineState />;
+  }
 
   return (
     <Form {...form}>
@@ -168,6 +198,18 @@ const PasswordResetForm = ({ onSuccess }: PasswordResetFormProps) => {
             </>
           ) : "Reset Password"}
         </Button>
+        
+        {error && error.includes("network") && (
+          <Button 
+            type="button"
+            variant="outline"
+            className="w-full mt-2 flex items-center"
+            onClick={handleRetryConnection}
+          >
+            <Loader2 className={`mr-2 h-4 w-4 ${retryCount > 0 ? "animate-spin" : ""}`} />
+            Retry Connection
+          </Button>
+        )}
       </form>
     </Form>
   );
