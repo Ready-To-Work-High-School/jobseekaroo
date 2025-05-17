@@ -7,6 +7,7 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog";
+import { Link } from 'react-router-dom';
 
 interface CoppaInformationDialogProps {
   open: boolean;
@@ -53,7 +54,7 @@ const CoppaInformationDialog: React.FC<CoppaInformationDialogProps> = ({
           </ul>
           
           <p className="text-xs italic">
-            For more information, please review our <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a> or contact us at <a href="mailto:privacy@js4hs.com" className="text-blue-600 hover:underline">privacy@js4hs.com</a>
+            For more information, please review our <Link to="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> or contact us at <a href="mailto:privacy@js4hs.com" className="text-blue-600 hover:underline">privacy@js4hs.com</a>
           </p>
         </div>
         

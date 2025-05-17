@@ -34,8 +34,12 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t mt-8 pt-4 text-center text-sm text-muted-foreground">
+        <div className="border-t mt-8 pt-4 flex flex-col md:flex-row justify-between text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} JobSeekers4HS. All rights reserved.</p>
+          <div className="flex gap-4 mt-2 md:mt-0">
+            <Link to="/privacy-policy" className="hover:text-foreground">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:text-foreground">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

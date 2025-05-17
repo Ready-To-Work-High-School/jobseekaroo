@@ -17,6 +17,11 @@ import AuthRoutes from './routes/authRoutes';
 import UserProfileTabs from './pages/UserProfileTabs';
 import PasswordResetRedirect from "./components/auth/PasswordResetRedirect";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import Jobs from './pages/Jobs';
+import EmployerKanban from './pages/EmployerKanban';
+import CommunicationTools from './pages/CommunicationTools';
 
 function App() {
   const { user } = useAuth();
@@ -37,12 +42,20 @@ function App() {
               <Route path="/profile" element={<Layout><Profile /></Layout>} />
               <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
               <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
-              <Route path="/jobs" element={<Layout><EnhancedJobListings /></Layout>} />
+              <Route path="/jobs" element={<Layout><Jobs /></Layout>} />
+              <Route path="/employer-kanban" element={<Layout><EmployerKanban /></Layout>} />
+              <Route path="/communication-tools" element={<Layout><CommunicationTools /></Layout>} />
               <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
               <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
               <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
               <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
               <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+              
+              {/* Add explicit routes for privacy policy and terms of service */}
+              <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
+              <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
+              <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
+              <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
               
               {/* Include all auth routes */}
               {AuthRoutes}
