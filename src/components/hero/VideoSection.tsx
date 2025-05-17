@@ -33,7 +33,7 @@ export const VideoSection = () => {
                 padding: 0,
                 margin: 0
               }}
-              src="https://www.canva.com/design/DAGnt7_DWQs/wVvFyiUq8Evef8u9TqzoRw/watch?utm_content=DAGnt7_DWQs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h76863511a1"
+              src="https://www.canva.com/design/DAGnt7_DWQs/wVvFyiUq8Evef8u9TqzoRw/watch?embed"
               allowFullScreen={true}
               allow="fullscreen"
               title="JS4HS Introduction Video"
@@ -41,7 +41,7 @@ export const VideoSection = () => {
           </div>
           <div className="text-center mt-2 mb-1">
             <a 
-              href="https://www.canva.com/design/DAGnt7_DWQs/wVvFyiUq8Evef8u9TqzoRw/watch?utm_content=DAGnt7_DWQs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h76863511a1" 
+              href="https://www.canva.com/design/DAGnt7_DWQs/wVvFyiUq8Evef8u9TqzoRw/watch?utm_content=DAGnt7_DWQs&utm_campaign=designshare&utm_medium=embeds&utm_source=link" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
