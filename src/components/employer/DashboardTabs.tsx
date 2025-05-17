@@ -12,7 +12,7 @@ import CreateJobTab from './CreateJobTab';
 import FreemiumInfoCard from './FreemiumInfoCard';
 import PremiumFeaturesBanner from './PremiumFeaturesBanner';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 
 interface JobPosting {

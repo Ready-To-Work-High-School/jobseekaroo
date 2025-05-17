@@ -1,42 +1,60 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
-import LazyImage from '@/components/LazyImage';
-import { getImageSizes } from '@/utils/imageUtils';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { GraduationCap, Building, ArrowRight } from 'lucide-react';
 
 const EmployerDirectAccessSection = () => {
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-100 mb-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div>
-          <Badge className="mb-2">EXCLUSIVE BENEFIT</Badge>
-          <h2 className="text-2xl font-bold mb-4">Direct Access to Verified Students</h2>
-          <p className="mb-4 text-muted-foreground">
-            Our platform gives you direct access to students with verified credentials and skills.
-            All students on our platform have completed industry-standard assessments.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-6">
-            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-              <Link to="/sign-up">Create Employer Account</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link to="/employer-badges">View Student Credentials</Link>
-            </Button>
+    <Card className="border-blue-200 shadow-md">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-white border-b">
+        <div className="flex items-center mb-2">
+          <GraduationCap className="h-5 w-5 mr-2 text-blue-600" />
+          <CardTitle>Direct Access to Student Talent</CardTitle>
+        </div>
+        <CardDescription>
+          Connect with high school students actively seeking employment opportunities
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="bg-blue-100 p-2 rounded-full">
+              <Building className="h-4 w-4 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-medium">School-Endorsed Platform</h3>
+              <p className="text-sm text-muted-foreground">
+                We partner directly with high schools to connect their students with quality employers.
+                All students using our platform are enrolled in career-focused academic programs.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-3">
+            <div className="bg-blue-100 p-2 rounded-full">
+              <GraduationCap className="h-4 w-4 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-medium">Career-Ready Students</h3>
+              <p className="text-sm text-muted-foreground">
+                Students on our platform are actively participating in Entrepreneurship and Nursing 
+                academies, meaning they're specifically preparing for workforce entry.
+              </p>
+            </div>
           </div>
         </div>
-        <div className="relative rounded-lg overflow-hidden border-4 border-white shadow-lg hidden md:block">
-          <LazyImage
-            src="/lovable-uploads/5bd40401-b911-4d3b-a1f2-3e1712199dbc.png"
-            alt="Employer Dashboard Preview"
-            className="object-cover w-full h-full"
-            sizes={getImageSizes('hero')}
-          />
-        </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="border-t pt-4 flex justify-end">
+        <Button asChild>
+          <Link to="/signup" className="gap-2">
+            <span>Create Employer Account</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import Layout from '@/components/Layout';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import DashboardHeader from '@/components/employer/DashboardHeader';
 import DashboardTabs from '@/components/employer/DashboardTabs';
 import UnauthenticatedEmployerView from '@/components/employer/dashboard/UnauthenticatedEmployerView';

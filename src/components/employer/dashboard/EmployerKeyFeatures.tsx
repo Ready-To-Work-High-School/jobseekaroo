@@ -1,58 +1,66 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, Users, BarChart3, Star } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Briefcase, Search, Users, Award } from 'lucide-react';
 
 const EmployerKeyFeatures = () => {
   return (
-    <div className="mb-12">
-      <h2 className="text-2xl font-bold text-center mb-8">Key Employer Features</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <Card className="bg-white hover:shadow-md transition-all hover:-translate-y-1 duration-300">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Briefcase className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Premium Job Postings</h3>
-              <p className="text-sm text-center text-muted-foreground">Branded listings with priority placement in search results</p>
-            </div>
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold text-center mb-6">Key Employer Features</h2>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium flex items-center">
+              <Briefcase className="h-4 w-4 mr-2 text-blue-600" />
+              Easy Job Posting
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Create and manage job listings with our user-friendly dashboard
+            </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-white hover:shadow-md transition-all hover:-translate-y-1 duration-300">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                <Users className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Smart Candidate Matching</h3>
-              <p className="text-sm text-center text-muted-foreground">AI-powered matching with skill compatibility scores</p>
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium flex items-center">
+              <Search className="h-4 w-4 mr-2 text-blue-600" />
+              Candidate Matching
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Our system helps match your postings with qualified student candidates
+            </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-white hover:shadow-md transition-all hover:-translate-y-1 duration-300">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mb-4">
-                <BarChart3 className="h-6 w-6 text-amber-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Advanced Analytics</h3>
-              <p className="text-sm text-center text-muted-foreground">Comprehensive dashboards with candidate metrics and trends</p>
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium flex items-center">
+              <Users className="h-4 w-4 mr-2 text-blue-600" />
+              Applicant Tracking
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Review applications, schedule interviews, and track candidate progress
+            </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-white hover:shadow-md transition-all hover:-translate-y-1 duration-300">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                <Star className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Premium Services</h3>
-              <p className="text-sm text-center text-muted-foreground">Custom training programs and exclusive partner benefits</p>
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium flex items-center">
+              <Award className="h-4 w-4 mr-2 text-blue-600" />
+              School Partnerships
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Connect directly with high school career programs and advisors
+            </p>
           </CardContent>
         </Card>
       </div>

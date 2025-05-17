@@ -1,10 +1,24 @@
 
-import React, { memo } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Building, Users, Clock, PlusCircle, Loader2 } from 'lucide-react';
-import AdvancedSpinner from '@/components/ui/advanced-spinner';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { PlusCircle, Users, ExternalLink, MoreHorizontal } from 'lucide-react';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { format } from 'date-fns';
 
 interface JobPosting {
   id: string;
@@ -18,99 +32,99 @@ interface JobPosting {
 
 interface PostingsTabProps {
   jobPostings: JobPosting[];
-  loading?: boolean;
+  loading: boolean;
   setActiveTab: (tab: string) => void;
 }
 
-// Using memo to prevent unnecessary re-renders
-const PostingsTab = memo(({ jobPostings, loading = false, setActiveTab }: PostingsTabProps) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Your Job Postings</CardTitle>
-        <CardDescription>
-          Manage and track all your active and closed job postings
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-10">
-            <AdvancedSpinner 
-              variant="circle" 
-              size="lg" 
-              text="Loading your job postings..." 
-              centered 
-              className="text-muted-foreground" 
-            />
-          </div>
-        ) : jobPostings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="bg-muted/30 p-4 rounded-full mb-4">
-              <Building className="h-10 w-10 text-muted-foreground" />
-            </div>
-            <h3 className="font-medium mb-2">No job postings yet</h3>
-            <p className="text-muted-foreground max-w-md mb-6">
-              You haven't posted any jobs yet. Create your first job posting to start finding qualified candidates.
-            </p>
-            <Button onClick={() => setActiveTab("create")} className="gap-2">
-              <PlusCircle className="h-4 w-4" />
-              Post New Job
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {jobPostings.map((job) => (
-              <div key={job.id} className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1 mb-3 md:mb-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium">{job.title}</h3>
-                    <Badge variant={job.status === 'active' ? 'default' : 'secondary'}>
-                      {job.status === 'active' ? 'Active' : 'Closed'}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Building className="h-3.5 w-3.5" />
-                      {job.company}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5" />
-                      {job.applicants} Applicants
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      Posted: {new Date(job.posted).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 w-full md:w-auto">
-                  <Button variant="outline" size="sm" className="w-full md:w-auto">
-                    View Applicants
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full md:w-auto">
-                    Edit
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-      {jobPostings.length > 0 && (
-        <CardFooter className="border-t pt-6 flex justify-between">
-          <div className="text-sm text-muted-foreground">
-            Showing {jobPostings.length} job posting{jobPostings.length !== 1 ? 's' : ''}
-          </div>
+const PostingsTab = ({ jobPostings, loading, setActiveTab }: PostingsTabProps) => {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+      </div>
+    );
+  }
+
+  if (jobPostings.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>No Job Postings</CardTitle>
+          <CardDescription>You haven't created any job postings yet.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center">
           <Button onClick={() => setActiveTab("create")} className="gap-2">
             <PlusCircle className="h-4 w-4" />
-            Post New Job
+            Create Your First Job Posting
           </Button>
-        </CardFooter>
-      )}
-    </Card>
-  );
-});
+        </CardContent>
+      </Card>
+    );
+  }
 
-PostingsTab.displayName = 'PostingsTab';
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-medium">Your Job Postings</h3>
+        <Button onClick={() => setActiveTab("create")} className="gap-2">
+          <PlusCircle className="h-4 w-4" />
+          Add New Job
+        </Button>
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Job Title</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Posted Date</TableHead>
+            <TableHead>Applicants</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {jobPostings.map((job) => (
+            <TableRow key={job.id}>
+              <TableCell className="font-medium">{job.title}</TableCell>
+              <TableCell>{job.location}</TableCell>
+              <TableCell>
+                <Badge variant={job.status === 'active' ? 'default' : 'outline'}>
+                  {job.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{job.posted ? format(new Date(job.posted), 'MMM d, yyyy') : 'N/A'}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span>{job.applicants}</span>
+                </div>
+              </TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                      <span className="sr-only">Actions</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      View Job
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Edit Job</DropdownMenuItem>
+                    <DropdownMenuItem>Pause Job</DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-600">Delete Job</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
 
 export default PostingsTab;

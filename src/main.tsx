@@ -6,6 +6,7 @@ import App from './App'
 import { AuthProvider } from './contexts/auth'
 import { Toaster as SonnerToaster } from 'sonner'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { ReactQueryProvider } from './lib/react-query'
 
 // Import styles
 import './styles/index.css'
@@ -28,21 +29,23 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <AuthProvider>
-          <App />
-          {/* Modern toast notifications with animations */}
-          <SonnerToaster 
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'white',
-                color: 'black',
-                border: '1px solid #e2e8f0',
-              },
-              className: 'font-medium',
-            }}
-          />
-        </AuthProvider>
+        <ReactQueryProvider>
+          <AuthProvider>
+            <App />
+            {/* Modern toast notifications with animations */}
+            <SonnerToaster 
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: 'white',
+                  color: 'black',
+                  border: '1px solid #e2e8f0',
+                },
+                className: 'font-medium',
+              }}
+            />
+          </AuthProvider>
+        </ReactQueryProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,

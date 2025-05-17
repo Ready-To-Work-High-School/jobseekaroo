@@ -1,57 +1,76 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import ValueProposition from '@/components/employer/premium/ValueProposition';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Check, Star, Sparkles } from 'lucide-react';
 
 const EmployerPremiumServices = () => {
   return (
-    <div className="max-w-5xl mx-auto bg-gradient-to-r from-amber-50 to-blue-50 p-6 rounded-lg border border-amber-100 dark:from-amber-950/30 dark:to-blue-950/30 dark:border-amber-900/50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-100/20 to-amber-200/20 animate-pulse-very-slow pointer-events-none"></div>
-      <div className="absolute inset-0 border-2 border-amber-300/40 rounded-lg animate-pulse-slow pointer-events-none"></div>
-      <div className="absolute inset-0 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse-slow glow-amber pointer-events-none"></div>
-      
-      <div className="flex flex-col gap-6 relative z-10">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <motion.div
-              animate={{ 
-                scale: [1, 1.2, 1], 
-                rotate: [0, 15, -15, 0],
-                opacity: [0.7, 1, 0.7] 
-              }}
-              transition={{ 
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut" 
-              }}
-              className="bg-amber-100 dark:bg-amber-900/50 p-2 rounded-full"
-            >
-              <Sparkles className="h-6 w-6 text-amber-500" />
-            </motion.div>
+    <Card className="border-amber-200 shadow-md">
+      <CardHeader className="bg-gradient-to-r from-amber-50 to-white border-b">
+        <div className="flex items-center mb-2">
+          <Star className="h-5 w-5 mr-2 text-amber-500" />
+          <CardTitle>Premium Employer Services</CardTitle>
+        </div>
+        <CardDescription>
+          Enhance your recruiting experience with our advanced employer tools
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-4">
+            <h3 className="font-medium flex items-center">
+              <Sparkles className="h-4 w-4 mr-2 text-amber-500" />
+              Premium Features
+            </h3>
+            <ul className="space-y-2">
+              {[
+                'Featured job listings at the top of search results',
+                'Candidate matching algorithm with compatibility scores',
+                'Advanced applicant analytics and reporting',
+                'Customizable screening questions for applications'
+              ].map((feature, index) => (
+                <li key={index} className="flex items-start">
+                  <Check className="h-4 w-4 mr-2 text-green-600 mt-1 flex-shrink-0" />
+                  <span className="text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold">Premium Employer Services</h2>
-            <p className="text-muted-foreground">
-              Employers get customized job profiles (branded listings, priority placement) and data analytics 
-              (applicant statistics, skill match scores) to streamline hiring and improve candidate selection.
-            </p>
+          
+          <div className="space-y-4">
+            <h3 className="font-medium flex items-center">
+              <Star className="h-4 w-4 mr-2 text-amber-500" />
+              Additional Benefits
+            </h3>
+            <ul className="space-y-2">
+              {[
+                'Direct messaging with qualified candidates',
+                'Virtual interview scheduling and management',
+                'School career advisor partnerships',
+                'Employer branding and profile customization'
+              ].map((benefit, index) => (
+                <li key={index} className="flex items-start">
+                  <Check className="h-4 w-4 mr-2 text-green-600 mt-1 flex-shrink-0" />
+                  <span className="text-sm">{benefit}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-        
-        <ValueProposition />
-        
-        <div className="flex justify-center mt-4">
-          <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
-            <Link to="/employer-premium">
-              Explore Premium Features
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="border-t pt-4 flex justify-between">
+        <p className="text-sm text-muted-foreground">
+          Starting at $49/month
+        </p>
+        <Button asChild variant="outline">
+          <Link to="/employer/premium-features">
+            Learn More
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
