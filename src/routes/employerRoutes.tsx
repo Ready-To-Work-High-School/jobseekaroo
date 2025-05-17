@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import ForEmployers from '../pages/ForEmployers';
@@ -17,7 +18,7 @@ import { VerificationFormContainer } from '@/components/employer/VerificationFor
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
 
-export const EmployerRoutes = (
+const EmployerRoutes = (
   <>
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
@@ -25,16 +26,15 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/dashboard" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerDashboard />
         </ProtectedRoute>
       } 
     />
-    <Route path="/employer-dashboard" element={<EmployerDashboard />} />
     <Route 
       path="/employer/analytics" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerAnalytics />
         </ProtectedRoute>
       } 
@@ -49,7 +49,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/applicants" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerApplicants />
         </ProtectedRoute>
       } 
@@ -58,7 +58,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/calendar" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerCalendar />
         </ProtectedRoute>
       } 
@@ -66,7 +66,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/verify" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <VerificationFormContainer />
         </ProtectedRoute>
       } 
@@ -74,7 +74,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/verifications" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerVerifications />
         </ProtectedRoute>
       } 
@@ -82,7 +82,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/candidates" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerKanban />
         </ProtectedRoute>
       } 
@@ -90,7 +90,7 @@ export const EmployerRoutes = (
     <Route 
       path="/employer/tools" 
       element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredRoles={["employer"]}>
           <EmployerToolsPage />
         </ProtectedRoute>
       } 

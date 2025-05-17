@@ -6,7 +6,7 @@ import Layout from './components/Layout';
 import MobileLayout from './components/MobileLayout';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
-import EmployerDashboard from './pages/EmployerDashboard';
+import EmployerDashboard from './pages/employer/EmployerDashboard';
 import EnhancedJobListings from './pages/EnhancedJobListings';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
@@ -20,6 +20,7 @@ import { PublicRoutes } from './routes/publicRoutes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import NotFound from './pages/NotFound';
 import RequireVerification from './components/auth/RequireVerification';
+import EmployerRoutes from './routes/employerRoutes';
 
 function App() {
   const { user } = useAuth();
@@ -78,6 +79,9 @@ function App() {
           
           {/* Include public routes */}
           {PublicRoutes}
+
+          {/* Include employer routes */}
+          {EmployerRoutes}
           
           {/* Catch-all route for 404s */}
           <Route path="*" element={<LayoutComponent><NotFound /></LayoutComponent>} />
