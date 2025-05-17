@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/auth'
 import { Toaster as SonnerToaster } from 'sonner'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ReactQueryProvider } from './lib/react-query'
+import ScrollToTop from './components/navigation/ScrollToTop'
 
 // Import styles
 import './styles/index.css'
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <ReactQueryProvider>
           <AuthProvider>
+            <ScrollToTop />
             <App />
             {/* Modern toast notifications with animations */}
             <SonnerToaster 

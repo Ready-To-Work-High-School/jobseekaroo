@@ -16,18 +16,22 @@ import AdminPanel from './pages/AdminPanel';
 import AuthRoutes from './routes/authRoutes';
 import UserProfileTabs from './pages/UserProfileTabs';
 import PasswordResetRedirect from "./components/auth/PasswordResetRedirect";
+import { Helmet, HelmetProvider } from 'react-helmet';
 
 function App() {
   const { user } = useAuth();
 
   return (
-    <>
+    <HelmetProvider>
       {/* Add the PasswordResetRedirect component at the root level */}
       <PasswordResetRedirect />
       
       <div className="app">
         <AuthProvider>
           <NotificationsProvider user={user}>
+            {/* Add a default title tag that will be overridden by specific pages */}
+            <Helmet defaultTitle="JobSeekers4HS - Your First Job, Made Simple" titleTemplate="%s | JobSeekers4HS" />
+            
             <Routes>
               <Route path="/" element={<Layout><Home /></Layout>} />
               <Route path="/profile" element={<Layout><Profile /></Layout>} />
@@ -46,7 +50,7 @@ function App() {
           </NotificationsProvider>
         </AuthProvider>
       </div>
-    </>
+    </HelmetProvider>
   );
 }
 

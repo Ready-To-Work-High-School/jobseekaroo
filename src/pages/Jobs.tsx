@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Star, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const Jobs = () => {
   // Log when the component mounts to debug
@@ -15,6 +16,11 @@ const Jobs = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Find Your Perfect First Job</title>
+        <meta name="description" content="Discover amazing opportunities tailored for high school students. Start your career journey today!" />
+      </Helmet>
+      
       <div className="bg-gradient-to-b from-blue-50/50 via-purple-50/30 to-transparent dark:from-blue-950/20 dark:via-purple-950/10">
         <div className="container mx-auto px-4 py-12">
           <motion.div 

@@ -90,7 +90,8 @@ const EmployerKanban = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Candidate Pipeline | Employer Dashboard</title>
+        <title>Candidate Pipeline</title>
+        <meta name="description" content="Manage candidates through your hiring stages" />
       </Helmet>
       <div className="container max-w-7xl mx-auto px-4 py-6">
         <div className="mb-6">

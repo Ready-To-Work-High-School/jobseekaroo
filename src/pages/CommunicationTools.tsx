@@ -2,10 +2,16 @@
 import Layout from '@/components/Layout';
 import { MessageSquare, Shield, FileText, Bell } from 'lucide-react';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
+import { Helmet } from 'react-helmet';
 
 const CommunicationTools = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Communication Tools</title>
+        <meta name="description" content="Secure messaging system between students, employers, and school administrators" />
+      </Helmet>
+      
       <div className="container max-w-6xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
           <div className="flex items-center gap-3">
