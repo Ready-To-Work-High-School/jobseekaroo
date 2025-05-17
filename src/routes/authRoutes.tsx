@@ -3,8 +3,8 @@ import { Route } from 'react-router-dom';
 import Layout from '../components/Layout';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
-import PasswordReset from '../pages/PasswordReset';
-import PasswordResetConfirmation from '../pages/PasswordResetConfirmation';
+import ForgotPassword from '../pages/ForgotPassword';
+import ResetPassword from '../pages/ResetPassword';
 
 const AuthRoutes = (
   <>
@@ -12,8 +12,8 @@ const AuthRoutes = (
     <Route path="/signin" element={<Layout><SignIn /></Layout>} />
     <Route path="/sign-up" element={<Layout><SignUp /></Layout>} />
     <Route path="/signup" element={<Layout><SignUp /></Layout>} />
-    <Route path="/password-reset" element={<Layout><PasswordReset /></Layout>} />
-    <Route path="/password-reset/confirmation" element={<Layout><PasswordResetConfirmation /></Layout>} />
+    <Route path="/forgot-password" element={<Layout><ForgotPassword /></Layout>} />
+    <Route path="/reset-password" element={<Layout><ResetPassword /></Layout>} />
   </>
 );
 
