@@ -1,6 +1,6 @@
 
 import { motion } from 'framer-motion';
-import VideoPlayer from '@/components/video/VideoPlayer';
+import VeedVideoPlayer from '@/components/video/VeedVideoPlayer';
 
 export const VideoSection = () => {
   return (
@@ -13,10 +13,10 @@ export const VideoSection = () => {
       {/* Gradient accent border around video */}
       <div className="p-1 rounded-lg bg-gradient-to-r from-purple-600 via-blue-500 to-amber-500">
         <div className="rounded-lg overflow-hidden shadow-xl relative">
-          <VideoPlayer 
-            thumbnailUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg" 
-            videoUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.mp4"
+          <VeedVideoPlayer 
+            videoId="4e32ccc9-686f-4609-9a24-afe82be84ad6"
             title="Kickstart Your Career with AI-Powered Tools!"
+            thumbnailUrl="/lovable-uploads/37c7b57e-b280-4ee0-abe9-5e3da84a418b.jpg"
           />
         </div>
       </div>
