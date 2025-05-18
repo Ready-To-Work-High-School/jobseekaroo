@@ -47,6 +47,7 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
     setError(null);
     
     try {
+      console.log('StudentSignUpForm: Starting signup process');
       // Validate password strength before submission
       const { isValid, errorMessage } = validatePasswordStrength(data.password);
       if (!isValid) {
@@ -54,7 +55,7 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       }
       
       // Create the user account with student user type
-      await signUp(
+      const user = await signUp(
         data.email, 
         data.password,
         data.firstName,
@@ -62,6 +63,8 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
         'student'
       );
       
+      console.log('StudentSignUpForm: Signup completed, user:', user ? 'success' : 'null');
+
       // Display success message
       toast({
         title: "Account created",
@@ -69,10 +72,16 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       });
       
       // Redirect or callback
-      onSuccess?.();
-      navigate('/dashboard');
+      if (onSuccess) {
+        console.log('StudentSignUpForm: Calling onSuccess callback');
+        onSuccess();
+      } else {
+        console.log('StudentSignUpForm: Redirecting to dashboard');
+        // Add a small delay to ensure the toast is shown before redirect
+        setTimeout(() => navigate('/dashboard'), 500);
+      }
     } catch (error: any) {
-      console.error('Signup error:', error);
+      console.error('StudentSignUpForm signup error:', error);
       setError(error.message || 'Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);

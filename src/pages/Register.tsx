@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ServerDataDisplay from '../components/ServerDataDisplay';
+import { useToast } from '@/hooks/use-toast';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -13,6 +13,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,16 +33,27 @@ const Register = () => {
     setIsLoading(true);
     
     try {
+      console.log('Register page: Starting signup process');
       // Extract first and last name from username
       const nameParts = username.split(' ');
       const firstName = nameParts[0] || '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
       // Call signUp with the required arguments: email, password, firstName, lastName, userType (optional)
-      await signUp(email, password, firstName, lastName);
-      navigate('/dashboard');
+      const user = await signUp(email, password, firstName, lastName);
+      
+      console.log('Register page: Signup complete, redirecting to dashboard');
+      toast({
+        title: "Account created",
+        description: "Your account has been created successfully.",
+      });
+      
+      // Add a small delay to ensure toast is shown
+      setTimeout(() => navigate('/dashboard'), 500);
     } catch (err: any) {
+      console.error('Register page error:', err);
       setError(err.message || 'Failed to create an account');
+    } finally {
       setIsLoading(false);
     }
   };

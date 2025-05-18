@@ -28,6 +28,9 @@ export const signUp = async (signUpData: SignUpData): Promise<AuthResponse> => {
   const { email, password, firstName, lastName, userType } = signUpData;
   
   try {
+    // Clear any logs first
+    console.log('Starting signup process for:', email);
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -40,10 +43,16 @@ export const signUp = async (signUpData: SignUpData): Promise<AuthResponse> => {
       }
     });
     
-    if (error) return { user: null, error: new Error(error.message) };
+    if (error) {
+      console.error('Signup error:', error);
+      return { user: null, error: new Error(error.message) };
+    }
+    
+    console.log('Auth signup successful, user:', data.user?.id);
     
     // Create a profile record for the new user
     if (data.user) {
+      console.log('Creating profile for user:', data.user.id);
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
@@ -57,11 +66,14 @@ export const signUp = async (signUpData: SignUpData): Promise<AuthResponse> => {
       if (profileError) {
         console.error('Error creating profile:', profileError);
         // Continue despite profile creation error
+      } else {
+        console.log('Profile created successfully');
       }
     }
     
     return { user: data.user, error: null };
   } catch (error: any) {
+    console.error('Exception during signup:', error);
     return { user: null, error: new Error(error.message || 'Unknown error during sign up') };
   }
 };

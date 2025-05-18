@@ -1,3 +1,4 @@
+
 import { ReactNode, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from './AuthContext';
@@ -12,7 +13,8 @@ import {
   signUp, 
   signOut, 
   signInWithGoogle, 
-  signInWithApple 
+  signInWithApple,
+  verifyEmployerStatus
 } from './authService';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -36,8 +38,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     let isFirstLoad = true;
     let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
 
+    // Set up the auth state change listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
+        
+        // Update user state synchronously
         setUser(session?.user ?? null);
         
         if (session?.user) {
@@ -46,8 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             clearTimeout(refreshTimeout);
           }
           
-          // Use timeout to avoid blocking render
+          // Defer profile fetch to avoid blocking render
           refreshTimeout = setTimeout(() => {
+            console.log('Refreshing profile for user:', session.user?.id);
             refreshProfile().catch(err => {
               console.error('Background profile refresh failed:', err);
               // Only show toast on initial load, not on subsequent refreshes
@@ -69,11 +76,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
     
-    // Initial session check
+    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.id);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('Found existing session, refreshing profile');
         refreshProfile().catch(err => {
           console.error('Initial profile refresh failed:', err);
           toast({
@@ -98,8 +107,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleSignIn = async (email: string, password: string): Promise<User | null> => {
     try {
+      console.log('AuthProvider: Starting sign in process for:', email);
       const { user, error } = await signIn(email, password);
       if (error) {
+        console.error('Sign in error:', error);
         toast({
           title: "Error",
           description: error.message || "Failed to sign in",
@@ -108,6 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw error;
       }
       if (user) {
+        console.log('AuthProvider: Sign in successful for user:', user.id);
         toast({
           title: "Success",
           description: "You have successfully signed in",
@@ -128,10 +140,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userType: 'student' | 'employer' = 'student'
   ): Promise<User | null> => {
     try {
+      console.log('AuthProvider: Starting sign up process for:', email);
       const { user, error } = await signUp({
         email, password, firstName, lastName, userType
       });
+      
       if (error) {
+        console.error('Sign up error:', error);
         toast({
           title: "Error",
           description: error.message || "Failed to create account",
@@ -139,12 +154,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
         throw error;
       }
+      
       if (user) {
+        console.log('AuthProvider: Sign up successful for user:', user.id);
         toast({
           title: "Success",
           description: "Your account has been created successfully",
         });
+        
+        // Force refresh profile after signup
+        setTimeout(() => {
+          refreshProfile();
+        }, 500);
       }
+      
       return user;
     } catch (error: any) {
       console.error('Error signing up:', error);
@@ -250,6 +273,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             job_id: jobId,
             ...data
           });
+        },
+        // Add proper implementation of verifyEmployerStatus
+        checkEmployerApproval: async (userId: string) => {
+          try {
+            return await verifyEmployerStatus(userId);
+          } catch (err: any) {
+            console.error('Error checking employer approval:', err);
+            return { canPostJobs: false, message: err.message || 'Failed to verify employer status' };
+          }
         }
       }}
     >

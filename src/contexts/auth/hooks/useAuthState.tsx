@@ -13,16 +13,25 @@ export const useAuthState = () => {
   const { toast } = useToast();
 
   const refreshProfile = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('refreshProfile: No user to refresh profile for');
+      return;
+    }
     
     try {
+      console.log('refreshProfile: Fetching profile for user:', user.id);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        throw error;
+      }
+      
+      console.log('refreshProfile: Profile data fetched:', data ? 'success' : 'null');
       
       // Format the profile data to match UserProfile type
       if (data) {
