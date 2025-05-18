@@ -1,3 +1,4 @@
+
 // Store session errors in memory
 let sessionErrors: Array<{
   message: string;
@@ -11,13 +12,23 @@ const MAX_ERRORS = 50;
 /**
  * Track a new error in the session
  * @param error Error object or error message
- * @param componentStack Optional component stack for React errors
+ * @param errorInfo Optional component stack for React errors or other error information
  */
 export const trackError = (
   error: Error | string,
-  componentStack?: string
+  errorInfo?: React.ErrorInfo | string
 ) => {
   const errorMessage = typeof error === 'string' ? error : error.message;
+  
+  // Extract component stack from errorInfo
+  let componentStack: string | undefined;
+  if (errorInfo) {
+    if (typeof errorInfo === 'string') {
+      componentStack = errorInfo;
+    } else if (errorInfo.componentStack) {
+      componentStack = errorInfo.componentStack;
+    }
+  }
   
   // Add the error to our session tracking
   sessionErrors.unshift({

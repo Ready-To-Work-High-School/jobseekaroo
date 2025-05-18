@@ -46,6 +46,7 @@ class AutoRecoveryErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('Error caught by AutoRecoveryErrorBoundary:', error, errorInfo);
+    // Pass the whole errorInfo object to trackError, which now handles ErrorInfo correctly
     trackError(error, errorInfo);
     
     // Try automatic recovery if we haven't exceeded max attempts
