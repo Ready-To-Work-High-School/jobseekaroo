@@ -12,6 +12,7 @@ interface ErrorBoundaryProps {
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
+  errorInfo?: ErrorInfo;
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -26,10 +27,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    this.setState({ errorInfo });
   }
 
   resetErrorBoundary = (): void => {
-    this.setState({ hasError: false, error: undefined });
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+    // Attempt to reload the current component
+    window.location.reload();
   };
 
   render(): ReactNode {
@@ -45,6 +49,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <p className="mb-4">
               {this.state.error?.message || 'An unexpected error occurred'}
             </p>
+            {this.state.error?.message?.includes('Failed to fetch') && (
+              <p className="mb-4 text-sm text-muted-foreground">
+                There seems to be a connection issue. Please check your internet connection and try again.
+              </p>
+            )}
             <Button 
               onClick={this.resetErrorBoundary}
               variant="outline"

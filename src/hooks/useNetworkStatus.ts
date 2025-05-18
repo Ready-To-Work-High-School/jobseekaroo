@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 
-export const useNetworkStatus = () => {
+export function useNetworkStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -18,6 +18,16 @@ export const useNetworkStatus = () => {
   }, []);
 
   return isOnline;
-};
+}
 
-export default useNetworkStatus;
+export function NetworkStatusIndicator() {
+  const isOnline = useNetworkStatus();
+
+  if (isOnline) return null;
+
+  return (
+    <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+      You are currently offline
+    </div>
+  );
+}

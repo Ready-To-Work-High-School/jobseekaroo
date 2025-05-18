@@ -23,36 +23,49 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
-      {/* Single ErrorBoundary that wraps the entire layout */}
-      <ErrorBoundary>
-        <AppHeader />
-        
-        <motion.main 
-          className="flex-grow pb-16 md:pb-0"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.3 }}
-        >
-          {!isHomePage && (
-            <FloatingBackButton />
-          )}
+      {/* Outer ErrorBoundary to ensure something always renders */}
+      <ErrorBoundary 
+        fallback={
+          <div className="min-h-screen flex flex-col items-center justify-center p-4">
+            <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
+            <p className="mb-4">We're having trouble loading the application. Please try again later.</p>
+            <a href="/" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+              Refresh Page
+            </a>
+          </div>
+        }
+      >
+        {/* Inner ErrorBoundary for the main content */}
+        <ErrorBoundary>
+          <AppHeader />
           
-          {children}
+          <motion.main 
+            className="flex-grow pb-16 md:pb-0"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+          >
+            {!isHomePage && (
+              <FloatingBackButton />
+            )}
+            
+            {children}
 
-          {/* Add the What You Get CTA to all non-auth pages */}
+            {/* Add the What You Get CTA to all non-auth pages */}
+            {!isAuthPage && (
+              <div className="container mx-auto px-4 mb-8 what-you-get-cta-container">
+                <WhatYouGetCTA />
+              </div>
+            )}
+          </motion.main>
+          
+          <Footer />
+          
+          {/* Only show mobile navigation on non-auth pages */}
           {!isAuthPage && (
-            <div className="container mx-auto px-4 mb-8 what-you-get-cta-container">
-              <WhatYouGetCTA />
-            </div>
+            <MobileBottomNav />
           )}
-        </motion.main>
-        
-        <Footer />
-        
-        {/* Only show mobile navigation on non-auth pages */}
-        {!isAuthPage && (
-          <MobileBottomNav />
-        )}
+        </ErrorBoundary>
       </ErrorBoundary>
     </div>
   );
