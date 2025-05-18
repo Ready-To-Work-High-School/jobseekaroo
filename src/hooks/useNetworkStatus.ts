@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { Wifi, WifiOff } from 'lucide-react';
-import { Alert } from '@/components/ui/alert';
 
 /**
  * Custom hook that tracks network connection status
