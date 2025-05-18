@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
@@ -22,7 +21,7 @@ import Jobs from './pages/Jobs';
 import EmployerKanban from './pages/EmployerKanban';
 import CommunicationTools from './pages/CommunicationTools';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
-import { NetworkStatusIndicator } from './hooks/useNetworkStatus';
+import { NetworkStatusIndicator } from './components/NetworkStatusIndicator';
 
 // Add a loading fallback component
 const LoadingFallback = () => (

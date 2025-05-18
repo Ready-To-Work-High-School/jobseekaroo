@@ -1,31 +1,22 @@
 
 import React from 'react';
 import { Wifi, WifiOff } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useNetworkStatus } from '../hooks/useNetworkStatus';
 
-interface NetworkStatusIndicatorProps {
-  isOnline: boolean;
-}
+/**
+ * Component that displays a notification when the user is offline
+ */
+export function NetworkStatusIndicator() {
+  const isOnline = useNetworkStatus();
 
-const NetworkStatusIndicator: React.FC<NetworkStatusIndicatorProps> = ({ isOnline }) => {
+  if (isOnline) return null;
+
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="p-1">
-          {isOnline ? (
-            <Wifi className="h-4 w-4 text-green-500" />
-          ) : (
-            <WifiOff className="h-4 w-4 text-red-500 animate-pulse" />
-          )}
-        </div>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>
-          {isOnline ? "Connected to network" : "You are currently offline"}
-        </p>
-      </TooltipContent>
-    </Tooltip>
+    <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg z-50 flex items-center gap-2">
+      <WifiOff className="h-4 w-4" />
+      <span>You are currently offline</span>
+    </div>
   );
-};
+}
 
 export default NetworkStatusIndicator;
