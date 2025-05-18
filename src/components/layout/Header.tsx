@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import MainNavigation from './MainNavigation';
 import AuthStatus from '../AuthStatus';
+import JobSeekers4HSBadge from '../badges/JobSeekers4HSBadge';
 
 interface HeaderProps {
   hideAuthLinks?: boolean;
@@ -16,8 +17,8 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <Link to="/" className="mr-6 font-bold">
-          Job Seekers 4 HS
+        <Link to="/" className="mr-6 flex items-center">
+          <JobSeekers4HSBadge variant="small" />
         </Link>
         
         {/* Main Navigation */}

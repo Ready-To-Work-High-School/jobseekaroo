@@ -30,8 +30,11 @@ const Hero = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 relative"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3 relative"
           >
+            <span className="text-2xl sm:text-3xl md:text-4xl block text-blue-600 mb-2">
+              Job Seekers 4 High School
+            </span>
             <span className="bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">
               Your First Job, Made Simple.
             </span>
