@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
@@ -46,7 +47,8 @@ function App() {
             
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                <Route path="/" element={<Layout><Home /></Layout>} />
+                {/* Routes with the Layout component which already includes the Header */}
+                <Route path="/" element={<Home />} />
                 <Route path="/profile" element={<Layout><Profile /></Layout>} />
                 <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
                 <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />

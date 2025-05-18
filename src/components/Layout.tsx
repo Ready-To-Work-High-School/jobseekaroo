@@ -1,6 +1,5 @@
 
 import React from 'react';
-import AppHeader from './app/AppHeader';
 import Footer from './layout/Footer';
 import { useAuth } from '@/contexts/auth';
 import { useLocation } from 'react-router-dom';
@@ -9,6 +8,7 @@ import FloatingBackButton from './common/FloatingBackButton';
 import MobileBottomNav from './mobile/MobileBottomNav';
 import { motion } from 'framer-motion';
 import WhatYouGetCTA from './auth/WhatYouGetCTA';
+import Header from './layout/Header';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -37,7 +37,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
       >
         {/* Inner ErrorBoundary for the main content */}
         <ErrorBoundary>
-          <AppHeader />
+          <Header hideAuthLinks={hideAuthLinks} />
           
           <motion.main 
             className="flex-grow pb-16 md:pb-0"

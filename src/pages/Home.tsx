@@ -20,27 +20,11 @@ import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog'
 import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
 import CareerExplorer from '@/components/home/CareerExplorer';
 
-// Create a wrapper component that doesn't render WhatYouGetCTA
-const HomeLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  return (
-    <Layout>
-      {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
-      <style dangerouslySetInnerHTML={{__html: `
-        /* Hide the default WhatYouGetCTA that comes from the Layout */
-        .what-you-get-cta-container {
-          display: none;
-        }
-      `}} />
-      {children}
-    </Layout>
-  );
-};
-
 const Home = () => {
   const { user } = useAuth();
 
   return (
-    <HomeLayout>
+    <Layout>
       <Helmet>
         <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
         <meta 
@@ -120,7 +104,15 @@ const Home = () => {
       </div>
 
       <FloatingQuickAccess />
-    </HomeLayout>
+      
+      {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
+      <style dangerouslySetInnerHTML={{__html: `
+        /* Hide the default WhatYouGetCTA that comes from the Layout */
+        .what-you-get-cta-container {
+          display: none;
+        }
+      `}} />
+    </Layout>
   );
 };
 
