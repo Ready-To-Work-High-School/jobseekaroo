@@ -2,6 +2,7 @@
 import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
 import { ApplicationStatus } from '@/types/application';
+import { EmployerVerificationResult } from './authService';
 
 export interface AuthContextType {
   user: User | null;
@@ -33,4 +34,7 @@ export interface AuthContextType {
   updateJob?: (jobId: string, jobData: any) => Promise<any>;
   createApplication?: (applicationData: any) => Promise<any>;
   updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  
+  // Add the missing checkEmployerApproval method
+  checkEmployerApproval?: (userId: string) => Promise<EmployerVerificationResult>;
 }
