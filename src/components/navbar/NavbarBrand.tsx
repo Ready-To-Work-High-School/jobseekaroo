@@ -4,14 +4,40 @@ import { useState } from 'react';
 
 export const NavbarBrand = () => {
   const [imageError, setImageError] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [showHint, setShowHint] = useState(false);
 
   const handleImageError = () => {
     setImageError(true);
   };
 
+  const handleLogoClick = (e) => {
+    // If ctrl/cmd key is pressed, increment counter
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const newCount = clickCount + 1;
+      setClickCount(newCount);
+      
+      // After 3 clicks with ctrl/cmd key, redirect to CEO portal
+      if (newCount >= 3) {
+        setClickCount(0);
+        window.location.href = '/ceo-portal';
+      } else {
+        // Show hint briefly
+        setShowHint(true);
+        setTimeout(() => setShowHint(false), 2000);
+      }
+    }
+  };
+
   return (
-    <div className="flex items-center gap-2">
-      <Link to="/" className="relative flex items-center">
+    <div className="flex items-center gap-2 relative">
+      <Link 
+        to="/" 
+        className="relative flex items-center"
+        onClick={handleLogoClick}
+        title="Home"
+      >
         {!imageError ? (
           <span className="relative flex items-center">
             {/* Glow effect behind the logo */}
@@ -32,6 +58,13 @@ export const NavbarBrand = () => {
           </span>
         )}
       </Link>
+      
+      {/* Hidden hint that appears only after ctrl+clicking */}
+      {showHint && (
+        <div className="absolute left-0 top-full mt-1 p-1 bg-black/80 text-white text-xs rounded whitespace-nowrap z-50">
+          {clickCount}/3 clicks to CEO access
+        </div>
+      )}
     </div>
   );
 };
