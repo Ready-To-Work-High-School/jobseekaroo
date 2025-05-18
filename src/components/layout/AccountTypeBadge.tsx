@@ -1,85 +1,35 @@
 
 import React from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
-import { UserProfile } from '@/types/user';
-import { GraduationCap, Briefcase, ShieldCheck, BookOpen, User } from 'lucide-react';
-import { useAdminStatus } from '@/hooks/useAdminStatus';
 
-interface AccountTypeBadgeProps {
-  userProfile: UserProfile | null;
-  className?: string;
-  showText?: boolean;
-}
-
-const AccountTypeBadge: React.FC<AccountTypeBadgeProps> = ({ 
-  userProfile, 
-  className = '', 
-  showText = true 
-}) => {
-  if (!userProfile || !userProfile.user_type) return null;
-
-  // Use proper CEO check
-  const isAdmin = userProfile.user_type === 'admin';
-  const isCeoByEmail = userProfile.email?.toLowerCase() === process.env.CEO_EMAIL?.toLowerCase();
-  const isCeo = isAdmin && isCeoByEmail;
-
-  const getBadgeContent = () => {
-    switch (userProfile.user_type) {
-      case 'student':
-        return {
-          text: 'Student',
-          icon: <GraduationCap className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-blue-700 text-white'
-        };
-      case 'employer':
-        return {
-          text: 'Employer',
-          icon: <Briefcase className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-green-700 text-white'
-        };
-      case 'admin':
-        if (isCeo) {
-          return {
-            text: 'Chief Executive Officer',
-            icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-            variant: 'outline',
-            className: 'bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white hover:bg-black/90'
-          };
-        }
-        return {
-          text: 'Admin',
-          icon: <ShieldCheck className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-          variant: 'outline',
-          className: 'bg-black text-white hover:bg-black/90'
-        };
-      case 'teacher':
-        return {
-          text: 'Teacher',
-          icon: <BookOpen className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-          variant: userProfile.redeemed_at ? 'default' : 'outline',
-          className: 'bg-amber-700 text-white'
-        };
-      default:
-        return {
-          text: 'Basic',
-          icon: <User className={`${showText ? 'h-3 w-3 mr-1' : 'h-4 w-4'}`} />,
-          variant: 'outline',
-          className: 'bg-gray-600 text-white'
-        };
-    }
-  };
-
-  const badge = getBadgeContent();
-
+const AccountTypeBadge: React.FC = () => {
+  const { userProfile } = useAuth();
+  
+  if (!userProfile) return null;
+  
+  let badgeText = 'User';
+  let badgeVariant: 'default' | 'secondary' | 'destructive' | 'outline' = 'default';
+  
+  if (userProfile.is_employer) {
+    badgeText = 'Employer';
+    badgeVariant = 'secondary';
+  } else if (userProfile.is_admin) {
+    badgeText = 'Admin';
+    badgeVariant = 'destructive';
+  } else if (userProfile.is_school_admin) {
+    badgeText = 'School Admin';
+    badgeVariant = 'outline';
+  }
+  
+  // Use environment variables with proper Vite format
+  // Replace process.env with import.meta.env
+  const isDevelopment = import.meta.env.DEV === true;
+  
   return (
-    <Badge 
-      variant={badge.variant as any} 
-      className={`flex items-center justify-center ${showText ? 'text-xs' : 'w-6 h-6 p-0'} ${badge.className || ''} ${className}`}
-    >
-      {badge.icon}
-      {showText && badge.text}
+    <Badge variant={badgeVariant} className="ml-2">
+      {badgeText}
+      {isDevelopment && ' (Dev)'}
     </Badge>
   );
 };
