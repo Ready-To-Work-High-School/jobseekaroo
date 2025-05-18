@@ -19,6 +19,7 @@ import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess
 import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
 import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
 import CareerExplorer from '@/components/home/CareerExplorer';
+import PremiumOnboardingCards from '@/components/premium/PremiumOnboardingCards';
 
 const Home = () => {
   const { user } = useAuth();
@@ -47,6 +48,10 @@ const Home = () => {
 
       <ErrorBoundary>
         <CareerExplorer />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <PremiumOnboardingCards />
       </ErrorBoundary>
 
       <SectionSeparator />

@@ -9,6 +9,8 @@ import StudentSuccess from '@/pages/StudentSuccess';
 import CareerQuiz from '@/pages/CareerQuiz';
 import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 import UserProfileTabs from '@/pages/UserProfileTabs';
+import PremiumServices from '@/pages/PremiumServices';
+import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -37,6 +39,8 @@ const HomeRoutes = (
     <Route path="/about" element={<About />} />
     <Route path="/jobs" element={<Jobs />} />
     <Route path="/for-employers" element={<ForEmployers />} />
+    <Route path="/employer-onboarding" element={<EmployerOnboarding />} />
+    <Route path="/premium-services" element={<PremiumServices />} />
     <Route path="/school-integration" element={<SchoolIntegration />} />
     <Route path="/resources" element={<Resources />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
