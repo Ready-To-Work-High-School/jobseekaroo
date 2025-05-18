@@ -14,6 +14,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import PurchaseConfirmation from '@/components/employer/premium/PurchaseConfirmation';
 import { Button } from '@/components/ui/button';
+import AirtableEmbed from '@/components/employer/premium/AirtableEmbed';
 
 const EmployerPremiumServices = () => {
   const fadeIn = useFadeIn(300);
@@ -83,12 +84,18 @@ const EmployerPremiumServices = () => {
         </div>
         
         {hasPremiumSubscription ? (
-          <ActiveSubscription />
+          <>
+            <ActiveSubscription />
+            <Separator className="my-10" />
+            <AirtableEmbed />
+          </>
         ) : (
           <>
             <ValueProposition />
             <Separator className="my-10" />
             <PremiumFeaturesList />
+            <Separator className="my-12" />
+            <AirtableEmbed />
             <Separator className="my-12" />
             <PricingPlans />
             

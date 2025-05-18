@@ -10,6 +10,7 @@ import PerformanceAnalyticsTab from '@/components/employer/tabs/PerformanceAnaly
 import InterviewSchedulingTab from '@/components/employer/tabs/InterviewSchedulingTab';
 import CareerEventsTab from '@/components/employer/tabs/CareerEventsTab';
 import CandidateMessagingTab from '@/components/employer/tabs/CandidateMessagingTab';
+import AirtableEmbed from '@/components/employer/premium/AirtableEmbed';
 
 const PremiumFeaturesPage = () => {
   const [activeTab, setActiveTab] = React.useState("features");
@@ -29,7 +30,10 @@ const PremiumFeaturesPage = () => {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Airtable Embed */}
+        <AirtableEmbed />
+
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full mt-8">
           <TabsList className="flex flex-wrap">
             <TabsTrigger value="features">Featured Tools</TabsTrigger>
             <TabsTrigger value="apprenticeships">Apprenticeships</TabsTrigger>
