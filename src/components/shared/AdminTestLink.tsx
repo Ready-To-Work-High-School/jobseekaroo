@@ -43,7 +43,7 @@ const AdminTestLink: React.FC<AdminTestLinkProps> = ({
       )}
       onClick={onClick}
     >
-      <Shield className="h-5 w-5" />
+      <Shield className="h-4 w-4" />
       <span>Admin Panel (Test)</span>
     </Link>
   );

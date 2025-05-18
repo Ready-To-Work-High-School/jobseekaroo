@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -107,7 +108,7 @@ const LocationSelector = ({ value, onChange, className }: LocationSelectorProps)
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-green-600" />
+              <Shield className="h-4 w-4 text-green-600" />
               Location Privacy Notice
             </DialogTitle>
             <DialogDescription>

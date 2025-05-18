@@ -45,7 +45,7 @@ const ContactCard = () => {
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-full bg-green-100">
-              <Shield className="h-5 w-5 text-green-700" />
+              <Shield className="h-4 w-4 text-green-700" />
             </div>
             <div>
               <h4 className="font-medium">Security Notice</h4>
@@ -57,7 +57,7 @@ const ContactCard = () => {
           
           <div className="mt-3 bg-amber-50 p-3 rounded-md border border-amber-200 text-amber-800 text-xs">
             <div className="flex items-start">
-              <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="h-3 w-3 mr-2 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium">Security Alert</p>
                 <p>If you receive suspicious communications or requests for payment/personal information, please report it immediately.</p>

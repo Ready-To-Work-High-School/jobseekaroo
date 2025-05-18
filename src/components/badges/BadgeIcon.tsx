@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Award, Star, Clock, Brain, Briefcase, Shield, Users, Wand, Zap, Check, Lightbulb, Target, GraduationCap, Crown } from 'lucide-react';
 
@@ -7,7 +8,7 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
   reliable: <Clock className="h-5 w-5" />,
   team_player: <Users className="h-5 w-5" />,
   punctual: <Clock className="h-5 w-5" />,
-  ethical: <Shield className="h-5 w-5" />,
+  ethical: <Shield className="h-4 w-4" />,
   
   // Skills
   problem_solver: <Brain className="h-5 w-5" />,

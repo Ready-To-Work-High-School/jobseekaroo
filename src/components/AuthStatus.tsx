@@ -99,7 +99,7 @@ const AuthStatus = () => {
             {isAdmin && (
               <DropdownMenuItem asChild>
                 <Link to="/admin" className="flex items-center cursor-pointer text-red-500">
-                  <Shield className="mr-2 h-4 w-4" />
+                  <Shield className="mr-2 h-3 w-3" />
                   <span>Admin Panel</span>
                 </Link>
               </DropdownMenuItem>

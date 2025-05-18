@@ -37,12 +37,12 @@ const JobSafetyBadge = ({ safetyScore, isVerified = false, size = 'md' }: JobSaf
         <TooltipTrigger asChild>
           <div className="inline-flex items-center gap-1">
             <Badge variant={getBadgeVariant()} className={`${getBadgeSize()} gap-1`}>
-              <Shield className="h-3 w-3" />
+              <Shield className="h-2.5 w-2.5" />
               {getBadgeLabel()}
             </Badge>
             {isVerified && (
               <Badge variant="outline" className={`${getBadgeSize()} gap-1 border-green-200 bg-green-50`}>
-                <CheckCircle className="h-3 w-3 text-green-600" />
+                <CheckCircle className="h-2.5 w-2.5 text-green-600" />
                 <span className="text-green-700">Verified</span>
               </Badge>
             )}

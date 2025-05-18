@@ -83,8 +83,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           {showCeoIcon && (
             <div className="absolute -bottom-1 -right-1">
               <Link to="/ceo-portal">
-                <div className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 border-2 border-white shadow-md">
-                  <Shield className="h-3 w-3 text-white" />
+                <div className="flex items-center justify-center h-5 w-5 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 border-2 border-white shadow-md">
+                  <Shield className="h-2.5 w-2.5 text-white" />
                 </div>
               </Link>
             </div>
@@ -98,7 +98,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </h2>
             {isCeo && (
               <Badge variant="outline" className="bg-gradient-to-r from-purple-800 via-blue-700 to-amber-600 text-white border-gray-700">
-                <Shield className="h-3 w-3 mr-1" />
+                <Shield className="h-2.5 w-2.5 mr-1" />
                 Chief Executive Officer
               </Badge>
             )}
@@ -136,7 +136,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           {isInceptionMember && (
             <div className="mt-2">
               <Badge className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-3 py-1 text-sm font-medium">
-                <Award className="h-4 w-4 mr-1.5" />
+                <Award className="h-3.5 w-3.5 mr-1.5" />
                 Founding Member (2025-2026)
               </Badge>
             </div>

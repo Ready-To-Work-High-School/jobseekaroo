@@ -62,7 +62,7 @@ const DiagnosticMenuButton: React.FC<DiagnosticMenuButtonProps> = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={variant} size={size} className="relative">
-          <Shield className="h-4 w-4 mr-2" />
+          <Shield className="h-3.5 w-3.5 mr-2" />
           System Check
           {errors.length > 0 && (
             <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">

@@ -61,7 +61,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
             isActiveLink("/admin") && "text-primary"
           )}
         >
-          <Shield className="h-4 w-4" />
+          <Shield className="h-3 w-3" />
           <span>Admin</span>
         </Link>
       )}
@@ -76,7 +76,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
             isActiveLink("/ceo-portal") && "font-bold"
           )}
         >
-          <Shield className="h-4 w-4 text-amber-500" />
+          <Shield className="h-3 w-3 text-amber-500" />
           <span>CEO</span>
         </Link>
       )}

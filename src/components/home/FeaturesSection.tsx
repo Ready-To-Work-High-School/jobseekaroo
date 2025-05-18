@@ -35,7 +35,7 @@ const FeaturesSection = () => {
             <Card className="h-full">
               <CardHeader className="pb-2">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-                  <Shield className="h-5 w-5 text-blue-600" />
+                  <Shield className="h-4 w-4 text-blue-600" />
                 </div>
                 <CardTitle className="text-base">Safe Job Listings</CardTitle>
               </CardHeader>

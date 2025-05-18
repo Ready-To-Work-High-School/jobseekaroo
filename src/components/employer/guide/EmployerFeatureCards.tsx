@@ -24,7 +24,7 @@ const EmployerFeatureCards = () => {
       link: "/employer-dashboard"
     },
     {
-      icon: <Shield className="h-10 w-10 text-green-500" />,
+      icon: <Shield className="h-8 w-8 text-green-500" />,
       title: "Safety & Compliance",
       description: "Built-in tools to ensure your job postings comply with all youth labor laws and regulations.",
       link: "/safety-compliance"

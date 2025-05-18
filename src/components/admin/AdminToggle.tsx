@@ -56,21 +56,21 @@ const AdminToggle = () => {
   return (
     <Card className="p-4 mb-6">
       <h2 className="text-lg font-medium flex items-center gap-2 mb-3">
-        <Shield className="h-5 w-5 text-primary" />
+        <Shield className="h-4 w-4 text-primary" />
         Admin Access
       </h2>
       
       {userProfile?.user_type === 'admin' ? (
         <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-md border border-green-200 dark:border-green-800 mb-4">
           <p className="text-green-800 dark:text-green-300 font-medium flex items-center gap-2">
-            <Shield className="h-4 w-4" />
+            <Shield className="h-3 w-3" />
             You have admin privileges
           </p>
         </div>
       ) : (
         <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-md border border-amber-200 dark:border-amber-800 mb-4">
           <p className="text-amber-800 dark:text-amber-300 font-medium flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
+            <AlertCircle className="h-3 w-3" />
             You don't have admin privileges
           </p>
         </div>

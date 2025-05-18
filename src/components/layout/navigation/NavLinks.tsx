@@ -30,7 +30,7 @@ export const NavLinks = () => {
         
         <Link to="/school-integration" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
           location.pathname === "/school-integration" ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-          <GraduationCap className="w-4 h-4" />
+          <GraduationCap className="w-3 h-3" />
           Schools
         </Link>
         
@@ -42,7 +42,7 @@ export const NavLinks = () => {
         {isAdmin(userProfile) && (
           <Link to="/admin" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
             location.pathname.startsWith("/admin") ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-            <Shield className="w-4 h-4" />
+            <Shield className="w-3 h-3" />
             Admin
           </Link>
         )}
@@ -72,14 +72,14 @@ export const NavLinks = () => {
             to="/sign-in" 
             className="text-sm font-medium transition-colors hover:text-primary flex items-center gap-1"
           >
-            <LogIn className="w-4 h-4" />
+            <LogIn className="w-3 h-3" />
             Sign In
           </Link>
           <Link 
             to="/signup" 
             className="text-sm font-medium bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center gap-1"
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3 h-3" />
             Sign Up
           </Link>
         </div>

@@ -24,22 +24,22 @@ const EmployerHeader = () => {
         
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           <Badge variant="outline" className="px-3 py-1 flex items-center gap-2 badge-highlight">
-            <Shield className="h-4 w-4" />
+            <Shield className="h-3 w-3" />
             <span>Verified Schools</span>
           </Badge>
           
           <Badge variant="outline" className="px-3 py-1 flex items-center gap-2 badge-highlight">
-            <Users className="h-4 w-4" />
+            <Users className="h-3 w-3" />
             <span>Qualified Candidates</span>
           </Badge>
           
           <Badge variant="outline" className="px-3 py-1 flex items-center gap-2 badge-highlight">
-            <ChartBar className="h-4 w-4" />
+            <ChartBar className="h-3 w-3" />
             <span>Hiring Analytics</span>
           </Badge>
           
           <Badge variant="outline" className="px-3 py-1 flex items-center gap-2 badge-highlight">
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-3 w-3" />
             <span>Premium Features</span>
           </Badge>
         </div>

@@ -65,7 +65,7 @@ export const ModerationInstructions = () => {
           <div className="space-y-4">
             <div>
               <h3 className="text-md font-medium flex items-center gap-2 mb-2">
-                <Shield className="h-4 w-4 text-blue-600" />
+                <Shield className="h-3 w-3 text-blue-600" />
                 Admin Access
                 <TooltipProvider>
                   <Tooltip>

@@ -140,7 +140,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => onUpdateUserType(user.id, 'admin')}>
-                        <Shield className="h-4 w-4 mr-2" />
+                        <Shield className="h-3 w-3 mr-2" />
                         Make Admin
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => onUpdateUserType(user.id, 'student')}>

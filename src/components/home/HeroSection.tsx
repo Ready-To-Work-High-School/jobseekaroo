@@ -21,8 +21,8 @@ const HeroSection = () => {
   }, []);
 
   const benefits = [
-    { icon: <Shield className="h-5 w-5" />, text: "Safe & Secure" },
-    { icon: <Award className="h-5 w-5" />, text: "Earn Badges" }
+    { icon: <Shield className="h-4 w-4" />, text: "Safe & Secure" },
+    { icon: <Award className="h-4 w-4" />, text: "Earn Badges" }
   ];
 
   return (

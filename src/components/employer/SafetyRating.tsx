@@ -45,8 +45,8 @@ const SafetyRating = ({
   const getIconSize = () => {
     switch (size) {
       case 'sm': return 'h-3 w-3';
-      case 'lg': return 'h-5 w-5';
-      default: return 'h-4 w-4';
+      case 'lg': return 'h-4 w-4';
+      default: return 'h-3.5 w-3.5';
     }
   };
   
@@ -77,7 +77,7 @@ const SafetyRating = ({
                 </Badge>
               )}
               
-              <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+              <Info className="h-3 w-3 text-muted-foreground cursor-help" />
             </div>
           </TooltipTrigger>
           <TooltipContent side="bottom">

@@ -16,7 +16,7 @@ export const AdminLink = ({ isAdmin }: AdminLinkProps) => {
   return (
     <Link to="/admin" className={cn("text-sm font-medium transition-colors flex items-center gap-1", 
       location.pathname.startsWith("/admin") ? "text-primary" : "text-muted-foreground hover:text-primary")}>
-      <Shield className="w-4 h-4" />
+      <Shield className="w-3 h-3" />
       Admin
     </Link>
   );
