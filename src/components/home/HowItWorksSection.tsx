@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Search, BookOpen, FileText, CheckCircle, Calendar, Briefcase } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const steps = [{
   icon: <Search className="h-10 w-10 text-blue-500" />,
@@ -40,17 +41,21 @@ const HowItWorksSection = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {steps.map((step, index) => <Card key={index} className="border-muted shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="mb-4 p-3 rounded-full bg-primary/5">
-                  {step.icon}
+        {steps.map((step, index) => (
+          <Link key={index} to="/sign-up" className="block group">
+            <Card className="border-muted shadow-sm hover:shadow-md transition-shadow h-full">
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-4 p-3 rounded-full bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-medium mb-2 group-hover:text-primary transition-colors">{step.title}</h3>
+                  <p className="text-muted-foreground">{step.description}</p>
                 </div>
-                <h3 className="text-xl font-medium mb-2">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
-              </div>
-            </CardContent>
-          </Card>)}
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
       </div>
     </div>
   </section>;
