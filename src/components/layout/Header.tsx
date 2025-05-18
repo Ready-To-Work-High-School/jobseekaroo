@@ -65,7 +65,8 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
         </nav>
         
         <div className="ml-auto flex items-center space-x-2">
-          <NetworkStatusIndicator isOnline={isOnline} />
+          {/* Remove the isOnline prop since NetworkStatusIndicator now gets this internally */}
+          <NetworkStatusIndicator />
           
           {/* Auth Status (only show if not hidden) */}
           {!hideAuthLinks && (
