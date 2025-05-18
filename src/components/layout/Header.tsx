@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import MainNavigation from './MainNavigation';
 import AuthStatus from '../AuthStatus';
-import JobSeekers4HSBadge from '../badges/JobSeekers4HSBadge';
 
 interface HeaderProps {
   hideAuthLinks?: boolean;
@@ -18,7 +17,26 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <Link to="/" className="mr-6 flex items-center">
-          <JobSeekers4HSBadge variant="small" />
+          <div className="h-10 w-10 overflow-hidden rounded-full">
+            <img 
+              src="/lovable-uploads/32bf017d-1f95-4d56-a62a-61d63d391248.png" 
+              alt="JS4HS Badge" 
+              className="h-full w-full object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                // Fallback to the JobSeekers4HSBadge component if image fails to load
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'bg-amber-500 text-white text-xs rounded-full h-8 w-8 flex items-center justify-center';
+                  fallback.innerText = 'JS4HS';
+                  parent.appendChild(fallback);
+                }
+              }}
+            />
+          </div>
         </Link>
         
         {/* Main Navigation */}
