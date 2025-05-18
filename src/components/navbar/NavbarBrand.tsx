@@ -14,7 +14,10 @@ export const NavbarBrand = () => {
   const handleLogoClick = (e) => {
     // If ctrl/cmd key is pressed, increment counter
     if (e.ctrlKey || e.metaKey) {
+      // Prevent default browser behavior (opening in new tab)
       e.preventDefault();
+      e.stopPropagation();
+      
       const newCount = clickCount + 1;
       setClickCount(newCount);
       
