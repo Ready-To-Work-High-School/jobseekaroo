@@ -56,7 +56,7 @@ const AuthStatus = () => {
               </Avatar>
               {userProfile?.user_type && (
                 <div className="absolute -top-2 -right-2">
-                  <AccountTypeBadge userProfile={userProfile} className="h-4 px-1" />
+                  <AccountTypeBadge className="h-4 px-1" showText={false} />
                 </div>
               )}
             </Button>
@@ -68,7 +68,7 @@ const AuthStatus = () => {
                   <div className="flex items-center justify-between">
                     <span>{userProfile.first_name} {userProfile.last_name}</span>
                     {userProfile.user_type && (
-                      <AccountTypeBadge userProfile={userProfile} />
+                      <AccountTypeBadge />
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">{user.email}</span>
