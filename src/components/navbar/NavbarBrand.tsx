@@ -17,7 +17,7 @@ export const NavbarBrand = () => {
             {/* Glow effect behind the logo */}
             <span className="absolute -inset-2 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-500 opacity-50 blur-[6px] pointer-events-none animate-pulse"></span>
             <img
-              src="/lovable-uploads/8fb94441-6c69-4725-b90f-401afaf2f5cc.png"
+              src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png"
               alt="JS4HS Logo"
               width={42}
               height={42}

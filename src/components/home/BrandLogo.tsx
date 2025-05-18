@@ -6,7 +6,7 @@ const BrandLogo = () => {
     <div className="container mx-auto px-4 py-12 text-center">
       <div className="flex justify-center mb-6">
         <img 
-          src="/lovable-uploads/8fb94441-6c69-4725-b90f-401afaf2f5cc.png" 
+          src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png" 
           alt="JS4HS Logo" 
           className="h-48 md:h-56 w-auto object-contain"
           width="400"

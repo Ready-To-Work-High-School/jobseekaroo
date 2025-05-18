@@ -19,8 +19,8 @@ const Header: React.FC<HeaderProps> = ({ hideAuthLinks }) => {
         <Link to="/" className="mr-6 flex items-center">
           <div className="h-10 w-10 overflow-hidden rounded-full">
             <img 
-              src="/lovable-uploads/32bf017d-1f95-4d56-a62a-61d63d391248.png" 
-              alt="JS4HS Badge" 
+              src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png" 
+              alt="JS4HS Logo" 
               className="h-full w-full object-contain"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
