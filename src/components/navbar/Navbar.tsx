@@ -46,10 +46,10 @@ const Navbar = () => {
           {isCeo && (
             <Link
               to="/ceo-portal"
-              className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 shadow-md hover:opacity-90 animate-pulse"
+              className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 shadow-md hover:opacity-90 animate-pulse"
               aria-label="CEO Portal"
             >
-              <Shield className="h-5 w-5 text-white" />
+              <Shield className="h-4 w-4 text-white" />
             </Link>
           )}
           
@@ -57,10 +57,10 @@ const Navbar = () => {
           {isAdmin && !isCeo && (
             <Link
               to="/admin"
-              className="flex items-center justify-center h-8 w-8 rounded-full bg-red-600 p-1.5 shadow-md hover:opacity-90"
+              className="flex items-center justify-center h-6 w-6 rounded-full bg-red-600 p-1 shadow-md hover:opacity-90"
               aria-label="Admin Panel"
             >
-              <Shield className="h-5 w-5 text-white" />
+              <Shield className="h-4 w-4 text-white" />
             </Link>
           )}
           

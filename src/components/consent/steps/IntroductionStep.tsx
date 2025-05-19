@@ -14,7 +14,7 @@ const IntroductionStep: React.FC<IntroductionStepProps> = ({ onContinue, onLearn
     <div className="space-y-4">
       <div className="flex justify-center mb-4">
         <div className="bg-blue-100 p-3 rounded-full">
-          <Shield className="h-6 w-6 text-blue-600" />
+          <Shield className="h-5 w-5 text-blue-600" />
         </div>
       </div>
       <h2 className="text-2xl font-bold text-center">Parental Consent Required</h2>

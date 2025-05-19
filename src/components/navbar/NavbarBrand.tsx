@@ -48,15 +48,15 @@ export const NavbarBrand = () => {
             <img
               src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png"
               alt="JS4HS Logo"
-              width={42}
-              height={42}
-              className="h-10 w-10 object-contain relative z-10"
+              width={48}
+              height={48}
+              className="h-12 w-12 object-contain relative z-10"
               onError={handleImageError}
               loading="eager"
             />
           </span>
         ) : (
-          <span className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500 text-sm z-10">
+          <span className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500 text-sm z-10">
             JS4HS
           </span>
         )}

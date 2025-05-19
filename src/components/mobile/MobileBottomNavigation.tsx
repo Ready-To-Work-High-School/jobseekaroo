@@ -82,7 +82,7 @@ const MobileBottomNavigation = () => {
                           )}
                           onClick={() => setIsMoreMenuOpen(false)}
                         >
-                          <Shield className="mr-2 h-5 w-5" />
+                          <Shield className="mr-2 h-3.5 w-3.5" />
                           <span>Admin</span>
                         </NavLink>
                       )}
@@ -98,7 +98,7 @@ const MobileBottomNavigation = () => {
                           )}
                           onClick={() => setIsMoreMenuOpen(false)}
                         >
-                          <Shield className="mr-2 h-5 w-5 text-amber-500" />
+                          <Shield className="mr-2 h-3.5 w-3.5 text-amber-500" />
                           <span>CEO Portal</span>
                         </NavLink>
                       )}

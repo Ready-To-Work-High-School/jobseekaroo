@@ -13,7 +13,7 @@ const AppHeader = () => {
     <header className="w-full relative">
       {/* JS4HS Badge - centered at the top */}
       <motion.div 
-        className="absolute left-0 right-0 -top-6 md:-top-5 z-10 flex justify-center"
+        className="absolute left-0 right-0 -top-7 md:-top-6 z-10 flex justify-center"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, type: "spring", stiffness: 50 }}
@@ -25,7 +25,7 @@ const AppHeader = () => {
       </motion.div>
       
       {/* Single navbar instance */}
-      <div className="pt-6 md:pt-5">
+      <div className="pt-7 md:pt-6">
         <Navbar />
       </div>
     </header>

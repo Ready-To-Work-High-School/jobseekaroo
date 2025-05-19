@@ -56,7 +56,7 @@ const AdminToggle = () => {
   return (
     <Card className="p-4 mb-6">
       <h2 className="text-lg font-medium flex items-center gap-2 mb-3">
-        <Shield className="h-4 w-4 text-primary" />
+        <Shield className="h-3.5 w-3.5 text-primary" />
         Admin Access
       </h2>
       

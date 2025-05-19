@@ -34,8 +34,8 @@ const UserMenuTrigger = ({ user, userProfile, hasPremium, hasBadges, isCeo }: Us
       {/* Improved CEO indicator */}
       {isCeo && (
         <div className="absolute top-0 right-0 -mt-1 -mr-1">
-          <div className="flex items-center justify-center h-4 w-4 rounded-full bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 p-[2px] border border-white">
-            <Shield className="h-2 w-2 text-white" />
+          <div className="flex items-center justify-center h-3 w-3 rounded-full bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 p-[1px] border border-white">
+            <Shield className="h-1.5 w-1.5 text-white" />
           </div>
         </div>
       )}

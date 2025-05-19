@@ -28,8 +28,8 @@ export const NavbarRight = () => {
           className="relative opacity-10 hover:opacity-100 transition-opacity duration-300 group"
           aria-label="CEO Portal Access"
         >
-          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 opacity-70 group-hover:opacity-100 group-hover:animate-ping"></div>
-          <Shield className="h-4 w-4 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" />
+          <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-amber-400 opacity-70 group-hover:opacity-100 group-hover:animate-ping"></div>
+          <Shield className="h-3.5 w-3.5 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" />
         </Link>
       )}
       
@@ -40,7 +40,7 @@ export const NavbarRight = () => {
           className="flex items-center justify-center h-5 w-5 rounded-full bg-red-600 hover:bg-red-700 transition-colors"
           aria-label="Admin Panel"
         >
-          <Shield className="h-3 w-3 text-white" />
+          <Shield className="h-2.5 w-2.5 text-white" />
         </Link>
       )}
       
