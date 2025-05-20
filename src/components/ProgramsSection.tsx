@@ -55,7 +55,7 @@ const ProgramsSection = () => {
                 </div>
                 
                 <p className="font-medium text-lg mb-6 text-zinc-800">
-                  Connect with our Entrepreneurship and Nursing Academies to find pre-trained students with industry-recognized credentials ready for your workforce.
+                  Connect with our Entrepreneurship Academy to find pre-trained students with industry-recognized credentials ready for your workforce.
                 </p>
                 
                 <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-colors">

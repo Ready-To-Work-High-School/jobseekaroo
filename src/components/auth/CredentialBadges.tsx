@@ -72,12 +72,6 @@ const CredentialBadges = () => {
     avif: "/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.avif",
   };
   
-  const nursingBadge = {
-    png: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.png", // Updated to new Nursing Academy logo
-    webp: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.webp", 
-    avif: "/lovable-uploads/df734ca8-d7b5-424e-a7ab-b2f87085851f.avif",
-  };
-  
   return (
     <Card className="border-blue-200 shadow-md">
       <CardHeader className="bg-blue-50 border-b border-blue-200">
@@ -142,29 +136,6 @@ const CredentialBadges = () => {
               />
             </div>
             <p className="text-xs text-center mt-2 text-red-800">Entrepreneurship & Small Business</p>
-          </div>
-          
-          {/* Nursing Badge - Updated with new logo */}
-          <div className="flex flex-col items-center">
-            <Badge variant="new" className="text-sm py-1 mb-3">
-              <Shield className="h-4 w-4 mr-1" />
-              Nursing Academy
-            </Badge>
-            
-            <div className="relative w-24 h-24 md:w-28 md:h-28 hover:scale-110 transition-transform duration-200">
-              <div className="absolute inset-0 bg-blue-400 rounded-lg blur-sm opacity-20 animate-pulse"></div>
-              <LazyImage 
-                src={nursingBadge.png} 
-                webpSrc={nursingBadge.webp}
-                avifSrc={nursingBadge.avif}
-                alt="Nursing Academy" 
-                className="w-full h-full object-contain relative z-10 rounded-md" 
-                width={140}
-                height={140}
-                priority={true}
-              />
-            </div>
-            <p className="text-xs text-center mt-2 text-red-800">Westside High School</p>
           </div>
         </div>
         

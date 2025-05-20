@@ -40,15 +40,6 @@ const BadgeGrid = ({ badges }: BadgeGridProps) => {
         height={200}
       />
       
-      {/* Nursing Academy Badge - Original */}
-      <IndustryCertificationBadge
-        imageSrc="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png"
-        name="Nursing Academy"
-        subtitle="Westside High School"
-        width={200}
-        height={200}
-      />
-      
       {/* IBM SkillsBuild Badge */}
       <IndustryCertificationBadge
         imageSrc="/lovable-uploads/898ea22e-1f00-4da4-92db-b78adabc702a.png"

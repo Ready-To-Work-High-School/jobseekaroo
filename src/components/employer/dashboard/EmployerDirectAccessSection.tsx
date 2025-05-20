@@ -39,8 +39,8 @@ const EmployerDirectAccessSection = () => {
             <div>
               <h3 className="font-medium">Career-Ready Students</h3>
               <p className="text-sm text-muted-foreground">
-                Students on our platform are actively participating in Entrepreneurship and Nursing 
-                academies, meaning they're specifically preparing for workforce entry.
+                Students on our platform are actively participating in our Entrepreneurship academy, 
+                meaning they're specifically preparing for workforce entry.
               </p>
             </div>
           </div>

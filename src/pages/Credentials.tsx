@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Award, BookOpen, Heart, Check } from 'lucide-react';
+import { Award, BookOpen, Check } from 'lucide-react';
 import SectionSeparator from '@/components/home/SectionSeparator';
 
 const Credentials = () => {
@@ -17,7 +17,7 @@ const Credentials = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Industry-Recognized Credentials</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Westside High School offers several pathways to earn valuable credentials that are recognized by employers across industries.
+            Westside High School offers pathways to earn valuable credentials that are recognized by employers across industries.
           </p>
         </div>
 
@@ -53,36 +53,6 @@ const Credentials = () => {
             </CardContent>
           </Card>
 
-          {/* Nursing Academy */}
-          <Card className="shadow-md hover:shadow-lg transition-all border-red-200">
-            <CardHeader className="bg-gradient-to-r from-red-50 to-red-100">
-              <CardTitle className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-red-600" />
-                Nursing Academy
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="flex justify-center mb-4">
-                <img 
-                  src="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png" 
-                  alt="Nursing Academy" 
-                  className="h-28 w-auto object-contain"
-                />
-              </div>
-              <p className="mb-4">Prepares students for healthcare careers with industry-recognized Certified Nursing Assistant credentials.</p>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-green-500" />
-                  <span>CNA certification preparation</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-green-500" />
-                  <span>Hands-on clinical experience</span>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
           {/* IBM SkillsBuild */}
           <Card className="shadow-md hover:shadow-lg transition-all border-blue-200">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100">
@@ -108,6 +78,36 @@ const Credentials = () => {
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-500" />
                   <span>Digital badges for your portfolio</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          {/* Florida Ready to Work */}
+          <Card className="shadow-md hover:shadow-lg transition-all border-green-200">
+            <CardHeader className="bg-gradient-to-r from-green-50 to-green-100">
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-green-600" />
+                Florida Ready to Work
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div className="flex justify-center mb-4">
+                <img 
+                  src="/lovable-uploads/c505c04a-b131-4528-b7be-676fde548fa1.png" 
+                  alt="Florida Ready to Work" 
+                  className="h-28 w-auto object-contain"
+                />
+              </div>
+              <p className="mb-4">The Florida Ready to Work program certifies that you have the foundational skills needed to succeed in today's rapidly changing workplace.</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  <span>State-recognized workforce credential</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  <span>Validates workplace essentials</span>
                 </li>
               </ul>
             </CardContent>

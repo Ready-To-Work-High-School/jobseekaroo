@@ -6,7 +6,6 @@ import { useAuth } from "@/contexts/auth";
 import { ModeToggle } from "@/components/theme/theme-toggle";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { NavbarNotifications } from "@/components/notifications/NavbarNotifications";
-import { Badge } from "@/components/ui/badge";
 import { Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AuthStatus from "@/components/AuthStatus";
@@ -29,7 +28,7 @@ export const NavbarRight = () => {
           aria-label="CEO Portal Access"
         >
           <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-amber-400 opacity-70 group-hover:opacity-100 group-hover:animate-ping"></div>
-          <Shield className="h-3.5 w-3.5 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" />
+          <Shield className="h-2.5 w-2.5 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" /> {/* Reduced shield size */}
         </Link>
       )}
       
@@ -40,7 +39,7 @@ export const NavbarRight = () => {
           className="flex items-center justify-center h-5 w-5 rounded-full bg-red-600 hover:bg-red-700 transition-colors"
           aria-label="Admin Panel"
         >
-          <Shield className="h-2.5 w-2.5 text-white" />
+          <Shield className="h-2 w-2 text-white" /> {/* Reduced shield size */}
         </Link>
       )}
       

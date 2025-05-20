@@ -6,7 +6,7 @@ export interface StudentProfile {
   firstName: string;
   lastName: string;
   grade: number;
-  academy: 'Entrepreneurship' | 'Nursing' | 'General';
+  academy: 'Entrepreneurship' | 'General';
   skills: string[];
   certifications: string[];
   interests: string[];
@@ -43,21 +43,21 @@ export const mockStudentProfiles: StudentProfile[] = [
   },
   {
     id: uuidv4(),
-    firstName: 'Miguel',
-    lastName: 'Rodriguez',
-    grade: 11,
-    academy: 'Nursing',
-    skills: ['Patient Care', 'Basic Medical Terminology', 'Record Keeping'],
-    certifications: ['CPR', 'Basic Life Support'],
-    interests: ['Healthcare', 'Helping Others', 'Science'],
+    firstName: 'Tyler',
+    lastName: 'Smith',
+    grade: 10,
+    academy: 'General',
+    skills: ['Computer Repair', 'Programming Basics', 'Hardware Installation'],
+    certifications: ['IT Fundamentals'],
+    interests: ['Technology', 'Computers', 'Gaming'],
     availability: {
       afterSchool: true,
-      weekends: false,
+      weekends: true,
       summer: true,
     },
-    bio: 'Junior year nursing academy student interested in gaining healthcare experience.',
+    bio: 'Sophomore with technical skills looking for IT support or retail tech positions.',
     workEligible: true,
-    preferredJobTypes: ['healthcare', 'senior care']
+    preferredJobTypes: ['tech', 'customer service', 'retail']
   },
   {
     id: uuidv4(),
@@ -77,43 +77,6 @@ export const mockStudentProfiles: StudentProfile[] = [
     bio: 'Senior with strong leadership skills seeking business or sales opportunities.',
     workEligible: true,
     preferredJobTypes: ['sales', 'office', 'customer service']
-  },
-  {
-    id: uuidv4(),
-    firstName: 'Tyler',
-    lastName: 'Smith',
-    grade: 10,
-    academy: 'General',
-    skills: ['Computer Repair', 'Programming Basics', 'Hardware Installation'],
-    certifications: ['IT Fundamentals'],
-    interests: ['Technology', 'Computers', 'Gaming'],
-    availability: {
-      afterSchool: true,
-      weekends: true,
-      summer: true,
-    },
-    bio: 'Sophomore with technical skills looking for IT support or retail tech positions.',
-    workEligible: true,
-    preferredJobTypes: ['tech', 'customer service', 'retail']
-  },
-  {
-    id: uuidv4(),
-    firstName: 'Sophia',
-    lastName: 'Garcia',
-    grade: 12,
-    academy: 'Nursing',
-    skills: ['Patient Care', 'Medical Records', 'Spanish Language'],
-    certifications: ['CPR', 'First Aid', 'Bilingual Certification'],
-    interests: ['Pediatrics', 'Community Health', 'Nutrition'],
-    availability: {
-      afterSchool: true,
-      weekends: true,
-      summer: true,
-    },
-    avatar: '/lovable-uploads/9902b779-4825-4eca-a738-f4c7384f3331.jpg',
-    bio: 'Bilingual senior in nursing academy seeking healthcare opportunities.',
-    workEligible: true,
-    preferredJobTypes: ['healthcare', 'childcare', 'customer service']
   },
   {
     id: uuidv4(),
@@ -138,18 +101,18 @@ export const mockStudentProfiles: StudentProfile[] = [
     firstName: 'Emma',
     lastName: 'Chen',
     grade: 12,
-    academy: 'Nursing',
-    skills: ['Organization', 'Communication', 'Basic Clinical Skills'],
-    certifications: ['CPR', 'Patient Care Technician'],
-    interests: ['Elder Care', 'Hospital Administration', 'Psychology'],
+    academy: 'Entrepreneurship',
+    skills: ['Organization', 'Communication', 'Basic Business Skills'],
+    certifications: ['ESB', 'Marketing Fundamentals'],
+    interests: ['Marketing', 'Business Management', 'Entrepreneurship'],
     availability: {
       afterSchool: false,
       weekends: true,
       summer: true,
     },
-    bio: 'Senior interested in healthcare administration and patient care.',
+    bio: 'Senior interested in business management and marketing.',
     workEligible: true,
-    preferredJobTypes: ['healthcare', 'office', 'senior care']
+    preferredJobTypes: ['marketing', 'office', 'retail']
   }
 ];
 
@@ -157,4 +120,3 @@ export const getRandomStudents = (count: number = 3): StudentProfile[] => {
   const shuffled = [...mockStudentProfiles].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, Math.min(count, mockStudentProfiles.length));
 };
-

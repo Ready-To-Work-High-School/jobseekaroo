@@ -16,13 +16,6 @@ const PartnerLogosSection = () => {
       isESB: true
     }, 
     {
-      id: 2,
-      name: "Nursing Academy",
-      logo: "/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png", // Original Nursing Academy logo
-      width: 180,
-      height: 180
-    }, 
-    {
       id: 3,
       name: "Microsoft Fundamentals",
       logo: "/lovable-uploads/33a2a707-cb1f-45e1-9f93-bb8816d721e6.png",

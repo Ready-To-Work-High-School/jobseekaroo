@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, ExternalLink, Activity, BadgeCheck } from "lucide-react";
+import { Award, ExternalLink, BadgeCheck } from "lucide-react";
 
 const CredentialCard = () => {
   return (
@@ -82,36 +82,6 @@ const CredentialCard = () => {
               <a href="https://www.floridareadytowork.com/" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4" />
                 Florida Ready to Work Official Site
-              </a>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="overflow-hidden border-blue-200 bg-blue-50">
-        <CardHeader className="pb-2">
-          <div className="flex items-center gap-3">
-            <Activity className="h-6 w-6 text-blue-600" />
-            <CardTitle>Nursing Academy & Healthcare Certifications</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="mb-4">
-            Students in our Nursing Academy graduate with industry-recognized healthcare credentials, including 
-            Certified Nursing Assistant (CNA) qualifications. They receive hands-on clinical training and develop 
-            essential patient care skills that make them valuable entry-level healthcare employees.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button variant="outline" className="flex items-center gap-2" asChild>
-              <a href="https://floridasnursing.gov/licensing/certified-nursing-assistant-examination/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4" />
-                Florida CNA Certification Info
-              </a>
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2" asChild>
-              <a href="https://www.prometric.com/test-takers/search/cna" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4" />
-                CNA Examination Details
               </a>
             </Button>
           </div>

@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, FileText, Briefcase, User, Award, Heart, Video, MessageSquare, BookMarked } from 'lucide-react';
+import { BookOpen, FileText, Briefcase, User, Award, Video, MessageSquare, BookMarked } from 'lucide-react';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
 
 const Resources = () => {
@@ -99,22 +99,6 @@ const Resources = () => {
             </CardContent>
           </Card>
           
-          {/* Healthcare Pathways */}
-          <Card className="hover:shadow-md transition-shadow student-card-hover">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Heart className="h-5 w-5 mr-2 text-red-600" />
-                Healthcare Pathways
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">Discover opportunities in the healthcare industry</p>
-              <Link to="/nursing-academy" className="text-blue-600 hover:underline">
-                Healthcare Resources →
-              </Link>
-            </CardContent>
-          </Card>
-          
           {/* Communication Tools */}
           <Card className="hover:shadow-md transition-shadow student-card-hover">
             <CardHeader>
@@ -136,7 +120,7 @@ const Resources = () => {
           <h2 className="text-2xl font-bold mb-2">Free Access for All Students</h2>
           <p className="mb-4">
             All resources on this platform are provided free of charge to Westside High School students 
-            enrolled in the Entrepreneurship or Nursing Academy.
+            enrolled in the Entrepreneurship Academy.
           </p>
           <div className="flex justify-center">
             <FreeForStudentsBadge />

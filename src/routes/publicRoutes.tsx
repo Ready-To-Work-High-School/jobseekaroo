@@ -10,7 +10,6 @@ import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import SampleCandidates from '../pages/SampleCandidates';
 import CredentialsPage from '../pages/Credentials';
-import NursingAcademy from '../pages/NursingAcademy';
 import EntrepreneurshipAcademy from '../pages/EntrepreneurshipAcademy';
 import FirstJobToolkit from '../pages/FirstJobToolkit';
 import Resources from '../pages/Resources';
@@ -31,7 +30,6 @@ import InterviewPrep from '../pages/InterviewPrep';
 import SchedulePage from '@/pages/SchedulePage';
 import SchoolGuide from '../pages/SchoolGuide';
 import SafetyCompliance from '../pages/SafetyCompliance';
-import HealthcarePathways from '../pages/HealthcarePathways';
 import StudentSuccess from '../pages/StudentSuccess';
 import PersonalizedAssessment from '../pages/PersonalizedAssessment';
 
@@ -44,7 +42,6 @@ export const PublicRoutes = (
     <Route path="/job-search" element={<EnhancedJobListings />} />
     <Route path="/employer-info" element={<EnhancedJobListings />} />
     <Route path="/for-employers" element={<ForEmployers />} />
-    <Route path="/nursing-academy" element={<NursingAcademy />} />
     <Route path="/entrepreneurship-academy" element={<EntrepreneurshipAcademy />} />
     <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
     <Route path="/skills-build" element={<SkillDevelopment />} />
@@ -70,8 +67,6 @@ export const PublicRoutes = (
     <Route path="/interview-prep" element={<InterviewPrep />} />
     <Route path="/school-guide" element={<SchoolGuide />} />
     <Route path="/safety-compliance" element={<SafetyCompliance />} />
-    <Route path="/programs/healthcare-pathways" element={<HealthcarePathways />} />
-    <Route path="/healthcare-pathways" element={<HealthcarePathways />} />
     <Route path="/student-success" element={<StudentSuccess />} />
     
     <Route path="/school/students" element={<SchoolStudents />} />

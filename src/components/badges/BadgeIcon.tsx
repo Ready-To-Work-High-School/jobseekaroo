@@ -31,13 +31,6 @@ export const badgeIconMap: Record<string, React.ReactNode> = {
       className="h-full w-full object-contain"
     />
   </div>,
-  nursing_academy: <div className="h-5 w-5 relative flex items-center justify-center">
-    <img 
-      src="/lovable-uploads/32e451a9-4fe2-40b0-bfbc-15cfceea8d71.png" 
-      alt="Nursing Academy" 
-      className="h-full w-full object-contain"
-    />
-  </div>,
   esb: <div className="h-5 w-5 relative flex items-center justify-center">
     <img 
       src="/lovable-uploads/9babf5b8-1235-48d8-8e19-a555efbf5102.png" 

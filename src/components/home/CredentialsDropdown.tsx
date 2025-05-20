@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Award, Heart, BookOpen, ChevronDown } from 'lucide-react';
+import { Award, BookOpen, ChevronDown } from 'lucide-react';
 
 const CredentialsDropdown = () => {
   return (
@@ -20,12 +20,6 @@ const CredentialsDropdown = () => {
             <Link to="/entrepreneurship-academy" className="cursor-pointer flex items-center">
               <Award className="mr-2 h-4 w-4 text-amber-500" />
               Entrepreneurship & Small Business
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/nursing-academy" className="cursor-pointer flex items-center">
-              <Heart className="mr-2 h-4 w-4 text-red-500" />
-              Nursing Academy
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

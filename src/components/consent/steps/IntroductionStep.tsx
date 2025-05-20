@@ -2,7 +2,6 @@
 import React from 'react';
 import { Shield } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { ConsentStep } from '../hooks/useConsentFlow';
 
 interface IntroductionStepProps {
   onContinue: () => void;
@@ -14,7 +13,7 @@ const IntroductionStep: React.FC<IntroductionStepProps> = ({ onContinue, onLearn
     <div className="space-y-4">
       <div className="flex justify-center mb-4">
         <div className="bg-blue-100 p-3 rounded-full">
-          <Shield className="h-5 w-5 text-blue-600" />
+          <Shield className="h-4 w-4 text-blue-600" /> {/* Reduced shield size */}
         </div>
       </div>
       <h2 className="text-2xl font-bold text-center">Parental Consent Required</h2>
