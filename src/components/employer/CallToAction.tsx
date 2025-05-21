@@ -22,7 +22,7 @@ const CallToAction = () => {
       
       <h2 className="text-3xl font-bold mb-6">Ready to Connect with Our Students?</h2>
       <p className="text-lg mb-8 max-w-2xl mx-auto">
-        Our students from both the Entrepreneurship and Nursing Academies are eager to apply their skills and learning in real-world settings.
+        Our students from the Entrepreneurship Academy are eager to apply their skills and learning in real-world settings.
         Connect with us today to find your next great hire.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">

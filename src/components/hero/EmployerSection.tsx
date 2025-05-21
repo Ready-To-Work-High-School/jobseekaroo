@@ -44,7 +44,7 @@ export const EmployerSection = () => {
 
       <p className="text-gray-700 mb-6">
         Access our talent pool of certified high school students from Westside High School's 
-        Entrepreneurship and Nursing academies. Get matched with motivated candidates ready to 
+        Entrepreneurship academy. Get matched with motivated candidates ready to 
         contribute to your business success.
       </p>
       

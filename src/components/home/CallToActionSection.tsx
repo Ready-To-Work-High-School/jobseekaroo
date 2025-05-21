@@ -47,7 +47,7 @@ const CallToActionSection = () => {
         </div>
         
         <p className="mt-8 text-sm text-blue-200">
-          *Exclusive to students enrolled in Entrepreneurship or Nursing academy at Westside High School
+          *Exclusive to students enrolled in Entrepreneurship academy at Westside High School
         </p>
       </div>
     </section>
