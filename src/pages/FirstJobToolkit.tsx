@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Compass, FileText, CheckCircle, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FreeForStudentsBadge from '@/components/badges/FreeForStudentsBadge';
+import FirstJobToolkitContent from '@/components/students/FirstJobToolkitContent';
 
 const FirstJobToolkit = () => {
   return (
@@ -119,21 +120,8 @@ const FirstJobToolkit = () => {
             </div>
           </div>
         </div>
-        
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4 text-center">Ready to Get Started?</h2>
-          <p className="text-center mb-6">
-            Access all the resources you need to prepare for your first job. Our toolkit is 
-            completely free for Westside High School students.
-          </p>
-          <div className="flex justify-center">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700" asChild>
-              <Link to="/resources">
-                Access First Job Toolkit
-              </Link>
-            </Button>
-          </div>
-        </div>
+
+        <FirstJobToolkitContent />
       </div>
     </Layout>
   );

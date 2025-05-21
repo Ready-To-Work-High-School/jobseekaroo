@@ -19,7 +19,7 @@ export const ResourcesDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="p-0 h-auto">
           <span className={cn("text-sm font-medium transition-colors", 
-          location.pathname.includes("/resources") ? 
+          location.pathname.includes("/resources") || location.pathname.includes("/first-job-toolkit") ? 
           "text-primary" : "text-muted-foreground hover:text-primary")}>
             Resources
           </span>
@@ -33,20 +33,20 @@ export const ResourcesDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/skill-development" className="flex items-center gap-2">
+          <Link to="/first-job-toolkit" className="flex items-center gap-2">
             <Award className="h-4 w-4" />
+            First Job Toolkit
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/skill-development" className="flex items-center gap-2">
+            <GraduationCap className="h-4 w-4" />
             Skill Development
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/platform-guide" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            Platform Guide
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
           <Link to="/interview-prep" className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4" />
+            <FileText className="h-4 w-4" />
             Interview Preparation
           </Link>
         </DropdownMenuItem>
