@@ -32,7 +32,10 @@ const LoadingFallback = () => (
 );
 
 function App() {
+  console.log('App component rendering...');
+  
   const { user } = useAuth();
+  console.log('User auth state:', !!user);
 
   return (
     <HelmetProvider>
@@ -83,5 +86,7 @@ function App() {
     </HelmetProvider>
   );
 }
+
+console.log('App component defined successfully');
 
 export default App;
