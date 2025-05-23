@@ -1,16 +1,14 @@
 
 import { Notification, NotificationType } from '@/types/notification';
 
-export interface DateRange {
-  from: Date | null;
-  to: Date | null;
-}
-
 export interface NotificationFilterOptions {
-  type?: string | 'all';
-  read?: boolean | 'all';
-  dateRange?: DateRange;
-  sortBy?: 'newest' | 'oldest';
+  type: NotificationType | 'all';
+  read: boolean | 'all';
+  dateRange: {
+    from: Date | null;
+    to: Date | null;
+  };
+  sortBy: 'newest' | 'oldest';
 }
 
 export interface NotificationsContextType {
@@ -19,18 +17,12 @@ export interface NotificationsContextType {
   filteredNotifications: Notification[];
   unreadCount: number;
   isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
+  setIsLoading: (loading: boolean) => void;
   errorMessage: string | null;
-  setErrorMessage: (message: string | null) => void;
-  markAsRead: (id: string) => Promise<void> | void;
-  markAllAsRead: () => Promise<void> | void;
-  clearAll: () => Promise<void> | void;
+  setErrorMessage: (error: string | null) => void;
+  markAsRead: (id: string) => void;
+  markAllAsRead: () => void;
+  clearAll: () => void;
   filterOptions: NotificationFilterOptions;
   updateFilters: (filters: Partial<NotificationFilterOptions>) => void;
-  addNotification?: (notification: Omit<Notification, "id" | "read" | "createdAt">) => Promise<void> | void;
-  // Direct filter access
-  filterType: string | null;
-  setFilterType: (type: string | null) => void;
-  filterStatus: 'all' | 'unread' | 'read';
-  setFilterStatus: (status: 'all' | 'unread' | 'read') => void;
 }

@@ -1,29 +1,39 @@
 
-import { supabase } from '../index';
+import { supabase } from '@/lib/supabase';
 import { Notification, NotificationType } from '@/types/notification';
-import { transformNotification } from './utils';
-import { NotificationResponse } from './types';
 
-/**
- * Subscribe to real-time notifications
- */
-export function subscribeToNotifications(
-  userId: string, 
-  callback: (notification: Notification) => void
-) {
-  return supabase
+export const subscribeToNotifications = (
+  userId: string,
+  onNotification: (notification: Notification) => void
+) => {
+  const channel = supabase
     .channel('notifications')
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'notifications',
-      filter: `user_id=eq.${userId}`,
-    }, (payload) => {
-      // Ensure the payload matches NotificationResponse before transforming
-      const newNotification = payload.new as NotificationResponse;
-      // Transform the payload to a Notification object
-      const notification = transformNotification(newNotification);
-      callback(notification);
-    })
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'notifications',
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => {
+        const notification: Notification = {
+          id: payload.new.id,
+          userId: payload.new.user_id,
+          title: payload.new.title,
+          message: payload.new.message,
+          type: payload.new.type as NotificationType,
+          read: payload.new.read,
+          createdAt: payload.new.created_at,
+          link: payload.new.link,
+          metadata: payload.new.metadata || {}
+        };
+        onNotification(notification);
+      }
+    )
     .subscribe();
-}
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+};
