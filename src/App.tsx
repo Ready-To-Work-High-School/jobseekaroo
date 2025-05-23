@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth';
@@ -13,7 +14,6 @@ import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
 import AuthRoutes from './routes/authRoutes';
 import UserProfileTabs from './pages/UserProfileTabs';
-import PasswordResetRedirect from "./components/auth/PasswordResetRedirect";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -33,58 +33,64 @@ const LoadingFallback = () => (
 
 function App() {
   console.log('App component rendering...');
-  
+
+  return (
+    <HelmetProvider>
+      <div className="app">
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </div>
+    </HelmetProvider>
+  );
+}
+
+function AppContent() {
   const { user } = useAuth();
   console.log('User auth state:', !!user);
 
   return (
-    <HelmetProvider>
-      <PasswordResetRedirect />
+    <NotificationsProvider user={user}>
+      <Helmet defaultTitle="JobSeekers4HS - Your First Job, Made Simple" titleTemplate="%s | JobSeekers4HS" />
       
-      <div className="app">
-        <AuthProvider>
-          <NotificationsProvider user={user}>
-            <Helmet defaultTitle="JobSeekers4HS - Your First Job, Made Simple" titleTemplate="%s | JobSeekers4HS" />
-            
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {/* Routes with the Layout component which already includes the Header */}
-                <Route path="/" element={<Home />} />
-                <Route path="/profile" element={<Layout><Profile /></Layout>} />
-                <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
-                <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
-                <Route path="/jobs" element={<Layout><Jobs /></Layout>} />
-                <Route path="/employer-kanban" element={<Layout><EmployerKanban /></Layout>} />
-                <Route path="/communication-tools" element={<Layout><CommunicationTools /></Layout>} />
-                <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
-                <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
-                <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
-                <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
-                <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
-                
-                {/* Add system diagnostics route */}
-                <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
-                
-                {/* Add explicit routes for privacy policy and terms of service */}
-                <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
-                <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
-                <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
-                <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
-                
-                {/* Include all employer routes */}
-                {EmployerRoutes}
-                
-                {/* Include all auth routes */}
-                {AuthRoutes}
-              </Routes>
-            </Suspense>
-            
-            {/* Network status indicator */}
-            <NetworkStatusIndicator />
-          </NotificationsProvider>
-        </AuthProvider>
-      </div>
-    </HelmetProvider>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {/* Home route without Layout wrapper since Home already includes it */}
+          <Route path="/" element={<Home />} />
+          
+          {/* Routes with the Layout component */}
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
+          <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
+          <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
+          <Route path="/jobs" element={<Layout><Jobs /></Layout>} />
+          <Route path="/employer-kanban" element={<Layout><EmployerKanban /></Layout>} />
+          <Route path="/communication-tools" element={<Layout><CommunicationTools /></Layout>} />
+          <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
+          <Route path="/ceo-portal" element={<Layout><CeoPortal /></Layout>} />
+          <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+          <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/admin/*" element={<Layout><AdminPanel /></Layout>} />
+          
+          {/* Add system diagnostics route */}
+          <Route path="/system-diagnostics" element={<Layout><SystemDiagnosticsPage /></Layout>} />
+          
+          {/* Add explicit routes for privacy policy and terms of service */}
+          <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
+          <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
+          <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
+          <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
+          
+          {/* Include all employer routes */}
+          {EmployerRoutes}
+          
+          {/* Include all auth routes */}
+          {AuthRoutes}
+        </Routes>
+      </Suspense>
+      
+      {/* Network status indicator */}
+      <NetworkStatusIndicator />
+    </NotificationsProvider>
   );
 }
 

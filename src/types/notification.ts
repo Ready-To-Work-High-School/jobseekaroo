@@ -1,19 +1,12 @@
 
-export type NotificationType = 'system' | 'application' | 'job' | 'message';
-
 export interface Notification {
   id: string;
   userId: string;
   title: string;
   message: string;
-  type: NotificationType;
+  type: 'job' | 'application' | 'system' | 'reminder';
   read: boolean;
   createdAt: string;
-  link: string;
+  link?: string;
   metadata: Record<string, any>;
-}
-
-export interface NotificationFilterOptions {
-  type?: string | null;
-  status?: 'all' | 'unread' | 'read';
 }

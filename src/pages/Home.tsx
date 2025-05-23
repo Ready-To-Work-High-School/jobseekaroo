@@ -1,25 +1,12 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import { useAuth } from '@/contexts/AuthContext';
-import AdminToggle from '@/components/admin/AdminToggle';
-import SearchSection from '@/components/home/SearchSection';
-import HowItWorksSection from '@/components/home/HowItWorksSection';
-import FirstJobToolkit from '@/components/home/FirstJobToolkit';
-import MayoSummerFeature from '@/components/home/MayoSummerFeature';
-import FeeTeaser from '@/components/pricing/FeeTeaser';
+import { useAuth } from '@/hooks/useAuth';
 import Hero from '@/components/Hero';
-import SuccessStories from '@/components/home/SuccessStories';
-import SectionSeparator from '@/components/home/SectionSeparator';
-import { EmployerSection } from '@/components/hero/EmployerSection';
-import { CompanySpotlight } from '@/components/company/CompanySpotlight';
-import { FloatingQuickAccess } from '@/components/navigation/FloatingQuickAccess';
-import TroubleshootDialog from '@/components/troubleshooting/TroubleshootDialog';
-import WhatYouGetCTA from '@/components/auth/WhatYouGetCTA';
-import CareerExplorer from '@/components/home/CareerExplorer';
-import PremiumOnboardingCards from '@/components/premium/PremiumOnboardingCards';
+import JobListings from '@/components/JobListings';
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const { user } = useAuth();
@@ -38,85 +25,25 @@ const Home = () => {
         <Hero />
       </ErrorBoundary>
 
-      <SectionSeparator />
-
       <ErrorBoundary>
-        <SearchSection />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <CareerExplorer />
-      </ErrorBoundary>
-
-      <ErrorBoundary>
-        <PremiumOnboardingCards />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <EmployerSection />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <CompanySpotlight />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <HowItWorksSection />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <SuccessStories />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <FirstJobToolkit />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <MayoSummerFeature />
-      </ErrorBoundary>
-
-      <SectionSeparator />
-
-      <ErrorBoundary>
-        <FeeTeaser />
+        <motion.section 
+          className="py-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-8">Featured Job Opportunities</h2>
+            <JobListings />
+          </div>
+        </motion.section>
       </ErrorBoundary>
 
       {user && (
         <div className="container mx-auto px-4 py-8">
-          <AdminToggle />
+          <p className="text-center text-muted-foreground">Welcome back, {user.email}!</p>
         </div>
       )}
-
-      <div className="container mx-auto px-4 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TroubleshootDialog />
-        </div>
-      </div>
-
-      <FloatingQuickAccess />
-      
-      {/* Manually override to remove the WhatYouGetCTA that comes from the Layout component */}
-      <style dangerouslySetInnerHTML={{__html: `
-        /* Hide the default WhatYouGetCTA that comes from the Layout */
-        .what-you-get-cta-container {
-          display: none;
-        }
-      `}} />
     </Layout>
   );
 };
