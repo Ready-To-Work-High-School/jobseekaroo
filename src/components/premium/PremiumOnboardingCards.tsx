@@ -30,13 +30,13 @@ const PremiumOnboardingCards = () => {
         "Post job opportunities",
         "Access verified student profiles",
         "Premium analytics and insights",
-        "Onboarding support included"
+        "Premium onboarding support included"
       ],
       icon: <Sparkles className="h-5 w-5 text-amber-500" />,
       color: "bg-amber-50 border-amber-200",
       textColor: "text-amber-700",
       btnVariant: "outline",
-      link: "/employer-onboarding"
+      link: "/sign-up?type=employer"
     }
   ];
 
@@ -88,7 +88,7 @@ const PremiumOnboardingCards = () => {
                 <CardFooter>
                   <Button asChild variant={card.btnVariant === "default" ? "default" : "outline"} className="w-full gap-1">
                     <Link to={card.link}>
-                      {card.title === "Employers" ? "Start Onboarding" : "Get Started"}
+                      {card.title === "Employers" ? "Sign Up" : "Get Started"}
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </Link>
                   </Button>
