@@ -42,8 +42,10 @@ const NotificationItem = ({ notification, onClose }: NotificationItemProps) => {
         return <Briefcase className="h-5 w-5 text-blue-500" />;
       case 'application':
         return <CircleAlert className="h-5 w-5 text-green-500" />;
-      case 'message':
-        return <MessageSquare className="h-5 w-5 text-purple-500" />;
+      case 'system':
+        return <Info className="h-5 w-5 text-purple-500" />;
+      case 'reminder':
+        return <Bell className="h-5 w-5 text-orange-500" />;
       default:
         return <Bell className="h-5 w-5 text-gray-500" />;
     }

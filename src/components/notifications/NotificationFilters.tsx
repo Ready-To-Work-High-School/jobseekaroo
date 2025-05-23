@@ -7,7 +7,8 @@ import {
   Briefcase, 
   MessageSquare, 
   Check, 
-  CircleAlert 
+  CircleAlert,
+  Info
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -48,7 +49,7 @@ const NotificationFilters = () => {
                   : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              <Bell className="h-3 w-3 mr-1" />
+              <Info className="h-3 w-3 mr-1" />
               System
             </button>
             <button 
@@ -74,15 +75,15 @@ const NotificationFilters = () => {
               Applications
             </button>
             <button 
-              onClick={() => setFilterType('message')} 
+              onClick={() => setFilterType('reminder')} 
               className={`flex items-center text-xs px-3 py-1 rounded-full ${
-                filterType === 'message' 
+                filterType === 'reminder' 
                   ? 'bg-primary text-primary-foreground' 
                   : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              <MessageSquare className="h-3 w-3 mr-1" />
-              Messages
+              <Bell className="h-3 w-3 mr-1" />
+              Reminders
             </button>
           </div>
         </div>
