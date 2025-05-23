@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Briefcase, MapPin, Clock, DollarSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { useFadeIn } from '@/utils/animations';
-import { toast } from 'sonner';
 
 type Job = {
   id: string;
@@ -107,14 +105,9 @@ const JobListings = () => {
           ];
           setJobs(sampleJobs);
           setLoading(false);
-          // Add a toast to inform the user that jobs loaded
-          toast.success('Jobs loaded successfully', {
-            description: 'Including teacher, accountant, and cashier positions'
-          });
         }, 1000);
       } catch (error) {
         console.error('Error fetching jobs:', error);
-        toast.error('Failed to load jobs');
         setLoading(false);
       }
     };
