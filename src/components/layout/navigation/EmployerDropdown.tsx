@@ -44,7 +44,7 @@ export const EmployerDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/employer/dashboard" className="flex items-center gap-2 w-full">
+          <Link to="/employer-dashboard" className="flex items-center gap-2 w-full">
             <FilePlus className="h-4 w-4" />
             Post Jobs
           </Link>
