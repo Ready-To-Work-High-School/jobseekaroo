@@ -7,6 +7,7 @@ import { Star, Sparkles, Check, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from 'react-router-dom';
 
 interface FreemiumFeaturesProps {
   jobId?: string;
@@ -166,13 +167,24 @@ const FreemiumFeatures: React.FC<FreemiumFeaturesProps> = ({ jobId }) => {
                 </div>
               </div>
               
-              <Button 
-                onClick={handleStartTrial}
-                disabled={!isEligibleForTrial || isLoading}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
-              >
-                {isLoading ? "Processing..." : isEligibleForTrial ? "Start Free Trial" : "Upgrade to Premium"}
-              </Button>
+              {jobId ? (
+                <Button 
+                  onClick={handleStartTrial}
+                  disabled={!isEligibleForTrial || isLoading}
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
+                >
+                  {isLoading ? "Processing..." : isEligibleForTrial ? "Start Free Trial" : "Upgrade to Premium"}
+                </Button>
+              ) : (
+                <Button
+                  asChild
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
+                >
+                  <Link to="/employer/premium-features">
+                    {isEligibleForTrial ? "Start Free Trial" : "Upgrade to Premium"}
+                  </Link>
+                </Button>
+              )}
               
               {!isEligibleForTrial && (
                 <p className="text-xs text-center text-muted-foreground">

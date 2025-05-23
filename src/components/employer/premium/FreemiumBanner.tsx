@@ -35,7 +35,7 @@ const FreemiumBanner = () => {
             asChild
             className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-md"
           >
-            <Link to="/employer-premium" className="flex items-center">
+            <Link to="/employer/premium-features" className="flex items-center">
               Start Free Trial
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>

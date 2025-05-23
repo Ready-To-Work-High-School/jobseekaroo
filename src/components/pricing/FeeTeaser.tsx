@@ -119,7 +119,7 @@ const FeeTeaser = () => {
             </div>
             
             <Button asChild className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border-0">
-              <Link to="/employer/premium">Start Free Trial</Link>
+              <Link to="/employer/premium-features">Start Free Trial</Link>
             </Button>
           </motion.div>
         </div>
