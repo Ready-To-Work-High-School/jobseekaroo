@@ -84,7 +84,7 @@ const Jobs = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div id="job-listings" className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">Browse Jobs</h2>
         <JobListings />
       </div>
