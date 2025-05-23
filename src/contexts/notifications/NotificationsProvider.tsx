@@ -1,58 +1,26 @@
 
-import React, { createContext, ReactNode } from 'react';
-import { NotificationsContextType } from './types';
-import { useNotificationsState } from './hooks/useNotificationsState';
-import { useNotificationsOperations } from './hooks/useNotificationsOperations';
-import { useNotificationsRealtime } from './hooks/useNotificationsRealtime';
+import React, { createContext, useContext } from 'react';
 
-interface NotificationsProviderProps {
-  children: ReactNode;
-  user: any;
+interface NotificationsContextType {
+  notifications: any[];
 }
 
-// Create the context with default values
-export const NotificationsContext = createContext<NotificationsContextType>({
-  notifications: [],
-  setNotifications: () => {},
-  filteredNotifications: [],
-  unreadCount: 0,
-  isLoading: false,
-  setIsLoading: () => {},
-  errorMessage: null,
-  setErrorMessage: () => {},
-  markAsRead: async () => {},
-  markAllAsRead: async () => {},
-  clearAll: async () => {},
-  filterOptions: { type: 'all', read: 'all' },
-  updateFilters: () => {},
-  filterType: null,
-  setFilterType: () => {},
-  filterStatus: 'all',
-  setFilterStatus: () => {},
-});
+const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
-export const NotificationsProvider = ({ children, user }: NotificationsProviderProps) => {
-  // Manage state with custom hooks
-  const state = useNotificationsState();
-  const operations = useNotificationsOperations(user?.id, state.setNotifications);
-  
-  // Set up real-time notifications
-  useNotificationsRealtime(
-    user, 
-    state.setNotifications,
-    state.setIsLoading,
-    state.setErrorMessage
-  );
-
-  // Combine all values for the context
-  const contextValue: NotificationsContextType = {
-    ...state,
-    ...operations
-  };
+export const NotificationsProvider: React.FC<{ children: React.ReactNode; user: any }> = ({ children, user }) => {
+  const notifications: any[] = [];
 
   return (
-    <NotificationsContext.Provider value={contextValue}>
+    <NotificationsContext.Provider value={{ notifications }}>
       {children}
     </NotificationsContext.Provider>
   );
+};
+
+export const useNotifications = () => {
+  const context = useContext(NotificationsContext);
+  if (context === undefined) {
+    throw new Error('useNotifications must be used within a NotificationsProvider');
+  }
+  return context;
 };

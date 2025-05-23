@@ -23,6 +23,7 @@ import EmployerKanban from './pages/EmployerKanban';
 import CommunicationTools from './pages/CommunicationTools';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import { NetworkStatusIndicator } from './components/NetworkStatusIndicator';
+import EmployerRoutes from './routes/employerRoutes';
 
 // Add a loading fallback component
 const LoadingFallback = () => (
@@ -39,13 +40,11 @@ function App() {
 
   return (
     <HelmetProvider>
-      {/* Add the PasswordResetRedirect component at the root level */}
       <PasswordResetRedirect />
       
       <div className="app">
         <AuthProvider>
           <NotificationsProvider user={user}>
-            {/* Add a default title tag that will be overridden by specific pages */}
             <Helmet defaultTitle="JobSeekers4HS - Your First Job, Made Simple" titleTemplate="%s | JobSeekers4HS" />
             
             <Suspense fallback={<LoadingFallback />}>
@@ -72,6 +71,9 @@ function App() {
                 <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
                 <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
                 <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
+                
+                {/* Include all employer routes */}
+                {EmployerRoutes}
                 
                 {/* Include all auth routes */}
                 {AuthRoutes}
