@@ -14,6 +14,13 @@ const Jobs = () => {
     console.log('Jobs page mounted');
   }, []);
 
+  const scrollToJobListings = () => {
+    const jobListingsElement = document.getElementById('job-listings');
+    if (jobListingsElement) {
+      jobListingsElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <Layout>
       <Helmet>
@@ -65,11 +72,13 @@ const Jobs = () => {
               </motion.div>
             </div>
 
-            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
-              <Link to="/job-listings">
-                <Briefcase className="mr-2 h-5 w-5" />
-                Start Your Search
-              </Link>
+            <Button 
+              onClick={scrollToJobListings}
+              size="lg" 
+              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+            >
+              <Briefcase className="mr-2 h-5 w-5" />
+              Start Your Search
             </Button>
           </motion.div>
         </div>
