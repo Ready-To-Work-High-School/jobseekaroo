@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface User {
@@ -14,13 +13,13 @@ interface UserProfile {
   preferences?: any;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -30,6 +29,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Mock authentication for demo
     setTimeout(() => {
+      // Demo user for testing
+      const demoUser = {
+        id: '123',
+        email: 'demo@example.com'
+      };
+      setUser(demoUser);
+      
+      setUserProfile({
+        id: '123',
+        first_name: 'Demo',
+        last_name: 'User',
+        user_type: 'student'
+      });
+      
       setLoading(false);
     }, 1000);
   }, []);
@@ -41,6 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+// We keep this here for backward compatibility but the primary import
+// should be from ./hooks/useAuth.tsx
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

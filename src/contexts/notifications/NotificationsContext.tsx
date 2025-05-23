@@ -1,4 +1,5 @@
 
+// Re-export from the NotificationsProvider
 import { useContext } from 'react';
 import { NotificationsContext } from './NotificationsProvider';
 
