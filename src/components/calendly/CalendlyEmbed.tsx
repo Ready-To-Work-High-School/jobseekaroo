@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useScript } from '@/hooks/useScript';
+import { useCalendlyConfig } from '@/hooks/useCalendlyConfig';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -15,22 +16,14 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
   className,
   userName 
 }) => {
-  // In Vite, we need to use import.meta.env instead of process.env
-  const defaultUrl = import.meta.env.VITE_CALENDLY_CLIENT_ID ? 
-    `https://calendly.com/d/${import.meta.env.VITE_CALENDLY_CLIENT_ID}` : 
-    '';
-    
-  // Use provided URL, construct one with userName, or fallback to default
-  let calendlyUrl = url;
-  if (!calendlyUrl && userName) {
-    calendlyUrl = `https://calendly.com/${userName.toLowerCase().replace(/\s+/g, '-')}`;
-  }
-  calendlyUrl = calendlyUrl || defaultUrl;
+  const { isConfigured, getUrlForUser } = useCalendlyConfig();
+  const calendlyUrl = url || getUrlForUser(userName);
   
   const scriptStatus = useScript('https://assets.calendly.com/assets/external/widget.js');
 
   useEffect(() => {
     if (scriptStatus === 'ready' && window.Calendly && calendlyUrl) {
+      console.log('Initializing Calendly with URL:', calendlyUrl);
       window.Calendly.initInlineWidget({
         url: calendlyUrl,
         parentElement: document.querySelector('.calendly-inline-widget'),
@@ -44,7 +37,10 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
         className="min-h-[650px] w-full flex items-center justify-center bg-muted/5"
         data-testid="calendly-loading"
       >
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Loading scheduling widget...</p>
+        </div>
       </div>
     );
   }
@@ -52,21 +48,32 @@ const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
   if (scriptStatus === 'error') {
     return (
       <div 
-        className="min-h-[650px] w-full flex items-center justify-center bg-destructive/5 text-destructive"
+        className="min-h-[650px] w-full flex items-center justify-center bg-destructive/5 text-destructive border border-destructive/20 rounded-lg"
         data-testid="calendly-error"
       >
-        Failed to load scheduling widget. Please try again later.
+        <div className="text-center p-6">
+          <p className="font-medium mb-2">Failed to load scheduling widget</p>
+          <p className="text-sm">Please check your internet connection and try again later.</p>
+        </div>
       </div>
     );
   }
 
-  if (!calendlyUrl) {
+  if (!calendlyUrl || !isConfigured) {
     return (
       <div 
-        className="min-h-[650px] w-full flex items-center justify-center bg-amber-50 text-amber-600 border border-amber-200"
+        className="min-h-[650px] w-full flex items-center justify-center bg-amber-50 text-amber-800 border border-amber-200 rounded-lg"
         data-testid="calendly-missing-config"
       >
-        Calendly configuration is missing. Please check your environment variables.
+        <div className="text-center p-6">
+          <p className="font-medium mb-2">Calendly Configuration Missing</p>
+          <p className="text-sm mb-4">
+            To enable scheduling, please add your Calendly Client ID to the environment variables.
+          </p>
+          <p className="text-xs text-amber-600">
+            Set VITE_CALENDLY_CLIENT_ID in your environment configuration
+          </p>
+        </div>
       </div>
     );
   }
