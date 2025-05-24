@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import EmployerDashboard from './pages/EmployerDashboard';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
+import Calendar from './pages/Calendar';
 import { useAuth } from './hooks/useAuth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
@@ -63,6 +64,7 @@ function AppContent() {
           <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
           <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
           <Route path="/jobs" element={<Layout><Jobs /></Layout>} />
+          <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
           <Route path="/employer-kanban" element={<Layout><EmployerKanban /></Layout>} />
           <Route path="/communication-tools" element={<Layout><CommunicationTools /></Layout>} />
           <Route path="/jobs/:jobId" element={<Layout><JobDetailsPage /></Layout>} />
