@@ -1,17 +1,17 @@
 
-import { NotificationRow, NotificationResponse } from './types';
+import { NotificationResponse } from './types';
 import { Notification } from '@/types/notification';
 
 /**
  * Transform a database notification row to the frontend notification format
  */
-export function transformNotification(row: NotificationRow): Notification {
+export function transformNotification(row: NotificationResponse): Notification {
   return {
     id: row.id,
     userId: row.user_id,
     title: row.title,
     message: row.message,
-    type: row.type,
+    type: row.type as any,
     read: row.read,
     createdAt: row.created_at,
     link: row.link,
@@ -22,6 +22,6 @@ export function transformNotification(row: NotificationRow): Notification {
 /**
  * Transform multiple database notification rows
  */
-export function transformNotifications(rows: NotificationRow[]): Notification[] {
+export function transformNotifications(rows: NotificationResponse[]): Notification[] {
   return rows.map(transformNotification);
 }

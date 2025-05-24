@@ -7,5 +7,9 @@ export const useEmployerStats = (employerId: string) => {
     queryKey: ['employerStats', employerId],
     queryFn: () => getEmployerJobStats(employerId),
     enabled: !!employerId,
+    select: (data) => ({
+      data: data,
+      stats: data // Add stats property for backward compatibility
+    })
   });
 };

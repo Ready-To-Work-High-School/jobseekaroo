@@ -2,14 +2,20 @@
 import React, { useState } from 'react';
 import { createUserSkill } from '@/lib/supabase/skills';
 
-const SkillAssessmentForm = () => {
+interface SkillAssessmentFormProps {
+  onComplete?: () => void;
+}
+
+const SkillAssessmentForm = ({ onComplete }: SkillAssessmentFormProps) => {
   const [skillName, setSkillName] = useState('');
 
   const handleCreateSkill = async () => {
     try {
-      // Call with required parameters
       await createUserSkill('user-id', { name: skillName, level: 'beginner' });
       console.log('Skill created successfully');
+      if (onComplete) {
+        onComplete();
+      }
     } catch (error) {
       console.error('Error creating skill:', error);
     }
