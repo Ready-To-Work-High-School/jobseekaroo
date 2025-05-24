@@ -41,7 +41,7 @@ const WhatYouGetCTA = () => {
       
       <div className="flex justify-center">
         <Button asChild className="gap-2" size="lg">
-          <Link to="/sign-up">
+          <Link to="/signup">
             Sign Up Now <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
