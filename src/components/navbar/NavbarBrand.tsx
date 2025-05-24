@@ -1,11 +1,14 @@
 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { Shield } from 'lucide-react';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 export const NavbarBrand = () => {
   const [imageError, setImageError] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const { isCeo } = useAdminStatus();
 
   const handleImageError = () => {
     setImageError(true);
@@ -48,19 +51,30 @@ export const NavbarBrand = () => {
             <img
               src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png"
               alt="JS4HS Logo"
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain relative z-10"
+              width={64}
+              height={64}
+              className="h-16 w-16 object-contain relative z-10"
               onError={handleImageError}
               loading="eager"
             />
           </span>
         ) : (
-          <span className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500 text-sm z-10">
+          <span className="h-16 w-16 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500 text-sm z-10">
             JS4HS
           </span>
         )}
       </Link>
+      
+      {/* Hidden CEO Shield - only visible to CEO users */}
+      {isCeo && (
+        <Link 
+          to="/ceo-portal" 
+          className="absolute -top-1 -right-1 opacity-10 hover:opacity-100 transition-opacity duration-300 z-20"
+          aria-label="CEO Portal Access"
+        >
+          <Shield className="h-4 w-4 text-amber-500" />
+        </Link>
+      )}
       
       {/* Hidden hint that appears only after ctrl+clicking */}
       {showHint && (
