@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
+import { checkEmailBreach, EmailBreachResult } from '@/lib/security/emailBreachCheck';
+import EmailBreachWarning from './EmailBreachWarning';
 
 interface StudentSignUpFormProps {
   onSuccess?: () => void;
@@ -35,12 +37,37 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailBreachResult, setEmailBreachResult] = useState<EmailBreachResult | null>(null);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
-  const password = watch('password', ''); // Watch password field for strength indicator
+  const password = watch('password', '');
+  const email = watch('email', '');
+  
+  // Debounced email breach check
+  useEffect(() => {
+    if (!email || !email.includes('@')) {
+      setEmailBreachResult(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setCheckingEmail(true);
+      try {
+        const result = await checkEmailBreach(email);
+        setEmailBreachResult(result);
+      } catch (error) {
+        console.error('Email breach check failed:', error);
+      } finally {
+        setCheckingEmail(false);
+      }
+    }, 1000); // Check 1 second after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [email]);
   
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
@@ -48,6 +75,7 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
     
     try {
       console.log('StudentSignUpForm: Starting signup process');
+      
       // Validate password strength before submission
       const { isValid, errorMessage } = validatePasswordStrength(data.password);
       if (!isValid) {
@@ -77,7 +105,6 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
         onSuccess();
       } else {
         console.log('StudentSignUpForm: Redirecting to dashboard');
-        // Add a small delay to ensure the toast is shown before redirect
         setTimeout(() => navigate('/dashboard'), 500);
       }
     } catch (error: any) {
@@ -137,6 +164,14 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
         />
         {errors.email && (
           <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
+        
+        {checkingEmail && (
+          <p className="text-sm text-blue-600">🔍 Checking email security status...</p>
+        )}
+        
+        {emailBreachResult && !checkingEmail && (
+          <EmailBreachWarning {...emailBreachResult} />
         )}
       </div>
       

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,8 @@ import { Alert } from '@/components/ui/alert';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { validatePasswordStrength } from '@/contexts/auth/services/security';
+import { checkEmailBreach, EmailBreachResult } from '@/lib/security/emailBreachCheck';
+import EmailBreachWarning from './EmailBreachWarning';
 
 interface EmployerSignUpFormProps {
   onSuccess?: (userId: string) => void;
@@ -36,6 +38,8 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailBreachResult, setEmailBreachResult] = useState<EmailBreachResult | null>(null);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   const { signUp, updateProfile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -52,7 +56,30 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
     }
   });
   
-  const password = watch('password', ''); // Watch password for strength indicator
+  const password = watch('password', '');
+  const email = watch('email', '');
+  
+  // Debounced email breach check
+  useEffect(() => {
+    if (!email || !email.includes('@')) {
+      setEmailBreachResult(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setCheckingEmail(true);
+      try {
+        const result = await checkEmailBreach(email);
+        setEmailBreachResult(result);
+      } catch (error) {
+        console.error('Email breach check failed:', error);
+      } finally {
+        setCheckingEmail(false);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [email]);
   
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
@@ -156,6 +183,14 @@ const EmployerSignUpForm: React.FC<EmployerSignUpFormProps> = ({
         />
         {errors.email && (
           <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
+        
+        {checkingEmail && (
+          <p className="text-sm text-blue-600">🔍 Checking email security status...</p>
+        )}
+        
+        {emailBreachResult && !checkingEmail && (
+          <EmailBreachWarning {...emailBreachResult} />
         )}
       </div>
       
