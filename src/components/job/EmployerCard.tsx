@@ -1,7 +1,8 @@
 
 import { Building2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface EmployerCardProps {
   employer: {
@@ -14,6 +15,23 @@ interface EmployerCardProps {
 }
 
 export const EmployerCard = ({ employer }: EmployerCardProps) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleJobsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!user) {
+      // Store the intended destination for after login
+      const jobsUrl = `/jobs?keyword=${encodeURIComponent(employer.company_name)}`;
+      sessionStorage.setItem('redirectAfterLogin', jobsUrl);
+      navigate('/signup');
+    } else {
+      // User is authenticated, go directly to jobs
+      navigate(`/jobs?keyword=${encodeURIComponent(employer.company_name)}`);
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardHeader className="pb-2">
@@ -48,12 +66,12 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
       <CardContent className="py-2">
         <p className="text-xs text-muted-foreground mb-1">{employer.industry || 'Business'}</p>
         <div className="flex items-center justify-between mt-2">
-          <Link 
-            to={`/jobs?keyword=${encodeURIComponent(employer.company_name)}`}
-            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline"
+          <button 
+            onClick={handleJobsClick}
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
           >
             <span className="text-xs">{employer.job_count} jobs</span>
-          </Link>
+          </button>
           <div className="text-sm font-semibold text-green-700">
             ${Number(employer.avg_min_wage).toFixed(2)}/hr
           </div>

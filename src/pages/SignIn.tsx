@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -23,14 +23,22 @@ const SignIn = () => {
       console.log('Sign in page: Starting signin process');
       const user = await signIn(email, password);
       
-      console.log('Sign in page: Signin complete, redirecting to dashboard');
+      console.log('Sign in page: Signin complete, checking for redirect');
       toast({
         title: "Welcome back!",
         description: "You have been signed in successfully.",
       });
       
-      // Add a small delay to ensure toast is shown
-      setTimeout(() => navigate('/dashboard'), 500);
+      // Check for stored redirect URL
+      const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+      if (redirectUrl) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        console.log('Redirecting to stored URL:', redirectUrl);
+        setTimeout(() => navigate(redirectUrl), 500);
+      } else {
+        console.log('No stored redirect, going to dashboard');
+        setTimeout(() => navigate('/dashboard'), 500);
+      }
     } catch (err: any) {
       console.error('Sign in page error:', err);
       setError(err.message || 'Failed to sign in');
@@ -91,7 +99,7 @@ const SignIn = () => {
             
             <div className="flex items-center justify-end">
               <div className="text-sm">
-                <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
                   Don't have an account? Sign up
                 </Link>
               </div>
