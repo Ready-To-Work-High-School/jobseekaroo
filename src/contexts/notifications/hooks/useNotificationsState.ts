@@ -25,7 +25,7 @@ export const useNotificationsState = () => {
       filtered = filtered.filter(notif => notif.type === filterOptions.type);
     }
 
-    // Apply read status filter
+    // Apply read status filter - fix the type comparison
     if (filterOptions.read !== 'all') {
       const isReadFilter = filterOptions.read === 'read';
       filtered = filtered.filter(notif => notif.read === isReadFilter);

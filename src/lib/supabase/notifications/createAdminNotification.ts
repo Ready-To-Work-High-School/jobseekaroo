@@ -1,12 +1,11 @@
 
-import { supabase } from '@/lib/supabase';
-import { NotificationType } from '@/types/notification';
+import { supabase } from '../client';
 
 export const createAdminNotification = async (
   userId: string,
-  title: string,
+  title: string, 
   message: string,
-  type: NotificationType = 'system',
+  type: string,
   link?: string
 ) => {
   try {
@@ -18,9 +17,10 @@ export const createAdminNotification = async (
         message,
         type,
         link,
-        read: false,
-        created_at: new Date().toISOString()
-      });
+        read: false
+      })
+      .select()
+      .single();
 
     if (error) throw error;
     return data;

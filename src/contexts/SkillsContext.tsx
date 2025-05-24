@@ -9,7 +9,7 @@ import {
   updateUserSkill, 
   deleteUserSkill, 
   getSkillResources 
-} from '@/lib/supabase';
+} from '@/lib/supabase/skills';
 
 interface SkillsContextType {
   skills: UserSkill[];
@@ -73,10 +73,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     
     try {
-      const skill = await createUserSkill({
-        ...newSkill,
-        user_id: user.id
-      });
+      const skill = await createUserSkill(user.id, newSkill);
       
       if (skill) {
         setSkills(prev => [...prev, skill]);

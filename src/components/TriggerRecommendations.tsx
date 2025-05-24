@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
-import { generateRecommendationsForUser } from '@/lib/supabase';
+import { generateRecommendationsForUser } from '@/lib/supabase/recommendations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
