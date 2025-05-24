@@ -24,6 +24,7 @@ import CommunicationTools from './pages/CommunicationTools';
 import SystemDiagnosticsPage from './pages/SystemDiagnosticsPage';
 import { NetworkStatusIndicator } from './components/NetworkStatusIndicator';
 import EmployerRoutes from './routes/employerRoutes';
+import { PublicRoutes } from './routes/publicRoutes';
 
 // Add a loading fallback component
 const LoadingFallback = () => (
@@ -81,6 +82,9 @@ function AppContent() {
           <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
           <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
           <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
+          
+          {/* Include all public routes (including sample-candidates) */}
+          {PublicRoutes}
           
           {/* Include all employer routes */}
           {EmployerRoutes}
