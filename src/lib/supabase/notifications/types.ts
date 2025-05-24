@@ -12,3 +12,17 @@ export interface NotificationRow {
   link?: string;
   metadata: Record<string, any>;
 }
+
+export interface NotificationData {
+  user_id: string;
+  title: string;
+  message: string;
+  type: NotificationType;
+  link?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface NotificationResponse {
+  data: NotificationRow[];
+  error?: string;
+}

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/contexts/ThemeContext"
 import App from './App.tsx'
 import './index.css'
 
@@ -37,7 +37,7 @@ ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <ThemeProvider>
           <TooltipProvider>
             <App />
             <Toaster />

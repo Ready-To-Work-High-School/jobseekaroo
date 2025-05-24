@@ -1,45 +1,70 @@
 
-import { useState } from 'react';
-import { Notification } from '@/types/notification';
+import { useState, useMemo } from 'react';
+import { Notification, NotificationType } from '@/types/notification';
 import { NotificationFilterOptions } from '../types';
 
-export function useNotificationsState() {
+export const useNotificationsState = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [filterOptions, setFilterOptions] = useState<NotificationFilterOptions>({
     type: 'all',
     read: 'all',
-  });
-  const [filterType, setFilterType] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<'all' | 'unread' | 'read'>('all');
-  
-  // Filter notifications based on current filter options
-  const filteredNotifications = notifications.filter((notification) => {
-    // Filter by type
-    if (filterType && notification.type !== filterType) {
-      return false;
-    }
-    
-    // Filter by read status
-    if (filterStatus === 'read' && !notification.read) {
-      return false;
-    }
-    
-    if (filterStatus === 'unread' && notification.read) {
-      return false;
-    }
-    
-    return true;
+    dateRange: {
+      from: null,
+      to: null
+    },
+    sortBy: 'newest'
   });
 
-  // Count unread notifications
-  const unreadCount = notifications.filter((notification) => !notification.read).length;
-  
+  const filteredNotifications = useMemo(() => {
+    let filtered = [...notifications];
+
+    // Apply type filter
+    if (filterOptions.type !== 'all') {
+      filtered = filtered.filter(notif => notif.type === filterOptions.type);
+    }
+
+    // Apply read status filter
+    if (filterOptions.read !== 'all') {
+      filtered = filtered.filter(notif => 
+        filterOptions.read === 'read' ? notif.read : !notif.read
+      );
+    }
+
+    // Apply date range filter
+    if (filterOptions.dateRange.from) {
+      filtered = filtered.filter(notif => 
+        new Date(notif.createdAt) >= filterOptions.dateRange.from!
+      );
+    }
+    if (filterOptions.dateRange.to) {
+      filtered = filtered.filter(notif => 
+        new Date(notif.createdAt) <= filterOptions.dateRange.to!
+      );
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return filterOptions.sortBy === 'newest' 
+        ? dateB.getTime() - dateA.getTime()
+        : dateA.getTime() - dateB.getTime();
+    });
+
+    return filtered;
+  }, [notifications, filterOptions]);
+
+  const unreadCount = useMemo(() => 
+    notifications.filter(notif => !notif.read).length, 
+    [notifications]
+  );
+
   const updateFilters = (newFilters: Partial<NotificationFilterOptions>) => {
     setFilterOptions(prev => ({ ...prev, ...newFilters }));
   };
-  
+
   return {
     notifications,
     setNotifications,
@@ -50,10 +75,6 @@ export function useNotificationsState() {
     errorMessage,
     setErrorMessage,
     filterOptions,
-    updateFilters,
-    filterType,
-    setFilterType,
-    filterStatus,
-    setFilterStatus,
+    updateFilters
   };
-}
+};
