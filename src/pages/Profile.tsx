@@ -29,7 +29,13 @@ const Profile = () => {
   } = useProfileStatus(userProfile);
   
   const { data: employerStatsData } = useEmployerStats(user?.id);
-  const employerStats = employerStatsData?.stats;
+  
+  // Transform the data to match expected format
+  const employerStats = employerStatsData?.data ? {
+    jobsPosted: employerStatsData.data.total,
+    hires: 0, // This would need to come from applications data
+    applications: 0 // This would need to come from applications data
+  } : undefined;
   
   return (
     <Layout>

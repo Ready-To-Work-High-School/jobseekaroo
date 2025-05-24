@@ -67,9 +67,3 @@ export const getEmployerJobStats = async (employerId: string) => {
     return { total: 0, active: 0, draft: 0 };
   }
 };
-
-export const generateRecommendationsForUser = async (userId: string) => {
-  // Mock implementation for now
-  console.log('Generating recommendations for user:', userId);
-  return [];
-};

@@ -1,141 +1,95 @@
 
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
 import Layout from '@/components/Layout';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileCheck, Shield, Award, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { toast } from '@/hooks/use-toast';
-import { CheckCircle, XCircle, Clock } from 'lucide-react';
 
-export default function EmployerVerifications() {
-  const { data: verifications, isLoading, error } = useQuery({
-    queryKey: ['employer-verifications'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('employer_verifications')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  const handleStatusUpdate = async (id: string, status: 'approved' | 'denied') => {
-    try {
-      const { error } = await supabase
-        .from('employer_verifications')
-        .update({ 
-          status,
-          reviewed_by: (await supabase.auth.getUser()).data.user?.id,
-          reviewed_at: new Date().toISOString()
-        })
-        .eq('id', id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Status Updated",
-        description: `Employer verification ${status}`,
-      });
-    } catch (error) {
-      console.error('Error updating status:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update status",
-        variant: "destructive",
-      });
-    }
-  };
-
-  if (error) {
-    return (
-      <Layout>
-        <div className="container mx-auto py-6">
-          <Card className="p-6">
-            <p className="text-red-500">Error loading verifications</p>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
+const EmployerVerifications = () => {
   return (
     <Layout>
-      <div className="container mx-auto py-6">
-        <h1 className="text-2xl font-bold mb-6">Employer Verifications</h1>
-        
-        <div className="space-y-4">
-          {isLoading ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <Card key={i} className="p-6">
-                <div className="space-y-4">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
-                </div>
-              </Card>
-            ))
-          ) : verifications?.map((verification) => (
-            <Card key={verification.id} className="p-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-xl font-semibold">{verification.company_name}</h2>
-                  <p className="text-muted-foreground">EIN: {verification.ein}</p>
-                  <p>{verification.contact_name} - {verification.contact_email}</p>
-                  <p className="mt-2">{verification.address}</p>
-                  
-                  <div className="mt-4">
-                    <h3 className="font-medium">Job Details</h3>
-                    <p>{verification.job_description}</p>
-                    <p className="mt-2">
-                      Wage Range: ${verification.wage_range_min} - ${verification.wage_range_max} | 
-                      Hours: {verification.hours_per_week}/week
-                    </p>
-                  </div>
-                </div>
+      <div className="container max-w-6xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <FileCheck className="h-8 w-8" />
+              Employer Verifications
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Verify your business credentials and unlock premium features
+            </p>
+          </div>
+        </div>
 
-                <div className="text-right">
-                  <Badge
-                    variant={
-                      verification.status === 'approved' ? 'success' :
-                      verification.status === 'denied' ? 'destructive' : 'default'
-                    }
-                    className="mb-4"
-                  >
-                    {verification.status === 'approved' && <CheckCircle className="w-4 h-4 mr-1" />}
-                    {verification.status === 'denied' && <XCircle className="w-4 h-4 mr-1" />}
-                    {verification.status === 'pending' && <Clock className="w-4 h-4 mr-1" />}
-                    {verification.status.charAt(0).toUpperCase() + verification.status.slice(1)}
-                  </Badge>
-
-                  {verification.status === 'pending' && (
-                    <div className="space-x-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-green-500 text-green-500 hover:bg-green-50"
-                        onClick={() => handleStatusUpdate(verification.id, 'approved')}
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-red-500 text-red-500 hover:bg-red-50"
-                        onClick={() => handleStatusUpdate(verification.id, 'denied')}
-                      >
-                        Deny
-                      </Button>
-                    </div>
-                  )}
+        <div className="grid gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Verification Status
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <AlertCircle className="h-5 w-5 text-yellow-600" />
+                <div className="flex-1">
+                  <p className="font-medium text-yellow-800">Verification Pending</p>
+                  <p className="text-sm text-yellow-700">Complete your business verification to access all features</p>
                 </div>
+                <Badge variant="outline" className="border-yellow-600 text-yellow-700">
+                  Pending
+                </Badge>
               </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileCheck className="h-5 w-5" />
+                  Business Verification
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Required Documents:</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Business License</li>
+                    <li>• Workers' Compensation Insurance</li>
+                    <li>• EIN (Employer Identification Number)</li>
+                    <li>• Business Address Verification</li>
+                  </ul>
+                </div>
+                <Button className="w-full">Start Verification Process</Button>
+              </CardContent>
             </Card>
-          ))}
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Award className="h-5 w-5" />
+                  Verification Benefits
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Unlock Premium Features:</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Priority job listing placement</li>
+                    <li>• Advanced candidate filtering</li>
+                    <li>• Direct messaging with candidates</li>
+                    <li>• Verified employer badge</li>
+                    <li>• Enhanced company profile</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </Layout>
   );
-}
+};
+
+export default EmployerVerifications;
