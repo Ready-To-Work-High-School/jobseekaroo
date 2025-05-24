@@ -28,7 +28,8 @@ const Profile = () => {
     isInceptionMember 
   } = useProfileStatus(userProfile);
   
-  const { stats: employerStats } = useEmployerStats(user?.id);
+  const { data: employerStatsData } = useEmployerStats(user?.id);
+  const employerStats = employerStatsData?.stats;
   
   return (
     <Layout>

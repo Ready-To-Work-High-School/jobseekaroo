@@ -22,3 +22,13 @@ export interface NotificationResponse {
   link?: string;
   metadata?: any;
 }
+
+export interface NotificationData {
+  user_id: string;
+  title: string;
+  message: string;
+  type: string;
+  read?: boolean;
+  link?: string;
+  metadata?: any;
+}
