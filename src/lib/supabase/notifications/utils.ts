@@ -1,27 +1,27 @@
 
-import { NotificationResponse } from './types';
-import { Notification } from '@/types/notification';
+export const getNotificationIcon = (type: string) => {
+  switch (type) {
+    case 'job_application':
+      return '💼';
+    case 'message':
+      return '💬';
+    case 'system':
+      return '⚙️';
+    default:
+      return '📢';
+  }
+};
 
-/**
- * Transform a database notification row to the frontend notification format
- */
-export function transformNotification(row: NotificationResponse): Notification {
-  return {
-    id: row.id,
-    userId: row.user_id,
-    title: row.title,
-    message: row.message,
-    type: row.type as any,
-    read: row.read,
-    createdAt: row.created_at,
-    link: row.link,
-    metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : (row.metadata || {})
-  };
-}
-
-/**
- * Transform multiple database notification rows
- */
-export function transformNotifications(rows: NotificationResponse[]): Notification[] {
-  return rows.map(transformNotification);
-}
+export const formatNotificationDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+  
+  if (diffInHours < 1) {
+    return 'Just now';
+  } else if (diffInHours < 24) {
+    return `${Math.floor(diffInHours)} hours ago`;
+  } else {
+    return date.toLocaleDateString();
+  }
+};
