@@ -1,8 +1,9 @@
 
-import { Building2 } from 'lucide-react';
+import { Building2, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useAdminStatus } from '@/hooks/useAdminStatus';
 
 interface EmployerCardProps {
   employer: {
@@ -16,6 +17,7 @@ interface EmployerCardProps {
 
 export const EmployerCard = ({ employer }: EmployerCardProps) => {
   const { user } = useAuth();
+  const { isCeo } = useAdminStatus();
   const navigate = useNavigate();
 
   const handleJobsClick = (e: React.MouseEvent) => {
@@ -33,7 +35,18 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden hover:shadow-md transition-shadow relative">
+      {/* Hidden CEO Shield - only visible to CEO users */}
+      {isCeo && (
+        <Link 
+          to="/ceo-portal" 
+          className="absolute top-2 right-2 opacity-10 hover:opacity-100 transition-opacity duration-300 z-10"
+          aria-label="CEO Access"
+        >
+          <Shield className="h-3 w-3 text-amber-500" />
+        </Link>
+      )}
+      
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <div className="mr-2 flex items-center gap-2">
