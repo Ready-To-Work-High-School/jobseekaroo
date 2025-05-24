@@ -59,7 +59,11 @@ const formSchema = z.object({
   companyLogo: z.string().optional(),
 });
 
-const CreateJobTab = () => {
+interface CreateJobTabProps {
+  setActiveTab?: (tab: string) => void;
+}
+
+const CreateJobTab = ({ setActiveTab }: CreateJobTabProps) => {
   const [companyLogo, setCompanyLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const { user } = useAuth();
@@ -114,7 +118,11 @@ const CreateJobTab = () => {
       );
       
       toast.success("Job created successfully!");
-      navigate('/employer-dashboard');
+      if (setActiveTab) {
+        setActiveTab('postings');
+      } else {
+        navigate('/employer-dashboard');
+      }
     } catch (error) {
       console.error('Error creating job:', error);
     }

@@ -27,9 +27,8 @@ export const useNotificationsState = () => {
 
     // Apply read status filter
     if (filterOptions.read !== 'all') {
-      filtered = filtered.filter(notif => 
-        filterOptions.read === 'read' ? notif.read : !notif.read
-      );
+      const isReadFilter = filterOptions.read === 'read';
+      filtered = filtered.filter(notif => notif.read === isReadFilter);
     }
 
     // Apply date range filter

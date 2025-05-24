@@ -1,43 +1,27 @@
 
-import { NotificationResponse } from './types';
+import { NotificationRow, NotificationResponse } from './types';
 import { Notification } from '@/types/notification';
 
 /**
- * Transform a notification response from the API to the frontend model
+ * Transform a database notification row to the frontend notification format
  */
-export function transformNotification(notification: NotificationResponse): Notification {
-  // Parse metadata if it exists
-  let metadata = notification.metadata;
-  
-  // Return transformed notification
+export function transformNotification(row: NotificationRow): Notification {
   return {
-    id: notification.id,
-    userId: notification.user_id, // Map user_id to userId for frontend
-    title: notification.title,
-    message: notification.message,
-    type: notification.type,
-    read: notification.read,
-    createdAt: notification.created_at, // Return as string instead of Date
-    link: notification.link,
-    metadata: metadata
+    id: row.id,
+    userId: row.user_id,
+    title: row.title,
+    message: row.message,
+    type: row.type,
+    read: row.read,
+    createdAt: row.created_at,
+    link: row.link,
+    metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : (row.metadata || {})
   };
 }
 
 /**
- * Process metadata to ensure it's in the correct format for storage
- * This helps prevent excessive type instantiation depth errors
+ * Transform multiple database notification rows
  */
-export function processMetadata(metadata: Record<string, any> | null | undefined): string | null {
-  if (!metadata) return null;
-  
-  // Create a simplified copy without deeply nested references
-  const simplifiedMetadata = { ...metadata };
-  
-  // Convert to string
-  try {
-    return JSON.stringify(simplifiedMetadata);
-  } catch (error) {
-    console.error('Error processing metadata:', error);
-    return null;
-  }
+export function transformNotifications(rows: NotificationRow[]): Notification[] {
+  return rows.map(transformNotification);
 }

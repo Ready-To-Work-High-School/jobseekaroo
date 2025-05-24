@@ -1,12 +1,17 @@
 
 import { supabase } from '@/lib/supabase';
 
-export const getUserSkills = async (userId: string) => {
+export const getUserSkills = async (userId?: string) => {
   try {
-    const { data, error } = await supabase
+    const query = supabase
       .from('user_skills')
-      .select('*')
-      .eq('user_id', userId);
+      .select('*');
+    
+    if (userId) {
+      query.eq('user_id', userId);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return data || [];
