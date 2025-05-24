@@ -5,7 +5,7 @@ import SignUp from '../pages/SignUp';
 
 const AuthRoutes = [
   <Route key="signin" path="/sign-in" element={<SignIn />} />,
-  <Route key="signup" path="/sign-up" element={<SignUp />} />
+  <Route key="signup" path="/signup" element={<SignUp />} />
 ];
 
 export default AuthRoutes;
