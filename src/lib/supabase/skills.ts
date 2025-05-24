@@ -68,11 +68,17 @@ export const deleteUserSkill = async (skillId: string) => {
   }
 };
 
-export const getSkillResources = async () => {
+export const getSkillResources = async (skillName?: string) => {
   try {
-    const { data, error } = await supabase
+    const query = supabase
       .from('skill_resources')
       .select('*');
+    
+    if (skillName) {
+      query.eq('skill_name', skillName);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return data || [];

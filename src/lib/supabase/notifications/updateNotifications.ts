@@ -1,5 +1,5 @@
 
-import { supabase } from '../index';
+import { supabase } from '../client';
 
 /**
  * Mark a notification as read
