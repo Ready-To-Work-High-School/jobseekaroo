@@ -65,14 +65,14 @@ export const NavbarBrand = () => {
         )}
       </Link>
       
-      {/* Hidden CEO Shield - only visible to CEO users */}
+      {/* CEO Shield - visible to CEO users with better visibility */}
       {isCeo && (
         <Link 
           to="/ceo-portal" 
-          className="absolute -top-1 -right-1 opacity-10 hover:opacity-100 transition-opacity duration-300 z-20"
+          className="ml-2 opacity-70 hover:opacity-100 transition-opacity duration-300 z-20 bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 rounded-full shadow-md"
           aria-label="CEO Portal Access"
         >
-          <Shield className="h-4 w-4 text-amber-500" />
+          <Shield className="h-4 w-4 text-white" />
         </Link>
       )}
       
