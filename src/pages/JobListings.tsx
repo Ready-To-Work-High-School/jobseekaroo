@@ -1,8 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchForm from '@/components/SearchForm';
 import { searchJobsByZipCode, JobSearchFilters } from '@/lib/mock-data/search';
-import { getAllJobs } from '@/lib/supabase';
+import { getAllJobs } from '@/lib/supabase/jobs';
 import { syncMockJobsToSupabase } from '@/lib/mock-data/sync-jobs';
 import { Job } from '@/types/job';
 import { toast } from 'sonner';

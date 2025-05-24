@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useFadeIn } from '@/utils/animations';
 import { getFeaturedJobs } from '@/lib/mock-data/jobs';
-import { getAllJobs } from '@/lib/supabase';
+import { getAllJobs } from '@/lib/supabase/jobs';
 import { Job } from '@/types/job';
 import JobCard from '@/components/JobCard';
 import { useAuth } from '@/contexts/AuthContext';
