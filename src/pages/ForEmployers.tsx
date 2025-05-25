@@ -11,6 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import { Database, Sparkles } from 'lucide-react';
 import AnimatedStar from '@/components/animations/AnimatedStar';
 import EmployerBenefits from '@/components/employer/EmployerBenefits';
+import EmployerWhatYouGetSection from '@/components/employer/EmployerWhatYouGetSection';
+import EmployerSignUpPrompt from '@/components/employer/EmployerSignUpPrompt';
 
 const ForEmployers = () => {
   const contentAnimation = useFadeIn(300);
@@ -32,6 +34,12 @@ const ForEmployers = () => {
             Hosted on Render
           </Badge>
         </div>
+        
+        {/* What You Get Section */}
+        <EmployerWhatYouGetSection />
+        
+        {/* Sign Up Prompt */}
+        <EmployerSignUpPrompt />
         
         <EmployerTabs />
         

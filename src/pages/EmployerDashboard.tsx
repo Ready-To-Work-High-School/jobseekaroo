@@ -8,6 +8,8 @@ import UnauthenticatedEmployerView from '@/components/employer/dashboard/Unauthe
 import EmployerKeyFeatures from '@/components/employer/dashboard/EmployerKeyFeatures';
 import EmployerDirectAccessSection from '@/components/employer/dashboard/EmployerDirectAccessSection';
 import EmployerPremiumServices from '@/components/employer/premium/EmployerPremiumServices';
+import EmployerSignUpPrompt from '@/components/employer/EmployerSignUpPrompt';
+import EmployerWhatYouGetSection from '@/components/employer/EmployerWhatYouGetSection';
 
 const EmployerDashboard = () => {
   const { user } = useAuth();
@@ -19,6 +21,8 @@ const EmployerDashboard = () => {
       <Layout>
         <div className="container max-w-6xl mx-auto px-4 py-8 space-y-12">
           <EmployerKeyFeatures />
+          <EmployerWhatYouGetSection />
+          <EmployerSignUpPrompt />
           <EmployerDirectAccessSection />
           <EmployerPremiumServices />
         </div>
