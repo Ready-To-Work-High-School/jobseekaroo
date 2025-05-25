@@ -63,10 +63,12 @@ function AppContent() {
           {/* Jobs route without Layout wrapper since Jobs already includes it */}
           <Route path="/jobs" element={<Jobs />} />
           
+          {/* Employer dashboard route without Layout wrapper since it includes it internally */}
+          <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+          
           {/* Routes with the Layout component */}
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/profile-tabs" element={<Layout><UserProfileTabs /></Layout>} />
-          <Route path="/employer-dashboard" element={<Layout><EmployerDashboard /></Layout>} />
           <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
           <Route path="/employer-kanban" element={<Layout><EmployerKanban /></Layout>} />
           <Route path="/communication-tools" element={<Layout><CommunicationTools /></Layout>} />
