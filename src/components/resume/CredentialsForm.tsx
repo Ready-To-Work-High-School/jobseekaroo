@@ -51,10 +51,12 @@ const CredentialsForm = ({ data, onUpdate }) => {
   const suggestedCredentials = [
     { name: 'CPR Certification', issuer: 'American Red Cross' },
     { name: 'First Aid Certification', issuer: 'American Red Cross' },
-    { name: 'Food Handler\'s License', issuer: 'Local Health Department' },
+    { name: 'Computer Science Certification', issuer: 'CompTIA' },
     { name: 'Microsoft Office Specialist', issuer: 'Microsoft' },
     { name: 'Google Workspace Certified', issuer: 'Google' },
-    { name: 'Customer Service Excellence', issuer: 'National Retail Federation' }
+    { name: 'WordPress Certification', issuer: 'WordPress Foundation' },
+    { name: 'Entrepreneur & Small Business Industry Certification', issuer: 'SBA' },
+    { name: 'Certified Nursing Assistant', issuer: 'State Board of Nursing' }
   ];
 
   return (
