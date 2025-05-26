@@ -43,6 +43,11 @@ const CredentialsForm = ({ data, onUpdate }) => {
     }));
   };
 
+  const addSuggestedCredential = (credentialName, issuerName) => {
+    handleInputChange('name', credentialName);
+    handleInputChange('issuer', issuerName);
+  };
+
   const suggestedCredentials = [
     { name: 'CPR Certification', issuer: 'American Red Cross' },
     { name: 'First Aid Certification', issuer: 'American Red Cross' },
@@ -156,7 +161,7 @@ const CredentialsForm = ({ data, onUpdate }) => {
                 key={index}
                 variant="outline"
                 size="sm"
-                onClick={() => handleInputChange('name', credential.name) || handleInputChange('issuer', credential.issuer)}
+                onClick={() => addSuggestedCredential(credential.name, credential.issuer)}
                 className="justify-start text-left"
               >
                 <Plus className="h-3 w-3 mr-2" />
