@@ -11,6 +11,10 @@ import { Helmet } from 'react-helmet-async';
 import { useToast } from '@/hooks/use-toast';
 import { QuickNavigationMenu } from '@/components/employer/QuickNavigationMenu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Users, GraduationCap, MapPin, Clock } from 'lucide-react';
 
 const EmployerKanban = () => {
   const {
@@ -31,6 +35,65 @@ const EmployerKanban = () => {
   const [showNavigation, setShowNavigation] = useState(false);
   const [currentFilter, setCurrentFilter] = useState('all');
   const [showImportDialog, setShowImportDialog] = useState(false);
+
+  // Sample candidates data
+  const sampleCandidates = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      grade: "12th Grade",
+      academy: "Business Academy",
+      skills: ["Customer Service", "Microsoft Office", "Communication"],
+      stage: "Applied",
+      avatar: "/placeholder.svg",
+      location: "Jacksonville, FL",
+      appliedDate: "2 days ago",
+      email: "sarah.j@email.com"
+    },
+    {
+      id: 2,
+      name: "Marcus Williams",
+      grade: "11th Grade",
+      academy: "IT Academy",
+      skills: ["Computer Science", "Problem Solving", "Teamwork"],
+      stage: "Screening",
+      avatar: "/placeholder.svg",
+      location: "Jacksonville, FL",
+      appliedDate: "1 day ago",
+      email: "marcus.w@email.com"
+    },
+    {
+      id: 3,
+      name: "Emma Davis",
+      grade: "12th Grade",
+      academy: "Health Sciences",
+      skills: ["First Aid", "Organization", "Leadership"],
+      stage: "Interview",
+      avatar: "/placeholder.svg",
+      location: "Jacksonville, FL",
+      appliedDate: "3 days ago",
+      email: "emma.d@email.com"
+    },
+    {
+      id: 4,
+      name: "Jordan Martinez",
+      grade: "11th Grade",
+      academy: "Engineering",
+      skills: ["Problem Solving", "Critical Thinking", "Adaptability"],
+      stage: "Hired",
+      avatar: "/placeholder.svg",
+      location: "Jacksonville, FL",
+      appliedDate: "1 week ago",
+      email: "jordan.m@email.com"
+    }
+  ];
+
+  const kanbanStages = [
+    { id: 'applied', title: 'Applied', candidates: sampleCandidates.filter(c => c.stage === 'Applied') },
+    { id: 'screening', title: 'Screening', candidates: sampleCandidates.filter(c => c.stage === 'Screening') },
+    { id: 'interview', title: 'Interview', candidates: sampleCandidates.filter(c => c.stage === 'Interview') },
+    { id: 'hired', title: 'Hired', candidates: sampleCandidates.filter(c => c.stage === 'Hired') }
+  ];
 
   useEffect(() => {
     // Load kanban data when component mounts
@@ -125,12 +188,80 @@ const EmployerKanban = () => {
           />
         )}
 
+        {/* Sample Kanban Board */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+          {kanbanStages.map((stage) => (
+            <Card key={stage.id} className="h-fit">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium">{stage.title}</CardTitle>
+                  <Badge variant="secondary" className="text-xs">
+                    {stage.candidates.length}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {stage.candidates.map((candidate) => (
+                  <Card key={candidate.id} className="p-3 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={candidate.avatar} />
+                          <AvatarFallback className="text-xs">
+                            {candidate.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{candidate.name}</p>
+                          <p className="text-xs text-muted-foreground">{candidate.grade}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <GraduationCap className="h-3 w-3" />
+                        <span className="truncate">{candidate.academy}</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="h-3 w-3" />
+                        <span>{candidate.location}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        <span>Applied {candidate.appliedDate}</span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-1">
+                        {candidate.skills.slice(0, 2).map((skill) => (
+                          <Badge key={skill} variant="outline" className="text-[10px] px-1 py-0">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {candidate.skills.length > 2 && (
+                          <Badge variant="outline" className="text-[10px] px-1 py-0">
+                            +{candidate.skills.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
         <DndProvider backend={HTML5Backend}>
-          <KanbanBoard 
-            stages={stages} 
-            onMoveItem={handleMoveItem} 
-            onUpdateItem={handleUpdateItem} 
-          />
+          <div className="mt-8">
+            <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
+              <Users className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+              <h3 className="mt-4 text-lg font-medium">Interactive Pipeline Coming Soon</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                The drag-and-drop functionality will be available once you start receiving applications.
+              </p>
+            </div>
+          </div>
         </DndProvider>
       </div>
 
