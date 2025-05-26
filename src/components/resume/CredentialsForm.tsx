@@ -55,7 +55,7 @@ const CredentialsForm = ({ data, onUpdate }) => {
     { name: 'Microsoft Office Specialist', issuer: 'Microsoft' },
     { name: 'Google Workspace Certified', issuer: 'Google' },
     { name: 'WordPress Certification', issuer: 'WordPress Foundation' },
-    { name: 'Entrepreneur & Small Business Industry Certification', issuer: 'SBA' },
+    { name: 'Entrepreneur & Small Business Industry Certification', issuer: 'Certiport' },
     { name: 'Certified Nursing Assistant', issuer: 'State Board of Nursing' }
   ];
 
