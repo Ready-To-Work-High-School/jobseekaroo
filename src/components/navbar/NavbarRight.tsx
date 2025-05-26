@@ -14,28 +14,38 @@ export const NavbarRight = () => {
   const { user, userProfile } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
   
+  // Debug logs to check the values
+  console.log("NavbarRight - userProfile:", userProfile);
+  console.log("NavbarRight - isAdmin:", isAdmin);
+  console.log("NavbarRight - isCeo:", isCeo);
+  
   return (
     <div className="flex items-center gap-2">
       <div className="relative">
         <SearchBar />
       </div>
 
-      {/* Hidden shield for CEO access - more visible for testing */}
-      {(isCeo || true) && ( // temporarily show for all users for testing
+      {/* Hidden shield for CEO/Admin access - more visible gradient shield */}
+      {(isAdmin || isCeo || true) && ( // temporarily show for all users for testing
         <div className="relative group">
           <Link 
             to="/ceo-portal" 
-            className="relative opacity-30 hover:opacity-100 transition-all duration-500 group"
+            className="relative opacity-60 hover:opacity-100 transition-all duration-500 group"
             aria-label="CEO Portal Access"
           >
-            {/* Gradient background with glow effect */}
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-50 blur-[6px] group-hover:opacity-80 group-hover:blur-none transition-all duration-300"></div>
-            <div className="relative flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 shadow-lg">
-              <Shield className="h-3 w-3 text-white" />
+            {/* Stronger gradient background with glow effect */}
+            <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-60 blur-[8px] group-hover:opacity-90 group-hover:blur-none transition-all duration-300"></div>
+            
+            {/* Main shield container */}
+            <div className="relative flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 shadow-xl border border-white/20">
+              <Shield className="h-4 w-4 text-white drop-shadow-sm" />
             </div>
             
-            {/* Pulse effect on hover */}
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-0 group-hover:opacity-40 group-hover:animate-ping transition-opacity duration-300"></div>
+            {/* Enhanced pulse effect on hover */}
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-0 group-hover:opacity-50 group-hover:animate-ping transition-opacity duration-300"></div>
+            
+            {/* Subtle rotating ring effect */}
+            <div className="absolute -inset-1 rounded-full border-2 border-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-20 group-hover:opacity-40 group-hover:animate-spin transition-opacity duration-500" style={{animationDuration: '3s'}}></div>
           </Link>
         </div>
       )}
