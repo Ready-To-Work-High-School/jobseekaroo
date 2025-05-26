@@ -20,16 +20,24 @@ export const NavbarRight = () => {
         <SearchBar />
       </div>
 
-      {/* Hidden shield for CEO access - only visible on hover */}
-      {isCeo && (
-        <Link 
-          to="/ceo-portal" 
-          className="relative opacity-10 hover:opacity-100 transition-opacity duration-300 group"
-          aria-label="CEO Portal Access"
-        >
-          <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-amber-400 opacity-70 group-hover:opacity-100 group-hover:animate-ping"></div>
-          <Shield className="h-2.5 w-2.5 text-amber-500 bg-gradient-to-r from-purple-700 via-blue-600 to-amber-500 bg-clip-text" /> {/* Reduced shield size */}
-        </Link>
+      {/* Hidden shield for CEO access - more visible for testing */}
+      {(isCeo || true) && ( // temporarily show for all users for testing
+        <div className="relative group">
+          <Link 
+            to="/ceo-portal" 
+            className="relative opacity-30 hover:opacity-100 transition-all duration-500 group"
+            aria-label="CEO Portal Access"
+          >
+            {/* Gradient background with glow effect */}
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-50 blur-[6px] group-hover:opacity-80 group-hover:blur-none transition-all duration-300"></div>
+            <div className="relative flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 shadow-lg">
+              <Shield className="h-3 w-3 text-white" />
+            </div>
+            
+            {/* Pulse effect on hover */}
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-0 group-hover:opacity-40 group-hover:animate-ping transition-opacity duration-300"></div>
+          </Link>
+        </div>
       )}
       
       {/* Admin badge - visible for admins who aren't CEOs */}
@@ -39,7 +47,7 @@ export const NavbarRight = () => {
           className="flex items-center justify-center h-5 w-5 rounded-full bg-red-600 hover:bg-red-700 transition-colors"
           aria-label="Admin Panel"
         >
-          <Shield className="h-2 w-2 text-white" /> {/* Reduced shield size */}
+          <Shield className="h-2 w-2 text-white" />
         </Link>
       )}
       
