@@ -42,26 +42,23 @@ const Navbar = () => {
           {isMobile && <MobileMenu />}
           <NavbarBrand />
           
-          {/* CEO Shield with improved visibility */}
-          {isCeo && (
-            <Link
-              to="/ceo-portal"
-              className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1 shadow-md hover:opacity-90 animate-pulse"
-              aria-label="CEO Portal"
-            >
-              <Shield className="h-4 w-4 text-white" />
-            </Link>
-          )}
-          
-          {/* Admin badge - visible for admins who aren't CEOs */}
-          {isAdmin && !isCeo && (
-            <Link
-              to="/admin"
-              className="flex items-center justify-center h-6 w-6 rounded-full bg-red-600 p-1 shadow-md hover:opacity-90"
-              aria-label="Admin Panel"
-            >
-              <Shield className="h-4 w-4 text-white" />
-            </Link>
+          {/* Gradient Hidden Shield for CEO/Admin Access */}
+          {(isCeo || isAdmin) && (
+            <div className="relative group">
+              <Link
+                to={isCeo ? "/ceo-portal" : "/admin"}
+                className="flex items-center justify-center h-8 w-8 rounded-full opacity-20 hover:opacity-100 transition-all duration-500 ease-in-out transform hover:scale-110"
+                aria-label={isCeo ? "CEO Portal" : "Admin Panel"}
+              >
+                {/* Gradient background with glow effect */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-70 blur-sm group-hover:blur-none transition-all duration-300"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400"></div>
+                <Shield className="h-4 w-4 text-white relative z-10" />
+              </Link>
+              
+              {/* Subtle pulse animation on hover */}
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-0 group-hover:opacity-30 group-hover:animate-ping transition-opacity duration-300"></div>
+            </div>
           )}
           
           <DesktopNav className="hidden md:flex" />
