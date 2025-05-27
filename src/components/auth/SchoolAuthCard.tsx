@@ -7,15 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { School, Users, LogIn, UserPlus, GraduationCap } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
 const SchoolAuthCard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { signIn, signUp } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
 
   // Sign In Form State
@@ -43,10 +42,7 @@ const SchoolAuthCard = () => {
 
     try {
       await signIn(signInData.email, signInData.password);
-      toast({
-        title: "Welcome back!",
-        description: "You have been signed in successfully.",
-      });
+      toast.success("Welcome back! You have been signed in successfully.");
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
@@ -79,10 +75,7 @@ const SchoolAuthCard = () => {
         signUpData.lastName,
         signUpData.userType
       );
-      toast({
-        title: "Account created!",
-        description: "Your school account has been created successfully.",
-      });
+      toast.success("Account created! Your school account has been created successfully.");
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to create account');
