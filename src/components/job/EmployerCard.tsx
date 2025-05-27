@@ -27,7 +27,7 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
       // Store the intended destination for after login
       const jobsUrl = `/jobs?keyword=${encodeURIComponent(employer.company_name)}`;
       sessionStorage.setItem('redirectAfterLogin', jobsUrl);
-      navigate('/signup');
+      navigate('/sign-up');
     } else {
       // User is authenticated, go directly to jobs
       navigate(`/jobs?keyword=${encodeURIComponent(employer.company_name)}`);
@@ -81,9 +81,9 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
         <div className="flex items-center justify-between mt-2">
           <button 
             onClick={handleJobsClick}
-            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer text-xs"
           >
-            <span className="text-xs">{employer.job_count} jobs</span>
+            {employer.job_count} jobs
           </button>
           <div className="text-sm font-semibold text-green-700">
             ${Number(employer.avg_min_wage).toFixed(2)}/hr

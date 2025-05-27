@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Briefcase, MapPin, Clock, DollarSign, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/auth';
-import { getJobById } from '@/lib/mock-data/job';
+import { getJobById } from '@/lib/supabase/jobs';
 
 const JobDetailsPage = () => {
   const { jobId } = useParams();
@@ -22,16 +22,32 @@ const JobDetailsPage = () => {
       return;
     }
 
-    // Get the actual job data using the jobId
-    const jobData = getJobById(jobId);
-    
-    setTimeout(() => {
-      if (jobData) {
-        setJob(jobData);
+    const fetchJob = async () => {
+      try {
+        console.log('Fetching job with ID:', jobId);
+        const jobData = await getJobById(jobId);
+        console.log('Job data received:', jobData);
+        
+        if (jobData) {
+          setJob(jobData);
+        }
+      } catch (error) {
+        console.error('Error fetching job:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load job details",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
+    };
+
+    // Add a small delay to show loading state
+    setTimeout(() => {
+      fetchJob();
     }, 500);
-  }, [jobId]);
+  }, [jobId, toast]);
 
   // If user is not authenticated, show sign-in prompt
   if (!user) {
@@ -115,19 +131,19 @@ const JobDetailsPage = () => {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="text-2xl">{job.title}</CardTitle>
-              <div className="text-lg font-medium">{job.company.name}</div>
+              <div className="text-lg font-medium">{job.company_name}</div>
               <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-1" />
-                  {job.location.city}, {job.location.state}
+                  {job.location_city}, {job.location_state}
                 </div>
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-1" />
-                  {job.type}
+                  {job.job_type}
                 </div>
                 <div className="flex items-center">
                   <DollarSign className="h-4 w-4 mr-1" />
-                  ${job.payRate.min} - ${job.payRate.max}/{job.payRate.period}
+                  ${job.pay_rate_min} - ${job.pay_rate_max}/{job.pay_rate_period}
                 </div>
               </div>
             </CardHeader>
@@ -137,23 +153,25 @@ const JobDetailsPage = () => {
                 <p>{job.description}</p>
               </div>
               
-              <div>
-                <h3 className="font-semibold mb-2">Requirements</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  {job.requirements.map((req: string, index: number) => (
-                    <li key={index}>{req}</li>
-                  ))}
-                </ul>
-              </div>
+              {job.requirements && job.requirements.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-2">Requirements</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {job.requirements.map((req: string, index: number) => (
+                      <li key={index}>{req}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-              {job.isRemote && (
+              {job.is_remote && (
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-medium text-blue-900">Remote Work Available</h4>
                   <p className="text-blue-700 text-sm">This position offers remote work options.</p>
                 </div>
               )}
 
-              {job.isFlexible && (
+              {job.is_flexible && (
                 <div className="bg-purple-50 p-4 rounded-lg">
                   <h4 className="font-medium text-purple-900">Flexible Schedule</h4>
                   <p className="text-purple-700 text-sm">This position offers flexible scheduling options.</p>
