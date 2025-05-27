@@ -10,6 +10,7 @@ import EmployerDashboard from './pages/EmployerDashboard';
 import JobDetailsPage from './pages/JobDetailsPage';
 import CeoPortal from './pages/CeoPortal';
 import Calendar from './pages/Calendar';
+import SchoolAuth from './pages/SchoolAuth';
 import { useAuth } from './hooks/useAuth';
 import Notifications from './pages/Notifications';
 import AdminPanel from './pages/AdminPanel';
@@ -65,6 +66,9 @@ function AppContent() {
           
           {/* Employer dashboard route without Layout wrapper since it includes it internally */}
           <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+          
+          {/* School auth route */}
+          <Route path="/school-auth" element={<SchoolAuth />} />
           
           {/* Routes with the Layout component */}
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
