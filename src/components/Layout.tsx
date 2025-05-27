@@ -20,6 +20,7 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isAuthPage = ['/sign-in', '/signin', '/signup', '/sign-up', '/forgot-password', '/reset-password', '/auth/callback'].includes(location.pathname);
+  const isSchoolIntegrationPage = location.pathname === '/school-integration';
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-rose-50 to-white">
@@ -51,8 +52,8 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
             
             {children}
 
-            {/* Add the What You Get CTA to all non-auth pages */}
-            {!isAuthPage && (
+            {/* Add the What You Get CTA to all non-auth pages except school integration */}
+            {!isAuthPage && !isSchoolIntegrationPage && (
               <div className="container mx-auto px-4 mb-8 what-you-get-cta-container">
                 <WhatYouGetCTA />
               </div>
