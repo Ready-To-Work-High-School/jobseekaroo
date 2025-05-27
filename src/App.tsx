@@ -44,6 +44,7 @@ import SafetyCompliance from '@/pages/SafetyCompliance';
 import StudentSuccess from '@/pages/StudentSuccess';
 import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 import StudentDashboard from '@/pages/StudentDashboard';
+import UserRepository from '@/pages/UserRepository';
 import NotFound from '@/pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -101,6 +102,7 @@ function App() {
                 <Route path="/school-guide" element={<SchoolGuide />} />
                 <Route path="/safety-compliance" element={<SafetyCompliance />} />
                 <Route path="/student-success" element={<StudentSuccess />} />
+                <Route path="/user-repository" element={<UserRepository />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
