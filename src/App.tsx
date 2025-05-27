@@ -17,6 +17,7 @@ import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import Applications from '@/pages/Applications';
 import SavedJobs from '@/pages/SavedJobs';
+import Messages from '@/pages/Messages';
 import InterviewPrep from '@/pages/InterviewPrep';
 import InterviewChecklist from '@/pages/InterviewChecklist';
 import About from '@/pages/About';
@@ -74,6 +75,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/applications" element={<Applications />} />
                 <Route path="/saved-jobs" element={<SavedJobs />} />
+                <Route path="/messages" element={<Messages />} />
                 <Route path="/interview-prep" element={<InterviewPrep />} />
                 <Route path="/interview-checklist" element={<InterviewChecklist />} />
                 <Route path="/about" element={<About />} />
