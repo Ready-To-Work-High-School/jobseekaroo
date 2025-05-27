@@ -76,7 +76,7 @@ export const NavLinks = () => {
             Sign In
           </Link>
           <Link 
-            to="/signup" 
+            to="/sign-up" 
             className="text-sm font-medium bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center gap-1"
           >
             <UserPlus className="w-3 h-3" />
