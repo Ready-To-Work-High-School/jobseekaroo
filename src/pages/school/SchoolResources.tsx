@@ -15,7 +15,7 @@ const SchoolResources = () => {
           <h1 className="text-3xl font-bold mb-4">Access Required</h1>
           <p className="mb-8">Please sign in to access educational resources.</p>
           <Button asChild>
-            <Link to="/sign-in">Sign In</Link>
+            <Link to="/school-auth">School Sign In</Link>
           </Button>
         </div>
       </Layout>
