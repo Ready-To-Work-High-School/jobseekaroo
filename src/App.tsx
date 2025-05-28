@@ -50,6 +50,7 @@ import UserRepository from '@/pages/UserRepository';
 import ErrorPage from '@/pages/ErrorPage';
 import TestPage from '@/pages/TestPage';
 import NotFound from '@/pages/NotFound';
+import EmployerKanban from '@/pages/EmployerKanban';
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,7 @@ function App() {
                 <Route path="/safety-compliance" element={<SafetyCompliance />} />
                 <Route path="/student-success" element={<StudentSuccess />} />
                 <Route path="/user-repository" element={<UserRepository />} />
+                <Route path="/employer/candidates" element={<EmployerKanban />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 <Route path="*" element={<NotFound />} />
