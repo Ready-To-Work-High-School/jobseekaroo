@@ -52,6 +52,7 @@ import TestPage from '@/pages/TestPage';
 import NotFound from '@/pages/NotFound';
 import EmployerKanban from '@/pages/EmployerKanban';
 import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
+import EmployerCalendar from '@/pages/employer/EmployerCalendar';
 
 const queryClient = new QueryClient();
 
@@ -113,6 +114,8 @@ function App() {
                 <Route path="/user-repository" element={<UserRepository />} />
                 <Route path="/employer/candidates" element={<EmployerKanban />} />
                 <Route path="/employer/tools" element={<EmployerToolsPage />} />
+                <Route path="/employer/calendar" element={<EmployerCalendar />} />
+                <Route path="/interview-scheduler" element={<EmployerCalendar />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 <Route path="*" element={<NotFound />} />
