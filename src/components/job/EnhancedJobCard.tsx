@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Briefcase, MapPin, Clock, CalendarDays, Share2, Bookmark, ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -23,8 +23,17 @@ const EnhancedJobCard = ({ job, size = 'default', className }: EnhancedJobCardPr
   const isCompact = size === 'compact' || isMobile;
   
   const jobUrl = `/jobs/${job.id}`;
-  const postedDate = new Date(job.postedDate);
-  const timeAgo = formatDistanceToNow(postedDate, { addSuffix: true });
+  
+  // Safe date parsing with fallback
+  let timeAgo = 'Recently posted';
+  try {
+    const postedDate = new Date(job.postedDate);
+    if (!isNaN(postedDate.getTime())) {
+      timeAgo = formatDistanceToNow(postedDate, { addSuffix: true });
+    }
+  } catch (error) {
+    console.error('Error formatting date:', error);
+  }
   
   const handleApplyClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -163,8 +172,5 @@ const EnhancedJobCard = ({ job, size = 'default', className }: EnhancedJobCardPr
     </>
   );
 };
-
-// Add this import to use buttonVariants
-import { buttonVariants } from '@/components/ui/button';
 
 export default EnhancedJobCard;

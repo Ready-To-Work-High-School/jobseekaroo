@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Briefcase, MapPin, Clock, DollarSign } from 'lucide-react';
@@ -21,12 +22,15 @@ type Job = {
 const JobListings = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const fadeIn = useFadeIn(300);
 
   useEffect(() => {
-    // In a real app, fetch jobs from API
     const fetchJobs = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         // Simulating API call with timeout
         setTimeout(() => {
           const sampleJobs = [
@@ -108,6 +112,7 @@ const JobListings = () => {
         }, 1000);
       } catch (error) {
         console.error('Error fetching jobs:', error);
+        setError('Failed to load jobs. Please try again.');
         setLoading(false);
       }
     };
@@ -132,6 +137,18 @@ const JobListings = () => {
           </Card>
         ))}
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <h3 className="text-xl font-semibold mb-2 text-red-600">Error Loading Jobs</h3>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </CardContent>
+      </Card>
     );
   }
 
