@@ -56,6 +56,7 @@ import EmployerCalendar from '@/pages/employer/EmployerCalendar';
 import EmployerAnalytics from '@/pages/EmployerAnalytics';
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import JobPerformance from '@/pages/employer/JobPerformance';
+import SampleCandidates from '@/pages/SampleCandidates';
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/skill-development" element={<SkillDevelopment />} />
                 <Route path="/for-employers" element={<ForEmployers />} />
+                <Route path="/sample-candidates" element={<SampleCandidates />} />
                 <Route path="/resume-assistant" element={<ResumeAssistant />} />
                 <Route path="/job-simulations" element={<JobSimulations />} />
                 <Route path="/job-simulations/:id" element={<SimulationDetail />} />
