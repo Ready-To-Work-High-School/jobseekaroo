@@ -1,4 +1,5 @@
 
+import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Search, Filter } from 'lucide-react';
@@ -58,7 +59,7 @@ const EmployerApplicants = () => {
                   When candidates apply to your job postings, they'll appear here for you to review and manage.
                 </p>
                 <Button className="mt-4" asChild>
-                  <a href="/employer-dashboard">Post Your First Job</a>
+                  <a href="/employer/dashboard">Post Your First Job</a>
                 </Button>
               </div>
             </CardContent>
