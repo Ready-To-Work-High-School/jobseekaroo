@@ -115,6 +115,7 @@ function App() {
                 <Route path="/employer/candidates" element={<EmployerKanban />} />
                 <Route path="/employer/tools" element={<EmployerToolsPage />} />
                 <Route path="/employer/calendar" element={<EmployerCalendar />} />
+                <Route path="/employer/messages" element={<Messages />} />
                 <Route path="/interview-scheduler" element={<EmployerCalendar />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
