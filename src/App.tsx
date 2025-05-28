@@ -11,6 +11,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Home from '@/pages/Home';
 import JobListings from '@/pages/JobListings';
 import JobDetailsPage from '@/pages/JobDetailsPage';
+import JobDetail from '@/pages/JobDetail';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import Dashboard from '@/pages/Dashboard';
@@ -46,6 +47,8 @@ import StudentSuccess from '@/pages/StudentSuccess';
 import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 import StudentDashboard from '@/pages/StudentDashboard';
 import UserRepository from '@/pages/UserRepository';
+import ErrorPage from '@/pages/ErrorPage';
+import TestPage from '@/pages/TestPage';
 import NotFound from '@/pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -66,6 +69,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/jobs" element={<JobListings />} />
                 <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
+                <Route path="/jobs/:id" element={<JobDetail />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
@@ -105,6 +109,8 @@ function App() {
                 <Route path="/safety-compliance" element={<SafetyCompliance />} />
                 <Route path="/student-success" element={<StudentSuccess />} />
                 <Route path="/user-repository" element={<UserRepository />} />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="/test" element={<TestPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

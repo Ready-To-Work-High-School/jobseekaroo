@@ -1,150 +1,172 @@
-import { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import { ConversationList } from '@/components/messaging/ConversationList';
-import { ConversationView } from '@/components/messaging/ConversationView';
-import { Card } from '@/components/ui/card';
-import { Conversation } from '@/types/message';
-import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, MessageSquare } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Search, MessageCircle, Send } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const Messages = () => {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const { user, userProfile } = useAuth();
-  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
 
-  // Determine if the user is under 18 and needs moderation
-  const [requiresModeration, setRequiresModeration] = useState(false);
-
-  useEffect(() => {
-    if (user && userProfile) {
-      // Check if user is a minor (needs moderation)
-      // This is a placeholder - you would need to add a birthdate field to profiles
-      // and calculate if they're under 18
-      const isMinor = userProfile.user_type === 'student' && userProfile.preferences?.is_minor === true;
-      setRequiresModeration(isMinor);
+  // Mock data for conversations
+  const conversations = [
+    {
+      id: '1',
+      name: 'Sarah Johnson - HR Manager',
+      company: 'Tech Solutions Inc',
+      lastMessage: 'Thank you for your application! We\'d like to schedule an interview.',
+      time: '2 hours ago',
+      unread: true
+    },
+    {
+      id: '2',
+      name: 'Mike Chen - Store Manager',
+      company: 'Retail Plus',
+      lastMessage: 'Great to meet you yesterday. Looking forward to having you on the team!',
+      time: '1 day ago',
+      unread: false
+    },
+    {
+      id: '3',
+      name: 'Lisa Davis - Recruiter',
+      company: 'Healthcare Partners',
+      lastMessage: 'Hi! I saw your profile and think you might be a great fit for our internship program.',
+      time: '3 days ago',
+      unread: true
     }
-  }, [user, userProfile]);
+  ];
 
-  useEffect(() => {
-    if (user) {
-      fetchConversations();
-      subscribeToConversationUpdates();
-    }
-    
-    return () => {
-      const channel = supabase.channel('conversations');
-      supabase.removeChannel(channel);
-    };
-  }, [user]);
-
-  const fetchConversations = async () => {
-    if (!user) return;
-    
-    try {
-      setIsLoading(true);
-      
-      // Get all conversations where the user is a participant
-      const { data, error } = await supabase
-        .from('conversations_with_participants_view')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('last_message_at', { ascending: false });
-      
-      if (error) throw error;
-      
-      setConversations(data || []);
-      
-      // Select the first conversation by default if available
-      if (data && data.length > 0 && !selectedConversationId) {
-        setSelectedConversationId(data[0].id);
-      }
-      
-    } catch (error) {
-      console.error('Error fetching conversations:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const subscribeToConversationUpdates = () => {
-    if (!user) return;
-    
-    const channel = supabase
-      .channel('conversations')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'conversations_with_participants_view',
-          filter: `user_id=eq.${user.id}`
-        },
-        () => {
-          fetchConversations();
-        }
-      )
-      .subscribe();
-  };
-
-  const handleSelectConversation = (conversationId: string) => {
-    setSelectedConversationId(conversationId);
-  };
-
-  const selectedConversation = conversations.find(
-    (conv) => conv.id === selectedConversationId
+  const filteredConversations = conversations.filter(conv =>
+    conv.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    conv.company.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Layout>
-      <ProtectedRoute>
-        <div className="container py-6">
-          <h1 className="text-2xl font-bold mb-6">Messages</h1>
+      <Helmet>
+        <title>Messages - Job Seekers 4 HS</title>
+        <meta name="description" content="Manage your messages with employers and stay connected throughout your job search." />
+      </Helmet>
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Messages</h1>
           
-          {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Conversations List */}
+            <div className="lg:col-span-1">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5" />
+                    Conversations
+                  </CardTitle>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search conversations..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="space-y-1">
+                    {filteredConversations.map((conversation) => (
+                      <div
+                        key={conversation.id}
+                        className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors ${
+                          selectedConversation === conversation.id ? 'bg-blue-50 border-blue-200' : ''
+                        }`}
+                        onClick={() => setSelectedConversation(conversation.id)}
+                      >
+                        <div className="flex justify-between items-start mb-1">
+                          <h3 className={`font-medium text-sm ${conversation.unread ? 'font-bold' : ''}`}>
+                            {conversation.name}
+                          </h3>
+                          <span className="text-xs text-gray-500">{conversation.time}</span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-1">{conversation.company}</p>
+                        <p className={`text-sm text-gray-500 truncate ${conversation.unread ? 'font-medium' : ''}`}>
+                          {conversation.lastMessage}
+                        </p>
+                        {conversation.unread && (
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="md:col-span-1">
-                <h2 className="text-lg font-medium mb-3">Conversations</h2>
-                <ConversationList
-                  conversations={conversations}
-                  selectedConversationId={selectedConversationId}
-                  onSelectConversation={handleSelectConversation}
-                />
-              </div>
-              
-              <div className="md:col-span-3">
+
+            {/* Message View */}
+            <div className="lg:col-span-2">
+              <Card className="h-[600px] flex flex-col">
                 {selectedConversation ? (
-                  <ConversationView
-                    conversationId={selectedConversation.id}
-                    participantName={selectedConversation.participant_name}
-                    participantAvatar={selectedConversation.participant_avatar}
-                    participantId={selectedConversation.participant_id}
-                    requiresModeration={requiresModeration}
-                  />
+                  <>
+                    <CardHeader className="border-b">
+                      <CardTitle>
+                        {conversations.find(c => c.id === selectedConversation)?.name}
+                      </CardTitle>
+                      <p className="text-sm text-gray-600">
+                        {conversations.find(c => c.id === selectedConversation)?.company}
+                      </p>
+                    </CardHeader>
+                    <CardContent className="flex-1 p-4 overflow-y-auto">
+                      <div className="space-y-4">
+                        {/* Sample messages */}
+                        <div className="flex justify-start">
+                          <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
+                            <p className="text-sm">Hi! Thanks for applying to our position. We'd love to learn more about you.</p>
+                            <span className="text-xs text-gray-500 mt-1 block">Yesterday, 2:30 PM</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          <div className="bg-blue-500 text-white rounded-lg p-3 max-w-xs">
+                            <p className="text-sm">Thank you for reaching out! I'm very excited about this opportunity.</p>
+                            <span className="text-xs text-blue-100 mt-1 block">Yesterday, 3:15 PM</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-start">
+                          <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
+                            <p className="text-sm">{conversations.find(c => c.id === selectedConversation)?.lastMessage}</p>
+                            <span className="text-xs text-gray-500 mt-1 block">
+                              {conversations.find(c => c.id === selectedConversation)?.time}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <div className="border-t p-4">
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Type your message..."
+                          className="flex-1"
+                        />
+                        <Button size="icon">
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  <Card className="flex flex-col items-center justify-center h-96 p-6 text-center">
-                    <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">No conversation selected</h3>
-                    <p className="text-muted-foreground mt-2">
-                      {conversations.length === 0 
-                        ? "You don't have any conversations yet" 
-                        : "Select a conversation from the list to view messages"}
-                    </p>
-                  </Card>
+                  <CardContent className="flex-1 flex items-center justify-center">
+                    <div className="text-center text-gray-500">
+                      <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>Select a conversation to start messaging</p>
+                    </div>
+                  </CardContent>
                 )}
-              </div>
+              </Card>
             </div>
-          )}
+          </div>
         </div>
-      </ProtectedRoute>
+      </div>
     </Layout>
   );
 };
