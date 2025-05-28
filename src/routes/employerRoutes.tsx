@@ -16,6 +16,7 @@ import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
 import { VerificationFormContainer } from '@/components/employer/VerificationFormContainer';
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
+import JobPerformance from '@/pages/employer/JobPerformance';
 
 export const EmployerRoutes = (
   <>
@@ -55,6 +56,14 @@ export const EmployerRoutes = (
       } 
     />
     <Route path="/applicants" element={<EmployerDashboard />} />
+    <Route 
+      path="/employer/job-performance" 
+      element={
+        <ProtectedRoute>
+          <JobPerformance />
+        </ProtectedRoute>
+      } 
+    />
     <Route 
       path="/employer/calendar" 
       element={
