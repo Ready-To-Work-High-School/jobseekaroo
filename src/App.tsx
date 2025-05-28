@@ -53,6 +53,7 @@ import EmployerKanban from '@/pages/EmployerKanban';
 import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
 import EmployerAnalytics from '@/pages/EmployerAnalytics';
+import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 
 const queryClient = new QueryClient();
 
@@ -117,6 +118,7 @@ function App() {
                 <Route path="/employer/calendar" element={<EmployerCalendar />} />
                 <Route path="/employer/messages" element={<Messages />} />
                 <Route path="/employer/analytics" element={<EmployerAnalytics />} />
+                <Route path="/employer/applicants" element={<EmployerApplicants />} />
                 <Route path="/interview-scheduler" element={<EmployerCalendar />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
