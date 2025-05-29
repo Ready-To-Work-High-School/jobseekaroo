@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -127,6 +128,7 @@ function App() {
                 <Route path="/employer/analytics" element={<EmployerAnalytics />} />
                 <Route path="/employer/applicants" element={<EmployerApplicants />} />
                 <Route path="/employer/job-performance" element={<JobPerformance />} />
+                <Route path="/employer/qr-generator" element={<EmployerQRGenerator />} />
                 <Route path="/interview-scheduler" element={<EmployerCalendar />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />

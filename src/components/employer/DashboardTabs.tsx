@@ -2,8 +2,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, ListFilter, BarChart3, Settings, Users } from 'lucide-react';
+import { PlusCircle, ListFilter, BarChart3, Settings, Users, QrCode } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 import PostingsTab from './PostingsTab';
 import ApplicantsTab from './ApplicantsTab';
 import SettingsTab from './SettingsTab';
@@ -80,6 +81,16 @@ const DashboardTabs = ({ activeTab, setActiveTab }: DashboardTabsProps) => {
     <>
       <FreemiumInfoCard />
       <PremiumFeaturesBanner />
+      
+      {/* Quick Action Buttons */}
+      <div className="flex gap-2 mb-4">
+        <Button asChild variant="outline" size="sm">
+          <Link to="/employer/qr-generator" className="flex items-center gap-2">
+            <QrCode className="h-4 w-4" />
+            Generate QR Code
+          </Link>
+        </Button>
+      </div>
       
       <div className="flex justify-between items-center mb-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
