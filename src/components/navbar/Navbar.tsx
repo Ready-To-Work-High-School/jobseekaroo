@@ -42,15 +42,15 @@ const Navbar = () => {
           {isMobile && <MobileMenu />}
           <NavbarBrand />
           
-          {/* Hidden Shield - visible to all users but very subtle */}
+          {/* Hidden Shield - visible to all users but subtle */}
           <div className="relative group">
             <Link
               to="/ceo-portal"
-              className="flex items-center justify-center h-8 w-8 rounded-full opacity-10 hover:opacity-100 transition-all duration-500 ease-in-out transform hover:scale-110"
+              className="flex items-center justify-center h-8 w-8 rounded-full opacity-40 hover:opacity-100 transition-all duration-500 ease-in-out transform hover:scale-110"
               aria-label="Hidden Access"
             >
               {/* Gradient background with glow effect */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-70 blur-sm group-hover:blur-none transition-all duration-300"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400 opacity-80 blur-sm group-hover:blur-none transition-all duration-300"></div>
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-blue-500 to-amber-400"></div>
               <Shield className="h-4 w-4 text-white relative z-10" />
             </Link>
