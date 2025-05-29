@@ -201,7 +201,6 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
             value={qrValue}
             size={size}
             level="M"
-            includeMargin={true}
             style={{ 
               height: "auto", 
               maxWidth: "100%", 
