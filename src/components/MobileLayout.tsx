@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import MobileBottomNav from './mobile/MobileBottomNav';
+import MobileBottomNavigation from './mobile/MobileBottomNavigation';
 import BackButton from './navigation/BackButton';
 import BackToTopButton from './navigation/BackToTopButton';
 import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
@@ -54,24 +54,6 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
-  // Handle modals/sheets preventing body scroll
-  useEffect(() => {
-    const handleSheetToggle = (event: CustomEvent) => {
-      if (event.detail.open) {
-        document.body.classList.add('modal-open');
-      } else {
-        document.body.classList.remove('modal-open');
-      }
-    };
-    
-    window.addEventListener('sheetStateChange' as any, handleSheetToggle as any);
-    
-    return () => {
-      window.removeEventListener('sheetStateChange' as any, handleSheetToggle as any);
-      document.body.classList.remove('modal-open');
-    };
-  }, []);
 
   // Page transition variants
   const pageVariants = {
@@ -92,7 +74,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
         <JobSeekers4HSBadge variant="default" className="badge-pop" />
       </motion.div>
       
-      {/* Free for students badge - NEW */}
+      {/* Free for students badge */}
       <motion.div 
         className="flex justify-center mb-3"
         initial={{ opacity: 0 }}
@@ -112,7 +94,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       
       <AnimatePresence mode="wait">
         <motion.main 
-          className="flex-1 main-content overflow-x-auto"
+          className="flex-1 main-content overflow-x-auto pb-20"
           key={location.pathname}
           variants={pageVariants}
           initial="initial"
@@ -132,7 +114,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       </AnimatePresence>
       
       <BackToTopButton />
-      <MobileBottomNav />
+      <MobileBottomNavigation />
       <UserOnboardingGuide />
     </div>
   );

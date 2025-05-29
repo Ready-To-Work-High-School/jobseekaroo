@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
-import MobileBottomNav from './mobile/MobileBottomNav';
+import MobileBottomNavigation from './mobile/MobileBottomNavigation';
 import { motion } from 'framer-motion';
 import WhatYouGetCTA from './auth/WhatYouGetCTA';
 import Header from './layout/Header';
@@ -62,10 +62,8 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
           
           <Footer />
           
-          {/* Only show mobile navigation on non-auth pages */}
-          {!isAuthPage && (
-            <MobileBottomNav />
-          )}
+          {/* Optimized mobile navigation */}
+          <MobileBottomNavigation />
         </ErrorBoundary>
       </ErrorBoundary>
     </div>
