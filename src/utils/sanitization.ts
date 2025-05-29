@@ -183,8 +183,9 @@ export const validateUrl = (url: string): boolean => {
     
     // List of allowed domains and protocols
     const allowedDomains = [
-      'jobseekers4hs.org',
       'jobseekaroo.com',
+      'jobseekers4hs.org',
+      'jobseeker4hs.org',
       'localhost',
       '127.0.0.1',
       // Add other trusted domains here

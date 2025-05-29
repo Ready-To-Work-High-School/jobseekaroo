@@ -17,7 +17,6 @@ import { VerificationFormContainer } from '@/components/employer/VerificationFor
 import EmployerApplicants from '@/pages/employer/EmployerApplicants';
 import EmployerCalendar from '@/pages/employer/EmployerCalendar';
 import JobPerformance from '@/pages/employer/JobPerformance';
-import EmployerQRGenerator from '@/pages/EmployerQRGenerator';
 
 export const EmployerRoutes = (
   <>
@@ -117,14 +116,6 @@ export const EmployerRoutes = (
       element={
         <ProtectedRoute>
           <EmployerToolsPage />
-        </ProtectedRoute>
-      } 
-    />
-    <Route 
-      path="/employer/qr-generator" 
-      element={
-        <ProtectedRoute>
-          <EmployerQRGenerator />
         </ProtectedRoute>
       } 
     />
