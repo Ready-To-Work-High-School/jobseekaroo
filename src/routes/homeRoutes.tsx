@@ -10,6 +10,7 @@ import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
 import UserProfileTabs from '@/pages/UserProfileTabs';
 import PremiumServices from '@/pages/PremiumServices';
 import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
+import License from '@/pages/License';
 
 // We need to fix the missing page imports - using Home instead of HomePage, etc.
 import Home from '@/pages/Home';
@@ -44,6 +45,7 @@ const HomeRoutes = (
     <Route path="/resources" element={<Resources />} />
     <Route path="/platform-guide" element={<PlatformGuide />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+    <Route path="/license" element={<License />} />
     <Route path="/support" element={<Support />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/employer-verification" element={<EmployerVerification />} />
