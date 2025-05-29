@@ -1,37 +1,48 @@
+
 import React, { useState, useEffect } from 'react';
-import QRCode from 'react-qr-code';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, Share2, QrCode, RefreshCw, AlertTriangle, Shield } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent } from '@/components/ui/card';
 import { useRateLimit } from '@/hooks/useRateLimit';
 import { useAuth } from '@/hooks/useAuth';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { logQRCodeEvent } from '@/utils/qrAuditLogger';
+import QRCodeDisplay from './qr/QRCodeDisplay';
+import QRCodeControls from './qr/QRCodeControls';
+import QRCodeInfo from './qr/QRCodeInfo';
+import QRCodeSecurity from './qr/QRCodeSecurity';
+import QRCodeHeader from './qr/QRCodeHeader';
+import { useQRCodeActions } from './qr/hooks/useQRCodeActions';
 
 interface QRJobCreationProps {
   baseUrl?: string;
   size?: number;
-  refreshInterval?: number; // in seconds
+  refreshInterval?: number;
 }
 
 const QRJobCreation: React.FC<QRJobCreationProps> = ({
   baseUrl = window.location.origin,
   size = 200,
-  refreshInterval = 30 // refresh every 30 seconds by default
+  refreshInterval = 30
 }) => {
   const [timestamp, setTimestamp] = useState(Date.now());
   const [timeLeft, setTimeLeft] = useState(refreshInterval);
-  const { toast } = useToast();
   const { user, userProfile } = useAuth();
   
-  // Rate limiting: 10 manual refreshes per 5 minutes
   const rateLimiter = useRateLimit({
     maxRequests: 10,
-    windowMs: 5 * 60 * 1000 // 5 minutes
+    windowMs: 5 * 60 * 1000
   });
   
   const qrValue = `${baseUrl}/employer/qr-generator?t=${timestamp}`;
+
+  const { manualRefresh, downloadQRCode, shareQRCode } = useQRCodeActions({
+    timestamp,
+    setTimestamp,
+    setTimeLeft,
+    refreshInterval,
+    size,
+    userId: user?.id,
+    companyName: userProfile?.company_name,
+    rateLimiter
+  });
 
   // Auto-refresh the QR code at regular intervals
   useEffect(() => {
@@ -41,7 +52,6 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       setTimeLeft(refreshInterval);
       console.log('QR code refreshed for security');
       
-      // Log auto-refresh event
       if (user?.id) {
         logQRCodeEvent('auto_refresh', user.id, {
           company_name: userProfile?.company_name,
@@ -90,220 +100,35 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
     }
   }, [rateLimiter.isBlocked, rateLimiter.timeUntilReset]);
 
-  const manualRefresh = () => {
-    if (!rateLimiter.checkRateLimit()) {
-      toast({
-        title: "Rate Limited",
-        description: `Too many refresh attempts. Try again in ${rateLimiter.timeUntilReset} seconds.`,
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newTimestamp = Date.now();
-    setTimestamp(newTimestamp);
-    setTimeLeft(refreshInterval);
-    
-    // Log manual refresh event
-    if (user?.id) {
-      logQRCodeEvent('manual_refresh', user.id, {
-        company_name: userProfile?.company_name,
-        timestamp: newTimestamp,
-        remaining_requests: rateLimiter.getRemainingRequests()
-      });
-    }
-    
-    toast({
-      title: "QR Code Refreshed",
-      description: `New secure QR code generated (${rateLimiter.getRemainingRequests()} refreshes remaining)`
-    });
-  };
-
-  const downloadQRCode = () => {
-    if (!rateLimiter.checkRateLimit()) {
-      toast({
-        title: "Rate Limited",
-        description: `Too many download attempts. Try again in ${rateLimiter.timeUntilReset} seconds.`,
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const svg = document.getElementById('job-creation-qr') as HTMLElement;
-    if (!svg) return;
-    
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    
-    img.onload = () => {
-      canvas.width = size;
-      canvas.height = size;
-      ctx?.drawImage(img, 0, 0);
-      const pngFile = canvas.toDataURL('image/png');
-      
-      const downloadLink = document.createElement('a');
-      downloadLink.download = `job-creation-qr-${timestamp}.png`;
-      downloadLink.href = pngFile;
-      downloadLink.click();
-      
-      // Log download event
-      if (user?.id) {
-        logQRCodeEvent('download', user.id, {
-          company_name: userProfile?.company_name,
-          timestamp,
-          filename: `job-creation-qr-${timestamp}.png`,
-          remaining_requests: rateLimiter.getRemainingRequests()
-        });
-      }
-    };
-    
-    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
-  };
-
-  const shareQRCode = async () => {
-    if (!rateLimiter.checkRateLimit()) {
-      toast({
-        title: "Rate Limited",
-        description: `Too many share attempts. Try again in ${rateLimiter.timeUntilReset} seconds.`,
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Log share event
-    if (user?.id) {
-      logQRCodeEvent('share', user.id, {
-        company_name: userProfile?.company_name,
-        timestamp,
-        share_method: navigator.share ? 'native' : 'clipboard',
-        remaining_requests: rateLimiter.getRemainingRequests()
-      });
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Quick Job Posting',
-          text: 'Scan this QR code to quickly post a job on JobSeekers4HS',
-          url: qrValue
-        });
-      } catch (error) {
-        console.error('Error sharing:', error);
-        copyToClipboard();
-      }
-    } else {
-      copyToClipboard();
-    }
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(qrValue);
-    toast({
-      title: "Link Copied",
-      description: "Job posting link copied to clipboard"
-    });
-  };
-
   return (
     <Card className="w-fit mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <QrCode className="h-5 w-5" />
-          Secure Job Posting QR Code
-        </CardTitle>
-        {userProfile?.company_name && (
-          <p className="text-sm text-muted-foreground">
-            Generated for: {userProfile.company_name}
-          </p>
-        )}
-      </CardHeader>
+      <QRCodeHeader companyName={userProfile?.company_name} />
       <CardContent className="flex flex-col items-center space-y-4">
-        {rateLimiter.isBlocked && (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertDescription>
-              Rate limit exceeded. Wait {rateLimiter.timeUntilReset} seconds before trying again.
-            </AlertDescription>
-          </Alert>
-        )}
+        <QRCodeSecurity
+          isBlocked={rateLimiter.isBlocked}
+          timeUntilReset={rateLimiter.timeUntilReset}
+          refreshInterval={refreshInterval}
+          companyName={userProfile?.company_name}
+        />
         
-        {/* Session Validation Info */}
-        <Alert>
-          <Shield className="h-4 w-4" />
-          <AlertDescription>
-            <div className="text-sm">
-              <div className="font-medium mb-1">Session Validation Active</div>
-              <div className="text-muted-foreground">
-                QR codes expire after {refreshInterval} seconds to prevent unauthorized use
-              </div>
-              <div className="text-xs text-blue-600 mt-1">
-                🔍 All QR code activities are logged for security audit
-              </div>
-            </div>
-          </AlertDescription>
-        </Alert>
+        <QRCodeDisplay
+          qrValue={qrValue}
+          size={size}
+          timeLeft={timeLeft}
+        />
         
-        <div className="bg-white p-4 rounded-lg border relative">
-          <QRCode
-            id="job-creation-qr"
-            value={qrValue}
-            size={size}
-            level="H"
-          />
-          <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-            {timeLeft}s
-          </div>
-        </div>
+        <QRCodeInfo
+          qrValue={qrValue}
+          refreshInterval={refreshInterval}
+          remainingRequests={rateLimiter.getRemainingRequests()}
+        />
         
-        <div className="text-center space-y-2">
-          <p className="text-sm text-muted-foreground">
-            Scan to create a job posting
-          </p>
-          <p className="text-xs text-green-600 font-medium">
-            🔒 Auto-refreshes every {refreshInterval}s for security
-          </p>
-          <p className="text-xs text-orange-600 font-medium">
-            ⏱️ Session validation: {refreshInterval}s window
-          </p>
-          <p className="text-xs text-blue-600 font-medium">
-            ⚡ {rateLimiter.getRemainingRequests()} manual actions remaining
-          </p>
-          <p className="text-xs font-mono bg-muted px-2 py-1 rounded break-all">
-            {qrValue}
-          </p>
-        </div>
-        
-        <div className="flex gap-2 flex-wrap justify-center">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={manualRefresh}
-            disabled={rateLimiter.isBlocked}
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh Now
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={downloadQRCode}
-            disabled={rateLimiter.isBlocked}
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Download
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={shareQRCode}
-            disabled={rateLimiter.isBlocked}
-          >
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-        </div>
+        <QRCodeControls
+          onManualRefresh={manualRefresh}
+          onDownload={downloadQRCode}
+          onShare={shareQRCode}
+          isBlocked={rateLimiter.isBlocked}
+        />
       </CardContent>
     </Card>
   );
