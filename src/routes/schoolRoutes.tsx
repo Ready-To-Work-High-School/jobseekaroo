@@ -6,6 +6,8 @@ import SchoolGuide from '@/components/guide/SchoolGuide';
 import SchoolDashboard from '@/pages/SchoolDashboard';
 import CounselorDashboard from '@/pages/CounselorDashboard';
 import TeacherDashboard from '@/pages/TeacherDashboard';
+import SchoolAuth from '@/pages/SchoolAuth';
+import SchoolLanding from '@/pages/SchoolLanding';
 
 export const SchoolRoutes = (
   <>
@@ -14,6 +16,10 @@ export const SchoolRoutes = (
         <SchoolGuide />
       </Layout>
     } />
+    
+    <Route path="/school-auth" element={<SchoolAuth />} />
+    
+    <Route path="/school-landing" element={<SchoolLanding />} />
     
     <Route path="/school-dashboard" element={
       <Layout>

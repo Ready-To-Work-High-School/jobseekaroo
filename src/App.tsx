@@ -7,6 +7,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { EmployerRoutes } from '@/routes/employerRoutes';
+import { SchoolRoutes } from '@/routes/schoolRoutes';
 
 // Import all page components
 import Home from '@/pages/Home';
@@ -53,6 +54,10 @@ import TestPage from '@/pages/TestPage';
 import NotFound from '@/pages/NotFound';
 import SampleCandidates from '@/pages/SampleCandidates';
 import QuickJobPost from '@/pages/QuickJobPost';
+import SchoolAuth from '@/pages/SchoolAuth';
+import SchoolLanding from '@/pages/SchoolLanding';
+import EmployerSchoolDemo from '@/pages/EmployerSchoolDemo';
+import CounselorDashboard from '@/pages/CounselorDashboard';
 
 const queryClient = new QueryClient();
 
@@ -103,7 +108,10 @@ function App() {
                 <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
                 <Route path="/platform-guide" element={<PlatformGuide />} />
                 <Route path="/school-integration" element={<SchoolIntegration />} />
+                <Route path="/school-auth" element={<SchoolAuth />} />
+                <Route path="/school-landing" element={<SchoolLanding />} />
                 <Route path="/school-dashboard" element={<SchoolDashboard />} />
+                <Route path="/counselor-dashboard" element={<CounselorDashboard />} />
                 <Route path="/school/students" element={<SchoolStudents />} />
                 <Route path="/school/analytics" element={<SchoolAnalytics />} />
                 <Route path="/school/events" element={<SchoolEvents />} />
@@ -114,11 +122,15 @@ function App() {
                 <Route path="/student-success" element={<StudentSuccess />} />
                 <Route path="/user-repository" element={<UserRepository />} />
                 <Route path="/quick-job-post" element={<QuickJobPost />} />
+                <Route path="/employer-school-demo" element={<EmployerSchoolDemo />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 
                 {/* Include all employer routes */}
                 {EmployerRoutes}
+                
+                {/* Include all school routes */}
+                {SchoolRoutes}
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
