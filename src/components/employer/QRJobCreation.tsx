@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Share2, QrCode, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Download, Share2, QrCode, RefreshCw, AlertTriangle, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRateLimit } from '@/hooks/useRateLimit';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -169,6 +169,19 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
           </Alert>
         )}
         
+        {/* Session Validation Info */}
+        <Alert>
+          <Shield className="h-4 w-4" />
+          <AlertDescription>
+            <div className="text-sm">
+              <div className="font-medium mb-1">Session Validation Active</div>
+              <div className="text-muted-foreground">
+                QR codes expire after {refreshInterval} seconds to prevent unauthorized use
+              </div>
+            </div>
+          </AlertDescription>
+        </Alert>
+        
         <div className="bg-white p-4 rounded-lg border relative">
           <QRCode
             id="job-creation-qr"
@@ -187,6 +200,9 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
           </p>
           <p className="text-xs text-green-600 font-medium">
             🔒 Auto-refreshes every {refreshInterval}s for security
+          </p>
+          <p className="text-xs text-orange-600 font-medium">
+            ⏱️ Session validation: {refreshInterval}s window
           </p>
           <p className="text-xs text-blue-600 font-medium">
             ⚡ {rateLimiter.getRemainingRequests()} manual actions remaining
