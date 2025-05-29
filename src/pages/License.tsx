@@ -1,3 +1,4 @@
+
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ const License = () => {
       <div className="py-12">
         <div className="flex justify-center mb-8">
           <img 
-            src="/lovable-uploads/0b66caa3-2a72-475c-981f-fe66e8da8bb0.png" 
+            src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png" 
             alt="JS4HS Logo" 
             className="h-24 w-auto"
             width="200"
