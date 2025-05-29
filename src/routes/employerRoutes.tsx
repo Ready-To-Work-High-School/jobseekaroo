@@ -21,9 +21,12 @@ import EmployerQRGenerator from '@/pages/EmployerQRGenerator';
 
 export const EmployerRoutes = (
   <>
+    {/* Public employer pages */}
     <Route path="/for-employers" element={<ForEmployers />} />
     <Route path="/employer" element={<ForEmployers />} />
     <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
+    
+    {/* Protected employer dashboard routes */}
     <Route 
       path="/employer/dashboard" 
       element={
@@ -32,21 +35,26 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
-    <Route path="/employer-dashboard" element={<EmployerDashboard />} />
     <Route 
-      path="/employer/analytics" 
+      path="/employer-dashboard" 
       element={
         <ProtectedRoute>
-          <EmployerAnalytics />
+          <EmployerDashboard />
         </ProtectedRoute>
-      } 
+      }
     />
-    <Route path="/analytics" element={<AnalyticsDashboard />} />
-    <Route path="/employer/premium" element={<EmployerPremiumServices />} />
-    <Route path="/employer/premium-features" element={<PremiumFeaturesPage />} />
-    <Route path="/premium-services" element={<PremiumServices />} />
-    <Route path="/employer/badges" element={<EmployerBadges />} />
-    <Route path="/employer-badges" element={<EmployerBadges />} />
+    
+    {/* QR Code functionality - accessible to all employers */}
+    <Route 
+      path="/employer/qr-generator" 
+      element={
+        <ProtectedRoute>
+          <EmployerQRGenerator />
+        </ProtectedRoute>
+      }
+    />
+    
+    {/* Job posting routes */}
     <Route 
       path="/post-job" 
       element={
@@ -63,15 +71,24 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
+    
+    {/* Analytics and performance */}
     <Route 
-      path="/employer/applicants" 
+      path="/employer/analytics" 
       element={
         <ProtectedRoute>
-          <EmployerApplicants />
+          <EmployerAnalytics />
         </ProtectedRoute>
       } 
     />
-    <Route path="/applicants" element={<EmployerDashboard />} />
+    <Route 
+      path="/analytics" 
+      element={
+        <ProtectedRoute>
+          <AnalyticsDashboard />
+        </ProtectedRoute>
+      }
+    />
     <Route 
       path="/employer/job-performance" 
       element={
@@ -80,6 +97,34 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
+    
+    {/* Applicant management */}
+    <Route 
+      path="/employer/applicants" 
+      element={
+        <ProtectedRoute>
+          <EmployerApplicants />
+        </ProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/applicants" 
+      element={
+        <ProtectedRoute>
+          <EmployerApplicants />
+        </ProtectedRoute>
+      }
+    />
+    <Route 
+      path="/employer/candidates" 
+      element={
+        <ProtectedRoute>
+          <EmployerKanban />
+        </ProtectedRoute>
+      } 
+    />
+    
+    {/* Calendar and scheduling */}
     <Route 
       path="/employer/calendar" 
       element={
@@ -88,6 +133,8 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
+    
+    {/* Verification and compliance */}
     <Route 
       path="/employer/verify" 
       element={
@@ -104,13 +151,31 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
+    
+    {/* Premium features and tools */}
     <Route 
-      path="/employer/candidates" 
+      path="/employer/premium" 
       element={
         <ProtectedRoute>
-          <EmployerKanban />
+          <EmployerPremiumServices />
         </ProtectedRoute>
-      } 
+      }
+    />
+    <Route 
+      path="/employer/premium-features" 
+      element={
+        <ProtectedRoute>
+          <PremiumFeaturesPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route 
+      path="/premium-services" 
+      element={
+        <ProtectedRoute>
+          <PremiumServices />
+        </ProtectedRoute>
+      }
     />
     <Route 
       path="/employer/tools" 
@@ -120,7 +185,24 @@ export const EmployerRoutes = (
         </ProtectedRoute>
       } 
     />
-    <Route path="/employer/qr-generator" element={<EmployerQRGenerator />} />
+    
+    {/* Badges and recognition */}
+    <Route 
+      path="/employer/badges" 
+      element={
+        <ProtectedRoute>
+          <EmployerBadges />
+        </ProtectedRoute>
+      }
+    />
+    <Route 
+      path="/employer-badges" 
+      element={
+        <ProtectedRoute>
+          <EmployerBadges />
+        </ProtectedRoute>
+      }
+    />
   </>
 );
 

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useRateLimit } from '@/hooks/useRateLimit';
 import { useAuth } from '@/hooks/useAuth';
@@ -45,24 +45,25 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   });
 
   // Auto-refresh the QR code at regular intervals
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newTimestamp = Date.now();
-      setTimestamp(newTimestamp);
-      setTimeLeft(refreshInterval);
-      console.log('QR code refreshed for security');
-      
-      if (user?.id) {
-        logQRCodeEvent('auto_refresh', user.id, {
-          company_name: userProfile?.company_name,
-          timestamp: newTimestamp,
-          refresh_interval: refreshInterval
-        });
-      }
-    }, refreshInterval * 1000);
-
-    return () => clearInterval(interval);
+  const autoRefresh = useCallback(() => {
+    const newTimestamp = Date.now();
+    setTimestamp(newTimestamp);
+    setTimeLeft(refreshInterval);
+    console.log('QR code auto-refreshed for security');
+    
+    if (user?.id) {
+      logQRCodeEvent('auto_refresh', user.id, {
+        company_name: userProfile?.company_name,
+        timestamp: newTimestamp,
+        refresh_interval: refreshInterval
+      });
+    }
   }, [refreshInterval, user?.id, userProfile?.company_name]);
+
+  useEffect(() => {
+    const interval = setInterval(autoRefresh, refreshInterval * 1000);
+    return () => clearInterval(interval);
+  }, [autoRefresh, refreshInterval]);
 
   // Log initial QR code generation
   useEffect(() => {

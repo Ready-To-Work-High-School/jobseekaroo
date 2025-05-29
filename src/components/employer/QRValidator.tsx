@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +23,7 @@ const QRValidator: React.FC<QRValidatorProps> = ({
   } | null>(null);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
-  useEffect(() => {
+  const validateQRCode = useCallback(() => {
     const timestamp = searchParams.get('t');
     
     if (timestamp) {
@@ -37,16 +37,21 @@ const QRValidator: React.FC<QRValidatorProps> = ({
       }
     } else {
       // No timestamp parameter - this might be a direct access
-      setValidationResult({
-        isValid: true, // Allow direct access
+      const result = {
+        isValid: true,
         reason: 'Direct access (no QR validation required)'
-      });
+      };
+      setValidationResult(result);
       
       if (onValidationChange) {
         onValidationChange(true);
       }
     }
   }, [searchParams, maxAgeSeconds, onValidationChange]);
+
+  useEffect(() => {
+    validateQRCode();
+  }, [validateQRCode]);
 
   // Countdown timer for valid QR codes
   useEffect(() => {
@@ -55,16 +60,7 @@ const QRValidator: React.FC<QRValidatorProps> = ({
         setTimeLeft((prev) => {
           if (prev === null || prev <= 1) {
             // Re-validate when time expires
-            const timestamp = searchParams.get('t');
-            if (timestamp) {
-              const currentUrl = window.location.href;
-              const newResult = validateQRCodeUrl(currentUrl, maxAgeSeconds);
-              setValidationResult(newResult);
-              
-              if (onValidationChange) {
-                onValidationChange(newResult.isValid);
-              }
-            }
+            validateQRCode();
             return 0;
           }
           return prev - 1;
@@ -73,7 +69,7 @@ const QRValidator: React.FC<QRValidatorProps> = ({
 
       return () => clearInterval(interval);
     }
-  }, [validationResult?.isValid, timeLeft, searchParams, maxAgeSeconds, onValidationChange]);
+  }, [validationResult?.isValid, timeLeft, validateQRCode]);
 
   if (!validationResult) {
     return null;
