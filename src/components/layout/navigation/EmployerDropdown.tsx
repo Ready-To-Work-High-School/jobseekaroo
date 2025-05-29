@@ -19,7 +19,8 @@ import {
   Kanban,
   Calendar,
   FilePlus,
-  Users 
+  Users,
+  QrCode
 } from 'lucide-react';
 
 export const EmployerDropdown = () => {
@@ -47,6 +48,12 @@ export const EmployerDropdown = () => {
           <Link to="/employer-dashboard" className="flex items-center gap-2 w-full">
             <FilePlus className="h-4 w-4" />
             Post Jobs
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/employer/qr-generator" className="flex items-center gap-2 w-full">
+            <QrCode className="h-4 w-4" />
+            QR Code Generator
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
