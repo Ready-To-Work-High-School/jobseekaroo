@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Download, Share2, QrCode, RefreshCw, AlertTriangle, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRateLimit } from '@/hooks/useRateLimit';
+import { useAuth } from '@/hooks/useAuth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { logQRCodeEvent } from '@/utils/qrAuditLogger';
 
 interface QRJobCreationProps {
   baseUrl?: string;
@@ -22,6 +23,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   const [timestamp, setTimestamp] = useState(Date.now());
   const [timeLeft, setTimeLeft] = useState(refreshInterval);
   const { toast } = useToast();
+  const { user, userProfile } = useAuth();
   
   // Rate limiting: 10 manual refreshes per 5 minutes
   const rateLimiter = useRateLimit({
@@ -34,13 +36,35 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   // Auto-refresh the QR code at regular intervals
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimestamp(Date.now());
+      const newTimestamp = Date.now();
+      setTimestamp(newTimestamp);
       setTimeLeft(refreshInterval);
       console.log('QR code refreshed for security');
+      
+      // Log auto-refresh event
+      if (user?.id) {
+        logQRCodeEvent('auto_refresh', user.id, {
+          company_name: userProfile?.company_name,
+          timestamp: newTimestamp,
+          refresh_interval: refreshInterval
+        });
+      }
     }, refreshInterval * 1000);
 
     return () => clearInterval(interval);
-  }, [refreshInterval]);
+  }, [refreshInterval, user?.id, userProfile?.company_name]);
+
+  // Log initial QR code generation
+  useEffect(() => {
+    if (user?.id) {
+      logQRCodeEvent('generate', user.id, {
+        company_name: userProfile?.company_name,
+        timestamp,
+        size,
+        refresh_interval: refreshInterval
+      });
+    }
+  }, [user?.id, userProfile?.company_name, timestamp, size, refreshInterval]);
 
   // Countdown timer
   useEffect(() => {
@@ -76,8 +100,19 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       return;
     }
 
-    setTimestamp(Date.now());
+    const newTimestamp = Date.now();
+    setTimestamp(newTimestamp);
     setTimeLeft(refreshInterval);
+    
+    // Log manual refresh event
+    if (user?.id) {
+      logQRCodeEvent('manual_refresh', user.id, {
+        company_name: userProfile?.company_name,
+        timestamp: newTimestamp,
+        remaining_requests: rateLimiter.getRemainingRequests()
+      });
+    }
+    
     toast({
       title: "QR Code Refreshed",
       description: `New secure QR code generated (${rateLimiter.getRemainingRequests()} refreshes remaining)`
@@ -112,6 +147,16 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       downloadLink.download = `job-creation-qr-${timestamp}.png`;
       downloadLink.href = pngFile;
       downloadLink.click();
+      
+      // Log download event
+      if (user?.id) {
+        logQRCodeEvent('download', user.id, {
+          company_name: userProfile?.company_name,
+          timestamp,
+          filename: `job-creation-qr-${timestamp}.png`,
+          remaining_requests: rateLimiter.getRemainingRequests()
+        });
+      }
     };
     
     img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
@@ -125,6 +170,16 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         variant: "destructive"
       });
       return;
+    }
+
+    // Log share event
+    if (user?.id) {
+      logQRCodeEvent('share', user.id, {
+        company_name: userProfile?.company_name,
+        timestamp,
+        share_method: navigator.share ? 'native' : 'clipboard',
+        remaining_requests: rateLimiter.getRemainingRequests()
+      });
     }
 
     if (navigator.share) {
@@ -158,6 +213,11 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
           <QrCode className="h-5 w-5" />
           Secure Job Posting QR Code
         </CardTitle>
+        {userProfile?.company_name && (
+          <p className="text-sm text-muted-foreground">
+            Generated for: {userProfile.company_name}
+          </p>
+        )}
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">
         {rateLimiter.isBlocked && (
@@ -177,6 +237,9 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
               <div className="font-medium mb-1">Session Validation Active</div>
               <div className="text-muted-foreground">
                 QR codes expire after {refreshInterval} seconds to prevent unauthorized use
+              </div>
+              <div className="text-xs text-blue-600 mt-1">
+                🔍 All QR code activities are logged for security audit
               </div>
             </div>
           </AlertDescription>
