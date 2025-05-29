@@ -58,6 +58,7 @@ import SchoolAuth from '@/pages/SchoolAuth';
 import SchoolLanding from '@/pages/SchoolLanding';
 import EmployerSchoolDemo from '@/pages/EmployerSchoolDemo';
 import CounselorDashboard from '@/pages/CounselorDashboard';
+import MacquarieExternship from '@/pages/MacquarieExternship';
 
 const queryClient = new QueryClient();
 
@@ -123,6 +124,7 @@ function App() {
                 <Route path="/user-repository" element={<UserRepository />} />
                 <Route path="/quick-job-post" element={<QuickJobPost />} />
                 <Route path="/employer-school-demo" element={<EmployerSchoolDemo />} />
+                <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 
