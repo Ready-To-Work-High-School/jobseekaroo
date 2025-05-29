@@ -16,8 +16,8 @@ interface EmployerCardProps {
 }
 
 export const EmployerCard = ({ employer }: EmployerCardProps) => {
-  const { user } = useAuth();
-  const { isCeo } = useAdminStatus();
+  const { user, userProfile } = useAuth();
+  const { isCeo, isAdmin } = useAdminStatus();
   const navigate = useNavigate();
 
   const handleJobsClick = (e: React.MouseEvent) => {
@@ -34,10 +34,13 @@ export const EmployerCard = ({ employer }: EmployerCardProps) => {
     }
   };
 
+  // Only show CEO shield for verified CEO users
+  const shouldShowCeoShield = isCeo && isAdmin && userProfile?.user_type === 'admin';
+
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow relative">
-      {/* Hidden CEO Shield - only visible to CEO users */}
-      {isCeo && (
+      {/* Hidden CEO Shield - only visible to verified CEO users */}
+      {shouldShowCeoShield && (
         <Link 
           to="/ceo-portal" 
           className="absolute top-2 right-2 opacity-10 hover:opacity-100 transition-opacity duration-300 z-10"

@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
+import { useAuth } from '@/contexts/auth';
 
 export const NavbarBrand = () => {
   const [imageError, setImageError] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [showHint, setShowHint] = useState(false);
-  const { isCeo } = useAdminStatus();
+  const { isCeo, isAdmin } = useAdminStatus();
+  const { userProfile } = useAuth();
 
   const handleImageError = () => {
     setImageError(true);
@@ -35,6 +37,9 @@ export const NavbarBrand = () => {
       }
     }
   };
+
+  // Only show CEO shield for verified admin users with CEO indicators
+  const shouldShowCeoShield = isCeo && isAdmin && userProfile?.user_type === 'admin';
 
   return (
     <div className="flex items-center gap-2 relative">
@@ -66,7 +71,7 @@ export const NavbarBrand = () => {
       </Link>
       
       {/* CEO Shield - visible to CEO users with better visibility */}
-      {isCeo && (
+      {shouldShowCeoShield && (
         <Link 
           to="/ceo-portal" 
           className="ml-2 opacity-70 hover:opacity-100 transition-opacity duration-300 z-20 bg-gradient-to-r from-purple-600 via-blue-500 to-amber-400 p-1.5 rounded-full shadow-md"

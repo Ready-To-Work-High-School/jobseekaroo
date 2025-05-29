@@ -14,10 +14,8 @@ export const NavbarRight = () => {
   const { user, userProfile } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
   
-  // Debug logs to check the values
-  console.log("NavbarRight - userProfile:", userProfile);
-  console.log("NavbarRight - isAdmin:", isAdmin);
-  console.log("NavbarRight - isCeo:", isCeo);
+  // Only show CEO shield for actual CEOs with admin privileges
+  const shouldShowCeoShield = isCeo && isAdmin && userProfile?.user_type === 'admin';
   
   return (
     <div className="flex items-center gap-2">
@@ -25,8 +23,8 @@ export const NavbarRight = () => {
         <SearchBar />
       </div>
 
-      {/* Hidden shield for CEO/Admin access - more visible gradient shield */}
-      {(isAdmin || isCeo || true) && ( // temporarily show for all users for testing
+      {/* CEO Shield - only visible to actual CEOs */}
+      {shouldShowCeoShield && (
         <div className="relative group">
           <Link 
             to="/ceo-portal" 
