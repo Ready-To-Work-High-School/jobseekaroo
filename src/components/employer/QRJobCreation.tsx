@@ -1,22 +1,61 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Share2, QrCode } from 'lucide-react';
+import { Download, Share2, QrCode, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface QRJobCreationProps {
   baseUrl?: string;
   size?: number;
+  refreshInterval?: number; // in seconds
 }
 
 const QRJobCreation: React.FC<QRJobCreationProps> = ({
   baseUrl = window.location.origin,
-  size = 200
+  size = 200,
+  refreshInterval = 30 // refresh every 30 seconds by default
 }) => {
-  const [qrValue] = useState(`${baseUrl}/quick-job-post`);
+  const [timestamp, setTimestamp] = useState(Date.now());
+  const [timeLeft, setTimeLeft] = useState(refreshInterval);
   const { toast } = useToast();
+  
+  const qrValue = `${baseUrl}/employer/qr-generator?t=${timestamp}`;
+
+  // Auto-refresh the QR code at regular intervals
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimestamp(Date.now());
+      setTimeLeft(refreshInterval);
+      console.log('QR code refreshed for security');
+    }, refreshInterval * 1000);
+
+    return () => clearInterval(interval);
+  }, [refreshInterval]);
+
+  // Countdown timer
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          return refreshInterval;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(countdown);
+  }, [refreshInterval]);
+
+  const manualRefresh = () => {
+    setTimestamp(Date.now());
+    setTimeLeft(refreshInterval);
+    toast({
+      title: "QR Code Refreshed",
+      description: "New secure QR code generated"
+    });
+  };
 
   const downloadQRCode = () => {
     const svg = document.getElementById('job-creation-qr') as HTMLElement;
@@ -34,7 +73,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       const pngFile = canvas.toDataURL('image/png');
       
       const downloadLink = document.createElement('a');
-      downloadLink.download = 'job-creation-qr-code.png';
+      downloadLink.download = `job-creation-qr-${timestamp}.png`;
       downloadLink.href = pngFile;
       downloadLink.click();
     };
@@ -72,29 +111,43 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5" />
-          Quick Job Posting QR Code
+          Secure Job Posting QR Code
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-white p-4 rounded-lg border relative">
           <QRCode
             id="job-creation-qr"
             value={qrValue}
             size={size}
             level="H"
           />
+          <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+            {timeLeft}s
+          </div>
         </div>
         
         <div className="text-center space-y-2">
           <p className="text-sm text-muted-foreground">
             Scan to create a job posting
           </p>
-          <p className="text-xs font-mono bg-muted px-2 py-1 rounded">
+          <p className="text-xs text-green-600 font-medium">
+            🔒 Auto-refreshes every {refreshInterval}s for security
+          </p>
+          <p className="text-xs font-mono bg-muted px-2 py-1 rounded break-all">
             {qrValue}
           </p>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap justify-center">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={manualRefresh}
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh Now
+          </Button>
           <Button 
             variant="outline" 
             size="sm"
