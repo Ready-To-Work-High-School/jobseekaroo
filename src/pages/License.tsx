@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ const License = () => {
           <img 
             src="/lovable-uploads/07748c3e-c8ae-4f0e-a79d-89da75c12094.png" 
             alt="JS4HS Logo" 
-            className="h-24 w-auto"
+            className="h-24 w-auto rounded-full"
             width="200"
             height="200"
           />
