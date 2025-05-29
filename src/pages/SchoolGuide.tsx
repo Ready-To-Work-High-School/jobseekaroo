@@ -181,7 +181,7 @@ const SchoolGuide = () => {
 
           <div className="text-center mt-8">
             <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
-              <Link to="/signup">
+              <Link to="/school-integration">
                 Get Started with Exclusive Access
               </Link>
             </Button>
