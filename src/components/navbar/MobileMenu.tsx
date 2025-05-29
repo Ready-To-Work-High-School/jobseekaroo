@@ -1,3 +1,4 @@
+
 import { Home, Shield } from 'lucide-react';
 import {
   Sheet,
@@ -30,7 +31,7 @@ export const MobileMenu = () => {
   
   const { isAdmin, isCeo } = useAdminStatus();
   
-  console.log('MobileMenu render - isAdmin:', isAdmin, 'isCeo:', isCeo);
+  // Removed debug logs - status is now logged centrally in useAdminStatus
 
   return (
     <Sheet>

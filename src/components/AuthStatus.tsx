@@ -20,11 +20,7 @@ const AuthStatus = () => {
   const { toast } = useToast();
   const location = useLocation();
 
-  // Debug logs
-  console.log("AuthStatus - User profile:", userProfile);
-  console.log("AuthStatus - Is admin:", userProfile?.user_type === 'admin');
-  console.log("AuthStatus - Current path:", location.pathname);
-
+  // Removed debug logs - these were causing repeated logging
   const handleSignOut = async () => {
     try {
       await signOut();

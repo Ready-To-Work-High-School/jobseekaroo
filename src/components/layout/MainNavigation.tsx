@@ -17,11 +17,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
   const { user } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
   
-  // Debug logs - leave these for troubleshooting
-  console.log('MainNavigation - user type:', isAdmin ? 'admin' : 'not-admin');
-  console.log('MainNavigation - CEO status:', isCeo ? 'CEO' : 'not-CEO');
-  console.log('MainNavigation - user:', user);
-  
+  // Removed debug logs - status changes are now logged only in useAdminStatus hook
   const isActiveLink = (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`);
   
   return (
