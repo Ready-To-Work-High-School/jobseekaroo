@@ -25,6 +25,7 @@ import About from '@/pages/About';
 import FAQ from '@/pages/FAQ';
 import ContactUs from '@/pages/Contact';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import License from '@/pages/License';
 import TermsOfService from '@/pages/TermsOfService';
 import Resources from '@/pages/Resources';
 import SkillDevelopment from '@/pages/SkillDevelopment';
@@ -93,6 +94,7 @@ function App() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/license" element={<License />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/resources" element={<Resources />} />
