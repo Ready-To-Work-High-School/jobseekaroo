@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Share2, QrCode, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { sanitizeHtml, validateUrl } from '@/utils/sanitization';
 
 interface QRJobCreationProps {
   baseUrl?: string;
@@ -13,31 +12,15 @@ interface QRJobCreationProps {
 }
 
 const QRJobCreation: React.FC<QRJobCreationProps> = ({
-  baseUrl = window.location.origin,
+  baseUrl,
   size = 200
 }) => {
-  // Validate and sanitize the base URL
-  const sanitizedBaseUrl = sanitizeHtml(baseUrl);
-  const isValidUrl = validateUrl(sanitizedBaseUrl);
-  
-  // Use a secure, validated URL for the QR code
-  const secureUrl = isValidUrl ? sanitizedBaseUrl : window.location.origin;
-  const [qrValue] = useState(`${secureUrl}/quick-job-post`);
+  // Use the correct JobSeekers4HS website URL
+  const jobSeekersUrl = 'https://jobseekers4hs.org';
+  const [qrValue] = useState(jobSeekersUrl);
   const { toast } = useToast();
 
-  // Security check for QR value
-  const isSecureQrValue = validateUrl(qrValue);
-
   const downloadQRCode = () => {
-    if (!isSecureQrValue) {
-      toast({
-        title: "Security Error",
-        description: "QR code contains invalid URL",
-        variant: "destructive"
-      });
-      return;
-    }
-
     const svg = document.getElementById('job-creation-qr') as HTMLElement;
     if (!svg) return;
     
@@ -54,7 +37,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         const pngFile = canvas.toDataURL('image/png');
         
         const downloadLink = document.createElement('a');
-        downloadLink.download = 'job-creation-qr-code.png';
+        downloadLink.download = 'jobseekers4hs-qr-code.png';
         downloadLink.href = pngFile;
         downloadLink.click();
       };
@@ -79,20 +62,11 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   };
 
   const shareQRCode = async () => {
-    if (!isSecureQrValue) {
-      toast({
-        title: "Security Error",
-        description: "Cannot share insecure URL",
-        variant: "destructive"
-      });
-      return;
-    }
-
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Quick Job Posting - JobSeekers4HS',
-          text: 'Scan this QR code to quickly post a job on JobSeekers4HS',
+          title: 'JobSeekers4HS - Student Job Platform',
+          text: 'Scan this QR code to access JobSeekers4HS - the premier job platform for high school students',
           url: qrValue
         });
       } catch (error) {
@@ -105,45 +79,19 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   };
 
   const copyToClipboard = () => {
-    if (!isSecureQrValue) {
-      toast({
-        title: "Security Error",
-        description: "Cannot copy insecure URL",
-        variant: "destructive"
-      });
-      return;
-    }
-
     navigator.clipboard.writeText(qrValue);
     toast({
       title: "Link Copied",
-      description: "Secure job posting link copied to clipboard"
+      description: "JobSeekers4HS link copied to clipboard"
     });
   };
-
-  // Don't render if URL is not secure
-  if (!isSecureQrValue) {
-    return (
-      <Card className="w-fit mx-auto border-red-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-red-600">
-            <Shield className="h-5 w-5" />
-            Security Error
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-red-600">Invalid or insecure URL detected. QR code generation blocked for security.</p>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="w-fit mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5" />
-          Quick Job Posting QR Code
+          JobSeekers4HS Access QR Code
           <Shield className="h-4 w-4 text-green-600" />
         </CardTitle>
       </CardHeader>
@@ -159,7 +107,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         
         <div className="text-center space-y-2">
           <p className="text-sm text-muted-foreground">
-            Scan to create a job posting
+            Scan to access JobSeekers4HS
           </p>
           <p className="text-xs font-mono bg-muted px-2 py-1 rounded break-all">
             {qrValue}
