@@ -15,21 +15,21 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   baseUrl,
   size = 200
 }) => {
-  // Hardcoded secure URL for JobSeekers4HS
-  const SECURE_URL = 'https://jobseekers4hs.org';
+  // Use a clean, Safari-compatible URL
+  const SECURE_URL = 'https://jobseekers4hs.org/';
   const [qrValue, setQrValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Simple initialization - set the QR value immediately
-    console.log('Initializing QR code with URL:', SECURE_URL);
+    // Set the QR value with proper Safari formatting
+    console.log('Initializing QR code with Safari-compatible URL:', SECURE_URL);
     setQrValue(SECURE_URL);
     setIsLoading(false);
   }, []);
 
   const downloadQRCode = () => {
-    const svg = document.getElementById('job-creation-qr') as HTMLElement;
+    const svg = document.getElementById('job-creation-qr');
     if (!svg) {
       toast({
         title: "Download Error",
@@ -40,7 +40,12 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
     }
     
     try {
+      // Safari-compatible download method
       const svgData = new XMLSerializer().serializeToString(svg);
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const svgUrl = URL.createObjectURL(svgBlob);
+      
+      // Create canvas for PNG conversion
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
@@ -50,19 +55,28 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         canvas.height = size;
         ctx?.drawImage(img, 0, 0);
         
-        const pngFile = canvas.toDataURL('image/png');
-        const downloadLink = document.createElement('a');
-        downloadLink.download = 'jobseekers4hs-qr-code.png';
-        downloadLink.href = pngFile;
-        downloadLink.click();
+        // Safari-compatible download
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.download = 'jobseekers4hs-qr-code.png';
+            downloadLink.href = url;
+            downloadLink.click();
+            URL.revokeObjectURL(url);
+            
+            toast({
+              title: "Success",
+              description: "QR code downloaded successfully"
+            });
+          }
+        }, 'image/png');
         
-        toast({
-          title: "Success",
-          description: "QR code downloaded successfully"
-        });
+        URL.revokeObjectURL(svgUrl);
       };
       
       img.onerror = () => {
+        URL.revokeObjectURL(svgUrl);
         toast({
           title: "Error",
           description: "Failed to generate image",
@@ -70,7 +84,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         });
       };
       
-      img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+      img.src = svgUrl;
     } catch (error) {
       console.error('Download error:', error);
       toast({
@@ -82,7 +96,10 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   };
 
   const shareQRCode = async () => {
-    if (navigator.share) {
+    // Safari-compatible sharing
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    if (navigator.share && !isSafari) {
       try {
         await navigator.share({
           title: 'JobSeekers4HS',
@@ -99,18 +116,47 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(qrValue).then(() => {
+    // Safari-compatible clipboard API
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(qrValue).then(() => {
+        toast({
+          title: "Copied",
+          description: "Link copied to clipboard"
+        });
+      }).catch(() => {
+        fallbackCopyToClipboard();
+      });
+    } else {
+      fallbackCopyToClipboard();
+    }
+  };
+
+  const fallbackCopyToClipboard = () => {
+    // Fallback for Safari and older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = qrValue;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
       toast({
         title: "Copied",
         description: "Link copied to clipboard"
       });
-    }).catch(() => {
+    } catch (err) {
       toast({
         title: "Error",
         description: "Failed to copy link",
         variant: "destructive"
       });
-    });
+    } finally {
+      document.body.removeChild(textArea);
+    }
   };
 
   if (isLoading) {
@@ -154,8 +200,14 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
             id="job-creation-qr"
             value={qrValue}
             size={size}
-            level="H"
-            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            level="M"
+            includeMargin={true}
+            style={{ 
+              height: "auto", 
+              maxWidth: "100%", 
+              width: "100%",
+              display: "block"
+            }}
           />
         </div>
         
