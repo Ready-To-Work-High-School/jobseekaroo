@@ -20,9 +20,9 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   const sanitizedBaseUrl = sanitizeHtml(baseUrl);
   const isValidUrl = validateUrl(sanitizedBaseUrl);
   
-  // Use a secure, validated URL for the QR code
+  // Use a secure, validated URL for the QR code - links to the main website
   const secureUrl = isValidUrl ? sanitizedBaseUrl : window.location.origin;
-  const [qrValue] = useState(`${secureUrl}/quick-job-post`);
+  const [qrValue] = useState(secureUrl);
   const { toast } = useToast();
 
   // Security check for QR value
@@ -54,7 +54,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         const pngFile = canvas.toDataURL('image/png');
         
         const downloadLink = document.createElement('a');
-        downloadLink.download = 'job-creation-qr-code.png';
+        downloadLink.download = 'jobseekers4hs-qr-code.png';
         downloadLink.href = pngFile;
         downloadLink.click();
       };
@@ -91,8 +91,8 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Quick Job Posting - JobSeekers4HS',
-          text: 'Scan this QR code to quickly post a job on JobSeekers4HS',
+          title: 'Job Seekers 4 High Schools - Student Job Portal',
+          text: 'Scan this QR code to access JobSeekers4HS - the premier job platform for high school students',
           url: qrValue
         });
       } catch (error) {
@@ -117,7 +117,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
     navigator.clipboard.writeText(qrValue);
     toast({
       title: "Link Copied",
-      description: "Secure job posting link copied to clipboard"
+      description: "JobSeekers4HS website link copied to clipboard"
     });
   };
 
@@ -143,7 +143,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5" />
-          Quick Job Posting QR Code
+          JobSeekers4HS Access QR Code
           <Shield className="h-4 w-4 text-green-600" />
         </CardTitle>
       </CardHeader>
@@ -159,7 +159,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         
         <div className="text-center space-y-2">
           <p className="text-sm text-muted-foreground">
-            Scan to create a job posting
+            Scan to access JobSeekers4HS platform
           </p>
           <p className="text-xs font-mono bg-muted px-2 py-1 rounded break-all">
             {qrValue}

@@ -3,17 +3,17 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QRJobCreation from '@/components/employer/QRJobCreation';
-import { QrCode, Briefcase, CheckCircle, Clock, Shield, Lock, Eye, AlertTriangle } from 'lucide-react';
+import { QrCode, Briefcase, CheckCircle, Clock, Shield, Lock, Eye, AlertTriangle, Users } from 'lucide-react';
 
 const EmployerQRGenerator = () => {
   return (
     <Layout>
       <div className="container max-w-4xl mx-auto py-8 px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Secure QR Code Job Posting</h1>
+          <h1 className="text-3xl font-bold mb-4">JobSeekers4HS Access QR Code</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Generate a secure QR code that companies can scan to quickly post jobs to JobSeekers4HS. 
-            Built with enterprise-grade security for safe job posting.
+            Generate a secure QR code that provides instant access to the JobSeekers4HS platform. 
+            Perfect for sharing with students, posting in schools, or adding to business materials.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ const EmployerQRGenerator = () => {
               <h3 className="font-medium text-green-900">Secure & Protected</h3>
               <p className="text-sm text-green-700 mt-1">
                 Our QR codes are generated with multiple security layers including URL validation, 
-                content sanitization, and rate limiting to prevent malicious use.
+                content sanitization, and secure linking to prevent malicious use.
               </p>
             </div>
           </div>
@@ -39,17 +39,17 @@ const EmployerQRGenerator = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5" />
-                How It Works
+                <Users className="h-5 w-5" />
+                How Students Use This
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-start gap-3">
                 <QrCode className="h-5 w-5 text-blue-500 mt-1" />
                 <div>
-                  <h4 className="font-medium">1. Scan Secure QR Code</h4>
+                  <h4 className="font-medium">1. Scan QR Code</h4>
                   <p className="text-sm text-muted-foreground">
-                    Companies scan the validated QR code with their phone camera
+                    Students scan the QR code with their phone camera
                   </p>
                 </div>
               </div>
@@ -57,19 +57,19 @@ const EmployerQRGenerator = () => {
               <div className="flex items-start gap-3">
                 <Shield className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h4 className="font-medium">2. Secure Form Validation</h4>
+                  <h4 className="font-medium">2. Access Secure Platform</h4>
                   <p className="text-sm text-muted-foreground">
-                    All input is sanitized and validated in real-time for security
+                    Instantly connects to the JobSeekers4HS website
                   </p>
                 </div>
               </div>
               
               <div className="flex items-start gap-3">
-                <Clock className="h-5 w-5 text-orange-500 mt-1" />
+                <Briefcase className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
-                  <h4 className="font-medium">3. Professional Review</h4>
+                  <h4 className="font-medium">3. Browse Opportunities</h4>
                   <p className="text-sm text-muted-foreground">
-                    Our team reviews jobs within 24 hours for safety and compliance
+                    Students can explore jobs, internships, and career resources
                   </p>
                 </div>
               </div>
@@ -77,9 +77,9 @@ const EmployerQRGenerator = () => {
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 text-purple-500 mt-1" />
                 <div>
-                  <h4 className="font-medium">4. Job Goes Live</h4>
+                  <h4 className="font-medium">4. Apply & Connect</h4>
                   <p className="text-sm text-muted-foreground">
-                    Approved jobs are published to the secure student portal
+                    Easy application process with employer connections
                   </p>
                 </div>
               </div>
@@ -103,15 +103,15 @@ const EmployerQRGenerator = () => {
                 </li>
                 <li className="flex items-center gap-2">
                   <Eye className="w-4 h-4 text-green-500" />
-                  Real-time content scanning
+                  Direct link to official platform
                 </li>
                 <li className="flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-green-500" />
-                  XSS attack prevention
+                  Anti-phishing protection
                 </li>
                 <li className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-green-500" />
-                  Rate limiting protection
+                  Secure HTTPS connection
                 </li>
               </ul>
             </CardContent>
@@ -125,15 +125,15 @@ const EmployerQRGenerator = () => {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  Job fairs and career events
+                  School bulletin boards
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Business cards and flyers
+                  Career fair materials
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                  Store windows and bulletin boards
+                  Business cards and flyers
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
@@ -145,25 +145,25 @@ const EmployerQRGenerator = () => {
           
           <Card>
             <CardHeader>
-              <CardTitle>Safety Compliance</CardTitle>
+              <CardTitle>Platform Benefits</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  All jobs reviewed for teen safety
+                  Free for all students
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  Company verification required
+                  Age-appropriate opportunities
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  Age-appropriate work only
+                  Career guidance and resources
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  Labor law compliance checked
+                  Direct employer connections
                 </li>
               </ul>
             </CardContent>
@@ -181,21 +181,21 @@ const EmployerQRGenerator = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div>
-                <h4 className="font-medium mb-2">Input Validation</h4>
+                <h4 className="font-medium mb-2">URL Security</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Real-time content sanitization</li>
-                  <li>• XSS attack vector detection</li>
-                  <li>• SQL injection prevention</li>
-                  <li>• Maximum length restrictions</li>
+                  <li>• Direct link to official platform</li>
+                  <li>• HTTPS encryption required</li>
+                  <li>• Anti-phishing protection</li>
+                  <li>• Regular security monitoring</li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-medium mb-2">Access Control</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Rate limiting per IP address</li>
-                  <li>• URL validation and verification</li>
-                  <li>• Secure form submission</li>
-                  <li>• Error handling without data exposure</li>
+                  <li>• Secure platform authentication</li>
+                  <li>• Student data protection</li>
+                  <li>• Privacy-compliant design</li>
+                  <li>• Safe browsing environment</li>
                 </ul>
               </div>
             </div>
