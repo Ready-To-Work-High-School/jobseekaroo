@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Share2, QrCode, Shield, AlertTriangle } from 'lucide-react';
+import { Download, Share2, QrCode, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { sanitizeHtml, validateUrl, containsXssVector } from '@/utils/sanitization';
 
 interface QRJobCreationProps {
   baseUrl?: string;
@@ -16,43 +15,29 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   baseUrl,
   size = 200
 }) => {
-  // Hardcoded secure URL - never accept user input for QR generation
-  const SECURE_JOBSEEKERS_URL = 'https://jobseekers4hs.org';
+  // Hardcoded secure URL for JobSeekers4HS
+  const SECURE_URL = 'https://jobseekers4hs.org';
   const [qrValue, setQrValue] = useState('');
-  const [isSecure, setIsSecure] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  // Validate QR code content on component mount
   useEffect(() => {
-    const validateQRContent = () => {
-      //  Multiple security checks:
-      // 1. Check if it's a valid URL
-      const isValid = validateUrl(SECURE_JOBSEEKERS_URL);
-      
-      // 2. Check for XSS vectors
-      const hasXssVectors = containsXssVector(SECURE_JOBSEEKERS_URL);
-      
-      // Only set URL if it passes all security checks
-      if (isValid && !hasXssVectors) {
-        setQrValue(SECURE_JOBSEEKERS_URL);
-        setIsSecure(true);
-      } else {
-        console.error("Security validation failed for QR code URL");
-        setIsSecure(false);
-      }
-    };
-
-    validateQRContent();
+    // Simple initialization - set the QR value immediately
+    console.log('Initializing QR code with URL:', SECURE_URL);
+    setQrValue(SECURE_URL);
+    setIsLoading(false);
   }, []);
 
   const downloadQRCode = () => {
-    if (!isSecure) {
-      showSecurityError("Cannot download QR code with insecure URL");
+    const svg = document.getElementById('job-creation-qr') as HTMLElement;
+    if (!svg) {
+      toast({
+        title: "Download Error",
+        description: "QR code element not found",
+        variant: "destructive"
+      });
       return;
     }
-
-    const svg = document.getElementById('job-creation-qr') as HTMLElement;
-    if (!svg) return;
     
     try {
       const svgData = new XMLSerializer().serializeToString(svg);
@@ -60,69 +45,53 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       const ctx = canvas.getContext('2d');
       const img = new Image();
       
-      // Set security attributes on the image
-      img.setAttribute('crossOrigin', 'anonymous');
-      
       img.onload = () => {
         canvas.width = size;
         canvas.height = size;
         ctx?.drawImage(img, 0, 0);
         
-        try {
-          // Generate image with security checks
-          const pngFile = canvas.toDataURL('image/png');
-          
-          // Create download link with security attributes
-          const downloadLink = document.createElement('a');
-          downloadLink.download = 'jobseekers4hs-qr-code.png';
-          downloadLink.href = pngFile;
-          downloadLink.rel = 'noopener noreferrer';
-          downloadLink.click();
-          
-          toast({
-            title: "Download Successful",
-            description: "QR code downloaded securely"
-          });
-        } catch (error) {
-          console.error('Canvas export error:', error);
-          showSecurityError("Failed to generate secure image");
-        }
+        const pngFile = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.download = 'jobseekers4hs-qr-code.png';
+        downloadLink.href = pngFile;
+        downloadLink.click();
+        
+        toast({
+          title: "Success",
+          description: "QR code downloaded successfully"
+        });
       };
       
       img.onerror = () => {
-        showSecurityError("Failed to generate QR code image");
+        toast({
+          title: "Error",
+          description: "Failed to generate image",
+          variant: "destructive"
+        });
       };
       
-      // Use Base64 encoding for added security
-      try {
-        img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
-      } catch (e) {
-        showSecurityError("Invalid SVG data");
-      }
+      img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
     } catch (error) {
-      console.error('QR code download error:', error);
-      showSecurityError("Failed to download QR code");
+      console.error('Download error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to download QR code",
+        variant: "destructive"
+      });
     }
   };
 
   const shareQRCode = async () => {
-    if (!isSecure) {
-      showSecurityError("Cannot share insecure URL");
-      return;
-    }
-
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'JobSeekers4HS - Student Job Platform',
-          text: 'Scan this QR code to access JobSeekers4HS - the premier job platform for high school students',
+          title: 'JobSeekers4HS',
+          text: 'Scan this QR code to access JobSeekers4HS',
           url: qrValue
         });
       } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-          console.error('Error sharing:', error);
-          copyToClipboard();
-        }
+        console.error('Share error:', error);
+        copyToClipboard();
       }
     } else {
       copyToClipboard();
@@ -130,43 +99,41 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
   };
 
   const copyToClipboard = () => {
-    if (!isSecure) {
-      showSecurityError("Cannot copy insecure URL");
-      return;
-    }
-
-    navigator.clipboard.writeText(qrValue)
-      .then(() => {
-        toast({
-          title: "Link Copied",
-          description: "JobSeekers4HS link copied to clipboard"
-        });
-      })
-      .catch(err => {
-        console.error('Clipboard error:', err);
-        showSecurityError("Failed to copy link");
+    navigator.clipboard.writeText(qrValue).then(() => {
+      toast({
+        title: "Copied",
+        description: "Link copied to clipboard"
       });
-  };
-  
-  const showSecurityError = (message: string) => {
-    toast({
-      title: "Security Error",
-      description: message,
-      variant: "destructive"
+    }).catch(() => {
+      toast({
+        title: "Error",
+        description: "Failed to copy link",
+        variant: "destructive"
+      });
     });
   };
 
-  if (!isSecure) {
+  if (isLoading) {
+    return (
+      <Card className="w-fit mx-auto">
+        <CardContent className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+            <p className="text-sm text-muted-foreground">Loading QR code...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!qrValue) {
     return (
       <Card className="w-fit mx-auto border-red-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-red-600">
-            <AlertTriangle className="h-5 w-5" />
-            Security Error
-          </CardTitle>
+          <CardTitle className="text-red-600">Error</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-red-600">QR code generation has been blocked for security reasons. Please contact support.</p>
+          <p className="text-red-600">Failed to generate QR code</p>
         </CardContent>
       </Card>
     );
@@ -177,20 +144,19 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5" />
-          JobSeekers4HS Access QR Code
+          JobSeekers4HS QR Code
           <Shield className="h-4 w-4 text-green-600" />
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">
         <div className="bg-white p-4 rounded-lg border shadow-sm">
-          {qrValue && (
-            <QRCode
-              id="job-creation-qr"
-              value={qrValue}
-              size={size}
-              level="H" // High error correction level for better security
-            />
-          )}
+          <QRCode
+            id="job-creation-qr"
+            value={qrValue}
+            size={size}
+            level="H"
+            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+          />
         </div>
         
         <div className="text-center space-y-2">
@@ -202,7 +168,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
           </p>
           <div className="flex items-center gap-1 text-xs text-green-600">
             <Shield className="h-3 w-3" />
-            <span>Secure & Verified URL</span>
+            <span>Secure URL</span>
           </div>
         </div>
         
