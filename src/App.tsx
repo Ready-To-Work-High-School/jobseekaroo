@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -5,6 +6,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { EmployerRoutes } from '@/routes/employerRoutes';
 
 // Import all page components
 import Home from '@/pages/Home';
@@ -28,7 +30,6 @@ import License from '@/pages/License';
 import TermsOfService from '@/pages/TermsOfService';
 import Resources from '@/pages/Resources';
 import SkillDevelopment from '@/pages/SkillDevelopment';
-import ForEmployers from '@/pages/ForEmployers';
 import ResumeAssistant from '@/pages/ResumeAssistant';
 import JobSimulations from '@/pages/JobSimulations';
 import SimulationDetail from '@/pages/SimulationDetail';
@@ -50,15 +51,8 @@ import UserRepository from '@/pages/UserRepository';
 import ErrorPage from '@/pages/ErrorPage';
 import TestPage from '@/pages/TestPage';
 import NotFound from '@/pages/NotFound';
-import EmployerKanban from '@/pages/EmployerKanban';
-import EmployerToolsPage from '@/pages/employer/EmployerToolsPage';
-import EmployerCalendar from '@/pages/employer/EmployerCalendar';
-import EmployerAnalytics from '@/pages/EmployerAnalytics';
-import EmployerApplicants from '@/pages/employer/EmployerApplicants';
-import JobPerformance from '@/pages/employer/JobPerformance';
 import SampleCandidates from '@/pages/SampleCandidates';
 import QuickJobPost from '@/pages/QuickJobPost';
-import EmployerQRGenerator from '@/pages/EmployerQRGenerator';
 
 const queryClient = new QueryClient();
 
@@ -100,7 +94,6 @@ function App() {
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/skill-development" element={<SkillDevelopment />} />
-                <Route path="/for-employers" element={<ForEmployers />} />
                 <Route path="/sample-candidates" element={<SampleCandidates />} />
                 <Route path="/resume-assistant" element={<ResumeAssistant />} />
                 <Route path="/job-simulations" element={<JobSimulations />} />
@@ -120,16 +113,13 @@ function App() {
                 <Route path="/safety-compliance" element={<SafetyCompliance />} />
                 <Route path="/student-success" element={<StudentSuccess />} />
                 <Route path="/user-repository" element={<UserRepository />} />
-                <Route path="/employer/candidates" element={<EmployerKanban />} />
-                <Route path="/employer/tools" element={<EmployerToolsPage />} />
-                <Route path="/employer/calendar" element={<EmployerCalendar />} />
-                <Route path="/employer/messages" element={<Messages />} />
-                <Route path="/employer/analytics" element={<EmployerAnalytics />} />
-                <Route path="/employer/applicants" element={<EmployerApplicants />} />
-                <Route path="/employer/job-performance" element={<JobPerformance />} />
-                <Route path="/interview-scheduler" element={<EmployerCalendar />} />
+                <Route path="/quick-job-post" element={<QuickJobPost />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
+                
+                {/* Include all employer routes */}
+                {EmployerRoutes}
+                
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
