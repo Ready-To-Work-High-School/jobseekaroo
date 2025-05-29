@@ -144,7 +144,7 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5" />
           Quick Job Posting QR Code
-          <Shield className="h-4 w-4 text-green-600" title="Secure QR Code" />
+          <Shield className="h-4 w-4 text-green-600" />
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">
@@ -154,7 +154,6 @@ const QRJobCreation: React.FC<QRJobCreationProps> = ({
             value={qrValue}
             size={size}
             level="H"
-            includeMargin={true}
           />
         </div>
         
