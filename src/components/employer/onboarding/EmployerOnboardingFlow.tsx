@@ -79,9 +79,9 @@ const EmployerOnboardingFlow: React.FC = () => {
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <CardTitle className="text-2xl text-blue-900">Employer Onboarding</CardTitle>
+              <CardTitle className="text-2xl text-blue-900">JS4HS Employer Onboarding</CardTitle>
               <CardDescription className="text-blue-700">
-                Let's get your company set up to find great high school talent
+                Set up your comprehensive onboarding system including pre-boarding, verification, and first 5 days acclimation
               </CardDescription>
             </div>
             <Badge variant="secondary" className="bg-blue-100 text-blue-800">
@@ -92,7 +92,7 @@ const EmployerOnboardingFlow: React.FC = () => {
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm text-blue-700">
-              <span>Progress</span>
+              <span>Onboarding Setup Progress</span>
               <span>{Math.round(progressPercentage)}% Complete</span>
             </div>
             <Progress value={progressPercentage} className="h-2" />

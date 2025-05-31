@@ -14,23 +14,23 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onComplete }) => {
   const benefits = [
     {
       icon: Users,
-      title: "Access High School Talent",
-      description: "Connect with motivated students ready to start their careers"
+      title: "Pre-Boarding Excellence",
+      description: "Streamlined pre-boarding process to engage new hires before day one"
     },
     {
       icon: Shield,
-      title: "Safe & Verified Platform",
-      description: "All students are school-verified and background checked"
+      title: "Employee Verification",
+      description: "Comprehensive verification system with automated background checks"
     },
     {
       icon: Zap,
-      title: "Quick Setup Process",
-      description: "Get your company profile ready in just a few minutes"
+      title: "First 5 Days Framework",
+      description: "Structured acclimation program to integrate new hires into your culture"
     },
     {
       icon: Building2,
-      title: "Professional Tools",
-      description: "Access our suite of hiring and management tools"
+      title: "Custom Onboarding Tools",
+      description: "Tailored onboarding workflows designed for your company's needs"
     }
   ];
 
@@ -48,18 +48,18 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onComplete }) => {
           </motion.div>
           
           <CardTitle className="text-3xl text-green-900 mb-2">
-            Welcome to Job Seekers 4 High School!
+            Welcome to JS4HS Employer Onboarding!
           </CardTitle>
           <CardDescription className="text-lg text-green-700">
-            You're about to join a platform that connects forward-thinking employers 
-            with the next generation of talent.
+            Transform your hiring process with our comprehensive onboarding platform designed 
+            to seamlessly guide new hires from pre-boarding through their first 5 days.
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
           <div className="text-center">
             <Badge variant="secondary" className="bg-green-100 text-green-800 px-4 py-2">
-              🎉 Trusted by 500+ Employers
+              🚀 Complete Onboarding Solution
             </Badge>
           </div>
 
@@ -92,10 +92,11 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onComplete }) => {
             <div className="flex items-start space-x-3">
               <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-blue-900">What to Expect</h4>
+                <h4 className="font-semibold text-blue-900">Your Complete Onboarding Journey</h4>
                 <p className="text-sm text-blue-700 mt-1">
-                  This onboarding process will take about 10-15 minutes. We'll help you set up 
-                  your company profile, complete verification, and post your first job listing.
+                  Our platform provides customizable onboarding workflows that handle everything from 
+                  pre-boarding engagement to employee verification and a structured first 5 days program 
+                  that helps new hires quickly acclimate to your company culture.
                 </p>
               </div>
             </div>
@@ -107,7 +108,7 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onComplete }) => {
               onClick={() => onComplete({})}
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3"
             >
-              Let's Get Started!
+              Start Building Your Onboarding Experience!
             </Button>
           </div>
         </CardContent>
