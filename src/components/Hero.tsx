@@ -49,10 +49,10 @@ const Hero = () => {
             className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3 relative"
           >
             <span className="text-2xl sm:text-3xl md:text-4xl block text-blue-600 mb-2">
-              Start Your Career Journey
+              Job Seekers 4 High School
             </span>
             <span className="bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">
-              Professional Onboarding Made Simple.
+              Your First Job, Made Simple.
             </span>
             <HeartIcon />
           </motion.h1>
@@ -63,7 +63,7 @@ const Hero = () => {
             transition={{ duration: 0.5, delay: 0.4 }} 
             className="mb-8 text-gray-600 font-semibold text-lg"
           >
-            Complete your onboarding process and connect with verified opportunities designed for high school students.
+            A safe, mobile-first platform connecting certified high school students with local businesses.
           </motion.p>
 
           <FeatureCards />
