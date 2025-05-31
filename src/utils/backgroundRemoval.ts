@@ -50,9 +50,19 @@ export const removeBackground = async (imageElement: HTMLImageElement): Promise<
     const { pipeline } = await loadTransformers();
     
     console.log('Loading AI model...');
-    const segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
-      device: 'cpu', // Use CPU instead of WebGPU for better compatibility
-    });
+    
+    // Try webgpu first, fallback to wasm if needed
+    let segmenter;
+    try {
+      segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
+        device: 'webgpu',
+      });
+    } catch (webgpuError) {
+      console.log('WebGPU not available, falling back to WASM...');
+      segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
+        device: 'wasm',
+      });
+    }
     
     // Convert HTMLImageElement to canvas
     const canvas = document.createElement('canvas');
