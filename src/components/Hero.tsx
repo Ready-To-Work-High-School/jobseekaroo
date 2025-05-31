@@ -33,10 +33,10 @@ const Hero = () => {
           >
             <div className="relative">
               <motion.div 
-                className="absolute -inset-4 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 opacity-30 blur-lg"
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 opacity-15 blur-lg"
                 animate={{
                   scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3],
+                  opacity: [0.15, 0.25, 0.15],
                   transition: { duration: 4, repeat: Infinity, repeatType: "mirror" }
                 }}
               />

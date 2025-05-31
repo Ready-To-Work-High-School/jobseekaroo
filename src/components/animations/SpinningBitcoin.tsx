@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { Bitcoin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +25,7 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
   // Handle the animation completion
   useEffect(() => {
     if (unlocked && onAnimationComplete) {
-      console.log('Bitcoin animation completed, calling onAnimationComplete callback');
+      console.log('Logo animation completed, calling onAnimationComplete callback');
       const timer = setTimeout(() => {
         onAnimationComplete();
       }, 500);
@@ -37,7 +36,7 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
 
   return (
     <div className={cn("relative flex items-center justify-center", className)}>
-      {/* The spinning bitcoin */}
+      {/* The spinning JS4HS logo */}
       <motion.div
         initial={{ rotateY: 0, scale: 1 }}
         animate={{ 
@@ -51,12 +50,23 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
           repeat: 2,
         }}
         onAnimationComplete={() => {
-          console.log('Bitcoin spin animation completed');
+          console.log('Logo spin animation completed');
           setUnlocked(true);
         }}
-        className={cn("relative z-10", color)}
+        className="relative z-10"
       >
-        <Bitcoin size={size} strokeWidth={1.5} className="drop-shadow-lg" />
+        <img 
+          src="/lovable-uploads/87366ebd-ac00-4f9c-b742-0a3330f31904.png" 
+          alt="Job Seekers 4 High Schools Logo" 
+          width={size}
+          height={size}
+          className="object-contain drop-shadow-lg"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.onerror = null;
+            target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='7'%3E%3C/circle%3E%3Cpolyline points='8.21 13.89 7 23 12 20 17 23 15.79 13.88'%3E%3C/polyline%3E%3C/svg%3E";
+          }}
+        />
       </motion.div>
       
       {/* The lock/unlock icon */}
