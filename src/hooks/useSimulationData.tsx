@@ -3,14 +3,12 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getJobSimulations } from '@/lib/supabase/simulations';
 import { JobSimulation } from '@/types/jobSimulation';
-import { supabase } from '@/integrations/supabase/client';
-
-// Mock data removed since we now have real data in the database
+import { jobSimulations } from '@/data/jobSimulations';
 
 export const useSimulationData = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Fetch all job simulations with more detailed logging
+  // Fetch all job simulations with fallback to mock data
   const { data: fetchedSimulations, isLoading, error } = useQuery({
     queryKey: ['jobSimulations'],
     queryFn: async () => {
@@ -18,10 +16,18 @@ export const useSimulationData = () => {
         console.log('Attempting to fetch job simulations from database');
         const simulations = await getJobSimulations();
         console.log('Fetched simulations:', simulations);
+        
+        // If no simulations in database, return mock data
+        if (!simulations || simulations.length === 0) {
+          console.log('No simulations in database, using mock data');
+          return jobSimulations;
+        }
+        
         return simulations;
       } catch (err) {
         console.error('Error fetching simulations:', err);
-        return [];
+        // Fallback to mock data on error
+        return jobSimulations;
       }
     }
   });
@@ -32,7 +38,7 @@ export const useSimulationData = () => {
     : ['all'];
 
   return { 
-    simulations: fetchedSimulations || [], 
+    simulations: fetchedSimulations || jobSimulations, 
     isLoading, 
     selectedCategory, 
     setSelectedCategory,

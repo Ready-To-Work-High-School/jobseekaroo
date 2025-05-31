@@ -15,101 +15,7 @@ import SimulationProgressBar from '@/components/job-simulations/SimulationProgre
 import SimulationOverview from '@/components/job-simulations/SimulationOverview';
 import SimulationTasks from '@/components/job-simulations/SimulationTasks';
 import SimulationGuideSidebar from '@/components/job-simulations/SimulationGuideSidebar';
-
-const mockSimulationData = {
-  "sim-001": {
-    id: "sim-001",
-    title: "Customer Service Representative",
-    description: "Experience what it's like to work in a customer service role, handling inquiries and resolving issues.",
-    category: "retail",
-    difficulty: "Beginner",
-    duration: "45 minutes",
-    requirements: ["Communication skills", "Problem solving"],
-    skills_gained: ["Customer service", "Conflict resolution", "Time management"],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  "sim-002": {
-    id: "sim-002",
-    title: "Administrative Assistant",
-    description: "Learn essential office skills through realistic scenarios in an office environment.",
-    category: "office",
-    difficulty: "Beginner",
-    duration: "60 minutes",
-    requirements: ["Basic computer skills", "Organization"],
-    skills_gained: ["Email management", "Scheduling", "Document processing"],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  "sim-003": {
-    id: "sim-003",
-    title: "Retail Sales Associate",
-    description: "Practice helping customers find products, processing transactions, and managing inventory.",
-    category: "retail",
-    difficulty: "Beginner",
-    duration: "40 minutes",
-    requirements: ["Communication skills", "Basic math"],
-    skills_gained: ["Sales techniques", "Point of sale systems", "Inventory management"],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  "sim-004": {
-    id: "sim-004",
-    title: "Healthcare Assistant",
-    description: "Experience patient interaction scenarios and basic healthcare procedures.",
-    category: "healthcare",
-    difficulty: "Intermediate",
-    duration: "75 minutes",
-    requirements: ["Interest in healthcare", "Attention to detail"],
-    skills_gained: ["Patient care", "Medical terminology", "Record keeping"],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  }
-};
-
-const mockTasks = {
-  "sim-001": [
-    {
-      id: "task-001",
-      simulation_id: "sim-001",
-      title: "Customer Greeting",
-      description: "Learn how to properly greet customers and make them feel welcome.",
-      order_number: 1,
-      content: {
-        type: "text",
-        value: "In this task, you'll learn the importance of a proper greeting. First impressions matter! A warm, friendly greeting sets the tone for the entire customer interaction."
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: "task-002",
-      simulation_id: "sim-001",
-      title: "Handling Inquiries",
-      description: "Practice responding to common customer questions and requests.",
-      order_number: 2,
-      content: {
-        type: "text",
-        value: "Customers will have many questions about products, services, and policies. In this module, you'll learn techniques for answering questions efficiently and accurately."
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: "task-003",
-      simulation_id: "sim-001",
-      title: "Resolving Complaints",
-      description: "Learn strategies for de-escalating situations and resolving customer issues.",
-      order_number: 3,
-      content: {
-        type: "text",
-        value: "When customers are unhappy, your response can turn a negative experience into a positive one. This module covers the LAST method: Listen, Apologize, Solve, and Thank."
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  ]
-};
+import { jobSimulations, simulationTasks } from '@/data/jobSimulations';
 
 const SimulationDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -123,31 +29,62 @@ const SimulationDetail = () => {
 
   const { data: simulation, isLoading: isLoadingSimulation } = useQuery({
     queryKey: ['simulation', id],
-    queryFn: () => id ? getJobSimulation(id) : Promise.reject('No simulation ID'),
-    meta: {
-      onError: (error: any) => {
+    queryFn: async () => {
+      if (!id) return null;
+      
+      try {
+        const dbSimulation = await getJobSimulation(id);
+        if (dbSimulation) return dbSimulation;
+        
+        // Fallback to mock data
+        const mockSimulation = jobSimulations.find(sim => sim.id === id);
+        if (mockSimulation) {
+          setUseMockData(true);
+          return mockSimulation;
+        }
+        
+        return null;
+      } catch (error) {
         console.error("Error fetching simulation:", error);
-        setUseMockData(true);
+        // Try mock data on error
+        const mockSimulation = jobSimulations.find(sim => sim.id === id);
+        if (mockSimulation) {
+          setUseMockData(true);
+          return mockSimulation;
+        }
+        return null;
       }
     }
   });
 
   const { data: tasks, isLoading: isLoadingTasks } = useQuery({
     queryKey: ['simulationTasks', id],
-    queryFn: () => id ? getSimulationTasks(id) : Promise.reject('No simulation ID'),
-    enabled: !!simulation || useMockData,
-    meta: {
-      onError: (error: any) => {
+    queryFn: async () => {
+      if (!id) return [];
+      
+      try {
+        if (useMockData || !simulation) {
+          // Use mock task data
+          return simulationTasks[id] || [];
+        }
+        
+        const dbTasks = await getSimulationTasks(id);
+        if (dbTasks && dbTasks.length > 0) return dbTasks;
+        
+        // Fallback to mock tasks
+        return simulationTasks[id] || [];
+      } catch (error) {
         console.error("Error fetching tasks:", error);
-        setUseMockData(true);
+        return simulationTasks[id] || [];
       }
-    }
+    },
+    enabled: !!simulation || !!id
   });
 
   const { data: userProgress, isLoading: isLoadingProgress } = useQuery({
     queryKey: ['userProgress', id, user?.id],
     queryFn: () => (id && user?.id) ? getUserSimulationProgress(user.id, id) : Promise.reject('Missing ID'),
-    enabled: !!user && !!id,
+    enabled: !!user && !!id && !useMockData,
     meta: {
       onError: (error: any) => {
         console.error("Error fetching user progress:", error);
@@ -168,20 +105,17 @@ const SimulationDetail = () => {
     }
   }, [userProgress, tasks]);
 
-  const currentSimulation = useMockData && id ? mockSimulationData[id as keyof typeof mockSimulationData] : simulation;
-  const currentTasks = useMockData && id ? mockTasks[id as keyof typeof mockTasks] || [] : tasks;
-
   const handleTaskCompletion = async () => {
     if (!user) {
       toast.error("Please sign in to track progress");
       return;
     }
     
-    if (!currentTasks || currentTasks.length === 0) return;
+    if (!tasks || tasks.length === 0) return;
     
     const nextTaskIndex = currentTaskIndex + 1;
-    const isLastTask = nextTaskIndex >= currentTasks.length;
-    const newProgress = isLastTask ? 100 : Math.round((nextTaskIndex / currentTasks.length) * 100);
+    const isLastTask = nextTaskIndex >= tasks.length;
+    const newProgress = isLastTask ? 100 : Math.round((nextTaskIndex / tasks.length) * 100);
     
     setProgress(newProgress);
     
@@ -193,10 +127,11 @@ const SimulationDetail = () => {
       setCurrentTaskIndex(nextTaskIndex);
     }
     
+    // Only update database if not using mock data
     if (!useMockData && userProgress && userProgress.id) {
       try {
         await updateSimulationProgress(userProgress.id, {
-          current_task_id: isLastTask ? undefined : currentTasks[nextTaskIndex].id,
+          current_task_id: isLastTask ? undefined : tasks[nextTaskIndex].id,
           progress_percentage: newProgress,
           completed: isLastTask
         });
@@ -207,7 +142,7 @@ const SimulationDetail = () => {
     }
   };
 
-  const isLoading = isLoadingSimulation || isLoadingTasks || (!!user && isLoadingProgress);
+  const isLoading = isLoadingSimulation || isLoadingTasks || (!!user && !useMockData && isLoadingProgress);
 
   if (isLoading) {
     return (
@@ -233,7 +168,7 @@ const SimulationDetail = () => {
     );
   }
 
-  if (!currentSimulation) {
+  if (!simulation) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-8 text-center">
@@ -252,7 +187,7 @@ const SimulationDetail = () => {
   return (
     <Layout>
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        <SimulationHeader simulation={currentSimulation} />
+        <SimulationHeader simulation={simulation} />
         
         <SimulationProgressBar progress={progress} showProgress={!!user} />
 
@@ -266,14 +201,14 @@ const SimulationDetail = () => {
               
               <TabsContent value="overview" className="space-y-6">
                 <SimulationOverview 
-                  simulation={currentSimulation} 
+                  simulation={simulation} 
                   setActiveTab={setActiveTab} 
                 />
               </TabsContent>
               
               <TabsContent value="tasks" className="space-y-6">
                 <SimulationTasks 
-                  tasks={currentTasks} 
+                  tasks={tasks} 
                   currentTaskIndex={currentTaskIndex}
                   handleTaskCompletion={handleTaskCompletion}
                   setActiveTab={setActiveTab}
@@ -284,7 +219,7 @@ const SimulationDetail = () => {
           
           <div className="lg:col-span-1">
             <SimulationGuideSidebar 
-              tasks={currentTasks} 
+              tasks={tasks} 
               currentTaskIndex={currentTaskIndex} 
             />
           </div>
