@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import AudioRecorder from '@/components/audio/AudioRecorder';
-import AudioPlayback from '@/components/audio/AudioPlayback';
+import InterviewTypeSelector from '@/components/interview/InterviewTypeSelector';
+import InterviewProgress from '@/components/interview/InterviewProgress';
+import InterviewQuestionCard from '@/components/interview/InterviewQuestionCard';
+import InterviewNavigation from '@/components/interview/InterviewNavigation';
+import InterviewTips from '@/components/interview/InterviewTips';
 
 const INTERVIEW_QUESTIONS = {
   entry: [
@@ -137,136 +139,41 @@ const MockInterview = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="md:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Interview Type</CardTitle>
-                <CardDescription>Select the type of interview to practice</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button 
-                  variant={category === 'entry' ? 'default' : 'outline'} 
-                  className="w-full justify-start"
-                  onClick={() => handleCategoryChange('entry')}
-                >
-                  Entry Level (General)
-                </Button>
-                
-                <Button 
-                  variant={category === 'retail' ? 'default' : 'outline'} 
-                  className="w-full justify-start"
-                  onClick={() => handleCategoryChange('retail')}
-                >
-                  Retail Positions
-                </Button>
-                
-                <Button 
-                  variant={category === 'food' ? 'default' : 'outline'} 
-                  className="w-full justify-start"
-                  onClick={() => handleCategoryChange('food')}
-                >
-                  Food Service
-                </Button>
-              </CardContent>
-            </Card>
+            <InterviewTypeSelector 
+              category={category}
+              onCategoryChange={handleCategoryChange}
+            />
             
             <div className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Progress</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-2">{currentQuestionIndex + 1} of {questions.length} questions</p>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div 
-                      className="bg-primary rounded-full h-2" 
-                      style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+              <InterviewProgress 
+                currentQuestionIndex={currentQuestionIndex}
+                totalQuestions={questions.length}
+              />
             </div>
           </div>
           
           <div className="md:col-span-3">
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle>
-                  Interview Question {currentQuestionIndex + 1}
-                </CardTitle>
-                <CardDescription>Respond as if you're in a real interview</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-muted p-6 rounded-lg mb-4 text-lg font-medium">
-                  {questions[currentQuestionIndex]}
-                </div>
-                
-                <div className="space-y-4">
-                  {!recordedAnswers[currentQuestionIndex] ? (
-                    <div className="flex flex-col items-center justify-center p-8 border rounded-lg">
-                      {isCurrentlyRecording ? (
-                        <div className="text-center">
-                          <div className="animate-pulse mb-4">
-                            <div className="h-12 w-12 bg-red-500 rounded-full mx-auto flex items-center justify-center">
-                              <div className="h-6 w-6 bg-white rounded-full"></div>
-                            </div>
-                          </div>
-                          <p className="text-red-500 font-medium mb-2">Recording...</p>
-                          <p className="text-sm text-muted-foreground">Speak clearly and remember to maintain good posture</p>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <p className="text-sm text-muted-foreground mb-4">Click to start recording your response</p>
-                        </div>
-                      )}
-                      <AudioRecorder 
-                        onRecordingComplete={handleRecordingComplete}
-                        isRecording={isCurrentlyRecording}
-                        onRecordingStart={handleRecordingStart}
-                        onRecordingStop={handleRecordingStop}
-                      />
-                    </div>
-                  ) : (
-                    <AudioPlayback 
-                      audioUrl={recordedAnswers[currentQuestionIndex].audioUrl}
-                      audioBlob={recordedAnswers[currentQuestionIndex].audioBlob}
-                      questionText={recordedAnswers[currentQuestionIndex].questionText}
-                    />
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <InterviewQuestionCard 
+              question={questions[currentQuestionIndex]}
+              questionIndex={currentQuestionIndex}
+              isRecording={isCurrentlyRecording}
+              recordedAnswer={recordedAnswers[currentQuestionIndex]}
+              onRecordingStart={handleRecordingStart}
+              onRecordingStop={handleRecordingStop}
+              onRecordingComplete={handleRecordingComplete}
+            />
             
-            <div className="flex justify-between">
-              <Button 
-                variant="outline" 
-                onClick={handlePrevious}
-                disabled={currentQuestionIndex === 0}
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Previous Question
-              </Button>
-              
-              <Button 
-                onClick={handleNext}
-                disabled={currentQuestionIndex === questions.length - 1 && !recordedAnswers[currentQuestionIndex]}
-              >
-                Next Question
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
+            <InterviewNavigation 
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={questions.length}
+              hasRecordedAnswer={!!recordedAnswers[currentQuestionIndex]}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+            />
           </div>
         </div>
         
-        <div className="bg-muted p-4 rounded-md mt-8">
-          <h3 className="font-medium mb-2">Interview Tips</h3>
-          <ul className="space-y-1 text-sm">
-            <li>• Answer questions using the STAR method: Situation, Task, Action, Result</li>
-            <li>• Maintain good eye contact with the interviewer</li>
-            <li>• Speak clearly and at a moderate pace</li>
-            <li>• Take a moment to think before answering difficult questions</li>
-            <li>• Prepare 2-3 questions to ask the interviewer at the end</li>
-          </ul>
-        </div>
+        <InterviewTips />
       </div>
     </Layout>
   );
