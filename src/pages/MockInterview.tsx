@@ -4,9 +4,11 @@ import Layout from '@/components/Layout';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Video, Mic, ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import AudioRecorder from '@/components/audio/AudioRecorder';
+import AudioPlayback from '@/components/audio/AudioPlayback';
 
 const INTERVIEW_QUESTIONS = {
   entry: [
@@ -36,35 +38,48 @@ const INTERVIEW_QUESTIONS = {
   ]
 };
 
+interface RecordedAnswer {
+  audioBlob: Blob;
+  audioUrl: string;
+  questionText: string;
+}
+
 const MockInterview = () => {
   const [category, setCategory] = useState<'entry' | 'retail' | 'food'>('entry');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
-  const [recordedAnswers, setRecordedAnswers] = useState<{[key: number]: boolean}>({});
+  const [recordedAnswers, setRecordedAnswers] = useState<{[key: number]: RecordedAnswer}>({});
   const { toast } = useToast();
   
   const questions = INTERVIEW_QUESTIONS[category];
   
-  const handleStartRecording = () => {
+  const handleRecordingStart = () => {
     setIsRecording(true);
     toast({
       title: "Recording started",
       description: "Answer the question as if you're in a real interview.",
     });
+  };
+
+  const handleRecordingStop = () => {
+    setIsRecording(false);
+  };
+
+  const handleRecordingComplete = (audioBlob: Blob, audioUrl: string) => {
+    const questionText = questions[currentQuestionIndex];
+    setRecordedAnswers({
+      ...recordedAnswers,
+      [currentQuestionIndex]: {
+        audioBlob,
+        audioUrl,
+        questionText
+      }
+    });
     
-    // In a real app, this would start recording
-    setTimeout(() => {
-      setIsRecording(false);
-      setRecordedAnswers({
-        ...recordedAnswers,
-        [currentQuestionIndex]: true
-      });
-      
-      toast({
-        title: "Recording complete",
-        description: "Your answer has been saved.",
-      });
-    }, 3000); // Simulate a 3-second recording
+    toast({
+      title: "Recording complete",
+      description: "Your answer has been saved. You can play it back or download it.",
+    });
   };
   
   const handleNext = () => {
@@ -82,6 +97,12 @@ const MockInterview = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
+  };
+
+  const handleCategoryChange = (newCategory: 'entry' | 'retail' | 'food') => {
+    setCategory(newCategory);
+    setCurrentQuestionIndex(0);
+    setRecordedAnswers({});
   };
   
   return (
@@ -117,11 +138,7 @@ const MockInterview = () => {
                 <Button 
                   variant={category === 'entry' ? 'default' : 'outline'} 
                   className="w-full justify-start"
-                  onClick={() => {
-                    setCategory('entry');
-                    setCurrentQuestionIndex(0);
-                    setRecordedAnswers({});
-                  }}
+                  onClick={() => handleCategoryChange('entry')}
                 >
                   Entry Level (General)
                 </Button>
@@ -129,11 +146,7 @@ const MockInterview = () => {
                 <Button 
                   variant={category === 'retail' ? 'default' : 'outline'} 
                   className="w-full justify-start"
-                  onClick={() => {
-                    setCategory('retail');
-                    setCurrentQuestionIndex(0);
-                    setRecordedAnswers({});
-                  }}
+                  onClick={() => handleCategoryChange('retail')}
                 >
                   Retail Positions
                 </Button>
@@ -141,11 +154,7 @@ const MockInterview = () => {
                 <Button 
                   variant={category === 'food' ? 'default' : 'outline'} 
                   className="w-full justify-start"
-                  onClick={() => {
-                    setCategory('food');
-                    setCurrentQuestionIndex(0);
-                    setRecordedAnswers({});
-                  }}
+                  onClick={() => handleCategoryChange('food')}
                 >
                   Food Service
                 </Button>
@@ -173,8 +182,7 @@ const MockInterview = () => {
           <div className="md:col-span-3">
             <Card className="mb-6">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Video className="h-5 w-5 text-primary" />
+                <CardTitle>
                   Interview Question {currentQuestionIndex + 1}
                 </CardTitle>
                 <CardDescription>Respond as if you're in a real interview</CardDescription>
@@ -184,29 +192,37 @@ const MockInterview = () => {
                   {questions[currentQuestionIndex]}
                 </div>
                 
-                <div className="flex flex-col items-center justify-center p-8 border rounded-lg">
-                  {isRecording ? (
-                    <div className="text-center">
-                      <div className="animate-pulse mb-4">
-                        <Mic className="h-12 w-12 text-red-500 mx-auto" />
-                      </div>
-                      <p className="text-red-500 font-medium mb-2">Recording...</p>
-                      <p className="text-sm text-muted-foreground">Speak clearly and remember to maintain good posture</p>
-                    </div>
-                  ) : recordedAnswers[currentQuestionIndex] ? (
-                    <div className="text-center">
-                      <Video className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                      <p className="text-green-500 font-medium mb-2">Response Recorded</p>
-                      <Button variant="outline" onClick={handleStartRecording}>Record Again</Button>
+                <div className="space-y-4">
+                  {!recordedAnswers[currentQuestionIndex] ? (
+                    <div className="flex flex-col items-center justify-center p-8 border rounded-lg">
+                      {isRecording ? (
+                        <div className="text-center">
+                          <div className="animate-pulse mb-4">
+                            <div className="h-12 w-12 bg-red-500 rounded-full mx-auto flex items-center justify-center">
+                              <div className="h-6 w-6 bg-white rounded-full"></div>
+                            </div>
+                          </div>
+                          <p className="text-red-500 font-medium mb-2">Recording...</p>
+                          <p className="text-sm text-muted-foreground">Speak clearly and remember to maintain good posture</p>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <AudioRecorder 
+                            onRecordingComplete={handleRecordingComplete}
+                            isRecording={isRecording}
+                            onRecordingStart={handleRecordingStart}
+                            onRecordingStop={handleRecordingStop}
+                          />
+                          <p className="text-sm text-muted-foreground mt-4">Click to start recording your response</p>
+                        </div>
+                      )}
                     </div>
                   ) : (
-                    <div className="text-center">
-                      <Button onClick={handleStartRecording} className="gap-2 mb-4">
-                        <Mic className="h-4 w-4" />
-                        Record Your Answer
-                      </Button>
-                      <p className="text-sm text-muted-foreground">Click to start recording your response</p>
-                    </div>
+                    <AudioPlayback 
+                      audioUrl={recordedAnswers[currentQuestionIndex].audioUrl}
+                      audioBlob={recordedAnswers[currentQuestionIndex].audioBlob}
+                      questionText={recordedAnswers[currentQuestionIndex].questionText}
+                    />
                   )}
                 </div>
               </CardContent>
@@ -224,7 +240,7 @@ const MockInterview = () => {
               
               <Button 
                 onClick={handleNext}
-                disabled={currentQuestionIndex === questions.length - 1 || !recordedAnswers[currentQuestionIndex]}
+                disabled={currentQuestionIndex === questions.length - 1 && !recordedAnswers[currentQuestionIndex]}
               >
                 Next Question
                 <ArrowRight className="h-4 w-4 ml-2" />
