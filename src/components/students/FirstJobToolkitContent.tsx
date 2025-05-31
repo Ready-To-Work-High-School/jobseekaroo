@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 const FirstJobToolkitContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
-  const totalSteps = 6; // Added one more step for badges
+  const totalSteps = 6;
   const { toast } = useToast();
   
   const stepComponents = [
@@ -25,7 +25,7 @@ const FirstJobToolkitContent = () => {
     <StepThree key="step-3" />,
     <StepFour key="step-4" />,
     <StepFive key="step-5" />,
-    <BadgesStep key="step-6" /> // New badges step
+    <BadgesStep key="step-6" />
   ];
   
   const stepTitles = [
@@ -34,7 +34,7 @@ const FirstJobToolkitContent = () => {
     "Job Search Strategy",
     "Interview Preparation",
     "First Job Success",
-    "Career Badges" // New step title
+    "Career Badges"
   ];
   
   const handlePrevious = () => {
@@ -47,7 +47,6 @@ const FirstJobToolkitContent = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
       
-      // If advancing to the final step, show confetti and toast
       if (currentStep === totalSteps - 1) {
         setShowConfetti(true);
         toast({
@@ -55,7 +54,6 @@ const FirstJobToolkitContent = () => {
           description: "You've completed the First Job Toolkit!",
         });
         
-        // Hide confetti after 5 seconds
         setTimeout(() => {
           setShowConfetti(false);
         }, 5000);
@@ -63,29 +61,22 @@ const FirstJobToolkitContent = () => {
     }
   };
   
-  // Clean up any timers when component unmounts
-  useEffect(() => {
-    // No need to return a cleanup function if we don't set any timeouts in the effect
-    // If we need one in the future, we'll need to store the timer ID
-    return () => {
-      // Removed the empty clearTimeout() call that was causing the error
-    };
-  }, []);
-  
   return (
     <div className="space-y-6 relative">
       {showConfetti && <ConfettiAnimation />}
       
       <div className="flex flex-col items-center text-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gold-400 via-lavender-500 to-gold-500 bg-clip-text text-transparent">Your First Job in {totalSteps} Steps</h1>
+        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+          Your First Job in {totalSteps} Steps
+        </h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
           Our guided toolkit to help you land and succeed in your first job. Complete each step to build your job readiness!
         </p>
       </div>
       
-      <Card className="shadow-md border-t-4 border-t-gold-400">
-        <CardHeader className="bg-gradient-to-r from-lavender-500/5 to-gold-400/5">
-          <CardTitle className="text-gold-lavender-gradient">Step {currentStep}: {stepTitles[currentStep - 1]}</CardTitle>
+      <Card className="shadow-md border-t-4 border-t-blue-400">
+        <CardHeader className="bg-gradient-to-r from-blue-500/5 to-purple-400/5">
+          <CardTitle className="text-blue-600">Step {currentStep}: {stepTitles[currentStep - 1]}</CardTitle>
           <CardDescription>
             {currentStep === 1 && "Create a complete profile to showcase your skills and experience."}
             {currentStep === 2 && "Build a professional resume that stands out to employers."}
@@ -108,7 +99,7 @@ const FirstJobToolkitContent = () => {
             variant="outline" 
             onClick={handlePrevious} 
             disabled={currentStep === 1}
-            className="flex items-center gap-2 border-gold-400/30 hover:bg-gold-400/10"
+            className="flex items-center gap-2 border-blue-400/30 hover:bg-blue-400/10"
           >
             <ChevronLeft className="h-4 w-4" /> Previous
           </Button>
@@ -117,7 +108,7 @@ const FirstJobToolkitContent = () => {
             variant="default" 
             onClick={handleNext} 
             disabled={currentStep === totalSteps}
-            className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-lavender-500 hover:from-gold-600 hover:to-lavender-600"
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
           >
             Next <ChevronRight className="h-4 w-4" />
           </Button>
