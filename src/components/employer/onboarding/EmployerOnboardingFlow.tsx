@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, ArrowRight, ArrowLeft, Building2, Users, Target, Zap } from 'lucide-react';
+import { CheckCircle, ArrowRight, ArrowLeft, Building2, Users, Target, Zap, Crown, Star } from 'lucide-react';
 import { Stepper, Step } from '@/components/ui/stepper';
 import WelcomeStep from './steps/WelcomeStep';
 import CompanyInfoStep from './steps/CompanyInfoStep';
@@ -74,12 +74,33 @@ const EmployerOnboardingFlow: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      {/* Premium Service Banner */}
+      <Card className="border-2 border-amber-200 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center space-x-3">
+            <div className="flex items-center space-x-2">
+              <Crown className="h-6 w-6 text-amber-600" />
+              <span className="text-lg font-semibold text-amber-900">Premium Onboarding Service</span>
+              <Star className="h-5 w-5 text-amber-500" />
+            </div>
+          </div>
+          <p className="text-center text-amber-800 mt-2 text-sm">
+            Comprehensive onboarding solution with pre-boarding, verification, and 5-day acclimation program
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Progress Header */}
       <Card className="border-2 border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <CardTitle className="text-2xl text-blue-900">JS4HS Employer Onboarding</CardTitle>
+              <CardTitle className="text-2xl text-blue-900 flex items-center">
+                JS4HS Employer Onboarding
+                <Badge variant="secondary" className="ml-3 bg-amber-100 text-amber-800 border-amber-300">
+                  Premium
+                </Badge>
+              </CardTitle>
               <CardDescription className="text-blue-700">
                 Set up your comprehensive onboarding system including pre-boarding, verification, and first 5 days acclimation
               </CardDescription>
@@ -92,7 +113,7 @@ const EmployerOnboardingFlow: React.FC = () => {
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm text-blue-700">
-              <span>Onboarding Setup Progress</span>
+              <span>Premium Onboarding Setup Progress</span>
               <span>{Math.round(progressPercentage)}% Complete</span>
             </div>
             <Progress value={progressPercentage} className="h-2" />
@@ -148,7 +169,7 @@ const EmployerOnboardingFlow: React.FC = () => {
               </Button>
               <Button
                 onClick={handleNext}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
               >
                 Next
                 <ArrowRight className="h-4 w-4" />
