@@ -1,10 +1,5 @@
-import { pipeline, env } from '@huggingface/transformers';
 
-// Configure transformers.js to always download models
-env.allowLocalModels = false;
-env.useBrowserCache = false;
-
-const MAX_IMAGE_DIMENSION = 1024;
+const MAX_IMAGE_DIMENSION = 512; // Reduced for better performance
 
 function resizeImageIfNeeded(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, image: HTMLImageElement) {
   let width = image.naturalWidth;
@@ -31,11 +26,32 @@ function resizeImageIfNeeded(canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
   return false;
 }
 
+// Dynamic import function to load transformers only when needed
+async function loadTransformers() {
+  try {
+    const { pipeline, env } = await import('@huggingface/transformers');
+    
+    // Configure transformers.js to always download models
+    env.allowLocalModels = false;
+    env.useBrowserCache = true; // Enable caching for better performance
+    
+    return { pipeline, env };
+  } catch (error) {
+    console.error('Failed to load transformers:', error);
+    throw new Error('Machine learning library could not be loaded. Please try again later.');
+  }
+}
+
 export const removeBackground = async (imageElement: HTMLImageElement): Promise<Blob> => {
   try {
     console.log('Starting background removal process...');
+    
+    // Dynamically load transformers
+    const { pipeline } = await loadTransformers();
+    
+    console.log('Loading AI model...');
     const segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
-      device: 'webgpu',
+      device: 'cpu', // Use CPU instead of WebGPU for better compatibility
     });
     
     // Convert HTMLImageElement to canvas
@@ -53,13 +69,13 @@ export const removeBackground = async (imageElement: HTMLImageElement): Promise<
     console.log('Image converted to base64');
     
     // Process the image with the segmentation model
-    console.log('Processing with segmentation model...');
+    console.log('Processing with AI model...');
     const result = await segmenter(imageData);
     
-    console.log('Segmentation result:', result);
+    console.log('AI processing complete');
     
     if (!result || !Array.isArray(result) || result.length === 0 || !result[0].mask) {
-      throw new Error('Invalid segmentation result');
+      throw new Error('Invalid AI processing result');
     }
     
     // Create a new canvas for the masked image
@@ -89,17 +105,17 @@ export const removeBackground = async (imageElement: HTMLImageElement): Promise<
     }
     
     outputCtx.putImageData(outputImageData, 0, 0);
-    console.log('Mask applied successfully');
+    console.log('Background removal complete');
     
     // Convert canvas to blob
     return new Promise((resolve, reject) => {
       outputCanvas.toBlob(
         (blob) => {
           if (blob) {
-            console.log('Successfully created final blob');
+            console.log('Successfully created processed image');
             resolve(blob);
           } else {
-            reject(new Error('Failed to create blob'));
+            reject(new Error('Failed to create processed image'));
           }
         },
         'image/png',
