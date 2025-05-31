@@ -19,7 +19,7 @@ const EmployerOnboarding: React.FC = () => {
           />
         </div>
         
-        <h1 className="text-3xl font-bold mb-6 text-center">Employer Registration</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Employer Onboarding</h1>
         <EmployerOnboardingFlow />
       </div>
     </Layout>
