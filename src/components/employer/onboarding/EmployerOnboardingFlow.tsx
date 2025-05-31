@@ -1,289 +1,367 @@
-
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Clipboard, Pen, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 
-const EmployerOnboardingFlow = () => {
-  const [activeTab, setActiveTab] = useState("welcome");
-  const navigate = useNavigate();
-
-  // Animation variants for tab content
-  const contentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
+const EmployerOnboardingFlow: React.FC = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({
+    companyName: '',
+    industry: '',
+    companySize: '',
+    contactPerson: '',
+    email: '',
+    phone: '',
+    website: '',
+    description: '',
+    logo: null as File | null
+  });
 
   const steps = [
-    { id: "welcome", label: "Welcome" },
-    { id: "company", label: "Company Info" },
-    { id: "profile", label: "Profile" },
-    { id: "plans", label: "Choose Plan" },
-    { id: "complete", label: "Complete" }
+    { title: 'Welcome', subtitle: 'Get started with JS4HS' },
+    { title: 'Company Info', subtitle: 'Tell us about your business' },
+    { title: 'Profile', subtitle: 'Complete your profile' },
+    { title: 'Choose Plan', subtitle: 'Select your subscription' },
+    { title: 'Complete', subtitle: 'You\'re all set!' }
   ];
 
-  const goToNextStep = () => {
-    const currentIndex = steps.findIndex(step => step.id === activeTab);
-    if (currentIndex < steps.length - 1) {
-      setActiveTab(steps[currentIndex + 1].id);
+  const handleInputChange = (field: string, value: string | File | null) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
     }
   };
 
-  const goToPrevStep = () => {
-    const currentIndex = steps.findIndex(step => step.id === activeTab);
-    if (currentIndex > 0) {
-      setActiveTab(steps[currentIndex - 1].id);
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
     }
   };
 
-  const finishOnboarding = () => {
-    navigate('/employer-dashboard');
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 0:
+        return (
+          <div className="text-center space-y-6">
+            {/* Professional Business Icons */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }} 
+              animate={{ y: 0, opacity: 1 }} 
+              transition={{ duration: 0.5 }} 
+              className="flex justify-center items-center gap-4 mb-8"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full shadow-lg">
+                <Clipboard className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex items-center justify-center w-12 h-12 bg-amber-500 rounded-full shadow-lg">
+                <Pen className="h-6 w-6 text-white" />
+              </div>
+            </motion.div>
+
+            <h2 className="text-3xl font-bold text-gray-900">Welcome to JS4HS</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We're excited to help you connect with talented high school students. 
+              Let's set up your employer profile in just a few steps.
+            </p>
+            
+            <div className="bg-blue-50 rounded-lg p-6 max-w-md mx-auto">
+              <h3 className="font-semibold text-gray-900 mb-3">What you'll need:</h3>
+              <div className="space-y-2 text-left">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-gray-700">Company information</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-gray-700">Job positions you're hiring for</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-gray-700">Logo image (optional)</span>
+                </div>
+              </div>
+            </div>
+            
+            <Button onClick={nextStep} className="mt-6">
+              Get Started <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        );
+
+      case 1:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Company Information</h2>
+              <p className="text-gray-600">Tell us about your business</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="companyName">Company Name *</Label>
+                <Input
+                  id="companyName"
+                  value={formData.companyName}
+                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  placeholder="Enter your company name"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="industry">Industry *</Label>
+                <Select onValueChange={(value) => handleInputChange('industry', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select industry" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="retail">Retail</SelectItem>
+                    <SelectItem value="healthcare">Healthcare</SelectItem>
+                    <SelectItem value="technology">Technology</SelectItem>
+                    <SelectItem value="hospitality">Hospitality</SelectItem>
+                    <SelectItem value="education">Education</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="companySize">Company Size</Label>
+                <Select onValueChange={(value) => handleInputChange('companySize', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select company size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1-10">1-10 employees</SelectItem>
+                    <SelectItem value="11-50">11-50 employees</SelectItem>
+                    <SelectItem value="51-200">51-200 employees</SelectItem>
+                    <SelectItem value="201-500">201-500 employees</SelectItem>
+                    <SelectItem value="500+">500+ employees</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="website">Company Website</Label>
+                <Input
+                  id="website"
+                  value={formData.website}
+                  onChange={(e) => handleInputChange('website', e.target.value)}
+                  placeholder="https://yourcompany.com"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="description">Company Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Briefly describe your company and what you do..."
+                rows={4}
+              />
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Contact Information</h2>
+              <p className="text-gray-600">Who should students contact?</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="contactPerson">Contact Person *</Label>
+                <Input
+                  id="contactPerson"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                  placeholder="Enter contact person's name"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="Enter contact email"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="Enter contact phone number"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="logo">Company Logo</Label>
+                <Input
+                  id="logo"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleInputChange('logo', e.target.files[0]);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Choose Your Plan</h2>
+              <p className="text-gray-600">Select a subscription plan</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
+                <CardHeader className="space-y-1">
+                  <CardTitle className="text-xl font-bold">Basic</CardTitle>
+                  <CardDescription>Free</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-gray-700">
+                    Perfect for getting started.
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>Limited job postings</li>
+                    <li>Basic support</li>
+                  </ul>
+                </CardContent>
+              </Card>
+              
+              <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border-2 border-blue-500">
+                <CardHeader className="space-y-1">
+                  <CardTitle className="text-xl font-bold">Pro</CardTitle>
+                  <CardDescription>$99/month</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-gray-700">
+                    Unlock more features and reach.
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>Unlimited job postings</li>
+                    <li>Priority support</li>
+                    <li>Featured employer badge</li>
+                  </ul>
+                </CardContent>
+              </Card>
+              
+              <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
+                <CardHeader className="space-y-1">
+                  <CardTitle className="text-xl font-bold">Enterprise</CardTitle>
+                  <CardDescription>Contact us</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-gray-700">
+                    Custom solutions for large teams.
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>Dedicated account manager</li>
+                    <li>Custom integrations</li>
+                    <li>Advanced analytics</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="text-center space-y-6">
+            <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
+            <h2 className="text-3xl font-bold text-gray-900">You're All Set!</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Your employer profile is now complete. You can start posting jobs and connecting with students.
+            </p>
+            
+            <Button>
+              Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        );
+      
+      default:
+        return <div>Step content</div>;
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="border-2 border-amber-200 shadow-md">
-        <CardHeader className="bg-gradient-to-r from-amber-50 to-amber-100">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500" />
-            <CardTitle>Employer Onboarding</CardTitle>
-          </div>
-          <CardDescription>
-            Complete your profile to start connecting with qualified high school talent
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-5 mb-8">
-              {steps.map((step) => (
-                <TabsTrigger 
-                  key={step.id} 
-                  value={step.id}
-                  disabled={step.id === "complete" && activeTab !== "complete"}
-                >
-                  {step.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+      {/* Progress Steps */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          {steps.map((step, index) => (
+            <div key={index} className="flex flex-col items-center flex-1">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                index <= currentStep 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-200 text-gray-500'
+              }`}>
+                {index < currentStep ? (
+                  <CheckCircle className="h-5 w-5" />
+                ) : (
+                  index + 1
+                )}
+              </div>
+              <div className="mt-2 text-center">
+                <div className="text-sm font-medium text-gray-900">{step.title}</div>
+                <div className="text-xs text-gray-500">{step.subtitle}</div>
+              </div>
+              {index < steps.length - 1 && (
+                <div className={`h-1 w-full mt-4 ${
+                  index < currentStep ? 'bg-blue-600' : 'bg-gray-200'
+                }`} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
-            <TabsContent value="welcome">
-              <motion.div
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <div className="text-center py-8">
-                  <div className="mx-auto bg-amber-100 rounded-full w-20 h-20 flex items-center justify-center mb-6">
-                    <Sparkles className="h-10 w-10 text-amber-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3">Welcome to JS4HS</h3>
-                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                    We're excited to help you connect with talented high school students. 
-                    Let's set up your employer profile in just a few steps.
-                  </p>
-                  <div className="max-w-md mx-auto bg-blue-50 border border-blue-100 rounded-md p-4 mb-8">
-                    <h4 className="font-medium mb-2">What you'll need:</h4>
-                    <ul className="space-y-2">
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="text-sm">Company information</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="text-sm">Job positions you're hiring for</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="text-sm">Logo image (optional)</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <Button onClick={goToNextStep} className="gap-2">
-                    Get Started <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="company">
-              <motion.div
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <h3 className="text-xl font-bold mb-4">Company Information</h3>
-                <p className="text-muted-foreground mb-6">
-                  Tell us about your company so students can learn more about you.
-                </p>
-                
-                {/* Company information form would go here */}
-                <div className="bg-gray-50 p-6 rounded-md border border-gray-200 text-center mb-6">
-                  <p className="text-muted-foreground">Company information form fields would be here</p>
-                </div>
-                
-                <div className="flex justify-between">
-                  <Button variant="outline" onClick={goToPrevStep} className="gap-2">
-                    <ArrowLeft className="h-4 w-4" /> Back
-                  </Button>
-                  <Button onClick={goToNextStep} className="gap-2">
-                    Continue <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="profile">
-              <motion.div
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <h3 className="text-xl font-bold mb-4">Your Profile</h3>
-                <p className="text-muted-foreground mb-6">
-                  Tell us about yourself as the company representative.
-                </p>
-                
-                {/* Profile form would go here */}
-                <div className="bg-gray-50 p-6 rounded-md border border-gray-200 text-center mb-6">
-                  <p className="text-muted-foreground">Profile information form fields would be here</p>
-                </div>
-                
-                <div className="flex justify-between">
-                  <Button variant="outline" onClick={goToPrevStep} className="gap-2">
-                    <ArrowLeft className="h-4 w-4" /> Back
-                  </Button>
-                  <Button onClick={goToNextStep} className="gap-2">
-                    Continue <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="plans">
-              <motion.div
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <h3 className="text-xl font-bold mb-4">Choose Your Plan</h3>
-                <p className="text-muted-foreground mb-6">
-                  Select a plan that best fits your hiring needs.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  {/* Basic Plan */}
-                  <Card className="border-blue-200">
-                    <CardHeader className="bg-blue-50">
-                      <CardTitle className="text-lg">Basic Plan</CardTitle>
-                      <div className="text-2xl font-bold">Free</div>
-                      <CardDescription>Get started at no cost</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <ul className="space-y-2">
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Post up to 3 job listings</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Basic company profile</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Access to candidate database</span>
-                        </li>
-                      </ul>
-                    </CardContent>
-                    <CardFooter>
-                      <Button variant="outline" className="w-full" onClick={goToNextStep}>Select</Button>
-                    </CardFooter>
-                  </Card>
-                  
-                  {/* Premium Plan */}
-                  <Card className="border-2 border-amber-300 shadow-md">
-                    <CardHeader className="bg-gradient-to-r from-amber-50 to-amber-100">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-amber-500" />
-                        <CardTitle className="text-lg">Premium Plan</CardTitle>
-                      </div>
-                      <div className="text-2xl font-bold">$49<span className="text-lg font-normal">/month</span></div>
-                      <CardDescription>Enhanced visibility & features</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <ul className="space-y-2">
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Unlimited job listings</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Featured company profile</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Advanced analytics dashboard</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-green-500 mt-1 mr-2" />
-                          <span className="text-sm">Priority placement in search results</span>
-                        </li>
-                      </ul>
-                    </CardContent>
-                    <CardFooter>
-                      <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700" onClick={goToNextStep}>
-                        Select Premium
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </div>
-                
-                <div className="flex justify-between">
-                  <Button variant="outline" onClick={goToPrevStep} className="gap-2">
-                    <ArrowLeft className="h-4 w-4" /> Back
-                  </Button>
-                  <Button onClick={goToNextStep} className="gap-2">
-                    Continue <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="complete">
-              <motion.div
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <div className="text-center py-8">
-                  <div className="mx-auto bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mb-6">
-                    <Check className="h-10 w-10 text-green-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3">You're All Set!</h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                    Your employer account has been created successfully. You can now start posting jobs
-                    and connecting with talented students.
-                  </p>
-                  <Button 
-                    onClick={finishOnboarding} 
-                    className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 gap-2"
-                  >
-                    Go to Employer Dashboard <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </TabsContent>
-          </Tabs>
+      {/* Step Content */}
+      <Card>
+        <CardContent className="p-8">
+          {renderStepContent()}
+          
+          {/* Navigation Buttons */}
+          {currentStep > 0 && currentStep < steps.length - 1 && (
+            <div className="flex justify-between mt-8">
+              <Button variant="outline" onClick={prevStep}>
+                <ArrowLeft className="mr-2 h-4 w-4" /> Previous
+              </Button>
+              <Button onClick={nextStep}>
+                Next <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
-
-      <div className="mt-6 text-center">
-        <p className="text-sm text-muted-foreground">
-          Need help? <a href="/support" className="text-blue-600 hover:underline">Contact our support team</a>
-        </p>
-      </div>
     </div>
   );
 };
