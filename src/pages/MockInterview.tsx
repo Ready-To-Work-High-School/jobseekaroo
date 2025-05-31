@@ -47,14 +47,18 @@ interface RecordedAnswer {
 const MockInterview = () => {
   const [category, setCategory] = useState<'entry' | 'retail' | 'food'>('entry');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isRecording, setIsRecording] = useState(false);
+  const [recordingStates, setRecordingStates] = useState<{[key: number]: boolean}>({});
   const [recordedAnswers, setRecordedAnswers] = useState<{[key: number]: RecordedAnswer}>({});
   const { toast } = useToast();
   
   const questions = INTERVIEW_QUESTIONS[category];
+  const isCurrentlyRecording = recordingStates[currentQuestionIndex] || false;
   
   const handleRecordingStart = () => {
-    setIsRecording(true);
+    setRecordingStates(prev => ({
+      ...prev,
+      [currentQuestionIndex]: true
+    }));
     toast({
       title: "Recording started",
       description: "Answer the question as if you're in a real interview.",
@@ -62,7 +66,10 @@ const MockInterview = () => {
   };
 
   const handleRecordingStop = () => {
-    setIsRecording(false);
+    setRecordingStates(prev => ({
+      ...prev,
+      [currentQuestionIndex]: false
+    }));
   };
 
   const handleRecordingComplete = (audioBlob: Blob, audioUrl: string) => {
@@ -103,6 +110,7 @@ const MockInterview = () => {
     setCategory(newCategory);
     setCurrentQuestionIndex(0);
     setRecordedAnswers({});
+    setRecordingStates({});
   };
   
   return (
@@ -195,7 +203,7 @@ const MockInterview = () => {
                 <div className="space-y-4">
                   {!recordedAnswers[currentQuestionIndex] ? (
                     <div className="flex flex-col items-center justify-center p-8 border rounded-lg">
-                      {isRecording ? (
+                      {isCurrentlyRecording ? (
                         <div className="text-center">
                           <div className="animate-pulse mb-4">
                             <div className="h-12 w-12 bg-red-500 rounded-full mx-auto flex items-center justify-center">
@@ -207,15 +215,15 @@ const MockInterview = () => {
                         </div>
                       ) : (
                         <div className="text-center">
-                          <AudioRecorder 
-                            onRecordingComplete={handleRecordingComplete}
-                            isRecording={isRecording}
-                            onRecordingStart={handleRecordingStart}
-                            onRecordingStop={handleRecordingStop}
-                          />
-                          <p className="text-sm text-muted-foreground mt-4">Click to start recording your response</p>
+                          <p className="text-sm text-muted-foreground mb-4">Click to start recording your response</p>
                         </div>
                       )}
+                      <AudioRecorder 
+                        onRecordingComplete={handleRecordingComplete}
+                        isRecording={isCurrentlyRecording}
+                        onRecordingStart={handleRecordingStart}
+                        onRecordingStop={handleRecordingStop}
+                      />
                     </div>
                   ) : (
                     <AudioPlayback 
