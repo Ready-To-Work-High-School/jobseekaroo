@@ -43,7 +43,7 @@ const Hero = () => {
               <img 
                 src="/lovable-uploads/87366ebd-ac00-4f9c-b742-0a3330f31904.png" 
                 alt="Job Seekers 4 High Schools Logo" 
-                className="h-24 w-24 object-contain relative z-10"
+                className="h-32 w-32 object-contain relative z-10"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.onerror = null;
