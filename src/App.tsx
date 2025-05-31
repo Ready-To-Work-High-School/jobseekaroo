@@ -22,6 +22,7 @@ import Applications from '@/pages/Applications';
 import SavedJobs from '@/pages/SavedJobs';
 import Messages from '@/pages/Messages';
 import InterviewPrep from '@/pages/InterviewPrep';
+import MockInterview from '@/pages/MockInterview';
 import InterviewChecklist from '@/pages/InterviewChecklist';
 import About from '@/pages/About';
 import FAQ from '@/pages/FAQ';
@@ -60,6 +61,7 @@ import EmployerSchoolDemo from '@/pages/EmployerSchoolDemo';
 import CounselorDashboard from '@/pages/CounselorDashboard';
 import MacquarieExternship from '@/pages/MacquarieExternship';
 import FirstJobToolkit from '@/pages/FirstJobToolkit';
+import CeoPortal from '@/pages/CeoPortal';
 
 const queryClient = new QueryClient();
 
@@ -91,6 +93,8 @@ function App() {
                 <Route path="/saved-jobs" element={<SavedJobs />} />
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/interview-prep" element={<InterviewPrep />} />
+                <Route path="/mock-interview" element={<MockInterview />} />
+                <Route path="/interview-questions" element={<InterviewPrep />} />
                 <Route path="/interview-checklist" element={<InterviewChecklist />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/faq" element={<FAQ />} />
@@ -127,6 +131,7 @@ function App() {
                 <Route path="/employer-school-demo" element={<EmployerSchoolDemo />} />
                 <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
                 <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
+                <Route path="/ceo-portal" element={<CeoPortal />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 
