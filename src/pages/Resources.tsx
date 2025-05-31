@@ -61,8 +61,8 @@ const Resources = () => {
             </CardHeader>
             <CardContent>
               <p className="mb-4">Tips and guidance for submitting successful job applications</p>
-              <Link to="/jobs" className="text-blue-600 hover:underline">
-                Job Resources →
+              <Link to="/first-job-toolkit" className="text-blue-600 hover:underline">
+                Job Application Resources →
               </Link>
             </CardContent>
           </Card>
