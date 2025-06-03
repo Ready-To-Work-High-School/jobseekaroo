@@ -34,17 +34,17 @@ const Navbar = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md ${
-        atTop ? 'border-b border-border/40' : 'border-b border-border shadow-sm'
+      className={`sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b ${
+        atTop ? 'border-border/40' : 'border-border shadow-sm'
       }`}
       role="banner"
       aria-label="Main navigation"
     >
-      <div className="container-custom flex h-16 items-center justify-between py-2">
+      <div className="container mx-auto px-4 flex h-16 items-center justify-between py-2">
         <div className="flex items-center gap-2 md:gap-6">
           {isMobile && <MobileMenu />}
           <NavbarBrand />
-          <DesktopNav className="hidden md:flex" />
+          {!isMobile && <DesktopNav className="hidden md:flex" />}
         </div>
 
         <div className="flex items-center gap-4">

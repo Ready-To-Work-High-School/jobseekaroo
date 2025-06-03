@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import JobSeekers4HSBadge from './badges/JobSeekers4HSBadge';
 import FreeForStudentsBadge from './badges/FreeForStudentsBadge';
 import WhatYouGetCTA from './auth/WhatYouGetCTA';
+import Navbar from './navbar/Navbar';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -64,6 +65,9 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-rose-50 to-white">
+      {/* Mobile Navbar - Always visible */}
+      <Navbar />
+      
       {/* Badge at the top */}
       <motion.div
         className="flex justify-center py-2"
@@ -85,7 +89,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       </motion.div>
       
       {!isHomePage && !isAuthPage && (
-        <div className={`sticky top-0 z-40 bg-white/80 backdrop-blur-md px-4 pt-4 pb-2 transition-shadow ${
+        <div className={`sticky top-16 z-40 bg-white/80 backdrop-blur-md px-4 pt-4 pb-2 transition-shadow ${
           scrollY > 10 ? 'shadow-md' : ''
         }`}>
           <BackButton />
@@ -94,7 +98,7 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
       
       <AnimatePresence mode="wait">
         <motion.main 
-          className="flex-1 main-content overflow-x-auto pb-20"
+          className="flex-1 main-content overflow-x-auto pb-20 pt-2"
           key={location.pathname}
           variants={pageVariants}
           initial="initial"

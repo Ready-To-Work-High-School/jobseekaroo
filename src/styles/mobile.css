@@ -1,8 +1,21 @@
+
 /* Mobile-specific styles */
 @media (max-width: 768px) {
-  /* Add padding to account for the bottom navigation bar */
+  /* Ensure navbar is always visible */
+  .navbar-mobile {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Add padding to account for the bottom navigation bar and top navbar */
   .main-content {
     padding-bottom: 4.5rem;
+    padding-top: 1rem;
   }
   
   /* Adjust typography for mobile */
@@ -68,7 +81,7 @@
   /* Mobile-specific job filters with animations */
   .job-filters-mobile {
     position: sticky;
-    top: 0;
+    top: 4rem; /* Account for navbar height */
     z-index: 30;
     background-color: white;
     padding-top: 0.75rem;
@@ -190,6 +203,23 @@
   
   .teen-image:hover {
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+  }
+
+  /* Ensure proper mobile viewport */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  /* Safe area adjustments for mobile */
+  @supports (padding: max(0px)) {
+    .mobile-safe-top {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    
+    .mobile-safe-bottom {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
   }
 }
 
