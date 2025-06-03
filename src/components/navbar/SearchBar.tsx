@@ -1,38 +1,31 @@
 
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Input } from '@/components/ui/input';
+import React, { useState } from 'react';
 import { Search } from 'lucide-react';
-import { sanitizeUrlParam } from '@/utils/sanitization';
+import { Input } from '@/components/ui/input';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const location = useLocation();
-  
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Sanitize the search query before using it in the URL
-      navigate(`/jobs?q=${sanitizeUrlParam(searchQuery.trim())}`);
+      navigate(`/jobs?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
     }
   };
-  
-  const showSearchBar = !location.pathname.includes('/jobs') && !location.pathname.includes('/sign');
-  
-  if (!showSearchBar) return null;
-  
+
   return (
-    <form className="hidden md:flex" onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className="relative">
       <div className="relative">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         <Input
-          type="search"
+          type="text"
           placeholder="Search jobs..."
-          className="pl-8 w-[180px] lg:w-[240px]"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          aria-label="Search for jobs"
+          className="pl-8 w-64"
         />
       </div>
     </form>

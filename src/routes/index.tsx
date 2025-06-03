@@ -11,6 +11,7 @@ import Profile from '@/pages/Profile';
 import Applications from '@/pages/Applications';
 import ErrorPage from '@/pages/ErrorPage';
 import EmployerDashboard from '@/pages/EmployerDashboard';
+import EmployerQRGenerator from '@/pages/EmployerQRGenerator';
 import AdminDashboard from '@/pages/AdminDashboard';
 import TeacherDashboard from '@/pages/TeacherDashboard';
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
@@ -29,6 +30,7 @@ import ForEmployers from '@/pages/ForEmployers';
 import SchedulePage from '@/pages/SchedulePage';
 import TestPage from '@/pages/TestPage';
 import SavedJobs from '@/pages/SavedJobs';
+import About from '@/pages/About';
 
 // These are route configurations that can be imported in App.tsx
 // They are not actual Route components
@@ -97,6 +99,11 @@ const AppRoutes = [
     path: "/employer-dashboard",
     element: <EmployerDashboard />,
     key: "employer-dashboard"
+  },
+  {
+    path: "/employer/qr-generator",
+    element: <EmployerQRGenerator />,
+    key: "employer-qr-generator"
   },
   {
     path: "/admin-dashboard",
@@ -177,6 +184,11 @@ const AppRoutes = [
     path: "/test",
     element: <TestPage />,
     key: "test"
+  },
+  {
+    path: "/about",
+    element: <About />,
+    key: "about"
   },
   {
     path: "*",

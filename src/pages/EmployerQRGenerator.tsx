@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import QRJobCreation from '@/components/employer/QRJobCreation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { QrCode, Shield, Zap, Download, Share2, RefreshCw } from 'lucide-react';
@@ -117,10 +117,10 @@ const EmployerQRGenerator = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <Button asChild className="w-full">
-                      <Link to="/signin">Sign In</Link>
+                      <Link to="/sign-in">Sign In</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full">
-                      <Link to="/signup">Create Account</Link>
+                      <Link to="/sign-up">Create Account</Link>
                     </Button>
                   </CardContent>
                 </Card>

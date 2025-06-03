@@ -1,3 +1,4 @@
 
-// Re-export all auth components for easier imports
-export * from './auth/index';
+// Re-export from AuthContext for consistency
+export { useAuth, AuthProvider } from './AuthContext';
+export type { AuthContextType } from './AuthContext';
