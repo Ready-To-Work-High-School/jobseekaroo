@@ -5,10 +5,6 @@ interface ProminentLogoProps {
 const ProminentLogo = ({
   className = ""
 }: ProminentLogoProps) => {
-  return <div className={`flex justify-center ${className}`}>
-      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-lg border">
-        
-      </div>
-    </div>;
+  return;
 };
 export default ProminentLogo;
