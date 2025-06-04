@@ -3,13 +3,15 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
 import { UserProfile } from '@/types/user';
+import { useToast } from '@/hooks/use-toast';
+import { ApplicationStatus } from '@/types/application';
 
-export interface AuthContextType {
+interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateProfile: (profileData: any) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
@@ -17,6 +19,12 @@ export interface AuthContextType {
   createApplication: (applicationData: any) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<void>;
+  deleteApplication: (applicationId: string) => Promise<void>;
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
+  getApplications: () => Promise<any[]>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,15 +33,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   const refreshProfile = async () => {
     if (!user) {
-      console.log('refreshProfile: No user to refresh profile for');
+      setUserProfile(null);
       return;
     }
-    
+
     try {
-      console.log('refreshProfile: Fetching profile for user:', user.id);
+      console.log('AuthContext: Refreshing profile for user:', user.id);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -41,12 +50,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
-        return;
+        if (error.code === 'PGRST116') {
+          console.log('AuthContext: No profile found, this might be a new user');
+          setUserProfile(null);
+          return;
+        }
+        throw error;
       }
-      
-      console.log('refreshProfile: Profile data fetched:', data ? 'success' : 'null');
-      
+
       if (data) {
         const formattedProfile: UserProfile = {
           id: data.id,
@@ -56,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           location: data.location,
           resume_url: data.resume_url,
           skills: data.skills || [],
-          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
+          preferences: data.preferences || {},
           user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
           redeemed_at: data.redeemed_at,
           redeemed_code: data.redeemed_code,
@@ -71,8 +82,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           contact_details_encrypted: data.contact_details_encrypted,
           created_at: data.created_at,
           updated_at: data.updated_at,
-          badges: Array.isArray(data.badges) 
-            ? data.badges.map(badge => ({ 
+          badges: Array.isArray(data.badges)
+            ? data.badges.map(badge => ({
                 id: (badge as any).id || '',
                 name: (badge as any).name || '',
                 earned_at: (badge as any).earned_at
@@ -80,10 +91,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             : []
         };
         
+        console.log('AuthContext: Profile refreshed successfully:', formattedProfile);
         setUserProfile(formattedProfile);
       }
-    } catch (error) {
-      console.error('Error refreshing profile:', error);
+    } catch (error: any) {
+      console.error('AuthContext: Error refreshing profile:', error);
+      // Don't throw here to prevent breaking auth flow
     }
   };
 
@@ -96,7 +109,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         if (session?.user) {
           setTimeout(() => {
-            console.log('Refreshing profile for user:', session.user?.id);
             refreshProfile().catch(err => {
               console.error('Background profile refresh failed:', err);
             });
@@ -126,26 +138,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signIn = async (email: string, password: string): Promise<User | null> => {
+  const signIn = async (email: string, password: string): Promise<void> => {
     try {
       console.log('AuthContext: Starting sign in process for:', email);
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      
+
       if (error) {
         console.error('Sign in error:', error);
         throw error;
       }
-      
-      if (data.user) {
-        console.log('AuthContext: Sign in successful for user:', data.user.id);
-      }
-      
-      return data.user;
+
+      console.log('AuthContext: Sign in successful');
+      toast({
+        title: "Success",
+        description: "You have successfully signed in",
+      });
     } catch (error: any) {
       console.error('Error signing in:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to sign in",
+        variant: "destructive",
+      });
       throw error;
     }
   };
@@ -154,11 +171,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     email: string, 
     password: string, 
     firstName: string, 
-    lastName: string,
-    userType: 'student' | 'employer' = 'student'
-  ): Promise<User | null> => {
+    lastName: string
+  ): Promise<void> => {
     try {
       console.log('AuthContext: Starting sign up process for:', email);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -166,27 +183,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           data: {
             first_name: firstName,
             last_name: lastName,
-            user_type: userType,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+          emailRedirectTo: `${window.location.origin}/auth/callback`
+        }
       });
-      
+
       if (error) {
         console.error('Sign up error:', error);
         throw error;
       }
-      
-      if (data.user) {
-        console.log('AuthContext: Sign up successful for user:', data.user.id);
-        setTimeout(() => {
-          refreshProfile();
-        }, 500);
-      }
-      
-      return data.user;
+
+      console.log('AuthContext: Sign up successful');
+      toast({
+        title: "Success",
+        description: "Your account has been created successfully",
+      });
     } catch (error: any) {
       console.error('Error signing up:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create account",
+        variant: "destructive",
+      });
       throw error;
     }
   };
@@ -194,20 +212,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async (): Promise<void> => {
     try {
       console.log('AuthContext: Starting sign out process');
-      
-      // Clear local state first
-      setUser(null);
-      setUserProfile(null);
-      
-      // Clear any stored session data
-      localStorage.removeItem('supabase.auth.token');
-      sessionStorage.removeItem('redirectAfterLogin');
-      
-      // Sign out from Supabase
       const { error } = await supabase.auth.signOut();
       
       if (error) {
-        console.error('Supabase sign out error:', error);
+        console.error('Sign out error:', error);
         throw error;
       }
       
@@ -272,7 +280,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           location: data.location,
           resume_url: data.resume_url,
           skills: data.skills || [],
-          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
+          preferences: data.preferences || {},
           user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
           redeemed_at: data.redeemed_at,
           redeemed_code: data.redeemed_code,
@@ -342,6 +350,109 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const updateApplicationStatus = async (applicationId: string, status: ApplicationStatus): Promise<void> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .update({ status })
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      throw error;
+    }
+  };
+
+  const deleteApplication = async (applicationId: string): Promise<void> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .delete()
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      throw error;
+    }
+  };
+
+  const saveJob = async (jobId: string): Promise<void> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .insert({ user_id: user.id, job_id: jobId });
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving job:', error);
+      throw error;
+    }
+  };
+
+  const unsaveJob = async (jobId: string): Promise<void> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('saved_jobs')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('job_id', jobId);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error unsaving job:', error);
+      throw error;
+    }
+  };
+
+  const isSavedJob = async (jobId: string): Promise<boolean> => {
+    if (!user) return false;
+    
+    try {
+      const { data, error } = await supabase
+        .from('saved_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('job_id', jobId)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') throw error;
+      return !!data;
+    } catch (error) {
+      console.error('Error checking if job is saved:', error);
+      return false;
+    }
+  };
+
+  const getApplications = async (): Promise<any[]> => {
+    if (!user) return [];
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('applied_date', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Error getting applications:', error);
+      return [];
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -356,7 +467,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         getSavedJobs,
         createApplication,
         signInWithGoogle,
-        signInWithApple
+        signInWithApple,
+        updateApplicationStatus,
+        deleteApplication,
+        saveJob,
+        unsaveJob,
+        isSavedJob,
+        getApplications
       }}
     >
       {children}
