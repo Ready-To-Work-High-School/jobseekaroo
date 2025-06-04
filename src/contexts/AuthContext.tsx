@@ -1,3 +1,4 @@
+
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
@@ -21,6 +22,7 @@ interface AuthContextType {
   saveJob?: (jobId: string) => Promise<void>;
   unsaveJob?: (jobId: string) => Promise<void>;
   isSavedJob?: (jobId: string) => Promise<boolean>;
+  getSavedJobs?: () => Promise<any[]>;
   // Application actions
   createApplication?: (data: any) => Promise<void>;
   // Admin actions
@@ -216,6 +218,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         saveJob: async () => {},
         unsaveJob: async () => {},
         isSavedJob: async () => false,
+        getSavedJobs: async () => [],
         createApplication: async () => {},
         makeAdmin: async () => {},
         verifyEmployer: async () => {},
@@ -228,3 +231,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+
+// Export the useAuth hook
+export { useAuth } from '@/hooks/useAuth';

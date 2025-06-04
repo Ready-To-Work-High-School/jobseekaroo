@@ -10,6 +10,11 @@ export interface SignUpData {
   userType: 'student' | 'employer';
 }
 
+export interface EmployerVerificationResult {
+  canPostJobs: boolean;
+  message: string;
+}
+
 export const signIn = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -90,7 +95,8 @@ export const signInWithGoogle = async () => {
       return { user: null, error };
     }
     
-    return { user: data.user || null, error: null };
+    // For OAuth, user will be null initially as redirect happens
+    return { user: null, error: null };
   } catch (error) {
     console.error('Google sign in error:', error);
     return { user: null, error };
@@ -111,14 +117,15 @@ export const signInWithApple = async () => {
       return { user: null, error };
     }
     
-    return { user: data.user || null, error: null };
+    // For OAuth, user will be null initially as redirect happens
+    return { user: null, error: null };
   } catch (error) {
     console.error('Apple sign in error:', error);
     return { user: null, error };
   }
 };
 
-export const verifyEmployerStatus = async (userId: string) => {
+export const verifyEmployerStatus = async (userId: string): Promise<EmployerVerificationResult> => {
   try {
     // This would typically check the user's employer verification status
     // For now, return a basic response
