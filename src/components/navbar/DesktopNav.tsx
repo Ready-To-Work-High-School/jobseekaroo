@@ -1,7 +1,6 @@
-
 import React from 'react';
 import NavLink from './NavLink';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Ticket, GraduationCap, Briefcase, Building2, BookOpen, Award, Info, Compass, Heart, Shield, LogIn, UserPlus } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';

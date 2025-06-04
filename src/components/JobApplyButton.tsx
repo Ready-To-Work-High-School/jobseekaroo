@@ -1,74 +1,154 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Job } from '@/types/job';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, CheckCircle } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useQualificationMatch } from '@/hooks/useQualificationMatch';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown, Clipboard, ListTodo } from 'lucide-react';
 
 interface JobApplyButtonProps {
-  jobId: string;
-  onApply?: () => void;
+  job: Job;
 }
 
-const JobApplyButton: React.FC<JobApplyButtonProps> = ({ jobId, onApply }) => {
-  const [isApplying, setIsApplying] = useState(false);
-  const [hasApplied, setHasApplied] = useState(false);
-  const { user } = useAuth();
+export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user, userProfile, createApplication } = useAuth();
   const { toast } = useToast();
-
-  const handleApply = async () => {
+  const navigate = useNavigate();
+  const { matchClass } = useQualificationMatch(job);
+  
+  const handleApplyAndTrack = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to track your applications",
+        variant: "destructive",
+      });
+      
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+      navigate('/sign-in');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      await createApplication({
+        job_id: job.id,
+        job_title: job.title,
+        company: job.company.name,
+        status: 'applied',
+        applied_date: new Date().toISOString().substring(0, 10),
+        notes: `Applied for ${job.title} at ${job.company.name}. Pay range: $${job.payRate.min}-$${job.payRate.max} ${job.payRate.period}.`,
+        resume_url: userProfile?.resume_url || undefined
+      });
+      
+      setShowSuccessDialog(true);
+      
+    } catch (error) {
+      console.error('Error creating application:', error);
+      toast({
+        title: "Error",
+        description: "Failed to track your application",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const onExternalApply = () => {
     if (!user) {
       toast({
         title: "Sign in required",
         description: "Please sign in to apply for jobs",
         variant: "destructive",
       });
+      
+      sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+      navigate('/sign-in');
       return;
     }
-
-    setIsApplying(true);
     
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setHasApplied(true);
-      toast({
-        title: "Application submitted!",
-        description: "Your application has been sent to the employer",
-      });
-      
-      onApply?.();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit application. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsApplying(false);
-    }
+    setShowSuccessDialog(true);
   };
-
-  if (hasApplied) {
-    return (
-      <Button disabled className="w-full">
-        <CheckCircle className="mr-2 h-4 w-4" />
-        Applied
-      </Button>
-    );
-  }
-
+  
   return (
-    <Button 
-      onClick={handleApply} 
-      disabled={isApplying}
-      className="w-full"
-    >
-      {isApplying && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {isApplying ? 'Applying...' : 'Apply Now'}
-    </Button>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className={`w-full md:w-auto px-6 py-3 gap-1 ${matchClass}`}>
+            Apply Now
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-white w-56">
+          <DropdownMenuItem onClick={handleApplyAndTrack} disabled={isLoading}>
+            <ListTodo className="mr-2 h-4 w-4" />
+            <span>Apply & Track Application</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onExternalApply} disabled={isLoading}>
+            <Clipboard className="mr-2 h-4 w-4" />
+            <span>Apply on Company Website</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Application Submitted!</DialogTitle>
+            <DialogDescription>
+              Your application for the {job.title} position at {job.company.name} has been successfully submitted.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            <p className="text-sm text-muted-foreground">
+              {user
+                ? "Your application has been added to your tracking dashboard."
+                : "Create an account to track the status of your applications."}
+            </p>
+          </div>
+          <DialogFooter className="sm:justify-between">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowSuccessDialog(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
+              Close
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                setShowSuccessDialog(false);
+                navigate('/applications');
+              }}
+            >
+              View Your Applications
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
-
-export default JobApplyButton;

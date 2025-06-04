@@ -1,7 +1,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { ParentFormValues, VerificationFormValues } from '../schemas';
 
 export type ConsentStep = 'introduction' | 'parentEmail' | 'verification' | 'complete';

@@ -1,3 +1,3 @@
 
-// Re-export everything from the main AuthContext for backward compatibility
-export * from './AuthContext';
+// Re-export everything from the auth directory for backward compatibility
+export * from './auth';

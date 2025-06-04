@@ -1,142 +1,177 @@
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-
-const applicationSchema = z.object({
-  jobTitle: z.string().min(1, 'Job title is required'),
-  company: z.string().min(1, 'Company is required'),
-  status: z.enum(['applied', 'interviewing', 'offer', 'rejected']),
-  appliedDate: z.string().min(1, 'Applied date is required'),
-  notes: z.string().optional(),
-});
-
-type ApplicationFormData = z.infer<typeof applicationSchema>;
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from '@/components/ui/form';
+import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/auth';
+import { Link } from 'react-router-dom';
 
 interface ApplicationFormProps {
-  onSubmit: (data: ApplicationFormData) => void;
-  isLoading?: boolean;
+  jobId?: string;
+  jobTitle?: string;
+  companyName?: string;
 }
 
-const ApplicationForm: React.FC<ApplicationFormProps> = ({ onSubmit, isLoading = false }) => {
-  const { user } = useAuth();
+const ApplicationForm: React.FC<ApplicationFormProps> = ({ 
+  jobId = '',
+  jobTitle = 'Job Position',
+  companyName = 'Company Name'
+}) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm<ApplicationFormData>({
-    resolver: zodResolver(applicationSchema),
+  const form = useForm({
+    defaultValues: {
+      coverLetter: '',
+      phone: '',
+      availability: '',
+      referral: ''
+    }
   });
 
-  const status = watch('status');
-
-  const handleFormSubmit = (data: ApplicationFormData) => {
+  const onSubmit = async (data: any) => {
     if (!user) {
       toast({
         title: "Authentication required",
-        description: "You must be signed in to track applications",
-        variant: "destructive",
+        description: "Please sign in to apply for jobs",
+        variant: "destructive"
       });
       return;
     }
-    onSubmit(data);
+    
+    setIsSubmitting(true);
+    
+    try {
+      // In a real app, this would submit to an API
+      console.log('Application data:', {
+        jobId,
+        userId: user.id,
+        ...data
+      });
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast({
+        title: "Application submitted!",
+        description: `Your application for ${jobTitle} at ${companyName} has been submitted successfully.`
+      });
+      
+      form.reset();
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      toast({
+        title: "Submission failed",
+        description: "There was a problem submitting your application. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Track New Application</CardTitle>
-        <CardDescription>
-          Add a job application to track your progress
-        </CardDescription>
-      </CardHeader>
-      
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="jobTitle">Job Title</Label>
-            <Input
-              id="jobTitle"
-              {...register('jobTitle')}
-              placeholder="Enter job title"
-            />
-            {errors.jobTitle && (
-              <p className="text-sm text-red-500 mt-1">{errors.jobTitle.message}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="company">Company</Label>
-            <Input
-              id="company"
-              {...register('company')}
-              placeholder="Enter company name"
-            />
-            {errors.company && (
-              <p className="text-sm text-red-500 mt-1">{errors.company.message}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="status">Application Status</Label>
-            <Select onValueChange={(value) => setValue('status', value as any)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="applied">Applied</SelectItem>
-                <SelectItem value="interviewing">Interviewing</SelectItem>
-                <SelectItem value="offer">Offer Received</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.status && (
-              <p className="text-sm text-red-500 mt-1">{errors.status.message}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="appliedDate">Date Applied</Label>
-            <Input
-              id="appliedDate"
-              type="date"
-              {...register('appliedDate')}
-            />
-            {errors.appliedDate && (
-              <p className="text-sm text-red-500 mt-1">{errors.appliedDate.message}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="notes">Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              {...register('notes')}
-              placeholder="Add any notes about this application..."
-              rows={3}
-            />
-          </div>
-        </CardContent>
-        
-        <CardFooter>
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? 'Adding Application...' : 'Add Application'}
+  if (!user) {
+    return (
+      <div className="application-form p-6 border rounded-lg bg-muted/30">
+        <h3 className="text-xl font-semibold mb-4">Apply for this position</h3>
+        <p className="mb-6 text-muted-foreground">Please sign in to apply for jobs</p>
+        <div className="flex gap-4">
+          <Button asChild>
+            <Link to="/sign-in">Sign In</Link>
           </Button>
-        </CardFooter>
-      </form>
-    </Card>
+          <Button asChild variant="outline">
+            <Link to="/sign-up">Create Account</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="application-form">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="coverLetter"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cover Letter</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Why are you interested in this position?" 
+                    className="min-h-[120px]" 
+                    {...field} 
+                  />
+                </FormControl>
+                <FormDescription>
+                  Briefly explain why you're a good fit for this role.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your phone number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="availability"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Availability</FormLabel>
+                <FormControl>
+                  <Input placeholder="When can you start? What days/hours are you available?" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="referral"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>How did you hear about this position?</FormLabel>
+                <FormControl>
+                  <Input placeholder="School counselor, teacher, website, etc." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit Application"}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 
