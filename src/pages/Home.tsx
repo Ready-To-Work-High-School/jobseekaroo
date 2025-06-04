@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Hero from '@/components/Hero';
 import JobListings from '@/components/JobListings';
 import TopEmployersSection from '@/components/job/TopEmployersSection';
+import TopJobsSection from '@/components/job/TopJobsSection';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -28,6 +29,10 @@ const Home = () => {
 
       <ErrorBoundary>
         <TopEmployersSection />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <TopJobsSection />
       </ErrorBoundary>
 
       <ErrorBoundary>
