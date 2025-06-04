@@ -26,7 +26,7 @@ export interface UserProfile {
   resume_data_encrypted?: string | null;
   contact_details_encrypted?: string | null;
   badges?: UserBadge[];
-  premium_status?: string; // Added premium_status field
+  premium_status?: string;
 }
 
 export interface UserProfileUpdate {
