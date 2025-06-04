@@ -10,7 +10,7 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer') => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   updateProfile: (data: UserProfileUpdate) => Promise<{ error: any }>;
@@ -24,7 +24,8 @@ interface AuthContextType {
   signInWithApple: () => Promise<User | null>;
 }
 
-const AuthContext = createContext<AuthContextType>({
+// Create and export the AuthContext
+export const AuthContext = createContext<AuthContextType>({
   user: null,
   userProfile: null,
   session: null,
@@ -104,7 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error: null };
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
     // Mock sign up
     return { error: null };
   };
