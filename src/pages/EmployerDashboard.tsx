@@ -10,6 +10,7 @@ import EmployerDirectAccessSection from '@/components/employer/dashboard/Employe
 import EmployerPremiumServices from '@/components/employer/premium/EmployerPremiumServices';
 import EmployerSignUpPrompt from '@/components/employer/EmployerSignUpPrompt';
 import EmployerWhatYouGetSection from '@/components/employer/EmployerWhatYouGetSection';
+import FreemiumBanner from '@/components/employer/premium/FreemiumBanner';
 
 const EmployerDashboard = () => {
   const { user } = useAuth();
@@ -30,11 +31,13 @@ const EmployerDashboard = () => {
     );
   }
   
-  // For authenticated users, show the actual dashboard
+  // For authenticated users, show the actual employer dashboard
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-6">
+      <div className="container max-w-6xl mx-auto px-4 py-6 space-y-6">
         <DashboardHeader />
+        <FreemiumBanner />
+        <EmployerKeyFeatures />
         <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </Layout>

@@ -7,6 +7,7 @@ import DashboardTabs from '@/components/employer/DashboardTabs';
 import UnauthenticatedEmployerView from '@/components/employer/dashboard/UnauthenticatedEmployerView';
 import FreemiumBanner from '@/components/employer/premium/FreemiumBanner';
 import PremiumFeaturesDisplay from '@/components/employer/premium/PremiumFeaturesDisplay';
+import EmployerKeyFeatures from '@/components/employer/dashboard/EmployerKeyFeatures';
 import { Helmet } from 'react-helmet';
 
 const EmployerDashboard = () => {
@@ -24,7 +25,7 @@ const EmployerDashboard = () => {
     );
   }
 
-  // For authenticated users
+  // For authenticated users - show employer-specific content only
   return (
     <Layout>
       <Helmet>
@@ -35,6 +36,9 @@ const EmployerDashboard = () => {
         
         {/* Display FreemiumBanner prominently at the top */}
         <FreemiumBanner />
+        
+        {/* Show key employer features */}
+        <EmployerKeyFeatures />
         
         <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         
