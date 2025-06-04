@@ -15,10 +15,26 @@ vi.mock('@/hooks/use-toast', () => ({
   }),
 }));
 
+// Mock User object that satisfies Supabase User type
+const mockUser = {
+  id: 'test-user',
+  app_metadata: {},
+  user_metadata: {},
+  aud: 'authenticated',
+  created_at: '2023-01-01T00:00:00.000Z',
+  email: 'test@example.com',
+  email_confirmed_at: '2023-01-01T00:00:00.000Z',
+  phone: '',
+  confirmed_at: '2023-01-01T00:00:00.000Z',
+  last_sign_in_at: '2023-01-01T00:00:00.000Z',
+  role: 'authenticated',
+  updated_at: '2023-01-01T00:00:00.000Z'
+};
+
 describe('ApplicationForm', () => {
   beforeEach(() => {
     vi.mocked(useAuth).mockReturnValue({
-      user: { id: 'test-user' },
+      user: mockUser,
       createApplication: vi.fn(),
       userProfile: null,
       session: null,
@@ -67,7 +83,7 @@ describe('ApplicationForm', () => {
   it('calls createApplication on submit', async () => {
     const createApplicationMock = vi.fn();
     vi.mocked(useAuth).mockReturnValue({
-      user: { id: 'test-user' },
+      user: mockUser,
       createApplication: createApplicationMock,
       userProfile: null,
       session: null,
