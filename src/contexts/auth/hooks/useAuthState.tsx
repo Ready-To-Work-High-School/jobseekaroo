@@ -9,7 +9,7 @@ export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
   const { toast } = useToast();
 
   const refreshProfile = useCallback(async () => {
@@ -74,9 +74,9 @@ export const useAuthState = () => {
       }
     } catch (error) {
       console.error('Error refreshing profile:', error);
-      // Convert Error object to string for the error state
-      const errorMessage = error instanceof Error ? error.message : 'Failed to refresh profile';
-      setError(errorMessage);
+      // Don't show toast on every refresh attempt, only log to console
+      // This prevents multiple toast notifications
+      setError(error instanceof Error ? error : new Error('Failed to refresh profile'));
     }
   }, [user]);
 

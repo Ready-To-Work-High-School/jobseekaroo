@@ -17,6 +17,7 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
   const { user } = useAuth();
   const { isAdmin, isCeo } = useAdminStatus();
   
+  // Removed debug logs - status changes are now logged only in useAdminStatus hook
   const isActiveLink = (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`);
   
   return (
@@ -25,25 +26,11 @@ const MainNavigation = ({ className }: MainNavigationProps) => {
         to="/" 
         className={cn(
           "text-sm font-medium transition-colors hover:text-primary", 
-          isActiveLink("/") && !isActiveLink("/dashboard") && "text-primary"
+          isActiveLink("/") && "text-primary"
         )}
       >
         Home
       </Link>
-      
-      {/* Dashboard link for authenticated users */}
-      {user && (
-        <Link 
-          to="/dashboard" 
-          className={cn(
-            "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1", 
-            isActiveLink("/dashboard") && "text-primary"
-          )}
-        >
-          <Briefcase className="h-3 w-3" />
-          Dashboard
-        </Link>
-      )}
       
       <Link 
         to="/jobs" 

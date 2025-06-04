@@ -1,7 +1,7 @@
 
 import { ReactNode, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { AuthContext } from '@/contexts/AuthContext';
+import { AuthContext } from './AuthContext';
 import { useAuthState } from './hooks/useAuthState';
 import { useJobActions } from './hooks/useJobActions';
 import { useApplications } from './hooks/useApplications';
