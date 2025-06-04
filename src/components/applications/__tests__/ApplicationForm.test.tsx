@@ -1,12 +1,13 @@
-
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import ApplicationForm from '../ApplicationForm';
-import { useAuth } from '@/hooks/useAuth';
 
 vi.mock('@/hooks/useAuth', () => ({
-  useAuth: vi.fn(),
+  useAuth: () => ({
+    user: { id: 'test-user' },
+    createApplication: vi.fn(),
+  }),
 }));
 
 vi.mock('@/hooks/use-toast', () => ({
@@ -15,47 +16,7 @@ vi.mock('@/hooks/use-toast', () => ({
   }),
 }));
 
-// Mock User object that satisfies Supabase User type
-const mockUser = {
-  id: 'test-user',
-  app_metadata: {},
-  user_metadata: {},
-  aud: 'authenticated',
-  created_at: '2023-01-01T00:00:00.000Z',
-  email: 'test@example.com',
-  email_confirmed_at: '2023-01-01T00:00:00.000Z',
-  phone: '',
-  confirmed_at: '2023-01-01T00:00:00.000Z',
-  last_sign_in_at: '2023-01-01T00:00:00.000Z',
-  role: 'authenticated',
-  updated_at: '2023-01-01T00:00:00.000Z'
-};
-
 describe('ApplicationForm', () => {
-  beforeEach(() => {
-    vi.mocked(useAuth).mockReturnValue({
-      user: mockUser,
-      createApplication: vi.fn(),
-      userProfile: null,
-      session: null,
-      isLoading: false,
-      signIn: vi.fn(),
-      signUp: vi.fn(),
-      signOut: vi.fn(),
-      signInWithGoogle: vi.fn(),
-      signInWithApple: vi.fn(),
-      updateProfile: vi.fn(),
-      refreshProfile: vi.fn(),
-      getSavedJobs: vi.fn(),
-      updateApplicationStatus: vi.fn(),
-      deleteApplication: vi.fn(),
-      saveJob: vi.fn(),
-      unsaveJob: vi.fn(),
-      isSavedJob: vi.fn(),
-      getApplications: vi.fn(),
-    });
-  });
-
   it('renders the form with default values', () => {
     render(<ApplicationForm />);
     expect(screen.getByLabelText('Position Title')).toBeInTheDocument();
@@ -83,25 +44,8 @@ describe('ApplicationForm', () => {
   it('calls createApplication on submit', async () => {
     const createApplicationMock = vi.fn();
     vi.mocked(useAuth).mockReturnValue({
-      user: mockUser,
+      user: { id: 'test-user' },
       createApplication: createApplicationMock,
-      userProfile: null,
-      session: null,
-      isLoading: false,
-      signIn: vi.fn(),
-      signUp: vi.fn(),
-      signOut: vi.fn(),
-      signInWithGoogle: vi.fn(),
-      signInWithApple: vi.fn(),
-      updateProfile: vi.fn(),
-      refreshProfile: vi.fn(),
-      getSavedJobs: vi.fn(),
-      updateApplicationStatus: vi.fn(),
-      deleteApplication: vi.fn(),
-      saveJob: vi.fn(),
-      unsaveJob: vi.fn(),
-      isSavedJob: vi.fn(),
-      getApplications: vi.fn(),
     });
 
     render(<ApplicationForm jobId="123" jobTitle="Software Engineer" companyName="Tech Corp" />);

@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFadeIn } from '@/utils/animations';
-import ApplicationDialog from '@/components/applications/ApplicationDialog';
+import { ApplicationDialog } from '@/components/applications/ApplicationDialog';
 import { ApplicationList } from '@/components/applications/ApplicationList';
 import { ApplicationHeader } from '@/components/applications/ApplicationHeader';
 import { ApplicationFilters } from '@/components/applications/ApplicationFilters';
@@ -184,7 +185,9 @@ const Applications = () => {
 
       <ApplicationDialog
         open={showAddDialog}
-        onClose={() => setShowAddDialog(false)}
+        onOpenChange={setShowAddDialog}
+        showSavedJobs={showSavedJobs}
+        setShowSavedJobs={setShowSavedJobs}
         onSuccess={loadApplications}
       />
     </Layout>
