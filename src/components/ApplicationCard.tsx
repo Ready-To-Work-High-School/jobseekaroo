@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,12 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { CalendarDays, Building2, MapPin, Clock } from 'lucide-react';
-import { Application } from '@/types/application';
+import { JobApplication } from '@/types/application';
 import { useAuth } from '@/hooks/useAuth';
 
 interface ApplicationCardProps {
-  application: Application;
-  onUpdate?: (application: Application) => void;
+  application: JobApplication;
+  onUpdate?: (application: JobApplication) => void;
 }
 
 const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, onUpdate }) => {
@@ -33,7 +34,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, onUpdate
             variant={
               application.status === 'applied' ? 'secondary' :
               application.status === 'interviewing' ? 'default' :
-              application.status === 'offer' ? 'default' :
+              application.status === 'offered' ? 'default' :
               application.status === 'rejected' ? 'destructive' :
               'outline'
             }
@@ -45,13 +46,6 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, onUpdate
       
       <CardContent className="pt-0">
         <div className="space-y-2 text-sm text-gray-600">
-          {application.location && (
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <span>{application.location}</span>
-            </div>
-          )}
-          
           {application.applied_date && (
             <div className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4" />
@@ -59,10 +53,10 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application, onUpdate
             </div>
           )}
           
-          {application.last_updated && (
+          {application.updated_at && (
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              <span>Updated {formatDistanceToNow(new Date(application.last_updated), { addSuffix: true })}</span>
+              <span>Updated {formatDistanceToNow(new Date(application.updated_at), { addSuffix: true })}</span>
             </div>
           )}
         </div>

@@ -1,73 +1,110 @@
 
-import { useFadeIn } from '@/utils/animations';
-import SectionHeading from './programs/SectionHeading';
-import WestsideAcademy from './programs/WestsideAcademy';
-import EntrepreneurshipStoreSection from './programs/EntrepreneurshipStoreSection';
-import CredentialBadges from './auth/CredentialBadges';
-import { Alert, AlertDescription } from './ui/alert';
-import { cn } from '@/lib/utils';
-import SectionSeparator from './home/SectionSeparator';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useEffect, useRef } from 'react';
-import { protectElement } from '@/utils/textProtection';
-import { Card, CardContent } from './ui/card';
-import { Sparkles, GraduationCap, ArrowRight, Award, BadgeCheck } from 'lucide-react';
-import { Badge } from './ui/badge';
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ExternalLink, Users, Calendar, Award } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
-const ProgramsSection = () => {
-  const animation = useFadeIn(300);
+const ProgramsSection: React.FC = () => {
   const { user } = useAuth();
-  const sectionRef = useRef<HTMLElement>(null);
 
-  // Function to get the redirect path based on auth status
-  const getPath = (authenticatedPath: string) => {
-    return user ? authenticatedPath : "/sign-in";
-  };
+  const programs = [
+    {
+      id: 1,
+      title: 'Summer Internship Program',
+      description: 'Gain hands-on experience with local businesses during your summer break.',
+      duration: '8-12 weeks',
+      participants: '50+ students',
+      status: 'Open',
+      deadline: 'March 15, 2024',
+    },
+    {
+      id: 2,
+      title: 'Career Mentorship Program',
+      description: 'Get paired with industry professionals for guidance and networking.',
+      duration: '6 months',
+      participants: '30+ mentors',
+      status: 'Applications Soon',
+      deadline: 'April 1, 2024',
+    },
+    {
+      id: 3,
+      title: 'Skills Certification Workshop',
+      description: 'Earn industry-recognized certifications in various skill areas.',
+      duration: '4-6 weeks',
+      participants: '100+ students',
+      status: 'Ongoing',
+      deadline: 'Rolling basis',
+    },
+  ];
 
-  // Apply text protection to the section
-  useEffect(() => {
-    if (sectionRef.current) {
-      protectElement(sectionRef.current);
-    }
-  }, []);
-  
   return (
-    <section ref={sectionRef} className={`py-16 bg-secondary/5 ${animation} protected-content`}>
-      <div className="container-custom">
-        {/* For Employers Only heading placed at the top of the section */}
-        <h2 className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight text-center w-full")}>
-          <span className="bg-gradient-to-r from-red-800 via-amber-600 to-red-900 py-3 font-bold text-gray-100 text-center text-3xl w-full block md:text-5xl">
-            Employer Resources
-          </span>
-        </h2>
-        
-        {/* Employers Section - Simplified without burst image */}
-        <div className="mb-12">
-          <div className="flex flex-col items-center justify-center gap-6 max-w-2xl mx-auto text-center">
-            <Card className="w-full rounded-xl overflow-hidden border-red-300 shadow-lg bg-gradient-to-br from-gray-100 to-gray-200">
-              <CardContent className="p-8">
-                <div className="flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-red-800 mr-2" />
-                  <h3 className="font-extrabold text-xl md:text-2xl text-red-900">
-                    Hiring Opportunity
-                  </h3>
+    <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Special Programs & Opportunities
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Accelerate your career with our exclusive programs designed for high school students
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {programs.map((program) => (
+            <Card key={program.id} className="h-full">
+              <CardHeader>
+                <div className="flex justify-between items-start mb-2">
+                  <CardTitle className="text-xl">{program.title}</CardTitle>
+                  <Badge 
+                    variant={
+                      program.status === 'Open' ? 'default' :
+                      program.status === 'Ongoing' ? 'secondary' :
+                      'outline'
+                    }
+                  >
+                    {program.status}
+                  </Badge>
+                </div>
+                <CardDescription>{program.description}</CardDescription>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Duration: {program.duration}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Users className="mr-2 h-4 w-4" />
+                    {program.participants}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Award className="mr-2 h-4 w-4" />
+                    Deadline: {program.deadline}
+                  </div>
                 </div>
                 
-                <p className="font-medium text-lg mb-6 text-zinc-800">
-                  Connect with our Entrepreneurship Academy to find pre-trained students with industry-recognized credentials ready for your workforce.
-                </p>
-                
-                <a href="mailto:ColemanP3@duvalschools.org" className="inline-block px-6 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-colors">
-                  Contact Us Today
-                </a>
+                <Button className="w-full" disabled={program.status === 'Applications Soon'}>
+                  {program.status === 'Applications Soon' ? 'Coming Soon' : 'Learn More'}
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
-          </div>
+          ))}
         </div>
-        
-        {/* Display our updated CredentialBadges component here */}
-        <CredentialBadges />
+
+        {!user && (
+          <div className="text-center mt-8">
+            <p className="text-gray-600 mb-4">
+              Sign up to access exclusive programs and get notifications about new opportunities!
+            </p>
+            <Button asChild>
+              <a href="/sign-up">Join Now</a>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

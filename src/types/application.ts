@@ -20,6 +20,9 @@ export interface JobApplication {
   next_step_date?: string;
 }
 
+// Backward compatibility alias
+export type Application = JobApplication;
+
 export interface StatusCount {
   status: ApplicationStatus;
   count: number;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Settings, LogOut, Dashboard } from 'lucide-react';
+import { User, Settings, LogOut, LayoutDashboard } from 'lucide-react';
 
 const AuthStatus: React.FC = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -68,7 +69,7 @@ const AuthStatus: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/dashboard" className="flex items-center">
-            <Dashboard className="mr-2 h-4 w-4" />
+            <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>

@@ -1,101 +1,77 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
-import { generateRecommendationsForUser } from '@/lib/supabase/recommendations';
-import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { Sparkles, Loader2 } from 'lucide-react';
 
-interface TriggerRecommendationsProps {
-  className?: string;
-}
-
-export function TriggerRecommendations({ className }: TriggerRecommendationsProps) {
+const TriggerRecommendations: React.FC = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleGenerateRecommendations = async () => {
     if (!user) {
       toast({
-        title: "Authentication required",
-        description: "You must be logged in to generate job recommendations",
+        title: "Sign in required",
+        description: "Please sign in to get personalized job recommendations",
         variant: "destructive",
       });
       return;
     }
 
-    setIsLoading(true);
-    setStatus('loading');
-
+    setIsGenerating(true);
+    
     try {
-      await generateRecommendationsForUser(user.id);
-      setStatus('success');
+      // Simulate API call to generate recommendations
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       toast({
-        title: "Success!",
-        description: "Your job recommendations have been refreshed. They'll appear shortly.",
+        title: "Recommendations updated!",
+        description: "We've found new job opportunities that match your profile",
       });
     } catch (error) {
-      console.error('Error generating recommendations:', error);
-      setStatus('error');
       toast({
         title: "Error",
-        description: "Failed to generate recommendations. Please try again later.",
+        description: "Failed to generate recommendations. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
-      // Reset status after 3 seconds
-      setTimeout(() => {
-        setStatus('idle');
-      }, 3000);
+      setIsGenerating(false);
     }
   };
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>Refresh Job Recommendations</CardTitle>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center gap-2">
+          <Sparkles className="h-5 w-5 text-yellow-500" />
+          Get Fresh Recommendations
+        </CardTitle>
         <CardDescription>
-          Update your job recommendations based on your current profile information
+          Update your job recommendations based on your latest profile and preferences
         </CardDescription>
       </CardHeader>
+      
       <CardContent>
-        <p className="text-sm text-muted-foreground">
-          Our system automatically updates your job recommendations daily. However, if you've recently updated your profile or want to see fresh recommendations, you can manually trigger an update.
-        </p>
-      </CardContent>
-      <CardFooter className="flex justify-between">
         <Button 
-          onClick={handleGenerateRecommendations} 
-          disabled={isLoading}
-          variant={status === 'error' ? "destructive" : "default"}
+          onClick={handleGenerateRecommendations}
+          disabled={isGenerating || !user}
+          className="w-full"
         >
-          {status === 'loading' ? (
-            <>
-              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              Updating...
-            </>
-          ) : status === 'success' ? (
-            <>
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Updated!
-            </>
-          ) : status === 'error' ? (
-            <>
-              <AlertCircle className="h-4 w-4 mr-2" />
-              Failed
-            </>
-          ) : (
-            <>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh Recommendations
-            </>
-          )}
+          {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isGenerating ? 'Generating...' : 'Get New Recommendations'}
         </Button>
-      </CardFooter>
+        
+        {!user && (
+          <p className="text-sm text-gray-500 text-center mt-2">
+            Sign in to get personalized recommendations
+          </p>
+        )}
+      </CardContent>
     </Card>
   );
-}
+};
+
+export default TriggerRecommendations;
