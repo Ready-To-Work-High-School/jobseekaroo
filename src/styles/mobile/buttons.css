@@ -1,0 +1,45 @@
+
+/* Mobile button and touch styles */
+@media (max-width: 768px) {
+  /* Authentication button adjustments for mobile */
+  .auth-provider-button {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Fancy buttons for teen appeal */
+  .teen-button {
+    background: linear-gradient(135deg, #8E2446 0%, #C13C67 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(142, 36, 70, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .teen-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgba(142, 36, 70, 0.1);
+  }
+
+  /* Apple Sign In specific styles */
+  .apple-sign-in-button {
+    min-height: 48px;
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    background-color: black;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .dark .apple-sign-in-button {
+    background-color: white;
+    color: black;
+  }
+}

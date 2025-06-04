@@ -1,0 +1,113 @@
+
+/* Mobile scrolling and swipe functionality */
+@media (max-width: 768px) {
+  /* Improved touch scrolling */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbars for mobile */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .mobile-scroll::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  .mobile-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  /* Mobile swipe actions */
+  .swipe-action-container {
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+  
+  .swipe-action {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+  }
+  
+  .swipe-action-left {
+    left: 0;
+    background: #f44336;
+    color: white;
+  }
+  
+  .swipe-action-right {
+    right: 0;
+    background: #4caf50;
+    color: white;
+  }
+
+  /* Horizontal scrolling enhancements */
+  .grid-cols-1 {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .grid-cols-1 > * {
+    flex: 0 0 auto;
+    width: 85%;
+    scroll-snap-align: start;
+  }
+  
+  /* Ensure cards have equal height in horizontal scroll */
+  .grid-cols-1 .card {
+    height: 100%;
+  }
+
+  /* Horizontal scrolling sections */
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .horizontal-scroll > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  /* Add padding to account for the feature cards in horizontal scroll */
+  .feature-cards-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    width: calc(100% + 2rem);
+  }
+  
+  /* Fun scroll effects for teens */
+  .teen-scroll-effect {
+    position: relative;
+  }
+  
+  .teen-scroll-effect::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
+    pointer-events: none;
+  }
+}

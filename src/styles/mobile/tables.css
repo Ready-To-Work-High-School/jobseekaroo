@@ -1,0 +1,28 @@
+
+/* Mobile table and navigation styles */
+@media (max-width: 768px) {
+  /* Mobile-friendly tables */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Mobile-friendly tabs */
+  .mobile-tabs [role="tablist"] {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .mobile-tabs [role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mobile-tabs [role="tab"] {
+    flex: none;
+    white-space: nowrap;
+  }
+}

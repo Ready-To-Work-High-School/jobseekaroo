@@ -5,7 +5,7 @@
 @import 'layout.css';
 @import 'utilities/index.css';
 @import 'accessibility.css';
-@import 'mobile.css';
+@import 'mobile/index.css';
 @import 'print.css';
 @import 'animations.css';
 

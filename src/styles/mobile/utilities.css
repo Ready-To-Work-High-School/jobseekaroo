@@ -1,0 +1,71 @@
+
+/* Mobile utility classes and safe areas */
+@media (max-width: 768px) {
+  /* Cool image effects */
+  .teen-image {
+    border-radius: 16px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    transition: all 0.3s ease;
+  }
+  
+  .teen-image:hover {
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+  }
+
+  /* Prevent body scrolling when a modal is open */
+  body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  /* Mobile-optimized buttons and touch targets */
+  .btn-mobile-full {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .mobile-touch-area {
+    position: relative;
+  }
+  
+  .mobile-touch-area::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    z-index: 1;
+  }
+
+  /* Mobile onboarding tour */
+  .onboarding-spotlight {
+    position: relative;
+    z-index: 60;
+  }
+  
+  .onboarding-spotlight::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 8px;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Safe area adjustments for mobile */
+  @supports (padding: max(0px)) {
+    .mobile-safe-top {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    
+    .mobile-safe-bottom {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+  }
+}
