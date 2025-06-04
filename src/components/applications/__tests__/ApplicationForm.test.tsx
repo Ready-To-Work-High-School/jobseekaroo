@@ -1,13 +1,15 @@
+
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
+import { useAuth } from '@/hooks/useAuth';
 import ApplicationForm from '../ApplicationForm';
 
 vi.mock('@/hooks/useAuth', () => ({
-  useAuth: () => ({
+  useAuth: vi.fn(() => ({
     user: { id: 'test-user' },
     createApplication: vi.fn(),
-  }),
+  })),
 }));
 
 vi.mock('@/hooks/use-toast', () => ({
