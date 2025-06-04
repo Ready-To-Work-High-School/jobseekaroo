@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +12,8 @@ interface VerificationStepProps {
 }
 
 const VerificationStep: React.FC<VerificationStepProps> = ({ onComplete }) => {
+  const navigate = useNavigate();
+
   const verificationItems = [
     {
       icon: FileText,
@@ -33,8 +36,8 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ onComplete }) => {
   ];
 
   const handleStartVerification = () => {
-    // This would typically navigate to the actual verification form
-    onComplete({ verificationStarted: true });
+    // Navigate to the verification form
+    navigate('/employer/verify');
   };
 
   return (
