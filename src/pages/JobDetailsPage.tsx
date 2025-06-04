@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -6,26 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Briefcase, MapPin, Clock, DollarSign, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { getJobById } from '@/lib/supabase/jobs';
 
 const JobDetailsPage = () => {
-  const { jobId } = useParams();
+  const { id } = useParams(); // Fixed: use 'id' instead of 'jobId'
   const { toast } = useToast();
   const { user } = useAuth();
   const [job, setJob] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    if (!jobId) {
+    if (!id) {
       setIsLoading(false);
       return;
     }
 
     const fetchJob = async () => {
       try {
-        console.log('Fetching job with ID:', jobId);
-        const jobData = await getJobById(jobId);
+        console.log('Fetching job with ID:', id);
+        const jobData = await getJobById(id);
         console.log('Job data received:', jobData);
         
         if (jobData) {
@@ -47,7 +46,7 @@ const JobDetailsPage = () => {
     setTimeout(() => {
       fetchJob();
     }, 500);
-  }, [jobId, toast]);
+  }, [id, toast]);
 
   // If user is not authenticated, show sign-in prompt
   if (!user) {
