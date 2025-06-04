@@ -55,12 +55,16 @@ const AuthTabsContainer = () => {
       console.log('Sign up process starting');
       const user = await signUp(email, password, firstName, lastName, userType);
       
-      toast({
-        title: "Account created!",
-        description: "Your account has been created successfully.",
-      });
-      
-      setTimeout(() => navigate('/dashboard'), 500);
+      if (user) {
+        toast({
+          title: "Account created!",
+          description: "Your account has been created successfully.",
+        });
+        
+        setTimeout(() => navigate('/dashboard'), 500);
+      } else {
+        throw new Error('Failed to create account');
+      }
     } catch (err: any) {
       console.error('Sign up error:', err);
       setError(err.message || 'Failed to create account');

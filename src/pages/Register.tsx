@@ -40,8 +40,8 @@ const Register = () => {
       const firstName = nameParts[0] || '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-      // Call signUp - it returns User | null, not { user, error }
-      const user = await signUp(email, password, firstName, lastName);
+      // Call signUp - it now returns User | null
+      const user = await signUp(email, password, firstName, lastName, 'student');
       
       if (user) {
         console.log('Register page: Signup complete, redirecting to dashboard');

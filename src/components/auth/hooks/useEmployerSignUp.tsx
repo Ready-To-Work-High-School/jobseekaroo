@@ -37,7 +37,7 @@ export const useEmployerSignUp = ({ onSuccess }: UseEmployerSignUpProps = {}) =>
         throw new Error(errorMessage || "Password is not strong enough");
       }
 
-      // Create the user account - signUp returns User | null, not { user, error }
+      // Create the user account - signUp now returns User | null
       const user = await signUp(
         data.email,
         data.password,

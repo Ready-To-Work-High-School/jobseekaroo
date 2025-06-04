@@ -48,15 +48,20 @@ export const useSchoolAuth = () => {
     setIsLoading(true);
 
     try {
-      await signUp(
+      const user = await signUp(
         signUpData.email,
         signUpData.password,
         signUpData.firstName,
         signUpData.lastName,
         signUpData.userType
       );
-      toast.success("Account created! Your school account has been created successfully.");
-      navigate('/dashboard');
+      
+      if (user) {
+        toast.success("Account created! Your school account has been created successfully.");
+        navigate('/dashboard');
+      } else {
+        throw new Error('Failed to create account');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to create account');
     } finally {

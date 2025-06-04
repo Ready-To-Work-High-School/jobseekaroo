@@ -93,19 +93,23 @@ const StudentSignUpForm: React.FC<StudentSignUpFormProps> = ({
       
       console.log('StudentSignUpForm: Signup completed, user:', user ? 'success' : 'null');
 
-      // Display success message
-      toast({
-        title: "Account created",
-        description: "Your student account has been created successfully.",
-      });
-      
-      // Redirect or callback
-      if (onSuccess) {
-        console.log('StudentSignUpForm: Calling onSuccess callback');
-        onSuccess();
+      if (user) {
+        // Display success message
+        toast({
+          title: "Account created",
+          description: "Your student account has been created successfully.",
+        });
+        
+        // Redirect or callback
+        if (onSuccess) {
+          console.log('StudentSignUpForm: Calling onSuccess callback');
+          onSuccess();
+        } else {
+          console.log('StudentSignUpForm: Redirecting to dashboard');
+          setTimeout(() => navigate('/dashboard'), 500);
+        }
       } else {
-        console.log('StudentSignUpForm: Redirecting to dashboard');
-        setTimeout(() => navigate('/dashboard'), 500);
+        throw new Error('Failed to create account');
       }
     } catch (error: any) {
       console.error('StudentSignUpForm signup error:', error);
