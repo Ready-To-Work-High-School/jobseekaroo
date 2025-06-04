@@ -14,7 +14,7 @@ import {
   FormMessage 
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 
 interface ApplicationFormProps {
