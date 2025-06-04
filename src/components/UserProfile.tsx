@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from './ui/button';

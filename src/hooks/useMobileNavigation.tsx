@@ -1,7 +1,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/auth';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { useToast } from '@/hooks/use-toast';
 
