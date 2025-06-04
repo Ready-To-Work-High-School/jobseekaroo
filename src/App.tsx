@@ -6,7 +6,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { EmployerRoutes } from '@/routes/employerRoutes';
+import EmployerRoutes from '@/routes/employerRoutes';
 import { SchoolRoutes } from '@/routes/schoolRoutes';
 
 // Import all page components
