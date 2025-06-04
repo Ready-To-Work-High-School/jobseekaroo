@@ -4,6 +4,8 @@ import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
 import AdminToggle from '@/components/admin/AdminToggle';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfileStatus } from '@/hooks/useProfileStatus';
+import InceptionBadge from '@/components/badges/InceptionBadge';
 import MayoSummerFeature from '@/components/home/MayoSummerFeature';
 import MacquarieFeature from '@/components/home/MacquarieFeature';
 import MacquarieExternshipFeature from '@/components/home/MacquarieExternshipFeature';
@@ -22,7 +24,8 @@ import UserRecommendationsSection from '@/components/home/UserRecommendationsSec
 
 const Index = () => {
   const fadeIn = useFadeIn(300);
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
+  const { isInceptionMember } = useProfileStatus(userProfile);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -50,6 +53,20 @@ const Index = () => {
         <motion.div variants={itemVariants}>
           <InfoBanner />
         </motion.div>
+        
+        {/* Welcome message with inception badge for authenticated users */}
+        {user && userProfile && (
+          <motion.div variants={itemVariants} className="container mx-auto px-4 py-6">
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Welcome back, {userProfile.first_name}!
+              </h2>
+              {isInceptionMember && (
+                <InceptionBadge variant="compact" className="flex justify-center" />
+              )}
+            </div>
+          </motion.div>
+        )}
         
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
           <MayoSummerFeature />
