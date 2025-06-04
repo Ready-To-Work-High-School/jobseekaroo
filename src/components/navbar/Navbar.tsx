@@ -5,7 +5,7 @@ import { MobileMenu } from './MobileMenu';
 import DesktopNav from './DesktopNav';
 import { NavbarBrand } from './NavbarBrand';
 import { NavbarRight } from './NavbarRight';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
