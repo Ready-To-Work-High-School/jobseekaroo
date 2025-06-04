@@ -7,7 +7,7 @@ import AnalyticsFilterForm from '@/components/employer/analytics/AnalyticsFilter
 import { ApplicationsTabContent, DemographicsTabContent, EngagementTabContent } from '@/components/employer/analytics/TabContent';
 import PremiumFeaturesCard from '@/components/employer/analytics/PremiumFeaturesCard';
 import { useFadeIn } from '@/utils/animations';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
