@@ -10,7 +10,7 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string, userType?: 'student' | 'employer') => Promise<{ error: any }>;
+  signUp: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   updateProfile: (data: UserProfileUpdate) => Promise<{ error: any }>;
@@ -74,17 +74,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       last_name: 'Doe',
       bio: 'Software developer with a passion for learning',
       location: 'New York, NY',
-      resume_url: 'https://example.com/resume.pdf',
+      resume_url: null,
       skills: ['JavaScript', 'React', 'Node.js'],
       preferences: { theme: 'light', notifications: true },
       user_type: 'student',
       redeemed_at: null,
       redeemed_code: null,
-      avatar_url: 'https://avatar.vercel.sh/user@example.com.png',
+      avatar_url: null,
       email: 'user@example.com',
       company_name: null,
       company_website: null,
-      job_title: 'Student',
+      job_title: null,
       employer_verification_status: null,
       verification_notes: null,
       resume_data_encrypted: null,
@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error: null };
   };
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, userType?: 'student' | 'employer') => {
+  const signUp = async (email: string, password: string) => {
     // Mock sign up
     return { error: null };
   };
@@ -136,17 +136,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const createApplication = async (data: any) => {
     // Mock create application
-    console.log('Creating application:', data);
   };
 
   const updateApplicationStatus = async (id: string, status: string) => {
     // Mock update application status
-    console.log('Updating application status:', id, status);
   };
 
   const deleteApplication = async (id: string) => {
     // Mock delete application
-    console.log('Deleting application:', id);
   };
 
   const getSavedJobs = async () => {
@@ -199,5 +196,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-export { AuthContext };
