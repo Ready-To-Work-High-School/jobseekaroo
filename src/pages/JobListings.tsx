@@ -1,11 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchForm from '@/components/SearchForm';
 import { searchJobsByZipCode, JobSearchFilters } from '@/lib/mock-data/search';
 import { getAllJobs } from '@/lib/supabase/jobs';
 import { syncMockJobsToSupabase } from '@/lib/mock-data/sync-jobs';
-import { Job } from '@/types/job';
 import { toast } from 'sonner';
 import JobListingsLayout from '@/components/job/JobListingsLayout';
 import JobFilterSidebar from '@/components/job/JobFilterSidebar';
@@ -14,6 +12,26 @@ import JobListContent from '@/components/job/JobListContent';
 import TopEmployersSection from '@/components/job/TopEmployersSection';
 import EnhancedJobCard from '@/components/job/EnhancedJobCard';
 import { useIsMobile } from '@/hooks/use-mobile';
+
+// Use the interface that matches the database structure
+interface Job {
+  id: string;
+  title: string;
+  company_name: string;
+  location_city: string;
+  location_state: string;
+  job_type: string;
+  pay_rate_min: number;
+  pay_rate_max: number;
+  pay_rate_period: string;
+  posted_date: string;
+  logo_url?: string;
+  is_featured?: boolean;
+  is_remote?: boolean;
+  is_flexible?: boolean;
+  description?: string;
+  experience_level?: string;
+}
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -135,6 +135,9 @@ const JobListContent: React.FC<JobListContentProps> = ({
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={onPageChange}
+          jobsCount={jobs.length}
+          currentPageStart={startIndex + 1}
+          currentPageEnd={Math.min(endIndex, jobs.length)}
         />
       )}
     </div>

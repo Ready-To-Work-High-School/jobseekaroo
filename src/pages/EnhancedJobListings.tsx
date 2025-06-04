@@ -3,11 +3,31 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import EnhancedSearchForm from '@/components/EnhancedSearchForm';
 import { searchJobsByZipCode, JobSearchFilters } from '@/lib/mock-data/search';
-import { Job } from '@/types/job';
 import JobListingsLayout from '@/components/job/JobListingsLayout';
 import JobFilterSidebar from '@/components/job/JobFilterSidebar';
 import JobMobileFilters from '@/components/job/JobMobileFilters';
 import JobListContent from '@/components/job/JobListContent';
+import EnhancedJobCard from '@/components/job/EnhancedJobCard';
+
+// Use the interface that matches the database structure
+interface Job {
+  id: string;
+  title: string;
+  company_name: string;
+  location_city: string;
+  location_state: string;
+  job_type: string;
+  pay_rate_min: number;
+  pay_rate_max: number;
+  pay_rate_period: string;
+  posted_date: string;
+  logo_url?: string;
+  is_featured?: boolean;
+  is_remote?: boolean;
+  is_flexible?: boolean;
+  description?: string;
+  experience_level?: string;
+}
 
 const EnhancedJobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,23 +76,19 @@ const EnhancedJobListings = () => {
         searchFilters.type = jobTypeParam;
       }
       
-      // Get experience level filter
       const expLevelParam = searchParams.get('experienceLevel');
       if (expLevelParam) {
         searchFilters.experienceLevel = expLevelParam;
       }
       
-      // Get remote work filter
       if (searchParams.has('remote')) {
         searchFilters.isRemote = searchParams.get('remote') === 'true';
       }
       
-      // Get flexible schedule filter
       if (searchParams.has('flexible')) {
         searchFilters.isFlexible = searchParams.get('flexible') === 'true';
       }
       
-      // Get salary range filter
       const salaryMinParam = searchParams.get('salaryMin');
       const salaryMaxParam = searchParams.get('salaryMax');
       if (salaryMinParam || salaryMaxParam) {
@@ -81,19 +97,16 @@ const EnhancedJobListings = () => {
         if (salaryMaxParam) searchFilters.salary.max = parseInt(salaryMaxParam);
       }
       
-      // Get posted within filter
       const postedWithinParam = searchParams.get('postedWithin');
       if (postedWithinParam) {
         searchFilters.postedWithin = parseInt(postedWithinParam);
       }
       
-      // Get keyword filter
       const keywordParam = searchParams.get('keyword');
       if (keywordParam) {
         searchFilters.keywords = [keywordParam];
       }
       
-      // Get sort option
       const sortByParam = searchParams.get('sortBy') as 'relevance' | 'date' | 'salary' | 'distance' | null;
       if (sortByParam) {
         searchFilters.sortBy = sortByParam;
@@ -145,6 +158,12 @@ const EnhancedJobListings = () => {
             zipCode={zipCodeParam}
             onResetFilters={resetFilters}
             onPageChange={setCurrentPage}
+            renderJobCard={(job) => (
+              <EnhancedJobCard 
+                key={job.id}
+                job={job}
+              />
+            )}
           />
         </div>
       </div>
