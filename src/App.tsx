@@ -36,16 +36,38 @@ import SchedulePage from '@/pages/SchedulePage';
 import TestPage from '@/pages/TestPage';
 import SavedJobs from '@/pages/SavedJobs';
 
+// Create a simple error fallback that doesn't use hooks
+const ErrorFallback = ({ error, resetErrorBoundary }: any) => (
+  <div className="min-h-screen flex flex-col items-center justify-center p-4">
+    <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
+    <p className="mb-4">We're having trouble loading the application. Please try again later.</p>
+    <div className="flex gap-4">
+      <button 
+        onClick={resetErrorBoundary}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Try again
+      </button>
+      <a 
+        href="/" 
+        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+      >
+        Go Home
+      </a>
+    </div>
+  </div>
+);
+
 function App() {
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorPage}
-      onError={(error, errorInfo) => {
-        console.error('Application error:', error, errorInfo);
-      }}
-    >
-      <Router>
-        <AuthProvider>
+    <Router>
+      <AuthProvider>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onError={(error, errorInfo) => {
+            console.error('Application error:', error, errorInfo);
+          }}
+        >
           <div className="min-h-screen bg-background">
             <AppHeader />
             <main className="flex-1">
@@ -86,9 +108,9 @@ function App() {
             </main>
             <Toaster />
           </div>
-        </AuthProvider>
-      </Router>
-    </ErrorBoundary>
+        </ErrorBoundary>
+      </AuthProvider>
+    </Router>
   );
 }
 

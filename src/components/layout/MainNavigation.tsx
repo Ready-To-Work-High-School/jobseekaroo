@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { Shield, GraduationCap, Briefcase } from 'lucide-react';
 import { useAdminStatus } from '@/hooks/useAdminStatus';
 import { EmployerDropdown } from './navigation/EmployerDropdown';
