@@ -1,35 +1,9 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-export interface UserProfile {
-  id: string;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
-  company_name?: string;
-  company_website?: string;
-  job_title?: string;
-  employer_verification_status?: 'pending' | 'approved' | 'denied';
-  bio?: string;
-  location?: string;
-  resume_url?: string;
-  skills?: string[];
-  preferences?: Record<string, any>;
-  accessibility_settings?: any;
-  redeemed_at?: string;
-  redeemed_code?: string;
-  avatar_url?: string;
-  created_at?: string;
-  updated_at?: string;
-  verification_notes?: string;
-  resume_data_encrypted?: string;
-  contact_details_encrypted?: string;
-  badges?: any[];
-  premium_status?: string;
-}
+import { UserProfile } from '@/types/user';
 
 export interface AuthContextType {
   user: User | null;
