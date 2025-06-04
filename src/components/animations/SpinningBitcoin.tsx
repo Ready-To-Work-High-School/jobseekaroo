@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { Award } from 'lucide-react';
 
 interface SpinningBitcoinProps {
   size?: number;
@@ -21,6 +22,7 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
   className
 }) => {
   const [unlocked, setUnlocked] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   // Handle the animation completion
   useEffect(() => {
@@ -55,18 +57,26 @@ const SpinningBitcoin: React.FC<SpinningBitcoinProps> = ({
         }}
         className="relative z-10"
       >
-        <img 
-          src="/lovable-uploads/87366ebd-ac00-4f9c-b742-0a3330f31904.png" 
-          alt="Job Seekers 4 High Schools Logo" 
-          width={size}
-          height={size}
-          className="object-contain drop-shadow-lg"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.onerror = null;
-            target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='7'%3E%3C/circle%3E%3Cpolyline points='8.21 13.89 7 23 12 20 17 23 15.79 13.88'%3E%3C/polyline%3E%3C/svg%3E";
-          }}
-        />
+        {!imageError ? (
+          <img 
+            src="/lovable-uploads/87366ebd-ac00-4f9c-b742-0a3330f31904.png" 
+            alt="Job Seekers 4 High Schools Logo" 
+            width={size}
+            height={size}
+            className="object-contain drop-shadow-lg"
+            onError={() => {
+              console.log('Image failed to load, showing fallback');
+              setImageError(true);
+            }}
+          />
+        ) : (
+          <div className={cn("flex items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg", color)}>
+            <Award 
+              size={size * 0.6} 
+              className="text-white"
+            />
+          </div>
+        )}
       </motion.div>
       
       {/* The lock/unlock icon */}
