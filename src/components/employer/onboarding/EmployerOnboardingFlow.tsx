@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, ArrowRight, ArrowLeft, Building2, Users, Target, Zap, Crown, Star } from 'lucide-react';
+import { CheckCircle, ArrowRight, ArrowLeft, Building2, Users, Target, Zap, Star } from 'lucide-react';
 import { Stepper, Step } from '@/components/ui/stepper';
 import WelcomeStep from './steps/WelcomeStep';
 import CompanyInfoStep from './steps/CompanyInfoStep';
@@ -79,7 +79,11 @@ const EmployerOnboardingFlow: React.FC = () => {
         <CardContent className="p-6">
           <div className="flex items-center justify-center space-x-3">
             <div className="flex items-center space-x-2">
-              <Crown className="h-6 w-6 text-amber-600" />
+              <img 
+                src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
+                alt="Job Seekers 4 High Schools Logo" 
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-lg font-semibold text-amber-900">Premium Onboarding Service</span>
               <Star className="h-5 w-5 text-amber-500" />
             </div>
