@@ -22,19 +22,6 @@ import TeacherDashboard from '@/pages/TeacherDashboard';
 import SchoolDashboard from '@/pages/SchoolDashboard';
 import SystemDiagnosticsPage from '@/pages/SystemDiagnosticsPage';
 import NotFound from '@/pages/NotFound';
-import SkillDevelopment from '@/pages/SkillDevelopment';
-import InterviewPrep from '@/pages/InterviewPrep';
-import EmployerAnalytics from '@/pages/EmployerAnalytics';
-import EmployerPremiumServices from '@/pages/EmployerPremiumServices';
-import PremiumServices from '@/pages/PremiumServices';
-import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
-import SchoolGuide from '@/pages/SchoolGuide';
-import SchoolIntegration from '@/pages/SchoolIntegration';
-import Resources from '@/pages/Resources';
-import PlatformGuide from '@/pages/PlatformGuide';
-import ForEmployers from '@/pages/ForEmployers';
-import SchedulePage from '@/pages/SchedulePage';
-import TestPage from '@/pages/TestPage';
 import SavedJobs from '@/pages/SavedJobs';
 
 // Create a client
@@ -79,19 +66,6 @@ function App() {
                   <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
                   <Route path="/school-dashboard" element={<SchoolDashboard />} />
                   <Route path="/system-diagnostics" element={<SystemDiagnosticsPage />} />
-                  <Route path="/skill-development" element={<SkillDevelopment />} />
-                  <Route path="/interview-prep" element={<InterviewPrep />} />
-                  <Route path="/employer-analytics" element={<EmployerAnalytics />} />
-                  <Route path="/premium-services" element={<PremiumServices />} />
-                  <Route path="/employer-premium" element={<EmployerPremiumServices />} />
-                  <Route path="/analytics" element={<AnalyticsDashboard />} />
-                  <Route path="/school-guide" element={<SchoolGuide />} />
-                  <Route path="/resources" element={<Resources />} />
-                  <Route path="/platform-guide" element={<PlatformGuide />} />
-                  <Route path="/for-employers" element={<ForEmployers />} />
-                  <Route path="/school-integration" element={<SchoolIntegration />} />
-                  <Route path="/schedule" element={<SchedulePage />} />
-                  <Route path="/test" element={<TestPage />} />
                   <Route path="/error" element={<ErrorPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
