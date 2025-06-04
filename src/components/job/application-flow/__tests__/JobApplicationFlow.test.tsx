@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/auth/AuthProvider';
-import { JobApplicationFlow } from '../JobApplicationFlow';
+import JobApplicationFlow from '@/components/job/JobApplicationFlow';
 
 // Mock the useAuth hook
 vi.mock('@/hooks/useAuth', () => ({
@@ -53,7 +53,7 @@ const renderWithProviders = (component: React.ReactElement) => {
 
 describe('JobApplicationFlow', () => {
   it('renders application flow', () => {
-    renderWithProviders(<JobApplicationFlow job={mockJob} />);
-    expect(screen.getByText('Apply for Test Job')).toBeInTheDocument();
+    renderWithProviders(<JobApplicationFlow job={mockJob} onClose={() => {}} />);
+    expect(screen.getByText('Apply for Position')).toBeInTheDocument();
   });
 });
