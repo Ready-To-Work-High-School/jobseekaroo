@@ -10,7 +10,7 @@ interface AuthContextType {
   session: any;
   loading: boolean;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<User | null>;
   signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<{ user: User | null; error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
@@ -36,7 +36,7 @@ export const AuthContext = createContext<AuthContextType>({
   session: null,
   loading: true,
   isAuthenticated: false,
-  signIn: async () => ({ error: null }),
+  signIn: async () => null,
   signUp: async () => ({ user: null, error: null }),
   signOut: async () => {},
   resetPassword: async () => ({ error: null }),
@@ -109,9 +109,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    // Mock sign in
-    return { error: null };
+  const signIn = async (email: string, password: string): Promise<User | null> => {
+    // Mock sign in - return the user object directly
+    const mockUser: User = {
+      id: 'mock-user-id',
+      email,
+      app_metadata: {},
+      user_metadata: {},
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      email_confirmed_at: new Date().toISOString(),
+      phone_confirmed_at: null,
+      last_sign_in_at: new Date().toISOString(),
+      role: 'authenticated',
+      updated_at: new Date().toISOString(),
+    };
+    
+    setUser(mockUser);
+    return mockUser;
   };
 
   const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
@@ -197,14 +213,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (): Promise<User | null> => {
     // Mock Google sign in
-    return null;
+    const mockUser: User = {
+      id: 'google-user-id',
+      email: 'google@example.com',
+      app_metadata: {},
+      user_metadata: {},
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      email_confirmed_at: new Date().toISOString(),
+      phone_confirmed_at: null,
+      last_sign_in_at: new Date().toISOString(),
+      role: 'authenticated',
+      updated_at: new Date().toISOString(),
+    };
+    
+    setUser(mockUser);
+    return mockUser;
   };
 
-  const signInWithApple = async () => {
+  const signInWithApple = async (): Promise<User | null> => {
     // Mock Apple sign in
-    return null;
+    const mockUser: User = {
+      id: 'apple-user-id',
+      email: 'apple@example.com',
+      app_metadata: {},
+      user_metadata: {},
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      email_confirmed_at: new Date().toISOString(),
+      phone_confirmed_at: null,
+      last_sign_in_at: new Date().toISOString(),
+      role: 'authenticated',
+      updated_at: new Date().toISOString(),
+    };
+    
+    setUser(mockUser);
+    return mockUser;
   };
 
   const value = {
