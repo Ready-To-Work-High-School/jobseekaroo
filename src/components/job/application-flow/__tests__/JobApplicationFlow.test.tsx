@@ -1,86 +1,163 @@
 
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/auth/AuthProvider';
+import JobApplicationFlow from '../../JobApplicationFlow';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
+import { Job } from '@/types/job';
 
-// Mock the JobApplicationFlow component since it doesn't exist yet
-const MockJobApplicationFlow = ({ job, onClose }: any) => (
-  <div>
-    <h2>Apply for {job.title}</h2>
-    <p>Application flow for {job.company.name}</p>
-    <button onClick={onClose}>Close</button>
-  </div>
-);
-
-// Mock the useAuth hook
-vi.mock('@/hooks/useAuth', () => ({
-  useAuth: () => ({
-    user: { id: 'test-user-id' },
-    userProfile: null,
-    createApplication: vi.fn(),
-    getSavedJobs: vi.fn().mockResolvedValue([]),
-  }),
+// Mock toast
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn()
+  }
 }));
 
-// Mock react-router-dom hooks
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => vi.fn(),
-    useParams: () => ({ id: 'test-job-id' }),
-  };
-});
+// Mock useAuth hook
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuth: vi.fn(() => ({
+    user: { id: 'test-user-id', email: 'test@example.com' },
+    createApplication: vi.fn().mockResolvedValue({}),
+    getApplications: vi.fn().mockResolvedValue([])
+  })),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+}));
 
-const mockJob = {
-  id: 'test-job-id',
+// Mock react-router-dom
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
+  useNavigate: () => vi.fn()
+}));
+
+const mockJob: Job = {
+  id: 'test-job-1',
   title: 'Test Job',
   company: {
     name: 'Test Company',
-    logoUrl: undefined
+    logoUrl: '/test-logo.png'
   },
   location: {
     city: 'Test City',
-    state: 'Test State',
+    state: 'TS',
     zipCode: '12345'
   },
-  type: 'full-time' as const,
+  description: 'This is a test job description',
   payRate: {
     min: 15,
     max: 25,
-    period: 'hourly' as const
+    period: 'hourly'
   },
-  description: 'Test job description',
-  requirements: ['Test requirement'],
-  experienceLevel: 'entry-level' as const,
-  postedDate: '2024-01-01',
-  logoUrl: undefined,
-  isRemote: false,
+  requirements: ['Test requirement 1', 'Test requirement 2'],
+  postedDate: '2023-01-01',
+  type: 'full-time',
+  isRemote: true,
   isFlexible: true,
-  applicationUrl: undefined,
-  contactEmail: undefined
+  experienceLevel: 'entry-level',
+  applicationUrl: 'https://example.com/apply'
 };
 
-const renderWithProviders = (component: React.ReactElement) => {
+const renderComponent = () => {
   return render(
     <BrowserRouter>
-      <AuthProvider>
-        {component}
-      </AuthProvider>
+      <JobApplicationFlow 
+        job={mockJob}
+        onClose={vi.fn()}
+      />
     </BrowserRouter>
   );
 };
 
 describe('JobApplicationFlow', () => {
-  it('renders application flow with job title', () => {
-    renderWithProviders(<MockJobApplicationFlow job={mockJob} onClose={() => {}} />);
-    expect(screen.getByText('Apply for Test Job')).toBeInTheDocument();
-    expect(screen.getByText('Application flow for Test Company')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('renders close button', () => {
-    renderWithProviders(<MockJobApplicationFlow job={mockJob} onClose={() => {}} />);
-    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
+  it('renders the job application flow with step 1 initially', () => {
+    renderComponent();
+    
+    // Check that the dialog title is present
+    expect(screen.getByText('Apply for Position')).toBeInTheDocument();
+    
+    // Check that step 1 content is visible
+    expect(screen.getByText('Job Overview')).toBeInTheDocument();
+    
+    // Check that the progress bar shows step 1 of 3
+    expect(screen.getByText('Step 1 of 3')).toBeInTheDocument();
+  });
+
+  it('navigates to step 2 when Next button is clicked', async () => {
+    renderComponent();
+    
+    // Click the Next button
+    const nextButton = screen.getByText('Next');
+    fireEvent.click(nextButton);
+    
+    // Check that we moved to step 2
+    await waitFor(() => {
+      expect(screen.getByText('Confirm Your Details')).toBeInTheDocument();
+    });
+    
+    // Check that the progress updates
+    expect(screen.getByText('Step 2 of 3')).toBeInTheDocument();
+  });
+
+  it('allows navigation back to the previous step', async () => {
+    renderComponent();
+    
+    // Go to step 2
+    fireEvent.click(screen.getByText('Next'));
+    await waitFor(() => expect(screen.getByText('Confirm Your Details')).toBeInTheDocument());
+    
+    // Go back to step 1
+    fireEvent.click(screen.getByText('Back'));
+    await waitFor(() => expect(screen.getByText('Job Overview')).toBeInTheDocument());
+  });
+  
+  it('navigates through all steps to completion and submits application', async () => {
+    renderComponent();
+    
+    // Go to step 2
+    fireEvent.click(screen.getByText('Next'));
+    await waitFor(() => expect(screen.getByText('Confirm Your Details')).toBeInTheDocument());
+    
+    // Go to step 3
+    fireEvent.click(screen.getByText('Next'));
+    await waitFor(() => expect(screen.getByText('Submit Your Application')).toBeInTheDocument());
+    
+    // Submit the application
+    const submitButton = screen.getByText('Submit Application');
+    fireEvent.click(submitButton);
+    
+    // Check that the success toast was shown
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith("Application submitted successfully!");
+    });
+    
+    // Check that we see the completion screen
+    await waitFor(() => {
+      expect(screen.getByText('Application Submitted!')).toBeInTheDocument();
+    });
+  });
+  
+  it('renders the completion screen with the correct job info', async () => {
+    renderComponent();
+    
+    // Go through all steps
+    fireEvent.click(screen.getByText('Next')); // Step 1 -> 2
+    await waitFor(() => expect(screen.getByText('Confirm Your Details')).toBeInTheDocument());
+    
+    fireEvent.click(screen.getByText('Next')); // Step 2 -> 3
+    await waitFor(() => expect(screen.getByText('Submit Your Application')).toBeInTheDocument());
+    
+    fireEvent.click(screen.getByText('Submit Application')); // Submit
+    
+    // Check the completion screen has the job title and company
+    await waitFor(() => {
+      expect(screen.getByText(/Test Job/i)).toBeInTheDocument();
+      expect(screen.getByText(/Test Company/i)).toBeInTheDocument();
+      expect(screen.getByText('Application Submitted!')).toBeInTheDocument();
+    });
   });
 });
