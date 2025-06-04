@@ -1,80 +1,39 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
-import { ApplicationForm } from '../ApplicationForm';
+import ApplicationForm from '../ApplicationForm';
 import { Job } from '@/types/job';
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
     createApplication: vi.fn().mockResolvedValue({}),
+    user: { id: 'test-user-id' },
+  }),
+}));
+
+vi.mock('@/hooks/use-toast', () => ({
+  useToast: () => ({
+    toast: vi.fn(),
   }),
 }));
 
 describe('ApplicationForm', () => {
-  const mockOnCancel = vi.fn();
-  const mockOnShowSavedJobs = vi.fn();
-  const mockOnSuccess = vi.fn();
-  const mockSetIsAdding = vi.fn();
-
-  beforeEach(() => {
-    mockOnCancel.mockClear();
-    mockOnShowSavedJobs.mockClear();
-    mockOnSuccess.mockClear();
-    mockSetIsAdding.mockClear();
-  });
-
   it('renders form fields correctly', () => {
     render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
+      <ApplicationForm />
     );
 
-    expect(screen.getByLabelText(/job title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/position title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/application date/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/status/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/application status/i)).toBeInTheDocument();
   });
 
-  it('pre-fills form when selectedJob is provided', () => {
-    const selectedJob: Partial<Job> = {
-      id: '1',
-      title: 'Frontend Developer',
-      company: {
-        name: 'Tech Company',
-      },
-      location: {
-        city: 'San Francisco',
-        state: 'CA',
-        zipCode: '94105',
-      },
-      type: 'full-time',
-      payRate: {
-        min: 50000,
-        max: 100000,
-        period: 'monthly',
-      },
-      description: 'Job description',
-      requirements: ['React', 'TypeScript'],
-      experienceLevel: 'entry-level',
-      postedDate: '2023-01-01',
-      isRemote: false,
-      isFlexible: true,
-    };
-
+  it('pre-fills form when job data is provided', () => {
     render(
       <ApplicationForm
-        selectedJob={selectedJob as Job}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
+        jobTitle="Frontend Developer"
+        companyName="Tech Company"
       />
     );
 
@@ -84,42 +43,20 @@ describe('ApplicationForm', () => {
 
   it('handles form submission', async () => {
     render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={false}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
+      <ApplicationForm />
     );
 
-    fireEvent.change(screen.getByLabelText(/job title/i), {
+    fireEvent.change(screen.getByLabelText(/position title/i), {
       target: { value: 'Test Job' },
     });
     fireEvent.change(screen.getByLabelText(/company/i), {
       target: { value: 'Test Company' },
     });
 
-    fireEvent.click(screen.getByText('Add Application'));
+    fireEvent.click(screen.getByText('Track Application'));
 
     await waitFor(() => {
-      expect(mockSetIsAdding).toHaveBeenCalledWith(true);
+      expect(screen.getByText('Tracking...')).toBeInTheDocument();
     });
-  });
-
-  it('disables form submission while adding', () => {
-    render(
-      <ApplicationForm
-        selectedJob={null}
-        isAdding={true}
-        setIsAdding={mockSetIsAdding}
-        onCancel={mockOnCancel}
-        onShowSavedJobs={mockOnShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
-    );
-
-    expect(screen.getByText('Adding...')).toBeDisabled();
   });
 });

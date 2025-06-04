@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { ApplicationStatus, JobApplication } from '@/types/application';
 import { Job } from '@/types/job';
@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ApplicationForm } from './ApplicationForm';
+import ApplicationForm from './ApplicationForm';
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -31,7 +31,6 @@ export const ApplicationDialog = ({
   setShowSavedJobs,
   onSuccess
 }: ApplicationDialogProps) => {
-  const [isAdding, setIsAdding] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const { getSavedJobs, createApplication } = useAuth();
   const { toast } = useToast();
@@ -99,14 +98,10 @@ export const ApplicationDialog = ({
           </>
         ) : (
           <ApplicationForm
-            selectedJob={selectedJob}
-            isAdding={isAdding}
-            setIsAdding={setIsAdding}
+            jobId={selectedJob?.id}
+            jobTitle={selectedJob?.title}
+            companyName={selectedJob?.company.name}
             onCancel={() => onOpenChange(false)}
-            onShowSavedJobs={() => {
-              setShowSavedJobs(true);
-              loadSavedJobs();
-            }}
             onSuccess={handleSuccess}
           />
         )}

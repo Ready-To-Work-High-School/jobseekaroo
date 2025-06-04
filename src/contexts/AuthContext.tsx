@@ -37,64 +37,92 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
+    let mounted = true;
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
+        
+        if (!mounted) return;
+        
         setSession(session);
         setUser(session?.user ?? null);
         
-        if (session?.user) {
-          // Fetch user profile
+        if (session?.user && mounted) {
+          // Use setTimeout to defer profile fetch and prevent blocking
           setTimeout(async () => {
+            if (!mounted) return;
+            
             try {
-              const { data: profile } = await supabase
+              const { data: profile, error } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', session.user.id)
                 .single();
               
-              if (profile) {
+              if (mounted && profile && !error) {
                 setUserProfile(profile);
+              } else if (error && error.code !== 'PGRST116') {
+                console.error('Error fetching user profile:', error);
               }
             } catch (error) {
               console.error('Error fetching user profile:', error);
             }
           }, 0);
-        } else {
+        } else if (mounted) {
           setUserProfile(null);
         }
         
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error);
+      }
+      
+      if (mounted) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string): Promise<User | null> => {
     try {
+      setIsLoading(true);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
       
       if (error) {
         console.error('Sign in error:', error);
-        throw error;
+        throw new Error(error.message);
+      }
+      
+      if (!data.user) {
+        throw new Error('Sign in failed: No user returned');
       }
       
       return data.user;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign in error:', error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,13 +134,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     userType: 'student' | 'employer' = 'student'
   ): Promise<User | null> => {
     try {
+      setIsLoading(true);
+      
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: {
-            first_name: firstName,
-            last_name: lastName,
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
             user_type: userType,
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -121,36 +151,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error('Sign up error:', error);
-        throw error;
+        throw new Error(error.message);
       }
       
       return data.user;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign up error:', error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const signOut = async (): Promise<void> => {
     try {
+      console.log('Starting sign out process...');
+      setIsLoading(true);
+      
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error('Sign out error:', error);
-        throw error;
+        throw new Error(error.message);
       }
       
-      // Clear local storage
+      // Clear local state immediately
+      setUser(null);
+      setUserProfile(null);
+      setSession(null);
+      
+      // Clear any stored tokens
       localStorage.removeItem('supabase.auth.token');
       sessionStorage.removeItem('redirectAfterLogin');
-    } catch (error) {
+      
+      console.log('Sign out completed successfully');
+    } catch (error: any) {
       console.error('Sign out error:', error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const signInWithGoogle = async (): Promise<void> => {
     try {
+      setIsLoading(true);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -160,16 +206,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error('Google sign in error:', error);
-        throw error;
+        throw new Error(error.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Google sign in error:', error);
+      setIsLoading(false);
       throw error;
     }
   };
 
   const signInWithApple = async (): Promise<void> => {
     try {
+      setIsLoading(true);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
@@ -179,10 +228,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error('Apple sign in error:', error);
-        throw error;
+        throw new Error(error.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Apple sign in error:', error);
+      setIsLoading(false);
       throw error;
     }
   };
@@ -210,14 +260,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
       
-      if (profile) {
+      if (profile && !error) {
         setUserProfile(profile);
+      } else if (error && error.code !== 'PGRST116') {
+        console.error('Error refreshing profile:', error);
       }
     } catch (error) {
       console.error('Error refreshing profile:', error);
