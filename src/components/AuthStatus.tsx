@@ -14,22 +14,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User, BookMarked, Award, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthStatus = () => {
   const { user, userProfile, signOut } = useAuth();
   const { toast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Removed debug logs - these were causing repeated logging
   const handleSignOut = async () => {
     try {
+      console.log('AuthStatus: Starting sign out process');
       await signOut();
+      console.log('AuthStatus: Sign out completed, redirecting to home');
+      
       toast({
         title: "Signed out",
         description: "You have been successfully signed out.",
       });
+      
+      // Redirect to home page after sign out
+      navigate('/');
     } catch (error: any) {
-      console.error('Sign out error:', error);
+      console.error('AuthStatus: Sign out error:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to sign out. Please try again.",

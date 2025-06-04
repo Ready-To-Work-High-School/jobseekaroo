@@ -1,39 +1,18 @@
 
-import { createContext, ReactNode, useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
-import { signIn, signUp, signOut, signInWithGoogle, signInWithApple } from './auth/authService';
 import { UserProfile } from '@/types/user';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
-  session: Session | null;
   isLoading: boolean;
-  error: string | null;
   signIn: (email: string, password: string) => Promise<User | null>;
   signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<User | null>;
   signOut: () => Promise<void>;
-  signInWithGoogle: () => Promise<User | null>;
-  signInWithApple: () => Promise<User | null>;
-  updateProfile: (data: any) => Promise<UserProfile | null>;
+  updateProfile: (profileData: any) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
-  // Job actions
-  saveJob?: (jobId: string) => Promise<void>;
-  unsaveJob?: (jobId: string) => Promise<void>;
-  isSavedJob?: (jobId: string) => Promise<boolean>;
-  getSavedJobs?: () => Promise<any[]>;
-  // Application actions
-  createApplication?: (data: any) => Promise<void>;
-  updateApplicationStatus?: (applicationId: string, status: string) => Promise<void>;
-  getApplications?: () => Promise<any[]>;
-  deleteApplication?: (applicationId: string) => Promise<void>;
-  // Admin actions
-  makeAdmin?: () => Promise<void>;
-  verifyEmployer?: () => Promise<void>;
-  redeemCode?: () => Promise<void>;
-  submitApplication?: (jobId: string, data: any) => Promise<void>;
-  checkEmployerApproval?: (userId: string) => Promise<{ canPostJobs: boolean; message: string }>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,124 +20,136 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchUserProfile = async (userId: string) => {
+  const refreshProfile = async () => {
+    if (!user) {
+      console.log('refreshProfile: No user to refresh profile for');
+      return;
+    }
+    
     try {
-      console.log('Fetching profile for user:', userId);
+      console.log('refreshProfile: Fetching profile for user:', user.id);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', userId)
+        .eq('id', user.id)
         .single();
-      
-      if (error && error.code !== 'PGRST116') {
+
+      if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
       
+      console.log('refreshProfile: Profile data fetched:', data ? 'success' : 'null');
+      
       if (data) {
-        console.log('Profile fetched successfully:', data);
-        setUserProfile(data as UserProfile);
-      } else {
-        console.log('No profile found, creating default profile');
-        // Create a default profile if none exists
-        const defaultProfile = {
-          id: userId,
-          user_type: 'student' as const,
-          first_name: user?.user_metadata?.first_name || '',
-          last_name: user?.user_metadata?.last_name || '',
-          email: user?.email || ''
+        const formattedProfile: UserProfile = {
+          id: data.id,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          bio: data.bio,
+          location: data.location,
+          resume_url: data.resume_url,
+          skills: data.skills || [],
+          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
+          user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
+          redeemed_at: data.redeemed_at,
+          redeemed_code: data.redeemed_code,
+          avatar_url: data.avatar_url,
+          email: data.email,
+          company_name: data.company_name,
+          company_website: data.company_website,
+          job_title: data.job_title,
+          employer_verification_status: data.employer_verification_status as "pending" | "approved" | "rejected" | null,
+          verification_notes: data.verification_notes,
+          resume_data_encrypted: data.resume_data_encrypted,
+          contact_details_encrypted: data.contact_details_encrypted,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          badges: Array.isArray(data.badges) 
+            ? data.badges.map(badge => ({ 
+                id: (badge as any).id || '',
+                name: (badge as any).name || '',
+                earned_at: (badge as any).earned_at
+              }))
+            : []
         };
         
-        const { data: newProfile, error: createError } = await supabase
-          .from('profiles')
-          .insert([defaultProfile])
-          .select()
-          .single();
-          
-        if (createError) {
-          console.error('Error creating profile:', createError);
-        } else if (newProfile) {
-          console.log('Created new profile:', newProfile);
-          setUserProfile(newProfile as UserProfile);
-        }
+        setUserProfile(formattedProfile);
       }
     } catch (error) {
-      console.error('Error in fetchUserProfile:', error);
+      console.error('Error refreshing profile:', error);
     }
   };
 
   useEffect(() => {
-    console.log('Setting up auth state listener...');
-    
-    // Set up auth state listener
+    let isFirstLoad = true;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, 'User ID:', session?.user?.id);
+        console.log('Auth state changed:', event, session?.user?.id);
         
-        setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          console.log('User is authenticated, fetching profile...');
-          await fetchUserProfile(session.user.id);
+          setTimeout(() => {
+            console.log('Refreshing profile for user:', session.user?.id);
+            refreshProfile().catch(err => {
+              console.error('Background profile refresh failed:', err);
+            });
+          }, 0);
         } else {
-          console.log('User is not authenticated, clearing profile');
           setUserProfile(null);
         }
         
         setIsLoading(false);
       }
     );
-
-    // Check for existing session immediately
-    const checkSession = async () => {
-      console.log('Checking for existing session...');
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        console.error('Error getting session:', error);
-        setIsLoading(false);
-        return;
-      }
-      
-      console.log('Initial session check:', session?.user?.id || 'No session');
-      
-      setSession(session);
+    
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.id);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        console.log('Found existing session, fetching profile...');
-        await fetchUserProfile(session.user.id);
+        console.log('Found existing session, refreshing profile');
+        refreshProfile().catch(err => {
+          console.error('Initial profile refresh failed:', err);
+        });
       }
       
       setIsLoading(false);
-    };
-
-    checkSession();
-
-    return () => {
-      console.log('Cleaning up auth subscription');
-      subscription.unsubscribe();
-    };
+      isFirstLoad = false;
+    });
+    
+    return () => subscription.unsubscribe();
   }, []);
 
-  const handleSignIn = async (email: string, password: string): Promise<User | null> => {
+  const signIn = async (email: string, password: string): Promise<User | null> => {
     try {
-      setError(null);
-      const { user, error } = await signIn(email, password);
-      if (error) throw error;
-      return user;
+      console.log('AuthContext: Starting sign in process for:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        console.error('Sign in error:', error);
+        throw error;
+      }
+      
+      if (data.user) {
+        console.log('AuthContext: Sign in successful for user:', data.user.id);
+      }
+      
+      return data.user;
     } catch (error: any) {
-      setError(error.message);
+      console.error('Error signing in:', error);
       throw error;
     }
   };
 
-  const handleSignUp = async (
+  const signUp = async (
     email: string, 
     password: string, 
     firstName: string, 
@@ -166,136 +157,118 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userType: 'student' | 'employer' = 'student'
   ): Promise<User | null> => {
     try {
-      setError(null);
-      const { user, error } = await signUp({ email, password, firstName, lastName, userType });
-      if (error) throw error;
-      return user;
+      console.log('AuthContext: Starting sign up process for:', email);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            user_type: userType,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      
+      if (error) {
+        console.error('Sign up error:', error);
+        throw error;
+      }
+      
+      if (data.user) {
+        console.log('AuthContext: Sign up successful for user:', data.user.id);
+        setTimeout(() => {
+          refreshProfile();
+        }, 500);
+      }
+      
+      return data.user;
     } catch (error: any) {
-      setError(error.message);
+      console.error('Error signing up:', error);
       throw error;
     }
   };
 
-  const handleSignOut = async (): Promise<void> => {
+  const signOut = async (): Promise<void> => {
     try {
-      setError(null);
-      const { error } = await signOut();
-      if (error) throw error;
+      console.log('AuthContext: Starting sign out process');
       
-      // Clear local state
+      // Clear local state first
       setUser(null);
       setUserProfile(null);
-      setSession(null);
+      
+      // Clear any stored session data
+      localStorage.removeItem('supabase.auth.token');
+      sessionStorage.removeItem('redirectAfterLogin');
+      
+      // Sign out from Supabase
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        console.error('Supabase sign out error:', error);
+        throw error;
+      }
+      
+      console.log('AuthContext: Sign out completed successfully');
     } catch (error: any) {
-      setError(error.message);
+      console.error('Error signing out:', error);
       throw error;
     }
   };
 
-  const handleSignInWithGoogle = async (): Promise<User | null> => {
-    try {
-      setError(null);
-      const { user, error } = await signInWithGoogle();
-      if (error) throw error;
-      return user;
-    } catch (error: any) {
-      setError(error.message);
-      throw error;
-    }
-  };
-
-  const handleSignInWithApple = async (): Promise<User | null> => {
-    try {
-      setError(null);
-      const { user, error } = await signInWithApple();
-      if (error) throw error;
-      return user;
-    } catch (error: any) {
-      setError(error.message);
-      throw error;
-    }
-  };
-
-  const updateProfile = async (data: any): Promise<UserProfile | null> => {
+  const updateProfile = async (profileData: any): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
     try {
-      const { data: updatedData, error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
-        .update(data)
+        .update(profileData)
         .eq('id', user.id)
         .select()
         .single();
       
       if (error) throw error;
       
-      if (updatedData) {
-        setUserProfile(updatedData as UserProfile);
-        return updatedData as UserProfile;
+      if (data) {
+        const formattedProfile: UserProfile = {
+          id: data.id,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          bio: data.bio,
+          location: data.location,
+          resume_url: data.resume_url,
+          skills: data.skills || [],
+          preferences: data.preferences ? (typeof data.preferences === 'string' ? JSON.parse(data.preferences) : data.preferences) : {},
+          user_type: data.user_type as "student" | "employer" | "admin" | "teacher" | null,
+          redeemed_at: data.redeemed_at,
+          redeemed_code: data.redeemed_code,
+          avatar_url: data.avatar_url,
+          email: data.email,
+          company_name: data.company_name,
+          company_website: data.company_website,
+          job_title: data.job_title,
+          employer_verification_status: data.employer_verification_status as "pending" | "approved" | "rejected" | null,
+          verification_notes: data.verification_notes,
+          resume_data_encrypted: data.resume_data_encrypted,
+          contact_details_encrypted: data.contact_details_encrypted,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          badges: Array.isArray(data.badges)
+            ? data.badges.map(badge => ({
+                id: (badge as any).id || '',
+                name: (badge as any).name || '',
+                earned_at: (badge as any).earned_at
+              }))
+            : []
+        };
+        
+        setUserProfile(prev => prev ? { ...prev, ...formattedProfile } : formattedProfile);
+        return formattedProfile;
       }
       return null;
     } catch (error) {
       console.error('Failed to update profile:', error);
-      throw error;
-    }
-  };
-
-  const refreshProfile = async (): Promise<void> => {
-    if (user) {
-      console.log('Refreshing profile for user:', user.id);
-      await fetchUserProfile(user.id);
-    }
-  };
-
-  // Application management functions
-  const getApplications = async () => {
-    if (!user) return [];
-    
-    try {
-      const { data, error } = await supabase
-        .from('job_applications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Error getting applications:', error);
-      return [];
-    }
-  };
-
-  const updateApplicationStatus = async (applicationId: string, status: string) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .update({ status, updated_at: new Date().toISOString() })
-        .eq('id', applicationId)
-        .eq('user_id', user.id);
-      
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error updating application status:', error);
-      throw error;
-    }
-  };
-
-  const deleteApplication = async (applicationId: string) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .delete()
-        .eq('id', applicationId)
-        .eq('user_id', user.id);
-      
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error deleting application:', error);
       throw error;
     }
   };
@@ -305,38 +278,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user,
         userProfile,
-        session,
         isLoading,
-        error,
-        signIn: handleSignIn,
-        signUp: handleSignUp,
-        signOut: handleSignOut,
-        signInWithGoogle: handleSignInWithGoogle,
-        signInWithApple: handleSignInWithApple,
+        signIn,
+        signUp,
+        signOut,
         updateProfile,
-        refreshProfile,
-        // Job actions - placeholder functions
-        saveJob: async () => {},
-        unsaveJob: async () => {},
-        isSavedJob: async () => false,
-        getSavedJobs: async () => [],
-        // Application actions
-        createApplication: async () => {},
-        updateApplicationStatus,
-        getApplications,
-        deleteApplication,
-        // Admin actions - placeholder functions
-        makeAdmin: async () => {},
-        verifyEmployer: async () => {},
-        redeemCode: async () => {},
-        submitApplication: async () => {},
-        checkEmployerApproval: async () => ({ canPostJobs: false, message: 'Not implemented' }),
+        refreshProfile
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
-// Export the useAuth hook
-export { useAuth } from '@/hooks/useAuth';
