@@ -96,103 +96,119 @@ const SchoolGuide = () => {
       </Helmet>
 
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" asChild className="p-0 mr-2">
-              <Link to="/">
-                <ArrowLeft className="h-4 w-4 mr-1" />
-                Back
-              </Link>
-            </Button>
-            <h1 className="text-3xl font-bold flex items-center">
-              <School className="mr-2" /> School Guide
-            </h1>
-          </div>
-        </div>
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left side - Main content */}
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" asChild className="p-0 mr-2">
+                  <Link to="/">
+                    <ArrowLeft className="h-4 w-4 mr-1" />
+                    Back
+                  </Link>
+                </Button>
+                <h1 className="text-3xl font-bold flex items-center">
+                  <School className="mr-2" /> School Guide
+                </h1>
+              </div>
+            </div>
 
-        <div className="bg-background p-6 rounded-lg border mb-8">
-          <h2 className="text-xl font-semibold mb-4">Resources for Educators</h2>
-          <p className="text-muted-foreground mb-6">
-            Utilize our platform to help your students prepare for the workforce with career guidance, skill development tools, and employer connections.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {resources.map((resource, index) => {
-              const Icon = resource.icon;
-              return (
-                <Card key={index} className="transition-all hover:shadow-md">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center gap-2">
-                      <Icon className="h-5 w-5 text-primary" />
-                      {resource.title}
-                    </CardTitle>
-                    <CardDescription>
-                      {resource.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button asChild>
-                      <Link to={resource.link}>Access Resource</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
+            <div className="bg-background p-6 rounded-lg border mb-8">
+              <h2 className="text-xl font-semibold mb-4">Resources for Educators</h2>
+              <p className="text-muted-foreground mb-6">
+                Utilize our platform to help your students prepare for the workforce with career guidance, skill development tools, and employer connections.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {resources.map((resource, index) => {
+                  const Icon = resource.icon;
+                  return (
+                    <Card key={index} className="transition-all hover:shadow-md">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="flex items-center gap-2">
+                          <Icon className="h-5 w-5 text-primary" />
+                          {resource.title}
+                        </CardTitle>
+                        <CardDescription>
+                          {resource.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Button asChild>
+                          <Link to={resource.link}>Access Resource</Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
 
-        {/* Exclusive Features Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-8 mb-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
-              <BarChart3 className="h-6 w-6 text-blue-600" />
-              Exclusive Features for Educational Professionals
-            </h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto">
-              Our platform provides specialized tools and features designed specifically for different roles within the educational ecosystem.
-            </p>
+            {/* Exclusive Features Section */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-8 mb-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+                  <BarChart3 className="h-6 w-6 text-blue-600" />
+                  Exclusive Features for Educational Professionals
+                </h2>
+                <p className="text-muted-foreground max-w-3xl mx-auto">
+                  Our platform provides specialized tools and features designed specifically for different roles within the educational ecosystem.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {exclusiveFeatures.map((category, index) => {
+                  const Icon = category.icon;
+                  return (
+                    <Card key={index} className="bg-white shadow-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Icon className="h-5 w-5 text-blue-600" />
+                          {category.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2">
+                          {category.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className="flex items-start gap-2">
+                              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                              <span className="text-sm">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              <div className="text-center mt-8">
+                <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
+                  <Link to="/school-integration">
+                    Get Started with Exclusive Access
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            
+            <div className="text-center py-8">
+              <h3 className="text-xl font-medium mb-4">Need specialized support for your school?</h3>
+              <Button size="lg" asChild>
+                <Link to="/contact">Contact our Education Team</Link>
+              </Button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {exclusiveFeatures.map((category, index) => {
-              const Icon = category.icon;
-              return (
-                <Card key={index} className="bg-white shadow-sm">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Icon className="h-5 w-5 text-blue-600" />
-                      {category.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {category.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-start gap-2">
-                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              );
-            })}
+          {/* Right side - Large logo */}
+          <div className="hidden lg:flex flex-col items-center justify-center sticky top-8">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg border">
+              <img 
+                src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
+                alt="Job Seekers 4 High Schools - Main Logo" 
+                className="w-48 h-48 object-contain mx-auto"
+              />
+            </div>
           </div>
-
-          <div className="text-center mt-8">
-            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
-              <Link to="/school-integration">
-                Get Started with Exclusive Access
-              </Link>
-            </Button>
-          </div>
-        </div>
-        
-        <div className="text-center py-8">
-          <h3 className="text-xl font-medium mb-4">Need specialized support for your school?</h3>
-          <Button size="lg" asChild>
-            <Link to="/contact">Contact our Education Team</Link>
-          </Button>
         </div>
       </div>
     </Layout>
