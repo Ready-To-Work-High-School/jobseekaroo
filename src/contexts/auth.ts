@@ -1,3 +1,3 @@
 
-// Re-export all auth components for easier imports
-export * from './auth/index';
+// Re-export the useAuth hook for easier imports
+export { useAuth } from '@/hooks/useAuth';

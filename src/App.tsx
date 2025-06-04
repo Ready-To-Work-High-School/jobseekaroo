@@ -137,10 +137,12 @@ function App() {
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 
-                {/* Include all employer routes */}
-                {EmployerRoutes}
+                {/* Render employer routes */}
+                {EmployerRoutes.map((route) => (
+                  <Route key={route.key} path={route.path} element={route.element} />
+                ))}
                 
-                {/* Include all school routes */}
+                {/* Render school routes */}
                 {SchoolRoutes}
                 
                 <Route path="*" element={<NotFound />} />
