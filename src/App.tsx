@@ -138,9 +138,7 @@ function App() {
                 <Route path="/test" element={<TestPage />} />
                 
                 {/* Render employer routes */}
-                {EmployerRoutes.map((route) => (
-                  <Route key={route.key} path={route.path} element={route.element} />
-                ))}
+                {EmployerRoutes}
                 
                 {/* Render school routes */}
                 {SchoolRoutes}
