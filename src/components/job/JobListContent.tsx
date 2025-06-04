@@ -4,35 +4,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, Briefcase } from 'lucide-react';
 import JobPagination from './JobPagination';
-
-interface Job {
-  id: string;
-  title: string;
-  company_name: string;
-  location_city: string;
-  location_state: string;
-  job_type: string;
-  pay_rate_min: number;
-  pay_rate_max: number;
-  pay_rate_period: string;
-  posted_date: string;
-  logo_url?: string;
-  is_featured?: boolean;
-  is_remote?: boolean;
-  is_flexible?: boolean;
-  description?: string;
-  experience_level?: string;
-}
+import { DatabaseJob } from '@/lib/utils/jobTransform';
 
 interface JobListContentProps {
-  jobs: Job[];
+  jobs: DatabaseJob[];
   loading: boolean;
   currentPage: number;
   jobsPerPage: number;
   zipCode: string;
   onResetFilters: () => void;
   onPageChange: (page: number) => void;
-  renderJobCard: (job: Job) => React.ReactNode;
+  renderJobCard: (job: DatabaseJob) => React.ReactNode;
 }
 
 const JobListContent: React.FC<JobListContentProps> = ({

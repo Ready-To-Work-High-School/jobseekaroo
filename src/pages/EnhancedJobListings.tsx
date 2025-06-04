@@ -8,32 +8,13 @@ import JobFilterSidebar from '@/components/job/JobFilterSidebar';
 import JobMobileFilters from '@/components/job/JobMobileFilters';
 import JobListContent from '@/components/job/JobListContent';
 import EnhancedJobCard from '@/components/job/EnhancedJobCard';
-
-// Use the interface that matches the database structure
-interface Job {
-  id: string;
-  title: string;
-  company_name: string;
-  location_city: string;
-  location_state: string;
-  job_type: string;
-  pay_rate_min: number;
-  pay_rate_max: number;
-  pay_rate_period: string;
-  posted_date: string;
-  logo_url?: string;
-  is_featured?: boolean;
-  is_remote?: boolean;
-  is_flexible?: boolean;
-  description?: string;
-  experience_level?: string;
-}
+import { DatabaseJob, transformMockJobsToDatabase } from '@/lib/utils/jobTransform';
 
 const EnhancedJobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const zipCodeParam = searchParams.get('zipCode') || '';
   const radiusParam = searchParams.get('radius') ? parseInt(searchParams.get('radius') || '0', 10) : 0;
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<DatabaseJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   
@@ -54,8 +35,9 @@ const EnhancedJobListings = () => {
     
     // Simulate API call
     setTimeout(() => {
-      const results = searchJobsByZipCode(zipCodeParam, searchFilters);
-      setJobs(results);
+      const mockResults = searchJobsByZipCode(zipCodeParam, searchFilters);
+      const transformedResults = transformMockJobsToDatabase(mockResults);
+      setJobs(transformedResults);
       setLoading(false);
     }, 800);
   };
@@ -70,7 +52,6 @@ const EnhancedJobListings = () => {
         radius: radiusParam > 0 ? radiusParam : undefined
       };
       
-      // Get job type filter
       const jobTypeParam = searchParams.get('jobType');
       if (jobTypeParam) {
         searchFilters.type = jobTypeParam;
@@ -112,8 +93,9 @@ const EnhancedJobListings = () => {
         searchFilters.sortBy = sortByParam;
       }
       
-      const results = searchJobsByZipCode(zipCodeParam, searchFilters);
-      setJobs(results);
+      const mockResults = searchJobsByZipCode(zipCodeParam, searchFilters);
+      const transformedResults = transformMockJobsToDatabase(mockResults);
+      setJobs(transformedResults);
       setLoading(false);
     }, 800);
   }, [searchParams, zipCodeParam, radiusParam]);

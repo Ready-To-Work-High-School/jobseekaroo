@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchForm from '@/components/SearchForm';
@@ -12,32 +13,13 @@ import JobListContent from '@/components/job/JobListContent';
 import TopEmployersSection from '@/components/job/TopEmployersSection';
 import EnhancedJobCard from '@/components/job/EnhancedJobCard';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-// Use the interface that matches the database structure
-interface Job {
-  id: string;
-  title: string;
-  company_name: string;
-  location_city: string;
-  location_state: string;
-  job_type: string;
-  pay_rate_min: number;
-  pay_rate_max: number;
-  pay_rate_period: string;
-  posted_date: string;
-  logo_url?: string;
-  is_featured?: boolean;
-  is_remote?: boolean;
-  is_flexible?: boolean;
-  description?: string;
-  experience_level?: string;
-}
+import { DatabaseJob, transformMockJobsToDatabase } from '@/lib/utils/jobTransform';
 
 const JobListings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const zipCodeParam = searchParams.get('zipCode') || '';
   const radiusParam = searchParams.get('radius') ? parseInt(searchParams.get('radius') || '0', 10) : 0;
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<DatabaseJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncingData, setSyncingData] = useState(false);
   const [appliedFiltersCount, setAppliedFiltersCount] = useState(0);
@@ -66,8 +48,9 @@ const JobListings = () => {
     setAppliedFiltersCount(count);
     
     setTimeout(() => {
-      const results = searchJobsByZipCode(zipCodeParam, searchFilters);
-      setJobs(results);
+      const mockResults = searchJobsByZipCode(zipCodeParam, searchFilters);
+      const transformedResults = transformMockJobsToDatabase(mockResults);
+      setJobs(transformedResults);
       setLoading(false);
     }, 800);
   };
@@ -147,7 +130,8 @@ const JobListings = () => {
       
       let filteredJobs = allJobs;
       if (zipCodeParam) {
-        filteredJobs = searchJobsByZipCode(zipCodeParam, searchFilters);
+        const mockResults = searchJobsByZipCode(zipCodeParam, searchFilters);
+        filteredJobs = transformMockJobsToDatabase(mockResults);
       }
       
       setJobs(filteredJobs);
