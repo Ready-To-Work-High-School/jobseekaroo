@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import ServerDataDisplay from '../components/ServerDataDisplay';
 import { useToast } from '@/hooks/use-toast';
 
@@ -19,7 +19,6 @@ const Register = () => {
     e.preventDefault();
     setError('');
     
-    // Basic validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -34,12 +33,10 @@ const Register = () => {
     
     try {
       console.log('Register page: Starting signup process');
-      // Extract first and last name from username
       const nameParts = username.split(' ');
       const firstName = nameParts[0] || '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-      // Call signUp with the required arguments: email, password, firstName, lastName, userType (optional)
       const user = await signUp(email, password, firstName, lastName);
       
       console.log('Register page: Signup complete, redirecting to dashboard');
@@ -48,7 +45,6 @@ const Register = () => {
         description: "Your account has been created successfully.",
       });
       
-      // Add a small delay to ensure toast is shown
       setTimeout(() => navigate('/dashboard'), 500);
     } catch (err: any) {
       console.error('Register page error:', err);
@@ -160,7 +156,6 @@ const Register = () => {
         </div>
       </div>
       
-      {/* API Demo section moved to the bottom */}
       <div className="w-full max-w-5xl mx-auto mb-8">
         <h2 className="text-2xl font-bold text-center mb-6">API Demo</h2>
         <ServerDataDisplay />
