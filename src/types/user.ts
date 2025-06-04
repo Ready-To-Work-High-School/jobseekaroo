@@ -3,13 +3,13 @@ import { UserBadge } from '@/types/badges';
 
 export interface UserProfile {
   id: string;
-  first_name: string | null;
-  last_name: string | null;
-  bio: string | null;
-  location: string | null;
-  resume_url: string | null;
-  skills: string[] | null;
-  preferences: Record<string, any> | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  bio?: string | null;
+  location?: string | null;
+  resume_url?: string | null;
+  skills?: string[] | null;
+  preferences?: Record<string, any> | null;
   user_type?: 'student' | 'employer' | 'admin' | 'teacher' | null;
   saved_searches?: SavedSearch[];
   accessibility_settings?: AccessibilitySettings;
