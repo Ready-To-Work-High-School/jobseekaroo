@@ -13,6 +13,10 @@ export interface AuthContextType {
   signOut: () => Promise<void>;
   updateProfile: (profileData: any) => Promise<UserProfile | null>;
   refreshProfile: () => Promise<void>;
+  getSavedJobs: () => Promise<string[]>;
+  createApplication: (applicationData: any) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,8 +88,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    let isFirstLoad = true;
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
@@ -119,7 +121,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       
       setIsLoading(false);
-      isFirstLoad = false;
     });
     
     return () => subscription.unsubscribe();
@@ -217,6 +218,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signInWithGoogle = async (): Promise<void> => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      if (error) throw error;
+    } catch (error: any) {
+      console.error('Google sign in error:', error);
+      throw error;
+    }
+  };
+
+  const signInWithApple = async (): Promise<void> => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      if (error) throw error;
+    } catch (error: any) {
+      console.error('Apple sign in error:', error);
+      throw error;
+    }
+  };
+
   const updateProfile = async (profileData: any): Promise<UserProfile | null> => {
     if (!user) throw new Error('User not authenticated');
     
@@ -273,6 +306,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getSavedJobs = async (): Promise<string[]> => {
+    if (!user) return [];
+    
+    try {
+      const { data, error } = await supabase
+        .from('saved_jobs')
+        .select('job_id')
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      
+      return data?.map(item => item.job_id) || [];
+    } catch (error) {
+      console.error('Error fetching saved jobs:', error);
+      return [];
+    }
+  };
+
+  const createApplication = async (applicationData: any): Promise<void> => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .insert({
+          user_id: user.id,
+          ...applicationData
+        });
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error creating application:', error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -283,10 +352,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signUp,
         signOut,
         updateProfile,
-        refreshProfile
+        refreshProfile,
+        getSavedJobs,
+        createApplication,
+        signInWithGoogle,
+        signInWithApple
       }}
     >
       {children}
     </AuthContext.Provider>
   );
+};
+
+// Export the useAuth hook directly from this file
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
