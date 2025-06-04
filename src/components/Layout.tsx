@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Footer from './layout/Footer';
 import { useAuth } from '@/hooks/useAuth';
