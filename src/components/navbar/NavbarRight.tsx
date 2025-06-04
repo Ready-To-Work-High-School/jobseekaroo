@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 import { ModeToggle } from "@/components/theme/theme-toggle";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
 import { NavbarNotifications } from "@/components/notifications/NavbarNotifications";

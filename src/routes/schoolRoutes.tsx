@@ -1,37 +1,48 @@
 
-import React from 'react';
+import { Route } from 'react-router-dom';
+import Layout from '@/components/Layout';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import SchoolGuide from '@/components/guide/SchoolGuide';
 import SchoolDashboard from '@/pages/SchoolDashboard';
-import SchoolStudents from '@/pages/school/SchoolStudents';
-import SchoolAnalytics from '@/pages/school/SchoolAnalytics';
-import SchoolEvents from '@/pages/school/SchoolEvents';
-import SchoolResources from '@/pages/school/SchoolResources';
+import CounselorDashboard from '@/pages/CounselorDashboard';
+import TeacherDashboard from '@/pages/TeacherDashboard';
+import SchoolAuth from '@/pages/SchoolAuth';
+import SchoolLanding from '@/pages/SchoolLanding';
 
-export const SchoolRoutes = [
-  {
-    path: "/school-dashboard",
-    element: <SchoolDashboard />,
-    key: "school-dashboard"
-  },
-  {
-    path: "/school/students",
-    element: <SchoolStudents />,
-    key: "school-students"
-  },
-  {
-    path: "/school/analytics",
-    element: <SchoolAnalytics />,
-    key: "school-analytics"
-  },
-  {
-    path: "/school/events",
-    element: <SchoolEvents />,
-    key: "school-events"
-  },
-  {
-    path: "/school/resources",
-    element: <SchoolResources />,
-    key: "school-resources"
-  }
-];
-
-export default SchoolRoutes;
+export const SchoolRoutes = (
+  <>
+    <Route path="/school-guide" element={
+      <Layout>
+        <SchoolGuide />
+      </Layout>
+    } />
+    
+    <Route path="/school-auth" element={<SchoolAuth />} />
+    
+    <Route path="/school-landing" element={<SchoolLanding />} />
+    
+    <Route path="/school-dashboard" element={
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'teacher', 'counselor']}>
+          <SchoolDashboard />
+        </ProtectedRoute>
+      </Layout>
+    } />
+    
+    <Route path="/counselor-dashboard" element={
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'counselor']}>
+          <CounselorDashboard />
+        </ProtectedRoute>
+      </Layout>
+    } />
+    
+    <Route path="/teacher-dashboard" element={
+      <Layout>
+        <ProtectedRoute requiredRoles={['admin', 'teacher']}>
+          <TeacherDashboard />
+        </ProtectedRoute>
+      </Layout>
+    } />
+  </>
+);

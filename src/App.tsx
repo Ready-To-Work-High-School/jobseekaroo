@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -136,23 +137,11 @@ function App() {
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/test" element={<TestPage />} />
                 
-                {/* Include employer routes */}
-                {EmployerRoutes.map((route) => (
-                  <Route 
-                    key={route.key} 
-                    path={route.path} 
-                    element={route.element} 
-                  />
-                ))}
+                {/* Include all employer routes */}
+                {EmployerRoutes}
                 
-                {/* Include school routes */}
-                {SchoolRoutes.map((route) => (
-                  <Route 
-                    key={route.key} 
-                    path={route.path} 
-                    element={route.element} 
-                  />
-                ))}
+                {/* Include all school routes */}
+                {SchoolRoutes}
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
