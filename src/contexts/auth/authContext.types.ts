@@ -21,20 +21,20 @@ export interface AuthContextType {
   redeemCode: (code: string) => Promise<any>;
   submitApplication: (jobId: string, data: any) => Promise<void>;
   
-  // Fix the return types to match the actual implementation
-  deleteApplication?: (id: string) => Promise<void>;
-  getSavedJobs?: () => Promise<any[]>;
-  isSavedJob?: (jobId: string) => Promise<boolean>;
-  getApplications?: () => Promise<any[]>;
-  
-  // Add any additional job or application methods here
-  saveJob?: (jobId: string) => Promise<void>;
-  unsaveJob?: (jobId: string) => Promise<void>;
+  // Job-related methods
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
+  getSavedJobs: () => Promise<any[]>;
   createJob?: (jobData: any) => Promise<any>;
   updateJob?: (jobId: string, jobData: any) => Promise<any>;
-  createApplication?: (applicationData: any) => Promise<any>;
-  updateApplicationStatus?: (applicationId: string, status: ApplicationStatus) => Promise<any>;
   
-  // Add the missing checkEmployerApproval method
-  checkEmployerApproval?: (userId: string) => Promise<EmployerVerificationResult>;
+  // Application-related methods
+  createApplication: (applicationData: any) => Promise<any>;
+  updateApplicationStatus: (applicationId: string, status: ApplicationStatus) => Promise<any>;
+  getApplications: () => Promise<any[]>;
+  deleteApplication: (id: string) => Promise<void>;
+  
+  // Employer verification
+  checkEmployerApproval: (userId: string) => Promise<EmployerVerificationResult>;
 }
