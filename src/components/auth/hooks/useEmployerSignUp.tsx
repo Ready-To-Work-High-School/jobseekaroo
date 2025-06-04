@@ -38,13 +38,17 @@ export const useEmployerSignUp = ({ onSuccess }: UseEmployerSignUpProps = {}) =>
       }
 
       // Create the user account
-      const user = await signUp(
+      const { user, error: signUpError } = await signUp(
         data.email,
         data.password,
         data.firstName,
         data.lastName,
         'employer'
       );
+      
+      if (signUpError) {
+        throw signUpError;
+      }
       
       // If sign-up is successful, update the profile with employer-specific details
       if (user) {
