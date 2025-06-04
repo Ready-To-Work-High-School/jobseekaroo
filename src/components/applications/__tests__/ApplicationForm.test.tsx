@@ -7,7 +7,19 @@ import ApplicationForm from '../ApplicationForm';
 
 vi.mock('@/hooks/useAuth', () => ({
   useAuth: vi.fn(() => ({
-    user: { id: 'test-user' },
+    user: {
+      id: 'test-user',
+      app_metadata: {},
+      user_metadata: {},
+      aud: 'authenticated',
+      created_at: '2023-01-01T00:00:00.000Z',
+      email: 'test@example.com',
+      phone: null,
+      confirmed_at: '2023-01-01T00:00:00.000Z',
+      last_sign_in_at: '2023-01-01T00:00:00.000Z',
+      role: 'authenticated',
+      updated_at: '2023-01-01T00:00:00.000Z'
+    },
     createApplication: vi.fn(),
   })),
 }));
@@ -46,7 +58,19 @@ describe('ApplicationForm', () => {
   it('calls createApplication on submit', async () => {
     const createApplicationMock = vi.fn();
     vi.mocked(useAuth).mockReturnValue({
-      user: { id: 'test-user' },
+      user: {
+        id: 'test-user',
+        app_metadata: {},
+        user_metadata: {},
+        aud: 'authenticated',
+        created_at: '2023-01-01T00:00:00.000Z',
+        email: 'test@example.com',
+        phone: null,
+        confirmed_at: '2023-01-01T00:00:00.000Z',
+        last_sign_in_at: '2023-01-01T00:00:00.000Z',
+        role: 'authenticated',
+        updated_at: '2023-01-01T00:00:00.000Z'
+      },
       createApplication: createApplicationMock,
     });
 
