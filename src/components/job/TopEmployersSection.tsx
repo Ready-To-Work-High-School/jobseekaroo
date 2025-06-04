@@ -29,7 +29,14 @@ const TopEmployersSection = () => {
   return (
     <div className="w-full py-8 bg-slate-50">
       <div className="container mx-auto px-4">
-        <EmployerSectionHeader />
+        <div className="flex items-center gap-3 mb-6">
+          <img 
+            src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
+            alt="Job Seekers 4 High Schools Logo" 
+            className="h-8 w-8 object-contain"
+          />
+          <EmployerSectionHeader />
+        </div>
 
         {employers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10">
