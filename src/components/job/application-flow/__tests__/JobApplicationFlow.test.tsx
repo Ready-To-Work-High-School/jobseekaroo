@@ -28,30 +28,17 @@ vi.mock('react-router-dom', async () => {
 const mockJob = {
   id: 'test-job-id',
   title: 'Test Job',
-  company: {
-    name: 'Test Company',
-    logoUrl: undefined
-  },
-  location: {
-    city: 'Test City',
-    state: 'Test State',
-    zipCode: '12345'
-  },
-  type: 'full-time' as const,
-  payRate: {
-    min: 15,
-    max: 25,
-    period: 'hourly' as const
-  },
+  company: { name: 'Test Company' },
   description: 'Test job description',
+  location: 'Test Location',
+  type: 'full-time' as const,
+  salary_min: 50000,
+  salary_max: 70000,
+  posted_date: '2024-01-01',
   requirements: ['Test requirement'],
-  experienceLevel: 'entry-level' as const,
-  postedDate: '2024-01-01',
-  logoUrl: undefined,
-  isRemote: false,
-  isFlexible: true,
-  applicationUrl: undefined,
-  contactEmail: undefined
+  benefits: ['Test benefit'],
+  remote_friendly: false,
+  category: 'technology'
 };
 
 const renderWithProviders = (component: React.ReactElement) => {
