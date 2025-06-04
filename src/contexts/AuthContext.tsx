@@ -11,7 +11,7 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer') => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, userType?: 'student' | 'employer') => Promise<{ user: User | null; error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   updateProfile: (data: UserProfileUpdate) => Promise<{ error: any }>;
@@ -21,6 +21,10 @@ interface AuthContextType {
   updateApplicationStatus: (id: string, status: string) => Promise<void>;
   deleteApplication: (id: string) => Promise<void>;
   getSavedJobs: () => Promise<any[]>;
+  getApplications: () => Promise<any[]>;
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<User | null>;
   signInWithApple: () => Promise<User | null>;
 }
@@ -33,7 +37,7 @@ export const AuthContext = createContext<AuthContextType>({
   loading: true,
   isAuthenticated: false,
   signIn: async () => ({ error: null }),
-  signUp: async () => ({ error: null }),
+  signUp: async () => ({ user: null, error: null }),
   signOut: async () => {},
   resetPassword: async () => ({ error: null }),
   updateProfile: async () => ({ error: null }),
@@ -43,6 +47,10 @@ export const AuthContext = createContext<AuthContextType>({
   updateApplicationStatus: async () => {},
   deleteApplication: async () => {},
   getSavedJobs: async () => [],
+  getApplications: async () => [],
+  saveJob: async () => {},
+  unsaveJob: async () => {},
+  isSavedJob: async () => false,
   signInWithGoogle: async () => null,
   signInWithApple: async () => null,
 });
@@ -107,8 +115,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string, firstName: string, lastName: string, userType: 'student' | 'employer' = 'student') => {
-    // Mock sign up
-    return { error: null };
+    // Mock sign up - return user object along with error
+    const mockUser: User = {
+      id: 'new-user-id',
+      email,
+      app_metadata: {},
+      user_metadata: { first_name: firstName, last_name: lastName },
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      email_confirmed_at: new Date().toISOString(),
+      phone_confirmed_at: null,
+      last_sign_in_at: new Date().toISOString(),
+      role: 'authenticated',
+      updated_at: new Date().toISOString(),
+    };
+    
+    setUser(mockUser);
+    return { user: mockUser, error: null };
   };
 
   const signOut = async () => {
@@ -153,6 +177,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return [];
   };
 
+  const getApplications = async () => {
+    // Mock get applications
+    return [];
+  };
+
+  const saveJob = async (jobId: string) => {
+    // Mock save job
+    console.log('Saving job:', jobId);
+  };
+
+  const unsaveJob = async (jobId: string) => {
+    // Mock unsave job
+    console.log('Unsaving job:', jobId);
+  };
+
+  const isSavedJob = async (jobId: string) => {
+    // Mock check if job is saved
+    return false;
+  };
+
   const signInWithGoogle = async () => {
     // Mock Google sign in
     return null;
@@ -180,6 +224,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     updateApplicationStatus,
     deleteApplication,
     getSavedJobs,
+    getApplications,
+    saveJob,
+    unsaveJob,
+    isSavedJob,
     signInWithGoogle,
     signInWithApple,
   };

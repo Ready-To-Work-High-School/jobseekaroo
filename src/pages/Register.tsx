@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -40,7 +41,11 @@ const Register = () => {
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
       // Call signUp with the required arguments: email, password, firstName, lastName, userType (optional)
-      const user = await signUp(email, password, firstName, lastName);
+      const { user, error } = await signUp(email, password, firstName, lastName);
+      
+      if (error) {
+        throw error;
+      }
       
       console.log('Register page: Signup complete, redirecting to dashboard');
       toast({
