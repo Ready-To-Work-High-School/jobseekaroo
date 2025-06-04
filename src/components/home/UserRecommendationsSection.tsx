@@ -4,7 +4,7 @@ import JobRecommendations from '@/components/JobRecommendations';
 import { TriggerRecommendations } from '@/components/TriggerRecommendations';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Sparkles, UserCircle } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 

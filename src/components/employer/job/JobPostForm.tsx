@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Briefcase, Plus } from 'lucide-react';
 import { createJob } from '@/lib/supabase/jobs';
 import { JobFormData } from '@/types/jobs';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import BasicJobDetails from './BasicJobDetails';
 import JobDescriptionSection from './JobDescriptionSection';
 import JobRequirementsSection from './JobRequirementsSection';
