@@ -53,8 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock user for development
-    const mockUser = {
+    // Mock user for development - using proper Supabase User type
+    const mockUser: User = {
       id: 'mock-user-id',
       email: 'user@example.com',
       app_metadata: {},
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       last_sign_in_at: new Date().toISOString(),
       role: 'authenticated',
       updated_at: new Date().toISOString(),
-    } as User;
+    };
 
     const mockProfile: UserProfile = {
       id: 'mock-user-id',
