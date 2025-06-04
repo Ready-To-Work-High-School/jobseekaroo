@@ -1,5 +1,5 @@
 
-import { ApplicationCard } from '@/components/ApplicationCard';
+import ApplicationCard from '@/components/ApplicationCard';
 import { Button } from '@/components/ui/button';
 import { JobApplication } from '@/types/application';
 
