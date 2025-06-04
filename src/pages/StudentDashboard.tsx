@@ -2,7 +2,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { useFadeIn } from '@/utils/animations';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Briefcase, CalendarIcon } from 'lucide-react';
