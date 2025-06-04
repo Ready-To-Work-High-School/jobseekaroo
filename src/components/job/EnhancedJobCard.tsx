@@ -1,15 +1,30 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Briefcase, MapPin, Clock, CalendarDays, Share2, Bookmark, ExternalLink } from 'lucide-react';
-import { Button, buttonVariants } from '@/components/ui/button';
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { MapPin, Clock, DollarSign, Building2, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
-import { Job } from '@/types/job';
-import JobApplicationFlow from './JobApplicationFlow';
-import { useIsMobile } from '@/hooks/use-mobile';
+
+interface Job {
+  id: string;
+  title: string;
+  company_name: string;
+  location_city: string;
+  location_state: string;
+  job_type: string;
+  pay_rate_min: number;
+  pay_rate_max: number;
+  pay_rate_period: string;
+  posted_date: string;
+  logo_url?: string;
+  is_featured?: boolean;
+  is_remote?: boolean;
+  is_flexible?: boolean;
+  description?: string;
+  experience_level?: string;
+}
 
 interface EnhancedJobCardProps {
   job: Job;
@@ -17,159 +32,170 @@ interface EnhancedJobCardProps {
   className?: string;
 }
 
-const EnhancedJobCard = ({ job, size = 'default', className }: EnhancedJobCardProps) => {
-  const [showApplicationFlow, setShowApplicationFlow] = useState(false);
-  const isMobile = useIsMobile();
-  const isCompact = size === 'compact' || isMobile;
-  
-  const jobUrl = `/jobs/${job.id}`;
-  
-  // Safe date parsing with fallback
-  let timeAgo = 'Recently posted';
-  try {
-    const postedDate = new Date(job.postedDate);
-    if (!isNaN(postedDate.getTime())) {
-      timeAgo = formatDistanceToNow(postedDate, { addSuffix: true });
-    }
-  } catch (error) {
-    console.error('Error formatting date:', error);
+const EnhancedJobCard: React.FC<EnhancedJobCardProps> = ({ 
+  job, 
+  size = 'default',
+  className 
+}) => {
+  // Safely handle potentially undefined job data
+  if (!job) {
+    return (
+      <Card className={cn("hover:shadow-md transition-shadow", className)}>
+        <CardContent className="p-6">
+          <div className="text-center text-muted-foreground">
+            Job data unavailable
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
+
+  const isCompact = size === 'compact';
   
-  const handleApplyClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setShowApplicationFlow(true);
+  // Format posted date safely
+  const formatPostedDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - date.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 1) return '1 day ago';
+      if (diffDays <= 7) return `${diffDays} days ago`;
+      if (diffDays <= 14) return '1 week ago';
+      if (diffDays <= 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+      return '1+ month ago';
+    } catch (error) {
+      return 'Recently posted';
+    }
   };
-  
+
   return (
-    <>
-      <Card className={cn("overflow-hidden transition-all hover:border-primary/50 hover:shadow-md", className)}>
-        <Link to={jobUrl} className="block">
-          <CardContent className={cn(
-            "flex items-start gap-4",
-            isCompact ? "p-3" : "p-5"
-          )}>
-            <div className="h-12 w-12 bg-muted rounded-md flex items-center justify-center overflow-hidden shrink-0">
-              {job.company.logoUrl ? (
+    <Card className={cn(
+      "hover:shadow-md transition-shadow",
+      job.is_featured && "ring-2 ring-blue-200 border-blue-300",
+      className
+    )}>
+      <CardContent className={cn("p-6", isCompact && "p-4")}>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3 flex-1">
+            {/* Company logo with safe handling */}
+            {job.logo_url ? (
+              <div className="flex-shrink-0">
                 <img 
-                  src={job.company.logoUrl}
-                  alt={job.company.name}
-                  className="h-full w-full object-contain"
+                  src={job.logo_url} 
+                  alt={`${job.company_name} logo`}
+                  className={cn(
+                    "rounded-lg object-contain bg-white border",
+                    isCompact ? "w-10 h-10" : "w-12 h-12"
+                  )}
                   onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'%3E%3C/rect%3E%3Cpath d='M12 7v10'%3E%3C/path%3E%3Cpath d='M7 12h10'%3E%3C/path%3E%3C/svg%3E";
+                    // Hide image if it fails to load
+                    e.currentTarget.style.display = 'none';
                   }}
                 />
-              ) : (
-                <Briefcase className="h-6 w-6 text-muted-foreground" />
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className={cn(
+                "flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center border",
+                isCompact ? "w-10 h-10" : "w-12 h-12"
+              )}>
+                <Building2 className={cn(
+                  "text-gray-400",
+                  isCompact ? "h-5 w-5" : "h-6 w-6"
+                )} />
+              </div>
+            )}
             
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 mb-1">
                 <h3 className={cn(
-                  "font-semibold text-foreground line-clamp-1", 
+                  "font-semibold text-gray-900 truncate",
                   isCompact ? "text-base" : "text-lg"
                 )}>
-                  {job.title}
+                  {job.title || 'Job Title Unavailable'}
                 </h3>
-                
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <Clock className="h-3.5 w-3.5" />
-                  <span className="text-xs">{timeAgo}</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
-                <span className="font-medium line-clamp-1">{job.company.name}</span>
-              </div>
-              
-              {!isCompact ? (
-                <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <MapPin className="h-3.5 w-3.5 shrink-0" />
-                    <span className="truncate">{job.location.city}, {job.location.state}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-                    <span>{job.type}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                  <MapPin className="h-3 w-3" />
-                  <span className="truncate">{job.location.city}, {job.location.state}</span>
-                </div>
-              )}
-              
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Badge variant="outline" className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200">
-                  ${job.payRate.min}-${job.payRate.max}/{job.payRate.period}
-                </Badge>
-                
-                {job.isRemote && (
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200">
-                    Remote
-                  </Badge>
-                )}
-                
-                {job.isFlexible && (
-                  <Badge variant="outline" className="bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200">
-                    Flexible Schedule
-                  </Badge>
-                )}
-                
-                {job.experienceLevel === 'entry-level' && (
-                  <Badge variant="outline" className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200">
-                    Entry Level
-                  </Badge>
+                {job.is_featured && (
+                  <Star className="h-4 w-4 text-yellow-500 fill-current flex-shrink-0" />
                 )}
               </div>
+              <p className={cn(
+                "text-gray-600 truncate",
+                isCompact ? "text-sm" : "text-base"
+              )}>
+                {job.company_name || 'Company Unavailable'}
+              </p>
             </div>
-          </CardContent>
-        </Link>
-        
-        <CardFooter className={cn(
-          "flex justify-between border-t bg-muted/10",
-          isCompact ? "px-3 py-2" : "px-5 py-3"
-        )}>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size={isCompact ? "sm" : "default"} className="gap-1">
-              <Bookmark className={cn("", isCompact ? "h-4 w-4" : "h-4 w-4")} />
-              <span className={isCompact ? "sr-only" : ""}>Save</span>
-            </Button>
-            
-            <Button variant="ghost" size={isCompact ? "sm" : "default"} className="gap-1">
-              <Share2 className={cn("", isCompact ? "h-4 w-4" : "h-4 w-4")} />
-              <span className={isCompact ? "sr-only" : ""}>Share</span>
-            </Button>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Link to={jobUrl} className={cn(
-              buttonVariants({ variant: "outline", size: isCompact ? "sm" : "default" }),
-              "gap-1"
+          <div className="text-right flex-shrink-0">
+            <div className={cn(
+              "font-semibold text-green-600",
+              isCompact ? "text-sm" : "text-base"
             )}>
-              <ExternalLink className={cn("", isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} />
-              <span>Details</span>
-            </Link>
-            
-            <Button 
-              size={isCompact ? "sm" : "default"} 
-              className="gap-1"
-              onClick={handleApplyClick}
-            >
-              Apply Now
-            </Button>
+              ${job.pay_rate_min || 0}-${job.pay_rate_max || 0}
+              <span className="text-gray-500">
+                /{job.pay_rate_period === 'hourly' ? 'hr' : job.pay_rate_period || 'hr'}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {job.posted_date ? formatPostedDate(job.posted_date) : 'Recently posted'}
+            </div>
           </div>
-        </CardFooter>
-      </Card>
-      
-      {showApplicationFlow && (
-        <JobApplicationFlow job={job} onClose={() => setShowApplicationFlow(false)} />
-      )}
-    </>
+        </div>
+
+        {/* Job details */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Badge variant="secondary" className="text-xs">
+            <MapPin className="h-3 w-3 mr-1" />
+            {job.location_city && job.location_state 
+              ? `${job.location_city}, ${job.location_state}`
+              : 'Location TBD'
+            }
+          </Badge>
+          
+          <Badge variant="secondary" className="text-xs">
+            <Clock className="h-3 w-3 mr-1" />
+            {job.job_type ? job.job_type.charAt(0).toUpperCase() + job.job_type.slice(1) : 'Type TBD'}
+          </Badge>
+          
+          {job.is_remote && (
+            <Badge variant="outline" className="text-xs border-blue-200 text-blue-700">
+              Remote
+            </Badge>
+          )}
+          
+          {job.is_flexible && (
+            <Badge variant="outline" className="text-xs border-green-200 text-green-700">
+              Flexible
+            </Badge>
+          )}
+        </div>
+
+        {/* Description preview for non-compact cards */}
+        {!isCompact && job.description && (
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {job.description}
+          </p>
+        )}
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {job.experience_level && (
+              <Badge variant="outline" className="text-xs">
+                {job.experience_level.charAt(0).toUpperCase() + job.experience_level.slice(1)}
+              </Badge>
+            )}
+          </div>
+          
+          <Button asChild size={isCompact ? "sm" : "default"}>
+            <Link to={`/jobs/${job.id}`}>
+              {isCompact ? 'View' : 'View Details'}
+            </Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
