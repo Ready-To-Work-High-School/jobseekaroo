@@ -1,179 +1,236 @@
-
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Job } from '@/types/job';
-import { useAuth } from '@/hooks/useAuth';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { DialogFooter } from '../ui/dialog';
-import { applicationFormSchema, type ApplicationFormValues } from './form/validation';
-import { StatusSelect } from './form/StatusSelect';
-import { ContactFields } from './form/ContactFields';
-import { NextStepFields } from './form/NextStepFields';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
+import { Briefcase, Calendar, FileText, Send, CheckCircle } from 'lucide-react';
 
 interface ApplicationFormProps {
-  selectedJob: Job | null;
-  isAdding: boolean;
-  setIsAdding: (isAdding: boolean) => void;
-  onCancel: () => void;
-  onShowSavedJobs: () => void;
-  onSuccess: () => void;
+  jobId?: string;
+  jobTitle?: string;
+  companyName?: string;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-export const ApplicationForm = ({
-  selectedJob,
-  isAdding,
-  setIsAdding,
-  onCancel,
-  onShowSavedJobs,
-  onSuccess
-}: ApplicationFormProps) => {
-  const { createApplication } = useAuth();
+const ApplicationForm: React.FC<ApplicationFormProps> = ({
+  jobId = '',
+  jobTitle = '',
+  companyName = '',
+  onSuccess,
+  onCancel
+}) => {
+  const [formData, setFormData] = useState({
+    position: jobTitle,
+    company: companyName,
+    status: 'applied' as const,
+    appliedDate: new Date().toISOString().substring(0, 10),
+    notes: '',
+    followUpDate: '',
+    priority: 'medium' as const
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, createApplication } = useAuth();
   const { toast } = useToast();
 
-  const form = useForm<ApplicationFormValues>({
-    resolver: zodResolver(applicationFormSchema),
-    defaultValues: {
-      job_title: selectedJob?.title || '',
-      company: selectedJob?.company.name || '',
-      applied_date: new Date().toISOString().substring(0, 10),
-      status: 'applied',
-      notes: '',
-      contact_name: '',
-      contact_email: '',
-      next_step: '',
-      next_step_date: '',
-    },
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to track applications",
+        variant: "destructive"
+      });
+      return;
+    }
 
-  const onSubmit = async (values: ApplicationFormValues) => {
-    setIsAdding(true);
+    setIsSubmitting(true);
     
     try {
-      await createApplication({
-        job_id: selectedJob?.id || 'manual-entry',
-        ...values
+      await createApplication(jobId, {
+        job_id: jobId,
+        job_title: formData.position,
+        company: formData.company,
+        status: formData.status,
+        applied_date: formData.appliedDate,
+        notes: formData.notes,
+        follow_up_date: formData.followUpDate || undefined,
+        priority: formData.priority
       });
       
       toast({
-        title: 'Application added',
-        description: 'Your job application has been added to tracking',
+        title: "Application tracked!",
+        description: "Your job application has been added to your dashboard",
       });
       
-      onSuccess();
-      
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
-      console.error('Error adding application:', error);
+      console.error('Error creating application:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to add application',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to track application. Please try again.",
+        variant: "destructive"
       });
     } finally {
-      setIsAdding(false);
+      setIsSubmitting(false);
     }
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-4 py-2">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <FormField
-                control={form.control}
-                name="job_title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Job Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Retail Associate" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Briefcase className="h-5 w-5 text-blue-600" />
+            Track New Application
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="position">Position Title</Label>
+                <Input
+                  id="position"
+                  value={formData.position}
+                  onChange={(e) => handleInputChange('position', e.target.value)}
+                  placeholder="e.g. Frontend Developer"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="company">Company</Label>
+                <Input
+                  id="company"
+                  value={formData.company}
+                  onChange={(e) => handleInputChange('company', e.target.value)}
+                  placeholder="e.g. Tech Corp"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="status">Application Status</Label>
+                <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="applied">Applied</SelectItem>
+                    <SelectItem value="interviewing">Interviewing</SelectItem>
+                    <SelectItem value="offer">Offer Received</SelectItem>
+                    <SelectItem value="rejected">Rejected</SelectItem>
+                    <SelectItem value="withdrawn">Withdrawn</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="appliedDate">Application Date</Label>
+                <Input
+                  id="appliedDate"
+                  type="date"
+                  value={formData.appliedDate}
+                  onChange={(e) => handleInputChange('appliedDate', e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="priority">Priority</Label>
+                <Select value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="followUpDate">Follow-up Date (Optional)</Label>
+                <Input
+                  id="followUpDate"
+                  type="date"
+                  value={formData.followUpDate}
+                  onChange={(e) => handleInputChange('followUpDate', e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => handleInputChange('notes', e.target.value)}
+                placeholder="Add any relevant notes about this application..."
+                rows={3}
               />
             </div>
-            <div className="col-span-2">
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Target" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="applied_date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Application Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+
+            <div className="flex gap-3 pt-4">
+              {onCancel && (
+                <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
+                  Cancel
+                </Button>
               )}
-            />
-            <StatusSelect form={form} />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Notes</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Any notes about this application"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <ContactFields form={form} />
-          <NextStepFields form={form} />
-        </div>
-
-        <DialogFooter className="flex justify-between items-center pt-2">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onShowSavedJobs}
-            disabled={isAdding}
-          >
-            Select from Saved Jobs
-          </Button>
-          <div className="flex gap-2">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onCancel}
-              disabled={isAdding}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isAdding}>
-              {isAdding ? "Adding..." : "Add Application"}
-            </Button>
-          </div>
-        </DialogFooter>
-      </form>
-    </Form>
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="flex-1 flex items-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                    />
+                    Tracking...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Track Application
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
+
+export default ApplicationForm;
