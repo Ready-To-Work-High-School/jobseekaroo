@@ -14,6 +14,11 @@ const SchoolIntegration = () => {
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-center gap-3 mb-6">
+          <img 
+            src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
+            alt="Job Seekers 4 High Schools Logo" 
+            className="h-8 w-8 object-contain"
+          />
           <Building2 className="h-8 w-8 text-primary" />
           <h1 className="text-4xl font-bold">School Integration</h1>
         </div>
