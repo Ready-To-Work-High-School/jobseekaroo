@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { QRCodeSVG } from 'qrcode.react';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { useMfaManagement } from '@/hooks/useMfaManagement';
 import { toast } from 'sonner';
 
