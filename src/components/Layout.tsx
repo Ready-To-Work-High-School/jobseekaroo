@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Footer from './layout/Footer';
 import { useAuth } from '@/hooks/useAuth';
@@ -5,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
 import MobileBottomNavigation from './mobile/MobileBottomNavigation';
+import ProminentLogo from './common/ProminentLogo';
 import { motion } from 'framer-motion';
 import WhatYouGetCTA from './auth/WhatYouGetCTA';
 import Header from './layout/Header';
@@ -39,11 +41,21 @@ const Layout = ({ children, hideAuthLinks }: LayoutProps) => {
         <ErrorBoundary>
           <Header hideAuthLinks={hideAuthLinks} />
           
+          {/* Prominent Logo Section - visible on all pages */}
+          <motion.div 
+            className="py-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+          >
+            <ProminentLogo />
+          </motion.div>
+          
           <motion.main 
             className="flex-grow pb-16 md:pb-0"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
           >
             {!isHomePage && (
               <FloatingBackButton />

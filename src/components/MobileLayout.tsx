@@ -5,6 +5,7 @@ import MobileBottomNavigation from './mobile/MobileBottomNavigation';
 import BackButton from './navigation/BackButton';
 import BackToTopButton from './navigation/BackToTopButton';
 import UserOnboardingGuide from './onboarding/UserOnboardingGuide';
+import ProminentLogo from './common/ProminentLogo';
 import { motion, AnimatePresence } from 'framer-motion';
 import JobSeekers4HSBadge from './badges/JobSeekers4HSBadge';
 import FreeForStudentsBadge from './badges/FreeForStudentsBadge';
@@ -76,6 +77,16 @@ const MobileLayout = ({ children }: MobileLayoutProps) => {
         transition={{ delay: 0.2, type: "spring" }}
       >
         <JobSeekers4HSBadge variant="default" className="badge-pop" />
+      </motion.div>
+      
+      {/* Prominent Logo */}
+      <motion.div 
+        className="py-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
+      >
+        <ProminentLogo className="px-4" />
       </motion.div>
       
       {/* Free for students badge */}

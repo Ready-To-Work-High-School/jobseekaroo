@@ -6,6 +6,7 @@ import TeacherFeatures from '@/components/school/TeacherFeatures';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import ProminentLogo from '@/components/common/ProminentLogo';
 
 const SchoolIntegration = () => {
   const { user } = useAuth();
@@ -13,9 +14,9 @@ const SchoolIntegration = () => {
   return (
     <Layout>
       <div className="container max-w-7xl mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left side - Main content */}
-          <div className="space-y-8">
+        <div className="grid lg:grid-cols-3 gap-12 items-start">
+          {/* Left side - Main content (takes 2 columns) */}
+          <div className="lg:col-span-2 space-y-8">
             <div className="text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
                 <img 
@@ -63,15 +64,9 @@ const SchoolIntegration = () => {
             </div>
           </div>
 
-          {/* Right side - Single large logo */}
+          {/* Right side - Single large logo (takes 1 column) */}
           <div className="hidden lg:flex flex-col items-center justify-center sticky top-8">
-            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg border">
-              <img 
-                src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
-                alt="Job Seekers 4 High Schools - Main Logo" 
-                className="w-48 h-48 object-contain mx-auto"
-              />
-            </div>
+            <ProminentLogo />
           </div>
         </div>
       </div>
