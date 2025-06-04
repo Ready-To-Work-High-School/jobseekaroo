@@ -1,157 +1,43 @@
+
+import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from '@/components/ui/toaster';
-import { Toaster as Sonner } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
-import EmployerRoutes from '@/routes/employerRoutes';
-import { SchoolRoutes } from '@/routes/schoolRoutes';
+import { Toaster } from '@/components/ui/toaster';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-// Import all page components
-import Home from '@/pages/Home';
-import JobListings from '@/pages/JobListings';
-import JobDetailsPage from '@/pages/JobDetailsPage';
-import JobDetail from '@/pages/JobDetail';
-import SignIn from '@/pages/SignIn';
-import SignUp from '@/pages/SignUp';
-import Dashboard from '@/pages/Dashboard';
-import Profile from '@/pages/Profile';
-import Applications from '@/pages/Applications';
-import SavedJobs from '@/pages/SavedJobs';
-import Messages from '@/pages/Messages';
-import InterviewPrep from '@/pages/InterviewPrep';
-import MockInterview from '@/pages/MockInterview';
-import InterviewChecklist from '@/pages/InterviewChecklist';
-import About from '@/pages/About';
-import FAQ from '@/pages/FAQ';
-import ContactUs from '@/pages/Contact';
-import PrivacyPolicy from '@/pages/PrivacyPolicy';
-import License from '@/pages/License';
-import TermsOfService from '@/pages/TermsOfService';
-import Resources from '@/pages/Resources';
-import SkillDevelopment from '@/pages/SkillDevelopment';
-import ResumeAssistant from '@/pages/ResumeAssistant';
-import JobSimulations from '@/pages/JobSimulations';
-import SimulationDetail from '@/pages/SimulationDetail';
-import CareerQuiz from '@/pages/CareerQuiz';
-import PlatformGuide from '@/pages/PlatformGuide';
-import SchoolIntegration from '@/pages/SchoolIntegration';
-import SchoolDashboard from '@/pages/SchoolDashboard';
-import SchoolStudents from '@/pages/school/SchoolStudents';
-import SchoolAnalytics from '@/pages/school/SchoolAnalytics';
-import SchoolEvents from '@/pages/school/SchoolEvents';
-import SchoolResources from '@/pages/school/SchoolResources';
-import SchedulePage from '@/pages/SchedulePage';
-import SchoolGuide from '@/pages/SchoolGuide';
-import SafetyCompliance from '@/pages/SafetyCompliance';
-import StudentSuccess from '@/pages/StudentSuccess';
-import PersonalizedAssessment from '@/pages/PersonalizedAssessment';
-import StudentDashboard from '@/pages/StudentDashboard';
-import UserRepository from '@/pages/UserRepository';
-import ErrorPage from '@/pages/ErrorPage';
-import TestPage from '@/pages/TestPage';
-import NotFound from '@/pages/NotFound';
-import SampleCandidates from '@/pages/SampleCandidates';
-import QuickJobPost from '@/pages/QuickJobPost';
-import SchoolAuth from '@/pages/SchoolAuth';
-import SchoolLanding from '@/pages/SchoolLanding';
-import EmployerSchoolDemo from '@/pages/EmployerSchoolDemo';
-import CounselorDashboard from '@/pages/CounselorDashboard';
-import MacquarieExternship from '@/pages/MacquarieExternship';
-import FirstJobToolkit from '@/pages/FirstJobToolkit';
-import CeoPortal from '@/pages/CeoPortal';
-import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
-import EmployerVerify from '@/pages/employer/EmployerVerify';
+// Lazy load pages
+const Home = lazy(() => import('@/pages/Home'));
+const SignIn = lazy(() => import('@/pages/SignIn'));
+const SignUp = lazy(() => import('@/pages/SignUp'));
+const JobListings = lazy(() => import('@/pages/JobListings'));
+const EnhancedJobListings = lazy(() => import('@/pages/EnhancedJobListings'));
 
-const queryClient = new QueryClient();
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+  </div>
+);
 
 function App() {
   return (
     <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-              <Helmet>
-                <title>Job Seekers 4 HS - Your First Job, Made Simple.</title>
-                <meta name="description" content="A fun, safe, mobile-first app to land your first job, with badges and guidance. For high school students." />
-              </Helmet>
-              
+      <ErrorBoundary>
+        <AuthProvider>
+          <div className="min-h-screen bg-background">
+            <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/jobs" element={<JobListings />} />
-                <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
-                <Route path="/jobs/:id" element={<JobDetail />} />
-                <Route path="/signin" element={<SignIn />} />
                 <Route path="/sign-in" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
                 <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/student-dashboard" element={<StudentDashboard />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/applications" element={<Applications />} />
-                <Route path="/saved-jobs" element={<SavedJobs />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/interview-prep" element={<InterviewPrep />} />
-                <Route path="/mock-interview" element={<MockInterview />} />
-                <Route path="/interview-questions" element={<InterviewPrep />} />
-                <Route path="/interview-checklist" element={<InterviewChecklist />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/contact" element={<ContactUs />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/license" element={<License />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/skill-development" element={<SkillDevelopment />} />
-                <Route path="/sample-candidates" element={<SampleCandidates />} />
-                <Route path="/resume-assistant" element={<ResumeAssistant />} />
-                <Route path="/job-simulations" element={<JobSimulations />} />
-                <Route path="/job-simulations/:id" element={<SimulationDetail />} />
-                <Route path="/career-quiz" element={<CareerQuiz />} />
-                <Route path="/career-assessment" element={<CareerQuiz />} />
-                <Route path="/personalized-assessment" element={<PersonalizedAssessment />} />
-                <Route path="/platform-guide" element={<PlatformGuide />} />
-                <Route path="/school-integration" element={<SchoolIntegration />} />
-                <Route path="/school-auth" element={<SchoolAuth />} />
-                <Route path="/school-landing" element={<SchoolLanding />} />
-                <Route path="/school-dashboard" element={<SchoolDashboard />} />
-                <Route path="/counselor-dashboard" element={<CounselorDashboard />} />
-                <Route path="/school/students" element={<SchoolStudents />} />
-                <Route path="/school/analytics" element={<SchoolAnalytics />} />
-                <Route path="/school/events" element={<SchoolEvents />} />
-                <Route path="/school/resources" element={<SchoolResources />} />
-                <Route path="/schedule" element={<SchedulePage />} />
-                <Route path="/school-guide" element={<SchoolGuide />} />
-                <Route path="/safety-compliance" element={<SafetyCompliance />} />
-                <Route path="/student-success" element={<StudentSuccess />} />
-                <Route path="/user-repository" element={<UserRepository />} />
-                <Route path="/quick-job-post" element={<QuickJobPost />} />
-                <Route path="/employer-school-demo" element={<EmployerSchoolDemo />} />
-                <Route path="/employer-onboarding" element={<EmployerOnboarding />} />
-                <Route path="/employer/verify" element={<EmployerVerify />} />
-                <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
-                <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
-                <Route path="/ceo-portal" element={<CeoPortal />} />
-                <Route path="/error" element={<ErrorPage />} />
-                <Route path="/test" element={<TestPage />} />
-                
-                {/* Render employer routes */}
-                {EmployerRoutes}
-                
-                {/* Render school routes */}
-                {SchoolRoutes}
-                
-                <Route path="*" element={<NotFound />} />
+                <Route path="/jobs" element={<JobListings />} />
+                <Route path="/enhanced-jobs" element={<EnhancedJobListings />} />
               </Routes>
-            </div>
+            </Suspense>
             <Toaster />
-            <Sonner />
-          </AuthProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
+          </div>
+        </AuthProvider>
+      </ErrorBoundary>
     </HelmetProvider>
   );
 }
