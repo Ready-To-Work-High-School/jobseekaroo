@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart3, Users, PlusCircle } from 'lucide-react';
-import { useAuth } from '@/contexts/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 interface DashboardHeaderProps {
   setActiveTab?: (tab: string) => void;
