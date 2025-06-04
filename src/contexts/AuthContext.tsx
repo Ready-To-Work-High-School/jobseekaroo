@@ -2,7 +2,6 @@
 import { createContext, useContext } from 'react';
 import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
-import { ApplicationStatus } from '@/types/application';
 
 export interface AuthContextType {
   user: User | null;
