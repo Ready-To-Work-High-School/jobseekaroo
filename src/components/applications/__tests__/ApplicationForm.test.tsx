@@ -1,132 +1,125 @@
 
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
-import { useAuth } from '@/hooks/useAuth';
-import ApplicationForm from '../ApplicationForm';
+import { ApplicationForm } from '../ApplicationForm';
+import { Job } from '@/types/job';
 
-vi.mock('@/hooks/useAuth', () => ({
-  useAuth: vi.fn(() => ({
-    user: {
-      id: 'test-user',
-      app_metadata: {},
-      user_metadata: {},
-      aud: 'authenticated',
-      created_at: '2023-01-01T00:00:00.000Z',
-      email: 'test@example.com',
-      phone: null,
-      confirmed_at: '2023-01-01T00:00:00.000Z',
-      last_sign_in_at: '2023-01-01T00:00:00.000Z',
-      role: 'authenticated',
-      updated_at: '2023-01-01T00:00:00.000Z'
-    },
-    userProfile: null,
-    session: null,
-    isLoading: false,
-    signIn: vi.fn(),
-    signUp: vi.fn(),
-    signOut: vi.fn(),
-    signInWithGoogle: vi.fn(),
-    signInWithApple: vi.fn(),
-    updateProfile: vi.fn(),
-    refreshProfile: vi.fn(),
-    getSavedJobs: vi.fn(),
-    createApplication: vi.fn(),
-    updateApplicationStatus: vi.fn(),
-    deleteApplication: vi.fn(),
-    saveJob: vi.fn(),
-    unsaveJob: vi.fn(),
-    isSavedJob: vi.fn(),
-    getApplications: vi.fn(),
-  })),
-}));
-
-vi.mock('@/hooks/use-toast', () => ({
-  useToast: () => ({
-    toast: vi.fn(),
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => ({
+    createApplication: vi.fn().mockResolvedValue({}),
   }),
 }));
 
 describe('ApplicationForm', () => {
-  it('renders the form with default values', () => {
-    render(<ApplicationForm />);
-    expect(screen.getByLabelText('Position Title')).toBeInTheDocument();
-    expect(screen.getByLabelText('Company')).toBeInTheDocument();
-    expect(screen.getByLabelText('Application Status')).toBeInTheDocument();
-    expect(screen.getByLabelText('Application Date')).toBeInTheDocument();
+  const mockOnCancel = vi.fn();
+  const mockOnShowSavedJobs = vi.fn();
+  const mockOnSuccess = vi.fn();
+  const mockSetIsAdding = vi.fn();
+
+  beforeEach(() => {
+    mockOnCancel.mockClear();
+    mockOnShowSavedJobs.mockClear();
+    mockOnSuccess.mockClear();
+    mockSetIsAdding.mockClear();
   });
 
-  it('allows the user to fill out the form', () => {
-    render(<ApplicationForm />);
-    const positionInput = screen.getByLabelText('Position Title');
-    const companyInput = screen.getByLabelText('Company');
-    const notesTextarea = screen.getByLabelText('Notes');
+  it('renders form fields correctly', () => {
+    render(
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
 
-    // Simulate user input
-    fireEvent.change(positionInput, { target: { value: 'Software Engineer' } });
-    fireEvent.change(companyInput, { target: { value: 'Tech Corp' } });
-    fireEvent.change(notesTextarea, { target: { value: 'Excited about this opportunity!' } });
-
-    expect(positionInput).toHaveValue('Software Engineer');
-    expect(companyInput).toHaveValue('Tech Corp');
-    expect(notesTextarea).toHaveValue('Excited about this opportunity!');
+    expect(screen.getByLabelText(/job title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/application date/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/status/i)).toBeInTheDocument();
   });
 
-  it('calls createApplication on submit', async () => {
-    const createApplicationMock = vi.fn();
-    vi.mocked(useAuth).mockReturnValue({
-      user: {
-        id: 'test-user',
-        app_metadata: {},
-        user_metadata: {},
-        aud: 'authenticated',
-        created_at: '2023-01-01T00:00:00.000Z',
-        email: 'test@example.com',
-        phone: null,
-        confirmed_at: '2023-01-01T00:00:00.000Z',
-        last_sign_in_at: '2023-01-01T00:00:00.000Z',
-        role: 'authenticated',
-        updated_at: '2023-01-01T00:00:00.000Z'
+  it('pre-fills form when selectedJob is provided', () => {
+    const selectedJob: Partial<Job> = {
+      id: '1',
+      title: 'Frontend Developer',
+      company: {
+        name: 'Tech Company',
       },
-      userProfile: null,
-      session: null,
-      isLoading: false,
-      signIn: vi.fn(),
-      signUp: vi.fn(),
-      signOut: vi.fn(),
-      signInWithGoogle: vi.fn(),
-      signInWithApple: vi.fn(),
-      updateProfile: vi.fn(),
-      refreshProfile: vi.fn(),
-      getSavedJobs: vi.fn(),
-      createApplication: createApplicationMock,
-      updateApplicationStatus: vi.fn(),
-      deleteApplication: vi.fn(),
-      saveJob: vi.fn(),
-      unsaveJob: vi.fn(),
-      isSavedJob: vi.fn(),
-      getApplications: vi.fn(),
+      location: {
+        city: 'San Francisco',
+        state: 'CA',
+        zipCode: '94105',
+      },
+      type: 'full-time',
+      payRate: {
+        min: 50000,
+        max: 100000,
+        period: 'monthly',
+      },
+      description: 'Job description',
+      requirements: ['React', 'TypeScript'],
+      experienceLevel: 'entry-level',
+      postedDate: '2023-01-01',
+      isRemote: false,
+      isFlexible: true,
+    };
+
+    render(
+      <ApplicationForm
+        selectedJob={selectedJob as Job}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    expect(screen.getByDisplayValue('Frontend Developer')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Tech Company')).toBeInTheDocument();
+  });
+
+  it('handles form submission', async () => {
+    render(
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={false}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    fireEvent.change(screen.getByLabelText(/job title/i), {
+      target: { value: 'Test Job' },
+    });
+    fireEvent.change(screen.getByLabelText(/company/i), {
+      target: { value: 'Test Company' },
     });
 
-    render(<ApplicationForm jobId="123" jobTitle="Software Engineer" companyName="Tech Corp" />);
-    const submitButton = screen.getByRole('button', { name: /Track Application/i });
+    fireEvent.click(screen.getByText('Add Application'));
 
-    // Simulate form submission
-    fireEvent.click(submitButton);
-
-    // Wait for the createApplication mock to be called
     await waitFor(() => {
-      expect(createApplicationMock).toHaveBeenCalledTimes(1);
-      expect(createApplicationMock).toHaveBeenCalledWith("123", expect.objectContaining({
-        job_id: "123",
-        job_title: "Software Engineer",
-        company: "Tech Corp",
-        status: "applied",
-        applied_date: expect.any(String),
-        notes: "",
-        follow_up_date: undefined,
-        priority: "medium"
-      }));
+      expect(mockSetIsAdding).toHaveBeenCalledWith(true);
     });
+  });
+
+  it('disables form submission while adding', () => {
+    render(
+      <ApplicationForm
+        selectedJob={null}
+        isAdding={true}
+        setIsAdding={mockSetIsAdding}
+        onCancel={mockOnCancel}
+        onShowSavedJobs={mockOnShowSavedJobs}
+        onSuccess={mockOnSuccess}
+      />
+    );
+
+    expect(screen.getByText('Adding...')).toBeDisabled();
   });
 });

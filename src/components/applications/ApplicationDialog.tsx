@@ -1,12 +1,20 @@
 
-import React from 'react';
+import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
+import { ApplicationStatus, JobApplication } from '@/types/application';
+import { Job } from '@/types/job';
+import { getJobById } from '@/lib/mock-data';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { ApplicationForm } from './ApplicationForm';
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -16,59 +24,93 @@ interface ApplicationDialogProps {
   onSuccess: () => void;
 }
 
-const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
+export const ApplicationDialog = ({
   open,
   onOpenChange,
   showSavedJobs,
   setShowSavedJobs,
   onSuccess
-}) => {
+}: ApplicationDialogProps) => {
+  const [isAdding, setIsAdding] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const { getSavedJobs, createApplication } = useAuth();
+  const { toast } = useToast();
+  const [savedJobs, setSavedJobs] = useState<Job[]>([]);
+
+  const loadSavedJobs = async () => {
+    if (!open) return;
+    
+    try {
+      const savedJobIds = await getSavedJobs();
+      const jobDetails = savedJobIds.map(id => getJobById(id)).filter(Boolean) as Job[];
+      setSavedJobs(jobDetails);
+    } catch (error) {
+      console.error('Error fetching saved jobs:', error);
+    }
+  };
+
+  const handleSuccess = () => {
+    onOpenChange(false);
+    setSelectedJob(null);
+    onSuccess();
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add New Application</DialogTitle>
           <DialogDescription>
-            Add a new job application to track your progress.
+            Track a new job application in your dashboard.
           </DialogDescription>
         </DialogHeader>
-        
+
         {showSavedJobs ? (
-          <div className="py-4">
-            <p className="text-sm text-muted-foreground mb-4">
-              Select from saved jobs:
-            </p>
-            {/* Saved jobs list would go here */}
-          </div>
-        ) : (
-          <div className="py-4">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="job-title" className="text-sm font-medium">
-                  Job Title
-                </label>
-                <input
-                  id="job-title"
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                  placeholder="Enter job title"
-                />
-              </div>
-              <div>
-                <label htmlFor="company" className="text-sm font-medium">
-                  Company
-                </label>
-                <input
-                  id="company"
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                  placeholder="Enter company name"
-                />
-              </div>
+          <>
+            <div className="py-4">
+              <h3 className="text-sm font-medium mb-2">Select from saved jobs:</h3>
+              {savedJobs.length > 0 ? (
+                <div className="max-h-[300px] overflow-y-auto space-y-2">
+                  {savedJobs.map((job) => (
+                    <div 
+                      key={job.id}
+                      className="p-3 border rounded-md cursor-pointer hover:border-primary/50 transition-colors"
+                      onClick={() => {
+                        setSelectedJob(job);
+                        setShowSavedJobs(false);
+                      }}
+                    >
+                      <div className="font-medium">{job.title}</div>
+                      <div className="text-sm text-muted-foreground">{job.company.name}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-6 text-center text-muted-foreground">
+                  <p>You don't have any saved jobs yet.</p>
+                </div>
+              )}
             </div>
-          </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowSavedJobs(false)}>
+                Enter Manually
+              </Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <ApplicationForm
+            selectedJob={selectedJob}
+            isAdding={isAdding}
+            setIsAdding={setIsAdding}
+            onCancel={() => onOpenChange(false)}
+            onShowSavedJobs={() => {
+              setShowSavedJobs(true);
+              loadSavedJobs();
+            }}
+            onSuccess={handleSuccess}
+          />
         )}
       </DialogContent>
     </Dialog>
   );
 };
-
-export default ApplicationDialog;

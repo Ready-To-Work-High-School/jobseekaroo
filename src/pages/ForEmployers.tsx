@@ -9,10 +9,10 @@ import FreemiumBanner from '@/components/employer/premium/FreemiumBanner';
 import PremiumFeaturesDisplay from '@/components/employer/premium/PremiumFeaturesDisplay';
 import { Badge } from '@/components/ui/badge';
 import { Database, Sparkles } from 'lucide-react';
+import AnimatedStar from '@/components/animations/AnimatedStar';
 import EmployerBenefits from '@/components/employer/EmployerBenefits';
 import EmployerWhatYouGetSection from '@/components/employer/EmployerWhatYouGetSection';
 import EmployerSignUpPrompt from '@/components/employer/EmployerSignUpPrompt';
-import EmployerKeyFeatures from '@/components/employer/dashboard/EmployerKeyFeatures';
 
 const ForEmployers = () => {
   const contentAnimation = useFadeIn(300);
@@ -34,9 +34,6 @@ const ForEmployers = () => {
             Hosted on Render
           </Badge>
         </div>
-        
-        {/* Key Features Section */}
-        <EmployerKeyFeatures />
         
         {/* What You Get Section */}
         <EmployerWhatYouGetSection />

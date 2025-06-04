@@ -1,7 +1,7 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import ApplicationDialog from '../ApplicationDialog';
+import { ApplicationDialog } from '../ApplicationDialog';
 
 describe('ApplicationDialog', () => {
   const mockOnOpenChange = vi.fn();

@@ -1,50 +1,63 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, BarChart3, Users, PlusCircle } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Building2, Plus, BarChart3, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+interface DashboardHeaderProps {
+  setActiveTab?: (tab: string) => void;
+}
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ setActiveTab }: DashboardHeaderProps = {}) => {
   const { userProfile } = useAuth();
+  const companyName = userProfile?.company_name || 'Your Company';
   
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-blue-100 rounded-lg">
-          <Building2 className="h-6 w-6 text-blue-600" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {userProfile?.company_name ? `${userProfile.company_name} Dashboard` : 'Employer Dashboard'}
-          </h1>
-          <p className="text-gray-600">
-            Manage your job postings and connect with qualified student candidates
-          </p>
-        </div>
+    <div className="mb-8 space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Employer Dashboard</h1>
+        {setActiveTab && (
+          <Button onClick={() => setActiveTab("create")} className="gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Quick Post Job
+          </Button>
+        )}
       </div>
-      
-      <div className="flex flex-wrap gap-3">
-        <Button asChild>
-          <Link to="/employer/post-job" className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Post New Job
-          </Link>
-        </Button>
-        
-        <Button variant="outline" asChild>
-          <Link to="/employer/analytics" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            View Analytics
-          </Link>
-        </Button>
-        
-        <Button variant="outline" asChild>
-          <Link to="/employer/applicants" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            View Applicants
-          </Link>
-        </Button>
+
+      <p className="text-muted-foreground">
+        Welcome to the employer portal for {companyName}. Manage your job postings and find the perfect candidates.
+      </p>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Jobs</CardTitle>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">+2 from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Applicants</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">47</div>
+            <p className="text-xs text-muted-foreground">+12 from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Interview Rate</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">24%</div>
+            <p className="text-xs text-muted-foreground">+5% from last month</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
