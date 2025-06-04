@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { useFadeIn } from '@/utils/animations';
@@ -117,53 +116,51 @@ const Index = () => {
             animate="animate"
             exit="exit"
           >
-            <div className="container mx-auto px-4 py-3">
+            <div className="container mx-auto px-4 py-6">
               <motion.div 
-                className="flex items-center justify-between bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20"
+                className="flex flex-col items-center justify-center text-center bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20"
                 whileHover={{ 
                   scale: 1.02,
                   boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <div className="flex items-center space-x-4">
-                  <motion.div
-                    variants={iconVariants}
-                    className="p-2 bg-white/20 rounded-full"
+                <motion.div
+                  variants={iconVariants}
+                  className="p-3 bg-white/20 rounded-full mb-4"
+                >
+                  <Star className="h-8 w-8 text-yellow-300" />
+                </motion.div>
+                
+                <div className="flex flex-col items-center space-y-2">
+                  <motion.h2 
+                    className="text-white font-bold text-3xl md:text-4xl"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
                   >
-                    <Star className="h-6 w-6 text-yellow-300" />
-                  </motion.div>
-                  
-                  <div className="flex flex-col">
-                    <motion.h2 
-                      className="text-white font-bold text-lg"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      Welcome back, {userProfile?.first_name || 'User'}! 
-                    </motion.h2>
-                    <motion.p 
-                      className="text-white/80 text-sm"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      Ready to continue your journey?
-                    </motion.p>
-                  </div>
+                    Welcome back, {userProfile?.first_name || 'User'}! 
+                  </motion.h2>
+                  <motion.p 
+                    className="text-white/80 text-lg"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    Ready to continue your journey?
+                  </motion.p>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center space-x-4 mt-6">
                   <motion.div
                     variants={sparkleVariants}
                     animate="animate"
                   >
-                    <Sparkles className="h-5 w-5 text-yellow-300" />
+                    <Sparkles className="h-6 w-6 text-yellow-300" />
                   </motion.div>
                   
-                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                    <Trophy className="h-3 w-3 mr-1" />
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-lg px-4 py-2">
+                    <Trophy className="h-4 w-4 mr-2" />
                     {userProfile?.user_type === 'employer' ? 'Employer' : 'Job Seeker'}
                   </Badge>
                   
@@ -172,35 +169,42 @@ const Index = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Button 
-                      size="sm" 
+                      size="lg" 
                       className="bg-white/20 hover:bg-white/30 text-white border border-white/30"
                     >
-                      <Briefcase className="h-4 w-4 mr-2" />
+                      <Briefcase className="h-5 w-5 mr-2" />
                       Dashboard
                     </Button>
+                  </motion.div>
+
+                  <motion.div
+                    variants={sparkleVariants}
+                    animate="animate"
+                  >
+                    <Sparkles className="h-6 w-6 text-yellow-300" />
                   </motion.div>
                 </div>
 
                 {/* Floating particles */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                  {[...Array(6)].map((_, i) => (
+                  {[...Array(8)].map((_, i) => (
                     <motion.div
                       key={i}
-                      className="absolute w-1 h-1 bg-white/40 rounded-full"
+                      className="absolute w-1.5 h-1.5 bg-white/40 rounded-full"
                       style={{
-                        left: `${20 + i * 15}%`,
-                        top: `${30 + (i % 2) * 40}%`,
+                        left: `${15 + i * 12}%`,
+                        top: `${25 + (i % 3) * 25}%`,
                       }}
                       animate={{
-                        y: [0, -20, 0],
-                        opacity: [0.2, 0.8, 0.2],
-                        scale: [1, 1.5, 1],
+                        y: [0, -25, 0],
+                        opacity: [0.2, 0.9, 0.2],
+                        scale: [1, 1.8, 1],
                       }}
                       transition={{
-                        duration: 3 + i * 0.5,
+                        duration: 4 + i * 0.5,
                         repeat: Infinity,
                         repeatType: "reverse",
-                        delay: i * 0.3,
+                        delay: i * 0.4,
                       }}
                     />
                   ))}
