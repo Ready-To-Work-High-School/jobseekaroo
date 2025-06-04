@@ -40,21 +40,21 @@ const Register = () => {
       const firstName = nameParts[0] || '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-      // Call signUp with the required arguments: email, password, firstName, lastName, userType (optional)
-      const { user, error } = await signUp(email, password, firstName, lastName);
+      // Call signUp - it returns User | null, not { user, error }
+      const user = await signUp(email, password, firstName, lastName);
       
-      if (error) {
-        throw error;
+      if (user) {
+        console.log('Register page: Signup complete, redirecting to dashboard');
+        toast({
+          title: "Account created",
+          description: "Your account has been created successfully.",
+        });
+        
+        // Add a small delay to ensure toast is shown
+        setTimeout(() => navigate('/dashboard'), 500);
+      } else {
+        throw new Error("Failed to create account");
       }
-      
-      console.log('Register page: Signup complete, redirecting to dashboard');
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully.",
-      });
-      
-      // Add a small delay to ensure toast is shown
-      setTimeout(() => navigate('/dashboard'), 500);
     } catch (err: any) {
       console.error('Register page error:', err);
       setError(err.message || 'Failed to create an account');

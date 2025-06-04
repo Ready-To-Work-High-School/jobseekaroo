@@ -25,6 +25,9 @@ interface AuthContextType {
   getSavedJobs?: () => Promise<any[]>;
   // Application actions
   createApplication?: (data: any) => Promise<void>;
+  updateApplicationStatus?: (applicationId: string, status: string) => Promise<void>;
+  getApplications?: () => Promise<any[]>;
+  deleteApplication?: (applicationId: string) => Promise<void>;
   // Admin actions
   makeAdmin?: () => Promise<void>;
   verifyEmployer?: () => Promise<void>;
@@ -199,6 +202,59 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Application management functions
+  const getApplications = async () => {
+    if (!user) return [];
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Error getting applications:', error);
+      return [];
+    }
+  };
+
+  const updateApplicationStatus = async (applicationId: string, status: string) => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      throw error;
+    }
+  };
+
+  const deleteApplication = async (applicationId: string) => {
+    if (!user) throw new Error('User not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .delete()
+        .eq('id', applicationId)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -214,12 +270,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signInWithApple: handleSignInWithApple,
         updateProfile,
         refreshProfile,
-        // Placeholder functions for job actions
+        // Job actions - placeholder functions
         saveJob: async () => {},
         unsaveJob: async () => {},
         isSavedJob: async () => false,
         getSavedJobs: async () => [],
+        // Application actions
         createApplication: async () => {},
+        updateApplicationStatus,
+        getApplications,
+        deleteApplication,
+        // Admin actions - placeholder functions
         makeAdmin: async () => {},
         verifyEmployer: async () => {},
         redeemCode: async () => {},
