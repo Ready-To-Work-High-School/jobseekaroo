@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -63,6 +62,7 @@ import MacquarieExternship from '@/pages/MacquarieExternship';
 import FirstJobToolkit from '@/pages/FirstJobToolkit';
 import CeoPortal from '@/pages/CeoPortal';
 import EmployerOnboarding from '@/pages/employer/EmployerOnboarding';
+import EmployerVerify from '@/pages/employer/EmployerVerify';
 
 const queryClient = new QueryClient();
 
@@ -131,6 +131,7 @@ function App() {
                 <Route path="/quick-job-post" element={<QuickJobPost />} />
                 <Route path="/employer-school-demo" element={<EmployerSchoolDemo />} />
                 <Route path="/employer-onboarding" element={<EmployerOnboarding />} />
+                <Route path="/employer/verify" element={<EmployerVerify />} />
                 <Route path="/programs/macquarie-externship" element={<MacquarieExternship />} />
                 <Route path="/first-job-toolkit" element={<FirstJobToolkit />} />
                 <Route path="/ceo-portal" element={<CeoPortal />} />

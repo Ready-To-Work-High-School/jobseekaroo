@@ -32,6 +32,8 @@ const badgeVariants = cva(
           "border-transparent bg-transparent text-foreground hover:bg-muted",
         premium:
           "border-transparent bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 font-bold shadow-sm",
+        skyBlue:
+          "border-transparent bg-gradient-to-r from-sky-400 to-blue-500 text-white font-bold shadow-sm hover:from-sky-500 hover:to-blue-600",
         new:
           "border-transparent bg-brand-500 text-white hover:bg-brand-600 animate-pulse",
         gold:
