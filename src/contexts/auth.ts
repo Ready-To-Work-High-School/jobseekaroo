@@ -1,4 +1,5 @@
 
 // Re-export from AuthContext for consistency
-export { useAuth, AuthProvider } from './AuthContext';
-export type { AuthContextType } from './AuthContext';
+export { useAuth } from '../hooks/useAuth';
+export { AuthProvider } from './auth/AuthContext';
+export type { AuthContextType } from './auth/AuthContext';
