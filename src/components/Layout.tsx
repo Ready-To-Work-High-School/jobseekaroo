@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Footer from './layout/Footer';
-import { useAuth } from '@/contexts/auth/AuthProvider';
+import { useAuth } from '@/contexts/auth';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import FloatingBackButton from './common/FloatingBackButton';
