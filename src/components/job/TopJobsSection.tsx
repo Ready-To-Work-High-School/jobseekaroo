@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, DollarSign, Users, TrendingUp } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, TrendingUp, ExternalLink, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 
 interface TopJob {
   id: string;
@@ -18,9 +19,11 @@ interface TopJob {
   requirements: string[];
   openings: number;
   isHiring: boolean;
+  jobWebsiteUrl: string;
 }
 
 const TopJobsSection = () => {
+  const { user } = useAuth();
   const [topJobs] = useState<TopJob[]>([
     {
       id: '1',
@@ -32,7 +35,8 @@ const TopJobsSection = () => {
       description: 'Help customers, stock shelves, and maintain store appearance.',
       requirements: ['Customer service skills', 'Flexible schedule', 'Team player'],
       openings: 8,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://corporate.target.com/careers/team-member-jobs'
     },
     {
       id: '2',
@@ -44,7 +48,8 @@ const TopJobsSection = () => {
       description: 'Prepare food, serve customers, and maintain cleanliness.',
       requirements: ['Food safety knowledge', 'Positive attitude', 'Reliability'],
       openings: 12,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://www.chick-fil-a.com/careers'
     },
     {
       id: '3',
@@ -56,7 +61,8 @@ const TopJobsSection = () => {
       description: 'Process transactions, bag groceries, and assist customers.',
       requirements: ['Math skills', 'Communication', 'Attention to detail'],
       openings: 6,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://corporate.publix.com/careers'
     },
     {
       id: '4',
@@ -68,7 +74,8 @@ const TopJobsSection = () => {
       description: 'Sell tickets, operate concessions, and clean theaters.',
       requirements: ['Weekend availability', 'Customer service', 'Physical stamina'],
       openings: 10,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://www.amctheatres.com/careers'
     },
     {
       id: '5',
@@ -80,7 +87,8 @@ const TopJobsSection = () => {
       description: 'Ensure swimmer safety and maintain pool areas.',
       requirements: ['Lifeguard certification', 'CPR certified', 'Strong swimmer'],
       openings: 15,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://www.coj.net/departments/human-resources/employment-opportunities'
     },
     {
       id: '6',
@@ -92,9 +100,59 @@ const TopJobsSection = () => {
       description: 'Help students with math and reading assignments.',
       requirements: ['Good grades', 'Patience', 'Communication skills'],
       openings: 4,
-      isHiring: true
+      isHiring: true,
+      jobWebsiteUrl: 'https://www.kumon.com/careers'
     }
   ]);
+
+  const UnauthenticatedView = () => (
+    <div className="w-full py-16 bg-gradient-to-b from-white to-blue-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <img 
+              src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
+              alt="Job Seekers 4 High Schools Logo" 
+              className="h-8 w-8 object-contain"
+            />
+            <h2 className="text-3xl font-bold text-slate-800">
+              Top Jobs for Teenagers in Jacksonville, FL
+            </h2>
+          </div>
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+            <TrendingUp className="h-4 w-4 text-green-600" />
+            <span>55 total openings available now</span>
+          </div>
+        </div>
+
+        <Card className="max-w-md mx-auto">
+          <CardContent className="p-8 text-center">
+            <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <Lock className="h-8 w-8 text-blue-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-800 mb-2">
+              Sign In to View Job Opportunities
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Create your free account to access direct links to company job applications and exclusive teen-friendly positions.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full">
+                <Link to="/sign-in">Sign In</Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/signup">Create Free Account</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  if (!user) {
+    return <UnauthenticatedView />;
+  }
 
   return (
     <div className="w-full py-16 bg-gradient-to-b from-white to-blue-50">
@@ -183,9 +241,15 @@ const TopJobsSection = () => {
                   </div>
 
                   <Button asChild className="w-full">
-                    <Link to={`/jobs?keyword=${encodeURIComponent(job.title)}&zipCode=32207`}>
-                      View Details
-                    </Link>
+                    <a 
+                      href={job.jobWebsiteUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      Apply on Company Website
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
