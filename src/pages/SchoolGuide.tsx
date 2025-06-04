@@ -23,16 +23,16 @@ const SchoolGuide = () => {
       </Helmet>
 
       <div className={`container mx-auto px-4 py-8 ${fadeIn}`}>
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left side - Main content */}
-          <div>
+        <div className="grid lg:grid-cols-3 gap-12 items-start">
+          {/* Left side - Main content (takes 2 columns) */}
+          <div className="lg:col-span-2">
             <SchoolGuideHeader />
             <ResourcesSection />
             <ExclusiveFeaturesSection />
             <ContactSection />
           </div>
 
-          {/* Right side - Large logo */}
+          {/* Right side - Large logo (takes 1 column) */}
           <SchoolGuideLogo />
         </div>
       </div>

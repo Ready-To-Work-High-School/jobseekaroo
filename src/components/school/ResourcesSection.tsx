@@ -40,7 +40,7 @@ const ResourcesSection = () => {
         Utilize our platform to help your students prepare for the workforce with career guidance, skill development tools, and employer connections.
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {resources.map((resource, index) => {
           const Icon = resource.icon;
           return (

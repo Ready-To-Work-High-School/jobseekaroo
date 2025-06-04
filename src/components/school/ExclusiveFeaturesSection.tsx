@@ -65,7 +65,7 @@ const ExclusiveFeaturesSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {exclusiveFeatures.map((category, index) => {
           const Icon = category.icon;
           return (
@@ -77,11 +77,11 @@ const ExclusiveFeaturesSection = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {category.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-2">
+                    <li key={featureIndex} className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
+                      <span className="text-sm leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
