@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { UserProfile, UserProfileUpdate } from '@/types/user';
@@ -196,3 +195,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export { AuthContext };
