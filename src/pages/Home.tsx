@@ -16,6 +16,10 @@ import BrandLogo from '@/components/home/BrandLogo';
 import FeaturedProgramsSection from '@/components/home/FeaturedProgramsSection';
 import QuickAccessButtons from '@/components/home/QuickAccessButtons';
 import FirstJobToolkit from '@/components/home/FirstJobToolkit';
+import FeaturedJobsSection from '@/components/home/FeaturedJobsSection';
+import TopJobsSection from '@/components/job/TopJobsSection';
+import TopEmployersSection from '@/components/job/TopEmployersSection';
+import HeroSection from '@/components/home/HeroSection';
 import { motion, AnimatePresence } from 'framer-motion';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import UserRecommendationsSection from '@/components/home/UserRecommendationsSection';
@@ -218,7 +222,26 @@ const Index = () => {
         variants={containerVariants}
       >
         <motion.div variants={itemVariants}>
+          <HeroSection />
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
           <InfoBanner />
+        </motion.div>
+
+        {/* Featured Jobs Section - Top Jobs */}
+        <motion.div variants={itemVariants}>
+          <FeaturedJobsSection />
+        </motion.div>
+
+        {/* Top Jobs for Teenagers in Jacksonville */}
+        <motion.div variants={itemVariants}>
+          <TopJobsSection />
+        </motion.div>
+
+        {/* Top Employers Section */}
+        <motion.div variants={itemVariants}>
+          <TopEmployersSection />
         </motion.div>
         
         <motion.div variants={itemVariants} className="container mx-auto px-4 mb-8">
