@@ -50,7 +50,7 @@ export const JobApplyButton = ({ job }: JobApplyButtonProps) => {
     setIsLoading(true);
     
     try {
-      await createApplication({
+      await createApplication(job.id, {
         job_id: job.id,
         job_title: job.title,
         company: job.company.name,

@@ -1,3 +1,4 @@
+
 import { UserBadge } from '@/types/badges';
 
 export interface UserProfile {
@@ -47,6 +48,8 @@ export interface UserProfileUpdate {
   employer_verification_status?: 'pending' | 'approved' | 'rejected';
   verification_notes?: string;
   accessibility_settings?: AccessibilitySettings;
+  resume_data_encrypted?: string;
+  contact_details_encrypted?: string;
 }
 
 export interface SavedSearch {

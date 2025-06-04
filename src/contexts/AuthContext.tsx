@@ -9,11 +9,27 @@ export interface UserProfile {
   first_name?: string;
   last_name?: string;
   email?: string;
-  user_type?: 'student' | 'employer' | 'admin';
+  user_type?: 'student' | 'employer' | 'admin' | 'teacher';
   company_name?: string;
   company_website?: string;
   job_title?: string;
   employer_verification_status?: 'pending' | 'approved' | 'denied';
+  bio?: string;
+  location?: string;
+  resume_url?: string;
+  skills?: string[];
+  preferences?: Record<string, any>;
+  accessibility_settings?: any;
+  redeemed_at?: string;
+  redeemed_code?: string;
+  avatar_url?: string;
+  created_at?: string;
+  updated_at?: string;
+  verification_notes?: string;
+  resume_data_encrypted?: string;
+  contact_details_encrypted?: string;
+  badges?: any[];
+  premium_status?: string;
 }
 
 export interface AuthContextType {
@@ -27,6 +43,7 @@ export interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
   updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  refreshProfile: () => Promise<void>;
   getSavedJobs: () => Promise<any[]>;
   createApplication: (jobId: string, applicationData: any) => Promise<void>;
   updateApplicationStatus: (applicationId: string, status: string) => Promise<void>;
@@ -216,6 +233,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const refreshProfile = async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      
+      if (profile) {
+        setUserProfile(profile);
+      }
+    } catch (error) {
+      console.error('Error refreshing profile:', error);
+    }
+  };
+
   // Mock implementations for now - these would connect to actual Supabase tables
   const getSavedJobs = async (): Promise<any[]> => {
     // This would query the saved_jobs table
@@ -268,6 +303,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signInWithGoogle,
     signInWithApple,
     updateProfile,
+    refreshProfile,
     getSavedJobs,
     createApplication,
     updateApplicationStatus,
