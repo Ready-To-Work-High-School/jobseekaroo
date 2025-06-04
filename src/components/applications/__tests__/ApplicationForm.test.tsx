@@ -1,13 +1,12 @@
+
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import ApplicationForm from '../ApplicationForm';
+import { useAuth } from '@/hooks/useAuth';
 
 vi.mock('@/hooks/useAuth', () => ({
-  useAuth: () => ({
-    user: { id: 'test-user' },
-    createApplication: vi.fn(),
-  }),
+  useAuth: vi.fn(),
 }));
 
 vi.mock('@/hooks/use-toast', () => ({
@@ -17,6 +16,30 @@ vi.mock('@/hooks/use-toast', () => ({
 }));
 
 describe('ApplicationForm', () => {
+  beforeEach(() => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: { id: 'test-user' },
+      createApplication: vi.fn(),
+      userProfile: null,
+      session: null,
+      isLoading: false,
+      signIn: vi.fn(),
+      signUp: vi.fn(),
+      signOut: vi.fn(),
+      signInWithGoogle: vi.fn(),
+      signInWithApple: vi.fn(),
+      updateProfile: vi.fn(),
+      refreshProfile: vi.fn(),
+      getSavedJobs: vi.fn(),
+      updateApplicationStatus: vi.fn(),
+      deleteApplication: vi.fn(),
+      saveJob: vi.fn(),
+      unsaveJob: vi.fn(),
+      isSavedJob: vi.fn(),
+      getApplications: vi.fn(),
+    });
+  });
+
   it('renders the form with default values', () => {
     render(<ApplicationForm />);
     expect(screen.getByLabelText('Position Title')).toBeInTheDocument();
@@ -46,6 +69,23 @@ describe('ApplicationForm', () => {
     vi.mocked(useAuth).mockReturnValue({
       user: { id: 'test-user' },
       createApplication: createApplicationMock,
+      userProfile: null,
+      session: null,
+      isLoading: false,
+      signIn: vi.fn(),
+      signUp: vi.fn(),
+      signOut: vi.fn(),
+      signInWithGoogle: vi.fn(),
+      signInWithApple: vi.fn(),
+      updateProfile: vi.fn(),
+      refreshProfile: vi.fn(),
+      getSavedJobs: vi.fn(),
+      updateApplicationStatus: vi.fn(),
+      deleteApplication: vi.fn(),
+      saveJob: vi.fn(),
+      unsaveJob: vi.fn(),
+      isSavedJob: vi.fn(),
+      getApplications: vi.fn(),
     });
 
     render(<ApplicationForm jobId="123" jobTitle="Software Engineer" companyName="Tech Corp" />);

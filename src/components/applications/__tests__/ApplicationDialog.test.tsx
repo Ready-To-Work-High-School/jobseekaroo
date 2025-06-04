@@ -1,16 +1,14 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import { ApplicationDialog } from '../ApplicationDialog';
+import ApplicationDialog from '../ApplicationDialog';
 
 describe('ApplicationDialog', () => {
-  const mockOnOpenChange = vi.fn();
-  const mockSetShowSavedJobs = vi.fn();
+  const mockOnClose = vi.fn();
   const mockOnSuccess = vi.fn();
 
   beforeEach(() => {
-    mockOnOpenChange.mockClear();
-    mockSetShowSavedJobs.mockClear();
+    mockOnClose.mockClear();
     mockOnSuccess.mockClear();
   });
 
@@ -18,43 +16,24 @@ describe('ApplicationDialog', () => {
     render(
       <ApplicationDialog
         open={true}
-        onOpenChange={mockOnOpenChange}
-        showSavedJobs={false}
-        setShowSavedJobs={mockSetShowSavedJobs}
+        onClose={mockOnClose}
         onSuccess={mockOnSuccess}
       />
     );
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Add New Application')).toBeInTheDocument();
+    expect(screen.getByText('Track Your Application')).toBeInTheDocument();
   });
 
-  it('shows saved jobs section when showSavedJobs is true', () => {
+  it('does not render when closed', () => {
     render(
       <ApplicationDialog
-        open={true}
-        onOpenChange={mockOnOpenChange}
-        showSavedJobs={true}
-        setShowSavedJobs={mockSetShowSavedJobs}
+        open={false}
+        onClose={mockOnClose}
         onSuccess={mockOnSuccess}
       />
     );
 
-    expect(screen.getByText('Select from saved jobs:')).toBeInTheDocument();
-  });
-
-  it('shows application form when showSavedJobs is false', () => {
-    render(
-      <ApplicationDialog
-        open={true}
-        onOpenChange={mockOnOpenChange}
-        showSavedJobs={false}
-        setShowSavedJobs={mockSetShowSavedJobs}
-        onSuccess={mockOnSuccess}
-      />
-    );
-
-    expect(screen.getByText('Job Title')).toBeInTheDocument();
-    expect(screen.getByText('Company')).toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
