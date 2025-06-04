@@ -63,29 +63,13 @@ const SchoolIntegration = () => {
             </div>
           </div>
 
-          {/* Right side - Large logos */}
-          <div className="hidden lg:flex flex-col items-center justify-center space-y-8 sticky top-8">
+          {/* Right side - Single large logo */}
+          <div className="hidden lg:flex flex-col items-center justify-center sticky top-8">
             <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg border">
               <img 
                 src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
                 alt="Job Seekers 4 High Schools - Main Logo" 
                 className="w-48 h-48 object-contain mx-auto"
-              />
-            </div>
-            
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-3xl shadow-lg border">
-              <img 
-                src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
-                alt="Job Seekers 4 High Schools - Secondary Logo" 
-                className="w-40 h-40 object-contain mx-auto opacity-90"
-              />
-            </div>
-            
-            <div className="bg-gradient-to-br from-purple-50 to-pink-100 p-6 rounded-3xl shadow-lg border">
-              <img 
-                src="/lovable-uploads/a051d480-e6ba-4e2e-8f5c-69229c03b3f9.png" 
-                alt="Job Seekers 4 High Schools - Accent Logo" 
-                className="w-32 h-32 object-contain mx-auto opacity-75"
               />
             </div>
           </div>
