@@ -13,6 +13,22 @@ interface UserProfile {
   location?: string;
   resume_url?: string;
   preferences?: any;
+  bio?: string;
+  skills?: string[];
+  company_website?: string;
+  employer_verification_status?: 'pending' | 'approved' | 'rejected';
+  verification_notes?: string;
+  redeemed_at?: string;
+  redeemed_code?: string;
+  created_at?: string;
+  updated_at?: string;
+  badges?: any[];
+  accessibility_settings?: {
+    high_contrast: boolean;
+    increased_font_size: boolean;
+    reduce_motion: boolean;
+    screen_reader_optimized: boolean;
+  };
 }
 
 interface Application {
@@ -40,6 +56,13 @@ export interface AuthContextType {
   refreshSession: () => Promise<{ error: any }>;
   refreshProfile: () => Promise<void>;
   createApplication: (application: Application) => Promise<void>;
+  updateApplicationStatus: (applicationId: string, status: string) => Promise<void>;
+  deleteApplication: (applicationId: string) => Promise<void>;
+  getSavedJobs: () => Promise<string[]>;
+  isSavedJob: (jobId: string) => Promise<boolean>;
+  getApplications: () => Promise<Application[]>;
+  saveJob: (jobId: string) => Promise<void>;
+  unsaveJob: (jobId: string) => Promise<void>;
   signInWithApple?: () => Promise<void>;
   signInWithGoogle?: () => Promise<void>;
 }
@@ -79,7 +102,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: '123',
         first_name: 'Demo',
         last_name: 'User',
-        user_type: 'student'
+        user_type: 'student',
+        avatar_url: null,
+        job_title: null,
+        location: null,
+        resume_url: null,
+        bio: null,
+        skills: [],
+        company_name: null,
+        company_website: null,
+        employer_verification_status: null,
+        verification_notes: null,
+        redeemed_at: null,
+        redeemed_code: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        badges: [],
+        accessibility_settings: {
+          high_contrast: false,
+          increased_font_size: false,
+          reduce_motion: false,
+          screen_reader_optimized: false
+        }
       });
       
       setLoading(false);
@@ -124,6 +168,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     console.log('Creating application:', application);
   };
 
+  const updateApplicationStatus = async (applicationId: string, status: string) => {
+    // Mock update application status
+    console.log('Updating application status:', applicationId, status);
+  };
+
+  const deleteApplication = async (applicationId: string) => {
+    // Mock delete application
+    console.log('Deleting application:', applicationId);
+  };
+
+  const getSavedJobs = async () => {
+    // Mock get saved jobs
+    return [];
+  };
+
+  const isSavedJob = async (jobId: string) => {
+    // Mock is saved job
+    return false;
+  };
+
+  const getApplications = async () => {
+    // Mock get applications
+    return [];
+  };
+
+  const saveJob = async (jobId: string) => {
+    // Mock save job
+    console.log('Saving job:', jobId);
+  };
+
+  const unsaveJob = async (jobId: string) => {
+    // Mock unsave job
+    console.log('Unsaving job:', jobId);
+  };
+
   const signInWithApple = async () => {
     // Mock Apple sign in
   };
@@ -146,6 +225,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshSession,
     refreshProfile,
     createApplication,
+    updateApplicationStatus,
+    deleteApplication,
+    getSavedJobs,
+    isSavedJob,
+    getApplications,
+    saveJob,
+    unsaveJob,
     signInWithApple,
     signInWithGoogle
   };
